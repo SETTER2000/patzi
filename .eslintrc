@@ -5,7 +5,7 @@
   // A set of basic code conventions designed to encourage quality and consistency
   // across your Sails app's code base.  These rules are checked against
   // automatically any time you run `npm test`.
-  // 
+  //
   // > An additional eslintrc override file is included in the `assets/` folder
   // > right out of the box.  This is specifically to allow for variations in acceptable
   // > global variables between front-end JavaScript code designed to run in the browser
@@ -21,7 +21,25 @@
   // you would visit `http://eslint.org/docs/rules/no-sequences`.  If you're unsure
   // or could use some advice, come by https://sailsjs.com/support.
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
+  // Набор базовых условных обозначений кода, призванных обеспечить качество и согласованность
+  // через базу кода вашего приложения Sails. Эти правила проверены
+  // автоматически каждый раз, когда вы запускаете `npm test`.
+  //
+  //> Дополнительный файл переопределения eslintrc включен в папку `assets /`
+  //> прямо из коробки. Это специально для учета вариаций в приемлемых
+  //> глобальные переменные между интерфейсным JavaScript-кодом, предназначенные для запуска в браузере
+  //> по сравнению с внутренним кодом, предназначенным для запуска в процессе Node.js / Sails.
+  //
+  //> Примечание: если вы используете mocha, вам нужно добавить дополнительный файл переопределения в ваш
+  //> папка `test /`, так что eslint будет переносить глобальные переменные типа mocha, такие как `before`
+  //> и `описать`.
+  // Разработано для ESLint v4.
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  // Для получения дополнительной информации о любом из приведенных ниже правил ознакомьтесь с
+  // справочная страница на eslint.org. Например, чтобы получить подробности о «без последовательностей»,
+  // вы бы посетили `http: // eslint.org / docs / rules / no-sequence`. Если вы не уверены
+  // или могли бы воспользоваться некоторыми советами, перейдите по адресу https://sailsjs.com/support.
+  // - - - - -
   "env": {
     "node": true
   },
@@ -36,14 +54,17 @@
   "globals": {
     // If "no-undef" is enabled below, be sure to list all global variables that
     // are used in this app's backend code (including the globalIds of models):
+    // Если "no-undef" включен ниже, обязательно перечислите все глобальные переменные, которые
+    // используются в бэкэнд-коде этого приложения (включая globalIds моделей):
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     "Promise": true,
     "sails": true,
     "_": true,
 
     // Models:
-    "User": true
-    
+    "User": true,
+    "Thing": true
+
     // …and any others.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   },
@@ -67,7 +88,8 @@
       "ObjectExpression": 1,
       "ignoredNodes": ["ConditionalExpression"]
     }],
-    "linebreak-style":              ["error", "unix"],
+//    "linebreak-style":              ["error", "unix"],
+    "linebreak-style":              ["error", "windows"],
     "no-dupe-keys":                 ["error"],
     "no-duplicate-case":            ["error"],
     "no-extra-semi":                ["warn"],
