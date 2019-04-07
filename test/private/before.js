@@ -39,7 +39,7 @@ before((done)=>{
       routes: Object.assign({}, configOverrides.routes, {
         // Provide a way to get a CSRF token:
         // Предоставляем способ получить токен CSRF:
-        'GET /.temporary/csrf/token/for/tests': { action: 'security/grant-csrf-token' }
+        'GET .temporary/csrf/token/for/tests': { action: 'security/grant-csrf-token' }
       }),
       policies: Object.assign({}, configOverrides.policies, {
         // Poke a hole in any global policies to ensure the test runner can
@@ -61,12 +61,17 @@ before((done)=>{
         })
       }),
     });
-
+    const hello = async function  (){
+      let result = await sails.helpers.formatWelcomeMessage('Dolly');
+      console.log('Ok it worked!  The result is:', result);
+    };
 
     // Lift app
     sails.lift(configOverrides, (err)=>{
       if (err) { return done(err); }
 
+
+      hello();
       // First, get a cookie and a CSRF token.
       // Сначала получаем cookie и токен CSRF.
       sails.helpers.http.sendHttpRequest.with({
@@ -76,7 +81,7 @@ before((done)=>{
       }).exec((err, serverResponse)=>{
         if (err) { return done(new Error('Test runner could not fetch CSRF token.\nDetails:\n'+err.stack)); }
 
-        // console.log(serverResponse);
+        // console.log('serverResponse',serverResponse);
 
         var csrfToken;
         try {
