@@ -24,7 +24,10 @@ module.exports = {
     // ];
     // TODO: come back to this and only fetch things that the current user is allowed to see
     // TODO: возвращаемся к этому и выбираем только то, что текущему пользователю разрешено видеть
-    let things = await Thing.find();
+    let things = await Thing.find({
+
+      owner:this.req.me.id
+    });
 
     // Respond with view.
     return {things};
