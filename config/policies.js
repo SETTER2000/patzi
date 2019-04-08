@@ -5,6 +5,9 @@
  * Policies are simple functions which run **before** your actions.
  *
  * For more information on configuring policies, check out:
+ * * Политики - это простые функции, которые выполняются ** перед ** вашими действиями.
+   *
+   * Для получения дополнительной информации о настройке политик, проверьте:
  * https://sailsjs.com/docs/concepts/policies
  */
 

@@ -5,6 +5,9 @@
  * Your routes tell Sails what to do each time it receives a request.
  *
  * For more information on configuring custom routes, check out:
+ * * Ваши маршруты сообщают Sails, что делать каждый раз, когда он получает запрос.
+   *
+   * Для получения дополнительной информации о настройке пользовательских маршрутов, проверьте:
  * https://sailsjs.com/anatomy/config/routes-js
  */
 
@@ -33,11 +36,13 @@ module.exports.routes = {
   'GET /account/password':   { action: 'account/view-edit-password' },
   'GET /account/profile':    { action: 'account/view-edit-profile' },
 
+  'GET /things/available-things': { action: 'things/view-available-things' },
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
   //  ╩ ╩╩╚═╝╚═╝  ╩╚═╚═╝═╩╝╩╩╚═╚═╝╚═╝ ╩ ╚═╝  └┘   ═╩╝╚═╝╚╩╝╝╚╝╩═╝╚═╝╩ ╩═╩╝╚═╝
   '/terms':                   '/legal/terms',
+  '/help':                    '/contact',
   '/logout':                  '/api/v1/account/logout',
 
 
@@ -52,14 +57,17 @@ module.exports.routes = {
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
   // Note that, in this app, these API endpoints may be accessed using the `Cloud.*()` methods
   // from the Parasails library, or by using those method names as the `action` in <ajax-form>.
-  '/api/v1/account/logout':                           { action: 'account/logout' },
-  'PUT   /api/v1/account/update-password':            { action: 'account/update-password' },
-  'PUT   /api/v1/account/update-profile':             { action: 'account/update-profile' },
-  'PUT   /api/v1/account/update-billing-card':        { action: 'account/update-billing-card' },
-  'PUT   /api/v1/entrance/login':                        { action: 'entrance/login' },
-  'POST  /api/v1/entrance/signup':                       { action: 'entrance/signup' },
-  'POST  /api/v1/entrance/send-password-recovery-email': { action: 'entrance/send-password-recovery-email' },
-  'POST  /api/v1/entrance/update-password-and-login':    { action: 'entrance/update-password-and-login' },
-  'POST  /api/v1/deliver-contact-form-message':          { action: 'deliver-contact-form-message' },
-
+  // Обратите внимание, что в этом приложении к этим конечным точкам API можно получить доступ с
+  // помощью методов `Cloud. * ()`
+  // из библиотеки Parasails или используя имена этих методов в качестве `action` в <ajax-form>.
+  '/api/v1/account/logout':                                { action: 'account/logout' },
+  'PUT     /api/v1/account/update-password':               { action: 'account/update-password' },
+  'PUT     /api/v1/account/update-profile':                { action: 'account/update-profile' },
+  'PUT     /api/v1/account/update-billing-card':           { action: 'account/update-billing-card' },
+  'PUT     /api/v1/entrance/login':                        { action: 'entrance/login' },
+  'POST    /api/v1/entrance/signup':                       { action: 'entrance/signup' },
+  'POST    /api/v1/entrance/send-password-recovery-email': { action: 'entrance/send-password-recovery-email' },
+  'POST    /api/v1/entrance/update-password-and-login':    { action: 'entrance/update-password-and-login' },
+  'POST    /api/v1/deliver-contact-form-message':          { action: 'deliver-contact-form-message' },
+  'DELETE  /api/v1/things/destroy-one-thing':              { action: 'things/destroy-one-thing' },
 };
