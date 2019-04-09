@@ -5,14 +5,17 @@
   // мы уверены, что `я` существует. Это гарантирует, что нам не нужно делать проверки `typeof` ниже.
   var me = undefined;
 } %><!DOCTYPE html>
-<html>
+<html lang="zxx" class="no-js">
   <head>
     <title>NEW_APP_NAME</title>
 
     <% /* Viewport tag for sensible mobile support
     Тег Viewport для разумной мобильной поддержки */ %>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
+   <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">-->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <% /* Script tags should normally be included further down the page- but any
     scripts that load fonts (e.g. Fontawesome ≥v5) are special exceptions to the
     rule. (Include them up here along with any hard-coded «link» tags for Typekit,
@@ -53,23 +56,32 @@
          по конвейеру активов между "STYLES" и "STYLES END", или обоими.
          (https://sailsjs.com/docs/concepts/assets/task-automation)
     */ %>
-
+    <link
+      href="https://fonts.googleapis.com/css?family=Oswald:300,500,600|Roboto:400,700"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/pro/flaticon.css" />
+    <link rel="stylesheet" href="/pro/themify-icons.css" />
+    <link rel="stylesheet" href="/pro/bootstrap.css" />
+    <link rel="stylesheet" href="/pro/magnific-popup.css" />
+    <link rel="stylesheet" href="/pro/nice-select.css" />
+    <link rel="stylesheet" href="/pro/animate.min.css" />
+    <link rel="stylesheet" href="/pro/owl.carousel.css" />
+    <link rel="stylesheet" href="/pro/main.css" />
     <% /* Auto-injected «link» tags: */ %>
     <!--STYLES-->
-    <link rel="stylesheet" href="/dependencies/bootstrap-4/bootstrap-4.css">
-    <link rel="stylesheet" href="/dependencies/fontawesome.css">
     <link rel="stylesheet" href="/styles/importer.css">
     <!--STYLES END-->
   </head>
   <body>
     <div id="page-wrap">
-      <header id="page-header" class="navbar navbar-expand-sm navbar-dark bg-dark flex-column flex-md-row justify-content-between">
+   <!--   <header id="page-header" class="navbar navbar-expand-sm navbar-dark bg-dark flex-column flex-md-row justify-content-between">
         <a class="navbar-brand mr-0" href="/"><img class="logo" alt="NEW_APP_NAME logo" src="/images/logo.png"/></a>
         <div class="navbar-nav flex-row">
-          <!-- LOGGED-IN NAVIGATION -->
+          &lt;!&ndash; LOGGED-IN NAVIGATION &ndash;&gt;
           <% if(me) { %>
           <a class="nav-item nav-link ml-2 ml-md-0 mr-2 mr-md-0" href="/contact">Help</a>
-          <!-- Only in desktop nav -->
+          &lt;!&ndash; Only in desktop nav &ndash;&gt;
           <div class="nav-item dropdown d-none d-sm-block">
             <a class="nav-link dropdown-toggle" id="header-account-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
             <div class="dropdown-menu account-menu" aria-labelledby="header-account-menu-link">
@@ -77,23 +89,76 @@
               <a class="dropdown-item" href="/logout">Sign out</a>
             </div>
           </div>
-          <!-- Only in mobile nav -->
+          &lt;!&ndash; Only in mobile nav &ndash;&gt;
           <a class="nav-item nav-link ml-2 mr-2 d-block d-sm-none" href="/account">Account Settings</a>
           <a class="nav-item nav-link ml-2 mr-2 d-block d-sm-none" href="/logout">Sign out</a>
           <% } else { %>
-          <!-- LOGGED-OUT NAVIGATION -->
+          &lt;!&ndash; LOGGED-OUT NAVIGATION &ndash;&gt;
           <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/faq">FAQ</a>
           <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/login">Log in</a>
-          <!-- Only in desktop nav -->
+          &lt;!&ndash; Only in desktop nav &ndash;&gt;
           <div class="form-inline d-none ml-2 d-md-block" >
             <a class="btn btn-outline-info" href="/signup">Sign up</a>
           </div>
-          <!-- Only in mobile nav -->
+          &lt;!&ndash; Only in mobile nav &ndash;&gt;
           <a class="nav-item nav-link text-info ml-2 d-block d-md-none" href="/signup">Sign up</a>
           <% } %>
         </div>
-      </header>
+      </header>-->
 
+
+      <!-- Start Header Area -->
+      <header id="header" class="mb-0">
+        <div class="container main-menu">
+          <div class="row align-items-center d-flex">
+            <div id="logo">
+              <a href="/"><img src="/images/logo.png" alt="NEW_APP_NAME logo" title=""/></a>
+            </div>
+            <nav id="nav-menu-container">
+              <ul class="nav-menu">
+                <% if(me) { %>
+                <li class=""><a class="active" href="/">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li class="menu-has-children">
+                  <a href="#">Pages</a>
+                  <ul>
+                    <li><a href="elements.html">Elements</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="project-details.html">Project Details</a></li>
+                  </ul>
+                </li>
+                <li class="menu-has-children">
+                  <a href="">Blog</a>
+                  <ul>
+                    <li><a href="blog-home.html">Blog Home</a></li>
+                    <li><a href="blog-single.html">Blog Single</a></li>
+                  </ul>
+                </li>
+                <li><a href="/contact">Help</a></li>
+                <li class="menu-has-children">
+                  <a href="">Account</a>
+                  <ul>
+                    <li><a class="dropdown-item" href="/account">Settings</a></li>
+                    <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+                  </ul>
+                </li>
+                <% } else { %>
+                <!-- LOGGED-OUT NAVIGATION -->
+                <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/faq">FAQ</a></li>
+                <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/login">Log in</a></li>
+                <!-- Only in desktop nav -->
+                <li> <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/signup">Sign up</a></li>
+                <!-- Only in mobile nav -->
+                <li><a class="nav-item nav-link text-info ml-2 d-block d-md-none" href="/signup">Sign up</a></li>
+                <% } %>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </header>
+      <!-- End Header Area -->
       <!-- Alert if email has not been confirmed -->
       <!-- Оповещение, если электронная почта не была подтверждена -->
       <% if(me&&me.emailChangeCandidate) { %>
@@ -111,8 +176,71 @@
       <% } %>
 
       <%- body %>
+      <!-- start footer Area -->
+      <footer class="footer-area section-gap">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-5 col-md-6 col-sm-6">
+              <div class="single-footer-widget">
+                <h6>About Us</h6>
+                <p>
+                  If you own an Iphone, you’ve probably already worked out how much fun it is to use it to watch movies-it has
+                  that.
+                </p>
+              </div>
+            </div>
+            <div class="col-lg-5  col-md-6 col-sm-6">
+              <div class="single-footer-widget">
+                <h6>Newsletter</h6>
+                <p>Stay update with our latest</p>
+                <div class="" id="mc_embed_signup">
+                  <form target="_blank" novalidate="true" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+                        method="get" class="form-inline">
+                    <input class="form-control" name="EMAIL" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'"
+                           required="" type="email">
+                    <button class="click-btn btn btn-default"><i class="ti-arrow-right" aria-hidden="true"></i></button>
+                    <div style="position: absolute; left: -5000px;">
+                      <input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="" type="text">
+                    </div>
+                    <div class="info"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-6 col-sm-6 social-widget">
+              <div class="single-footer-widget">
+                <h6>Follow Us</h6>
+                <p>Let us be social</p>
+                <div class="footer-social d-flex align-items-center">
+                  <a href="#"><i class="ti-facebook"></i></a>
+                  <a href="#"><i class="ti-twitter"></i></a>
+                  <a href="#"><i class="ti-dribbble"></i></a>
+                  <a href="#"><i class="ti-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <p class="footer-text"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+            </div>
+          </div>
+        </div>
+      </footer>
+      <!-- End footer Area -->
 
-      <footer id="page-footer" class="navbar navbar-light justify-content-between flex-row-reverse">
+      <!-- ####################### Start Scroll to Top Area ####################### -->
+      <div id="back-top">
+        <a title="Go to Top" href="#"> <i class="ti-angle-double-up"></i> </a>
+      </div>
+      <!-- ####################### End Scroll to Top Area ####################### -->
+
+
+
+
+    <!--  <footer id="page-footer" class="navbar navbar-light justify-content-between flex-row-reverse">
         <div class="nav">
           <small class="nav-item"><a class="nav-link text-info" href="/contact">Contact<span class="d-none d-sm-inline"> us</span></a></small>
           <small class="nav-item"><a class="nav-link text-info" href="/legal/terms">Terms<span class="d-none d-sm-inline"> of use</span></a></small>
@@ -122,7 +250,7 @@
           <% } %>
         </div>
         <small class="copy">Copyright &copy; 2019 <a target="_blank" href="NEW_APP_COMPANY_ABOUT_HREF">NEW_APP_COMPANY_NAME</a>. <br class="xs-only"/>All rights reserved.</small>
-      </footer>
+      </footer>-->
     </div>
 
 
@@ -161,10 +289,23 @@
     <script src="/dependencies/jquery.min.js"></script>
     <script src="/dependencies/vue.js"></script>
     <script src="/dependencies/vue-router.js"></script>
-    <script src="/dependencies/bootstrap-4/bootstrap-4.bundle.js"></script>
+    <script src="/dependencies/bootstrap.min.js"></script>
     <script src="/dependencies/cloud.js"></script>
+    <script src="/dependencies/easing.min.js"></script>
+    <script src="/dependencies/hoverIntent.js"></script>
+    <script src="/dependencies/isotope.pkgd.min.js"></script>
+    <script src="/dependencies/jquery.ajaxchimp.min.js"></script>
+    <script src="/dependencies/jquery.circlechart.js"></script>
+    <script src="/dependencies/jquery.magnific-popup.min.js"></script>
+    <script src="/dependencies/jquery.nice-select.min.js"></script>
+    <script src="/dependencies/mail-script.js"></script>
+    <script src="/dependencies/main.js"></script>
+    <script src="/dependencies/mn-accordion.js"></script>
     <script src="/dependencies/moment.js"></script>
+    <script src="/dependencies/owl.carousel.min.js"></script>
     <script src="/dependencies/parasails.js"></script>
+    <script src="/dependencies/superfish.min.js"></script>
+    <script src="/dependencies/wow.min.js"></script>
     <script src="/js/cloud.setup.js"></script>
     <script src="/js/components/ajax-button.component.js"></script>
     <script src="/js/components/ajax-form.component.js"></script>
@@ -187,6 +328,7 @@
     <script src="/js/pages/legal/privacy.page.js"></script>
     <script src="/js/pages/legal/terms.page.js"></script>
     <script src="/js/pages/things/available-things.page.js"></script>
+    <script src="/js/pages/things/portfolio.page.js"></script>
     <!--SCRIPTS END-->
 
     <% /* Display an overlay if the current browser is not supported.

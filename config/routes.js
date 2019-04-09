@@ -37,6 +37,8 @@ module.exports.routes = {
   'GET /account/profile':    { action: 'account/view-edit-profile' },
 
   'GET /things/available-things': { action: 'things/view-available-things' },
+  'GET /things/portfolio': { action: 'things/view-portfolio' },
+
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
