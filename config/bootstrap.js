@@ -81,6 +81,7 @@ module.exports.bootstrap = async function () {
     {owner: users[1].id, label: 'Красный рассвет'}
   ]).fetch();
 
+  await Litter.createEach([{label:'a',born:new Date(2016, 3, 10)},{label:'b', born:new Date(2017, 10, 3)}]).fetch();
   // Save new bootstrap version
   await sails.helpers.fs.writeJson.with({
     destination: bootstrapLastRunInfoPath,

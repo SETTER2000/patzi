@@ -16,7 +16,7 @@ module.exports = {
   },
 
 
-  fn: async function () {
+  fn: async function (inputs, exits) {
 
     // var things = [
     //   {id: 1, label: 'Sweet Red Drill'},
@@ -30,7 +30,7 @@ module.exports = {
     });
 
     // Respond with view.
-    return {things};
+    return exits.success({things});
 
   }
 

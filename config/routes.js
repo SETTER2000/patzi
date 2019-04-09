@@ -39,6 +39,9 @@ module.exports.routes = {
   'GET /things/available-things': { action: 'things/view-available-things' },
   'GET /things/portfolio': { action: 'things/view-portfolio' },
 
+  'GET /litters/kennel': { action: 'litters/view-kennel' },
+
+
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
