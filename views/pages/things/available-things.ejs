@@ -1,81 +1,104 @@
-<div  id="available-things" v-cloak>
+<div id="available-things" v-cloak>
   <div class="container">
-  <div class="row align-items-center">
-    <div class="col text-center ">
-      <h1 class="pt-3">Things</h1>
-      <p>View available items to borrow, to upload your own things.</p>
-      <button class="btn btn-outline-info">Add an item</button>
+    <div class="row align-items-center">
+      <div class="col text-center ">
+        <h1 class="pt-3">Things</h1>
+        <p>View available items to borrow, to upload your own things.</p>
+        <button class="btn btn-outline-info">Add an item</button>
+      </div>
     </div>
-  </div>
 
-  <div class="row m-5">
-    <div v-for="(thing, key, index) in things" :key="index"  class="col-sm-4">
-      <div class="card mt-lg-4 " >
-        <div class="card-header">
-          <ul class="nav nav-pills card-header-pills">
-            <li class="nav-item">
-              <div class="dropdown">
-                <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                <button  type="button" class="btn btn-outline-light">
-                  <a v-if="thing.owner.id === me.id" href="#" @click="clickDeleteThing(thing.id)" class="card-link"><i class="ti-trash"></i></a>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" v-if="thing.owner.id === me.id" href="#" @click="clickDeleteThing(thing.id)" ><i class="ti-trash"></i></a>
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
+    <div class="row m-5">
+      <div v-for="(thing, key, index) in things" :key="index" class="col-sm-4">
+        <div class="card mt-lg-4 ">
+          <div class="card-header p-1">
+            <ul class="nav justify-content-end nav-pills card-header-pills pr-2">
+              <li class="nav-item">
+                <div class="dropdown">
+                  <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
+                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                  <!--<button  type="button" class="btn btn-outline-light">-->
+                  <!--<a v-if="thing.owner.id === me.id" href="#" @click="clickDeleteThing(thing.id)" class="card-link"><i class="ti-trash"></i></a>-->
+                  <!--</button>-->
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" v-if="thing.owner.id === me.id" href="#"
+                       @click="clickDeleteThing(thing.id)">
+                      <!--<i class="ti-trash"></i>-->
+                      Delete
+                    </a>
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                  </div>
                 </div>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{thing.label}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+              content.</p>
+            <p v-if="thing.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mine</p>
+            <a v-if="thing.owner.id !== me.id" href="#" class="card-link">{{thing.owner.fullName}}</a>
+
+          </div>
+        </div>
+      </div>
+      <!--    <div class="col-sm-4">
+            <div class="card" >
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a>
               </div>
-            </li>
-          </ul>
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">{{thing.label}}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="card-link">Card link</a>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card" >
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a>
+              </div>
+            </div>
 
-        </div>
-      </div>
+            <ul>
+              <li v-for="thing in things" @click="clickThing(thing.id)">{{thing.label}}</li>
+            </ul>
+            &lt;!&ndash; <h1>TODO: Implement this page.</h1>
+             <p>(See also <em>assets/styles/pages/things/available-things.less</em>, <em>assets/js/pages/things/available-things.page.js</em>, and <em>api/controllers/things/view-available-things.js</em>.)</p>
+           &ndash;&gt;
+
+
+          </div>-->
     </div>
-<!--    <div class="col-sm-4">
-      <div class="card" >
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="card-link">Card link</a>
-          <a href="#" class="card-link">Another link</a>
-        </div>
+
+    <% /* "Confirm Delete Thing" Modal */ %>
+    <modal v-if="confirmDeleteThingModalOpen && selectedThing" v-cloak key="delete"
+           @close="closeDeleteThingModal()">
+      <ajax-form action="destroyOneThing" :syncing.sync="syncing" :cloud-error.sync="cloudError">
+      <div class="modal-header">
+        <h5 class="modal-title">Remove this item?</h5>
+        <button class="close p-3" data-dismiss="modal" aria-label="Close">
+          <span >&times;</span>
+        </button>
       </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="card" >
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="card-link">Card link</a>
-          <a href="#" class="card-link">Another link</a>
-        </div>
+      <div class="modal-body">
+        <p class="text-center">Are you sure you want to remove this {{selectedThing.label || 'item'}}?
+          <br>This item will no longer be available to share with friends.</p>
       </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal">Nevermind</button>
+        <button type="submit" class="btn btn-danger ml-1">Remove</button>
+      </div>
+      </ajax-form>
+    </modal>
 
-      <ul>
-        <li v-for="thing in things" @click="clickThing(thing.id)">{{thing.label}}</li>
-      </ul>
-      &lt;!&ndash; <h1>TODO: Implement this page.</h1>
-       <p>(See also <em>assets/styles/pages/things/available-things.less</em>, <em>assets/js/pages/things/available-things.page.js</em>, and <em>api/controllers/things/view-available-things.js</em>.)</p>
-     &ndash;&gt;
-
-
-    </div>-->
   </div>
-
-  <% /* "Confirm Delete Thing" Modal */ %>
-<modal v-if="confirmDeleteThingModalOpen">
-<h1>Hello!</h1>
-</modal>
-
-</div>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
