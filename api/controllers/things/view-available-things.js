@@ -18,19 +18,35 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    // var things = [
-    //   {id: 1, label: 'Sweet Red Drill'},
-    //   {id: 2, label: 'Rad Mountain Bike'},
-    // ];
-    // TODO: come back to this and only fetch things that the current user is allowed to see
-    // TODO: возвращаемся к этому и выбираем только то, что текущему пользователю разрешено видеть
+    // Выбираем авторизованного пользователя и всех его
+    // друзей по ассоциативному полю friends
+    let me = await User.findOne({
+      id: this.req.me.id
+    }).populate('friends');
+    /**
+     * me:
+     * {
+     * id: ...,
+     * fullName: ...,
+     * friends: [{id: ..., fullName: ...,}],
+     * }
+     */
+      // Функция pluck из встроенного в sails, lodash v3
+      // если версия Lodash 4, то эта функция заменена на map (_.map(users, 'firstName'))
+      // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
+      // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
+    let friendIds = _.pluck(me.friends, 'id'); // friendIds: [id,id,id...]
+
     let things = await Thing.find({
+      or: [{owner: this.req.me.id}, {owner: {in: friendIds}}]
+    }).populate('owner');
 
-      owner:this.req.me.id
-    });
-
+    console.log(things);
     // Respond with view.
-    return exits.success({things});
+    return exits.success({
+      things,
+      currentSection: 'things'
+    });
 
   }
 
