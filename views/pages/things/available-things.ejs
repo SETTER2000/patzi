@@ -4,10 +4,9 @@
       <div class="col text-center ">
         <h1 class="pt-3">Things</h1>
         <p>View available items to borrow, to upload your own things.</p>
-        <button class="btn btn-outline-info">Add an item</button>
+        <button @click="clickUploadThing()" class="btn btn-outline-info">Add an item</button>
       </div>
     </div>
-
     <div class="row m-5">
       <div v-for="(thing, key, index) in things" :key="index" class="col-sm-4">
         <div class="card mt-lg-4 ">
@@ -17,13 +16,9 @@
                 <div class="dropdown">
                   <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                  <!--<button  type="button" class="btn btn-outline-light">-->
-                  <!--<a v-if="thing.owner.id === me.id" href="#" @click="clickDeleteThing(thing.id)" class="card-link"><i class="ti-trash"></i></a>-->
-                  <!--</button>-->
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" v-if="thing.owner.id === me.id" href="#"
                        @click="clickDeleteThing(thing.id)">
-                      <!--<i class="ti-trash"></i>-->
                       Delete
                     </a>
                     <a class="dropdown-item" href="#">Action</a>
@@ -41,42 +36,76 @@
               content.</p>
             <p v-if="thing.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mine</p>
             <a v-if="thing.owner.id !== me.id" href="#" class="card-link">{{thing.owner.fullName}}</a>
-
           </div>
         </div>
       </div>
-      <!--    <div class="col-sm-4">
-            <div class="card" >
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
+    </div>
+
+    <% /* "Upload Thing" Modal */ %>
+    <modal v-if="uploadThingModalOpen" v-cloak key="upload"
+           @close="closeUploadThingModal()">
+      <div class="modal-header">
+        <h5 class="modal-title">Upload a new thing</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+      </div>
+
+      <ajax-form action="uploadThing" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+                 :handle-parsing="handleParsingUploadThingForm"
+                 @submitted="submittedUploadThingForm()">
+        <div class="modal-body">
+          <div class="card border border-light bg-white  mb-3 w-100%">
+            <div class="card-header  bg-white text-left">Add a photo:</div>
+            <div class="row no-gutters">
+              <div class="col-md-6 pl-3 pt-3">
+                <img src="https://via.placeholder.com/340x210.jpg" class="card-img" alt="...">
+              </div>
+              <div class="col-md-6">
+                <div class="card-body bg-white">
+                  <div class="col d-flex-column justify-content-center">
+               <!-- <span class="file-upload-button btn btn-sm"
+                      :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
+               -->   <!--<span class="button-text" v-if="!uploadFormData.previewImageSrc">&lt;!&ndash;Select image&ndash;&gt;</span>
+                  <span class="button-text" v-else>Change image</span>-->
+                  <input type="file" :disabled="syncing" accept="image/*"
+                         class="file-input" @change="changeFileInput($event.target.files)"/>
+           <!--     </span>-->
+                   <!-- <p class="image-advice text-muted" v-if="!formErrors.photo"><strong>Tip</strong>: Make sure the item
+                      is front and center in the photo, so people know exactly what you're offering to share.</p>
+                    <p class="image-advice text-danger" v-if="formErrors.photo">A photo is required in order to add a
+                      new item.</p>-->
+                  </div>
+                  <!--<h5 class="card-title">Card title</h5>-->
+                  <!--<p><button class="btn btn-outline-success">Select image</button></p>-->
+                  <p class="card-text">This is a wider card with supporting text Lorem ipsum dolor sit amet, consectetur
+                    adipisicing elit. Corporis veritatis. Enim facilis quos tempora!.</p>
+                  <p class="card-text">
+                    <small class="text-muted">Last updated 3 mins ago</small>
+                  </p>
+                  <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroup-sizing-sm">Small</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-sm">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-sm-4">
-            <div class="card" >
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-            </div>
-
-            <ul>
-              <li v-for="thing in things" @click="clickThing(thing.id)">{{thing.label}}</li>
-            </ul>
-            &lt;!&ndash; <h1>TODO: Implement this page.</h1>
-             <p>(See also <em>assets/styles/pages/things/available-things.less</em>, <em>assets/js/pages/things/available-things.page.js</em>, and <em>api/controllers/things/view-available-things.js</em>.)</p>
-           &ndash;&gt;
-
-
-          </div>-->
-    </div>
+          <p class="text-danger" v-if="cloudError">
+            <small>An error occured while processing your request. Please check your information and try again, or <a
+                href="/contact">contact support</a> if the error persists.
+            </small>
+          </p>
+        </div>
+        <div class="modal-footer flex-row-reverse justify-content-start">
+          <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1">Share item</ajax-button>
+          <button data-dismiss="modal" class="btn btn-outline-primary mr-1">Cancel</button>
+        </div>
+      </ajax-form>
+    </modal>
 
     <% /* "Confirm Delete Thing" Modal */ %>
     <modal v-if="confirmDeleteThingModalOpen && selectedThing" v-cloak key="delete"
@@ -90,16 +119,21 @@
       <ajax-form action="destroyOneThing" :syncing.sync="syncing" :cloud-error.sync="cloudError"
                  :handle-parsing="handleParsingDeleteThingForm"
                  @submitted="submittedDeleteThingForm()">
-      <div class="modal-body">
-        <p>Are you sure you want to remove this {{selectedThing.label || 'item'}}?</p>
-        <p class="text-muted" v-if="selectedThing.borrowedBy">We will no longer be able to assist with the return of this item, so you will need to contact {{selectedThing.borrowedBy.fullName}} directly to coordinate.</p>
-        <p v-else>This item will no longer be available to share with friends.</p>
-        <p class="text-danger" v-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persists.</small></p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal">Nevermind</button>
-        <button type="submit" class="btn btn-danger ml-1">Remove</button>
-      </div>
+        <div class="modal-body">
+          <p>Are you sure you want to remove this {{selectedThing.label || 'item'}}?</p>
+          <p class="text-muted" v-if="selectedThing.borrowedBy">We will no longer be able to assist with the return of
+            this item, so you will need to contact {{selectedThing.borrowedBy.fullName}} directly to coordinate.</p>
+          <p v-else>This item will no longer be available to share with friends.</p>
+          <p class="text-danger" v-if="cloudError">
+            <small>An error occured while processing your request. Please check your information and try again, or <a
+                href="/contact">contact support</a> if the error persists.
+            </small>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary mr-1" data-dismiss="modal">Nevermind</button>
+          <button type="submit" class="btn btn-danger ml-1">Remove</button>
+        </div>
       </ajax-form>
     </modal>
 

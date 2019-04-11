@@ -23,8 +23,13 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    // sails.uploadOne();
+    let info = await sails.uploadOne(inputs.photo);
+    console.log(info);
 
+    await Thing.create({
+      label: inputs.label,
+      owner: this.req.me.id
+    });
     return exits.success();
 
   }

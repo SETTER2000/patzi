@@ -1,30 +1,34 @@
 <div id="welcome">
 
-
-  <div class="container">
-    <h1>Welcome!</h1>
-    <hr/>
-    <p>Это страница, которую могут посещать только зарегистрированные пользователи. Ты не чувствуешь себя особенным? Попробуйте нажать на кнопку ниже, чтобы сделать некоторые вещи, которые вы не можете сделать, когда вы вышли из системы.</p>
-    <div class="buttons">
-      <a class="btn btn-info" href="/account/profile">Update my email</a>
-      <a class="btn btn-danger" href="/things/available-things">Available Things</a>
-      <a class="btn btn-success" href="/things/portfolio">Portfolio</a>
-      <button class="btn btn-outline-info ml-2" @click="clickOpenExampleModalButton()">FAQ</button>
-    </div>
-  </div>
-
+  <!--<section class="about-area section-gap">-->
+  <!--<div class="container">-->
+    <!--<h1>Welcome!</h1>-->
+    <!--<hr/>-->
+    <!--<p>This is a page that only registered users can visit. You do not feel special?-->
+      <!--Try clicking the button below to do some things that you cannot do until you are logged in.</p>-->
+    <!--<div class="buttons">-->
+      <!--<a class="btn btn-danger" href="/things/available-things">Available Things</a>-->
+      <!--&lt;!&ndash;<a class="btn btn-success" href="/things/portfolio">Portfolio</a>&ndash;&gt;-->
+      <!--<button class="btn btn-outline-info ml-2" @click="clickOpenExampleModalButton()">Modal</button>-->
+    <!--</div>-->
+  <!--</div>-->
+  <!--</section>-->
 
   <!-- start banner Area -->
   <section class="home-banner-area">
     <div class="container-fluid">
       <div class="row fullscreen d-flex align-items-center">
         <div class="banner-content col-lg-4 col-md-8 justify-content-center ">
+
+
+
+
           <h1 class="wow fadeIn" data-wow-duration="1s" data-wow-delay=".6s">Gr<span>o</span>wth <br />
             mat<span>t</span>er</h1>
           <div class="designation mb-25 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.5s">
             <p>Poale Ell Chinese Crested Dog Kennel</p>
           </div>
-          <a href="#" class="primary-btn" data-text="Explore More">
+          <a href="#" @click="clickOpenExampleModalButton()" class="primary-btn" data-text="Explore More">
             <span>E</span>
             <span>x</span>
             <span>p</span>
@@ -38,6 +42,8 @@
             <span>r</span>
             <span>e</span>
           </a>
+
+          <!--<button class="btn btn-outline-info ml-2" @click="clickOpenExampleModalButton()">Modal</button>-->
         </div>
         <div class="banner-img offset-lg-1 col-lg-7 col-md-6">
           <img class="img-fluid" style="-webkit-filter: contrast(1.3);filter: contrast(1.3);" src="/images/banner-img-light.png" alt="">

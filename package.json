@@ -12,7 +12,8 @@
     "sails-hook-apianalytics": "^2.0.3",
     "sails-hook-organics": "^0.16.0",
     "sails-hook-orm": "^2.1.1",
-    "sails-hook-sockets": "^1.5.5"
+    "sails-hook-sockets": "^1.5.5",
+    "sails-hook-uploads": "^0.4.2"
   },
   "devDependencies": {
     "@sailshq/eslint": "^4.19.3",
