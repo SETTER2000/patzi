@@ -60,6 +60,7 @@
       href="https://fonts.googleapis.com/css?family=Oswald:300,500,600|Roboto:400,700"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="/112098-dog-breeds-heads/font/flaticon.css" />
     <link rel="stylesheet" href="/pro/flaticon.css" />
     <link rel="stylesheet" href="/pro/themify-icons.css" />
     <link rel="stylesheet" href="/pro/bootstrap.css" />
@@ -119,13 +120,16 @@
         <div class="container main-menu">
           <div class="row align-items-center d-flex">
             <div id="logo">
-              <a href="/"><img src="/images/logo.png" alt="NEW_APP_NAME logo" title=""/></a>
+              <a href="/">
+                <!--<img src="/images/logo.svg">-->
+                <img src="/images/logo.png" alt="NEW_APP_NAME logo" title=""/>
+              </a>
             </div>
             <nav id="nav-menu-container">
               <ul class="nav-menu">
                 <% if(me) { %>
                 <li class=""><a class="active" href="/">Home</a></li>
-                <li><a href="about.html">About</a></li>
+                <li><a href="/about">About</a></li>
                 <li><a href="/litters/kennel">Litters</a></li>
                 <li class="menu-has-children">
                   <a href="#">Pages</a>
@@ -320,6 +324,7 @@
     <script src="/js/components/modal.component.js"></script>
     <script src="/js/utilities/open-stripe-checkout.js"></script>
     <script src="/js/pages/498.page.js"></script>
+    <script src="/js/pages/about.page.js"></script>
     <script src="/js/pages/account/account-overview.page.js"></script>
     <script src="/js/pages/account/edit-password.page.js"></script>
     <script src="/js/pages/account/edit-profile.page.js"></script>
