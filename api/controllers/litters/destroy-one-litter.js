@@ -1,10 +1,10 @@
 module.exports = {
 
 
-  friendlyName: 'Destroy one thing',
+  friendlyName: 'Destroy one litter',
 
 
-  description: 'Delete the "thing"  with the specified ID from the database.',
+  description: 'Удалите «помёт» с указанным идентификатором из базы данных.',
 
 
   inputs: {
@@ -21,7 +21,7 @@ module.exports = {
       responseType:'notFound' // как раньше res.notFound(), сейчас это встроеная функция sails
     },
     forbidden: {
-      description: 'The user making this request does\'t have the permissions to delete this thing.',
+      description: 'Пользователь делающий данный запрос не имеет право на удаление этого помёта.',
       responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
     }
   },
@@ -29,19 +29,18 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     console.log('INPUTS:', inputs);
-    let thing = await Thing.findOne({
+    let litter = await Litter.findOne({
       id: inputs.id
     });
-
-    if (!thing) {
+    if (!litter) {
       throw 'notFound';
     }
-
-    if (thing.owner !== this.req.me.id) {
+    if (litter.owner !== this.req.me.id) {
       throw 'forbidden';
     }
 
-    await Thing.destroy({id: inputs.id});
+    await Litter.destroy({id: inputs.id});
     return exits.success();
   }
+
 };

@@ -81,16 +81,20 @@
     <% /* "Confirm Delete Thing" Modal */ %>
     <modal v-if="confirmDeleteThingModalOpen && selectedThing" v-cloak key="delete"
            @close="closeDeleteThingModal()">
-      <ajax-form action="destroyOneThing" :syncing.sync="syncing" :cloud-error.sync="cloudError">
       <div class="modal-header">
         <h5 class="modal-title">Remove this item?</h5>
-        <button class="close p-3" data-dismiss="modal" aria-label="Close">
-          <span >&times;</span>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
         </button>
       </div>
+      <ajax-form action="destroyOneThing" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+                 :handle-parsing="handleParsingDeleteThingForm"
+                 @submitted="submittedDeleteThingForm()">
       <div class="modal-body">
-        <p class="text-center">Are you sure you want to remove this {{selectedThing.label || 'item'}}?
-          <br>This item will no longer be available to share with friends.</p>
+        <p>Are you sure you want to remove this {{selectedThing.label || 'item'}}?</p>
+        <p class="text-muted" v-if="selectedThing.borrowedBy">We will no longer be able to assist with the return of this item, so you will need to contact {{selectedThing.borrowedBy.fullName}} directly to coordinate.</p>
+        <p v-else>This item will no longer be available to share with friends.</p>
+        <p class="text-danger" v-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persists.</small></p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline-secondary mr-1" data-dismiss="modal">Nevermind</button>

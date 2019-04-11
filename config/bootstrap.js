@@ -15,7 +15,7 @@ module.exports.bootstrap = async function () {
   var path = require('path');
 
   // This bootstrap version indicates what version of fake data we're dealing with here.
-  var HARD_CODED_DATA_VERSION = 3;
+  var HARD_CODED_DATA_VERSION = 4;
 
   // This path indicates where to store/look for the JSON file that tracks the "last run bootstrap info"
   // locally on this development computer (if we happen to be on a development computer).
@@ -85,7 +85,14 @@ module.exports.bootstrap = async function () {
     {owner: alexFox.id, label: 'Красный рассвет'}
   ]).fetch();
 
-  await Litter.createEach([{label: 'a', born: new Date(2016, 3, 10)}, {label: 'b', born: new Date(2017, 10, 3)}]).fetch();
+  await Litter.createEach([
+    {owner: alexFox.id,label: 'a', born: new Date(2016, 3, 10)},
+    {owner: alexFox.id,label: 'b', born: new Date(2017, 10, 3)},
+    {owner: ryanDahl.id,label: 'c', born: new Date(2008, 2, 15)},
+    {owner: ryanDahl.id,label: 'd', born: new Date(2010, 5, 21)}
+    ]).fetch();
+
+
   // Save new bootstrap version
   await sails.helpers.fs.writeJson.with({
     destination: bootstrapLastRunInfoPath,

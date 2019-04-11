@@ -3,7 +3,13 @@ parasails.registerPage('kennel', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-    //…
+    litters: [],
+    confirmDeleteLitterModalOpen: false,
+    selectedLitter: undefined,
+    // Состояние загрузки
+    syncing: false,
+    // Состояние ошибки сервера
+    cloudError: '',
   },
   filters: {
     capitalize: function (value) {
@@ -42,11 +48,38 @@ parasails.registerPage('kennel', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    clickLitter: async function (thingId) {
-      console.log('clicked a thing #' + thingId);
-      /*await Cloud.destroyOneThing.with({id:thingId});
-      _.remove(this.things, {id:thingId});
-      this.$forceUpdate();*/
+   /* clickLitter: async function (litterId) {
+      console.log('clicked a litter #' + litterId);
+      /!*await Cloud.destroyOneLitters.with({id:litterId});
+      _.remove(this.litters, {id:litterId});
+      this.$forceUpdate();*!/
+    }*/
+
+    // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
+    // Это кнопка вызывает модальное окно <modal> с <ajax-form>
+    clickDeleteLitter: function (litterId) {
+      console.log(`click the "delete" button! ID: ${litterId}`);
+      this.confirmDeleteLitterModalOpen = true;
+      this.selectedLitter = _.find(this.litters, {id: litterId});
+    },
+
+    closeDeleteLitterModal: function () {
+      this.selectedLitter = undefined;
+      this.confirmDeleteLitterModalOpen = false;
+    },
+
+    handleParsingDeleteLitterForm: function () {
+      return {
+        id: this.selectedLitter.id
+      }
+    },
+
+    submittedDeleteLitterForm: function () {
+      console.log(`Ok it worked ID: ${this.selectedLitter.id}!`);
+      _.remove(this.litters, {id: this.selectedLitter.id});
+      this.$forceUpdate();
+      this.confirmDeleteLitterModalOpen = false;
+      this.selectedLitter = undefined;
     }
   }
 });
