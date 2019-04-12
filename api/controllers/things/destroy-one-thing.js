@@ -28,7 +28,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    console.log('INPUTS:', inputs);
+    // console.log('INPUTS:', inputs);
     let thing = await Thing.findOne({
       id: inputs.id
     });

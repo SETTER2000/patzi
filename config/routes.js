@@ -37,7 +37,6 @@ module.exports.routes = {
   'GET /account/profile':    { action: 'account/view-edit-profile' },
 
   'GET /things/available-things': { action: 'things/view-available-things' },
-  'GET /things/portfolio': { action: 'things/view-portfolio' },
 
   'GET /litters/kennel': { action: 'litters/view-kennel' },
 
@@ -74,8 +73,11 @@ module.exports.routes = {
   'POST    /api/v1/entrance/send-password-recovery-email': { action: 'entrance/send-password-recovery-email' },
   'POST    /api/v1/entrance/update-password-and-login':    { action: 'entrance/update-password-and-login' },
   'POST    /api/v1/deliver-contact-form-message':          { action: 'deliver-contact-form-message' },
-  'DELETE  /api/v1/things/destroy-one-thing':              { action: 'things/destroy-one-thing' },
   'DELETE  /api/v1/litters/destroy-one-litter':            { action: 'litters/destroy-one-litter' },
-  'POST    /api/v1/things/upload-thing':                   { action: 'things/upload-thing' },
   'POST    /api/v1/litters/upload-litter':                 { action: 'litters/upload-litter' },
+
+  'POST    /api/v1/things/upload-thing':                   { action: 'things/upload-thing' },
+  'GET     /api/v1/things/:id':                            { action: 'things/download-photo' },
+  'DELETE  /api/v1/things/destroy-one-thing':              { action: 'things/destroy-one-thing' },
+
 };

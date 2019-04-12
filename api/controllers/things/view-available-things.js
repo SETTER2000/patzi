@@ -18,6 +18,9 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
+    // Бибилиотека Node.js
+    const url = require('url');
+
     // Выбираем авторизованного пользователя и всех его
     // друзей по ассоциативному полю friends
     let me = await User.findOne({
@@ -40,8 +43,25 @@ module.exports = {
     let things = await Thing.find({
       or: [{owner: this.req.me.id}, {owner: {in: friendIds}}]
     }).populate('owner');
-
     console.log(things);
+    /**
+     * Здесь будем превращать поток байт в нормальное изображение для frontend
+     * исключая некоторые данные не нужные для страницы.
+     * Есть пару способов сделать это.
+     * 1. В цикле
+     * 2. С библиотекой Lodash
+     */
+
+    _.each(things, (thing) => {
+      // Устанавливаем свойство источника изображения
+      // Первый аргумент, базовый url
+      thing.imageSrc = url.resolve(sails.config.custom.baseUrl,`/api/v1/things/${thing.id}`);
+      // ... затем мы удаляем наш файловый дескриптор
+      delete thing.imageUploadFD;
+      // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
+      delete thing.imageUploadMime;
+    });
+
     // Respond with view.
     return exits.success({
       things,

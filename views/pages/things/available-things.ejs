@@ -4,7 +4,7 @@
       <div class="col text-center ">
         <h1 class="pt-3">Things</h1>
         <p>View available items to borrow, to upload your own things.</p>
-        <button @click="clickUploadThing()" class="btn btn-outline-info">Add an item</button>
+        <button @click="clickAddButton()" class="btn btn-outline-info">Add an item</button>
       </div>
     </div>
     <div class="row m-5">
@@ -22,18 +22,19 @@
                       Delete
                     </a>
                     <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <!--     <a class="dropdown-item" href="#">Another action</a>
+                     <a class="dropdown-item" href="#">Something else here</a>-->
                   </div>
                 </div>
               </li>
             </ul>
           </div>
+          <img :src="thing.imageSrc" class="card-img-top" alt="...">
           <div class="card-body">
             <h5 class="card-title">{{thing.label}}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-              content.</p>
+
+            <h6 class="card-subtitle mb-2 text-muted">{{thing.title}}</h6>
+            <p class="card-text">{{thing.subtitle}}</p>
             <p v-if="thing.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mine</p>
             <a v-if="thing.owner.id !== me.id" href="#" class="card-link">{{thing.owner.fullName}}</a>
           </div>
@@ -42,7 +43,7 @@
     </div>
 
     <% /* "Upload Thing" Modal */ %>
-    <modal v-if="uploadThingModalOpen" v-cloak key="upload"
+    <modal v-if="uploadThingModalOpen" v-cloak key="new"
            @close="closeUploadThingModal()">
       <div class="modal-header">
         <h5 class="modal-title">Upload a new thing</h5>
@@ -53,8 +54,52 @@
 
       <ajax-form action="uploadThing" :syncing.sync="syncing" :cloud-error.sync="cloudError"
                  :handle-parsing="handleParsingUploadThingForm"
-                 @submitted="submittedUploadThingForm()">
+                 @submitted="submittedUploadThingForm($event)">
+
         <div class="modal-body">
+          <div class="form-group"><label>Add a photo:</label>
+            <div class="photo-uploader">
+              <div class="photo-upload-field row d-flex align-items-center">
+                <div class="col d-flex-column justify-content-center">
+                  <!--
+                  :disabled - отключает input для приёма изображений,
+                   когда флаг синхронизации (syncing) содержит true
+                   Поробное описание в "JOURNAL" SAILS.JS.txt
+                  -->
+                  <input type="file" @change="changeFileInput($event.target.files)"
+                         :disabled="syncing" accept="image/*" class="file-input">
+                  <p class="image-advice text-muted" v-if="!formErrors.photo">
+                    <strong>Tip</strong>: Make sure the item is front and center in the photo,
+                    so people know exactly what you're offering to share.
+                  </p>
+                  <p class="image-advice text-danger" v-if="formErrors.photo">
+                    A photo is required in order to add a new item.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>What is it?</label>
+            <input class="form-control" type="text" v-model="uploadFormData.label" placeholder="Waffle Iron">
+            <label>Title</label>
+            <input class="form-control" type="text" v-model="uploadFormData.title" placeholder="Brief Information">
+        <label>Sub Title</label>
+            <input class="form-control" type="text" v-model="uploadFormData.subtitle" placeholder="Complete Description">
+          </div>
+          <p class="text-danger" v-if="cloudError === 'tooBig'">
+            <small>That file is too big. Please choose a junkier picture.</small>
+          </p>
+          <p class="text-danger" v-else-if="cloudError">
+            <small>An error occured while processing your request. Please check your information and try again, or <a href="/support">contact
+                support</a> if the error persists.
+            </small>
+          </p>
+
+        </div>
+
+
+        <!--<div class="modal-body">
           <div class="card border border-light bg-white  mb-3 w-100%">
             <div class="card-header  bg-white text-left">Add a photo:</div>
             <div class="row no-gutters">
@@ -64,20 +109,20 @@
               <div class="col-md-6">
                 <div class="card-body bg-white">
                   <div class="col d-flex-column justify-content-center">
-               <!-- <span class="file-upload-button btn btn-sm"
+               &lt;!&ndash; <span class="file-upload-button btn btn-sm"
                       :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
-               -->   <!--<span class="button-text" v-if="!uploadFormData.previewImageSrc">&lt;!&ndash;Select image&ndash;&gt;</span>
-                  <span class="button-text" v-else>Change image</span>-->
+               &ndash;&gt;   &lt;!&ndash;<span class="button-text" v-if="!uploadFormData.previewImageSrc">&lt;!&ndash;Select image&ndash;&gt;</span>
+                  <span class="button-text" v-else>Change image</span>&ndash;&gt;
                   <input type="file" :disabled="syncing" accept="image/*"
                          class="file-input" @change="changeFileInput($event.target.files)"/>
-           <!--     </span>-->
-                   <!-- <p class="image-advice text-muted" v-if="!formErrors.photo"><strong>Tip</strong>: Make sure the item
+           &lt;!&ndash;     </span>&ndash;&gt;
+                   &lt;!&ndash; <p class="image-advice text-muted" v-if="!formErrors.photo"><strong>Tip</strong>: Make sure the item
                       is front and center in the photo, so people know exactly what you're offering to share.</p>
                     <p class="image-advice text-danger" v-if="formErrors.photo">A photo is required in order to add a
-                      new item.</p>-->
+                      new item.</p>&ndash;&gt;
                   </div>
-                  <!--<h5 class="card-title">Card title</h5>-->
-                  <!--<p><button class="btn btn-outline-success">Select image</button></p>-->
+                  &lt;!&ndash;<h5 class="card-title">Card title</h5>&ndash;&gt;
+                  &lt;!&ndash;<p><button class="btn btn-outline-success">Select image</button></p>&ndash;&gt;
                   <p class="card-text">This is a wider card with supporting text Lorem ipsum dolor sit amet, consectetur
                     adipisicing elit. Corporis veritatis. Enim facilis quos tempora!.</p>
                   <p class="card-text">
@@ -99,7 +144,7 @@
                 href="/contact">contact support</a> if the error persists.
             </small>
           </p>
-        </div>
+        </div>-->
         <div class="modal-footer flex-row-reverse justify-content-start">
           <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1">Share item</ajax-button>
           <button data-dismiss="modal" class="btn btn-outline-primary mr-1">Cancel</button>

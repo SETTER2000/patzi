@@ -9,12 +9,14 @@ parasails.registerPage('available-things', {
 
     uploadThingModalOpen: false,
     uploadFormData: {
-      label: ''
+      label: '',
+      photo: undefined
     },
-    // Validation errors:
-    formErrors: {},
+
     // Состояние загрузки
     syncing: false,
+    // Validation errors:
+    formErrors: {},
     // Состояние ошибки сервера
     cloudError: '',
   },
@@ -50,33 +52,9 @@ parasails.registerPage('available-things', {
       this.selectedThing = _.find(this.things, {id: thingId});
     },
 
-    // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
-    // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
-    clickUploadThing: function () {
-      console.log(`click the "Add an item" button!`);
-      this.uploadThingModalOpen = true;
-      // this.selectedThing = _.find(this.things, {id: thingId});
-    },
-    _clearUploadThingModal: function () {
-      // Close modal
-      this.uploadThingModalOpen = false;
-      // Reset form data
-      this.uploadFormData = {
-        label: ''
-      };
-      // Clear error states
-      this.formErrors = {};
-      this.cloudError = '';
-    },
-
     closeDeleteThingModal: function () {
       this.selectedThing = undefined;
       this.confirmDeleteThingModalOpen = false;
-    },
-
-    closeUploadThingModal: function () {
-      this.selectedThing = undefined;
-      this.uploadThingModalOpen = false;
     },
 
     handleParsingDeleteThingForm: function () {
@@ -93,6 +71,33 @@ parasails.registerPage('available-things', {
       this.selectedThing = undefined;
     },
 
+    // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
+    // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
+    clickAddButton: function () {
+      console.log(`click the "Add an item" button!`);
+      this.uploadThingModalOpen = true;
+      // this.selectedThing = _.find(this.things, {id: thingId});
+    },
+
+    _clearUploadThingModal: function () {
+      // Close modal
+      this.uploadThingModalOpen = false;
+      // Reset form data
+      this.uploadFormData = {
+        label: '',
+        photo: undefined
+      };
+      // Clear error states
+      this.formErrors = {};
+      this.cloudError = '';
+    },
+
+    closeUploadThingModal: function () {
+      this._clearUploadThingModal();
+      /*this.selectedThing = undefined;
+      this.uploadThingModalOpen = false;*/
+    },
+
     handleParsingUploadThingForm: function () {
       this.formErrors = {};
       let argins = this.uploadFormData;
@@ -105,44 +110,75 @@ parasails.registerPage('available-things', {
       return argins;
     },
 
+    /**
+     * Обрабатывает success от сервера, при загрузке файла без ошибок.
+     * Т.е. как только форма загрузки файла на сервер отработала без ошибок,
+     * эта функция получает результат и должна вставить новые данные на страницу.
+     */
     submittedUploadThingForm: function (result) {
+      // Добавлем новые данные в уже имеющийся массив things
+      this.things.push({
+        label: this.uploadFormData.label,
+        id: result.id,
+        imageSrc:result.imageSrc,
+        title:this.uploadFormData.title,
+        subtitle:this.uploadFormData.subtitle,
+        owner: {
+          id: this.me.id,
+          fullName: this.me.fullName,
+        },
+      });
       this._clearUploadThingModal();
     },
 
-    changeFileInput: function(files) {
-      if (files.length !== 1 && !this.uploadFormData.photo) {
-        throw new Error('Consistency violation: `changeFileInput` was somehow called with an empty array of files, or with more than one file in the array!  This should never happen unless there is already an uploaded file tracked.');
-      }
-      var selectedFile = files[0];
-
-      // If you cancel from the native upload window when you already
-      // have a photo tracked, then we just avast (return early).
-      // In this case, we just leave whatever you had there before.
-      // Если вы отменяете из собственного окна загрузки, когда вы уже
-      // отслеживаем фотографию, тогда мы просто avast (возвращаемся рано).
-      // В этом случае мы просто оставляем все, что у вас было раньше.
-      if (!selectedFile && this.uploadFormData.photo) {
+    changeFileInput: function (files) {
+      let selectedFile = files[0];
+      if (!selectedFile) {
+        this.uploadFormData.photo = undefined;
         return;
       }
-
       this.uploadFormData.photo = selectedFile;
+    }
 
-      // Set up the file preview for the UI:
-      // Настройка предварительного просмотра файла для пользовательского интерфейса:
-      var reader = new FileReader();
-      reader.onload = (event)=>{
-        this.uploadFormData.previewImageSrc = event.target.result;
 
-        // Unbind this "onload" event.
-        // Отмена привязки этого события onload.
-        delete reader.onload;
-      };
-      // Clear out any error messages about not providing an image.
-      // Убираем любые сообщения об ошибках о не предоставлении изображения.
-      this.formErrors.photo = false;
-      reader.readAsDataURL(selectedFile);
 
-    },
+    /*  changeFileInput: function(files) {
+        if (files.length !== 1 && !this.uploadFormData.photo) {
+          throw new Error('Consistency violation: `changeFileInput` was somehow called with an empty array of files, or with more than one file in the array!  This should never happen unless there is already an uploaded file tracked.');
+        }
+        var selectedFile = files[0];
+
+        // If you cancel from the native upload window when you already
+        // have a photo tracked, then we just avast (return early).
+        // In this case, we just leave whatever you had there before.
+        // Если вы отменяете из собственного окна загрузки, когда вы уже
+        // отслеживаем фотографию, тогда мы просто avast (возвращаемся рано).
+        // В этом случае мы просто оставляем все, что у вас было раньше.
+        if (!selectedFile && this.uploadFormData.photo) {
+          return;
+        }
+
+        this.uploadFormData.photo = selectedFile;
+
+        // Set up the file preview for the UI:
+        // Настройка предварительного просмотра файла для пользовательского интерфейса:
+        var reader = new FileReader();
+        reader.onload = (event)=>{
+          this.uploadFormData.previewImageSrc = event.target.result;
+
+          // Unbind this "onload" event.
+          // Отмена привязки этого события onload.
+          delete reader.onload;
+        };
+        // Clear out any error messages about not providing an image.
+        // Убираем любые сообщения об ошибках о не предоставлении изображения.
+        this.formErrors.photo = false;
+        reader.readAsDataURL(selectedFile);
+
+      },*/
+
+
+
     /*   rejectedDeleteThingForm: function (err) {
          console.log('Ups!!: ', err);
          /!*_.remove(this.things, {id: this.selectedThing.id});*!/

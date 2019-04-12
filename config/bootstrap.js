@@ -59,6 +59,7 @@ module.exports.bootstrap = async function () {
   }//∞
 
   // By convention, this is a good place to set up fake data during development.
+  // По общему мнению, это хорошее место для настройки поддельных данных во время разработки.
   let ryanDahl = await User.create(
     {
       emailAddress: 'admin@example.com',
@@ -78,12 +79,14 @@ module.exports.bootstrap = async function () {
   await User.addToCollection(alexFox.id, 'friends', [ryanDahl.id]);
   // await User.addToCollection(ryanDahl.id, 'friends', alexFox.id);
 
-  await Thing.createEach([
+  // В БУДУЩЕМ: Решить что с эти делать
+  // Create some things
+ /* await Thing.createEach([
     {owner: ryanDahl.id, label: 'Сладкая дрель'},
     {owner: ryanDahl.id, label: 'Капкан на куницу'},
     {owner: ryanDahl.id, label: 'Моторная лодка'},
     {owner: alexFox.id, label: 'Красный рассвет'}
-  ]).fetch();
+  ]).fetch();*/
 
   await Litter.createEach([
     {owner: alexFox.id,label: 'a', born: new Date(2016, 3, 10)},
