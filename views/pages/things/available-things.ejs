@@ -57,33 +57,61 @@
                  @submitted="submittedUploadThingForm($event)">
 
         <div class="modal-body">
-          <div class="form-group"><label>Add a photo:</label>
+          <div class="form-group">
+            <label>Add a photo:</label>
+            <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
+              <div class="photo-upload-field row d-flex align-items-center" :class="!uploadFormData.previewImageSrc ? 'justify-content-center' :  'justify-content-start'" >
+                <div class="photo-preview col">
+                  <div class="image-wrapper" :class="!uploadFormData.previewImageSrc ? 'd-flex align-items-center justify-content-center' : ''">
+                    <img v-if="uploadFormData.previewImageSrc" alt="A preview of the selected item" :src="uploadFormData.previewImageSrc"/>
+                    <span v-else class="placeholder-icon fa fa-picture-o"></span>
+                  </div>
+                </div>
+                <div class="col d-flex-column justify-content-center">
+                <span class="file-upload-button btn btn-sm" :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
+                  <span class="button-text" v-if="!uploadFormData.previewImageSrc">Select image</span>
+                  <span class="button-text" v-else>Change image</span>
+                  <input type="file" :disabled="syncing" accept="image/*" class="file-input" @change="changeFileInput($event.target.files)"/>
+                </span>
+                  <p class="image-advice text-muted" v-if="!formErrors.photo"><strong>Tip</strong>: Make sure the item is front and center in the photo, so people know exactly what you're offering to share.</p>
+                  <p class="image-advice text-danger" v-if="formErrors.photo">A photo is required in order to add a new item.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--<div class="form-group"><label>Add a photo:</label>
             <div class="photo-uploader">
               <div class="photo-upload-field row d-flex align-items-center">
                 <div class="col d-flex-column justify-content-center">
-                  <!--
+                  &lt;!&ndash;
                   :disabled - отключает input для приёма изображений,
                    когда флаг синхронизации (syncing) содержит true
                    Поробное описание в "JOURNAL" SAILS.JS.txt
-                  -->
+                  &ndash;&gt;
                   <input type="file" @change="changeFileInput($event.target.files)"
                          :disabled="syncing" accept="image/*" class="file-input">
                   <p class="image-advice text-muted" v-if="!formErrors.photo">
                     <strong>Tip</strong>: Make sure the item is front and center in the photo,
                     so people know exactly what you're offering to share.
                   </p>
+                  <p></p>
+                  <img :src="uploadFormData.photo" alt="">
                   <p class="image-advice text-danger" v-if="formErrors.photo">
                     A photo is required in order to add a new item.
                   </p>
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
           <div class="form-group">
             <label>What is it?</label>
             <input class="form-control" type="text" v-model="uploadFormData.label" placeholder="Waffle Iron">
+          </div>
+          <div class="form-group">
             <label>Title</label>
             <input class="form-control" type="text" v-model="uploadFormData.title" placeholder="Brief Information">
+          </div>
+          <div class="form-group">
         <label>Sub Title</label>
             <input class="form-control" type="text" v-model="uploadFormData.subtitle" placeholder="Complete Description">
           </div>

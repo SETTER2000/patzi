@@ -10,7 +10,8 @@ parasails.registerPage('available-things', {
     uploadThingModalOpen: false,
     uploadFormData: {
       label: '',
-      photo: undefined
+      photo: undefined,
+      previewImageSrc: ''
     },
 
     // Состояние загрузки
@@ -85,7 +86,8 @@ parasails.registerPage('available-things', {
       // Reset form data
       this.uploadFormData = {
         label: '',
-        photo: undefined
+        photo: undefined,
+        previewImageSrc: ''
       };
       // Clear error states
       this.formErrors = {};
@@ -102,12 +104,17 @@ parasails.registerPage('available-things', {
       this.formErrors = {};
       let argins = this.uploadFormData;
 
+      if(!argins.photo) {
+        this.formErrors.photo = true;
+      }
+
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined. (Thus signifies that the submission should be cancelled.)
       if (Object.keys(this.formErrors).length > 0) {
         return;
       }
-      return argins;
+      // return argins;
+      return _.omit(argins, ['previewImageSrc']);
     },
 
     /**
@@ -132,12 +139,32 @@ parasails.registerPage('available-things', {
     },
 
     changeFileInput: function (files) {
+      if (files.length !== 1 && !this.uploadFormData.photo) {
+        throw new Error('Consistency violation: `changeFileInput` was somehow called with an empty array of files, or with more than one file in the array!  This should never happen unless there is already an uploaded file tracked.');
+      }
+
       let selectedFile = files[0];
+
       if (!selectedFile) {
         this.uploadFormData.photo = undefined;
         return;
       }
+
+      console.log(selectedFile.name);
+
       this.uploadFormData.photo = selectedFile;
+
+      // Set up the file preview for the UI:
+      var reader = new FileReader();
+      reader.onload = (event)=>{
+        this.uploadFormData.previewImageSrc = event.target.result;
+
+        // Unbind this "onload" event.
+        delete reader.onload;
+      };
+      // Clear out any error messages about not providing an image.
+      this.formErrors.photo = false;
+      reader.readAsDataURL(selectedFile);
     }
 
 
