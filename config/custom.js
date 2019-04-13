@@ -57,8 +57,8 @@ module.exports.custom = {
    * (https://app.mailgun.com/app/domains)                                   *
    *                                                                         *
    **************************************************************************/
-  mailgunDomain: 'sandbfdgox8de4a59fgdf85b69c.mailgun.org',
-  mailgunSecret: 'key-4bb01d6f0dfgdfg85b32dfg8763c',
+  mailgunDomain: 'sandbox8de4a5908f2e4d85a8ea06f4b585b69c.mailgun.org',
+  mailgunSecret: 'key-4bb01d6f085b327149c0dc8226f8763c',
   //--------------------------------------------------------------------------
   // /\  Configure these to enable support for automated emails.
   // ||  (Important for password recovery, verification, contact form, etc.)
@@ -66,12 +66,12 @@ module.exports.custom = {
 
   // The sender that all outgoing emails will appear to come from.
   // Отправитель, от которого будут исходить все исходящие письма.
-  fromEmailAddress: 'noreply@example.com',
-  fromName: 'The NEW_APP_NAME Team',
+  fromEmailAddress: 'lphp@mail.ru',
+  fromName: 'The Poale Ell Team',
 
   // Email address for receiving support messages & other correspondences.
   // Адрес электронной почты для получения сообщений поддержки и другой корреспонденции.
-  internalEmailAddress: 'user@example.com',
+  internalEmailAddress: 'ins09@mail.ru',
 
   // Whether to require proof of email address ownership any time a new user
   // signs up, or when an existing user attempts to change their email address.
@@ -87,8 +87,8 @@ module.exports.custom = {
    * (https://dashboard.stripe.com/account/apikeys)                          *
    *                                                                         *
    **************************************************************************/
-  stripePublishableKey: 'pk_test_8seggs234piW00tQzsodOT',
-  stripeSecret: 'sk_test_AF4t21g651fgh5d0UE2pJBmk',
+  stripePublishableKey: 'pk_test_8KuhQJFhYBuRlXga9rXeUpiW00tQzsodOT',
+  stripeSecret: 'sk_test_AFRysKkBtj3HTE8n7VimMo0b00UE2pJBmk',
   //--------------------------------------------------------------------------
   // /\  Configure these to enable support for billing features.
   // ||  (Or if you don't need billing, feel free to remove them.)

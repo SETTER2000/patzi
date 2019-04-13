@@ -1609,7 +1609,7 @@ h1, h2, h3, h4, h5, h6 {
       cursor: pointer;
       border: 1px solid #f1f1f1; }
     .primary-checkbox input:checked + label {
-      background: url(../images/elements/primary-check.png) no-repeat center center/cover;
+      background: url(../../images/elements/primary-check.png) no-repeat center center/cover;
       border: none; }
 
 .confirm-checkbox {
@@ -1640,7 +1640,7 @@ h1, h2, h3, h4, h5, h6 {
       cursor: pointer;
       border: 1px solid #f1f1f1; }
     .confirm-checkbox input:checked + label {
-      background: url(../images/elements/success-check.png) no-repeat center center/cover;
+      background: url(../../images/elements/success-check.png) no-repeat center center/cover;
       border: none; }
 
 .disabled-checkbox {
@@ -1674,7 +1674,7 @@ h1, h2, h3, h4, h5, h6 {
       cursor: not-allowed;
       z-index: 3; }
     .disabled-checkbox input:checked + label {
-      background: url(../images/elements/disabled-check.png) no-repeat center center/cover;
+      background: url(../../images/elements/disabled-check.png) no-repeat center center/cover;
       border: none; }
 
 .primary-radio {
@@ -1705,7 +1705,7 @@ h1, h2, h3, h4, h5, h6 {
       cursor: pointer;
       border: 1px solid #f1f1f1; }
     .primary-radio input:checked + label {
-      background: url(../images/elements/primary-radio.png) no-repeat center center/cover;
+      background: url(../../images/elements/primary-radio.png) no-repeat center center/cover;
       border: none; }
 
 .confirm-radio {
@@ -1736,7 +1736,7 @@ h1, h2, h3, h4, h5, h6 {
       cursor: pointer;
       border: 1px solid #f1f1f1; }
     .confirm-radio input:checked + label {
-      background: url(../images/elements/success-radio.png) no-repeat center center/cover;
+      background: url(../../images/elements/success-radio.png) no-repeat center center/cover;
       border: none; }
 
 .disabled-radio {
@@ -1770,7 +1770,7 @@ h1, h2, h3, h4, h5, h6 {
       cursor: not-allowed;
       z-index: 3; }
     .disabled-radio input:checked + label {
-      background: url(../images/elements/disabled-radio.png) no-repeat center center/cover;
+      background: url(../../images/elements/disabled-radio.png) no-repeat center center/cover;
       border: none; }
 
 .default-select {
@@ -2194,7 +2194,7 @@ body.mobile-nav-active #mobile-nav-toggle {
           margin-right: 8px; }
 
 .banner-area {
-  background: url(../images/banner/common-banner.jpg) no-repeat;
+  background: url(../../images/banner/common-banner.jpg) no-repeat;
   background-size: cover;
   position: relative; }
   .banner-area:after {
@@ -2677,7 +2677,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 ################
 */
 .blog-home-banner {
-  background: url(../images/blog/blog-home-banner.jpg) bottom;
+  background: url(../../images/blog/blog-home-banner.jpg) bottom;
   background-size: cover;
   padding: 130px 0px; }
   .blog-home-banner .primary-btn {

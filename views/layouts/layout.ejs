@@ -7,7 +7,7 @@
 } %><!DOCTYPE html>
 <html lang="zxx" class="no-js">
   <head>
-    <title>NEW_APP_NAME</title>
+    <title>Poale Ell</title>
 
     <% /* Viewport tag for sensible mobile support
     Тег Viewport для разумной мобильной поддержки */ %>
@@ -60,117 +60,26 @@
       href="https://fonts.googleapis.com/css?family=Oswald:300,500,600|Roboto:400,700"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/112098-dog-breeds-heads/font/flaticon.css" />
-    <link rel="stylesheet" href="/pro/flaticon.css" />
-    <link rel="stylesheet" href="/pro/themify-icons.css" />
-    <link rel="stylesheet" href="/pro/bootstrap.css" />
-    <link rel="stylesheet" href="/pro/magnific-popup.css" />
-    <link rel="stylesheet" href="/pro/nice-select.css" />
-    <link rel="stylesheet" href="/pro/animate.min.css" />
-    <link rel="stylesheet" href="/pro/owl.carousel.css" />
-    <link rel="stylesheet" href="/pro/main.css" />
+
     <% /* Auto-injected «link» tags: */ %>
     <!--STYLES-->
     <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/pro/animate.min.css">
+    <link rel="stylesheet" href="/styles/pro/bootstrap.css">
+    <link rel="stylesheet" href="/styles/pro/flaticon.css">
+    <link rel="stylesheet" href="/styles/pro/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/pro/linearicons.css">
+    <link rel="stylesheet" href="/styles/pro/magnific-popup.css">
+    <link rel="stylesheet" href="/styles/pro/main.css">
+    <link rel="stylesheet" href="/styles/pro/nice-select.css">
+    <link rel="stylesheet" href="/styles/pro/owl.carousel.css">
+    <link rel="stylesheet" href="/styles/pro/themify-icons.css">
     <!--STYLES END-->
   </head>
   <body>
-  <!-- Start Preloader Area -->
-  <div class="preloader-area">
-    <div class="loader-box">
-      <div class="loader"></div>
-    </div>
-  </div>
-  <!-- End Preloader Area -->
-    <div id="page-wrap">
-   <!--   <header id="page-header" class="navbar navbar-expand-sm navbar-dark bg-dark flex-column flex-md-row justify-content-between">
-        <a class="navbar-brand mr-0" href="/"><img class="logo" alt="NEW_APP_NAME logo" src="/images/logo.png"/></a>
-        <div class="navbar-nav flex-row">
-          &lt;!&ndash; LOGGED-IN NAVIGATION &ndash;&gt;
-          <% if(me) { %>
-          <a class="nav-item nav-link ml-2 ml-md-0 mr-2 mr-md-0" href="/contact">Help</a>
-          &lt;!&ndash; Only in desktop nav &ndash;&gt;
-          <div class="nav-item dropdown d-none d-sm-block">
-            <a class="nav-link dropdown-toggle" id="header-account-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
-            <div class="dropdown-menu account-menu" aria-labelledby="header-account-menu-link">
-              <a class="dropdown-item" href="/account">Settings</a>
-              <a class="dropdown-item" href="/logout">Sign out</a>
-            </div>
-          </div>
-          &lt;!&ndash; Only in mobile nav &ndash;&gt;
-          <a class="nav-item nav-link ml-2 mr-2 d-block d-sm-none" href="/account">Account Settings</a>
-          <a class="nav-item nav-link ml-2 mr-2 d-block d-sm-none" href="/logout">Sign out</a>
-          <% } else { %>
-          &lt;!&ndash; LOGGED-OUT NAVIGATION &ndash;&gt;
-          <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/faq">FAQ</a>
-          <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/login">Log in</a>
-          &lt;!&ndash; Only in desktop nav &ndash;&gt;
-          <div class="form-inline d-none ml-2 d-md-block" >
-            <a class="btn btn-outline-info" href="/signup">Sign up</a>
-          </div>
-          &lt;!&ndash; Only in mobile nav &ndash;&gt;
-          <a class="nav-item nav-link text-info ml-2 d-block d-md-none" href="/signup">Sign up</a>
-          <% } %>
-        </div>
-      </header>-->
 
+    <!--<div id="page-wrap">-->
 
-      <!-- Start Header Area -->
-      <header id="header" class="mb-0">
-        <div class="container main-menu">
-          <div class="row align-items-center d-flex">
-            <div id="logo">
-              <a href="/">
-                <!--<img src="/images/logo.svg">-->
-                <img src="/images/logo.png" alt="NEW_APP_NAME logo" title=""/>
-              </a>
-            </div>
-            <nav id="nav-menu-container">
-              <ul class="nav-menu">
-                <% if(me) { %>
-                <li class=""><a class="active" href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/litters/kennel">Litters</a></li>
-                <li><a href="/things/available-things">Things</a></li>
-                <li class="menu-has-children">
-                  <a href="#">Pages</a>
-                  <ul>
-                    <li><a href="elements.html">Elements</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="pricing.html">Pricing</a></li>
-                    <li><a href="project-details.html">Project Details</a></li>
-                  </ul>
-                </li>
-                <li class="menu-has-children">
-                  <a href="">Blog</a>
-                  <ul>
-                    <li><a href="blog-home.html">Blog Home</a></li>
-                    <li><a href="blog-single.html">Blog Single</a></li>
-                  </ul>
-                </li>
-                <li><a href="/contact">Help</a></li>
-                <li class="menu-has-children">
-                  <a href="">Account</a>
-                  <ul>
-                    <li><a class="dropdown-item" href="/account">Settings</a></li>
-                    <li><a class="dropdown-item" href="/logout">Sign out</a></li>
-                  </ul>
-                </li>
-                <% } else { %>
-                <!-- LOGGED-OUT NAVIGATION -->
-                <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/faq">FAQ</a></li>
-                <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/login">Log in</a></li>
-                <!-- Only in desktop nav -->
-                <li> <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/signup">Sign up</a></li>
-                <!-- Only in mobile nav -->
-                <li><a class="nav-item nav-link text-info ml-2 d-block d-md-none" href="/signup">Sign up</a></li>
-                <% } %>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
-      <!-- End Header Area -->
       <!-- Alert if email has not been confirmed -->
       <!-- Оповещение, если электронная почта не была подтверждена -->
       <% if(me&&me.emailChangeCandidate) { %>
@@ -186,7 +95,69 @@
         </div>
       </div>
       <% } %>
-
+    <!-- Start Preloader Area -->
+    <div class="preloader-area">
+      <div class="loader-box">
+        <div class="loader"></div>
+      </div>
+    </div>
+    <!-- End Preloader Area -->
+    <!-- Start Header Area -->
+    <header id="header" class="mb-0 way-down">
+      <div class="container main-menu">
+        <div class="row align-items-center d-flex">
+          <div id="logo">
+            <a href="/">
+              <!--<img src="/images/logo.svg">-->
+              <img src="/images/logo.png" alt="Poale Ell logo" title=""/>
+            </a>
+          </div>
+          <nav id="nav-menu-container">
+            <ul class="nav-menu">
+              <% if(me) { %>
+              <li class=""><a class="active" href="/">Home</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/litters/kennel">Litters</a></li>
+              <li><a href="/things/available-things">Things</a></li>
+              <li class="menu-has-children">
+                <a href="#">Pages</a>
+                <ul>
+                  <li><a href="elements.html">Elements</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                  <li><a href="pricing.html">Pricing</a></li>
+                  <li><a href="project-details.html">Project Details</a></li>
+                </ul>
+              </li>
+              <li class="menu-has-children">
+                <a href="">Blog</a>
+                <ul>
+                  <li><a href="blog-home.html">Blog Home</a></li>
+                  <li><a href="blog-single.html">Blog Single</a></li>
+                </ul>
+              </li>
+              <li><a href="/contact">Help</a></li>
+              <li class="menu-has-children">
+                <a href="">Account</a>
+                <ul>
+                  <li><a class="dropdown-item" href="/account">Settings</a></li>
+                  <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+                </ul>
+              </li>
+              <% } else { %>
+              <!-- LOGGED-OUT NAVIGATION -->
+              <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/faq">FAQ</a></li>
+              <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/login">Log in</a></li>
+              <!-- Only in desktop nav -->
+              <li> <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/signup">Sign up</a></li>
+              <!-- Only in mobile nav -->
+              <li><a class="nav-item nav-link text-info ml-2 d-block d-md-none" href="/signup">Sign up</a></li>
+              <% } %>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <!-- End Header Area -->
       <%- body %>
       <!-- start footer Area -->
       <footer class="footer-area section-gap">
@@ -263,7 +234,7 @@
         </div>
         <small class="copy">Copyright &copy; 2019 <a target="_blank" href="NEW_APP_COMPANY_ABOUT_HREF">NEW_APP_COMPANY_NAME</a>. <br class="xs-only"/>All rights reserved.</small>
       </footer>-->
-    </div>
+    <!--</div>-->
 
 
     <% /*
