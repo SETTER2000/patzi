@@ -86,15 +86,14 @@ module.exports.bootstrap = async function () {
     {owner: ryanDahl.id, label: 'Капкан на куницу'},
     {owner: ryanDahl.id, label: 'Моторная лодка'},
     {owner: alexFox.id, label: 'Красный рассвет'}
-  ]).fetch();*/
-/*
+  ]).fetch();
 
-    await Litter.createEach([
-      {owner: alexFox.id,label: 'a', born: new Date(2016, 3, 10)},
-      {owner: alexFox.id,label: 'b', born: new Date(2017, 10, 3)},
-      {owner: ryanDahl.id,label: 'c', born: new Date(2008, 2, 15)},
-      {owner: ryanDahl.id,label: 'd', born: new Date(2010, 5, 21)}]).fetch();
-  */
+          await Litter.createEach([
+            {owner: alexFox.id,label: 'a', born: new Date(2016, 3, 10)},
+            {owner: alexFox.id,label: 'b', born: new Date(2017, 10, 3)},
+            {owner: ryanDahl.id,label: 'c', born: new Date(2008, 2, 15)},
+            {owner: ryanDahl.id,label: 'd', born: new Date(2010, 5, 21)}]).fetch();
+        */
 
 
   // Save new bootstrap version
