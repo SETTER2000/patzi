@@ -8,6 +8,7 @@
     "@sailshq/connect-redis": "^3.2.1",
     "@sailshq/lodash": "^3.10.3",
     "@sailshq/socket.io-redis": "^5.2.0",
+    "ajv-keywords": "^3.4.0",
     "async": "^2.6.2",
     "moment": "^2.24.0",
     "sails": "^1.1.0",
@@ -24,7 +25,9 @@
     "@sailshq/eslint": "^4.19.3",
     "@sailshq/htmlhint": "^0.9.16",
     "@sailshq/lesshint": "^4.6.6",
+    "ajv": "^5.5.2",
     "grunt": "^1.0.4",
+    "grunt-contrib-jst": "1.0.0",
     "grunt-sync": "0.8.0",
     "mocha": "^6.1.2",
     "supertest": "4.0.2"
