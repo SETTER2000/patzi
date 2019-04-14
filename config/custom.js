@@ -100,5 +100,5 @@ module.exports.custom = {
    *                                                                          *
    ***************************************************************************/
   // …
-
+  googleMapKey: 'AIzaSyCi1WzkP0B6eptXv8PRt4UrmocL7cieOiI',
 };
