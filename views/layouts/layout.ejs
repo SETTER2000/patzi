@@ -247,7 +247,26 @@
 <% /* Load Google Map Checkout */ %>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCi1WzkP0B6eptXv8PRt4UrmocL7cieOiI&callback=initMap" async defer></script>
 
+<script src='https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js'></script>
+<script src='https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js'></script>
 
+<script>
+  // external js: masonry.pkgd.js, imagesloaded.pkgd.js
+
+  // init Masonry
+  var grid = document.querySelector('.grid');
+
+  var msnry = new Masonry( grid, {
+    itemSelector: '.grid-item',
+    columnWidth: '.grid-sizer',
+    percentPosition: true
+  });
+
+  imagesLoaded( grid ).on( 'progress', function() {
+    // layout Masonry after each image loads
+    msnry.layout();
+  });
+</script>
 <% /* Delete the global `self` to help avoid client-side bugs.
     (see https://developer.mozilla.org/en-US/docs/Web/API/Window/self)
     Удалите глобальное `self`, чтобы избежать ошибок на стороне клиента.

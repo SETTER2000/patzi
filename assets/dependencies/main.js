@@ -482,6 +482,25 @@ function initMap() {
   });
 }
 
+
+// external js: masonry.pkgd.js, imagesloaded.pkgd.js
+
+// init Masonry
+// const grid = document.querySelector('.grid');
+//
+// const msnry = new Masonry( grid, {
+//   itemSelector: '.grid-item',
+//   columnWidth: '.grid-sizer',
+//   percentPosition: true
+// });
+//
+// imagesLoaded( grid ).on( 'progress', function() {
+//   // layout Masonry after each image loads
+//   msnry.layout();
+// });
+
+
+
 // This example defines an image map type using the Gall-Peters
 // projection.
 // https://en.wikipedia.org/wiki/Gall%E2%80%93Peters_projection

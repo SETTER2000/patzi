@@ -13,7 +13,6 @@ parasails.registerPage('available-things', {
       photo: undefined,
       previewImageSrc: ''
     },
-
     // Состояние загрузки
     syncing: false,
     // Validation errors:
@@ -21,7 +20,28 @@ parasails.registerPage('available-things', {
     // Состояние ошибки сервера
     cloudError: '',
   },
-
+  filters: {
+    capital: function (value) {
+      if (!value) return '';
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+    date: function (value,ru) {
+      if (!value) return '';
+      let date, year, month, dt;
+      date = new Date(value);
+      year = date.getFullYear();
+      month = date.getMonth() + 1;
+      dt = date.getDate();
+      if (dt < 10) {
+        dt = '0' + dt;
+      }
+      if (month < 10) {
+        month = '0' + month;
+      }
+      return  (ru==='ru') ? `${dt}.${month}.${year}`:`${year}.${month}.${dt}`;
+    }
+  },
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝

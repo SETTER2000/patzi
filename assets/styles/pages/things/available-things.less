@@ -1,8 +1,4 @@
 #available-things {
-  /*.page-header {
-    .page-header();
-  }*/
-
   .listings {
     max-width: 1000px;
     margin: 0 auto;
@@ -151,4 +147,51 @@
       }
     }
   }
+
+
+  // ФОТО
+
+  * { box-sizing: border-box; }
+
+  /* force scrollbar */
+  html { overflow-y: scroll; }
+
+  body { font-family: sans-serif; }
+
+  /* ---- grid ---- */
+
+  .grid {
+    /*background: #DDD;*/
+  }
+
+  /* clear fix */
+  .grid:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  /* ---- .grid-item ---- */
+
+  .grid-sizer,
+  .grid-item {
+    width: 12em;
+    /*width: 33.333%;*/
+  }
+
+  .grid-item {
+    float: left;
+  }
+
+  .grid-item img {
+    display: block;
+    max-width: 100%;
+  }
+
+  .jp{
+    border: .1em solid #ffffff;
+    border-radius: .3rem;
+  }
+
+
 }
