@@ -116,6 +116,11 @@ module.exports = {
   * > that in `config/blueprints.js`, since you'll want to disable them in  *
   * > all environments (not just in production.)                            *
   *                                                                         *
+   * > Вы также можете отключить любые другие маршруты чертежей, если вы не *
+      *> фактически используя их (например, «действия» и «отдых») - но вы можете сделать *
+      *> это в `config / blueprints.js`, так как вы хотите отключить их в *
+      *> всех средах (не только в производстве.) *
+      *
   ***************************************************************************/
   blueprints: {
     shortcuts: false,
