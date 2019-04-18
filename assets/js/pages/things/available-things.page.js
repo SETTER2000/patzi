@@ -22,12 +22,13 @@ parasails.registerPage('available-things', {
   },
   filters: {
     capital: function (value) {
-      if (!value) return '';
+      if (!value) {return '';}
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
-    date: function (value,ru) {
-      if (!value) return '';
+    date: function (value) {
+      return value.toLocaleString();
+      /*if (!value) return '';
       let date, year, month, dt;
       date = new Date(value);
       year = date.getFullYear();
@@ -39,7 +40,7 @@ parasails.registerPage('available-things', {
       if (month < 10) {
         month = '0' + month;
       }
-      return  (ru==='ru') ? `${dt}.${month}.${year}`:`${year}.${month}.${dt}`;
+      return  (ru==='ru') ? `${dt}.${month}.${year}`:`${year}.${month}.${dt}`;*/
     }
   },
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗

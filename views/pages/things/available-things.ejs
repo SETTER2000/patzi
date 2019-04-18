@@ -2,23 +2,23 @@
 
   <div class="row align-items-center">
     <div class="col text-center ">
-      <h1 class="pt-3">Things</h1>
+      <h1 class="pt-3">Dogs</h1>
       <p>View available items to borrow, to upload your own things.</p>
       <button @click="clickAddButton()" class="btn btn-outline-info">Add an item</button>
     </div>
   </div>
 
-  <div class="container">
+ <!-- <div class="container">
     <div class="grid">
       <div class="grid-sizer"></div>
       <div class="grid-item" v-for="(thing, key, index) in things" :key="index">
         <img class="jp" :src="thing.imageSrc" alt="">
       </div>
     </div>
-  </div>
+  </div>-->
 
 
-<!--  <div class="container">
+  <div class="container">
     <div class="row m-5">
       <div v-for="(thing, key, index) in things" :key="index" class="col-sm-4">
         <div class="card mt-lg-4 ">
@@ -34,8 +34,8 @@
                       Delete
                     </a>
                     <a class="dropdown-item" href="#">Action</a>
-                    &lt;!&ndash;     <a class="dropdown-item" href="#">Another action</a>
-                     <a class="dropdown-item" href="#">Something else here</a>&ndash;&gt;
+                    <!--     <a class="dropdown-item" href="#">Another action</a>
+                     <a class="dropdown-item" href="#">Something else here</a>-->
                   </div>
                 </div>
               </li>
@@ -54,7 +54,7 @@
       </div>
     </div>
   </div>
-  <section class="work-area section-gap-top" id="work">
+<!--  <section class="work-area section-gap-top" id="work">
     <div class="container">
       <div class="filters-content">
         <div class="row grid">

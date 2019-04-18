@@ -28,7 +28,6 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    console.log('INPUTS:', inputs);
     let litter = await Litter.findOne({
       id: inputs.id
     });

@@ -31,10 +31,10 @@ module.exports = {
      * friends: [{id: ..., fullName: ...,}],
      * }
      */
-      // Функция pluck из встроенного в sails, lodash v3
-      // если версия Lodash 4, то эта функция заменена на map (_.map(users, 'firstName'))
-      // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
-      // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
+    // Функция pluck из встроенного в sails, lodash v3
+    // если версия Lodash 4, то эта функция заменена на map (_.map(users, 'firstName'))
+    // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
+    // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
     let friendIds = _.pluck(me.friends, 'id'); // friendIds: [id,id,id...]
 
     let litters = await Litter.find({

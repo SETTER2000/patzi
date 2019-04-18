@@ -121,7 +121,7 @@
           <li class=""><a class="active" href="/">Home</a></li>
           <li><a href="/about">About</a></li>
           <li><a href="/litters/kennel">Litters</a></li>
-          <li><a href="/things/available-things">Things</a></li>
+          <li><a href="/things/available-things">Dogs</a></li>
           <li class="menu-has-children">
             <a href="#">Pages</a>
             <ul>
@@ -227,7 +227,6 @@
 </div>
 <!-- ####################### End Scroll to Top Area ####################### -->
 
-
 <% /*
       Client-side JavaScript
       ========================
@@ -244,10 +243,7 @@
 <% /* Load Stripe Checkout */ %>
 <script src="https://checkout.stripe.com/checkout.js"></script>
 
-<% /* Load Google Map Checkout */ %>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCi1WzkP0B6eptXv8PRt4UrmocL7cieOiI&callback=initMap" async defer></script>
-
-<script src='https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js'></script>
+<script src='https://unpkg.com/masonry-layout@4.2.2/dist/masonry.pkgd.min.js'></script>
 <script src='https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js'></script>
 
 <% /* Delete the global `self` to help avoid client-side bugs.
@@ -562,6 +558,7 @@
     return s
   });</script>
 <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+
 <% /* Auto-injected «script» tags: */ %>
 <!--SCRIPTS-->
 <script src="/dependencies/sails.io.js"></script>
@@ -613,7 +610,43 @@
 <script src="/js/pages/things/available-things.page.js"></script>
 <!--SCRIPTS END-->
 
+<% /* Load Google Map Checkout */ %>
+<script>
+  var map;
+  function initMap() {
+    if(document.getElementById('map') !== null) {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 55.636564706, lng: 37.516969567},
+        zoom: 16
+      });
+    }
+  }
+</script>
+<script>
+/*  var map;
 
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 55.636564706, lng: 37.516969567},
+      zoom: 16 /!* Уровни масштабирования от 0 - Земля. 10 - Город, 15 - это примерно улица, 20 - здание! *!/
+    });
+  }*/
+
+  // Чтобы настроить местоположение на карте можно раскомментировать
+  // и посмортеть точные координаты в консоли
+  //   var coordsDiv = document.getElementById('coords');
+  //   //map.controls[google.maps.ControlPosition.TOP_CENTER].push(coordsDiv);
+  //   map.addListener('mouseup', function(event) {
+  //     /*console.log('event.latLng.lat(): ', event.latLng.lat());
+  //     console.log('event.latLng.lng():', event.latLng.lng());*/
+  //     coordsDiv.textContent =
+  //       'lat: ' + Math.round(event.latLng.lat()) + ', ' +
+  //       'lng: ' + Math.round(event.latLng.lng());
+  //   });
+  // }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCi1WzkP0B6eptXv8PRt4UrmocL7cieOiI&callback=initMap"></script>
 
 <% /* Display an overlay if the current browser is not supported.
     (Relies on `bowser`, which is loaded inline above.)

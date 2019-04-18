@@ -13,13 +13,14 @@ parasails.registerPage('kennel', {
   },
   filters: {
     capitalize: function (value) {
-      if (!value) return '';
+      if (!value) {return '';}
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
-    date: function (value,ru) {
-      if (!value) return '';
-      let date, year, month, dt;
+    date (value, ru) {
+      // return value.toLocaleString();
+      if (!value) {return '';}
+      let date; let year; let month; let dt;
       date = new Date(value);
       year = date.getFullYear();
       month = date.getMonth() + 1;
@@ -48,7 +49,7 @@ parasails.registerPage('kennel', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-   /* clickLitter: async function (litterId) {
+    /* clickLitter: async function (litterId) {
       console.log('clicked a litter #' + litterId);
       /!*await Cloud.destroyOneLitters.with({id:litterId});
       _.remove(this.litters, {id:litterId});
@@ -71,7 +72,7 @@ parasails.registerPage('kennel', {
     handleParsingDeleteLitterForm: function () {
       return {
         id: this.selectedLitter.id
-      }
+      };
     },
 
     submittedDeleteLitterForm: function () {

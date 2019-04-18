@@ -230,6 +230,11 @@ $(document).ready(function() {
 
   //------- Google Map  js --------//
 
+
+ /* if (document.getElementById("map")) {
+    initMap();
+  }*/
+
  /* if (document.getElementById("map")) {
     google.maps.event.addDomListener(window, "load", init);
 
@@ -463,10 +468,10 @@ $(document).ready(function() {
 
 
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
+/*function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 55.636564706, lng: 37.516969567},
-    zoom: 16 /* Уровни масштабирования от 0 - Земля. 10 - Город, 15 - это примерно улица, 20 - здание! */
+    zoom: 16 /!* Уровни масштабирования от 0 - Земля. 10 - Город, 15 - это примерно улица, 20 - здание! *!/
   });
 
   // Чтобы настроить местоположение на карте можно раскомментировать
@@ -474,30 +479,30 @@ function initMap() {
   var coordsDiv = document.getElementById('coords');
   //map.controls[google.maps.ControlPosition.TOP_CENTER].push(coordsDiv);
   map.addListener('mouseup', function(event) {
-    /*console.log('event.latLng.lat(): ', event.latLng.lat());
-    console.log('event.latLng.lng():', event.latLng.lng());*/
+    /!*console.log('event.latLng.lat(): ', event.latLng.lat());
+    console.log('event.latLng.lng():', event.latLng.lng());*!/
     coordsDiv.textContent =
       'lat: ' + Math.round(event.latLng.lat()) + ', ' +
       'lng: ' + Math.round(event.latLng.lng());
   });
-}
+}*/
 
 
 // external js: masonry.pkgd.js, imagesloaded.pkgd.js
 
-// init Masonry
-var grid = document.querySelector('.grid');
-
-var msnry = new Masonry( grid, {
-  itemSelector: '.grid-item',
-  columnWidth: '.grid-sizer',
-  percentPosition: true
-});
-
-imagesLoaded( grid ).on( 'progress', function() {
-  // layout Masonry after each image loads
-  msnry.layout();
-});
+// // init Masonry
+// var grid = document.querySelector('.grid');
+//
+// var msnry = new Masonry( grid, {
+//   itemSelector: '.grid-item',
+//   columnWidth: '.grid-sizer',
+//   percentPosition: true
+// });
+//
+// imagesLoaded( grid ).on( 'progress', function() {
+//   // layout Masonry after each image loads
+//   msnry.layout();
+// });
 
 
 
