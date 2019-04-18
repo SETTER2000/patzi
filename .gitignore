@@ -129,5 +129,5 @@ lib-cov
 *.log
 *.out
 *.pid
-*.docs
+*.docx
 
