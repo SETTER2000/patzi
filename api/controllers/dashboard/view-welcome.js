@@ -19,7 +19,7 @@ module.exports = {
 
   fn: async function () {
 
-    return {};
+    return {spinner:true};
 
   }
 

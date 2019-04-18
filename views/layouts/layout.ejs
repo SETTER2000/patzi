@@ -99,12 +99,14 @@
   </div>
 </div>
 <% } %>
+
 <!-- Start Preloader Area -->
 <div class="preloader-area">
   <div class="loader-box">
     <div class="loader"></div>
   </div>
 </div>
+
 <!-- End Preloader Area -->
 <!-- Start Header Area -->
 <header id="header" class="mb-0 way-down">
@@ -212,8 +214,7 @@
       <div class="col-lg-12">
         <p class="footer-text"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
           Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-          All rights reserved | This template is made with <i class="ti-heart" aria-hidden="true"></i> by <a
-            href="https://colorlib.com" target="_blank">Colorlib</a>
+          All rights reserved | This template is made with <i class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
           <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
       </div>
     </div>
@@ -242,7 +243,7 @@
 
 <% /* Load Stripe Checkout */ %>
 <script src="https://checkout.stripe.com/checkout.js"></script>
-
+<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
 <script src='https://unpkg.com/masonry-layout@4.2.2/dist/masonry.pkgd.min.js'></script>
 <script src='https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js'></script>
 
@@ -256,7 +257,8 @@
 <% /* bowser.js (for browser detection) -- included inline to avoid issues with minification that could affect the unsupported browser overlay
     bowser.js (для обнаружения в браузере) - встроенный, чтобы избежать проблем с минификацией, которые могут повлиять на неподдерживаемое наложение браузера
     */ %>
-<script>!function (e, i, s) {
+<script>
+  !function (e, i, s) {
     if ("undefined" != typeof module && module.exports) module.exports = s(); else if ("function" == typeof define && define.amd) define(i, s); else e[i] = s()
   }(this, "bowser", function () {
     var e = true;
@@ -557,7 +559,7 @@
     s.detect = i;
     return s
   });</script>
-<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+
 
 <% /* Auto-injected «script» tags: */ %>
 <!--SCRIPTS-->
