@@ -1,7 +1,9 @@
 @footer-height: 40px;
 @container-md-max-width: 1100px;
 
-[v-cloak] { display: none; }
+[v-cloak] {
+  display: none;
+}
 
 html, body {
   height: 100%;
@@ -10,22 +12,58 @@ html, body {
 
 #page-wrap {
   height: 100%;
-  /* lesshint-disable */height: auto !important;/* lesshint-enable */
+  /* lesshint-disable */
+  height: auto !important; /* lesshint-enable */
   // ^^The above is to disable "importantRule" and "duplicateProperty" rules.
   min-height: 100%;
   position: relative;
   padding-bottom: @footer-height;
 
+  .poaleell-ico{
+    position: relative;
+    display:inline-block;
+    height:31px;
+    width: 165px;
+  }
+  .poaleell-ico::after{
+    content:'';
+    height:100%;
+    width:100%;
+    position: absolute;
+    top:0;
+    left:0;
+    background-image: url("/images/logo2.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+
   header {
-    .logo {
-      height: 20px;
+    .logo{
+      position: relative;
+      display:inline-block;
+      height:31px;
+      width: 165px;
+    }
+    .logo::after {
+      content:'';
+      height:100%;
+      width:100%;
+      position: absolute;
+      top:0;
+      left:0;
+      background-image: url("/images/logo2.svg");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
     }
     a {
       cursor: pointer;
     }
     .dropdown-menu.account-menu {
       left: auto;
-      right: 0px;
+      right: 0;
     }
   }
 
@@ -40,8 +78,8 @@ html, body {
   height: @footer-height;
   width: 100%;
   position: absolute;
-  left: 0px;
-  bottom: 0px;
+  left: 0;
+  bottom: 0;
   .xs-only {
     display: none;
   }

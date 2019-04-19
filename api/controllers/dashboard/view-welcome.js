@@ -19,9 +19,9 @@ module.exports = {
 
   fn: async function () {
 
-    return {spinner:true};
+    // true - включить красный spinner на главной, false - выключить
+    return {spinner: true};
 
   }
-
 
 };

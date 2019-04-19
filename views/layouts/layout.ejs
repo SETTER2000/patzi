@@ -79,7 +79,8 @@
 </head>
 <body>
 
-<!--<div id="page-wrap">-->
+<div id="page-wrap">
+
 
 <!-- Alert if email has not been confirmed -->
 <!-- Оповещение, если электронная почта не была подтверждена -->
@@ -101,22 +102,24 @@
 <% } %>
 
 <!-- Start Preloader Area -->
+<% if(typeof spinner === "boolean" && spinner){ %>
 <div class="preloader-area">
   <div class="loader-box">
     <div class="loader"></div>
   </div>
 </div>
-
+<%}%>
 <!-- End Preloader Area -->
+
 <!-- Start Header Area -->
 <header id="header" class="mb-0 way-down">
   <div class="container main-menu">
     <div class="row align-items-center d-flex">
-      <div id="logo">
-        <a href="/">
-          <img src="/images/logo.png" alt="Poale Ell logo" title=""/>
+      <!--<div id="logo">-->
+        <a href="/" class="logo">
+          <!--<img src="/images/logo.png" alt="Poale Ell logo" title=""/>-->
         </a>
-      </div>
+      <!--</div>-->
       <nav id="nav-menu-container">
         <ul class="nav-menu">
           <% if(me) { %>
@@ -134,7 +137,7 @@
             </ul>
           </li>
           <li class="menu-has-children">
-            <a href="">Blog</a>
+            <a href="#">Blog</a>
             <ul>
               <li><a href="blog-home.html">Blog Home</a></li>
               <li><a href="blog-single.html">Blog Single</a></li>
@@ -142,7 +145,7 @@
           </li>
           <li><a href="/contact">Help</a></li>
           <li class="menu-has-children">
-            <a href="">Account</a>
+            <a href="#">Account</a>
             <ul>
               <li><a class="dropdown-item" href="/account">Settings</a></li>
               <li><a class="dropdown-item" href="/logout">Sign out</a></li>
@@ -165,63 +168,78 @@
 <!-- End Header Area -->
 <%- body %>
 <!-- start footer Area -->
-<footer class="footer-area section-gap">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-5 col-md-6 col-sm-6">
-        <div class="single-footer-widget">
-          <h6>About Us</h6>
-          <p>
-            If you own an Iphone, you’ve probably already worked out how much fun it is to use it to watch movies-it has
-            that.
-          </p>
+<% if(me){ %>
+  <% /* Высокий*/ %>
+  <footer class="footer-area section-gap">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5 col-md-6 col-sm-6">
+          <div class="single-footer-widget">
+            <h6>About Us</h6>
+            <p>
+              In the breed since 2004. Officially, the kennel Poale Ell, was registered in the international registry of the FCI federation in 2016, certificate No. 18431 dated 02.26.2016, owner Olga Petrova.
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="col-lg-5  col-md-6 col-sm-6">
-        <div class="single-footer-widget">
-          <h6>Newsletter</h6>
-          <p>Stay update with our latest</p>
-          <div class="" id="mc_embed_signup">
-            <form target="_blank" novalidate="true"
-                  action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                  method="get" class="form-inline">
-              <input class="form-control" name="EMAIL" placeholder="Email Address" onfocus="this.placeholder = ''"
-                     onblur="this.placeholder = 'Email Address'"
-                     required="" type="email">
-              <button class="click-btn btn btn-default"><i class="ti-arrow-right" aria-hidden="true"></i></button>
-              <div style="position: absolute; left: -5000px;">
-                <input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="" type="text">
-              </div>
-              <div class="info"></div>
-            </form>
+        <div class="col-lg-5  col-md-6 col-sm-6">
+          <div class="single-footer-widget">
+            <h6>Newsletter</h6>
+            <p>Stay update with our latest</p>
+            <div class="" id="mc_embed_signup">
+              <form target="_blank" novalidate="true"
+                    action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+                    method="get" class="form-inline">
+                <input class="form-control" name="EMAIL" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'"
+                       required="" type="email">
+                <button class="click-btn btn btn-default"><i class="ti-arrow-right" aria-hidden="true"></i></button>
+                <div style="position: absolute; left: -5000px;">
+                  <input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="" type="text">
+                </div>
+                <div class="info"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6 col-sm-6 social-widget">
+          <div class="single-footer-widget">
+            <h6>Follow Us</h6>
+            <p>Let us be social</p>
+            <div class="footer-social d-flex align-items-center">
+              <a href="https://www.facebook.com/olga.vasef"><i class="ti-facebook"></i></a>
+              <a href="https://www.instagram.com/poaleell/?hl=ru"><i class="ti-instagram"></i></a>
+              <a href="https://www.youtube.com/channel/UCu31A2FPy08gEG6904OqEfA"><i class="ti-youtube"></i></a>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-2 col-md-6 col-sm-6 social-widget">
-        <div class="single-footer-widget">
-          <h6>Follow Us</h6>
-          <p>Let us be social</p>
-          <div class="footer-social d-flex align-items-center">
-            <a href="#"><i class="ti-facebook"></i></a>
-            <a href="#"><i class="ti-twitter"></i></a>
-            <a href="#"><i class="ti-dribbble"></i></a>
-            <a href="#"><i class="ti-linkedin"></i></a>
-          </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <p class="footer-text"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+            All rights reserved | Poale Ell <i class="poaleell-ico"></i><!--<i class="ti-heart" aria-hidden="true"></i>--> by <a href="http://lphp.ru" target="_blank">www.lphp.ru</a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-12">
-        <p class="footer-text"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-          Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-          All rights reserved | This template is made with <i class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-      </div>
+  </footer>
+<%} else {%>
+  <% /* Низкий */ %>
+  <footer id="page-footer" class="navbar navbar-light justify-content-between flex-row-reverse">
+    <div class="nav">
+    <% /*  <small class="nav-item"><a class="nav-link text-info" target="_blank" href="https://github.com/mikermcneil/ration">Source code</a></small>*/ %>
+      <small class="nav-item"><a class="nav-link text-info" href="/contact">Contact<span class="d-none d-sm-inline"> us</span></a></small>
+      <small class="nav-item"><a class="nav-link text-info" href="/legal/terms">Terms<span class="d-none d-sm-inline"> of Use</span></a></small>
+      <small class="nav-item"><a class="nav-link text-info" href="/legal/privacy">Privacy<span class="d-none d-sm-inline"> policy</span></a></small>
+      <% if(me) { %>
+      <small class="nav-item"><a class="nav-link text-info" href="/logout">Sign out</a></small>
+      <% } %>
     </div>
-  </div>
-</footer>
-<!-- End footer Area -->
+    <small class="copy">Copyright &copy; 2018 <a target="_blank" href="https://sailsjs.com/about">Sails Co.</a> <br class="xs-only"/>All rights reserved.</small>
+  </footer>
 
+  <%}%>
+<!-- End footer Area -->
+</div>
 <!-- ####################### Start Scroll to Top Area ####################### -->
 <div id="back-top">
   <a title="Go to Top" href="#"> <i class="ti-angle-double-up"></i> </a>
