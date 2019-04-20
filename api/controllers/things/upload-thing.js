@@ -42,10 +42,8 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
     // Бибилиотека Node.js
     const url = require('url');
-
 
     /**
      * Принимает мета данные загружаемого файла
@@ -67,7 +65,6 @@ module.exports = {
     if (!info) {
       throw 'badRequest';
     }
-    console.log(info);
     let newThing = await Thing.create({
       imageUploadFD: info.fd,
       imageUploadMime: info.type,
@@ -76,14 +73,10 @@ module.exports = {
       title: inputs.title,
       subtitle: inputs.subtitle,
     }).fetch();
-
-
+    
     return exits.success({
       id: newThing.id,
       imageSrc: url.resolve(sails.config.custom.baseUrl, `/api/v1/things/${newThing.id}`)
     });
-
   }
-
-
 };
