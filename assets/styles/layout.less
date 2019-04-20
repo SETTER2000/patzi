@@ -8,8 +8,70 @@
 html, body {
   height: 100%;
   margin: 0;
+  background-image: url("/images/logo-fh.svg");
+  background-position: -8000px, -8000px;
+  background-repeat: no-repeat;
 }
-
+header {
+  .logo{
+    position: relative;
+    display:inline-block;
+    height:31px;
+    width: 165px;
+  }
+  .logo::after {
+    content:'';
+    height:100%;
+    width:100%;
+    position: absolute;
+    top:0;
+    left:0;
+    background-image: url("/images/logo.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  a {
+    cursor: pointer;
+  }
+  .dropdown-menu.account-menu {
+    left: auto;
+    right: 0;
+  }
+}
+footer{
+  .logo{
+    top: 3px;
+    position: relative;
+    display:inline-block;
+    height: 16px;
+    width:78px;
+  }
+  .logo::after {
+    content:'';
+    height:100%;
+    width:100%;
+    position: absolute;
+    top:0;
+    left:0;
+    background-image: url("/images/logo-f.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  .logo:hover::after {
+    content:'';
+    height:100%;
+    width:100%;
+    position: absolute;
+    top:0;
+    left:0;
+    background-image: url("/images/logo-fh.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+}
 #page-wrap {
   height: 100%;
   /* lesshint-disable */
@@ -22,8 +84,8 @@ html, body {
   .poaleell-ico{
     position: relative;
     display:inline-block;
-    height:31px;
-    width: 165px;
+    height:16px;
+    width: 16px;
   }
   .poaleell-ico::after{
     content:'';
@@ -32,40 +94,14 @@ html, body {
     position: absolute;
     top:0;
     left:0;
-    background-image: url("/images/logo2.svg");
+    background-image: url("/images/ico.svg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
   }
 
 
-  header {
-    .logo{
-      position: relative;
-      display:inline-block;
-      height:31px;
-      width: 165px;
-    }
-    .logo::after {
-      content:'';
-      height:100%;
-      width:100%;
-      position: absolute;
-      top:0;
-      left:0;
-      background-image: url("/images/logo2.svg");
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: contain;
-    }
-    a {
-      cursor: pointer;
-    }
-    .dropdown-menu.account-menu {
-      left: auto;
-      right: 0;
-    }
-  }
+
 
   // App-wide styles for our ajax buttons
   .ajax-button {

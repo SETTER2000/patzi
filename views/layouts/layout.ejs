@@ -78,9 +78,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/css/jquery.fancybox.min.css"/>
 </head>
 <body>
-
+<% if(!me){ %>
 <div id="page-wrap">
-
+<%}%>
 
 <!-- Alert if email has not been confirmed -->
 <!-- Оповещение, если электронная почта не была подтверждена -->
@@ -132,8 +132,8 @@
             <ul>
               <li><a href="elements.html">Elements</a></li>
               <li><a href="/contact">Contact</a></li>
-              <li><a href="pricing.html">Pricing</a></li>
-              <li><a href="project-details.html">Project Details</a></li>
+              <li><a href="/pricing">Pricing</a></li>
+              <li><a href="/projects/project-details">Project Details</a></li>
             </ul>
           </li>
           <li class="menu-has-children">
@@ -214,10 +214,9 @@
       </div>
       <div class="row">
         <div class="col-lg-12">
-          <p class="footer-text"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          <p class="footer-text">
             Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-            All rights reserved | Poale Ell <i class="poaleell-ico"></i><!--<i class="ti-heart" aria-hidden="true"></i>--> by <a href="http://lphp.ru" target="_blank">www.lphp.ru</a>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+            All rights reserved | <a href="/"><i class="logo"></i></a>by <a href="http://lphp.ru" target="_blank">www.lphp.ru</a></p>
         </div>
       </div>
     </div>
@@ -234,12 +233,14 @@
       <small class="nav-item"><a class="nav-link text-info" href="/logout">Sign out</a></small>
       <% } %>
     </div>
-    <small class="copy">Copyright &copy; 2018 <a target="_blank" href="https://sailsjs.com/about">Sails Co.</a> <br class="xs-only"/>All rights reserved.</small>
-  </footer>
+    <small class="copy">Copyright &copy; 2019 <a target="_blank" href="/">Poale Ell.</a> <br class="xs-only"/>All rights reserved.</small>
 
+  </footer>
   <%}%>
 <!-- End footer Area -->
+  <% if(!me){ %>
 </div>
+<%}%>
 <!-- ####################### Start Scroll to Top Area ####################### -->
 <div id="back-top">
   <a title="Go to Top" href="#"> <i class="ti-angle-double-up"></i> </a>
@@ -576,7 +577,8 @@
     s._detect = i;
     s.detect = i;
     return s
-  });</script>
+  });
+</script>
 
 
 <% /* Auto-injected «script» tags: */ %>
@@ -627,6 +629,7 @@
 <script src="/js/pages/legal/privacy.page.js"></script>
 <script src="/js/pages/legal/terms.page.js"></script>
 <script src="/js/pages/litters/kennel.page.js"></script>
+<script src="/js/pages/pricing.page.js"></script>
 <script src="/js/pages/things/available-things.page.js"></script>
 <!--SCRIPTS END-->
 
