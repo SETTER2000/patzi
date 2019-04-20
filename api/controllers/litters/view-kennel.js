@@ -10,6 +10,7 @@ module.exports = {
   exits: {
 
     success: {
+      currentSection: 'kennel',
       viewTemplatePath: 'pages/litters/kennel'
     }
 
@@ -45,7 +46,7 @@ module.exports = {
     // Respond with view.
     return exits.success({
       litters,
-      currentSection: 'litters'
+      currentSection: 'kennel'
     });
 
   }

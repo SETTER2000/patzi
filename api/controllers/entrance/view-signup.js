@@ -27,7 +27,7 @@ module.exports = {
       throw {redirect: '/'};
     }
 
-    return {};
+    return { currentSection: 'signup'};
 
   }
 

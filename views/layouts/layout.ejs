@@ -76,99 +76,101 @@
   <link rel="stylesheet" href="/styles/pro/themify-icons.css">
   <!--STYLES END-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/css/jquery.fancybox.min.css"/>
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 </head>
 <body>
 <% if(!me){ %>
 <div id="page-wrap">
-<%}%>
+  <% } %>
 
-<!-- Alert if email has not been confirmed -->
-<!-- Оповещение, если электронная почта не была подтверждена -->
-<% if(me && me.emailChangeCandidate) { %>
-<div class="container-fluid">
-  <div class="alert alert-secondary mt-2" role="alert">
-    Your updated email address needs verification. Until you click the link sent to
-    <strong><%= me.emailChangeCandidate %></strong>, you'll still need to sign in as
-    <strong><%= me.emailAddress %></strong>.
+  <!-- Alert if email has not been confirmed -->
+  <!-- Оповещение, если электронная почта не была подтверждена -->
+  <% if(me && me.emailChangeCandidate) { %>
+  <div class="container-fluid">
+    <div class="alert alert-secondary mt-2" role="alert">
+      Your updated email address needs verification. Until you click the link sent to
+      <strong><%= me.emailChangeCandidate %></strong>, you'll still need to sign in as
+      <strong><%= me.emailAddress %></strong>.
+    </div>
   </div>
-</div>
-<% } else if(me && me.emailStatus === 'unconfirmed') { %>
-<div class="container-fluid">
-  <div class="alert alert-secondary mt-2" role="alert">
-    Your email address still needs verification. Your account access may be limited until you click the link sent to
-    <strong><%= me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress %></strong>.
+  <% } else if(me && me.emailStatus === 'unconfirmed') { %>
+  <div class="container-fluid">
+    <div class="alert alert-secondary mt-2" role="alert">
+      Your email address still needs verification. Your account access may be limited until you click the link sent to
+      <strong><%= me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress %></strong>.
+    </div>
   </div>
-</div>
-<% } %>
+  <% } %>
 
-<!-- Start Preloader Area -->
-<% if(typeof spinner === "boolean" && spinner){ %>
-<div class="preloader-area">
-  <div class="loader-box">
-    <div class="loader"></div>
+  <!-- Start Preloader Area -->
+  <% if(typeof spinner === "boolean" && spinner){ %>
+  <div class="preloader-area">
+    <div class="loader-box">
+      <div class="loader"></div>
+    </div>
   </div>
-</div>
-<%}%>
-<!-- End Preloader Area -->
+  <% } %>
+  <!-- End Preloader Area -->
 
-<!-- Start Header Area -->
-<header id="header" class="mb-0 way-down">
-  <div class="container main-menu">
-    <div class="row align-items-center d-flex">
-      <!--<div id="logo">-->
+  <!-- Start Header Area -->
+  <header id="header" class="mb-0 way-down">
+    <div class="container main-menu">
+      <div class="row align-items-center d-flex">
+        <!--<div id="logo">-->
         <a href="/" class="logo">
           <!--<img src="/images/logo.png" alt="Poale Ell logo" title=""/>-->
         </a>
-      <!--</div>-->
-      <nav id="nav-menu-container">
-        <ul class="nav-menu">
-          <% if(me) { %>
-          <li class=""><a class="active" href="/">Home</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/litters/kennel">Litters</a></li>
-          <li><a href="/things/available-things">Dogs</a></li>
-          <li class="menu-has-children">
-            <a href="#">Pages</a>
-            <ul>
-              <li><a href="elements.html">Elements</a></li>
-              <li><a href="/contact">Contact</a></li>
-              <li><a href="/pricing">Pricing</a></li>
-              <li><a href="/litters/litter">Litter Details</a></li>
-            </ul>
-          </li>
-          <li class="menu-has-children">
-            <a href="#">Blog</a>
-            <ul>
-              <li><a href="blog-home.html">Blog Home</a></li>
-              <li><a href="blog-single.html">Blog Single</a></li>
-            </ul>
-          </li>
-          <li><a href="/contact">Help</a></li>
-          <li class="menu-has-children">
-            <a href="#">Account</a>
-            <ul>
-              <li><a class="dropdown-item" href="/account">Settings</a></li>
-              <li><a class="dropdown-item" href="/logout">Sign out</a></li>
-            </ul>
-          </li>
-          <% } else { %>
-          <!-- LOGGED-OUT NAVIGATION -->
-          <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/faq">FAQ</a></li>
-          <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/login">Log in</a></li>
-          <!-- Only in desktop nav -->
-          <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/signup">Sign up</a></li>
-          <!-- Only in mobile nav -->
-          <li><a class="nav-item nav-link text-info ml-2 d-block d-md-none" href="/signup">Sign up</a></li>
-          <% } %>
-        </ul>
-      </nav>
+        <!--</div>-->
+        <nav id="nav-menu-container">
+          <ul class="nav-menu">
+            <% if(me) { %>
+            <li ><a href="/" class="active">Home</a></li>
+            <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'about' ? 'current' : '' %>" href="/about">About</a></li>
+            <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'kennel' ? 'current' : '' %>" href="/litters/kennel">Litters</a></li>
+            <li><a class="nav-item nav-link   <%= typeof currentSection !== 'undefined' && currentSection === 'things' ? 'current' : '' %>" href="/things">Dogs</a></li>
+            <li class="menu-has-children">
+              <a href="#">Pages</a>
+              <ul>
+                <li><a href="elements.html">Elements</a></li>
+                <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'contact' ? 'current' : '' %>" href="/contact">Contact</a></li>
+                <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'pricing' ? 'current' : '' %>" href="/pricing">Pricing</a></li>
+                <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'litter' ? 'current' : '' %>" href="/litters/litter">Litter Details</a></li>
+              </ul>
+            </li>
+            <li class="menu-has-children">
+              <a href="#">Blog</a>
+              <ul>
+                <li><a href="blog-home.html">Blog Home</a></li>
+                <li><a href="blog-single.html">Blog Single</a></li>
+              </ul>
+            </li>
+            <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'contact' ? 'current' : '' %>" href="/contact">Help</a></li>
+            <li class="menu-has-children">
+              <a href="#">Account</a>
+              <ul>
+                <li><a class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'account' ? 'current' : '' %>" href="/account">Settings</a></li>
+                <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+              </ul>
+            </li>
+            <% } else { %>
+            <!-- LOGGED-OUT NAVIGATION -->
+            <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'faq' ? 'current' : '' %>" href="/faq">FAQ</a></li>
+            <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'login' ? 'current' : '' %>" href="/login">Log in</a></li>
+            <!-- Only in desktop nav -->
+            <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'signup' ? 'current' : '' %>" href="/signup">Sign up</a></li>
+            <!-- Only in mobile nav -->
+            <li><a class="nav-item nav-link text-info ml-2 d-block d-md-none" href="/signup">Sign up</a></li>
+            <% } %>
+          </ul>
+        </nav>
+
+      </div>
     </div>
-  </div>
-</header>
-<!-- End Header Area -->
-<%- body %>
-<!-- start footer Area -->
-<% if(me){ %>
+  </header>
+  <!-- End Header Area -->
+  <%- body %>
+  <!-- start footer Area -->
+  <% if(me){ %>
   <% /* Высокий*/ %>
   <footer class="footer-area section-gap">
     <div class="container">
@@ -177,7 +179,8 @@
           <div class="single-footer-widget">
             <h6>About Us</h6>
             <p>
-              In the breed since 2004. Officially, the kennel Poale Ell, was registered in the international registry of the FCI federation in 2016, certificate No. 18431 dated 02.26.2016, owner Olga Petrova.
+              In the breed since 2004. Officially, the kennel Poale Ell, was registered in the international registry of
+              the FCI federation in 2016, certificate No. 18431 dated 02.26.2016, owner Olga Petrova.
             </p>
           </div>
         </div>
@@ -189,7 +192,8 @@
               <form target="_blank" novalidate="true"
                     action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
                     method="get" class="form-inline">
-                <input class="form-control" name="EMAIL" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'"
+                <input class="form-control" name="EMAIL" placeholder="Email Address" onfocus="this.placeholder = ''"
+                       onblur="this.placeholder = 'Email Address'"
                        required="" type="email">
                 <button class="click-btn btn btn-default"><i class="ti-arrow-right" aria-hidden="true"></i></button>
                 <div style="position: absolute; left: -5000px;">
@@ -216,31 +220,37 @@
         <div class="col-lg-12">
           <p class="footer-text">
             Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-            All rights reserved | <a href="/"><i class="logo"></i></a>by <a href="http://lphp.ru" target="_blank">www.lphp.ru</a></p>
+            All rights reserved | <a href="/"><i class="logo"></i></a>by <a href="http://lphp.ru" target="_blank">www.lphp.ru</a>
+          </p>
         </div>
       </div>
     </div>
   </footer>
-<%} else {%>
+  <% } else { %>
   <% /* Низкий */ %>
   <footer id="page-footer" class="navbar navbar-light justify-content-between flex-row-reverse">
     <div class="nav">
-    <% /*  <small class="nav-item"><a class="nav-link text-info" target="_blank" href="https://github.com/mikermcneil/ration">Source code</a></small>*/ %>
-      <small class="nav-item"><a class="nav-link text-info" href="/contact">Contact<span class="d-none d-sm-inline"> us</span></a></small>
-      <small class="nav-item"><a class="nav-link text-info" href="/legal/terms">Terms<span class="d-none d-sm-inline"> of Use</span></a></small>
-      <small class="nav-item"><a class="nav-link text-info" href="/legal/privacy">Privacy<span class="d-none d-sm-inline"> policy</span></a></small>
+      <% /*  <small class="nav-item"><a class="nav-link text-info" target="_blank" href="https://github.com/mikermcneil/ration">Source code</a></small>*/ %>
+      <small class="nav-item"><a class="nav-link text-info" href="/contact">Contact<span
+            class="d-none d-sm-inline"> us</span></a></small>
+      <small class="nav-item"><a class="nav-link text-info" href="/legal/terms">Terms<span class="d-none d-sm-inline"> of Use</span></a>
+      </small>
+      <small class="nav-item"><a class="nav-link text-info" href="/legal/privacy">Privacy<span
+            class="d-none d-sm-inline"> policy</span></a></small>
       <% if(me) { %>
       <small class="nav-item"><a class="nav-link text-info" href="/logout">Sign out</a></small>
       <% } %>
     </div>
-    <small class="copy">Copyright &copy; 2019 <a target="_blank" href="/">Poale Ell.</a> <br class="xs-only"/>All rights reserved.</small>
+    <small class="copy">Copyright &copy; 2019 <a target="_blank" href="/">Poale Ell.</a> <br class="xs-only"/>All rights
+      reserved.
+    </small>
 
   </footer>
-  <%}%>
-<!-- End footer Area -->
+  <% } %>
+  <!-- End footer Area -->
   <% if(!me){ %>
 </div>
-<%}%>
+<% } %>
 <!-- ####################### Start Scroll to Top Area ####################### -->
 <div id="back-top">
   <a title="Go to Top" href="#"> <i class="ti-angle-double-up"></i> </a>
@@ -263,8 +273,6 @@
 <% /* Load Stripe Checkout */ %>
 <script src="https://checkout.stripe.com/checkout.js"></script>
 <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-<script src='https://unpkg.com/masonry-layout@4.2.2/dist/masonry.pkgd.min.js'></script>
-<script src='https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js'></script>
 
 <% /* Delete the global `self` to help avoid client-side bugs.
     (see https://developer.mozilla.org/en-US/docs/Web/API/Window/self)
@@ -580,7 +588,6 @@
   });
 </script>
 
-
 <% /* Auto-injected «script» tags: */ %>
 <!--SCRIPTS-->
 <script src="/dependencies/sails.io.js"></script>
@@ -593,8 +600,10 @@
 <script src="/dependencies/easing.min.js"></script>
 <script src="/dependencies/hoverIntent.js"></script>
 <script src="/dependencies/isotope.pkgd.min.js"></script>
+<script src="/dependencies/jquery-imagefill.js"></script>
 <script src="/dependencies/jquery.ajaxchimp.min.js"></script>
 <script src="/dependencies/jquery.circlechart.js"></script>
+<script src="/dependencies/jquery.easing.js"></script>
 <script src="/dependencies/jquery.fancybox.js"></script>
 <script src="/dependencies/jquery.magnific-popup.min.js"></script>
 <script src="/dependencies/jquery.nice-select.min.js"></script>
@@ -637,8 +646,9 @@
 <% /* Load Google Map Checkout */ %>
 <script>
   var map;
+
   function initMap() {
-    if(document.getElementById('map') !== null) {
+    if (document.getElementById('map') !== null) {
       map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 55.636564706, lng: 37.516969567},
         zoom: 16
@@ -646,32 +656,34 @@
     }
   }
 </script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCi1WzkP0B6eptXv8PRt4UrmocL7cieOiI&callback=initMap"></script>
+
+<!--<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>-->
+<script src='https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js'></script>
+<script src='https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js'></script>
+<script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script>
-/*  var map;
+  $(document).ready(function () {
 
-  function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 55.636564706, lng: 37.516969567},
-      zoom: 16 /!* Уровни масштабирования от 0 - Земля. 10 - Город, 15 - это примерно улица, 20 - здание! *!/
+    var $container = $('masonry-container');
+    $container.imagesLoaded(function () {
+      $container.masonry({
+        columnWidth: ".item",
+        itemSelector: ".item"
+      });
+      $('.item').imagefill();
     });
-  }*/
 
-  // Чтобы настроить местоположение на карте можно раскомментировать
-  // и посмортеть точные координаты в консоли
-  //   var coordsDiv = document.getElementById('coords');
-  //   //map.controls[google.maps.ControlPosition.TOP_CENTER].push(coordsDiv);
-  //   map.addListener('mouseup', function(event) {
-  //     /*console.log('event.latLng.lat(): ', event.latLng.lat());
-  //     console.log('event.latLng.lng():', event.latLng.lng());*/
-  //     coordsDiv.textContent =
-  //       'lat: ' + Math.round(event.latLng.lat()) + ', ' +
-  //       'lng: ' + Math.round(event.latLng.lng());
-  //   });
-  // }
-
+  });
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCi1WzkP0B6eptXv8PRt4UrmocL7cieOiI&callback=initMap"></script>
 
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.your-class').slick({});
+  });
+</script>
 <% /* Display an overlay if the current browser is not supported.
     (Relies on `bowser`, which is loaded inline above.)
     Отображение наложения, если текущий браузер не поддерживается.

@@ -10,6 +10,7 @@ module.exports = {
   exits: {
 
     success: {
+      currentSection: 'pricing',
       viewTemplatePath: 'pages/pricing'
     }
 

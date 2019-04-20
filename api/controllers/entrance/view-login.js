@@ -10,6 +10,7 @@ module.exports = {
   exits: {
 
     success: {
+      currentSection: 'login',
       viewTemplatePath: 'pages/entrance/login',
     },
 
@@ -26,7 +27,7 @@ module.exports = {
       throw {redirect: '/'};
     }
 
-    return {};
+    return {currentSection: 'login'};
 
   }
 

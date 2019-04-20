@@ -31,8 +31,32 @@ header {
     background-repeat: no-repeat;
     background-size: contain;
   }
-  a {
+  a:not(.btn) {
     cursor: pointer;
+    border-bottom: 3px solid transparent;
+    &.nav-item {
+     // padding-left: 0px;
+      padding-right: 0px;
+      margin-right: 20px;
+      &:hover {
+        border-bottom-color: @border-lt-gray;
+      }
+      &.current {
+        border-bottom-color: @accent-teal;
+      }
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    &.dropdown-toggle {
+      &:hover {
+        color: @accent-teal!important;
+      }
+    }
+  }
+  .dropdown-menu.account-menu {
+    left: auto;
+    right: 0px;
   }
   .dropdown-menu.account-menu {
     left: auto;

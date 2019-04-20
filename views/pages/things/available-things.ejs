@@ -1,103 +1,154 @@
 <div id="available-things" v-cloak>
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white">Dogs</h1>
+          <p>Dogs of Kennel Poale Ell </p>
 
-  <div class="row align-items-center">
-    <div class="col text-center ">
-      <h1 class="pt-3">Dogs</h1>
-      <p>View available items to borrow, to upload your own things.</p>
-      <button @click="clickAddButton()" class="btn btn-outline-info">Add an item</button>
-    </div>
-  </div>
-
- <!-- <div class="container">
-    <div class="grid">
-      <div class="grid-sizer"></div>
-      <div class="grid-item" v-for="(thing, key, index) in things" :key="index">
-        <img class="jp" :src="thing.imageSrc" alt="">
+        </div>
       </div>
     </div>
-  </div>-->
+  </section>
 
 
-  <div class="container">
-    <div class="row m-5">
-      <div v-for="(thing, key, index) in things" :key="index" class="col-sm-4">
-        <div class="card mt-lg-4 ">
-          <div class="card-header p-1">
-            <ul class="nav justify-content-end nav-pills card-header-pills pr-2">
-              <li class="nav-item">
-                <div class="dropdown">
-                  <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" v-if="thing.owner.id === me.id" href="#"
-                       @click="clickDeleteThing(thing.id)">
-                      Delete
-                    </a>
-                    <a class="dropdown-item" href="#">Action</a>
-                    <!--     <a class="dropdown-item" href="#">Another action</a>
-                     <a class="dropdown-item" href="#">Something else here</a>-->
-                  </div>
-                </div>
-              </li>
+  <!-- Start Work Area Area -->
+  <section class="work-area section-gap-top" >
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3>Our Portfolio</h3>
+            <h2><span>Check</span> Our Work</h2>
+            <div class="mt-5">
+              <button @click="clickAddButton()" class="btn btn-outline-info">Add an item</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 d-none">
+          <div class="filters">
+            <ul>
+              <li class="active" data-filter=".all"></li>
             </ul>
           </div>
-          <img :src="thing.imageSrc" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">{{thing.label}}</h5>
-
-            <h6 class="card-subtitle mb-2 text-muted">{{thing.title}}</h6>
-            <p class="card-text">{{thing.subtitle}}</p>
-            <p v-if="thing.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mine</p>
-            <a v-if="thing.owner.id !== me.id" href="#" class="card-link">{{thing.owner.fullName}}</a>
+        </div>
+      </div>
+      <div class="container">
+        <div class="masonry-container ">
+          <div class="row d-flex align-items-center justify-content-center ">
+            <!--<a class="fancybox" rel="gallery1"
+               href="http://d3a1wbnh2r1l7y.cloudfront.net/ds-6.jpg"
+               title="">
+              <img src="http://d3a1wbnh2r1l7y.cloudfront.net/ds-6.jpg" alt=""/>
+            </a>
+            <a class="fancybox" rel="gallery1"
+               href="http://d3a1wbnh2r1l7y.cloudfront.net/ds-3.jpg"
+               title="">
+              <img src="http://d3a1wbnh2r1l7y.cloudfront.net/ds-3.jpg" alt=""/>
+            </a>-->
+              <div class=" col-md-3 col-sm-4 mx-1 my-1 item" v-for="(thing, key, index) in things" :key="index">
+                <a class="fancybox" rel="gallery1" :href="thing.imageSrc" :title="thing.title">
+                <img :src="thing.imageSrc" :alt="thing.label">
+                </a>
+                <!--<a rel="gallery1" href="http://d3a1wbnh2r1l7y.cloudfront.net/ds-1.jpg" title="Codirosso spazzacamino (Massimo Greco _Foligno)" class="fancybox"><img src="http://d3a1wbnh2r1l7y.cloudfront.net/ds-1.jpg" alt="" class="img-fluid"></a>-->
+              </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-<!--  <section class="work-area section-gap-top" id="work">
-    <div class="container">
-      <div class="filters-content">
-        <div class="row grid">
-          <div class="col-lg-4 col-md-6 grid-sizer"></div>
-          <div v-for="(litter, key, index) in things" :key="index" class="col-lg-8 grid-item col-md-6 all wow fadeIn"
-               data-wow-duration="2s" data-wow-delay="0.4s">
-            <div class="single-work">
-              <div class="relative">
-                <div class="thumb">
-                  <img :src="litter.imageSrc" class="image img-fluid"  alt="...">
-                </div>
-                <div class="middle">
-                  <ul class="navbar-nav  my-sm-0 ">
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                         data-toggle="dropdown"
-                         aria-haspopup="true" aria-expanded="false">
-                        <i class="ti-settings"></i>
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" v-if="litter.owner.id === me.id" href="#"
-                           @click="clickDeleteLitter(litter.id)">
-                          Delete
+  </section>
+  <!-- End Work Area Area -->
+
+
+
+
+
+  <!--OLD GALLERY-->
+  <!-- <div class="container">
+     <div class="row m-5">
+       <div v-for="(thing, key, index) in things" :key="index" class="col-sm-4">
+         <div class="card mt-lg-4 ">
+           <div class="card-header p-1">
+             <ul class="nav justify-content-end nav-pills card-header-pills pr-2">
+               <li class="nav-item">
+                 <div class="dropdown">
+                   <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                     <a class="dropdown-item" v-if="thing.owner.id === me.id" href="#"
+                        @click="clickDeleteThing(thing.id)">
+                       Delete
+                     </a>
+                     <a class="dropdown-item" href="#">Action</a>
+                     &lt;!&ndash;     <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>&ndash;&gt;
+                   </div>
+                 </div>
+               </li>
+             </ul>
+           </div>
+           <img :src="thing.imageSrc" class="card-img-top" alt="...">
+           <div class="card-body">
+             <h5 class="card-title">{{thing.label}}</h5>
+
+             <h6 class="card-subtitle mb-2 text-muted">{{thing.title}}</h6>
+             <p class="card-text">{{thing.subtitle}}</p>
+             <p v-if="thing.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mine</p>
+             <a v-if="thing.owner.id !== me.id" href="#" class="card-link">{{thing.owner.fullName}}</a>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>-->
+
+
+  <!--  <section class="work-area section-gap-top" id="work">
+      <div class="container">
+        <div class="filters-content">
+          <div class="row grid">
+            <div class="col-lg-4 col-md-6 grid-sizer"></div>
+            <div v-for="(litter, key, index) in things" :key="index" class="col-lg-8 grid-item col-md-6 all wow fadeIn"
+                 data-wow-duration="2s" data-wow-delay="0.4s">
+              <div class="single-work">
+                <div class="relative">
+                  <div class="thumb">
+                    <img :src="litter.imageSrc" class="image img-fluid"  alt="...">
+                  </div>
+                  <div class="middle">
+                    <ul class="navbar-nav  my-sm-0 ">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                          <i class="ti-settings"></i>
                         </a>
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        &lt;!&ndash;<a class="dropdown-item" href="#">Somelitter else here</a>&ndash;&gt;
-                      </div>
-                    </li>
-                  </ul>
-                  <h3>Litter: {{litter.label | capital}}</h3>
-                  <div class="cat">Litter born: {{litter.born | date('ru') }}</div>
-                  <h4 v-if="litter.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mine</h4>
-                  <h5 v-if="litter.owner.id !== me.id"> Owner: <a href="#"
-                                                                  class="card-link">{{litter.owner.fullName}}</a></h5>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" v-if="litter.owner.id === me.id" href="#"
+                             @click="clickDeleteLitter(litter.id)">
+                            Delete
+                          </a>
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          &lt;!&ndash;<a class="dropdown-item" href="#">Somelitter else here</a>&ndash;&gt;
+                        </div>
+                      </li>
+                    </ul>
+                    <h3>Litter: {{litter.label | capital}}</h3>
+                    <div class="cat">Litter born: {{litter.born | date('ru') }}</div>
+                    <h4 v-if="litter.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mine</h4>
+                    <h5 v-if="litter.owner.id !== me.id"> Owner: <a href="#"
+                                                                    class="card-link">{{litter.owner.fullName}}</a></h5>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>-->
+    </section>-->
+
+
+
 
   <% /* "Upload Thing" Modal */ %>
   <modal v-if="uploadThingModalOpen" v-cloak key="new"
@@ -137,7 +188,8 @@
                 </span>
                 <p class="image-advice text-muted" v-if="!formErrors.photo"><strong>Tip</strong>: Make sure the item
                   is front and center in the photo, so people know exactly what you're offering to share.</p>
-                <p class="image-advice text-danger" v-if="formErrors.photo">A photo is required in order to add a new
+                <p class="image-advice text-danger" v-if="formErrors.photo">A photo is required in order to add a
+                  new
                   item.</p>
               </div>
             </div>
@@ -275,5 +327,6 @@
     </ajax-form>
   </modal>
 </div>
+
 
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
