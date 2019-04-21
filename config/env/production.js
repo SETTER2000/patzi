@@ -52,7 +52,8 @@ module.exports = {
       //--------------------------------------------------------------------------
       //  /\   To avoid checking it in to version control, you might opt to set
       //  ||   sensitive credentials like `url` using an environment variable.
-      //
+      // Чтобы не включать его в систему контроля версий, вы можете установить
+      // || конфиденциальные учетные данные, такие как `url` с использованием переменной окружения.
       //  For example:
       //  ```
       //  sails_datastores__default__url=mysql://admin:myc00lpAssw2D@db.example.com:3306/my_prod_db
@@ -65,7 +66,8 @@ module.exports = {
       *                                                                           *
       * > For example, for some hosted PostgreSQL providers (like Heroku), the    *
       * > extra `ssl: true` option is mandatory and must be provided.             *
-      *                                                                           *
+      *  Например, для некоторых хостинг-провайдеров PostgreSQL (например, Heroku), *
+      *> дополнительная опция `ssl: true` является обязательной и должна быть указана.                                                                         *
       * More info:                                                                *
       * https://sailsjs.com/config/datastores                                     *
       *                                                                           *
@@ -85,7 +87,9 @@ module.exports = {
     * To help avoid accidents, Sails automatically sets the automigration      *
     * strategy to "safe" when your app lifts in production mode.               *
     * (This is just here as a reminder.)                                       *
-    *                                                                          *
+    * Чтобы избежать несчастных случаев, Sails автоматически устанавливает автомиграцию *
+     * стратегия «безопасности», когда ваше приложение работает в производственном режиме. *
+     * (Это просто напоминание.)                                                                         *
     * More info:                                                               *
     * https://sailsjs.com/docs/concepts/models-and-orm/model-settings#?migrate *
     *                                                                          *
@@ -99,7 +103,11 @@ module.exports = {
     * database and uncomment this to disable Waterline's `cascadeOnDestroy`    *
     * polyfill.  (Otherwise, if you are using a databse like Mongo, you might  *
     * choose to keep this enabled.)                                            *
-    *                                                                          *
+    * Если в работе это приложение имеет доступ к CASCADE * физического уровня *
+          * ограничения (например, PostgreSQL или MySQL), затем установите их в *
+          * базы данных и раскомментируйте это, чтобы отключить `cascadeOnDestroy` Waterline *
+          * полифилл. (В противном случае, если вы используете базу данных, такую как Mongo, вы можете *
+          * выберите, чтобы оставить это включенным.)                                                                         *
     ***************************************************************************/
     // cascadeOnDestroy: false,
 
@@ -116,8 +124,8 @@ module.exports = {
   * > that in `config/blueprints.js`, since you'll want to disable them in  *
   * > all environments (not just in production.)                            *
   *                                                                         *
-   * > Вы также можете отключить любые другие маршруты чертежей, если вы не *
-      *> фактически используя их (например, «действия» и «отдых») - но вы можете сделать *
+   * > Вы также можете отключить любые другие маршруты blueprint, если вы не *
+      *> фактически используя их (например, "actions" и "rest") - но вы можете сделать *
       *> это в `config / blueprints.js`, так как вы хотите отключить их в *
       *> всех средах (не только в производстве.) *
       *
