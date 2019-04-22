@@ -57,8 +57,8 @@ module.exports.custom = {
    * (https://app.mailgun.com/app/domains)                                   *
    *                                                                         *
    **************************************************************************/
-  mailgunDomain: 'sandbox8de4a5908f2e4d85a8ea06f4b585b69c.mailgun.org',
-  mailgunSecret: 'key-4bb01d6f085b327149c0dc8226f8763c',
+  // mailgunDomain: 'you domain',
+  // mailgunSecret: 'key-xxxxxxx',
   //--------------------------------------------------------------------------
   // /\  Configure these to enable support for automated emails.
   // ||  (Important for password recovery, verification, contact form, etc.)
@@ -66,12 +66,12 @@ module.exports.custom = {
 
   // The sender that all outgoing emails will appear to come from.
   // Отправитель, от которого будут исходить все исходящие письма.
-  fromEmailAddress: 'lphp@mail.ru',
+  fromEmailAddress: 'info@poaleell.com',
   fromName: 'The Poale Ell Team',
 
   // Email address for receiving support messages & other correspondences.
   // Адрес электронной почты для получения сообщений поддержки и другой корреспонденции.
-  internalEmailAddress: 'ins09@mail.ru',
+  internalEmailAddress: 'info@poaleell.com',
 
   // Whether to require proof of email address ownership any time a new user
   // signs up, or when an existing user attempts to change their email address.

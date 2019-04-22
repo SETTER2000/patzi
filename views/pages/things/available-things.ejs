@@ -47,8 +47,10 @@
               <img src="http://d3a1wbnh2r1l7y.cloudfront.net/ds-3.jpg" alt=""/>
             </a>-->
               <div class=" col-md-3 col-sm-4 mx-1 my-1 item" v-for="(thing, key, index) in things" :key="index">
-                <a class="fancybox" rel="gallery1" :href="thing.imageSrc" :title="thing.title">
-                <img :src="thing.imageSrc" :alt="thing.label">
+                <!--<a class="fancybox" rel="gallery1" :href="thing.imageSrc" :title="thing.title">-->
+                <a  v-if="thing.owner.id === me.id" href="#"
+                   @click="clickDeleteThing(thing.id)">
+                <img  :src="thing.imageSrc" :alt="thing.label">
                 </a>
                 <!--<a rel="gallery1" href="http://d3a1wbnh2r1l7y.cloudfront.net/ds-1.jpg" title="Codirosso spazzacamino (Massimo Greco _Foligno)" class="fancybox"><img src="http://d3a1wbnh2r1l7y.cloudfront.net/ds-1.jpg" alt="" class="img-fluid"></a>-->
               </div>

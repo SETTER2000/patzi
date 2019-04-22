@@ -8,6 +8,7 @@ parasails.registerPage('available-things', {
     selectedThing: undefined,
 
     uploadThingModalOpen: false,
+    showThingModalOpen: false,
     uploadFormData: {
       label: '',
       photo: undefined,
@@ -98,6 +99,14 @@ parasails.registerPage('available-things', {
     clickAddButton: function () {
       console.log(`click the "Add an item" button!`);
       this.uploadThingModalOpen = true;
+      // this.selectedThing = _.find(this.things, {id: thingId});
+    },
+
+    // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
+    // Это кнопка вызывает модальное окно "ShowPhoto <modal>" с <ajax-form> для загрузки фото
+    clickShowPhoto: function () {
+      console.log(`click to photo the "Show photo" !`);
+      this.showThingModalOpen = true;
       // this.selectedThing = _.find(this.things, {id: thingId});
     },
 
