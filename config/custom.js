@@ -63,7 +63,6 @@ module.exports.custom = {
   // /\  Configure these to enable support for automated emails.
   // ||  (Important for password recovery, verification, contact form, etc.)
   //--------------------------------------------------------------------------
-
   // The sender that all outgoing emails will appear to come from.
   // Отправитель, от которого будут исходить все исходящие письма.
   fromEmailAddress: 'info@poaleell.com',

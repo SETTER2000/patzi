@@ -2,6 +2,7 @@
  * custom hook
  *
  * @description :: A hook definition.  Extends Sails by adding shadow routes, implicit actions, and/or initialization logic.
+ * Определение крючка. Расширяет паруса, добавляя теневые маршруты, неявные действия и / или логику инициализации.
  * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
  */
 

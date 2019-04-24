@@ -30,13 +30,18 @@ module.exports = {
 
     imageUploadFD:{
       type:'string',
-      description:'The Skipper file descriptor uniquely identifies the uploaded image associated with this "Thing".',
+      description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение, связанное с этой «вещью».',
       required:true
     },
     imageUploadMime:{
       type:'string',
-      description:'The MIME type for the uploaded image.',
+      description:'Тип MIME для загруженного изображения.',
       required:true
+    },
+    expectedReturnAt: {
+      type: 'number',
+      description: 'Метка времени JS (эпоха мс), представляющая момент ожидаемого возврата этого элемента (или 0, если он в данный момент не выдан).',
+      example: 1502844074211
     },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
@@ -47,10 +52,13 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    owner:{
-      model:'User',
-      required:true
-    }
+    // owner:{
+    //   model:'User',
+    //   required:true
+    // }
+    owner: { model: 'User',required:true, description: 'Пользователь, который загрузил этот элемент.' },
+
+    borrowedBy: { model: 'User', description: 'Пользователь, который попросил одолжить этот товар.' },
   },
 
 };

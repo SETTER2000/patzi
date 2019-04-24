@@ -34,7 +34,7 @@ module.exports = {
     // (Even if no such user exists, pretend it worked to discourage sniffing.)
     // Найти запись для этого пользователя.
     // (Даже если такого пользователя не существует, сделайте вид, что он сработал, чтобы препятствовать анализу.)
-    var userRecord = await User.findOne({ emailAddress: inputs.emailAddress });
+    var userRecord = await User.findOne({emailAddress: inputs.emailAddress});
     if (!userRecord) {
       return;
     }//•
@@ -49,11 +49,11 @@ module.exports = {
     // (This allows us to look up the user when the link from the email is clicked.)
     // Сохраняем токен в записи пользователя
     // (Это позволяет нам искать пользователя при нажатии на ссылку из электронного письма.)
-    await User.update({ id: userRecord.id })
-    .set({
-      passwordResetToken: token,
-      passwordResetTokenExpiresAt: Date.now() + sails.config.custom.passwordResetTokenTTL,
-    });
+    await User.update({id: userRecord.id})
+      .set({
+        passwordResetToken: token,
+        passwordResetTokenExpiresAt: Date.now() + sails.config.custom.passwordResetTokenTTL,
+      });
 
     // Send recovery email
     await sails.helpers.sendTemplateEmail.with({

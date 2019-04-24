@@ -69,12 +69,14 @@ parasails.registerPage('available-things', {
     },*/
     // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
     // Это кнопка вызывает модальное окно <modal> с <ajax-form>
+    // для удаления объекта
     clickDeleteThing: function (thingId) {
       console.log(`click the "delete" button! ID: ${thingId}`);
       this.confirmDeleteThingModalOpen = true;
       this.selectedThing = _.find(this.things, {id: thingId});
     },
 
+    // Закрывает модальное окно для удаления объекта
     closeDeleteThingModal: function () {
       this.selectedThing = undefined;
       this.confirmDeleteThingModalOpen = false;
@@ -110,6 +112,7 @@ parasails.registerPage('available-things', {
       // this.selectedThing = _.find(this.things, {id: thingId});
     },
 
+    // Обнуляет данные формы загрузки объекта, очищает поля формы
     _clearUploadThingModal: function () {
       // Close modal
       this.uploadThingModalOpen = false;
@@ -140,6 +143,9 @@ parasails.registerPage('available-things', {
 
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined. (Thus signifies that the submission should be cancelled.)
+      // Если были какие-либо проблемы, они были сообщены пользователю,
+      // так просто вернуть undefined. (Таким образом, означает,
+      // что представление должно быть отменено.)
       if (Object.keys(this.formErrors).length > 0) {
         return;
       }
@@ -148,11 +154,12 @@ parasails.registerPage('available-things', {
     },
 
     /**
-     * Обрабатывает success от сервера, при загрузке файла без ошибок.
-     * Т.е. как только форма загрузки файла на сервер отработала без ошибок,
+     * Обрабатывает success от сервера, при загрузки файла без ошибок.
+     * Т.е. как только форма загрузки файла на сервере отработала без ошибок
      * эта функция получает результат и должна вставить новые данные на страницу.
      */
     submittedUploadThingForm: function (result) {
+
       // Добавлем новые данные в уже имеющийся массив things
       this.things.push({
         label: this.uploadFormData.label,
@@ -169,8 +176,12 @@ parasails.registerPage('available-things', {
     },
 
     changeFileInput: function (files) {
+      console.log('files: ', files);
       if (files.length !== 1 && !this.uploadFormData.photo) {
-        throw new Error('Consistency violation: `changeFileInput` was somehow called with an empty array of files, or with more than one file in the array!  This should never happen unless there is already an uploaded file tracked.');
+        throw new Error('Consistency violation: `changeFileInput` ' +
+          'was somehow called with an empty array of files, ' +
+          'or with more than one file in the array!  This should never happen unless ' +
+          'there is already an uploaded file tracked.');
       }
 
       let selectedFile = files[0];
@@ -180,19 +191,22 @@ parasails.registerPage('available-things', {
         return;
       }
 
-      console.log(selectedFile.name);
+      console.log('Имя фото: ', selectedFile.name);
 
       this.uploadFormData.photo = selectedFile;
 
       // Set up the file preview for the UI:
+      // Настройка предварительного просмотра файла для пользовательского интерфейса:
       var reader = new FileReader();
       reader.onload = (event)=>{
         this.uploadFormData.previewImageSrc = event.target.result;
 
         // Unbind this "onload" event.
+        // Отмена привязки этого события onload.
         delete reader.onload;
       };
       // Clear out any error messages about not providing an image.
+      // Удалите все сообщения об ошибках о не предоставлении изображения.
       this.formErrors.photo = false;
       reader.readAsDataURL(selectedFile);
     }

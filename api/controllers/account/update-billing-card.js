@@ -54,15 +54,22 @@ module.exports = {
 
     // Add, update, or remove the default payment source for the logged-in user's
     // customer entry in Stripe.
+    // Добавить, обновить или удалить источник платежа по умолчанию для вошедшего в систему
+    // пользователя запись клиента в Stripe.
     var stripeCustomerId = await sails.helpers.stripe.saveBillingInfo.with({
       stripeCustomerId: this.req.me.stripeCustomerId,
-      token: inputs.stripeToken || '',
+      token: inputs.stripeToken || ''
+      // plan: 'Kennel'
     }).timeout(5000).retry();
 
     // Update (or clear) the card info we have stored for this user in our database.
     // > Remember, never store complete card numbers-- only the last 4 digits + expiration!
     // > Storing (or even receiving) complete, unencrypted card numbers would require PCI
     // > compliance in the U.S.
+    // Обновить (или очистить) информацию о карте, которую мы сохранили для этого пользователя в нашей базе данных.
+    //> Помните, никогда не сохраняйте полные номера карт - только последние 4 цифры + срок действия!
+    //> Для хранения (или даже получения) полных незашифрованных номеров карт потребуется PCI
+    //> соответствие в США
     await User.updateOne({id: this.req.me.id})
       .set({
         stripeCustomerId,

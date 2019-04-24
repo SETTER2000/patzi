@@ -14,7 +14,8 @@ module.exports = {
       required: true
     },
     label: {
-      type: 'string'
+      type: 'string',
+      required: true
     },
     title: {
       type: 'string'
@@ -73,7 +74,8 @@ module.exports = {
       title: inputs.title,
       subtitle: inputs.subtitle,
     }).fetch();
-    
+
+
     return exits.success({
       id: newThing.id,
       imageSrc: url.resolve(sails.config.custom.baseUrl, `/api/v1/things/${newThing.id}`)
