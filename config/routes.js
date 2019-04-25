@@ -82,4 +82,7 @@ module.exports.routes = {
   'GET     /api/v1/things/:id': {action: 'things/download-photo'},
   'DELETE  /api/v1/things/destroy-one-thing': {action: 'things/destroy-one-thing'},
 
+  'POST    /api/v1/friends/add-friends': { action: 'friends/add-friends' },
+  'POST    /api/v1/friends/approve-friend': { action: 'friends/approve-friend' },
+
 };

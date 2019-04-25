@@ -52,6 +52,7 @@ module.exports = {
     await User.update({id: userRecord.id})
       .set({
         passwordResetToken: token,
+        // Срок годности токена для восстановления пароля
         passwordResetTokenExpiresAt: Date.now() + sails.config.custom.passwordResetTokenTTL,
       });
 

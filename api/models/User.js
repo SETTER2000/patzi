@@ -42,7 +42,7 @@ email status until they click the link in the confirmation email.`
 
     password: {
       type: 'string',
-      required: true,
+      // required: true,
       description: 'Securely hashed representation of the user\'s login password.',
       protect: true,
       example: '2$28a8eabna301089103-13948134nad'
@@ -168,8 +168,13 @@ without necessarily having a billing card.`
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    friends:{collection: 'User'}
-
+    friends:{collection: 'User'},
+    // Входящие запросы на добавление в друзья, это набор пользователей через их исходящие
+    // запросы на добавления в друзья
+    inboundFriendRequests: {collection:'User', via: 'outboundFriendRequests'},
+    // Исходящие от вас запросы на добавления в друзья, это набор пользователей через их входящие
+    // запросы на добавления в друзья
+    outboundFriendRequests: {collection:'User', via: 'inboundFriendRequests'}
   },
 
 

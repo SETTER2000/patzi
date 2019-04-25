@@ -75,9 +75,10 @@ module.exports.bootstrap = async function () {
     gravr: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
   }).fetch();
 
-  // Райан Даль добавить, как одного из друзей Алекса Фокса
-  await User.addToCollection(alexFox.id, 'friends', [ryanDahl.id]);
-  // await User.addToCollection(ryanDahl.id, 'friends', alexFox.id);
+  // Добавить Райана Даля , как одного из друзей Алекса Фокса
+  // и добавить Алекса Фокса в друзья Райану Далю
+  await User.addToCollection(alexFox.id, 'friends', ryanDahl.id);
+  await User.addToCollection(ryanDahl.id, 'friends', alexFox.id);
 
   // В БУДУЩЕМ: Решить что с эти делать
   // Create some things
