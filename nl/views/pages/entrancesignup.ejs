@@ -1,51 +1,51 @@
 <div id="signup" v-cloak>
   <div class="container" v-if="!cloudSuccess">
-    <h1 class="text-center">Create an account</h1>
+    <h1 class="text-center">een account Aanmaken</h1>
     <div class="signup-form">
-      <p class="text-center">Let's get started! Becoming a member is free and only takes a few minutes.</p>
+      <p class="text-center">aan de slag! Lid worden is gratis en duurt slechts een paar minuten.</p>
       <hr/>
       <ajax-form action="signup" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm()" :handle-parsing="handleParsingForm">
         <div class="form-group">
-          <label for="full-name">Full name</label>
-          <input class="form-control" id="full-name" type="text"  :class="[formErrors.fullName ? 'is-invalid' : '']" v-model.trim="formData.fullName" placeholder="Sturgis P. Sturgeon" autocomplete="name" focus-first>
-          <div class="invalid-feedback" v-if="formErrors.fullName">Please enter your full name.</div>
+          <label for="full-name">Volledige naam</label>
+          <input class="form-control" id="volledige naam" type="text" class="[formErrors.fullName ? 'is-invalid' : "]" v-model.trim="formData.fullName" placeholder="Sturgis P. Steur" autocomplete="naam" focus-de eerste>
+          <div class="invalid-feedback" v-if="formErrors.fullName">vul uw volledige naam in.</div>
         </div>
         <div class="form-group">
-          <label for="email-address">Email address</label>
-          <input class="form-control" id="email-address" type="email"  :class="[formErrors.emailAddress ? 'is-invalid' : '']" v-model.trim="formData.emailAddress" placeholder="sturgeon@example.com" autocomplete="email">
-          <div class="invalid-feedback" v-if="formErrors.emailAddress">Please enter a valid email address.</div>
+          <label for="email-address">e-Mail adres</label>
+          <input class="form-control" id="email-adres" type="email" class="[formErrors.e-mailadres ? 'is-invalid' : "]" v-model.trim="formData.emailAddress" placeholder="sturgeon@example.com" autocomplete="email">
+          <div class="invalid-feedback" v-if="formErrors.emailAddress">vul een geldig e-mail adres.</div>
         </div>
         <div class="form-group">
-          <label for="password">Choose a password</label>
-          <input class="form-control" id="password" type="password"  :class="[formErrors.password ? 'is-invalid' : '']" v-model.trim="formData.password" placeholder="••••••••" autocomplete="new-password">
-          <div class="invalid-feedback" v-if="formErrors.password">Please enter a password.</div>
+          <label for="password">Kies een wachtwoord</label>
+          <input class="form-control" id="password" type="password" class="[formErrors.wachtwoord ? 'is-invalid' : "]" v-model.trim="formData.wachtwoord" tijdelijke aanduiding="••••••••" autocomplete="nieuw wachtwoord">
+          <div class="invalid-feedback" v-if="formErrors.password">A.u.b. voer een wachtwoord in.</div>
         </div>
         <div class="form-group">
-          <label for="confirm-password">Confirm password</label>
-          <input class="form-control" id="confirm-password" type="password"  :class="[formErrors.confirmPassword ? 'is-invalid' : '']" v-model.trim="formData.confirmPassword" placeholder="••••••••" autocomplete="new-password">
-          <div class="invalid-feedback" v-if="formErrors.confirmPassword">Your password and confirmation do not match.</div>
+          <label for="confirm-password">wachtwoord Bevestigen</label>
+          <input class="form-control" id="bevestig wachtwoord" type="password" class="[formErrors.wachtwoord bevestigen ? 'is-invalid' : "]" v-model.trim="formData.wachtwoord bevestigen" tijdelijke aanduiding="••••••••" autocomplete="nieuw wachtwoord">
+          <div class="invalid-feedback" v-if="formErrors.confirmPassword">Uw wachtwoord en de bevestiging komen niet overeen.</div>
         </div>
         <div class="form-group form-check">
           <input class="form-check-input" id="terms-agreement" type="checkbox" v-model="formData.agreed">
-          <label for="terms-agreement" class="form-check-label" :class="[formErrors.agreed ? 'text-danger' : '']">I have read &amp; agree to the <a target="_blank" href="/terms">terms of service</a>.</label>
+          <label for="voorwaarden van de overeenkomst" class="form-check-label" :klasse="[formErrors.afgesproken ? 'tekst-gevaar": "] ">ik heb gelezen &amp; <a target="_blank" href="/terms">akkoord gaat met de voorwaarden van service</a>.</label>
         </div>
-        <p class="text-danger" v-if="cloudError==='emailAlreadyInUse'"><small>It looks like there's already an account with your email address. If you forgot your password, you can recover it <a href="password/forgot">here</a>.</small></p>
-        <p class="text-danger" v-else-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/support">contact support</a> if the error persists.</small></p>
+        <p class="text-danger" v-if="cloudError==='emailAlreadyInUse'"><small>Het lijkt erop dat er al een account met uw e-mail adres. Als u uw wachtwoord bent vergeten kunt u deze opvragen hier <a href="password/forgot"></a>.</small></p>
+        <p class="text-danger" v-else-if="cloudError"><small>er is Een fout opgetreden tijdens het verwerken van uw verzoek. Controleer uw gegevens en probeer het opnieuw, of neem contact op met ondersteuning <a href="/support"></a> als de fout zich blijft voordoen.</small></p>
         <div class="form-group">
-          <ajax-button type="submit" :syncing="syncing" class="btn-dark btn-lg btn-block">Create account</ajax-button>
+          <ajax-button type="submit" :syncing="syncing" class="btn-dark btn-lg btn-block">account Aanmaken</ajax-button>
         </div>
       </ajax-form>
-      <p class="text-center">Have an account? <a href="/login">Sign in</a></p>
+      <p class="text-center">een account? <a href="/login">Teken in</a></p>
     </div>
   </div>
   <div class="container" v-if="cloudSuccess">
-    <h1 class="text-center">Check your email!</h1>
+    <h1 class="text-center">Controleer uw e-mail!</h1>
     <div class="success-message">
       <hr/>
-      <p>Your account is nearly ready. All you have to do is click the link we sent to <strong>{{formData.emailAddress}}</strong>.</p>
-      <p>(You can still access your dashboard now, but some features will be unvavailable until we've verified your email address.)</p>
-      <p><a class="btn btn-outline-info" href="/">Go to dashboard</a></p>
+      <p>Uw account is bijna klaar. Alles wat je hoeft te doen is klik op de link die we gestuurd naar <strong>{{formData.emailAddress}}</strong>.</p>
+      <p>(U kunt nog steeds toegang krijgen tot uw dashboard nu, maar sommige functies zullen worden unvavailable totdat we gecontroleerd uw e-mail adres.)</p>
+      <p><a class="btn btn-outline-info" href="/">Ga naar dashboard</a></p>
     </div>
   </div>
 </div>
-<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
+<%- /* Laat de lokale bevolking als `venster.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
