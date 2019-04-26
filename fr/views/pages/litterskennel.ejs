@@ -38,8 +38,8 @@
       <div class="filters-content">
         <div class="row grid">
           <div class="col-lg-4 col-md-6 grid-sizer"></div>
-          <div v-for="(litter, key, index) in litters" :key="index" class="col-lg-8 grid-item col-md-6 all wow fadeIn"
-               data-wow-duration="2s" data-wow-delay="0.4s">
+          <div v for="(litter, key, index) in litters" :key="index" class="col-lg-8 grid-item col-md-6 all wow fadeIn"
+               data-wow-duration="2s" data-wow-delay="0.4 s">
             <div class="single-work">
               <div class="relative">
                 <div class="thumb">
@@ -65,7 +65,7 @@
                   </ul>
 
                   <h3>Litter: {{litter.label | capitalize}}</h3>
-                  <div class="cat">Litter born: {{litter.born | date('ru') }}</div>
+                  <div class="cat">Litter born: {{litter.born | date('fr') }}</div>
                   <h4 v-if="litter.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mine</h4>
                   <h5 v-if="litter.owner.id !== me.id"> Owner: <a href="#" class="card-link">{{litter.owner.fullName}}</a></h5>
                 </div>
@@ -162,14 +162,14 @@
         <span>&times;</span>
       </button>
     </div>
-    <ajax-form action="destroyOneLitter" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+    <ajax form action="destroyOneLitter" :syncing.sync="syncing" :cloud-error.sync="cloudError"
                :handle-parsing="handleParsingDeleteLitterForm"
                @submitted="submittedDeleteLitterForm()">
       <div class="modal-body">
         <p>Are you sure you want to remove this {{selectedLitter.label || 'item'}}?</p>
         <p class="text-muted" v-if="selectedLitter.borrowedBy">We will no longer be able to assist with the return of this item, so you will need to contact {{selectedLitter.borrowedBy.fullName}} directly to coordinate.</p>
         <p v-else>This item will no longer be available to share with friends.</p>
-        <p class="text-danger" v-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persists.</small></p>
+        <p class="text-danger" v-if="cloudError"><small>An error occurred while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persiste.</small></p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline-secondary mr-1" data-dismiss="modal">Nevermind</button>
@@ -178,4 +178,4 @@
     </ajax-form>
   </modal>
 </div>
-<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
+<%- /* Exposez server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
