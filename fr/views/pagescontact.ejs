@@ -16,30 +16,30 @@
   <div class="container section-gap">
     <h1 class="text-center">Get in touch</h1>
     <div class="contact-form" v-if="!cloudSuccess">
-      <p class="text-center">Have a question for us?  Maybe some feedback?  We love talking to users about Poale Ell, and we're happy to answer questions about our pricing, roadmap, or business solutions.  Send us a note and we'll get back to you as soon as possible.</p>
+      <p class="text-center">Have a question for us?  Maybe some feedback?  We love talking to users about Poale Ell, and we're happy to answer questions about our pricing, feuille de route, or business solutions.  Send us a note and we'll get back to you as soon as possible.</p>
       <hr/>
       <ajax-form action="deliverContactFormMessage" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm()" :handle-parsing="handleParsingForm">
         <div class="form-group">
           <label for="full-name">Name</label>
-          <input class="form-control" id="full-name" name="full-name" type="text"  :class="[formErrors.fullName ? 'is-invalid' : '']" v-model.trim="formData.fullName" placeholder="Sturgis P. Sturgeon" autocomplete="name" focus-first>
+          <input class="form-control" id="full name" name="full name" type="text" : "class="[formErrors.fullName ? 'is-invalid' : "]" v-model.trim="formData.fullName" placeholder="Sturgis P. Sturgeon" autocomplete="name" focus-first>
           <div class="invalid-feedback" v-if="formErrors.fullName">Please let us know what to call you.</div>
         </div>
         <div class="form-group">
           <label for="email-address">Email address</label>
-          <input class="form-control" id="email-address" name="email-address" type="email"  :class="[formErrors.emailAddress ? 'is-invalid' : '']" v-model.trim="formData.emailAddress" placeholder="your email, example: sturgeon@example.com" autocomplete="email">
+          <input class="form-control" id="email address" name="email address" type="email" : "class="[formErrors.emailAddress ? 'is-invalid' : "]" v-model.trim="formData.emailAddress" placeholder="votre email, example: sturgeon@example.com" autocomplete="email">
           <div class="invalid-feedback" v-if="formErrors.emailAddress">Please enter a valid email address.</div>
         </div>
         <div class="form-group">
           <label for="topic">Topic</label>
-          <input class="form-control" id="topic" name="topic" type="text"  :class="[formErrors.topic ? 'is-invalid' : '']" v-model.trim="formData.topic" placeholder="Pricing question" autocomplete="none">
+          <input class="form-control" id="topic" name="topic" type="text" : "class="[formErrors.topic ? 'is-invalid' : "]" v-model.trim="formData.topic" placeholder="Pricing question" autocomplete="none">
           <div class="invalid-feedback" v-if="formErrors.topic">Please choose a topic for your message.</div>
         </div>
         <div class="form-group">
           <label for="message">Message</label>
-          <textarea class="form-control" id="message" name="message" :class="[formErrors.message ? 'is-invalid' : '']" v-model.trim="formData.message" placeholder="What is the difference between a &quot;Hairless&quot; and &quot;Powderpuff&quot; dog?" autocomplete="none"></textarea>
+          <textarea class="form-control" id="message" name="message": "class="[formErrors.message ? 'is-invalid' : "]" v-model.trim="formData.message" placeholder="What is the difference between a &quot;Hairless&quot; and &quot;Powderpuff&quot; dog?" autocomplete="none"></textarea>
           <div class="invalid-feedback" v-if="formErrors.message">Message cannot be empty.</div>
         </div>
-        <p class="text-danger" v-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persists.</small></p>
+        <p class="text-danger" v-if="cloudError"><small>An error occurred while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persiste.</small></p>
         <div class="form-group">
           <ajax-button type="submit" :syncing="syncing" class="btn btn-dark btn-lg btn-block">Send message</ajax-button>
         </div>
@@ -103,7 +103,7 @@
 
           </div>-->
         </div>
-     <%   /*<div class="col-lg-8">
+     <% /*<div class="col-lg-8">
           <form
             class="form-area "
             id="myForm"
@@ -115,8 +115,8 @@
               <div class="col-lg-6 form-group form-group-top">
                 <input
                   name="name"
-                  placeholder="Enter your name"
-                  onfocus="this.placeholder = ''"
+                  placeholder="entrez votre nom"
+                  onfocus="this.placeholder = ""
                   onblur="this.placeholder = 'Enter your name'"
                   class="common-input mb-20 form-control"
                   required=""
@@ -125,9 +125,9 @@
 
                 <input
                   name="email"
-                  placeholder="Enter email address"
+                  placeholder="Entrez un email address"
                   pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"
-                  onfocus="this.placeholder = ''"
+                  onfocus="this.placeholder = ""
                   onblur="this.placeholder = 'Enter email address'"
                   class="common-input mb-20 form-control"
                   required=""
@@ -137,7 +137,7 @@
                 <input
                   name="subject"
                   placeholder="Enter your subject"
-                  onfocus="this.placeholder = ''"
+                  onfocus="this.placeholder = ""
                   onblur="this.placeholder = 'Enter your subject'"
                   class="common-input mb-20 form-control"
                   required=""
@@ -149,7 +149,7 @@
                     class="common-textarea form-control"
                     name="message"
                     placeholder="Messege"
-                    onfocus="this.placeholder = ''"
+                    onfocus="this.placeholder = ""
                     onblur="this.placeholder = 'Messege'"
                     required=""
                   ></textarea>
@@ -176,4 +176,4 @@
   <!-- End contact-page Area -->
 
 </div>
-<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
+<%- /* Exposé des locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
