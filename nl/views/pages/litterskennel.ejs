@@ -1,28 +1,28 @@
 <div id="kennel" v-cloak>
 
-  <!-- start banner Area -->
+  <!-- start banner Gebied -->
   <section class="banner-area relative">
     <div class="container">
       <div class="row d-flex align-items-center justify-content-center">
         <div class="about-content col-lg-12">
-          <h1 class="text-white">Litters</h1>
-          <p>Fowl living for lights our ears bearing to heaven signs</p>
+          <h1 class="text-white">Nesten</h1>
+          <p>Gevogelte living lights voor onze oren naar de hemel lager tekenen</p>
         </div>
       </div>
     </div>
   </section>
-  <!-- End banner Area -->
+  <!-- Einde banner Gebied -->
   <!-- <ul>
      <li v-for="litter in litters" @click="clickLitter(litter.id)">{{litter.label}}</li>
    </ul>-->
-  <!-- Start Work Area Area -->
+  <!-- Werkgebied Start -->
   <section class="work-area section-gap-top" id="work">
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
           <div class="section-title text-center">
-            <h3>Our Portfolio</h3>
-            <h2><span>Check</span> Our Work</h2>
+            <h3>Onze Portfolio</h3>
+            <h2><span>Controleren</span> Ons Werk</h2>
           </div>
         </div>
 
@@ -38,8 +38,8 @@
       <div class="filters-content">
         <div class="row grid">
           <div class="col-lg-4 col-md-6 grid-sizer"></div>
-          <div v-for="(litter, key, index) in litters" :key="index" class="col-lg-8 grid-item col-md-6 all wow fadeIn"
-               data-wow-duration="2s" data-wow-delay="0.4s">
+          <div v-for="(nest -, toets-index) in nesten" key="index" class="col-lg-8 raster-item col-md-6 wow fadeIn alle"
+               data-wow-duur="2s" data-wow-vertraging="0,4 s">
             <div class="single-work">
               <div class="relative">
                 <div class="thumb">
@@ -53,21 +53,21 @@
                         <i class="ti-settings"></i>
                       </a>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" v-if="litter.owner.id === me.id" href="#"
-                           @click="clickDeleteLitter(litter.id)">
-                          Delete
+                        <a class="dropdown-item" v-als="nest.de eigenaar.id === mij.id" href="#"
+                           @click="clickDeleteLitter(nest.id)">
+                          Verwijderen
                         </a>
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <!--<a class="dropdown-item" href="#">Somelitter else here</a>-->
+                        <a class="dropdown-item" href="#">Actie</a>
+                        <a class="dropdown-item" href="#">een Andere actie</a>
+                        <!--<a class="dropdown-item" href="#">Somelitter anders hier</a>-->
                       </div>
                     </li>
                   </ul>
 
-                  <h3>Litter: {{litter.label | capitalize}}</h3>
-                  <div class="cat">Litter born: {{litter.born | date('ru') }}</div>
-                  <h4 v-if="litter.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mine</h4>
-                  <h5 v-if="litter.owner.id !== me.id"> Owner: <a href="#" class="card-link">{{litter.owner.fullName}}</a></h5>
+                  <h3>Nest: {{litter.label | capitalize}}</h3>
+                  <div class="cat">Nest geboren: {{nest.geboren | date('NL') }}</div>
+                  <h4 v-if="litter.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mijn</h4>
+                  <h5 v-if="litter.owner.id !== me.id"> Eigenaar: <a href="#" class="card-link">{{litter.owner.fullName}}</a></h5>
                 </div>
               </div>
             </div>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="middle">
                   <h4>+2D Vinyl Design</h4>
-                  <div class="cat">Client Project</div>
+                  <div class="cat">Opdrachtgever Project</div>
                 </div>
                 <a class="overlay" href="project-details.html"></a>
               </div>
@@ -97,7 +97,7 @@
                 </div>
                 <div class="middle">
                   <h4>2D Vinyl Design</h4>
-                  <div class="cat">Client Project</div>
+                  <div class="cat">Opdrachtgever Project</div>
                 </div>
                 <a class="overlay" href="project-details.html"></a>
               </div>
@@ -112,7 +112,7 @@
                 </div>
                 <div class="middle">
                   <h4>2D Vinyl Design</h4>
-                  <div class="cat">Client Project</div>
+                  <div class="cat">Opdrachtgever Project</div>
                 </div>
                 <a class="overlay" href="project-details.html"></a>
               </div>
@@ -126,8 +126,8 @@
                   <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/PoaleEllAdam-1.jpg" alt="">
                 </div>
                 <div class="middle">
-                  <h4>++2D Vinyl Design</h4>
-                  <div class="cat">Client Project</div>
+                  <h4>++2D Ontwerp Vinyl</h4>
+                  <div class="cat">Opdrachtgever Project</div>
                 </div>
                 <a class="overlay" href="project-details.html"></a>
               </div>
@@ -137,7 +137,7 @@
           <div class="col-lg-4 text-center grid-item col-md-12 all creative wow fadeIn" data-wow-duration="2s">
             <a href="#" class="primary-btn" data-text="View More">
               <span>V</span>
-              <span>i</span>
+              <span>ik</span>
               <span>e</span>
               <span>w</span>
               <span> </span>
@@ -152,30 +152,30 @@
       </div>
     </div>
   </section>
-  <!-- End Work Area Area -->
-  <% /* "Confirm Delete Litter" Modal */ %>
-  <modal v-if="confirmDeleteLitterModalOpen && selectedLitter" v-cloak key="delete"
+  <!-- Werkgebied End -->
+  <% /* "Bevestig Verwijderen Van Strooisel" Modal - * / %>
+  <modaal v-als="confirmDeleteLitterModalOpen && selectedLitter" v-mantel key="verwijderen"
          @close="closeDeleteLitterModal()">
     <div class="modal-header">
-      <h5 class="modal-title">Remove this item?</h5>
+      <h5 class="modal-title">Verwijder dit item?</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span>&times;</span>
       </button>
     </div>
-    <ajax-form action="destroyOneLitter" :syncing.sync="syncing" :cloud-error.sync="cloudError"
-               :handle-parsing="handleParsingDeleteLitterForm"
-               @submitted="submittedDeleteLitterForm()">
+    <ajax-form action="destroyOneLitter" :synchroniseren.sync="synchroniseren" :cloud-fout.sync="cloudError"
+               :handvat-parsing="handleParsingDeleteLitterForm"
+               @voorgelegd="submittedDeleteLitterForm()">
       <div class="modal-body">
-        <p>Are you sure you want to remove this {{selectedLitter.label || 'item'}}?</p>
-        <p class="text-muted" v-if="selectedLitter.borrowedBy">We will no longer be able to assist with the return of this item, so you will need to contact {{selectedLitter.borrowedBy.fullName}} directly to coordinate.</p>
-        <p v-else>This item will no longer be available to share with friends.</p>
-        <p class="text-danger" v-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persists.</small></p>
+        <p>weet u zeker dat u wilt verwijderen dit {{selectedLitter.label || 'item'}}?</p>
+        <p class="text-muted" v-if="selectedLitter.borrowedBy">zullen We niet langer in staat zijn om te helpen met de terugkeer van dit artikel, dus je moet contact opnemen met {{selectedLitter.borrowedBy.fullName}} direct te coördineren.</p>
+        <p v-else>Dit item is niet langer beschikbaar zijn om te delen met vrienden.</p>
+        <p class="text-danger" v-if="cloudError"><small>er is Een fout opgetreden tijdens het verwerken van uw verzoek. Controleer uw gegevens en probeer het opnieuw, of neem contact op met ondersteuning <a href="/contact"></a> als de fout zich blijft voordoen.</small></p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline-secondary mr-1" data-dismiss="modal">Nevermind</button>
-        <button type="submit" class="btn btn-danger ml-1">Remove</button>
+        <button type="submit" class="btn btn-danger ml-1">Verwijderen</button>
       </div>
     </ajax-form>
   </modal>
 </div>
-<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
+<%- /* Bloot server-rendered gegevens venster.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
