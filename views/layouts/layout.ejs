@@ -124,7 +124,7 @@
         <nav id="nav-menu-container">
           <ul class="nav-menu">
             <% if(me) { %>
-            <li ><a href="/" class="active">Home</a></li>
+            <li ><a href="/" class="active"> <%= __('Home-menu') %></a></li>
             <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'about' ? 'current' : '' %>" href="/about">About</a></li>
             <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'kennel' ? 'current' : '' %>" href="/litters/kennel">Litters</a></li>
             <li><a class="nav-item nav-link   <%= typeof currentSection !== 'undefined' && currentSection === 'things' ? 'current' : '' %>" href="/things">Dogs</a></li>
@@ -625,6 +625,7 @@
 <script src="/js/pages/498.page.js"></script>
 <script src="/js/pages/about.page.js"></script>
 <script src="/js/pages/account/account-overview.page.js"></script>
+<script src="/js/pages/account/edit-language.page.js"></script>
 <script src="/js/pages/account/edit-password.page.js"></script>
 <script src="/js/pages/account/edit-profile.page.js"></script>
 <script src="/js/pages/contact.page.js"></script>

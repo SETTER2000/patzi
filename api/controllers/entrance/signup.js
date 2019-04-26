@@ -14,7 +14,16 @@ by modifying its [session](https://sailsjs.com/documentation/concepts/sessions),
 
 If a verification email is sent, the new user's account is put in an "unconfirmed" state
 until they confirm they are using a legitimate email address (by clicking the link in
-the account verification message.)`,
+the account verification message.)
+
+Это создает новую запись пользователя в базе данных, подписывает в запрашивающем пользовательском агенте
+изменив его [сеанс] (https://sailsjs.com/documentation/concepts/sessions), и
+(если включена электронная почта с Mailgun) отправляет письмо с подтверждением учетной записи.
+
+Если письмо с подтверждением отправлено, учетная запись нового пользователя переводится в 
+неподтвержденное состояние. Пока они не подтвердят, что они используют законный адрес электронной 
+почты (нажав на ссылку в сообщение о подтверждении аккаунта.)
+`,
 
 
   inputs: {

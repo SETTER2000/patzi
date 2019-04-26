@@ -27,11 +27,11 @@ module.exports = {
       defaultsTo: 'confirmed',
       description: 'The confirmation status of the user\'s email address.',
       extendedDescription:
-`Users might be created as "unconfirmed" (e.g. normal signup) or as "confirmed" (e.g. hard-coded
-admin users).  When the email verification feature is enabled, new users created via the
-signup form have \`emailStatus: 'unconfirmed'\` until they click the link in the confirmation email.
-Similarly, when an existing user changes their email address, they switch to the "change-requested"
-email status until they click the link in the confirmation email.`
+        `Пользователи могут быть созданы как «неподтвержденные» (например, обычная регистрация) или как «подтвержденные» (например, жестко запрограммированные)
+пользователи админа). Когда функция проверки электронной почты включена, новые пользователи создаются с помощью
+в форме регистрации есть \`emailStatus: 'unsfirmed'\`, пока они не нажмут на ссылку в электронном подтверждении.
+Точно так же, когда существующий пользователь меняет свой адрес электронной почты, он переключается на «запрос на изменение»
+статус электронной почты, пока они не нажмут на ссылку в электронном письме с подтверждением.`
     },
 
     emailChangeCandidate: {
@@ -60,7 +60,7 @@ email status until they click the link in the confirmation email.`
       type: 'boolean',
       description: 'Whether this user is a "super admin" with extra permissions, etc.',
       extendedDescription:
-`Super admins might have extra permissions, see a different default home page when they log in,
+        `Super admins might have extra permissions, see a different default home page when they log in,
 or even have a completely different feature set from normal users.  In this app, the \`isSuperAdmin\`
 flag is just here as a simple way to represent two different kinds of users.  Usually, it's a good idea
 to keep the data model as simple as possible, only adding attributes when you actually need them for
@@ -101,7 +101,7 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       protect: true,
       description: 'The id of the customer entry in Stripe associated with this user (or empty string if this user is not linked to a Stripe customer -- e.g. if billing features are not enabled).',
       extendedDescription:
-`Just because this value is set doesn't necessarily mean that this user has a billing card.
+        `Just because this value is set doesn't necessarily mean that this user has a billing card.
 It just means they have a customer entry in Stripe, which might or might not have a billing card.`
     },
 
@@ -109,7 +109,7 @@ It just means they have a customer entry in Stripe, which might or might not hav
       type: 'boolean',
       description: 'Whether this user has a default billing card hooked up as their payment method.',
       extendedDescription:
-`More specifically, this indcates whether this user record's linked customer entry in Stripe has
+        `More specifically, this indcates whether this user record's linked customer entry in Stripe has
 a default payment source (i.e. credit card).  Note that a user have a \`stripeCustomerId\`
 without necessarily having a billing card.`
     },
@@ -154,11 +154,27 @@ without necessarily having a billing card.`
       description: 'A JS timestamp (epoch ms) representing the moment at which this user most recently interacted with the backend while logged in (or 0 if they have not interacted with the backend at all yet).',
       example: 1502844074211
     },
-    gravr:{
+    gravr: {
       type: 'string',
       description: 'Email адрес зарегистрированый в граватар сервисе',
-      example:'my-email@gmail.com',
+      example: 'my-email@gmail.com',
       moreInfoUrl: 'https://ru.gravatar.com/'
+    },
+    preferredLocale: {
+      type: 'string',
+      description: 'Предпочтительный язык',
+      example: 'ru',
+      moreInfoUrl: 'https://gist.github.com/mikermcneil/0af155ed546f3ddf164b4885fb67830c; https://sailsjs.com/documentation/reference/request-req/req-set-locale',
+      defaultsTo: 'ru',
+
+    },
+
+    emailConfirmationReminderAlreadySent: {
+      type: 'boolean',
+      description: 'Отправлено ли напоминание о подтверждение email при регистрации',
+      extendedDescription:
+        `Письмо-напоминание. Письмо отправляется за 24 часа до истечения срока годности токена 
+        на подтверждение адреса электронной почты при регистрации.`
     },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -168,13 +184,13 @@ without necessarily having a billing card.`
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    friends:{collection: 'User'},
+    friends: {collection: 'User'},
     // Входящие запросы на добавление в друзья, это набор пользователей через их исходящие
     // запросы на добавления в друзья
-    inboundFriendRequests: {collection:'User', via: 'outboundFriendRequests'},
+    inboundFriendRequests: {collection: 'User', via: 'outboundFriendRequests'},
     // Исходящие от вас запросы на добавления в друзья, это набор пользователей через их входящие
     // запросы на добавления в друзья
-    outboundFriendRequests: {collection:'User', via: 'inboundFriendRequests'}
+    outboundFriendRequests: {collection: 'User', via: 'inboundFriendRequests'}
   },
 
 

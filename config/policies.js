@@ -13,7 +13,7 @@
 
 module.exports.policies = {
 
-  '*': 'is-logged-in',
+  '*': ['is-logged-in','localize'],
 
   // Bypass the `is-logged-in` policy for:
   'entrance/*': true,
