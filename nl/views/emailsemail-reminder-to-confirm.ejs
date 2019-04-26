@@ -1,22 +1,22 @@
-<% /* Note: This is injected into `views/layouts/layout-email.ejs` */
+<% /* Opmerking: Dit is geïnjecteerd in de `views/opmaak/lay-out-e-mail.ejs` */
 /*
-Время отпущенное на подтверждение электронного адреса при регистрации на сайте Поале Элл заканчивается.
-Через 6 часов ваш аккаунт будет аннулирован.
-  Если для вас эта информация не актуальна, то просто не обращайте внимание на данной сообщение.
-  Если вы хотите подтвердить ваш адрес электронной почты, вам следует перейти в письмо, которое
-  было вам выслано при регистрации и нажать кнопку подтверждения.
+De toegestane tijd voor u om te bevestigen dat het e-mail adres bij het registreren op de website van de Paula ell eindigt.
+Na 6 uur zal uw account worden geannuleerd.
+  Als u deze informatie niet relevant is, dan negeer dit bericht.
+  Als u wilt dat uw e-mailadres bevestigen, moet u in de brief
+  het werd verzonden naar u tijdens de registratie en klik op bevestigen.
 
-  Если вы не смогли найти письмо присланное при регистрации, свяжитесь пожалуйста с нами или
-  зарегистрируйтесь повторно.
+  Als u niet in staat bent om de e-mail verzonden wanneer de registratie, neem dan contact met ons op of
+  weer opnieuw aanmelden.
 */
 %>
-<p style="margin-bottom: 25px;">Dear <%= user.fullName %>,</p>
+<p style="margin-bottom: 25px;">Geachte <%= gebruiker.fullName %>,</p>
 <p style="margin-bottom: 25px;">
-  The time allowed to confirm the email address when registering on the Poale Ell website ends. After 6 hours, your account will be canceled.
- <br>If this information is not relevant to you, then just do not pay attention to this message.
- <br>If you want to confirm your email address, you should go to the email that was sent to you during registration and click the confirm button.
+  De tijd toegestaan om te bevestigen dat het e-mail adres bij het registreren op de website van Poale Ell eindigt. Na 6 uur, zal uw account worden geannuleerd.
+ <br>Als deze informatie is niet relevant voor u is, dan gewoon geen aandacht besteden aan dit bericht.
+ <br>Als u wilt uw e-mailadres bevestigen, dient u te gaan naar de e-mail die naar u gestuurd wordt tijdens de registratie en klik op de knop bevestigen.
 </p><p>
-  If you could not find the letter sent during registration, please contact us or register again.
+  Als je niet kon vinden in de brief tijdens de registratie, dan kunt u contact met ons opnemen of opnieuw aanmelden.
 </p>
-<p style="margin-bottom: 5px;">Sincerely,</p>
-<p style="margin-top: 0px;">The Poale Ell Team</p>
+<p style="margin-bottom: 5px;">met vriendelijke groet,</p>
+<p style="margin-top: 0px;">De Poale Ell Team</p>
