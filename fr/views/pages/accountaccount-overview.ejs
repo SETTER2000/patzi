@@ -19,8 +19,8 @@
     <div class="row">
       <div class="col-3">Email:</div>
       <div class="col">
-        <strong :class="[me.emailStatus === 'unconfirmed' || me.emailStatus === 'change-requested' ? 'text-muted' : '']">{{me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress}}</strong>
-        <span v-if="me.emailStatus === 'unconfirmed' || me.emailStatus === 'change-requested'" class="badge badge-pill badge-warning">Unverified</span>
+        <p :class="[me.emailStatus === 'unconfirmed' || me.emailStatus === 'change-requested' ? 'text-muted' : "]">{{me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress}}</strong>
+        <span v-if="me.emailStatus === 'unconfirmed' || me.emailStatus === 'change-requested'" class="badge badge-pill badge-warning">Invérifié</span>
       </div>
     </div>
     <hr/>
@@ -66,7 +66,7 @@
               <span v-if="syncingOpenCheckout">Connecting...</span>
               <span v-else>Updating...</span>
             </span>
-            <span slot="default">{{ me.hasBillingCard ? 'Change card' : 'Add card' }}</span>
+            <span slot="default">{{ me.hasBillingCard ? 'Change card' : 'Ajouter card' }}</span>
           </ajax-button>
         </span>
       </div>
@@ -82,7 +82,7 @@
       </div>
     </div>
     <div class="alert alert-danger" v-else-if="isBillingEnabled && cloudError">
-      There was an error updating your credit card information. Please check your information and try again, or <a href="/contact">contact support</a> if the error persists.
+      There was an error updating your credit card information. Please check your information and try again, or <a href="/contact">contact support</a> if the error persiste.
     </div>
     <div class="alert alert-secondary" v-else-if="isBillingEnabled">
       You have not linked a payment source to your account. In order to access paid features, you'll need to provide your credit card information. (Don't worry: you will only be charged when you've reached the limit of your free plan.)
@@ -101,7 +101,7 @@
       <div class="modal-body">
         <p>Are you sure you want to remove your {{me.billingCardBrand}} ending in <strong>{{me.billingCardLast4}}</strong>?</p>
         <p class="text-muted">This may restrict your access to paid features.</p>
-        <p class="text-danger" v-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persists.</small></p>
+        <p class="text-danger" v-if="cloudError"><small>An error occurred while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persiste.</small></p>
       </div>
       <div class="modal-footer">
         <button data-dismiss="modal" class="btn btn-outline-secondary mr-1">Nevermind</button>
@@ -110,4 +110,4 @@
     </ajax-form>
   </modal>
 </div>
-<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
+<%- /* Exposé des locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
