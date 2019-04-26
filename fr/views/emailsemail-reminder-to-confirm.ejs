@@ -1,19 +1,19 @@
 <% /* Note: This is injected into `views/layouts/layout-email.ejs` */
 /*
-Время отпущенное на подтверждение электронного адреса при регистрации на сайте Поале Элл заканчивается.
-Через 6 часов ваш аккаунт будет аннулирован.
-  Если для вас эта информация не актуальна, то просто не обращайте внимание на данной сообщение.
-  Если вы хотите подтвердить ваш адрес электронной почты, вам следует перейти в письмо, которое
-  было вам выслано при регистрации и нажать кнопку подтверждения.
+Le temps alloué à la confirmation de l'adresse électronique lors de votre inscription sur le site Поале Elle se termine.
+Au bout de 6 heures, votre compte sera annulé.
+  Si pour vous, cette information n'est pas d'actualité, il suffit de ne pas prêter attention à ce message.
+  Si vous voulez confirmer votre adresse e-mail, vous devez aller dans la lettre qui
+  vous avez envoyé lors de votre inscription et cliquez sur le bouton de confirmation.
 
-  Если вы не смогли найти письмо присланное при регистрации, свяжитесь пожалуйста с нами или
-  зарегистрируйтесь повторно.
+  Si vous ne parvenez pas à trouver un mail envoyé lors de votre inscription, veuillez contacter ou
+  inscrivez-vous à nouveau.
 */
 %>
-<p style="margin-bottom: 25px;">Dear <%= user.fullName %>,</p>
+<p style="margin-bottom: 25px;">Cher <%= user.fullName %>,</p>
 <p style="margin-bottom: 25px;">
-  The time allowed to confirm the email address when registering on the Poale Ell website ends. After 6 hours, your account will be canceled.
- <br>If this information is not relevant to you, then just do not pay attention to this message.
+  The time allowed to confirm the email address when registering on the Poale Ell website ends. Après 6 heures, your account will be canceled.
+ <br>If this information is not relevant to you then just do not pay attention to this message.
  <br>If you want to confirm your email address, you should go to the email that was sent to you during registration and click the confirm button.
 </p><p>
   If you could not find the letter sent during registration, please contact us or register again.
