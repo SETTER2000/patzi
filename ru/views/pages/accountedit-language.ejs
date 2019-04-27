@@ -3,21 +3,29 @@
   <div class="container">
     <h1><%=__('Change language')%></h1>
     <hr/>
-    <ajax-form action="updatePassword" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm()" :handle-parsing="handleParsingForm">
+    <ajax-form action="updateLanguage"
+               :syncing.sync="syncing"
+               :cloud-error.sync="cloudError"
+               @submitted="submittedForm()"
+               :handle-parsing="handleParsingForm">
       <div class="row">
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="password">New password</label>
-            <input class="form-control" id="password" name="password" type="password"  :class="[formErrors.password ? 'is-invalid' : '']" v-model.trim="formData.password" placeholder="••••••••" autocomplete="new-password" focus-first>
-            <div class="invalid-feedback" v-if="formErrors.password">Please enter a password or choose "Cancel".</div>
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-group">
-            <label for="confirm-password">Confirm password</label>
-            <input class="form-control" id="confirm-password" name="confirm-password" type="password"  :class="[formErrors.confirmPassword ? 'is-invalid' : '']" v-model.trim="formData.confirmPassword" autocomplete="new-password" placeholder="••••••••">
-            <div class="invalid-feedback" v-if="formErrors.confirmPassword">Your new password and confirmation do not match.</div>
-          </div>
+            <div class="custom-control custom-radio">
+              <input  type="radio"
+                      v-model="formData.language"
+                     id="customRadio1"
+                    name="language"  value="ru" class="custom-control-input">
+              <label class="custom-control-label" for="customRadio1">{{formData.checked}} <%= __('Russian') %></label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio"
+                     v-model="formData.language"
+                     id="customRadio2"
+                     name="language" value="en" class="custom-control-input">
+              <label class="custom-control-label" for="customRadio2"><%= __('English') %></label>
+            </div>
+            </div>
         </div>
       </div>
       <div class="row">
@@ -26,8 +34,8 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group text-right">
-            <a class="btn btn-outline-info" href="/account">Cancel</a>
-            <ajax-button type="submit" :syncing="syncing" class="btn btn-dark">Save changes</ajax-button>
+            <a class="btn btn-outline-info" href="/account"><%= __('Cancel') %></a>
+            <ajax-button type="submit" :syncing="syncing" class="btn btn-dark"><%= __('Save') %></ajax-button>
           </div>
         </div>
       </div>
