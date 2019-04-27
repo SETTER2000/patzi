@@ -1,0 +1,181 @@
+<div id="kennel" v-cloak>
+
+  <!-- start banner Area -->
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white">Litters</h1>
+          <p>Fowl living for lights our ears bearing to heaven signs</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End banner Area -->
+  <!-- <ul>
+     <li v-for="litter in litters" @click="clickLitter(litter.id)">{{litter.label}}</li>
+   </ul>-->
+  <!-- Start Work Area Area -->
+  <section class="work-area section-gap-top" id="work">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3>Our Portfolio</h3>
+            <h2><span>Check</span> Our Work</h2>
+          </div>
+        </div>
+
+        <div class="col-lg-12 d-none">
+          <div class="filters">
+            <ul>
+              <li class="active" data-filter=".all"></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="filters-content">
+        <div class="row grid">
+          <div class="col-lg-4 col-md-6 grid-sizer"></div>
+          <div v-for="(litter, key, index) in litters" :key="index" class="col-lg-8 grid-item col-md-6 all wow fadeIn"
+               data-wow-duration="2s" data-wow-delay="0.4s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/litter-03112017.jpg" alt="">
+                </div>
+                <div class="middle">
+                  <ul class="navbar-nav  my-sm-0 ">
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+                         aria-haspopup="true" aria-expanded="false">
+                        <i class="ti-settings"></i>
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" v-if="litter.owner.id === me.id" href="#"
+                           @click="clickDeleteLitter(litter.id)">
+                          Delete
+                        </a>
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <!--<a class="dropdown-item" href="#">Somelitter else here</a>-->
+                      </div>
+                    </li>
+                  </ul>
+
+                  <h3>Litter: {{litter.label | capitalize}}</h3>
+                  <div class="cat">Litter born: {{litter.born | date('ru') }}</div>
+                  <h4 v-if="litter.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mine</h4>
+                  <h5 v-if="litter.owner.id !== me.id"> Owner: <a href="#" class="card-link">{{litter.owner.fullName}}</a></h5>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-lg-4 col-md-12 grid-item all wow fadeIn" data-wow-duration="2s" data-wow-delay="0s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/Bazhen-Barthalamew-3m.jpg" alt="">
+                </div>
+                <div class="middle">
+                  <h4>+2D Vinyl Design</h4>
+                  <div class="cat">Client Project</div>
+                </div>
+                <a class="overlay" href="project-details.html"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 grid-item col-md-6 all wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/Poale-Ell-Adam-2.jpg" alt="">
+                </div>
+                <div class="middle">
+                  <h4>2D Vinyl Design</h4>
+                  <div class="cat">Client Project</div>
+                </div>
+                <a class="overlay" href="project-details.html"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 grid-item col-md-6 all wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/litter-03112017.jpg" alt="">
+                </div>
+                <div class="middle">
+                  <h4>2D Vinyl Design</h4>
+                  <div class="cat">Client Project</div>
+                </div>
+                <a class="overlay" href="project-details.html"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 grid-item col-md-12 all wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/PoaleEllAdam-1.jpg" alt="">
+                </div>
+                <div class="middle">
+                  <h4>++2D Vinyl Design</h4>
+                  <div class="cat">Client Project</div>
+                </div>
+                <a class="overlay" href="project-details.html"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 text-center grid-item col-md-12 all creative wow fadeIn" data-wow-duration="2s">
+            <a href="#" class="primary-btn" data-text="View More">
+              <span>V</span>
+              <span>i</span>
+              <span>e</span>
+              <span>w</span>
+              <span> </span>
+              <span>M</span>
+              <span>o</span>
+              <span>r</span>
+              <span>e</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Work Area Area -->
+  <% /* "Confirm Delete Litter" Modal */ %>
+  <modal v-if="confirmDeleteLitterModalOpen && selectedLitter" v-cloak key="delete"
+         @close="closeDeleteLitterModal()">
+    <div class="modal-header">
+      <h5 class="modal-title">Remove this item?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="destroyOneLitter" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingDeleteLitterForm"
+               @submitted="submittedDeleteLitterForm()">
+      <div class="modal-body">
+        <p>Are you sure you want to remove this {{selectedLitter.label || 'item'}}?</p>
+        <p class="text-muted" v-if="selectedLitter.borrowedBy">We will no longer be able to assist with the return of this item, so you will need to contact {{selectedLitter.borrowedBy.fullName}} directly to coordinate.</p>
+        <p v-else>This item will no longer be available to share with friends.</p>
+        <p class="text-danger" v-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persists.</small></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal">Nevermind</button>
+        <button type="submit" class="btn btn-danger ml-1">Remove</button>
+      </div>
+    </ajax-form>
+  </modal>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
