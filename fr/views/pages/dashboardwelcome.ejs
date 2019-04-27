@@ -53,12 +53,9 @@
           </div>
           <div class="mb-35 wow fadeIn" data-wow-duration=".8s" data-wow-delay=".3s">
             <p>
-              In the breed since 2004. Officially the kennel Poale Ell, was registered in the international
-              registry of the FCI federation in 2016, certificate No. 18431 dated 02.26.2016, owner Olga Petrova.
+              <%= __('In the breed since 2004. Officially, the kennel Poale Ell, was registered in the international registry of the FCI federation in 2016, certificate No. 18431 dated 02.26.2016, owner Olga Petrova.') %>
             </p>
-            <p>The nursery is actively working with Polish, British and American manufacturers.
-              Specializes in breeding Chinese crested dogs of standard size. In kennel dogs there are brilliant
-              les pedigrees with lines of the best specialized kennels in the world.
+            <p><%= __('The nursery is actively working with Polish, British and American manufacturers. Specializes in breeding Chinese crested dogs of standard size. In kennel dogs there are brilliant pedigrees with lines of the best specialized kennels in the world.') %>
             </p>
           </div>
           <a href="/about" class="primary-btn" data-text="Read More">
@@ -156,8 +153,8 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="section-title text-center">
-            <h3>Our Portfolio</h3>
-            <h2><span>Check</span> Our Work</h2>
+            <h3><%= __('Our Portfolio') %></h3>
+            <h2><span><%= __('Check Our Work') %></span></h2>
           </div>
         </div>
 
@@ -257,13 +254,14 @@
   <!-- End Work Area Area -->
 
   <!-- Start Pricing Area -->
-  <section class="pricing-area section-gap-top">
+  <section class="pricing-area">
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
           <div class="section-title text-center">
-            <h3>Pricing Plan</h3>
-            <h2><span>Choose</span> Your Dog</h2>
+            <h3><%= __('Pricing Plan') %></h3>
+            <h2><span><%= __('Choose Your Dog') %></span></h2>
+            <p ><ul><li><span class="ti-close cross mx-2 text-danger"></span><%= __('Not included in the price') %></li></ul></p>
           </div>
         </div>
       </div>
@@ -271,19 +269,19 @@
       <div class="row">
         <div class="col-lg-3 col-md-3">
           <div class="pricing_item">
-            <h3 class="p_title">Hairless Dam</h3>
-            <p class="p_criteria">What is included in the price.</p>
+            <h3 class="p_title"><%= __('Hairless Dam') %></h3>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
             <h1 class="p_price">&euro;1500</h1>
             <div class="p_list">
               <ul>
-                <li><span class="ti-check"></span> Vaccination, anthelmintic</li>
-                <li><span class="ti-check"></span> Pedigree (puppy card) </li>
-                <li><span class="ti-check"></span> Clear Tests PRA, PLL</li>
-                <li><span class="ti-check"></span> The gift collar nouvelle</li>
-                <li><span class="ti-check"></span>Contract of sale </li>
-                <li><span class="ti-check"></span> Nursery help</li>
-                <li><span class="ti-close cross"></span> Erect ears</li>
-                <li><span class="ti-close cross"></span> Delivery </li>
+                <li><span class="ti-check"></span> <%= __('Vaccination, anthelmintic') %></li>
+                <li><span class="ti-check"></span> <%= __('Pedigree (puppy card)') %> </li>
+                <li><span class="ti-check"></span> <%= __('Clear Tests PRA, PLL') %></li>
+                <li><span class="ti-check"></span> <%= __('The gift collar brand') %></li>
+                <li><span class="ti-check"></span><%= __('Contract of sale') %> </li>
+                <li><span class="ti-check"></span> <%= __('Nursery help') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
               </ul>
               <a class="primary-btn mt-4" href="#" data-text="Detailed">
                 <span>D</span>
@@ -302,18 +300,18 @@
         <div class="col-lg-3 col-md-3">
           <div class="pricing_item">
             <h3 class="p_title">Hairless Sire</h3>
-            <p class="p_criteria">What is included in the price.</p>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
             <h1 class="p_price">&euro;1000</h1>
             <div class="p_list">
               <ul>
-                <li><span class="ti-check"></span> Vaccination, anthelmintic</li>
-                <li><span class="ti-check"></span> Pedigree (puppy card) </li>
-                <li><span class="ti-check"></span> Clear Tests PRA, PLL</li>
-                <li><span class="ti-check"></span> The gift collar nouvelle</li>
-                <li><span class="ti-check"></span>Contract of sale </li>
-                <li><span class="ti-check"></span> Nursery help</li>
-                <li><span class="ti-close cross"></span> Erect ears</li>
-                <li><span class="ti-close cross"></span> Delivery </li>
+                <li><span class="ti-check"></span> <%= __('Vaccination, anthelmintic') %></li>
+                <li><span class="ti-check"></span> <%= __('Pedigree (puppy card)') %> </li>
+                <li><span class="ti-check"></span> <%= __('Clear Tests PRA, PLL') %></li>
+                <li><span class="ti-check"></span> <%= __('The gift collar brand') %></li>
+                <li><span class="ti-check"></span><%= __('Contract of sale') %> </li>
+                <li><span class="ti-check"></span> <%= __('Nursery help') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
               </ul>
               <a class="primary-btn mt-4" href="#" data-text="Detailed">
                 <span>D</span>
@@ -332,18 +330,18 @@
         <div class="col-lg-3 col-md-3">
           <div class="pricing_item">
             <h3 class="p_title">Powderpuff Dam</h3>
-            <p class="p_criteria">Attend only first day</p>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
             <h1 class="p_price">&euro;1000</h1>
             <div class="p_list">
               <ul>
-                <li><span class="ti-check"></span> Vaccination, anthelmintic</li>
-                <li><span class="ti-check"></span> Pedigree (puppy card) </li>
-                <li><span class="ti-check"></span> Clear Tests PRA, PLL</li>
-                <li><span class="ti-check"></span> The gift collar nouvelle</li>
-                <li><span class="ti-check"></span>Contract of sale </li>
-                <li><span class="ti-check"></span> Nursery help</li>
-                <li><span class="ti-close cross"></span> Erect ears</li>
-                <li><span class="ti-close cross"></span> Delivery </li>
+                <li><span class="ti-check"></span> <%= __('Vaccination, anthelmintic') %></li>
+                <li><span class="ti-check"></span> <%= __('Pedigree (puppy card)') %> </li>
+                <li><span class="ti-check"></span> <%= __('Clear Tests PRA, PLL') %></li>
+                <li><span class="ti-check"></span> <%= __('The gift collar brand') %></li>
+                <li><span class="ti-check"></span><%= __('Contract of sale') %> </li>
+                <li><span class="ti-check"></span> <%= __('Nursery help') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
               </ul>
               <a class="primary-btn mt-4" href="#" data-text="Detailed">
                 <span>D</span>
@@ -361,18 +359,18 @@
         <div class="col-lg-3 col-md-3">
           <div class="pricing_item">
             <h3 class="p_title">Powderpuff Sire</h3>
-            <p class="p_criteria">Attend only first day</p>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
             <h1 class="p_price">&euro;800</h1>
             <div class="p_list">
               <ul>
-                <li><span class="ti-check"></span> Vaccination, anthelmintic</li>
-                <li><span class="ti-check"></span> Pedigree (puppy card) </li>
-                <li><span class="ti-check"></span> Clear Tests PRA, PLL</li>
-                <li><span class="ti-check"></span> The gift collar nouvelle</li>
-                <li><span class="ti-check"></span>Contract of sale </li>
-                <li><span class="ti-check"></span> Nursery help</li>
-                <li><span class="ti-close cross"></span> Erect ears</li>
-                <li><span class="ti-close cross"></span> Delivery </li>
+                <li><span class="ti-check"></span> <%= __('Vaccination, anthelmintic') %></li>
+                <li><span class="ti-check"></span> <%= __('Pedigree (puppy card)') %> </li>
+                <li><span class="ti-check"></span> <%= __('Clear Tests PRA, PLL') %></li>
+                <li><span class="ti-check"></span> <%= __('The gift collar brand') %></li>
+                <li><span class="ti-check"></span><%= __('Contract of sale') %> </li>
+                <li><span class="ti-check"></span> <%= __('Nursery help') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
               </ul>
               <a class="primary-btn mt-4" href="#" data-text="Detailed">
                 <span>D</span>
@@ -398,16 +396,8 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="section-title text-center">
-            <h3>Our Blog</h3>
-            <h2><span>Latest</span> Good Story</h2>
-            <ul class="navbar-nav">
-              <router-link tag="li" class="nav-item" exact to="/" active-class="active">
-                <a class="nav-link">  <%= __('Home-menu') %></a>
-              </router-link>
-              <router-link tag="li" class="nav-item" to="/about" active-class="active">
-                <a class="nav-link"> About</a>
-              </router-link>
-            </ul>
+            <h3><%= __('Our Blog') %></h3>
+            <h2><span><%= __('Latest Good Story') %></span></h2>
           </div>
         </div>
       </div>
@@ -415,26 +405,20 @@
         <div class="col-lg-6">
           <div class="single-recent-blog mb-lg-3 mb-5">
             <div class="thumb">
-              <!--<img class="f-img img-fluid mx-auto" src="http://d3a1wbnh2r1l7y.cloudfront.net/zahar.jpg" alt="">-->
+              <img class="f-img img-fluid mx-auto" src="http://d3a1wbnh2r1l7y.cloudfront.net/Olga_PoaleEll.jpg" alt="">
             </div>
             <a href="#">
-              <h4 class="mt-4 mb-3">In anticipation of the New 2019. Christmas photo shoot "I and my favorite pets." In
-                the photo: Ella, Adam Lux.</h4>
+              <h4 class="mt-4 mb-3"><%= __('In anticipation of the New 2019. Christmas photo shoot "I and my favorite pets." In the photo: Ella, Adam, Lux.') %></h4>
             </a>
             <div class="mb-3 bottom d-flex justify-content-between align-items-center flex-wrap">
               <div class="meta">
-                <span class="ti-user mr-1"></span> Olga Petrova
-                <span class="ti-calendar mr-1"></span> 20/12/2018
+                <span class="ti-user mr-1"></span> <%= __('Olga Petrova') %>
+                <span class="ti-calendar mr-1"></span> 24/12/2018
               </div>
             </div>
             <p>
-              On the eve of the New Year - a wonderful holiday, which is a real magic.
-              This time of carefree fun, smiles and pleasant surprises. Let your main
-              gift in the coming year be the realization of your plans! With all my heart
-              I wish you health, an infinite number of happy moments and harmony in families.
-              Let luck be your companion, inspiring optimism and confidence that all your dreams
-              will surely come true! 🎄<br>
-              C Happy New Year and Merry Christmas!
+              <%= __('On the eve of the New Year - a wonderful holiday, which is a real magic. This time of carefree fun, smiles and pleasant surprises. Let your main gift in the coming year be the realization of your plans! With all my heart I wish you health, an infinite number of happy moments and harmony in families. Let luck be your companion, inspiring optimism and confidence that all your dreams will surely come true!') %> 🎄<br>
+              <%= __('C Happy New Year and Merry Christmas!') %>
             </p>
           </div>
         </div>
@@ -449,16 +433,16 @@
               </div>
               <div class="col-lg-6 col-md-6 mt-md-0 mt-3">
                 <a href="#">
-                  <h4 class="mb-lg-3 mb-2">So I would sit with them all day.</h4>
+                  <h4 class="mb-lg-3 mb-2"><%= __('So I would sit with them all day.') %></h4>
                 </a>
                 <div class="bottom d-flex justify-content-between align-items-center flex-wrap mb-3">
                   <div class="meta">
-                    <span class="ti-user mr-1"></span> Olga Petrova
-                    <span class="ti-calendar mr-1"></span> 20/12/2018
+                    <span class="ti-user mr-1"></span> <%= __('Olga Petrova') %>
+                    <span class="ti-calendar mr-1"></span> 24/12/2018
                   </div>
                 </div>
                 <p>
-                  It is snowing outside, and we are warm together..
+                  <%= __('It is snowing outside, and we are warm together..') %>
                 </p>
               </div>
             </div>
@@ -473,16 +457,16 @@
               </div>
               <div class="col-lg-6 col-md-6 mt-md-0 mt-3">
                 <a href="#">
-                  <h4 class="mb-lg-3 mb-2">Ella, my star. Lovely girl.</h4>
+                  <h4 class="mb-lg-3 mb-2"><%= __('Ella, my star. Lovely girl.') %></h4>
                 </a>
                 <div class="bottom d-flex justify-content-between align-items-center flex-wrap mb-3">
                   <div class="meta">
-                    <span class="ti-user mr-1"></span> Olga Petrova
-                    <span class="ti-calendar mr-1"></span> 20/12/2018
+                    <span class="ti-user mr-1"></span> <%= __('Olga Petrova') %>
+                    <span class="ti-calendar mr-1"></span> 24/12/2018
                   </div>
                 </div>
                 <p>
-                  She is always there, even when I'm not at home. Wonderful, warm, tender lump.
+                  <%= __('She is always there, even when I\'m not at home. Wonderful, warm, tender lump.') %>
                 </p>
               </div>
             </div>
@@ -497,16 +481,16 @@
               </div>
               <div class="col-lg-6 col-md-6 mt-md-0 mt-3">
                 <a href="#">
-                  <h4 class="mb-lg-3 mb-2">We will be forever young ...</h4>
+                  <h4 class="mb-lg-3 mb-2"><%= __('We will be forever young ...') %></h4>
                 </a>
                 <div class="bottom d-flex justify-content-between align-items-center flex-wrap mb-3">
                   <div class="meta">
-                    <span class="ti-user mr-1"></span> Olga Petrova
-                    <span class="ti-calendar mr-1"></span> 20/12/2018
+                    <span class="ti-user mr-1"></span><%= __('Olga Petrova') %>
+                    <span class="ti-calendar mr-1"></span> 24/12/2018
                   </div>
                 </div>
                 <p>
-                  In these photos, only a moment that will last forever. Let the dreams come true!
+                  <%= __('In these photos, only a moment that will last forever. Let the dreams come true!') %>
                 </p>
               </div>
             </div>
@@ -526,7 +510,7 @@
         ╚═╝╩ ╚═╩ ╩╩ ╩╩ ╩═╝╚═╝ ┴ ┴└─┘─┴┘┴ ┴┴─┘ -->
   <modal class="example-modal" v-if="modal==='example'" @close="closeExampleModal()" v-cloak>
     <div class="modal-header">
-      <h2 class="modal-title">Dog Shows</h2>
+      <h2 class="modal-title"><%= __('Dog Shows') %></h2>
       <p>An passionnant journey into the world of dogs through the prism of the exhibition marathon.</p>
       <hr/>
       <button type="button" class="modal-close-button" data-dismiss="modal" aria-label="Close"></button>
