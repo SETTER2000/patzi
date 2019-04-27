@@ -165,7 +165,7 @@ without necessarily having a billing card.`
       description: 'Предпочтительный язык',
       example: 'ru',
       moreInfoUrl: 'https://gist.github.com/mikermcneil/0af155ed546f3ddf164b4885fb67830c; https://sailsjs.com/documentation/reference/request-req/req-set-locale',
-      defaultsTo: 'ru',
+      defaultsTo: 'en',
 
     },
 

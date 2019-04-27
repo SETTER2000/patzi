@@ -88,15 +88,15 @@
   <% if(me && me.emailChangeCandidate) { %>
   <div class="container-fluid">
     <div class="alert alert-secondary mt-2" role="alert">
-      Your updated email address needs verification. Until you click the link sent to
-      <strong><%= me.emailChangeCandidate %></strong>, you'll still need to sign in as
+      <%= __('Your updated email address needs verification. Until you click the link sent to') %>
+      <strong><%= me.emailChangeCandidate %></strong>, <%= __('you\'ll still need to sign in as') %>
       <strong><%= me.emailAddress %></strong>.
     </div>
   </div>
   <% } else if(me && me.emailStatus === 'unconfirmed') { %>
   <div class="container-fluid">
     <div class="alert alert-secondary mt-2" role="alert">
-      Your email address still needs verification. Your account access may be limited until you click the link sent to
+      <%= __('Your email address still needs verification. Your account access may be limited until you click the link sent to') %>
       <strong><%= me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress %></strong>.
     </div>
   </div>
@@ -129,12 +129,10 @@
             <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'kennel' ? 'current' : '' %>" href="/litters/kennel"><%= __('Litters') %></a></li>
             <li><a class="nav-item nav-link   <%= typeof currentSection !== 'undefined' && currentSection === 'things' ? 'current' : '' %>" href="/things"><%= __('Dogs') %></a></li>
             <li class="menu-has-children">
-              <a href="#">Pages</a>
+              <a href="#"><%= __('Pages') %></a>
               <ul>
-                <li><a href="elements.html">Elements</a></li>
                 <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'contact' ? 'current' : '' %>" href="/contact"><%= __('Contact') %></a></li>
                 <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'pricing' ? 'current' : '' %>" href="/pricing"><%= __('Pricing') %></a></li>
-                <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'litter' ? 'current' : '' %>" href="/litters/litter">Litter Details</a></li>
               </ul>
             </li>
             <li class="menu-has-children">
@@ -177,22 +175,19 @@
       <div class="row">
         <div class="col-lg-5 col-md-6 col-sm-6">
           <div class="single-footer-widget">
-            <h6>About Us</h6>
-            <p>
-              In the breed since 2004. Officially, the kennel Poale Ell, was registered in the international registry of
-              the FCI federation in 2016, certificate No. 18431 dated 02.26.2016, owner Olga Petrova.
-            </p>
+            <h6><%= __('About Us') %></h6>
+            <p><%= __('In the breed since 2004. Officially, the kennel Poale Ell, was registered in the international registry of the FCI federation in 2016, certificate No. 18431 dated 02.26.2016, owner Olga Petrova.') %></p>
           </div>
         </div>
         <div class="col-lg-5  col-md-6 col-sm-6">
           <div class="single-footer-widget">
-            <h6>Newsletter</h6>
-            <p>Stay update with our latest</p>
+            <h6><%= __('Newsletter') %></h6>
+            <p><%= __('Stay update with our latest') %></p>
             <div class="" id="mc_embed_signup">
               <form target="_blank" novalidate="true"
                     action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
                     method="get" class="form-inline">
-                <input class="form-control" name="EMAIL" placeholder="Email Address" onfocus="this.placeholder = ''"
+                <input class="form-control" name="EMAIL" placeholder="<%= __('Email Address') %>" onfocus="this.placeholder = ''"
                        onblur="this.placeholder = 'Email Address'"
                        required="" type="email">
                 <button class="click-btn btn btn-default"><i class="ti-arrow-right" aria-hidden="true"></i></button>
@@ -206,8 +201,8 @@
         </div>
         <div class="col-lg-2 col-md-6 col-sm-6 social-widget">
           <div class="single-footer-widget">
-            <h6>Follow Us</h6>
-            <p>Let us be social</p>
+            <h6><%= __('Follow Us') %></h6>
+            <p><%= __('Let us be social') %></p>
             <div class="footer-social d-flex align-items-center">
               <a href="https://www.facebook.com/olga.vasef"><i class="ti-facebook"></i></a>
               <a href="https://www.instagram.com/poaleell/?hl=ru"><i class="ti-instagram"></i></a>
@@ -231,14 +226,14 @@
   <footer id="page-footer" class="navbar navbar-light justify-content-between flex-row-reverse">
     <div class="nav">
       <% /*  <small class="nav-item"><a class="nav-link text-info" target="_blank" href="https://github.com/mikermcneil/ration">Source code</a></small>*/ %>
-      <small class="nav-item"><a class="nav-link text-info" href="/contact">Contact<span
-            class="d-none d-sm-inline"> us</span></a></small>
-      <small class="nav-item"><a class="nav-link text-info" href="/legal/terms">Terms<span class="d-none d-sm-inline"> of Use</span></a>
+      <small class="nav-item"><a class="nav-link text-info" href="/contact"><%= __('Contact') %><span
+            class="d-none d-sm-inline"></span></a></small>
+      <small class="nav-item"><a class="nav-link text-info" href="/legal/terms"><%= __('Terms') %><span class="d-none d-sm-inline"> <%= __('of Use') %></span></a>
       </small>
-      <small class="nav-item"><a class="nav-link text-info" href="/legal/privacy">Privacy<span
-            class="d-none d-sm-inline"> policy</span></a></small>
+      <small class="nav-item"><a class="nav-link text-info" href="/legal/privacy"><%= __('Privacy') %><span
+            class="d-none d-sm-inline"> <%= __('policy') %></span></a></small>
       <% if(me) { %>
-      <small class="nav-item"><a class="nav-link text-info" href="/logout">Sign out</a></small>
+      <small class="nav-item"><a class="nav-link text-info" href="/logout"><%= __('Sign out') %></a></small>
       <% } %>
     </div>
     <small class="copy">Copyright &copy; 2019 <a target="_blank" href="/">Poale Ell.</a> <br class="xs-only"/>All rights
