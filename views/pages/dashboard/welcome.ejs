@@ -58,7 +58,7 @@
             <p><%= __('The nursery is actively working with Polish, British and American manufacturers. Specializes in breeding Chinese crested dogs of standard size. In kennel dogs there are brilliant pedigrees with lines of the best specialized kennels in the world.') %>
             </p>
           </div>
-          <a href="/about" class="primary-btn" data-text="Read More">
+          <a href="/about" class="primary-btn" data-text="<%= __('Read More') %>">
             <span>R</span>
             <span>e</span>
             <span>a</span>
@@ -283,7 +283,7 @@
                 <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
                 <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
               </ul>
-              <a class="primary-btn mt-4" href="#" data-text="Detailed">
+              <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
                 <span>D</span>
                 <span>e</span>
                 <span>t</span>
@@ -313,7 +313,7 @@
                 <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
                 <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
               </ul>
-              <a class="primary-btn mt-4" href="#" data-text="Detailed">
+              <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
                 <span>D</span>
                 <span>e</span>
                 <span>t</span>
@@ -343,7 +343,7 @@
                 <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
                 <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
               </ul>
-              <a class="primary-btn mt-4" href="#" data-text="Detailed">
+              <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
                 <span>D</span>
                 <span>e</span>
                 <span>t</span>
@@ -372,7 +372,7 @@
                 <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
                 <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
               </ul>
-              <a class="primary-btn mt-4" href="#" data-text="Detailed">
+              <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
                 <span>D</span>
                 <span>e</span>
                 <span>t</span>
@@ -511,22 +511,16 @@
   <modal class="example-modal" v-if="modal==='example'" @close="closeExampleModal()" v-cloak>
     <div class="modal-header">
       <h2 class="modal-title"><%= __('Dog Shows') %></h2>
-      <p>An exciting journey into the world of dogs through the prism of the exhibition marathon.</p>
+      <p><%= __('An exciting journey into the world of dogs through the prism of the exhibition marathon.') %></p>
+      <p><%= __('Have you ever been at an international dog show, for example, at the World Dog Show? Have you ever participated in these exhibitions? We invite you to discover this new, exciting journey of joy and charm with your beloved pet. After all, you are on this site is not accidental!? In our kennel there is always a desperate and sweet dog, ready to accompany you on this journey, which will become your most reliable friend on trips to countries and exhibitions. Discover the new world of dogs - show dogs!') %></p>
       <hr/>
       <button type="button" class="modal-close-button" data-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
-      <h5 class="section-heading">Chapter 1: 10/06/2018, Moscow, China Town shopping and entertainment center.</h5>
-      <p>Have you ever been to an international dog show, for example at the World Dog Show?
-        Have you ever participated in these exhibitions? We invite you to discover this new,
-        exciting journey of joy and charm with your favorite animals. After all, you are on this
-        site is not accidental, is not it? In our kennel there is always a desperate and cute dog,
-        ready to accompany you on this journey, which will be your surest destination in trips to
-        countries and exhibitions.
-                 Discover the new world of dogs - dog show!
-      </p>
+      <h5 class="section-heading"><%= __('Chapter') %> 1: 10/06/2018, <%= __('Moscow') %>, <%= __('China Town shopping and entertainment center') %>.</h5>
 
-      <p> On video Chinese Crested Dog: Poale Ell Bazhen</p>
+
+      <p><%= __('On video') %> Chinese Crested Dog: Poale Ell Bazhen </p>
       <div class="embed-responsive embed-responsive-16by9">
 
         <iframe width="560" height="315" src="https://www.youtube.com/embed/Z5SmaOld7lM" frameborder="0"
@@ -534,12 +528,12 @@
                 allowfullscreen></iframe>
       </div>
       <div class="p-3">
-        <h3>The First Dog Show of Bazhen.</h3>
+        <h3><%= __('The First Dog Show of Bazhen') %>.</h3>
         <p>- MKOO “Empire of Stars”, All-Russian Dog Show CAC - ChF, judge MIHAIL PAPADATOS (Greece)
           POALE ELL BAZHEN - right on, CW, JCAC, BJ, BOB</p>
         <p> - MKOO “Atlantis”, All-Russian Dogshow, CAC - ChF, judge PAOLO LOVAGLIO (Italy)
           POALE ELL BAZHEN - right on, CW, JCAC, BJ, BOB</p>
-        <p>This is the first exhibition of Bazhen. Baby got a great description.</p>
+        <p><%= __('This is the first exhibition of Bazhen. Baby got a great description') %>.</p>
       </div>
 
       <div class="d-flex bd-highlight mb-0">
@@ -661,8 +655,8 @@
 
     </div>
     <div class="modal-footer flex-row-reverse justify-content-between">
-      <button type="button" data-dismiss="modal" class="btn btn-info">Close</button>
-      <button type="button" data-dismiss="modal" class="btn btn-outline-info">Cancel</button>
+      <button type="button" data-dismiss="modal" class="btn btn-info"><%= __('Close') %></button>
+      <button type="button" data-dismiss="modal" class="btn btn-outline-danger"><%= __('Cancel') %></button>
     </div>
   </modal>
 </div>

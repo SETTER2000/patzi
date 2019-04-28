@@ -4,15 +4,13 @@ module.exports = {
   friendlyName: 'View available things',
 
 
-  description: 'Display "Available things" page.',
+  description: 'Показать страницу "Portfolio".',
 
 
   exits: {
-
     success: {
       viewTemplatePath: 'pages/things/available-things'
     }
-
   },
 
 
@@ -21,8 +19,8 @@ module.exports = {
     // Бибилиотека Node.js
     const url = require('url');
 
-    // Выбираем авторизованного пользователя и всех его
-    // друзей по ассоциативному полю friends
+    // Выбираем авторизованного пользователя, который сделал этот запрос
+    // и всех его друзей по ассоциативному полю friends
     let me = await User.findOne({
       id: this.req.me.id
     }).populate('friends');
@@ -34,10 +32,10 @@ module.exports = {
      * friends: [{id: ..., fullName: ...,}],
      * }
      */
-    // Функция pluck из встроенного в sails, lodash v3
-    // если версия Lodash 4, то эта функция заменена на map (_.map(users, 'firstName'))
-    // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
-    // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
+      // Функция pluck из встроенного в sails, lodash v3
+      // если версия Lodash 4, то эта функция заменена на map (_.map(users, 'firstName'))
+      // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
+      // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
     let friendIds = _.pluck(me.friends, 'id'); // friendIds: [id,id,id...]
 
     let things = await Thing.find({
@@ -55,7 +53,7 @@ module.exports = {
     _.each(things, (thing) => {
       // Устанавливаем свойство источника изображения
       // Первый аргумент, базовый url
-      thing.imageSrc = url.resolve(sails.config.custom.baseUrl,`/api/v1/things/${thing.id}`);
+      thing.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/things/${thing.id}`);
       // ... затем мы удаляем наш файловый дескриптор
       delete thing.imageUploadFD;
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
@@ -64,8 +62,8 @@ module.exports = {
 
     // Respond with view.
     return exits.success({
-      things,
-      currentSection: 'things'
+      currentSection: 'portfolio',
+      things
     });
 
   }

@@ -18,7 +18,8 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
+    // Бибилиотека Node.js
+    const url = require('url');
     // Выбираем авторизованного пользователя и всех его
     // друзей по ассоциативному полю friends
     let me = await User.findOne({
@@ -42,7 +43,23 @@ module.exports = {
       or: [{owner: this.req.me.id}, {owner: {in: friendIds}}]
     }).populate('owner');
 
-    console.log(litters);
+
+
+
+    _.each(litters, (litter) => {
+      litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`);
+      // ... затем мы удаляем наш файловый дескриптор
+      delete litter.imageUploadFD;
+      // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
+      delete litter.imageUploadMime;
+      // Устанавливаем url к странице просмотра помёта
+      // Первый аргумент, базовый url
+      litter.detail =  `/litters/litter/${litter.id}`;
+    });
+
+
+
+    // console.log(litters);
     // Respond with view.
     return exits.success({
       litters,

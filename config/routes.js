@@ -37,13 +37,19 @@ module.exports.routes = {
   'GET /account/profile': {action: 'account/view-edit-profile'},
   'GET /account/language': { action: 'account/view-edit-language' },
 
-  'GET /things/:virtualPageSlug?': {action: 'things/view-available-things'},
+  'GET /portfolio/:virtualPageSlug?': {action: 'things/view-available-things'},
 
-  'GET /litters/kennel': {action: 'litters/view-kennel'},
+  'GET /blog/:virtualPageSlug?': { action: 'blog/view-blog-home' },
+
+  'GET /litters/:virtualPageSlug?': {action: 'litters/view-kennel'},
+  'GET /litters/litter/:id': {action: 'litters/view-litter'},
 
   'GET /about': {action: 'view-about', locals: {currentSection: 'about'}},
   'GET /pricing': {action: 'view-pricing', locals: {currentSection: 'pricing'}},
-  'GET /litters/litter': {action: 'litters/view-litter', locals: {currentSection: 'litter'}},
+
+
+
+
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
@@ -79,6 +85,7 @@ module.exports.routes = {
   'POST    /api/v1/deliver-contact-form-message': {action: 'deliver-contact-form-message'},
   'DELETE  /api/v1/litters/destroy-one-litter': {action: 'litters/destroy-one-litter'},
   'POST    /api/v1/litters/upload-litter': {action: 'litters/upload-litter'},
+  'GET     /api/v1/litters/:id': { action: 'litters/download-photo' },
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},
   'GET     /api/v1/things/:id': {action: 'things/download-photo'},

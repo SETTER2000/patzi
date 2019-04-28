@@ -18,7 +18,7 @@ module.exports = {
 
   exits: {
     success: {
-      outputDescription: 'The streaming bytes of the specified thing\'s photo.',
+      outputDescription: 'The streaming bytes of the specified litter\'s photo.',
       outputType: 'ref'
     },
     forbidden: {
@@ -32,9 +32,9 @@ module.exports = {
 
   fn: async function (inputs) {
 
-    let thing = await Thing.findOne({id: inputs.id});
+    let litter = await Litter.findOne({id: inputs.id});
 
-    if (!thing) {
+    if (!litter) {
       throw 'notFound';
     }
 
@@ -54,7 +54,7 @@ module.exports = {
      * "Если вы не являетесь владельцем фото и не один из ваших друзей тоже,
      * то это означает, что вам запрещено видеть эту вещь.
      */
-    if (this.req.me.id !== thing.owner && !_.any(user.friends, {id: thing.owner})) {
+    if (this.req.me.id !== litter.owner && !_.any(user.friends, {id: litter.owner})) {
       throw 'forbidden';
     }
 
@@ -63,7 +63,7 @@ module.exports = {
     //************************************//
     // Set the mime type for the response
     // Это устанавливает mime тип ответа
-    this.res.type(thing.imageUploadMime);
+    this.res.type(litter.imageUploadMime);
 
     /**
      * startDownload - функция от модуля sails-hook-uploads
@@ -73,7 +73,8 @@ module.exports = {
      *
      * Ответ о благополучном завершении отдачи файла
      */
-    let downloading = await sails.startDownload(thing.imageUploadFD);
+    let downloading = await sails.startDownload(litter.imageUploadFD);
     return downloading;
   }
+
 };
