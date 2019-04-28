@@ -16,16 +16,16 @@
   <!-- Portfolio Details Area -->
   <section class="portfolio_details_area section-gap">
     <div class="container">
-      <div class="portfolio_details_inner">
+      <div  class="portfolio_details_inner" >
         <div class="row">
           <div class="col-md-6">
             <div class="left_img">
-              <img class="img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/Bazhen-Barthalamew-3m.jpg" alt="">
+              <img class="img-fluid" :src="litter.imageSrc" alt="">
             </div>
           </div>
           <div class="offset-md-1 col-md-5">
             <div class="portfolio_right_text mt-30">
-              <h4>Litter B</h4>
+              <h4><%= __('Litter') %> {{litter.label.toUpperCase()}}</h4>
               <p>litter In 4 puppies were born. 1 naked dog, 2 down dogs and one down girl.
                 The rods went fine without complications.</p>
               <ul class="list">
