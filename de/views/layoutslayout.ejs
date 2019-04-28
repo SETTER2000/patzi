@@ -126,23 +126,17 @@
             <% if(me) { %>
             <li ><a href="/" class="active"> <%= __('Home-menu') %></a></li>
             <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'about' ? 'current' : '' %>" href="/about"><%= __('About') %></a></li>
-            <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'kennel' ? 'current' : '' %>" href="/litters/kennel"><%= __('Litters') %></a></li>
-            <li><a class="nav-item nav-link   <%= typeof currentSection !== 'undefined' && currentSection === 'things' ? 'current' : '' %>" href="/things"><%= __('Dogs') %></a></li>
+            <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'kennel' ? 'current' : '' %>" href="/litters"><%= __('Litters') %></a></li>
+            <li><a class="nav-item nav-link   <%= typeof currentSection !== 'undefined' && currentSection === 'portfolio' ? 'current' : '' %>" href="/portfolio"><%= __('Portfolio') %></a></li>
             <li class="menu-has-children">
               <a href="#"><%= __('Pages') %></a>
               <ul>
                 <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'contact' ? 'current' : '' %>" href="/contact"><%= __('Contact') %></a></li>
                 <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'pricing' ? 'current' : '' %>" href="/pricing"><%= __('Pricing') %></a></li>
-              </ul>
-            </li>
-            <li class="menu-has-children">
-              <a href="#"><%= __('Blog') %></a>
-              <ul>
-                <li><a href="blog-home.html">Blog Home</a></li>
+                <li><a href="/blog"><%= __('Blog') %></a></li>
                 <li><a href="blog-single.html">Blog Single</a></li>
               </ul>
             </li>
-            <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'contact' ? 'current' : '' %>" href="/contact"><%= __('Help') %></a></li>
             <li class="menu-has-children">
               <a href="#"><%= __('Account') %></a>
               <ul>
@@ -623,6 +617,7 @@
 <script src="/js/pages/account/edit-language.page.js"></script>
 <script src="/js/pages/account/edit-password.page.js"></script>
 <script src="/js/pages/account/edit-profile.page.js"></script>
+<script src="/js/pages/blog/blog-home.page.js"></script>
 <script src="/js/pages/contact.page.js"></script>
 <script src="/js/pages/dashboard/welcome.page.js"></script>
 <script src="/js/pages/entrance/confirmed-email.page.js"></script>
