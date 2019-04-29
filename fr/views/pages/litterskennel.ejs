@@ -22,7 +22,7 @@
             <h3><%= __('Portfolio') %></h3>
             <h2><span><%= __('Check Our Work') %></span></h2>
             <div class="mt-5">
-              <button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add a photo') %></button>
+              <button class="btn btn-outline-info" @click="clickAddButton()"><%= __('Add a photo') %></button>
             </div>
           </div>
         </div>
@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      <div class="filters-content">
+      <!--<div class="filters-content" v-if="litters.length > 0">
         <div class="row grid">
           <div class="col-lg-4 col-md-6 grid-sizer"></div>
           <div v for="(litter, key, index) in litters" :key="index" class="col-lg-8 grid-item col-md-6 all wow fadeIn"
@@ -62,7 +62,7 @@
                         </a>
                         <a class="dropdown-item" href="#">Action</a>
                         <a class="dropdown-item" href="#">Another action</a>
-                        <!--<a class="dropdown-item" href="#">Somelitter else here</a>-->
+                        &lt;!&ndash;<a class="dropdown-item" href="#">Somelitter else here</a>&ndash;&gt;
                       </div>
                     </li>
                   </ul>
@@ -75,92 +75,59 @@
               </div>
             </div>
           </div>
-
-
-        <!--  <div class="col-lg-4 col-md-12 grid-item all wow fadeIn" data-wow-duration="2s" data-wow-delay="0s">
-            <div class="single-work">
-              <div class="relative">
-                <div class="thumb">
-                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/Bazhen-Barthalamew-3m.jpg" alt="">
-                </div>
-                <div class="middle">
-                  <h4><%= __('Litter B') %></h4>
-                  <div class="cat"><%= __('dob: 03 Nov, 2017') %></div>
-                </div>
-                <a class="overlay" href="/litters/litter"></a>
-              </div>
+        </div>
+      </div>-->
+      <div class="listings" v-if="litters.length > 0">
+        <div class="card" :key="'litter'+litter.id"
+             :class="[litter.owner.id === me.id ? 'mine' : '', litter.unavailable ? 'not-available' : '']" v-for="litter in litters">
+          <div class="card-options dropdown" v-if="litter.borrowedBy && litter.owner.id === me.id">
+            <span class="options-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                class="fa fa-ellipsis-v"></span></span>
+            <div class="dropdown-menu dropdown-menu-right">
+              <span class="dropdown-item" @click="clickDeleteLitter(litter.id)">Delete</span>
+              <span class="dropdown-item" @click="clickMarkReturned(litter.id)">Mark as returned</span>
+              <span class="dropdown-item" @click="clickContactBorrower(litter.id)">Contact {{litter.borrowedBy.fullName}}</span>
             </div>
           </div>
-
-          <div class="col-lg-4 grid-item col-md-6 all wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
-            <div class="single-work">
-              <div class="relative">
-                <div class="thumb">
-                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/Poale-Ell-Adam-2.jpg" alt="">
-                </div>
-                <div class="middle">
-                  <h4><%= __('Litter A') %></h4>
-                  <div class="cat"><%= __('dob: 10 Apr, 2016') %></div>
-                </div>
-                <a class="overlay" href="/litters/litter"></a>
-              </div>
+          <div class="card-options dropdown" v-else-if="litter.borrowedBy && litter.borrowedBy.id === me.id">
+            <span class="options-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                class="fa fa-ellipsis-v"></span></span>
+            <div class="dropdown-menu dropdown-menu-right">
+              <span class="dropdown-item" @click="clickReturn(litter.id)">Give this back</span>
+              <span class="dropdown-item" @click="clickContactOwner(litter.id)">Contact {{litter.owner.fullName}}</span>
             </div>
           </div>
-
-          <div class="col-lg-4 grid-item col-md-6 all wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
-            <div class="single-work">
-              <div class="relative">
-                <div class="thumb">
-                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/litter-03112017.jpg" alt="">
-                </div>
-                <div class="middle">
-                  <h4><%= __('Litter B') %></h4>
-                  <div class="cat"><%= __('dob: 03 Nov, 2017') %></div>
-                </div>
-                <a class="overlay" href="/litters/litter"></a>
-              </div>
-            </div>
+          <div class="card-options" v-else-if="!litter.borrowedBy">
+            <span class="options-button" data-toggle="tooltip" data-placement="top" title="Delete" @click="clickDeleteLitter(litter.id)"
+                  v-if="litter.owner.id === me.id"><span class="fa fa-trash-o text-danger"></span></span>
+            <span class="options-button borrow" data-toggle="tooltip" data-placement="top" title="Borrow" @click="clickBorrow(litter.id)"
+                  v-else><span class="fa fa-handshake-o text-dark"></span></span>
           </div>
-
-          <div class="col-lg-4 grid-item col-md-12 all wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
-            <div class="single-work">
-              <div class="relative">
-                <div class="thumb">
-                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/PoaleEllAdam-1.jpg" alt="">
-                </div>
-                <div class="middle">
-                  <h4><%= __('Litter A') %></h4>
-                  <div class="cat"><%= __('dob: 10 Apr, 2016') %></div>
-                </div>
-                <a class="overlay" href="/litters/litter"></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 text-center grid-item col-md-12 all creative wow fadeIn" data-wow-duration="2s">
-            <a href="#" class="primary-btn" data-text="View More">
-              <span>V</span>
-              <span>i</span>
-              <span>e</span>
-              <span>w</span>
-              <span> </span>
-              <span>M</span>
-              <span>o</span>
-              <span>r</span>
-              <span>e</span>
-            </a>
-          </div>
--->
+          <a :href="litter.imageSrc" data-fancybox="gallery">
+            <img alt="A mysterious item" :alt="litter.label ? litter.label : 'A mysterious item'" :src="litter.imageSrc"/>
+          </a>
+          <span class="label" v-if="litter.label">{{litter.label}}<br/></span>
+          <small class="owner text-secondary" v-if="litter.owner.id === me.id"><span class="fa fa-home mr-1"></span> Mine</small>
+          <small class="owner text-success" v-else-if="litter.borrowedBy && litter.borrowedBy.id === me.id"><span
+              class="fa fa-star-o mr-1"></span> Borrowing
+          </small>
+          <small class="owner text-primary" v-else>{{litter.owner.fullName}}</small>
         </div>
       </div>
+      <div class="empty text-center" v-else><p><%= __('You have not downloaded yet a single idea of your litters.') %> <a
+            href="/litters/new" @click="clickAddButton()"><%= __('Add your') %></a> <%= __('first litter show now') %>!</p></div>
+
     </div>
   </section>
   <!-- End Work Area Area -->
 
+  <% /* "Upload Litter" Modal
+     v-if="virtualPageSlug === 'new'"
+     v-if="uploadLitterModalOpen"
+  */ %>
 
-  <% /* "Upload Litter" Modal */ %>
-  <modal v-if="uploadLitterModalOpen" v-cloak key="new"
-         @close="closeUploadLitterModal()">
+
+  <modal v-if="virtualPageSlug==='new'" v-cloak key="new" @close="closeUploadLitterModal()">
     <div class="modal-header">
       <h5 class="modal-title"><%= __('Upload new photo') %></h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -195,7 +162,8 @@
                          @change="changeFileInput($event.target.files)"/>
                 </span>
                 <p class="image-advice text-muted" v-if="!formErrors.photo">
-                  <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %></p>
+                  <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
+                </p>
                 <p class="image-advice text-danger" v-if="formErrors.photo">
                   A photo is required in order to add a new item.</p>
               </div>
@@ -240,7 +208,10 @@
         </div>
         <div class="form-group">
           <label><%= __('Date of litter') %></label>
-          <input class="form-control" type="date" v-model="uploadFormData.born">
+          <!--<input class="form-control" type="date" v-model="uploadFormData.born">-->
+          <datepicker ref="datepickerref" v-model="uploadFormData.born" placeholder-text="(<%= __('Date of litter') %>)" :popup="true"
+                      :invalid="formErrors.expectedReturnAt"
+                      validation-error-message="<%= __('Please set the date when puppies were born.') %>."></datepicker>
         </div>
         <p class="text-danger" v-if="cloudError === 'tooBig'">
           <small><%= __('That file is too big. Please choose a junkier picture') %>.</small>
@@ -253,58 +224,54 @@
 
       </div>
 
-
-      <!--<div class="modal-body">
-        <div class="card border border-light bg-white  mb-3 w-100%">
-          <div class="card-header  bg-white text-left">Add a photo:</div>
-          <div class="row no-gutters">
-            <div class="col-md-6 pl-3 pt-3">
-              <img src="https://via.placeholder.com/340x210.jpg" class="card-img" alt="...">
-            </div>
-            <div class="col-md-6">
-              <div class="card-body bg-white">
-                <div class="col d-flex-column justify-content-center">
-             &lt;!&ndash; <span class="file-upload-button btn btn-sm"
-                    :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
-             &ndash;&gt;   &lt;!&ndash;<span class="button-text" v-if="!uploadFormData.previewImageSrc">&lt;!&ndash;Select image&ndash;&gt;</span>
-                <span class="button-text" v-else>Change image</span>&ndash;&gt;
-                <input type="file" :disabled="syncing" accept="image/*"
-                       class="file-input" @change="changeFileInput($event.target.files)"/>
-         &lt;!&ndash;     </span>&ndash;&gt;
-                 &lt;!&ndash; <p class="image-advice text-muted" v-if="!formErrors.photo"><strong>Tip</strong>: Make sure the item
-                    is front and center in the photo, so people know exactly what you're offering to share.</p>
-                  <p class="image-advice text-danger" v-if="formErrors.photo">A photo is required in order to add a
-                    new item.</p>&ndash;&gt;
-                </div>
-                &lt;!&ndash;<h5 class="card-title">Card title</h5>&ndash;&gt;
-                &lt;!&ndash;<p><button class="btn btn-outline-success">Select image</button></p>&ndash;&gt;
-                <p class="card-text">This is a wider card with supporting text Lorem ipsum dolor sit amet, consectetur
-                  adipisicing elit. Corporis veritatis. Enim facilis quos tempora!.</p>
-                <p class="card-text">
-                  <small class="text-muted">Last updated 3 mins ago</small>
-                </p>
-                <div class="input-group input-group-sm mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Small</span>
-                  </div>
-                  <input type="text" class="form-control" aria-label="Sizing example input"
-                         aria-describedby="inputGroup-sizing-sm">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p class="text-danger" v-if="cloudError">
-          <small>An error occured while processing your request. Please check your information and try again, or <a
-              href="/contact">contact support</a> if the error persists.
-          </small>
-        </p>
-      </div>-->
       <div class="modal-footer flex-row-reverse justify-content-start">
         <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1"><%= __('Save') %></ajax-button>
         <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
       </div>
     </ajax-form>
+  </modal>
+
+  <% /* "Borrow litter" modal */ %>
+  <modal v-if="borrowLitterModalOpen && selectedLitter" v-cloak key="borrow" @close="closeBorrowLitterModal()">
+    <div class="modal-header">
+      <h5 class="modal-title">Borrow this {{selectedLitter.label || 'item'}}</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="borrowLitter" :syncing.sync="syncing" :cloud-error.sync="cloudError" :handle-parsing="handleParsingBorrowLitterForm" @submitted="submittedBorrowLitterForm($event)" v-if="!borrowFormSuccess">
+      <div class="modal-body">
+        <div class="item-preview d-flex justify-content-center">
+          <div class="card">
+            <img alt="A mysterious item" :alt="selectedLitter.label ? selectedLitter.label : 'A mysterious item'" :src="selectedLitter.imageSrc"/>
+          </div>
+        </div>
+        <div class="form-group mt-4">
+          <label>How long do you want to borrow it?</label>
+          <div class="field-wrap">
+            <span class="datepicker-label">Until</span>
+            <datepicker ref="datepickerref" v-model="borrowFormData.expectedReturnAt" placeholder-text="(Choose return date)" :popup="true" :invalid="formErrors.expectedReturnAt" validation-error-message="Please let the owner know when you can return the item."></datepicker>
+          </div>
+        </div>
+        <div class="form-group mt-4">
+          <label>When can you pick it up?</label>
+          <input class="form-control" type="text" placeholder="e.g. This afternoon or anytime tomorrow" v-model="borrowFormData.pickupInfo" :class="[formErrors.pickupInfo ? 'is-invalid' : '']">
+          <div class="invalid-feedback" v-if="formErrors.pickupInfo">Please add your pickup availability.</div>
+        </div>
+        <p class="text-danger" v-if="cloudError"><small>An error occurred while processing your request. Please check your information and try again, or <a href="/support">contact support</a> if the error persists.</small></p>
+      </div>
+      <div class="modal-footer  flex-row-reverse justify-content-start">
+        <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1">Borrow</ajax-button>
+        <button data-dismiss="modal" class="btn btn-outline-primary mr-1">Cancel</button>
+      </div>
+    </ajax-form>
+    <div class="modal-body" v-else>
+      <p>We let the owner of <strong class="text-success">{{selectedLitter.label || 'item'}}</strong> know when you could drop by.</p>
+      <p>Stay in touch with {{selectedLitter.owner.fullName}} to confirm pickup details: <strong>{{selectedLitter.owner.emailAddress}}</strong></p>
+    </div>
+    <div class="modal-footer" v-if="borrowFormSuccess">
+      <button data-dismiss="modal" class="btn btn-outline-success">Got it</button>
+    </div>
   </modal>
 
   <% /* "Confirm Delete Litter" Modal */ %>
@@ -321,9 +288,14 @@
                @submitted="submittedDeleteLitterForm()">
       <div class="modal-body">
         <p>Are you sure you want to remove this {{selectedLitter.label || 'item'}}?</p>
-        <p class="text-muted" v-if="selectedLitter.borrowedBy">We will no longer be able to assist with the return of this item, so you will need to contact {{selectedLitter.borrowedBy.fullName}} directly to coordinate.</p>
+        <p class="text-muted" v-if="selectedLitter.borrowedBy">We will no longer be able to assist with the return of this item, so you will
+          need to contact {{selectedLitter.borrowedBy.fullName}} directly to coordinate.</p>
         <p v-else>This item will no longer be available to share with friends.</p>
-        <p class="text-danger" v-if="cloudError"><small>An error occurred while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persiste.</small></p>
+        <p class="text-danger" v-if="cloudError">
+          <small>An error occured while processing your request. Please check your information and try again, or <a href="/contact">contact
+              support</a> if the error persists.
+          </small>
+        </p>
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline-secondary mr-1" data-dismiss="modal">Nevermind</button>
@@ -331,5 +303,8 @@
       </div>
     </ajax-form>
   </modal>
+
+  <% /* For virtual pages */ %>
+  <router-view></router-view>
 </div>
 <%- /* Exposez server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
