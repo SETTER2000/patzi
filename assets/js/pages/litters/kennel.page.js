@@ -4,23 +4,51 @@ parasails.registerPage('kennel', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     litters: [],
-    confirmDeleteLitterModalOpen: false,
+
     selectedLitter: undefined,
 
-    uploadLitterModalOpen: false,
+    // Виртуальная часть URL
+    virtualPageSlug:'',
+
+    // uploadLitterModalOpen: false,
+
     showLitterModalOpen: false,
+
     uploadFormData: {
       label: '',
       photo: undefined,
       previewImageSrc: ''
     },
+
+    borrowFormData: {
+      expectedReturnAt: undefined,
+      pickupInfo: undefined
+    },
+    // Modals which aren't linkable:
+    borrowLitterModalOpen: false,
+    confirmDeleteLitterModalOpen: false,
+    scheduleReturnModalOpen: false,
+    confirmReturnModalOpen: false,
+
+
     // Состояние загрузки
     syncing: false,
+
     // Validation errors:
     formErrors: {},
     // Состояние ошибки сервера
     cloudError: '',
+
+    borrowFormSuccess: false,
+    scheduleReturnFormSuccess: false
   },
+
+
+  virtualPages: true,
+  html5HistoryMode: 'history',
+  virtualPagesRegExp: /^\/litters\/?([^\/]+)?/,
+
+
   filters: {
     capitalize: function (value) {
       if (!value) {return '';}
@@ -50,9 +78,10 @@ parasails.registerPage('kennel', {
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
+
   },
   mounted: async function () {
-
+    this.$find('[data-toggle="tooltip"]').tooltip();
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -97,8 +126,9 @@ parasails.registerPage('kennel', {
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
       console.log(`click the "Add an item" button!`);
-      this.uploadLitterModalOpen = true;
-      // this.selectedLitter = _.find(this.litters, {id: thingId});
+      // this.uploadLitterModalOpen = true;
+      this.goto('/litters/new');
+      // this.selectedLitter = _.find(this.litters, {id: litterId});
     },
 
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
@@ -106,19 +136,34 @@ parasails.registerPage('kennel', {
     clickShowPhoto: function () {
       console.log(`click to photo the "Show photo" !`);
       this.showLitterModalOpen = true;
-      // this.selectedLitter = _.find(this.litters, {id: thingId});
+      // this.selectedLitter = _.find(this.litters, {id: litterId});
     },
 
     // Обнуляет данные формы загрузки объекта, очищает поля формы
     _clearUploadLitterModal: function () {
       // Close modal
-      this.uploadLitterModalOpen = false;
+      this.goto('/litters');
       // Reset form data
       this.uploadFormData = {
         label: '',
         photo: undefined,
-        previewImageSrc: ''
+        previewImageSrc: '',
+        born:undefined
       };
+      // Clear error states
+      this.formErrors = {};
+      this.cloudError = '';
+    },
+
+    _clearBorrowLitterModal: function() {
+      // Close modal
+      this.borrowLitterModalOpen = false;
+      // Reset form data
+      this.borrowFormData = {
+        expectedReturnAt: undefined,
+        pickupInfo: undefined
+      };
+      this.selectedLitter = undefined;
       // Clear error states
       this.formErrors = {};
       this.cloudError = '';
@@ -132,11 +177,24 @@ parasails.registerPage('kennel', {
 
     handleParsingUploadLitterForm: function () {
       this.formErrors = {};
-      let argins = this.uploadFormData;
+      // let argins = this.uploadFormData;
+      // console.log('this.selectedLitter::', this.selectedLitter);
+      // console.log('uploadFormData::', this.uploadFormData);
+      let argins =  this.uploadFormData;
 
       if(!argins.photo) {
         this.formErrors.photo = true;
       }
+
+      if(!argins.born) {
+        this.formErrors.born = true;
+      }
+
+      // Convert the return time into a real date.
+      // Преобразуйте дату помёта в реальную дату.
+      // Приходит timestamp типа: born: 1558472400000
+      argins.born = this.$refs.datepickerref.doParseDate().getTime();
+      // console.log('born::', argins.born);
 
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined. (Thus signifies that the submission should be cancelled.)
@@ -157,7 +215,7 @@ parasails.registerPage('kennel', {
      * эта функция получает результат и должна вставить новые данные на страницу.
      */
     submittedUploadLitterForm: function (result) {
-console.log('BORN SEARCH', this.uploadFormData);
+// console.log('BORN SEARCH', this.uploadFormData);
       // Добавлем новые данные в уже имеющийся массив litters
       this.litters.push({
         label: this.uploadFormData.label,
@@ -208,6 +266,59 @@ console.log('BORN SEARCH', this.uploadFormData);
       // Удалите все сообщения об ошибках о не предоставлении изображения.
       this.formErrors.photo = false;
       reader.readAsDataURL(selectedFile);
-    }
+    },
+
+
+    clickBorrow: function(litterId) {
+      this.selectedLitter = _.find(this.litters, {id: litterId});
+
+      // Open the modal.
+      this.borrowLitterModalOpen = true;
+    },
+
+    closeBorrowLitterModal: function() {
+      this._clearBorrowLitterModal();
+    },
+
+    handleParsingBorrowLitterForm: function() {
+      // Clear out any pre-existing error messages.
+      // Удалите все существующие сообщения об ошибках
+      this.formErrors = {};
+
+      var argins = _.extend({ id: this.selectedLitter.id }, this.borrowFormData);
+
+      if(!argins.expectedReturnAt) {
+        this.formErrors.expectedReturnAt = true;
+      }
+
+      if(!argins.pickupInfo) {
+        this.formErrors.pickupInfo = true;
+      }
+
+      // Convert the return time into a real date.
+      argins.expectedReturnAt = this.$refs.datepickerref.doParseDate().getTime();
+      console.log('expectedReturnAt', argins.expectedReturnAt);
+
+      // If there were any issues, they've already now been communicated to the user,
+      // so simply return undefined.  (This signifies that the submission should be
+      // cancelled.)
+      if (Object.keys(this.formErrors).length > 0) {
+        return;
+      }
+
+      return argins;
+    },
+
+    submittedBorrowLitterForm: function() {
+
+      // Show success message.
+      this.borrowFormSuccess = true;
+
+      // Update the borrowed item in the UI.
+      var borrowedItem = _.find(this.litters, {id: this.selectedLitter.id});
+      borrowedItem.borrowedBy = this.me;
+    },
+
+
   }
 });

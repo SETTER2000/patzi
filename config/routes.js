@@ -44,6 +44,7 @@ module.exports.routes = {
   'GET /litters/:virtualPageSlug?': {action: 'litters/view-kennel'},
   'GET /litters/litter/:id': {action: 'litters/view-litter'},
 
+
   'GET /about': {action: 'view-about', locals: {currentSection: 'about'}},
   'GET /pricing': {action: 'view-pricing', locals: {currentSection: 'pricing'}},
 

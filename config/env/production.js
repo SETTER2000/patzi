@@ -5,7 +5,10 @@
  * What you see below is a quick outline of the built-in settings you need
  * to configure your Sails app for production.  The configuration in this file
  * is only used in your production environment, i.e. when you lift your app using:
- *
+ ** То, что вы видите ниже, является кратким описанием необходимых вам встроенных настроек
+   * настроить приложение Sails для производства. Конфигурация в этом файле
+   * используется только в вашей производственной среде, т.е.
+   * когда вы поднимаете свое приложение, используя:
  * ```
  * NODE_ENV=production node app
  * ```
@@ -14,7 +17,10 @@
  * > this file WILL BE COMMITTED to your repository by default, unless you add
  * > it to your .gitignore file.  If your repository will be publicly viewable,
  * > don't add private/sensitive data (like API secrets / db passwords) to this file!
- *
+ **> Если вы используете git в качестве решения для управления версиями своего приложения Sails,
+   *> этот файл будет добавлен в ваш репозиторий по умолчанию, если вы не добавите
+   *> это в ваш файл .gitignore. Если ваш репозиторий будет общедоступным,
+   *> не добавляйте личные / конфиденциальные данные (например, секреты API / пароли БД) в этот файл!
  * For more best practices and tips, see:
  * https://sailsjs.com/docs/concepts/deployment
  */

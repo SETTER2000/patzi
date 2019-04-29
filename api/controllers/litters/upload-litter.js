@@ -23,7 +23,9 @@ module.exports = {
       type: 'string'
     },
     born: {
-      type: 'string',
+      type: 'number',
+      example: 1502844074211,
+      description: 'Дата появления на свет помёта.',
       required: true
     }
   },
@@ -46,6 +48,8 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+
+    // console.log('inputs:::', inputs);
     // Бибилиотека Node.js
     const url = require('url');
 

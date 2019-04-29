@@ -20,13 +20,12 @@ module.exports = {
       // unique: true
     },
     born: {
-      // type: 'number',
-      // example: 1502844074211,
-      type: 'string',
-      columnType: 'date',
+      type: 'number',
+      example: 1502844074211,
+      // type: 'string',
+      // columnType: 'date',
       // example: '10.04.2016',
-      description: 'Дата появления на свет помёта.',
-      required: true
+      description: 'Дата появления на свет помёта.'
     },
     title: {
       type: 'string',

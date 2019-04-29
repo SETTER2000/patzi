@@ -10,7 +10,6 @@ module.exports = {
   exits: {
 
     success: {
-      currentSection: 'kennel',
       viewTemplatePath: 'pages/litters/kennel'
     }
 

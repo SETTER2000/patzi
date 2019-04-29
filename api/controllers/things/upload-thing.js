@@ -60,8 +60,19 @@ module.exports = {
           name: 'IMG_6984.JPG'
           }
      */
-    // uploadOne - не будет работать без пакета sails-hook-uploads
-    // npm i --save sails-hook-uploads
+
+
+    /**
+     * Добавляет более простой интерфейс для работы с выгрузками и загрузками файлов в
+     * приложении Node.js / Sails. Поддерживает async/await (асинхронное/ожидание).
+     * Поддерживает только Node 8 и выше. (https://www.npmjs.com/package/sails-hook-uploads)
+     *
+     * uploadOne - не будет работать без пакета sails-hook-uploads
+     * npm i --save sails-hook-uploads
+     * .uploadOne (upstreamOrReadable) (принимает любой доступный для чтения поток
+     * или входящую загрузку файла Sails из файла 0 или 1; возвращает либо undefined словарь,
+     * либо информацию о загруженных данных файла.)
+     */
     let info = await sails.uploadOne(inputs.photo);
     if (!info) {
       throw 'badRequest';
