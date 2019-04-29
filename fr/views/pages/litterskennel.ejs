@@ -26,7 +26,6 @@
             </div>
           </div>
         </div>
-
         <div class="col-lg-12 d-none">
           <div class="filters">
             <ul>
@@ -93,8 +92,8 @@
             <span class="options-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
                 class="fa fa-ellipsis-v"></span></span>
             <div class="dropdown-menu dropdown-menu-right">
-              <span class="dropdown-item" @click="clickReturn(litter.id)">Give this back</span>
-              <span class="dropdown-item" @click="clickContactOwner(litter.id)">Contact {{litter.owner.fullName}}</span>
+              <span class="dropdown-item" @click="clickReturn(litter.id)"><%= __('Give this back') %></span>
+              <span class="dropdown-item" @click="clickContactOwner(litter.id)"><%= __('Contact') %> {{litter.owner.fullName}}</span>
             </div>
           </div>
           <div class="card-options" v-else-if="!litter.borrowedBy">
@@ -109,7 +108,7 @@
           <span class="label" v-if="litter.label">{{litter.label}}<br/></span>
           <small class="owner text-secondary" v-if="litter.owner.id === me.id"><span class="fa fa-home mr-1"></span> Mine</small>
           <small class="owner text-success" v-else-if="litter.borrowedBy && litter.borrowedBy.id === me.id"><span
-              class="fa fa-star-o mr-1"></span> Borrowing
+              class="fa fa-star-o mr-1"></span> <%= __('Borrowing') %>
           </small>
           <small class="owner text-primary" v-else>{{litter.owner.fullName}}</small>
         </div>
