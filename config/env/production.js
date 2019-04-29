@@ -394,8 +394,8 @@ module.exports = {
     internalEmailAddress: 'support@example.com',
 
     // mailgunDomain: 'mg.example.com',
-    // mailgunSecret: 'key-prod_fake_bd32301385130a0bafe030c',
-    // stripeSecret: 'sk_prod__fake_Nfgh82401348jaDa3lkZ0d9Hm',
+    // mailgunSecret: 'key-prod_fake_xx',
+    // stripeSecret: 'sk_prod__fake_xx',
     //--------------------------------------------------------------------------
     // /\   OR, to avoid checking them in to version control, you might opt to
     // ||   set sensitive credentials like these using environment variables.
@@ -403,8 +403,8 @@ module.exports = {
     // For example:
     // ```
     // sails_custom__mailgunDomain=mg.example.com
-    // sails_custom__mailgunSecret=key-prod_fake_bd32301385130a0bafe030c
-    // sails_custom__stripeSecret=sk_prod__fake_Nfgh82401348jaDa3lkZ0d9Hm
+    // sails_custom__mailgunSecret=key-prod_fake_xx
+    // sails_custom__stripeSecret=sk_prod__fake_xx
     // ```
     //--------------------------------------------------------------------------
 
