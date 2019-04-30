@@ -107,9 +107,9 @@
                   v-else><span class="fa fa-handshake-o text-dark"></span></span>
           </div>
 
-<p @click="() => showImg('litter'+litter.id)">
+
             <img alt="A mysterious item" :alt="litter.label ? litter.label : 'A mysterious item'" :src="litter.imageSrc"/>
-</p>
+
           <span class="label" v-if="litter.label">{{litter.label}}<br/></span>
           <small class="owner text-secondary" v-if="litter.owner.id === me.id"><span class="fa fa-home mr-1"></span> Mine</small>
           <small class="owner text-success" v-else-if="litter.borrowedBy && litter.borrowedBy.id === me.id"><span
@@ -124,11 +124,7 @@
     </div>
   </section>
   <!-- End Work Area Area -->
-  <vue-easy-lightbox
-    :visible="visible"
-    :imgs="imgs"
-    @hide="handleHide"
-  ></vue-easy-lightbox>
+
 
   <% /* "Upload Litter" Modal */ %>
   <modal v-if="virtualPageSlug==='new'" v-cloak key="new" @close="closeUploadLitterModal()">
