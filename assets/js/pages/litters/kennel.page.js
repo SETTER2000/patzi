@@ -20,7 +20,7 @@ parasails.registerPage('kennel', {
 
     borrowFormData: {
       expectedReturnAt: undefined,
-      pickupInfo: undefined
+      preliminaryPrice: undefined
     },
     // Modals which aren't linkable:
     borrowLitterModalOpen: false,
@@ -159,7 +159,7 @@ parasails.registerPage('kennel', {
       // Reset form data
       this.borrowFormData = {
         expectedReturnAt: undefined,
-        pickupInfo: undefined
+        preliminaryPrice: undefined
       };
       this.selectedLitter = undefined;
       // Clear error states
@@ -273,7 +273,7 @@ parasails.registerPage('kennel', {
 
     clickBorrow: function(litterId) {
       this.selectedLitter = _.find(this.litters, {id: litterId});
-
+console.log('this.selectedLitter', this.selectedLitter);
       // Open the modal.
       this.borrowLitterModalOpen = true;
     },
@@ -286,18 +286,19 @@ parasails.registerPage('kennel', {
       // Clear out any pre-existing error messages.
       // Удалите все существующие сообщения об ошибках
       this.formErrors = {};
-
+console.log('this.borrowFormData: ', this.borrowFormData);
       var argins = _.extend({ id: this.selectedLitter.id }, this.borrowFormData);
 
       if(!argins.expectedReturnAt) {
         this.formErrors.expectedReturnAt = true;
       }
 
-      if(!argins.pickupInfo) {
-        this.formErrors.pickupInfo = true;
+      if(!argins.preliminaryPrice) {
+        this.formErrors.preliminaryPrice = true;
       }
 
       // Convert the return time into a real date.
+      // Конвертировать время в реальную дату.
       argins.expectedReturnAt = this.$refs.datepickerref.doParseDate().getTime();
       console.log('expectedReturnAt', argins.expectedReturnAt);
 
@@ -314,9 +315,11 @@ parasails.registerPage('kennel', {
     submittedBorrowLitterForm: function() {
 
       // Show success message.
+      // Показать сообщение об успехе.
       this.borrowFormSuccess = true;
 
       // Update the borrowed item in the UI.
+      // Обновление элемента в пользовательском интерфейсе.
       var borrowedItem = _.find(this.litters, {id: this.selectedLitter.id});
       borrowedItem.borrowedBy = this.me;
     },

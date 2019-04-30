@@ -87,6 +87,7 @@ module.exports.routes = {
   'DELETE  /api/v1/litters/destroy-one-litter': {action: 'litters/destroy-one-litter'},
   'POST    /api/v1/litters/upload-litter': {action: 'litters/upload-litter'},
   'GET     /api/v1/litters/:id': { action: 'litters/download-photo' },
+  'PUT     /api/v1/litters/:id/puppy': { action: 'litters/reserve-puppy' },
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},
   'GET     /api/v1/things/:id': {action: 'things/download-photo'},

@@ -223,7 +223,9 @@
         </div>-->
         <div class="form-group">
           <label><%= __('Who is it') %>?</label>
-          <input class="form-control" type="text" v-model="uploadFormData.label" placeholder="Poale Ell Adam">
+          <input class="form-control" :class="formErrors.label ? 'is-invalid' : ''"
+                 type="text" v-model="uploadFormData.label" placeholder="Poale Ell Adam">
+          <small v-if="formErrors.label" class="text-danger "><%= __('Please enter a name.') %></small>
         </div>
         <div class="form-group">
           <label><%= __('Title') %></label>

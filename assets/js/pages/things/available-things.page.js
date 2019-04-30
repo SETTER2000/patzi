@@ -118,9 +118,9 @@ parasails.registerPage('available-things', {
       this.uploadThingModalOpen = false;
       // Reset form data
       this.uploadFormData = {
-        label: '',
         photo: undefined,
-        previewImageSrc: ''
+        previewImageSrc: '',
+        label:undefined,
       };
       // Clear error states
       this.formErrors = {};
@@ -140,7 +140,9 @@ parasails.registerPage('available-things', {
       if(!argins.photo) {
         this.formErrors.photo = true;
       }
-
+      if(!argins.label) {
+        this.formErrors.label = true;
+      }
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined. (Thus signifies that the submission should be cancelled.)
       // Если были какие-либо проблемы, они были сообщены пользователю,
