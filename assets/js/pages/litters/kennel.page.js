@@ -297,7 +297,7 @@ parasails.registerPage('kennel', {
 
     clickBorrow: function(litterId) {
       this.selectedLitter = _.find(this.litters, {id: litterId});
-console.log('this.selectedLitter', this.selectedLitter);
+
       // Open the modal.
       this.borrowLitterModalOpen = true;
     },
@@ -310,7 +310,6 @@ console.log('this.selectedLitter', this.selectedLitter);
       // Clear out any pre-existing error messages.
       // Удалите все существующие сообщения об ошибках
       this.formErrors = {};
-console.log('this.borrowFormData: ', this.borrowFormData);
       var argins = _.extend({ id: this.selectedLitter.id }, this.borrowFormData);
 
       if(!argins.expectedReturnAt) {
