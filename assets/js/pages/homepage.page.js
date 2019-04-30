@@ -15,7 +15,6 @@ parasails.registerPage('homepage', {
   },
   mounted: async function(){
     this._setHeroHeight();
-    console.log('Hello world2');
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗

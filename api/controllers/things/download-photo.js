@@ -39,7 +39,7 @@ module.exports = {
     }
 
     let user = await User.findOne({id: this.req.me.id}).populate('friends');
-    // console.log('populate.friends:', user);
+
     /**
      * Если друзья имеют идентификатор (ID) владельца этой вещи,
      * то вам позволено это видеть, потому что один из ваших друзей

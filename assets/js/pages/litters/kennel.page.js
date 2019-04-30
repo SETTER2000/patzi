@@ -91,7 +91,7 @@ parasails.registerPage('kennel', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     /* clickLitter: async function (litterId) {
-      console.log('clicked a litter #' + litterId);
+
       /!*await Cloud.destroyOneLitters.with({id:litterId});
       _.remove(this.litters, {id:litterId});
       this.$forceUpdate();*!/
@@ -100,7 +100,6 @@ parasails.registerPage('kennel', {
     // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
     // Это кнопка вызывает модальное окно <modal> с <ajax-form>
     clickDeleteLitter: function (litterId) {
-      console.log(`click the "delete" button! ID: ${litterId}`);
       this.confirmDeleteLitterModalOpen = true;
       this.selectedLitter = _.find(this.litters, {id: litterId});
     },
@@ -117,7 +116,6 @@ parasails.registerPage('kennel', {
     },
 
     submittedDeleteLitterForm: function () {
-      console.log(`Ok it worked ID: ${this.selectedLitter.id}!`);
       _.remove(this.litters, {id: this.selectedLitter.id});
       this.$forceUpdate();
       this.confirmDeleteLitterModalOpen = false;
@@ -127,7 +125,6 @@ parasails.registerPage('kennel', {
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
-      console.log(`click the "Add an item" button!`);
       // this.uploadLitterModalOpen = true;
       this.goto('/litters/new');
       // this.selectedLitter = _.find(this.litters, {id: litterId});
@@ -136,7 +133,6 @@ parasails.registerPage('kennel', {
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "ShowPhoto <modal>" с <ajax-form> для загрузки фото
     clickShowPhoto: function () {
-      console.log(`click to photo the "Show photo" !`);
       this.showLitterModalOpen = true;
       // this.selectedLitter = _.find(this.litters, {id: litterId});
     },
@@ -183,11 +179,7 @@ parasails.registerPage('kennel', {
 
     handleParsingUploadLitterForm: function () {
       this.formErrors = {};
-      // let argins = this.uploadFormData;
-      // console.log('this.selectedLitter::', this.selectedLitter);
-      // console.log('uploadFormData::', this.uploadFormData);
       let argins =  this.uploadFormData;
-
       if(!argins.photo) {
         this.formErrors.photo = true;
       }
@@ -216,7 +208,6 @@ parasails.registerPage('kennel', {
       // Преобразуйте дату помёта в реальную дату.
       // Приходит timestamp типа: born: 1558472400000
       argins.born = this.$refs.datepickerref.doParseDate().getTime();
-      // console.log('born::', argins.born);
 
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined. (Thus signifies that the submission should be cancelled.)
@@ -237,7 +228,6 @@ parasails.registerPage('kennel', {
      * эта функция получает результат и должна вставить новые данные на страницу.
      */
     submittedUploadLitterForm: function (result) {
-// console.log('BORN SEARCH', this.uploadFormData);
       // Добавлем новые данные в уже имеющийся массив litters
       this.litters.push({
         label: this.uploadFormData.label,
@@ -259,7 +249,6 @@ parasails.registerPage('kennel', {
     },
 
     changeFileInput: function (files) {
-      console.log('files: ', files);
       if (files.length !== 1 && !this.uploadFormData.photo) {
         throw new Error('Consistency violation: `changeFileInput` ' +
           'was somehow called with an empty array of files, ' +
@@ -274,7 +263,6 @@ parasails.registerPage('kennel', {
         return;
       }
 
-      // console.log('Имя фото: ', selectedFile.name);
 
       this.uploadFormData.photo = selectedFile;
 
@@ -323,7 +311,6 @@ parasails.registerPage('kennel', {
       // Convert the return time into a real date.
       // Конвертировать время в реальную дату.
       argins.expectedReturnAt = this.$refs.datepickerref.doParseDate().getTime();
-      console.log('expectedReturnAt', argins.expectedReturnAt);
 
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined.  (This signifies that the submission should be

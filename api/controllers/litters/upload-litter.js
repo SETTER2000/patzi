@@ -72,7 +72,6 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    console.log('inputs:::', inputs);
     // Бибилиотека Node.js
     const url = require('url');
 
@@ -97,7 +96,6 @@ module.exports = {
       throw 'badRequest';
     }
 
-    // console.log("inputs:: ", inputs);
 
     let newLitter = await Litter.create({
       imageUploadFD: info.fd,

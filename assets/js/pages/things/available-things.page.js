@@ -61,17 +61,10 @@ parasails.registerPage('available-things', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    /*clickThing: async function (thingId) {
-      console.log('clicked a thing #' + thingId);
-      await Cloud.destroyOneThing.with({id: thingId});
-      _.remove(this.things, {id: thingId});
-      this.$forceUpdate();
-    },*/
     // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
     // Это кнопка вызывает модальное окно <modal> с <ajax-form>
     // для удаления объекта
     clickDeleteThing: function (thingId) {
-      console.log(`click the "delete" button! ID: ${thingId}`);
       this.confirmDeleteThingModalOpen = true;
       this.selectedThing = _.find(this.things, {id: thingId});
     },
@@ -89,7 +82,6 @@ parasails.registerPage('available-things', {
     },
 
     submittedDeleteThingForm: function () {
-      console.log('Ok it worked!');
       _.remove(this.things, {id: this.selectedThing.id});
       this.$forceUpdate();
       this.confirmDeleteThingModalOpen = false;
@@ -99,7 +91,6 @@ parasails.registerPage('available-things', {
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
-      console.log(`click the "Add an item" button!`);
       this.uploadThingModalOpen = true;
       // this.selectedThing = _.find(this.things, {id: thingId});
     },
@@ -107,7 +98,6 @@ parasails.registerPage('available-things', {
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "ShowPhoto <modal>" с <ajax-form> для загрузки фото
     clickShowPhoto: function () {
-      console.log(`click to photo the "Show photo" !`);
       this.showThingModalOpen = true;
       // this.selectedThing = _.find(this.things, {id: thingId});
     },
@@ -178,7 +168,6 @@ parasails.registerPage('available-things', {
     },
 
     changeFileInput: function (files) {
-      console.log('files: ', files);
       if (files.length !== 1 && !this.uploadFormData.photo) {
         throw new Error('Consistency violation: `changeFileInput` ' +
           'was somehow called with an empty array of files, ' +
@@ -193,7 +182,6 @@ parasails.registerPage('available-things', {
         return;
       }
 
-      console.log('Имя фото: ', selectedFile.name);
 
       this.uploadFormData.photo = selectedFile;
 
@@ -212,52 +200,5 @@ parasails.registerPage('available-things', {
       this.formErrors.photo = false;
       reader.readAsDataURL(selectedFile);
     }
-
-
-
-    /*  changeFileInput: function(files) {
-        if (files.length !== 1 && !this.uploadFormData.photo) {
-          throw new Error('Consistency violation: `changeFileInput` was somehow called with an empty array of files, or with more than one file in the array!  This should never happen unless there is already an uploaded file tracked.');
-        }
-        var selectedFile = files[0];
-
-        // If you cancel from the native upload window when you already
-        // have a photo tracked, then we just avast (return early).
-        // In this case, we just leave whatever you had there before.
-        // Если вы отменяете из собственного окна загрузки, когда вы уже
-        // отслеживаем фотографию, тогда мы просто avast (возвращаемся рано).
-        // В этом случае мы просто оставляем все, что у вас было раньше.
-        if (!selectedFile && this.uploadFormData.photo) {
-          return;
-        }
-
-        this.uploadFormData.photo = selectedFile;
-
-        // Set up the file preview for the UI:
-        // Настройка предварительного просмотра файла для пользовательского интерфейса:
-        var reader = new FileReader();
-        reader.onload = (event)=>{
-          this.uploadFormData.previewImageSrc = event.target.result;
-
-          // Unbind this "onload" event.
-          // Отмена привязки этого события onload.
-          delete reader.onload;
-        };
-        // Clear out any error messages about not providing an image.
-        // Убираем любые сообщения об ошибках о не предоставлении изображения.
-        this.formErrors.photo = false;
-        reader.readAsDataURL(selectedFile);
-
-      },*/
-
-
-
-    /*   rejectedDeleteThingForm: function (err) {
-         console.log('Ups!!: ', err);
-         /!*_.remove(this.things, {id: this.selectedThing.id});*!/
-         this.$forceUpdate();
-         this.confirmDeleteThingModalOpen = false;
-         this.selectedThing = undefined;
-       }*/
   }
 });

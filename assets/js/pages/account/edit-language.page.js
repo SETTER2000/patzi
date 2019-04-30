@@ -56,7 +56,6 @@ parasails.registerPage('edit-language', {
       // Clear out any pre-existing error messages.
       // Удалить все существующие сообщения об ошибках.
       this.formErrors = {};
-console.log('this.formData.language :', this.formData.language );
       var argins = { language: this.formData.language };
 
       // Validate password:

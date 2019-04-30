@@ -74,7 +74,6 @@ module.exports = {
      * либо информацию о загруженных данных файла.)
      */
     let info = await sails.uploadOne(inputs.photo);
-    console.log('info:::' , info);
     if (!info) {
       throw 'badRequest';
     }

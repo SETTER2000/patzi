@@ -21,7 +21,6 @@ module.exports = {
 
 
   fn: async function (inputs) {
-console.log(this.req.i18n.locales);
     // Hash the new password.
     // let hashed = await sails.helpers.passwords.hashPassword(inputs.language);
 

@@ -58,7 +58,6 @@ module.exports = {
 
 
 
-    // console.log(litters);
     // Respond with view.
     return exits.success({
       litters,

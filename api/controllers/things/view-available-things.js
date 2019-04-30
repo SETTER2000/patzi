@@ -41,7 +41,7 @@ module.exports = {
     let things = await Thing.find({
       or: [{owner: this.req.me.id}, {owner: {in: friendIds}}]
     }).populate('owner');
-    // console.log(things);
+
     /**
      * Здесь будем превращать поток байт в нормальное изображение для frontend
      * исключая некоторые данные не нужные для страницы.
