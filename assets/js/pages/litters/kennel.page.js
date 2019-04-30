@@ -10,9 +10,6 @@ parasails.registerPage('kennel', {
     // Виртуальная часть URL
     virtualPageSlug:'',
 
-    // uploadLitterModalOpen: false,
-    visible:'',
-    imgs:'',
     showLitterModalOpen: false,
 
     uploadFormData: {
