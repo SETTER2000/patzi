@@ -135,7 +135,7 @@
                       v-model="uploadFormData.born"
                       placeholder-text="(<%= __('Date of litter') %>)"
                       :popup="true"
-                      :invalid="formErrors.born"
+                      :invalid="formErrors.born && !uploadFormData.born"
                       validation-error-message="<%= __('Please set the date when puppies were born.') %>."
           >
           </datepicker>
@@ -144,13 +144,13 @@
         <div class="form-group">
           <label><%= __('Litter letter') %></label>
           <input class="form-control"
-                 :class="formErrors.label ? 'is-invalid' : ''"
+                 :class="(formErrors.label && !uploadFormData.label) ? 'is-invalid' : ''"
                  type="text"
                  id="validationServerUsername"
                  aria-describedby="inputGroupPrepend3"
                  v-model="uploadFormData.label"
                  placeholder="A">
-          <small v-if="formErrors.label" class="text-danger ">
+          <small v-if="formErrors.label && !uploadFormData.label" class="text-danger ">
             <%= __('Please indicate the litter letter.') %>
           </small>
         </div>
@@ -174,7 +174,6 @@
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <label class="input-group-text"
-                       :class="[formErrors.gender ? 'bg-outline-danger' : !uploadFormData.gender ? 'btn-success' : 'btn-secondary mr-3']"
                        for="inputGroupSelect01"
                 >
                   <%= __('Gender') %>
@@ -182,14 +181,14 @@
               </div>
               <select class="custom-select"
                       id="inputGroupSelect01"
-                      :class="formErrors.gender ? 'is-invalid' : ''"
+                      :class="(formErrors.gender && !uploadFormData.gender)? 'is-invalid' : ''"
                       v-model="uploadFormData.gender"
               >
                 <option value="dam">Dam</option>
                 <option value="sire">Sire</option>
               </select>
             </div>
-              <small v-if="formErrors.gender" class="text-danger ">
+              <small v-if="formErrors.gender && !uploadFormData.gender" class="text-danger ">
                 <%= __('Please indicate the litter letter.') %>
               </small>
           </div>
@@ -203,14 +202,14 @@
               </div>
               <select class="custom-select"
                       id="inputGroupSelect01"
-                      :class="formErrors.type ? 'is-invalid' : ''"
+                      :class="(formErrors.type && !uploadFormData.type) ? 'is-invalid' : ''"
                       v-model="uploadFormData.type"
               >
                 <option value="hairless">Hairless</option>
                 <option value="powderpuff">Powderpuff</option>
               </select>
             </div>
-              <small v-if="formErrors.type" class="text-danger ">
+              <small v-if="formErrors.type && !uploadFormData.type" class="text-danger ">
                 <%= __('Please indicate the litter letter.') %>
               </small>
           </div>
