@@ -10,13 +10,13 @@ Au bout de 6 heures, votre compte sera annulé.
   inscrivez-vous à nouveau.
 */
 %>
-<p style="margin-bottom: 25px;">Cher <%= user.fullName %>,</p>
+<p style="margin-bottom: 25px;"><%= __('Dear') %> <%= user.fullName %>,</p>
 <p style="margin-bottom: 25px;">
-  The time allowed to confirm the email address when registering on the Poale Ell website ends. Après 6 heures, your account will be canceled.
- <br>If this information is not relevant to you then just do not pay attention to this message.
- <br>If you want to confirm your email address, you should go to the email that was sent to you during registration and click the confirm button.
+  <%= __('The time allowed to confirm the email address when registering on the Poale Ell website ends. After 6 hours, your account will be canceled.') %>
+ <br><%= __('If this information is not relevant to you, then just do not pay attention to this message.') %>
+ <br><%= __('If you want to confirm your email address, you should go to the email that was sent to you during registration and click the confirm button.') %>
 </p><p>
-  If you could not find the letter sent during registration, please contact us or register again.
+  <%= __('If you could not find the letter sent during registration, please contact us or register again.') %>
 </p>
-<p style="margin-bottom: 5px;">Sincerely,</p>
-<p style="margin-top: 0px;">The Poale Ell Team</p>
+<p style="margin-bottom: 5px;"><%= __('Sincerely') %>,</p>
+<p style="margin-top: 0px;"><%= __('The Poale Ell Team') %></p>
