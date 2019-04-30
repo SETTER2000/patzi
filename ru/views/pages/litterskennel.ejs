@@ -78,7 +78,11 @@
       </div>-->
       <div class="listings" v-if="litters.length > 0">
         <div class="card" :key="'litter'+litter.id"
-             :class="[litter.owner.id === me.id ? 'mine' : '', litter.unavailable ? 'not-available' : '']" v-for="litter in litters">
+             :class="[litter.owner.id === me.id ? 'mine' : '', litter.unavailable ? 'not-available' : '']"
+             v-for="(litter, index) in litters"
+             :data-index="index"
+
+        >
           <div class="card-options dropdown" v-if="litter.borrowedBy && litter.owner.id === me.id">
             <span class="options-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
                 class="fa fa-ellipsis-v"></span></span>
@@ -102,9 +106,10 @@
             <span class="options-button borrow" data-toggle="tooltip" data-placement="top" title="Borrow" @click="clickBorrow(litter.id)"
                   v-else><span class="fa fa-handshake-o text-dark"></span></span>
           </div>
-          <a :href="litter.imageSrc" data-fancybox="gallery">
+
+<p @click="() => showImg('litter'+litter.id)">
             <img alt="A mysterious item" :alt="litter.label ? litter.label : 'A mysterious item'" :src="litter.imageSrc"/>
-          </a>
+</p>
           <span class="label" v-if="litter.label">{{litter.label}}<br/></span>
           <small class="owner text-secondary" v-if="litter.owner.id === me.id"><span class="fa fa-home mr-1"></span> Mine</small>
           <small class="owner text-success" v-else-if="litter.borrowedBy && litter.borrowedBy.id === me.id"><span
@@ -119,13 +124,13 @@
     </div>
   </section>
   <!-- End Work Area Area -->
+  <vue-easy-lightbox
+    :visible="visible"
+    :imgs="imgs"
+    @hide="handleHide"
+  ></vue-easy-lightbox>
 
-  <% /* "Upload Litter" Modal
-     v-if="virtualPageSlug === 'new'"
-     v-if="uploadLitterModalOpen"
-  */ %>
-
-
+  <% /* "Upload Litter" Modal */ %>
   <modal v-if="virtualPageSlug==='new'" v-cloak key="new" @close="closeUploadLitterModal()">
     <div class="modal-header">
       <h5 class="modal-title"><%= __('Upload new photo') %></h5>
@@ -147,6 +152,7 @@
               <div class="photo-preview col">
                 <div class="image-wrapper"
                      :class="!uploadFormData.previewImageSrc ? 'd-flex align-items-center justify-content-center' : ''">
+
                   <img v-if="uploadFormData.previewImageSrc" alt="A preview of the selected item"
                        :src="uploadFormData.previewImageSrc"/>
                   <span v-else class="placeholder-icon fa fa-picture-o"></span>
@@ -156,7 +162,7 @@
                 <span class="file-upload-button btn btn-sm"
                       :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
                   <span class="button-text" v-if="!uploadFormData.previewImageSrc"><%= __('Select image') %></span>
-                  <span class="button-text" v-else>Change image</span>
+                  <span class="button-text" v-else><%= __('Change image') %></span>
                   <input type="file" :disabled="syncing" accept="image/*" class="file-input"
                          @change="changeFileInput($event.target.files)"/>
                 </span>
@@ -164,7 +170,7 @@
                   <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
                 </p>
                 <p class="image-advice text-danger" v-if="formErrors.photo">
-                  A photo is required in order to add a new item.</p>
+                  <%= __('A photo is required in order to add a new item') %>.</p>
               </div>
             </div>
           </div>
@@ -194,8 +200,19 @@
           </div>
         </div>-->
         <div class="form-group">
-          <label><%= __('Who is it') %>?</label>
-          <input class="form-control" type="text" v-model="uploadFormData.label" placeholder="Poale Ell Adam">
+          <label><%= __('When were born?') %></label>
+          <!--<input class="form-control" type="date" v-model="uploadFormData.born">-->
+          <datepicker ref="datepickerref" v-model="uploadFormData.born" placeholder-text="(<%= __('Date of litter') %>)" :popup="true"
+                      :invalid="formErrors.born"
+                      validation-error-message="<%= __('Please set the date when puppies were born.') %>."></datepicker>
+        </div>
+        <div class="form-group">
+          <label><%= __('Litter letter') %></label>
+          <input class="form-control" :class="formErrors.label ? 'is-invalid' : ''"
+                  type="text" id="validationServerUsername"
+                 aria-describedby="inputGroupPrepend3"
+                 v-model="uploadFormData.label" placeholder="A" >
+          <small v-if="formErrors.label" class="text-danger "><%= __('Please indicate the litter letter.') %></small>
         </div>
         <div class="form-group">
           <label><%= __('Title') %></label>
@@ -205,13 +222,7 @@
           <label><%= __('Sub Title') %></label>
           <input class="form-control" type="text" v-model="uploadFormData.subtitle">
         </div>
-        <div class="form-group">
-          <label><%= __('Date of litter') %></label>
-          <!--<input class="form-control" type="date" v-model="uploadFormData.born">-->
-          <datepicker ref="datepickerref" v-model="uploadFormData.born" placeholder-text="(<%= __('Date of litter') %>)" :popup="true"
-                      :invalid="formErrors.expectedReturnAt"
-                      validation-error-message="<%= __('Please set the date when puppies were born.') %>."></datepicker>
-        </div>
+
         <p class="text-danger" v-if="cloudError === 'tooBig'">
           <small><%= __('That file is too big. Please choose a junkier picture') %>.</small>
         </p>
@@ -249,7 +260,7 @@
           <label>How long do you want to borrow it?</label>
           <div class="field-wrap">
             <span class="datepicker-label">Until</span>
-            <datepicker ref="datepickerref" v-model="borrowFormData.expectedReturnAt" placeholder-text="(Choose return date)" :popup="true" :invalid="formErrors.expectedReturnAt" validation-error-message="Please let the owner know when you can return the item."></datepicker>
+            <datepicker ref="datepickerref" v-model="borrowFormData.born" placeholder-text="(Choose return date)" :popup="true" :invalid="formErrors.born" validation-error-message="Please let the owner know when you can return the item."></datepicker>
           </div>
         </div>
         <div class="form-group mt-4">
