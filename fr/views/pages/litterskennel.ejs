@@ -103,7 +103,7 @@
           <div class="card-options" v-else-if="!litter.borrowedBy">
             <span class="options-button" data-toggle="tooltip" data-placement="top" title="Delete" @click="clickDeleteLitter(litter.id)"
                   v-if="litter.owner.id === me.id"><span class="fa fa-trash-o text-danger"></span></span>
-            <span class="options-button borrow" data-toggle="tooltip" data-placement="top" title="Borrow" @click="clickBorrow(litter.id)"
+            <span class="options-button borrow" data-toggle="tooltip" data-placement="top" title="<%= __('to reserve') %>" @click="clickBorrow(litter.id)"
                   v-else><span class="fa fa-handshake-o text-dark"></span></span>
           </div>
 
@@ -210,13 +210,14 @@
                  v-model="uploadFormData.label" placeholder="A" >
           <small v-if="formErrors.label" class="text-danger "><%= __('Please indicate the litter letter.') %></small>
         </div>
-        <div class="form-group">
-          <label><%= __('Title') %></label>
-          <input class="form-control" type="text" v-model="uploadFormData.title">
+        <div class="form-group mt-4">
+          <label><%= __('Our preliminary price') %></label>
+          <input class="form-control" type="text" placeholder="<%= __('€1000 - €1200') %>" v-model="borrowFormData.preliminaryPrice" :class="[formErrors.preliminaryPrice ? 'is-invalid' : '']">
+          <div class="invalid-feedback" v-if="formErrors.ourPreliminaryPrice"><%= __('Please indicate your preliminary price.') %></div>
         </div>
         <div class="form-group">
           <label><%= __('Sub Title') %></label>
-          <input class="form-control" type="text" v-model="uploadFormData.subtitle">
+          <textarea class="form-control" name="" id="" v-model="uploadFormData.subtitle" cols="30" rows="3"></textarea>
         </div>
 
         <p class="text-danger" v-if="cloudError === 'tooBig'">
@@ -240,43 +241,50 @@
   <% /* "Borrow litter" modal */ %>
   <modal v-if="borrowLitterModalOpen && selectedLitter" v-cloak key="borrow" @close="closeBorrowLitterModal()">
     <div class="modal-header">
-      <h5 class="modal-title">Borrow this {{selectedLitter.label || 'item'}}</h5>
+      <h5 class="modal-title"><%= __('Make a reservation') %> {{selectedLitter.label || 'item'}}</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span>&times;</span>
       </button>
     </div>
-    <ajax-form action="borrowLitter" :syncing.sync="syncing" :cloud-error.sync="cloudError" :handle-parsing="handleParsingBorrowLitterForm" @submitted="submittedBorrowLitterForm($event)" v-if="!borrowFormSuccess">
+    <ajax-form action="reservePuppy" :syncing.sync="syncing" :cloud-error.sync="cloudError" :handle-parsing="handleParsingBorrowLitterForm" @submitted="submittedBorrowLitterForm($event)" v-if="!borrowFormSuccess">
       <div class="modal-body">
         <div class="item-preview d-flex justify-content-center">
           <div class="card">
-            <img alt="A mysterious item" :alt="selectedLitter.label ? selectedLitter.label : 'A mysterious item'" :src="selectedLitter.imageSrc"/>
+            <img alt="<%= __('A mysterious item') %>" :alt="selectedLitter.label ? selectedLitter.label : '<%= __('A mysterious item') %>'" :src="selectedLitter.imageSrc"/>
           </div>
         </div>
         <div class="form-group mt-4">
-          <label>How long do you want to borrow it?</label>
+          <label><%= __('Our preliminary price') %></label>
+          <input class="form-control" type="text" placeholder="<%= __('€1000 - €1200') %>" v-model="borrowFormData.preliminaryPrice" :class="[formErrors.preliminaryPrice ? 'is-invalid' : '']">
+          <div class="invalid-feedback" v-if="formErrors.ourPreliminaryPrice"><%= __('Please indicate your preliminary price.') %></div>
+        </div>
+
+        <div class="form-group mt-4">
+          <label><%= __('What price would you offer?') %></label>
+          <input class="form-control" type="text" placeholder="<%= __('€1000 - €1200') %>" v-model="borrowFormData.preliminaryPrice" :class="[formErrors.preliminaryPrice ? 'is-invalid' : '']">
+          <div class="invalid-feedback" v-if="formErrors.preliminaryPrice"><%= __('Please indicate your preliminary price.') %></div>
+        </div>
+        <div class="form-group mt-4">
+          <label><%= __('When can you pick up the puppy?') %></label>
           <div class="field-wrap">
-            <span class="datepicker-label">Until</span>
-            <datepicker ref="datepickerref" v-model="borrowFormData.born" placeholder-text="(Choose return date)" :popup="true" :invalid="formErrors.born" validation-error-message="Please let the owner know when you can return the item."></datepicker>
+            <span class="datepicker-label"><%= __('Until') %></span>
+            <datepicker ref="datepickerref" v-model="borrowFormData.expectedReturnAt" placeholder-text="(<%= __('Choose date') %>)" :popup="true" :invalid="formErrors.expectedReturnAt" validation-error-message="<%= __('Required field.') %>"></datepicker>
           </div>
         </div>
-        <div class="form-group mt-4">
-          <label>When can you pick it up?</label>
-          <input class="form-control" type="text" placeholder="e.g. This afternoon or anytime tomorrow" v-model="borrowFormData.pickupInfo" :class="[formErrors.pickupInfo ? 'is-invalid' : '']">
-          <div class="invalid-feedback" v-if="formErrors.pickupInfo">Please add your pickup availability.</div>
-        </div>
-        <p class="text-danger" v-if="cloudError"><small>An error occurred while processing your request. Please check your information and try again, or <a href="/support">contact support</a> if the error persists.</small></p>
+
+        <p class="text-danger" v-if="cloudError"><small><%= __('An error occured while processing your request. Please check your information and try again, or') %> <a href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.</small></p>
       </div>
       <div class="modal-footer  flex-row-reverse justify-content-start">
-        <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1">Borrow</ajax-button>
-        <button data-dismiss="modal" class="btn btn-outline-primary mr-1">Cancel</button>
+        <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1"><%= __('Make a reservation') %></ajax-button>
+        <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
       </div>
     </ajax-form>
     <div class="modal-body" v-else>
-      <p>We let the owner of <strong class="text-success">{{selectedLitter.label || 'item'}}</strong> know when you could drop by.</p>
+      <p><%= __('We let the owner of') %> <strong class="text-success">{{selectedLitter.label || 'item'}}</strong> know when you could drop by.</p>
       <p>Stay in touch with {{selectedLitter.owner.fullName}} to confirm pickup details: <strong>{{selectedLitter.owner.emailAddress}}</strong></p>
     </div>
     <div class="modal-footer" v-if="borrowFormSuccess">
-      <button data-dismiss="modal" class="btn btn-outline-success">Got it</button>
+      <button data-dismiss="modal" class="btn btn-outline-success"><%= __('Got it') %></button>
     </div>
   </modal>
 
