@@ -29,6 +29,26 @@ module.exports = {
       example: 1502844074211,
       description: 'Дата появления на свет помёта.',
       required: true
+    },
+    gender:{
+      type:'string',
+      description:'Половая пренадлежность щенка.',
+      example:'dam, sire'
+      // required:true
+    },
+    type:{
+      type:'string',
+      description:'Тип собаки',
+      example: 'hairless, powderpuff'
+      // required:true
+    },
+    preliminaryPrice:{
+      type:'number',
+      description:'Тип MIME для загруженного изображения.'
+    },
+    currency:{
+      type:'string',
+      description:'Валюта продажи.'
     }
   },
 
@@ -52,7 +72,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    // console.log('inputs:::', inputs);
+    console.log('inputs:::', inputs);
     // Бибилиотека Node.js
     const url = require('url');
 
@@ -88,6 +108,10 @@ module.exports = {
       title: inputs.title,
       subtitle: inputs.subtitle,
       born: inputs.born,
+      gender:inputs.gender,
+      type:inputs.type,
+      preliminaryPrice:inputs.preliminaryPrice,
+      currency:inputs.currency
     }).fetch();
 
 

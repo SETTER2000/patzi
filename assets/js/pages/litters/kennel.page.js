@@ -15,7 +15,11 @@ parasails.registerPage('kennel', {
     uploadFormData: {
       label: '',
       photo: undefined,
-      previewImageSrc: ''
+      previewImageSrc: '',
+      gender:'',
+      type:'',
+      preliminaryPrice:0,
+      currency:''
     },
 
     borrowFormData: {
@@ -147,6 +151,10 @@ parasails.registerPage('kennel', {
         previewImageSrc: '',
         born:undefined,
         label:undefined,
+        gender:undefined,
+        type:undefined,
+        preliminaryPrice:undefined,
+        currency:undefined,
       };
       // Clear error states
       this.formErrors = {};
@@ -191,6 +199,18 @@ parasails.registerPage('kennel', {
       if(!argins.label) {
         this.formErrors.label = true;
       }
+      if(!argins.gender) {
+        this.formErrors.gender = true;
+      }
+      if(!argins.type) {
+        this.formErrors.type = true;
+      }
+      // if(!argins.preliminaryPrice) {
+      //   this.formErrors.preliminaryPrice = true;
+      // }
+      // if(!argins.currency) {
+      //   this.formErrors.currency = true;
+      // }
 
       // Convert the return time into a real date.
       // Преобразуйте дату помёта в реальную дату.
@@ -221,6 +241,10 @@ parasails.registerPage('kennel', {
       // Добавлем новые данные в уже имеющийся массив litters
       this.litters.push({
         label: this.uploadFormData.label,
+        gender:this.uploadFormData.gender,
+        type:this.uploadFormData.type,
+        preliminaryPrice:this.uploadFormData.preliminaryPrice,
+        currency:this.uploadFormData.currency,
         id: result.id,
         imageSrc:result.imageSrc,
         title:this.uploadFormData.title,

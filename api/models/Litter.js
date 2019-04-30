@@ -52,6 +52,26 @@ module.exports = {
       description:'Тип MIME для загруженного изображения.',
       required:true
     },
+    gender:{
+      type:'string',
+      description:'Половая пренадлежность щенка.',
+      example:'dam, sire'
+      // required:true
+    },
+    type:{
+      type:'string',
+      description:'Тип собаки',
+      example: 'hairless, powderpuff'
+      // required:true
+    },
+    preliminaryPrice:{
+      type:'number',
+      description:'Тип MIME для загруженного изображения.'
+    },
+    currency:{
+      type:'string',
+      description:'Валюта продажи.'
+    },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝

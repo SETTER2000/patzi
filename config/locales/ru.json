@@ -9,8 +9,16 @@
 	"GrO": "Р",
 	"Owth": "ст",
 	"matO": "имее",
+	"Gender": "Пол",
+	"Choose": "Выберите",
+	"Type": "Тип",
+	"Currency": "Валюта",
 	"Ters": "",
 	"Got it": "Понял",
+	"Euro": "Евро",
+	"Preliminary name": "Предварительное имя",
+	"Russian ruble": "Российский рубль",
+	"U.S. dollar": "Доллар США",
 	"to reserve": "зарезервировать",
 	"Make a reservation": "Зарезервировать",
 	"e.g. This afternoon or anytime tomorrow": "например сегодня днем или завтра",
@@ -272,5 +280,6 @@
 	"We have received the following message through the contact form": "Мы получили следующее сообщение через контактную форму",
 	"Please set the date when puppies were born.": "Пожалуйста, установите дату, когда щенки появились на свет",
 	"Latest Good Story": "Latest Good Story",
-	"Close": "Close"
+	"Close": "Close",
+	"Nevermind": "Nevermind"
 }
