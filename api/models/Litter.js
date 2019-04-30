@@ -37,7 +37,11 @@ module.exports = {
       example: 'Beautiful, noble dog, your eternal companion on a journey through the world. Life and light in such a small creature.',
       description: 'Custom label with full description of this product.'
     },
-
+    filename: {
+      type: 'string',
+      example: 'my-file.jpg',
+      description: 'Название файла, который загружается.'
+    },
     imageUploadFD:{
       type:'string',
       description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение, связанное с этой «вещью».',

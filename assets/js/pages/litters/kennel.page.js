@@ -11,7 +11,8 @@ parasails.registerPage('kennel', {
     virtualPageSlug:'',
 
     // uploadLitterModalOpen: false,
-
+    visible:'',
+    imgs:'',
     showLitterModalOpen: false,
 
     uploadFormData: {
@@ -145,10 +146,10 @@ parasails.registerPage('kennel', {
       this.goto('/litters');
       // Reset form data
       this.uploadFormData = {
-        label: '',
         photo: undefined,
         previewImageSrc: '',
-        born:undefined
+        born:undefined,
+        label:undefined,
       };
       // Clear error states
       this.formErrors = {};
@@ -188,6 +189,10 @@ parasails.registerPage('kennel', {
 
       if(!argins.born) {
         this.formErrors.born = true;
+      }
+
+      if(!argins.label) {
+        this.formErrors.label = true;
       }
 
       // Convert the return time into a real date.

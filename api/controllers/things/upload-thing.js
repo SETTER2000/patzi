@@ -74,12 +74,14 @@ module.exports = {
      * либо информацию о загруженных данных файла.)
      */
     let info = await sails.uploadOne(inputs.photo);
+    console.log('info:::' , info);
     if (!info) {
       throw 'badRequest';
     }
     let newThing = await Thing.create({
       imageUploadFD: info.fd,
       imageUploadMime: info.type,
+      filename: info.filename,
       owner: this.req.me.id,
       label: inputs.label,
       title: inputs.title,

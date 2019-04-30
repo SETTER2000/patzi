@@ -9,12 +9,14 @@ module.exports = {
   inputs: {
     photo: {
       type: 'ref',
-      description: 'Uploaded file stream.',
+      description: 'Фото помёта. Загружаемый поток.',
       required: true
     },
     label: {
       type: 'string',
-      required: true
+      required: true,
+      description: 'Буква помёта.',
+      example: 'A'
     },
     title: {
       type: 'string'
@@ -33,6 +35,7 @@ module.exports = {
 
   exits: {
     success: {
+      // Информация о вновь созданной записи
       outputDescription: 'Information about the newly created record.',
       // Устанавливаем выходной тип данных. Хорошая практика для документирования кода.
       outputType: {
@@ -79,6 +82,7 @@ module.exports = {
     let newLitter = await Litter.create({
       imageUploadFD: info.fd,
       imageUploadMime: info.type,
+      filename: info.filename,
       owner: this.req.me.id,
       label: inputs.label,
       title: inputs.title,
