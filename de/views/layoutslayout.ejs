@@ -82,13 +82,15 @@
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 </head>
 <body>
-<% if(!me){ %>
+<% if(!me){
+
+%>
 <div id="page-wrap">
   <% } %>
 
   <!-- Alert if email has not been confirmed -->
   <!-- Оповещение, если электронная почта не была подтверждена -->
-  <% if(me && me.emailChangeCandidate) { %>
+  <% if(me && me.emailChangeCandidate) {%>
   <div class="container-fluid">
     <div class="alert alert-secondary mt-2" role="alert">
       <%= __('Your updated email address needs verification. Until you click the link sent to') %>
@@ -594,6 +596,19 @@
 <script src="/dependencies/isotope.pkgd.js"></script>
 <script src="/dependencies/jquery-imagefill.js"></script>
 <script src="/dependencies/jquery-ui/jquery-ui.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-de.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-en-AU.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-en-GB.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-en-NZ.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-es.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-eu.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-fr-CA.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-fr-CH.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-fr.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-it-CH.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-it.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-lt.js"></script>
+<script src="/dependencies/jquery-ui/ui/i18n/datepicker-ru.js"></script>
 <script src="/dependencies/jquery.ajaxchimp.min.js"></script>
 <script src="/dependencies/jquery.circlechart.js"></script>
 <script src="/dependencies/jquery.easing.js"></script>
