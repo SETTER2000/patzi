@@ -19,10 +19,14 @@ module.exports = {
       example: 'A'
     },
     title: {
-      type: 'string'
+      type: 'string',
+      example: 'A2',
+      description: 'Предварительное имя щенка после рождения.'
     },
     subtitle: {
-      type: 'string'
+      type: 'string',
+      example: 'Прекрасный, здоровый щенок.',
+      description: 'Описание щенка. Какая то интересная информация.'
     },
     born: {
       type: 'number',
@@ -42,9 +46,13 @@ module.exports = {
       example: 'hairless, powderpuff'
       // required:true
     },
+    ourPreliminaryPrice:{
+      type:'number',
+      description:'Наша предварительная цена на щенка.'
+    },
     preliminaryPrice:{
       type:'number',
-      description:'Тип MIME для загруженного изображения.'
+      description:'Покупатель предложил цену за щенка.'
     },
     currency:{
       type:'string',
@@ -96,7 +104,6 @@ module.exports = {
       throw 'badRequest';
     }
 
-
     let newLitter = await Litter.create({
       imageUploadFD: info.fd,
       imageUploadMime: info.type,
@@ -109,12 +116,14 @@ module.exports = {
       gender:inputs.gender,
       type:inputs.type,
       preliminaryPrice:inputs.preliminaryPrice,
+      ourPreliminaryPrice:inputs.ourPreliminaryPrice,
       currency:inputs.currency
     }).fetch();
 
-
+console.log('`/litters/litter/${newLitter.id}`', `/litters/litter/${newLitter.id}`);
     return exits.success({
       id: newLitter.id,
+      detail: url.resolve(sails.config.custom.baseUrl,`/litters/litter/${newLitter.id}`),
       imageSrc: url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${newLitter.id}`)
     });
   }

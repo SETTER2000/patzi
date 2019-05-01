@@ -58,19 +58,23 @@ module.exports.bootstrap = async function () {
     await sails.models[identity].destroy({});
   }//∞
 
+   // Создаём группу пользователей admin
+  let group = await Group.create({label: 'admin'}).fetch();
   // By convention, this is a good place to set up fake data during development.
   // По общему мнению, это хорошее место для настройки поддельных данных во время разработки.
   let ryanDahl = await User.create(
     {
-      emailAddress: 'admin@example.com',
+      emailAddress: 'ins09@mail.ru',
       fullName: 'Ryan Dahl',
-      isSuperAdmin: true,
       password: await sails.helpers.passwords.hashPassword('abc123'),
+      preferredLocale: 'en'
     }).fetch();
 
   let alexFox = await User.create({
     emailAddress: sails.config.custom.internalEmailAddress,
     fullName: 'Alex Fox',
+    isSuperAdmin: true,
+    preferredLocale: 'en',
     password: await sails.helpers.passwords.hashPassword('abc123'),
     gravr: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
   }).fetch();
@@ -79,7 +83,8 @@ module.exports.bootstrap = async function () {
   // и добавить Алекса Фокса в друзья Райану Далю
   await User.addToCollection(alexFox.id, 'friends', ryanDahl.id);
   await User.addToCollection(ryanDahl.id, 'friends', alexFox.id);
-
+  // Добавить пользователя alexFox.id в группу 'admin'
+  await User.addToCollection(alexFox.id, 'groupIncludesUser', group.id);
   // В БУДУЩЕМ: Решить что с эти делать
   // Create some things
   /* await Thing.createEach([
@@ -89,12 +94,11 @@ module.exports.bootstrap = async function () {
     {owner: alexFox.id, label: 'Красный рассвет'}
   ]).fetch(); */
 
-        /*  await Litter.createEach([
-            {owner: alexFox.id,label: 'a', born: new Date(2016, 3, 10)},
-            {owner: alexFox.id,label: 'b', born: new Date(2017, 10, 3)},
-            {owner: ryanDahl.id,label: 'c', born: new Date(2008, 2, 15)},
-            {owner: ryanDahl.id,label: 'd', born: new Date(2010, 5, 21)}]).fetch();*/
-
+  /*  await Litter.createEach([
+      {owner: alexFox.id,label: 'a', born: new Date(2016, 3, 10)},
+      {owner: alexFox.id,label: 'b', born: new Date(2017, 10, 3)},
+      {owner: ryanDahl.id,label: 'c', born: new Date(2008, 2, 15)},
+      {owner: ryanDahl.id,label: 'd', born: new Date(2010, 5, 21)}]).fetch();*/
 
 
   // Save new bootstrap version

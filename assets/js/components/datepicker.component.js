@@ -30,7 +30,7 @@ parasails.registerComponent('datepicker', {
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
-  data: function (){
+  data: function () {
     return {
       //...
     };
@@ -50,10 +50,10 @@ parasails.registerComponent('datepicker', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  mounted: function (){
+  mounted: function () {
 
     this.$find('[datepicker-el]').datepicker({
-      onSelect: (dateText, datepicker)=> {//eslint-disable-line no-unused-vars
+      onSelect: (dateText, datepicker) => {//eslint-disable-line no-unused-vars
         this.$emit('input', dateText);
       }
     });
@@ -64,11 +64,14 @@ parasails.registerComponent('datepicker', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-
-    doParseDate: function() {
+    doParseDate: function () {
       return $.datepicker.parseDate('mm/dd/yy', this.value);
+      // return $.datepicker.parseDate('@', new Date( this.value));
+    },
+    doTimeStump: function () {
+      // Функция возвращает из строки даты (22.12.2019), TIMESTAMP согласно предоопределённому стандарту @
+      // Используется для форматирования даты перед записью в БД
+      return (SAILS_LOCALS.me.preferredLocale === 'ru') ? $.datepicker.parseDate('dd.mm.yy', this.value) : $.datepicker.parseDate('mm/dd/yy', this.value);
     }
-
   }
-
 });

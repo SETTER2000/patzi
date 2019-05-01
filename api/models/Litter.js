@@ -29,13 +29,13 @@ module.exports = {
     },
     title: {
       type: 'string',
-      example: 'The girl is wonderful!',
-      description: 'Custom label with a brief additional description of this item.'
+      example: 'A2',
+      description: 'Предварительное имя щенка после рождения.'
     },
     subtitle: {
       type: 'string',
-      example: 'Beautiful, noble dog, your eternal companion on a journey through the world. Life and light in such a small creature.',
-      description: 'Custom label with full description of this product.'
+      example: 'Прекрасный, здоровый щенок.',
+      description: 'Описание щенка. Какая то интересная информация.'
     },
     filename: {
       type: 'string',
@@ -64,9 +64,13 @@ module.exports = {
       example: 'hairless, powderpuff'
       // required:true
     },
+    ourPreliminaryPrice:{
+      type:'number',
+      description:'Наша предварительная цена на щенка.'
+    },
     preliminaryPrice:{
       type:'number',
-      description:'Тип MIME для загруженного изображения.'
+      description:'Покупатель предложил цену за щенка.'
     },
     currency:{
       type:'string',

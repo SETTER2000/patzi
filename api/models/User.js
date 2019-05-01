@@ -184,13 +184,19 @@ without necessarily having a billing card.`
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+
+
     friends: {collection: 'User'},
     // Входящие запросы на добавление в друзья, это набор пользователей через их исходящие
     // запросы на добавления в друзья
     inboundFriendRequests: {collection: 'User', via: 'outboundFriendRequests'},
     // Исходящие от вас запросы на добавления в друзья, это набор пользователей через их входящие
     // запросы на добавления в друзья
-    outboundFriendRequests: {collection: 'User', via: 'inboundFriendRequests'}
+    outboundFriendRequests: {collection: 'User', via: 'inboundFriendRequests'},
+
+    // Многие ко Многим (Many-to-Many)
+    // Читаем как: Пользователь пренадлежит к группе, belongsToGroup - ключ для объеденяющей таблице
+    groupIncludesUser: {collection: 'Group', via: 'belongsToGroup'}
   },
 
 

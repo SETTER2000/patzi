@@ -240,6 +240,14 @@ $(document).ready(function () {
 
   });
 
+  //----------- Datepicker js ----------------//
+  $(document).ready(function () {
+
+    if(!!SAILS_LOCALS.me){
+      $.datepicker.setDefaults( $.datepicker.regional[ SAILS_LOCALS.me.preferredLocale] );
+    }
+
+  });
 
 });
 

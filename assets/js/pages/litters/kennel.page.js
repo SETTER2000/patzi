@@ -19,12 +19,14 @@ parasails.registerPage('kennel', {
       gender:'',
       type:'',
       preliminaryPrice:0,
+      ourPreliminaryPrice:0,
       currency:''
     },
 
     borrowFormData: {
       expectedReturnAt: undefined,
-      preliminaryPrice: undefined
+      preliminaryPrice: undefined,
+      ourPreliminaryPrice: undefined
     },
     // Modals which aren't linkable:
     borrowLitterModalOpen: false,
@@ -126,7 +128,7 @@ parasails.registerPage('kennel', {
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
       // this.uploadLitterModalOpen = true;
-      this.goto('/litters/new');
+      this.admin ? this.goto('/litters/new') : alert('Не достаточно прав.');
       // this.selectedLitter = _.find(this.litters, {id: litterId});
     },
 
@@ -150,6 +152,7 @@ parasails.registerPage('kennel', {
         gender:undefined,
         type:undefined,
         preliminaryPrice:undefined,
+        ourPreliminaryPrice:undefined,
         currency:undefined,
       };
       // Clear error states
@@ -163,7 +166,8 @@ parasails.registerPage('kennel', {
       // Reset form data
       this.borrowFormData = {
         expectedReturnAt: undefined,
-        preliminaryPrice: undefined
+        preliminaryPrice: undefined,
+        ourPreliminaryPrice: undefined
       };
       this.selectedLitter = undefined;
       // Clear error states
@@ -197,17 +201,9 @@ parasails.registerPage('kennel', {
       if(!argins.type) {
         this.formErrors.type = true;
       }
-      // if(!argins.preliminaryPrice) {
-      //   this.formErrors.preliminaryPrice = true;
-      // }
-      // if(!argins.currency) {
-      //   this.formErrors.currency = true;
-      // }
 
-      // Convert the return time into a real date.
-      // Преобразуйте дату помёта в реальную дату.
-      // Приходит timestamp типа: born: 1558472400000
-      argins.born = this.$refs.datepickerref.doParseDate().getTime();
+
+
 
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined. (Thus signifies that the submission should be cancelled.)
@@ -216,8 +212,13 @@ parasails.registerPage('kennel', {
       // что представление должно быть отменено.)
       if (Object.keys(this.formErrors).length > 0) {
         return;
+      }else{
+        // Convert the return time into a real date.
+        // Преобразуйте дату помёта из строки в реальную TIMESTAMP .
+        // Приходит timestamp типа: born: 1558472400000
+        argins.born = this.$refs.datepickerref.doTimeStump(this.me.preferredLocale).getTime();
       }
-      // return argins;
+
       return _.omit(argins, ['previewImageSrc']);
     },
 
@@ -229,11 +230,14 @@ parasails.registerPage('kennel', {
      */
     submittedUploadLitterForm: function (result) {
       // Добавлем новые данные в уже имеющийся массив litters
+      console.log(this.uploadFormData);
       this.litters.push({
         label: this.uploadFormData.label,
         gender:this.uploadFormData.gender,
         type:this.uploadFormData.type,
+        detail:result.detail,
         preliminaryPrice:this.uploadFormData.preliminaryPrice,
+        ourPreliminaryPrice:this.uploadFormData.ourPreliminaryPrice,
         currency:this.uploadFormData.currency,
         id: result.id,
         imageSrc:result.imageSrc,
@@ -307,10 +311,15 @@ parasails.registerPage('kennel', {
       if(!argins.preliminaryPrice) {
         this.formErrors.preliminaryPrice = true;
       }
+      if(!argins.ourPreliminaryPrice) {
+        this.formErrors.ourPreliminaryPrice = true;
+      }
 
       // Convert the return time into a real date.
       // Конвертировать время в реальную дату.
-      argins.expectedReturnAt = this.$refs.datepickerref.doParseDate().getTime();
+      console.log("doTimeStumpdoTimeStump:: ",this.$refs.datepickerref.doTimeStump());
+      argins.expectedReturnAt = this.$refs.datepickerref.doTimeStump(this.me.preferredLocale).getTime();
+      // argins.expectedReturnAt = this.$refs.datepickerref.doParseDate().getTime();
 
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined.  (This signifies that the submission should be

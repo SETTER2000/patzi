@@ -19,8 +19,16 @@ module.exports = {
   fn: async function (inputs, exits) {
     // Бибилиотека Node.js
     const url = require('url');
+    const moment = require('moment');
+    // Устанавливаем для пользователя его локаль. Для соответствующего отображения даты.
+    moment.locale(this.req.me.preferredLocale);
+    const admin = await sails.hooks.accessgroup.isAdmin(this.req.me.id);
+    admin ? console.log('Пользователь пренадлежит к группе admin.'):console.log('Не входит в группу admin.');
+
+
+
     // Выбираем авторизованного пользователя и всех его
-    // друзей по ассоциативному полю friends
+    // Выбираем пользователя с массивом друзей по ассоциативному полю friends.
     let me = await User.findOne({
       id: this.req.me.id
     }).populate('friends');
@@ -54,12 +62,14 @@ module.exports = {
       // Устанавливаем url к странице просмотра помёта
       // Первый аргумент, базовый url
       litter.detail =  `/litters/litter/${litter.id}`;
+      // litter.born =  moment(litter.born).format('L');
     });
 
 
 
     // Respond with view.
     return exits.success({
+      admin,
       litters,
       currentSection: 'kennel'
     });
