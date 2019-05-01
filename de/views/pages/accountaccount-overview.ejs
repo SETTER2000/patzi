@@ -106,7 +106,7 @@
         <p class="text-danger" v-if="cloudError"><small><%= __('An error occured while processing your request. Please check your information and try again, or') %> <a href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.</small></p>
       </div>
       <div class="modal-footer">
-        <button data-dismiss="modal" class="btn btn-outline-secondary mr-1"><%= __('Nevermind') %></button>
+        <button data-dismiss="modal" class="btn btn-outline-secondary mr-1"><%= __('Cancel') %></button>
         <ajax-button type="submit" :syncing="syncingRemoveCard" class="btn btn-danger ml-1"><%= __('Remove') %></ajax-button>
       </div>
     </ajax-form>
