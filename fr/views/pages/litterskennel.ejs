@@ -19,9 +19,9 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="section-title text-center">
-            <h3><%= __('Portfolio') %></h3>
+            <h3><%= __('Born in') %> Poale Ell</h3>
             <h2><span><%= __('Check Our Work') %></span></h2>
-            <div class="mt-5">
+            <div v-if="admin" class="mt-5">
               <button class="btn btn-outline-info" @click="clickAddButton()"><%= __('Add a photo') %></button>
             </div>
           </div>
@@ -44,9 +44,10 @@
             <span class="options-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
                 class="fa fa-ellipsis-v"></span></span>
             <div class="dropdown-menu dropdown-menu-right">
-              <span class="dropdown-item" @click="clickDeleteLitter(litter.id)">Delete</span>
-              <span class="dropdown-item" @click="clickMarkReturned(litter.id)">Mark as returned</span>
-              <span class="dropdown-item" @click="clickContactBorrower(litter.id)">Contact {{litter.borrowedBy.fullName}}</span>
+              <span class="dropdown-item" @click="clickDeleteLitter(litter.id)"><%= __('Delete') %></span>
+              <span class="dropdown-item" @click="clickMarkReturned(litter.id)"><%= __('Mark as returned') %></span>
+              <span class="dropdown-item" @click="clickContactBorrower(litter.id)"><%= __('Contact') %>
+                {{litter.borrowedBy.fullName}}</span>
             </div>
           </div>
           <div class="card-options dropdown" v-else-if="litter.borrowedBy && litter.borrowedBy.id === me.id">
@@ -66,21 +67,28 @@
                   title="<%= __('to reserve') %>" @click="clickBorrow(litter.id)"
                   v-else><span class="fa fa-handshake-o text-dark"></span></span>
           </div>
-          <img alt="A mysterious item" :alt="litter.label ? litter.label : 'A mysterious item'" :src="litter.imageSrc"/>
-          <span class="label" v-if="litter.label">{{litter.label}}<br/></span>
+          <a :href="litter.detail">
+            <img alt="A mysterious item" :alt="litter.label ? litter.label : 'A mysterious item'"
+                 :src="litter.imageSrc"/>
+          </a>
+          <span class="label" v-if="litter.label">{{litter.title}}<br/></span>
           <small class="owner text-secondary" v-if="litter.owner.id === me.id"><span class="fa fa-home mr-1"></span>
             Mine
           </small>
           <small class="owner text-success" v-else-if="litter.borrowedBy && litter.borrowedBy.id === me.id"><span
               class="fa fa-star-o mr-1"></span> <%= __('Borrowing') %>
           </small>
-          <small class="owner text-primary" v-else>{{litter.owner.fullName}}</small>
+          <small class="owner text-primary" v-else>{{litter.born}}</small>
+          <!--<small class="owner text-primary" v-else>{{litter.owner.fullName}}</small>-->
         </div>
       </div>
-      <div class="empty text-center" v-else><p><%= __('You have not downloaded yet a single idea of your litters.') %>
-          <a
-            href="/litters/new" @click="clickAddButton()"><%= __('Add your') %></a> <%= __('first litter show now') %>!
-        </p></div>
+      <div v-else>
+        <div v-if="admin" class="empty text-center">
+          <p><%= __('You have not downloaded yet a single idea of your litters.') %>
+            <a href="/litters/new"
+               @click="clickAddButton()"><%= __('Add your') %></a> <%= __('first litter show now') %>!
+          </p></div>
+      </div>
     </div>
   </section>
   <!-- End Work Area Area -->
@@ -148,7 +156,7 @@
                  type="text"
                  id="validationServerUsername"
                  aria-describedby="inputGroupPrepend3"
-                 v-model="uploadFormData.label"
+                 v-model.trim="uploadFormData.label"
                  placeholder="A">
           <small v-if="formErrors.label && !uploadFormData.label" class="text-danger ">
             <%= __('Please indicate the litter letter.') %>
@@ -162,7 +170,7 @@
                  type="text"
                  id="validationServerUsername"
                  aria-describedby="inputGroupPrepend3"
-                 v-model="uploadFormData.title"
+                 v-model.trim="uploadFormData.title"
                  placeholder="A2">
           <small v-if="formErrors.title" class="text-danger ">
             <%= __('Please indicate the litter letter.') %>
@@ -188,9 +196,9 @@
                 <option value="sire">Sire</option>
               </select>
             </div>
-              <small v-if="formErrors.gender && !uploadFormData.gender" class="text-danger ">
-                <%= __('Please indicate the litter letter.') %>
-              </small>
+            <small v-if="formErrors.gender && !uploadFormData.gender" class="text-danger ">
+              <%= __('Please indicate the litter letter.') %>
+            </small>
           </div>
           <!--Тип-->
           <div class="col-sm-6">
@@ -209,9 +217,9 @@
                 <option value="powderpuff">Powderpuff</option>
               </select>
             </div>
-              <small v-if="formErrors.type && !uploadFormData.type" class="text-danger ">
-                <%= __('Please indicate the litter letter.') %>
-              </small>
+            <small v-if="formErrors.type && !uploadFormData.type" class="text-danger ">
+              <%= __('Please indicate the litter letter.') %>
+            </small>
           </div>
         </div>
 
@@ -222,7 +230,7 @@
               <label><%= __('Our preliminary price') %></label>
               <input class="form-control"
                      type="number"
-                     v-model="uploadFormData.preliminaryPrice"
+                     v-model.number="uploadFormData.ourPreliminaryPrice"
               >
               <div class="invalid-feedback" v-if="formErrors.ourPreliminaryPrice">
                 <%= __('Please indicate your preliminary price.') %>
@@ -256,7 +264,7 @@
           <label><%= __('Sub Title') %></label>
           <textarea class="form-control"
                     name=""
-                    id=""
+                    placeholder="Прекрасный щенок."
                     v-model="uploadFormData.subtitle"
                     cols="30"
                     rows="3">
@@ -309,7 +317,7 @@
             <input class="form-control-plaintext" type="text" v-model="selectedLitter.currency" readonly>
           </div>
           <div class="col-sm-6">
-            <input class="form-control-plaintext" type="text" v-model="selectedLitter.preliminaryPrice" readonly>
+            <input class="form-control-plaintext" type="text" v-model="selectedLitter.ourPreliminaryPrice" readonly>
           </div>
           <!--<input class="form-control" type="text" placeholder="<%= __('€1000 - €1200') %>" v-model="borrowFormData.preliminaryPrice" :class="[formErrors.preliminaryPrice ? 'is-invalid' : '']">-->
           <div class="invalid-feedback"
@@ -318,8 +326,9 @@
 
         <div class="form-group mt-4">
           <label><%= __('What price would you offer?') %></label>
-          <input class="form-control" type="text" placeholder="<%= __('€1000 - €1200') %>"
-                 v-model="borrowFormData.preliminaryPrice" :class="[formErrors.preliminaryPrice ? 'is-invalid' : '']">
+          <input class="form-control" type="number"
+                 v-model.number="borrowFormData.preliminaryPrice"
+                 :class="[formErrors.preliminaryPrice ? 'is-invalid' : '']">
           <div class="invalid-feedback"
                v-if="formErrors.preliminaryPrice"><%= __('Please indicate your preliminary price.') %></div>
         </div>
@@ -347,7 +356,8 @@
       </div>
     </ajax-form>
     <div class="modal-body" v-else>
-      <p><%= __('We let the owner of') %> <strong class="text-success">{{selectedLitter.label || 'item'}}</strong> know
+      <p><%= __('Thank you for contacting, we will contact you shortly. Advance reservation comes into force after the agreement of the details and the adoption of a positive decision by the two parties.') %>
+        <strong class="text-success">{{selectedLitter.label || 'item'}}</strong> know
         when you could drop by.</p>
       <p>Stay in touch with {{selectedLitter.owner.fullName}} to confirm pickup details: <strong>{{selectedLitter.owner.emailAddress}}</strong>
       </p>
@@ -361,7 +371,7 @@
   <modal v-if="confirmDeleteLitterModalOpen && selectedLitter" v-cloak key="delete"
          @close="closeDeleteLitterModal()">
     <div class="modal-header">
-      <h5 class="modal-title">Remove this item?</h5>
+      <h5 class="modal-title"><%= __('Remove this') %>?</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span>&times;</span>
       </button>
@@ -370,21 +380,21 @@
                :handle-parsing="handleParsingDeleteLitterForm"
                @submitted="submittedDeleteLitterForm()">
       <div class="modal-body">
-        <p>Are you sure you want to remove this {{selectedLitter.label || 'item'}}?</p>
-        <p class="text-muted" v-if="selectedLitter.borrowedBy">We will no longer be able to assist with the return of
-          this item, so you will
-          need to contact {{selectedLitter.borrowedBy.fullName}} directly to coordinate.</p>
-        <p v-else>This item will no longer be available to share with friends.</p>
+        <p><%= __('Are you sure you want to remove this') %> {{selectedLitter.label || 'item'}}?</p>
+        <p class="text-muted"
+           v-if="selectedLitter.borrowedBy"><%= __('We will no longer be able to assist with the return of this item, so you will need to contact') %>
+          {{selectedLitter.borrowedBy.fullName}} <%= __('directly to coordinate') %>.</p>
+        <p v-else><%= __('This item will no longer be available to share with friends') %>.</p>
         <p class="text-danger" v-if="cloudError">
-          <small>An error occured while processing your request. Please check your information and try again, or <a
-              href="/contact">contact
-              support</a> if the error persists.
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a
+              href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
           </small>
         </p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal">Nevermind</button>
-        <button type="submit" class="btn btn-danger ml-1">Remove</button>
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal"><%= __('Nevermind') %></button>
+        <button type="submit" class="btn btn-danger ml-1"><%= __('Remove') %></button>
       </div>
     </ajax-form>
   </modal>
