@@ -315,10 +315,7 @@ parasails.registerPage('kennel', {
         this.formErrors.ourPreliminaryPrice = true;
       }
 
-      // Convert the return time into a real date.
-      // Конвертировать время в реальную дату.
-      console.log("doTimeStumpdoTimeStump:: ",this.$refs.datepickerref.doTimeStump());
-      argins.expectedReturnAt = this.$refs.datepickerref.doTimeStump(this.me.preferredLocale).getTime();
+
       // argins.expectedReturnAt = this.$refs.datepickerref.doParseDate().getTime();
 
       // If there were any issues, they've already now been communicated to the user,
@@ -326,6 +323,10 @@ parasails.registerPage('kennel', {
       // cancelled.)
       if (Object.keys(this.formErrors).length > 0) {
         return;
+      }else{
+        // Convert the return time into a real date.
+        // Конвертировать время в реальную дату.
+        argins.expectedReturnAt = this.$refs.datepickerref.doTimeStump(this.me.preferredLocale).getTime();
       }
 
       return argins;

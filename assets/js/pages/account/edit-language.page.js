@@ -9,6 +9,8 @@ parasails.registerPage('edit-language', {
 
     // Form data
     formData: {
+      english:false,
+      russian:false,
       // language:'en'
       checked:''
     },

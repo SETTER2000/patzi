@@ -60,7 +60,6 @@ module.exports.custom = {
   // mailgunDomain: 'you domain',
   // mailgunSecret: 'key-xxxxxxx',
 
- 
   //--------------------------------------------------------------------------
   // /\  Configure these to enable support for automated emails.
   // ||  (Important for password recovery, verification, contact form, etc.)

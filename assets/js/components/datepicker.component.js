@@ -18,10 +18,10 @@ parasails.registerComponent('datepicker', {
   props: [
     // The v-model
     'value',
-    // Flag telling us whether the datepicker should be a popup (if truthy)
-    // or always visible (if falsy)
+    // Флаг, сообщающий нам, должен ли указатель даты быть всплывающим
+    // или всегда видимый (если ложь)
     'popup',
-    // The following are only relevant if using the popup style of datepicker:
+    // Следующее применимо только при использовании всплывающего стиля datepicker:
     'invalid',
     'validationErrorMessage',
     'placeholderText'
