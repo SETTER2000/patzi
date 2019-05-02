@@ -590,6 +590,7 @@
 <script src="/dependencies/jquery.min.js"></script>
 <script src="/dependencies/vue.js"></script>
 <script src="/dependencies/vue-router.js"></script>
+<script src="/dependencies/moment.js"></script>
 <script src="/dependencies/bootstrap.min.js"></script>
 <script src="/dependencies/cloud.js"></script>
 <script src="/dependencies/easing.min.js"></script>
@@ -619,7 +620,6 @@
 <script src="/dependencies/mail-script.js"></script>
 <script src="/dependencies/main.js"></script>
 <script src="/dependencies/mn-accordion.js"></script>
-<script src="/dependencies/moment.js"></script>
 <script src="/dependencies/owl.carousel.min.js"></script>
 <script src="/dependencies/parasails.js"></script>
 <script src="/dependencies/superfish.min.js"></script>
@@ -691,6 +691,10 @@
     });
 
   });
+
+  // console.log('locle:', SAILS_LOCALS.me.preferredLocal);
+  (!!SAILS_LOCALS.me) ? moment.locale(SAILS_LOCALS.me.preferredLocal) : '';
+
 </script>
 
 
