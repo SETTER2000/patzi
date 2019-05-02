@@ -1,0 +1,124 @@
+{
+  "addons": [
+    "cleardb",
+    "librato",
+    "papertrail",
+    "redistogo",
+    "scheduler"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "AWS_ACCESS_KEY_ID": {
+      "required": true
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+      "required": true
+    },
+    "CLEARDB_DATABASE_URL": {
+      "required": true
+    },
+    "dirpath": {
+      "required": true
+    },
+    "ERROR_PAGE_URL": {
+      "required": true
+    },
+    "LIBRATO_PASSWORD": {
+      "required": true
+    },
+    "LIBRATO_TOKEN": {
+      "required": true
+    },
+    "LIBRATO_USER": {
+      "required": true
+    },
+    "MAINTENANCE_PAGE_URL": {
+      "required": true
+    },
+    "PAPERTRAIL_API_TOKEN": {
+      "required": true
+    },
+    "REDISTOGO_URL": {
+      "required": true
+    },
+    "S3_BUCKET": {
+      "required": true
+    },
+    "S3_BUCKET_NAME": {
+      "required": true
+    },
+    "sails_custom__baseUrl": {
+      "required": true
+    },
+    "sails_custom__fromEmailAddress": {
+      "required": true
+    },
+    "sails_custom__fromName": {
+      "required": true
+    },
+    "sails_custom__internalEmailAddress": {
+      "required": true
+    },
+    "sails_custom__mailgunDomain": {
+      "required": true
+    },
+    "sails_custom__mailgunSecret": {
+      "required": true
+    },
+    "sails_custom__stripePublishableKey": {
+      "required": true
+    },
+    "sails_custom__stripeSecret": {
+      "required": true
+    },
+    "sails_datastores__default__adapter": {
+      "required": true
+    },
+    "sails_datastores__default__url": {
+      "required": true
+    },
+    "sails_environment": {
+      "required": true
+    },
+    "sails_hooks__grunt": {
+      "required": true
+    },
+    "sails_paths__public": {
+      "required": true
+    },
+    "sails_session__url": {
+      "required": true
+    },
+    "sails_sockets__onlyAllowOrigins": {
+      "required": true
+    },
+    "sails_sockets__url": {
+      "required": true
+    },
+    "sails_uploads__bucket": {
+      "required": true
+    },
+    "sails_uploads__key": {
+      "required": true
+    },
+    "sails_uploads__region": {
+      "required": true
+    },
+    "sails_uploads__secret": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "patzi",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
