@@ -21,7 +21,7 @@
           <div class="section-title text-center">
             <h3><%= __('Born in') %> Poale Ell</h3>
             <h2><span><%= __('Check Our Work') %></span></h2>
-            <div v-if="admin" class="mt-5">
+            <div v-if="me.admin" class="mt-5">
               <button class="btn btn-outline-info" @click="clickAddButton()"><%= __('Add a photo') %></button>
             </div>
           </div>
@@ -68,8 +68,7 @@
                   v-else><span class="fa fa-handshake-o text-dark"></span></span>
           </div>
           <a :href="litter.detail">
-            <img alt="A mysterious item" :alt="litter.label ? litter.label : 'A mysterious item'"
-                 :src="litter.imageSrc"/>
+            <img alt="litter.title" :src="litter.imageSrc"/>
           </a>
           <span class="label" v-if="litter.label">{{litter.title}}<br/></span>
           <small class="owner text-secondary" v-if="litter.owner.id === me.id"><span class="fa fa-home mr-1"></span>
@@ -78,12 +77,12 @@
           <small class="owner text-success" v-else-if="litter.borrowedBy && litter.borrowedBy.id === me.id"><span
               class="fa fa-star-o mr-1"></span> <%= __('Borrowing') %>
           </small>
-          <small class="owner text-primary" v-else>{{litter.born}}</small>
+          <small class="owner text-primary" v-else>{{litter.born | date}}</small>
           <!--<small class="owner text-primary" v-else>{{litter.owner.fullName}}</small>-->
         </div>
       </div>
       <div v-else>
-        <div v-if="admin" class="empty text-center">
+        <div v-if="me.admin" class="empty text-center">
           <p><%= __('You have not downloaded yet a single idea of your litters.') %>
             <a href="/litters/new"
                @click="clickAddButton()"><%= __('Add your') %></a> <%= __('first litter show now') %>!
