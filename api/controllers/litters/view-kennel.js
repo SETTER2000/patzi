@@ -22,9 +22,6 @@ module.exports = {
     const moment = require('moment');
     // Устанавливаем для пользователя его локаль. Для соответствующего отображения даты.
     moment.locale(this.req.me.preferredLocale);
-    const admin = await sails.hooks.accessgroup.isAdmin(this.req.me.id);
-    admin ? console.log('Пользователь пренадлежит к группе admin.'):console.log('Не входит в группу admin.');
-
 
 
     // Выбираем авторизованного пользователя и всех его
@@ -69,7 +66,6 @@ module.exports = {
 
     // Respond with view.
     return exits.success({
-      admin,
       litters,
       currentSection: 'kennel'
     });

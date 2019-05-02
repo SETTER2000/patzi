@@ -8,7 +8,7 @@ parasails.registerPage('kennel', {
     selectedLitter: undefined,
 
     // Виртуальная часть URL
-    virtualPageSlug:'',
+    virtualPageSlug: '',
 
     showLitterModalOpen: false,
 
@@ -16,11 +16,11 @@ parasails.registerPage('kennel', {
       label: '',
       photo: undefined,
       previewImageSrc: '',
-      gender:'',
-      type:'',
-      preliminaryPrice:0,
-      ourPreliminaryPrice:0,
-      currency:''
+      gender: '',
+      type: '',
+      preliminaryPrice: 0,
+      ourPreliminaryPrice: 0,
+      currency: ''
     },
 
     borrowFormData: {
@@ -55,25 +55,14 @@ parasails.registerPage('kennel', {
 
   filters: {
     capitalize: function (value) {
-      if (!value) {return '';}
+      if (!value) {
+        return '';
+      }
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
-    date (value, ru) {
-      // return value.toLocaleString();
-      if (!value) {return '';}
-      let date; let year; let month; let dt;
-      date = new Date(value);
-      year = date.getFullYear();
-      month = date.getMonth() + 1;
-      dt = date.getDate();
-      if (dt < 10) {
-        dt = '0' + dt;
-      }
-      if (month < 10) {
-        month = '0' + month;
-      }
-      return  (ru==='ru') ? `${dt}.${month}.${year}`:`${year}.${month}.${dt}`;
+    date(value) {
+      return (!value)? '': moment(value).format('LLL');
     }
   },
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -147,20 +136,20 @@ parasails.registerPage('kennel', {
       this.uploadFormData = {
         photo: undefined,
         previewImageSrc: '',
-        born:undefined,
-        label:undefined,
-        gender:undefined,
-        type:undefined,
-        preliminaryPrice:undefined,
-        ourPreliminaryPrice:undefined,
-        currency:undefined,
+        born: undefined,
+        label: undefined,
+        gender: undefined,
+        type: undefined,
+        preliminaryPrice: undefined,
+        ourPreliminaryPrice: undefined,
+        currency: undefined,
       };
       // Clear error states
       this.formErrors = {};
       this.cloudError = '';
     },
 
-    _clearBorrowLitterModal: function() {
+    _clearBorrowLitterModal: function () {
       // Close modal
       this.borrowLitterModalOpen = false;
       // Reset form data
@@ -183,26 +172,24 @@ parasails.registerPage('kennel', {
 
     handleParsingUploadLitterForm: function () {
       this.formErrors = {};
-      let argins =  this.uploadFormData;
-      if(!argins.photo) {
+      let argins = this.uploadFormData;
+      if (!argins.photo) {
         this.formErrors.photo = true;
       }
 
-      if(!argins.born) {
+      if (!argins.born) {
         this.formErrors.born = true;
       }
 
-      if(!argins.label) {
+      if (!argins.label) {
         this.formErrors.label = true;
       }
-      if(!argins.gender) {
+      if (!argins.gender) {
         this.formErrors.gender = true;
       }
-      if(!argins.type) {
+      if (!argins.type) {
         this.formErrors.type = true;
       }
-
-
 
 
       // If there were any issues, they've already now been communicated to the user,
@@ -212,9 +199,9 @@ parasails.registerPage('kennel', {
       // что представление должно быть отменено.)
       if (Object.keys(this.formErrors).length > 0) {
         return;
-      }else{
+      } else {
         // Convert the return time into a real date.
-        // Преобразуйте дату помёта из строки в реальную TIMESTAMP .
+        // Преобразуйте дату помёта .
         // Приходит timestamp типа: born: 1558472400000
         argins.born = this.$refs.datepickerref.doTimeStump(this.me.preferredLocale).getTime();
       }
@@ -233,17 +220,17 @@ parasails.registerPage('kennel', {
       console.log(this.uploadFormData);
       this.litters.push({
         label: this.uploadFormData.label,
-        gender:this.uploadFormData.gender,
-        type:this.uploadFormData.type,
-        detail:result.detail,
-        preliminaryPrice:this.uploadFormData.preliminaryPrice,
-        ourPreliminaryPrice:this.uploadFormData.ourPreliminaryPrice,
-        currency:this.uploadFormData.currency,
+        gender: this.uploadFormData.gender,
+        type: this.uploadFormData.type,
+        detail: result.detail,
+        preliminaryPrice: this.uploadFormData.preliminaryPrice,
+        ourPreliminaryPrice: this.uploadFormData.ourPreliminaryPrice,
+        currency: this.uploadFormData.currency,
         id: result.id,
-        imageSrc:result.imageSrc,
-        title:this.uploadFormData.title,
-        subtitle:this.uploadFormData.subtitle,
-        born:this.uploadFormData.born,
+        imageSrc: result.imageSrc,
+        title: this.uploadFormData.title,
+        subtitle: this.uploadFormData.subtitle,
+        born: this.uploadFormData.born,
         owner: {
           id: this.me.id,
           fullName: this.me.fullName,
@@ -273,7 +260,7 @@ parasails.registerPage('kennel', {
       // Set up the file preview for the UI:
       // Настройка предварительного просмотра файла для пользовательского интерфейса:
       var reader = new FileReader();
-      reader.onload = (event)=>{
+      reader.onload = (event) => {
         this.uploadFormData.previewImageSrc = event.target.result;
 
         // Unbind this "onload" event.
@@ -287,31 +274,31 @@ parasails.registerPage('kennel', {
     },
 
 
-    clickBorrow: function(litterId) {
+    clickBorrow: function (litterId) {
       this.selectedLitter = _.find(this.litters, {id: litterId});
 
       // Open the modal.
       this.borrowLitterModalOpen = true;
     },
 
-    closeBorrowLitterModal: function() {
+    closeBorrowLitterModal: function () {
       this._clearBorrowLitterModal();
     },
 
-    handleParsingBorrowLitterForm: function() {
+    handleParsingBorrowLitterForm: function () {
       // Clear out any pre-existing error messages.
       // Удалите все существующие сообщения об ошибках
       this.formErrors = {};
-      var argins = _.extend({ id: this.selectedLitter.id }, this.borrowFormData);
+      var argins = _.extend({id: this.selectedLitter.id}, this.borrowFormData);
 
-      if(!argins.expectedReturnAt) {
+      if (!argins.expectedReturnAt) {
         this.formErrors.expectedReturnAt = true;
       }
 
-      if(!argins.preliminaryPrice) {
+      if (!argins.preliminaryPrice) {
         this.formErrors.preliminaryPrice = true;
       }
-      if(!argins.ourPreliminaryPrice) {
+      if (!argins.ourPreliminaryPrice) {
         this.formErrors.ourPreliminaryPrice = true;
       }
 
@@ -323,7 +310,7 @@ parasails.registerPage('kennel', {
       // cancelled.)
       if (Object.keys(this.formErrors).length > 0) {
         return;
-      }else{
+      } else {
         // Convert the return time into a real date.
         // Конвертировать время в реальную дату.
         argins.expectedReturnAt = this.$refs.datepickerref.doTimeStump(this.me.preferredLocale).getTime();
@@ -332,7 +319,7 @@ parasails.registerPage('kennel', {
       return argins;
     },
 
-    submittedBorrowLitterForm: function() {
+    submittedBorrowLitterForm: function () {
 
       // Show success message.
       // Показать сообщение об успехе.
