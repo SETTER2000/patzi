@@ -25,7 +25,7 @@ module.exports = {
       // Если дата регистрации в свойстве createdAt будет
       // меньше текущей даты минус 12 часов, то отправляем уведомление-напоминание
       createdAt: {'>': Date.now() - 1000 * 60 * 60 * 6}
-    }).eachRecord(async (user, proceed) => {
+    }).eachRecord(async (user) => {
       console.log('V user: ', user);
       await sails.helpers.sendTemplateEmail.with({
         to: user.emailAddress,

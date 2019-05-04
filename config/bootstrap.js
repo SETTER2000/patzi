@@ -57,8 +57,6 @@ module.exports.bootstrap = async function () {
   for (let identity in sails.models) {
     await sails.models[identity].destroy({});
   }//∞
-  // Создаём группу пользователей admin
-  let group = await Group.create({label: 'admin'}).fetch();
   // By convention, this is a good place to set up fake data during development.
   // По общему мнению, это хорошее место для настройки поддельных данных во время разработки.
   let ryanDahl = await User.create(
@@ -82,6 +80,9 @@ module.exports.bootstrap = async function () {
   // и добавить Алекса Фокса в друзья Райану Далю
   await User.addToCollection(alexFox.id, 'friends', ryanDahl.id);
   await User.addToCollection(ryanDahl.id, 'friends', alexFox.id);
+
+  // Создаём группу пользователей admin
+  let group = await Group.create({label: 'admin'}).fetch();
   // Добавить пользователя alexFox.id в группу 'admin'
   await User.addToCollection(alexFox.id, 'groupIncludesUser', group.id);
   // В БУДУЩЕМ: Решить что с эти делать

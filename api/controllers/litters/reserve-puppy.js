@@ -32,15 +32,13 @@ module.exports = {
   },
 
 
-  exits: {
-
-  },
+  exits: {},
 
 
-  fn: async function (inputs) {
+  fn: async function () {
 
     // All done.
-    return;
+    return {};
 
   }
 

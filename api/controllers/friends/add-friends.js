@@ -29,10 +29,19 @@ module.exports = {
   },
 
 
-  exits: {},
+  exits: {
+    success: {
+      outputDescription: 'Информация о вновь созданной записи.',
+      // Устанавливаем выходной тип данных. Хорошая практика для документирования кода.
+      /*outputType: {
+        id: 'number',
+        imageSrc: 'string'
+      },*/
+    },
+  },
 
 
-  fn: async function (inputs) {
+  fn: async function (inputs, exits) {
     let desiredFriendEmails = _.pluck(inputs.friends, 'emailAddress');
     let friends = await User.find({
       emailAddress: {in: _.pluck(inputs.friends, 'emailAddress')}
@@ -66,7 +75,7 @@ module.exports = {
 
 
     // All done.
-    return exists.success();
+    return exits.success();
 
   }
 

@@ -32,7 +32,7 @@ module.exports = function defineCustomHook(sails) {
         let suffix = '';
         if (_.contains(['silly'], sails.config.log.level)) {
           suffix =
-`
+            `
 > Совет: Чтобы исключить конфиденциальные учетные данные из системы контроля версий, используйте:
 > • config/local.js (for local development)
 > • environment variables (for production)
@@ -64,7 +64,7 @@ module.exports = function defineCustomHook(sails) {
         }
 
         sails.log.verbose(
-`Some optional settings have not been configured yet:
+          `Some optional settings have not been configured yet:
 ---------------------------------------------------------------------
 ${problems.join('\n')}
 
@@ -85,7 +85,7 @@ will be disabled and/or hidden in the UI.
       // and Mailgun packs with any available credentials.
       // После завершения инициализации "sails-hook-organics" настроить Stripe
       // и пакеты Mailgun с любыми доступными учетными данными.
-      sails.after('hook:organics:loaded', ()=>{
+      sails.after('hook:organics:loaded', () => {
 
         sails.helpers.stripe.configure({
           secret: sails.config.custom.stripeSecret
@@ -119,7 +119,7 @@ will be disabled and/or hidden in the UI.
       before: {
         '/*': {
           skipAssets: true,
-          fn: async function(req, res, next){
+          fn: async function (req, res, next) {
 
             var url = require('url');
 
@@ -182,28 +182,33 @@ will be disabled and/or hidden in the UI.
             var configuredBaseHostname;
             try {
               configuredBaseHostname = url.parse(sails.config.custom.baseUrl).host;
-            } catch (unusedErr) { /*…*/}
+            } catch (unusedErr) { /*…*/
+            }
             if ((sails.config.environment === 'staging' || sails.config.environment === 'production') && !req.isSocket && req.method === 'GET' && req.hostname !== configuredBaseHostname) {
-              sails.log.info('Redirecting GET request from `'+req.hostname+'` to configured expected host (`'+configuredBaseHostname+'`)...');
-              return res.redirect(sails.config.custom.baseUrl+req.url);
+              sails.log.info('Redirecting GET request from `' + req.hostname + '` to configured expected host (`' + configuredBaseHostname + '`)...');
+              return res.redirect(sails.config.custom.baseUrl + req.url);
             }//•
 
             // No session? Proceed as usual.
             // (e.g. request for a static asset)
             // Нет сессии? Действуйте как обычно.
             // (например, запрос на статический актив)
-            if (!req.session) { return next(); }
+            if (!req.session) {
+              return next();
+            }
 
             // Not logged in? Proceed as usual.
             // Не вошли? Действуйте как обычно.
-            if (!req.session.userId) { return next(); }
+            if (!req.session.userId) {
+              return next();
+            }
 
             // Otherwise, look up the logged-in user.
             // В противном случае ищите вошедшего в систему пользователя.
             var loggedInUser = await User.findOne({
               id: req.session.userId
             });
-console.log('loggedInUser: ', req.me);
+
             // If the logged-in user has gone missing, log a warning,
             // wipe the user id from the requesting user agent's session,
             // and then send the "unauthorized" response.
@@ -211,7 +216,7 @@ console.log('loggedInUser: ', req.me);
             // стираем идентификатор пользователя из сеанса запрашивающего агента пользователя,
             // а затем отправить «неавторизованный» ответ.
             if (!loggedInUser) {
-              sails.log.warn('Каким-то образом учётная запись для вошедшего в систему пользователя (`'+req.session.userId+'`) без вести пропала....');
+              sails.log.warn('Каким-то образом учётная запись для вошедшего в систему пользователя (`' + req.session.userId + '`) без вести пропала....');
               delete req.session.userId;
               return res.unauthorized();
             }
@@ -242,19 +247,19 @@ console.log('loggedInUser: ', req.me);
             // установите его к текущей отметке времени.
             //
             // (Примечание: как оптимизация, она запускается за кулисами, чтобы избежать добавления ненужных задержек.)
-            var MS_TO_BUFFER = 60*1000;
+            var MS_TO_BUFFER = 60 * 1000;
             var now = Date.now();
             if (loggedInUser.lastSeenAt < now - MS_TO_BUFFER) {
               User.updateOne({id: loggedInUser.id})
-              .set({ lastSeenAt: now })
-              .exec((err)=>{
-                if (err) {
-                  sails.log.error('Background task failed: Could not update user (`'+loggedInUser.id+'`) with a new `lastSeenAt` timestamp.  Error details: '+err.stack);
-                  return;
-                }//•
-                sails.log.verbose('Updated the `lastSeenAt` timestamp for user `'+loggedInUser.id+'`.');
-                // Nothing else to do here.
-              });//_∏_  (Meanwhile...)
+                .set({lastSeenAt: now})
+                .exec((err) => {
+                  if (err) {
+                    sails.log.error('Background task failed: Could not update user (`' + loggedInUser.id + '`) with a new `lastSeenAt` timestamp.  Error details: ' + err.stack);
+                    return;
+                  }//•
+                  sails.log.verbose('Updated the `lastSeenAt` timestamp for user `' + loggedInUser.id + '`.');
+                  // Nothing else to do here.
+                });//_∏_  (Meanwhile...)
             }//ﬁ
 
 
@@ -301,7 +306,6 @@ console.log('loggedInUser: ', req.me);
               // включены для этого приложения, и требуется ли подтверждение электронной почты.
               res.locals.isBillingEnabled = sails.config.custom.enableBillingFeatures;
               res.locals.isEmailVerificationRequired = sails.config.custom.verifyEmailAddresses;
-
             }//ﬁ
 
             // Prevent the browser from caching logged-in users' pages.
@@ -313,14 +317,11 @@ console.log('loggedInUser: ', req.me);
             //> • https://mixmax.com/blog/chrome-back-button-cache-no-store
             //> • https://madhatted.com/2013/6/16/you-do-not-understand-browser-history
             res.setHeader('Cache-Control', 'no-cache, no-store');
-            console.log('loggedInUser 2: ', req.me);
+            /* console.log('loggedInUser 2: ', req.me);*/
             return next();
           }
         }
       }
     }
-
-
   };
-
 };

@@ -1,4 +1,3 @@
-const moment = require('moment');
 module.exports = async function (req, res, proceed) {
   // If no user is logged in, continue with the default locale.
   // Если ни один пользователь не вошел в систему, перейдите к локали по умолчанию.

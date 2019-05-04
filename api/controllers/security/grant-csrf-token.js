@@ -11,11 +11,11 @@ module.exports = {
 
 
   exits: {
-    success: { description: 'New token was created successfully.'},
+    success: {description: 'New token was created successfully.'},
     invalid: {
       responseType: 'badRequest',
       description: 'The provided fullName, password and/or email address are invalid.',
-      extendedDescription: 'If this request was sent from a graphical user interface, the request '+
+      extendedDescription: 'If this request was sent from a graphical user interface, the request ' +
       'parameters should have been validated/coerced _before_ they were sent.'
     },
     emailAlreadyInUse: {
@@ -26,12 +26,14 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    let hostname =  this.req.hostname;
-    let owner =  hostname;
-    let path =  `${this.req.path}`;
-    let _csrf = await this.req.csrfToken();
+    const req = this.req;
 
-    let newTokenRecord = await Security.create({
+    let hostname = req.hostname;
+    let owner = await req.header('x-forwarded-for') || req.connection.remoteAddress;
+    let path = `${req.path}`;
+    let _csrf = await req.csrfToken();
+
+    await Security.create({
       hostname: hostname,
       owner: owner,
       token: _csrf,
@@ -48,10 +50,10 @@ module.exports = {
       subject: 'Выдан новый _csrf токен. ',
       template: 'email-create-new-token',
       templateData: {
-        fullName: hostname ||this.req.me.fullName,
+        fullName: hostname || req.me.fullName,
         token: _csrf
       }
     });
-    return exits.success({token:_csrf});
+    return exits.success({token: _csrf});
   }
 };

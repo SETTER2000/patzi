@@ -63,7 +63,11 @@
 
     // Models:
     "User": true,
-    "Thing": true
+    "Thing": true,
+    "Litter": true,
+    "Group": true,
+    "Message": true,
+    "Security": true
 
     // …and any others.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

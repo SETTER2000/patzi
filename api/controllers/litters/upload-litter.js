@@ -34,29 +34,29 @@ module.exports = {
       description: 'Дата появления на свет помёта.',
       required: true
     },
-    gender:{
-      type:'string',
-      description:'Половая пренадлежность щенка.',
-      example:'dam, sire'
+    gender: {
+      type: 'string',
+      description: 'Половая пренадлежность щенка.',
+      example: 'dam, sire'
       // required:true
     },
-    type:{
-      type:'string',
-      description:'Тип собаки',
+    type: {
+      type: 'string',
+      description: 'Тип собаки',
       example: 'hairless, powderpuff'
       // required:true
     },
-    ourPreliminaryPrice:{
-      type:'number',
-      description:'Наша предварительная цена на щенка.'
+    ourPreliminaryPrice: {
+      type: 'number',
+      description: 'Наша предварительная цена на щенка.'
     },
-    preliminaryPrice:{
-      type:'number',
-      description:'Покупатель предложил цену за щенка.'
+    preliminaryPrice: {
+      type: 'number',
+      description: 'Покупатель предложил цену за щенка.'
     },
-    currency:{
-      type:'string',
-      description:'Валюта продажи.'
+    currency: {
+      type: 'string',
+      description: 'Валюта продажи.'
     }
   },
 
@@ -97,8 +97,10 @@ module.exports = {
           name: 'IMG_6984.JPG'
           }
      */
-      // uploadOne - не будет работать без пакета sails-hook-uploads
-      // npm i --save sails-hook-uploads
+
+
+    // uploadOne - не будет работать без пакета sails-hook-uploads
+    // npm i --save sails-hook-uploads
     let info = await sails.uploadOne(inputs.photo);
     if (!info) {
       throw 'badRequest';
@@ -113,17 +115,17 @@ module.exports = {
       title: inputs.title,
       subtitle: inputs.subtitle,
       born: inputs.born,
-      gender:inputs.gender,
-      type:inputs.type,
-      preliminaryPrice:inputs.preliminaryPrice,
-      ourPreliminaryPrice:inputs.ourPreliminaryPrice,
-      currency:inputs.currency
+      gender: inputs.gender,
+      type: inputs.type,
+      preliminaryPrice: inputs.preliminaryPrice,
+      ourPreliminaryPrice: inputs.ourPreliminaryPrice,
+      currency: inputs.currency
     }).fetch();
 
-console.log('`/litters/litter/${newLitter.id}`', `/litters/litter/${newLitter.id}`);
+    console.log('`/litters/litter/${newLitter.id}`', `/litters/litter/${newLitter.id}`);
     return exits.success({
       id: newLitter.id,
-      detail: url.resolve(sails.config.custom.baseUrl,`/litters/litter/${newLitter.id}`),
+      detail: url.resolve(sails.config.custom.baseUrl, `/litters/litter/${newLitter.id}`),
       imageSrc: url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${newLitter.id}`)
     });
   }

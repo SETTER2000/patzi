@@ -49,7 +49,7 @@ module.exports.routes = {
   'GET /pricing': {action: 'view-pricing', locals: {currentSection: 'pricing'}},
 
   'GET /group/group-home': {action: 'group/view-group-home', locals: {currentSection: 'group'}},
-  'GET /message/message-home': { action: 'message/view-message-home', locals: {currentSection: 'message'} },
+  'GET /message/message-home': {action: 'message/view-message-home', locals: {currentSection: 'message'}},
 
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
@@ -98,12 +98,12 @@ module.exports.routes = {
   'GET     /sous': {action: 'security/grant-csrf-token'},
   'POST   /api/v1/message/message-mailgun': {
     action: 'message/message-mailgun',
-    _csrf:true,
+    _csrf: true,
     cors: {
-      allRoutes: true,
+      // allRoutes: true,
       allowOrigins: '*',
       allowCredentials: false,
-      allowAnyOriginWithCredentialsUnsafe: true
+      //allowAnyOriginWithCredentialsUnsafe: true
     }
   },
 };

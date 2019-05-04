@@ -38,13 +38,13 @@ module.exports = {
       throw 'notFound';
     }
 
-      // Устанавливаем свойство источника изображения
-      // Первый аргумент, базовый url
-      litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`);
-      // ... затем мы удаляем наш файловый дескриптор
-      delete litter.imageUploadFD;
-      // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
-      delete litter.imageUploadMime;
+    // Устанавливаем свойство источника изображения
+    // Первый аргумент, базовый url
+    litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`);
+    // ... затем мы удаляем наш файловый дескриптор
+    delete litter.imageUploadFD;
+    // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
+    delete litter.imageUploadMime;
 
 
     // Respond with view.
