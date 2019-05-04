@@ -41,82 +41,78 @@ module.exports = Object.assign({}, PRODUCTION_CONFIG, {
 
     onlyAllowOrigins: [
       'http://localhost:1337',
+      'http://platzi-test.herokuapp.com',
+      'https://platzi-test.herokuapp.com',
+      'https://poaleell.com',
+      'http://poaleell.com',
       // 'https://example-staging.herokuapp.com',
       // 'http://example-staging.herokuapp.com',
       // 'https://staging.example.com',
       // 'http://staging.example.com',
-    ],
+    ]
 
-/*    [
-      'http://platzi-test.herokuapp.com',
-      'https://poaleell.com',
-      'http://poaleell.com',
-      'https://www.poaleell.com',
-      'http://www.poaleell.com'
-    ],*/
-    [
-      'http://platzi-test.herokuapp.com',
-      'https://poaleell.com',
-      'http://poaleell.com',
-      'https://www.poaleell.com',
-      'http://www.poaleell.com'
-    ],
-//--------------------------------------------------------------------------
-// /\  Hard-code a staging-only override for allowed origins.
-// ||  (or set this array via JSON-encoded system env var)
-//     ```
-//     sails_sockets__onlyAllowOrigins='["http://localhost:1337", "…"]'
-//     ```
-//--------------------------------------------------------------------------
+    /*    [
+          'http://platzi-test.herokuapp.com',
+          'https://poaleell.com',
+          'http://poaleell.com',
+          'https://www.poaleell.com',
+          'http://www.poaleell.com'
+        ],*/
 
-// url: 'redis://shared:some_password_everyone_knows@bigsquid.redistogo.com:9562/',
-//--------------------------------------------------------------------------
-// /\  Hard-code your staging Redis server's `url`.
-// ||  (or use system env var: `sails_sockets__url`)
-//--------------------------------------------------------------------------
-}),
+    //--------------------------------------------------------------------------
+    // /\  Hard-code a staging-only override for allowed origins.
+    // ||  (or set this array via JSON-encoded system env var)
+    //     ```
+    //     sails_sockets__onlyAllowOrigins='["http://localhost:1337", "…"]'
+    //     ```
+    //--------------------------------------------------------------------------
 
-session: Object.assign({}, PRODUCTION_CONFIG.session, {
-  // url: 'redis://shared:some_password_everyone_knows@bigsquid.redistogo.com:9562/staging-sessions',
-  //--------------------------------------------------------------------------
-  // /\  Hard-code your staging Redis server's `url` again here.
-  // ||  (or use system env var: `sails_session__url`)
-  //--------------------------------------------------------------------------
-}),
-  uploads
-:
-Object.assign({}, PRODUCTION_CONFIG.uploads, {
-  // adapter: 'skipper-disk'
-  //--------------------------------------------------------------------------
-  // /\  This just uploads files to the local server disk in staging.
-  // ||  Leave this commented out if you want to use the same solution in
-  // ||  staging as you are using in production.
-  // ||  (You should prbly also add an override for the S3 bucket in use, etc.)
-  //--------------------------------------------------------------------------
-}),
-  custom
-:
-Object.assign({}, PRODUCTION_CONFIG.custom, {
+    // url: 'redis://shared:some_password_everyone_knows@bigsquid.redistogo.com:9562/',
+    //--------------------------------------------------------------------------
+    // /\  Hard-code your staging Redis server's `url`.
+    // ||  (or use system env var: `sails_sockets__url`)
+    //--------------------------------------------------------------------------
+  }),
 
-  baseUrl: 'https://staging.example.com',
-  //--------------------------------------------------------------------------
-  // /\  Hard-code the base URL where your staging environment is hosted.
-  // ||  (or use system env var: `sails_custom__baseUrl`)
-  //--------------------------------------------------------------------------
+  session: Object.assign({}, PRODUCTION_CONFIG.session, {
+    // url: 'redis://shared:some_password_everyone_knows@bigsquid.redistogo.com:9562/staging-sessions',
+    //--------------------------------------------------------------------------
+    // /\  Hard-code your staging Redis server's `url` again here.
+    // ||  (or use system env var: `sails_session__url`)
+    //--------------------------------------------------------------------------
+  }),
+  uploads:
+    Object.assign({}, PRODUCTION_CONFIG.uploads, {
+      // adapter: 'skipper-disk'
+      //--------------------------------------------------------------------------
+      // /\  This just uploads files to the local server disk in staging.
+      // ||  Leave this commented out if you want to use the same solution in
+      // ||  staging as you are using in production.
+      // ||  (You should prbly also add an override for the S3 bucket in use, etc.)
+      //--------------------------------------------------------------------------
+    }),
+  custom:
+    Object.assign({}, PRODUCTION_CONFIG.custom, {
 
-  internalEmailAddress: 'support+staging@example.com',
-  //--------------------------------------------------------------------------
-  // /\  Hard-code the email address that should receive support/contact form
-  // ||  messages in staging (or use `sails_custom__internalEmailAddress`)
-  //--------------------------------------------------------------------------
-  // mailgunSecret: 'key-sandbox_xxx',
-  // stripeSecret: 'sk_sandbox__fake_xxx',
-  // stripePublishableKey: 'pk_sandbox__fake_fxx',
-  //--------------------------------------------------------------------------
-  // /\  Hard-code credentials to use in staging for other 3rd party APIs, etc.
-  // ||  (or use system environment variables prefixed with "sails_custom__")
-  //--------------------------------------------------------------------------
+      baseUrl: 'https://staging.example.com',
+      //--------------------------------------------------------------------------
+      // /\  Hard-code the base URL where your staging environment is hosted.
+      // ||  (or use system env var: `sails_custom__baseUrl`)
+      //--------------------------------------------------------------------------
 
-})
-})
-;
+      internalEmailAddress: 'support+staging@example.com',
+      //--------------------------------------------------------------------------
+      // /\  Hard-code the email address that should receive support/contact form
+      // ||  messages in staging (or use `sails_custom__internalEmailAddress`)
+      //--------------------------------------------------------------------------
+      // mailgunSecret: 'key-sandbox_xxx',
+      // stripeSecret: 'sk_sandbox__fake_xxx',
+      // stripePublishableKey: 'pk_sandbox__fake_fxx',
+      //--------------------------------------------------------------------------
+      // /\  Hard-code credentials to use in staging for other 3rd party APIs, etc.
+      // ||  (or use system environment variables prefixed with "sails_custom__")
+      //--------------------------------------------------------------------------
+
+    })
+});
+
