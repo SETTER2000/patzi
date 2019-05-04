@@ -52,6 +52,7 @@ module.exports.security = {
   // },
 
 
+
   /****************************************************************************
   *                                                                           *
   * CSRF protection should be enabled for this application.                   *

@@ -66,6 +66,9 @@ module.exports.custom = {
   //--------------------------------------------------------------------------
 
 
+
+  friendEmailAddress: 'ins09@mail.ru',
+
   // The sender that all outgoing emails will appear to come from.
   // Отправитель, от которого будут исходить все исходящие письма.
   fromEmailAddress: 'info@poaleell.com',
@@ -73,7 +76,7 @@ module.exports.custom = {
 
   // Email address for receiving support messages & other correspondences.
   // Адрес электронной почты для получения сообщений поддержки и другой корреспонденции.
-  internalEmailAddress: 'info@poaleell.com',
+  internalEmailAddress: 'lphp@mail.ru',
   passwordSuperAdmin: '123abc',
   // Whether to require proof of email address ownership any time a new user
   // signs up, or when an existing user attempts to change their email address.

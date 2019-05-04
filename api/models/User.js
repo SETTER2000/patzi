@@ -58,7 +58,7 @@ module.exports = {
 
     isSuperAdmin: {
       type: 'boolean',
-      description: 'Whether this user is a "super admin" with extra permissions, etc.',
+      description: 'Является ли этот пользователь «супер-администратором» с дополнительными разрешениями и т. д.',
       extendedDescription:
         `Super admins might have extra permissions, see a different default home page when they log in,
 or even have a completely different feature set from normal users.  In this app, the \`isSuperAdmin\`
@@ -71,17 +71,36 @@ change prices, deactivate seasonal categories, add new offerings, and view live 
 On the other hand, for an e-commerce website like Walmart.com that has undergone years of development
 by a large team, those administrative features might be split across a few different roles.
 
-So, while this \`isSuperAdmin\` demarcation might not be the right approach forever, it's a good place to start.`
+So, while this \`isSuperAdmin\` demarcation might not be the right approach forever, it's a good place to start.
+
+Супер-администраторы могут иметь дополнительные разрешения, видеть другую домашнюю страницу по умолчанию 
+при входе в систему, или даже иметь совершенно другой набор функций от обычных пользователей. 
+В этом приложении \`isSuperAdmin\` Флаг здесь как простой способ представления двух разных типов 
+пользователей. Обычно это хорошая идея чтобы сделать модель данных максимально простой, добавляя 
+атрибуты только тогда, когда они вам действительно нужны функции строятся прямо сейчас.
+
+Например, пользователь «супер-админ» для малого и среднего сайта электронной коммерции мог бы
+изменять цены, деактивировать сезонные категории, добавлять новые предложения и просматривать 
+текущие заказы по мере их поступления. С другой стороны, для веб-сайта электронной коммерции, 
+такого как Walmart.com, который прошел годы разработки в большой команде эти административные 
+функции могут быть разделены на несколько разных ролей.
+
+Поэтому, хотя разграничение между isSuperAdmin и может быть неправильным подходом, это хорошее место 
+для начала.
+
+`
     },
 
     passwordResetToken: {
       type: 'string',
-      description: 'A unique token used to verify the user\'s identity when recovering a password.  Expires after 1 use, or after a set amount of time has elapsed.'
+      description: 'Уникальный токен, используемый для проверки личности пользователя при восстановлении пароля. ' +
+      'Истекает после 1 использования или по истечении установленного количества времени.'
     },
 
     passwordResetTokenExpiresAt: {
       type: 'number',
-      description: 'A JS timestamp (epoch ms) representing the moment when this user\'s `passwordResetToken` will expire (or 0 if the user currently has no such token).',
+      description: 'Метка времени JS (эпоха мс), представляющая момент истечения срока действия этого пароля' +
+      ' `passwordResetToken` (или 0, если у пользователя в настоящее время нет такого токена).',
       example: 1502844074211
     },
 
@@ -107,11 +126,11 @@ It just means they have a customer entry in Stripe, which might or might not hav
 
     hasBillingCard: {
       type: 'boolean',
-      description: 'Whether this user has a default billing card hooked up as their payment method.',
+      description: 'Есть ли у этого пользователя платежная карта по умолчанию, подключенная в качестве способа оплаты.',
       extendedDescription:
-        `More specifically, this indcates whether this user record's linked customer entry in Stripe has
-a default payment source (i.e. credit card).  Note that a user have a \`stripeCustomerId\`
-without necessarily having a billing card.`
+        `Более конкретно, это указывает на то, имеет ли связанная запись пользователя в Stripe запись о пользователе
+источник платежа по умолчанию (например, кредитная карта). Обратите внимание, что у пользователя есть \`stripeCustomerId\`
+без необходимости иметь платежную карту.`
     },
 
     billingCardBrand: {
@@ -162,10 +181,11 @@ without necessarily having a billing card.`
     },
     preferredLocale: {
       type: 'string',
-      description: 'Предпочтительный язык',
+      description: 'Предпочитаемый язык интерфейса. Пользователь сам устанавливает эту ' +
+      'опцию в настройках своего аккаунта после авторизации.',
       example: 'ru',
       moreInfoUrl: 'https://gist.github.com/mikermcneil/0af155ed546f3ddf164b4885fb67830c; https://sailsjs.com/documentation/reference/request-req/req-set-locale',
-      defaultsTo: 'en',
+      // defaultsTo: 'en',
 
     },
 
@@ -195,7 +215,7 @@ without necessarily having a billing card.`
     outboundFriendRequests: {collection: 'User', via: 'inboundFriendRequests'},
 
     // Многие ко Многим (Many-to-Many)
-    // Читаем как: Пользователь пренадлежит к группе, belongsToGroup - ключ для объеденяющей таблице
+    // Читаем как: Пользователь пренадлежит к группе, belongsToGroup - ключ для объеденяющей таблицы
     groupIncludesUser: {collection: 'Group', via: 'belongsToGroup'}
   },
 

@@ -10,9 +10,8 @@ module.exports = async function (req, res, proceed) {
     req.setLocale(me.preferredLocale);
   }
 
-  // Проверяем пренадлежит ли пользователь к группе admin
+  // Пренадлежит ли пользователь к группе admin
   req.me.admin = await sails.hooks.accessgroup.isAdmin(req.me.id);
-
 
   // Load the user from the database
   // Загрузка пользователя из базы данных

@@ -105,9 +105,9 @@ and exposed as \`req.me\`.)`
     if (inputs.rememberMe) {
       if (this.req.isSocket) {
         sails.log.warn(
-          'Received `rememberMe: true` from a virtual request, but it was ignored\n'+
-          'because a browser\'s session cookie cannot be reset over sockets.\n'+
-          'Please use a traditional HTTP request instead.'
+          'Received `RememberMe: true` из виртуального запроса, но оно было проигнорировано \ n' +
+          'потому что сессионный cookie браузера не может быть сброшен через сокеты. \ n' +
+           'Пожалуйста, используйте вместо этого традиционный HTTP-запрос.'
         );
       } else {
         this.req.session.cookie.maxAge = sails.config.custom.rememberMeCookieMaxAge;

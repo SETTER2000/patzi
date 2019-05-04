@@ -2,7 +2,8 @@
  * custom hook
  *
  * @description :: A hook definition.  Extends Sails by adding shadow routes, implicit actions, and/or initialization logic.
- * Определение крючка. Расширяет паруса, добавляя теневые маршруты, неявные действия и / или логику инициализации.
+ * Определение крючка. Расширяет паруса, добавляя теневые маршруты, неявные действия и / или
+ * логику инициализации.
  * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
  */
 
@@ -32,11 +33,11 @@ module.exports = function defineCustomHook(sails) {
         if (_.contains(['silly'], sails.config.log.level)) {
           suffix =
 `
-> Tip: To exclude sensitive credentials from source control, use:
+> Совет: Чтобы исключить конфиденциальные учетные данные из системы контроля версий, используйте:
 > • config/local.js (for local development)
 > • environment variables (for production)
 >
-> If you want to check them in to source control, use:
+> Если вы хотите проверить их в системе контроля версий, используйте:
 > • config/custom.js  (for development)
 > • config/env/staging.js  (for staging)
 > • config/env/production.js  (for production)
@@ -202,7 +203,7 @@ will be disabled and/or hidden in the UI.
             var loggedInUser = await User.findOne({
               id: req.session.userId
             });
-
+console.log('loggedInUser: ', req.me);
             // If the logged-in user has gone missing, log a warning,
             // wipe the user id from the requesting user agent's session,
             // and then send the "unauthorized" response.
@@ -210,7 +211,7 @@ will be disabled and/or hidden in the UI.
             // стираем идентификатор пользователя из сеанса запрашивающего агента пользователя,
             // а затем отправить «неавторизованный» ответ.
             if (!loggedInUser) {
-              sails.log.warn('Somehow, the user record for the logged-in user (`'+req.session.userId+'`) has gone missing....');
+              sails.log.warn('Каким-то образом учётная запись для вошедшего в систему пользователя (`'+req.session.userId+'`) без вести пропала....');
               delete req.session.userId;
               return res.unauthorized();
             }
@@ -228,7 +229,8 @@ will be disabled and/or hidden in the UI.
             // Предоставляем запись пользователя как дополнительное свойство объекта запроса (`req.me`).
             //> Обратите внимание, что мы уверены, что `req.me` сначала не существует.
             if (req.me !== undefined) {
-              throw new Error('Cannot attach logged-in user as `req.me` because this property already exists!  (Is it being attached somewhere else?)');
+              throw new Error('Невозможно присоединить зарегистрированного пользователя к req.me, ' +
+                'поскольку это свойство уже существует! (Это прикреплено где-то еще?)');
             }
             req.me = loggedInUser;
 
@@ -236,8 +238,8 @@ will be disabled and/or hidden in the UI.
             // to the current timestamp.
             //
             // (Note: As an optimization, this is run behind the scenes to avoid adding needless latency.)
-            // Если наш атрибут «lastSeenAt» для этого пользователя имеет возраст не менее нескольких секунд, установите его
-            // к текущей отметке времени.
+            // Если наш атрибут «lastSeenAt» для этого пользователя имеет возраст не менее нескольких секунд,
+            // установите его к текущей отметке времени.
             //
             // (Примечание: как оптимизация, она запускается за кулисами, чтобы избежать добавления ненужных задержек.)
             var MS_TO_BUFFER = 60*1000;
@@ -264,7 +266,9 @@ will be disabled and/or hidden in the UI.
             //> Также обратите внимание, что мы удаляем любые свойства, которые соответствуют защищенным атрибутам.
             if (req.method === 'GET') {
               if (res.locals.me !== undefined) {
-                throw new Error('Cannot attach logged-in user as the view local `me`, because this view local already exists!  (Is it being attached somewhere else?)');
+                throw new Error('Невозможно присоединить зарегистрированного пользователя как локальное ' +
+                  'представление `me`, потому что локальное представление уже существует! ' +
+                  '(Это прикреплено где-то еще?)');
               }
 
               // Exclude any fields corresponding with attributes that have `protect: true`.
@@ -278,10 +282,14 @@ will be disabled and/or hidden in the UI.
 
               // If there is still a "password" in sanitized user data, then delete it just to be safe.
               // (But also log a warning so this isn't hopelessly confusing.)
-              // Если в очищенных пользовательских данных все еще есть «пароль», то удалите его просто для безопасности.
+              // Если в очищенных пользовательских данных все еще есть «пароль»,
+              // то удалите его просто для безопасности.
               // (но также регистрируйте предупреждение, чтобы это не сбивало с толку.)
               if (sanitizedUser.password) {
-                sails.log.warn('The logged in user record has a `password` property, but it was still there after pruning off all properties that match `protect: true` attributes in the User model.  So, just to be safe, removing the `password` property anyway...');
+                sails.log.warn('Зарегистрированная пользовательская запись имеет свойство `пароль`, ' +
+                  'но оно все еще было там после удаления всех свойств, которые соответствуют атрибутам' +
+                  '` protect: true` в модели User. Так что, чтобы быть в безопасности, все равно удалите свойство ' +
+                  '`password` ...');
                 delete sanitizedUser.password;
               }//ﬁ
 
@@ -305,7 +313,7 @@ will be disabled and/or hidden in the UI.
             //> • https://mixmax.com/blog/chrome-back-button-cache-no-store
             //> • https://madhatted.com/2013/6/16/you-do-not-understand-browser-history
             res.setHeader('Cache-Control', 'no-cache, no-store');
-
+            console.log('loggedInUser 2: ', req.me);
             return next();
           }
         }

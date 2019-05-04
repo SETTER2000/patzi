@@ -90,7 +90,6 @@ module.exports = Object.assign({}, PRODUCTION_CONFIG, {
     // /\  Hard-code the email address that should receive support/contact form
     // ||  messages in staging (or use `sails_custom__internalEmailAddress`)
     //--------------------------------------------------------------------------
-
     // mailgunSecret: 'key-sandbox_xxx',
     // stripeSecret: 'sk_sandbox__fake_xxx',
     // stripePublishableKey: 'pk_sandbox__fake_fxx',
@@ -100,5 +99,4 @@ module.exports = Object.assign({}, PRODUCTION_CONFIG, {
     //--------------------------------------------------------------------------
 
   })
-
 });

@@ -33,7 +33,9 @@ module.exports = function defineAccessGroupHook(sails) {
     },
     isAdmin: async function (userId) {
       let group = await Group.find({label: 'admin'}).populate('belongsToGroup', {where: {id: userId}});
-      this.access = (group[0].belongsToGroup.length > 0);
+      console.log('GROUP: ', group[0].belongsToGroup);
+      console.log('OBJ-keys', Object.keys(group[0].belongsToGroup).length > 0);
+      this.access = Object.keys(group[0].belongsToGroup).length > 0;
       return this.access;
     }
   };

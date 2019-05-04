@@ -174,7 +174,7 @@ module.exports = {
 
       if (!sails.config.custom.mailgunSecret || !sails.config.custom.mailgunDomain) {
         throw new Error(
-          'Cannot deliver email to "'+inputs.to+'" because:\n'+
+          'Не удается доставить письмо на "'+inputs.to+'" так как:\n'+
           (()=>{
             let problems = [];
             if (!sails.config.custom.mailgunSecret) {
@@ -186,19 +186,17 @@ module.exports = {
             return problems.join('\n');
           })()+
           '\n'+
-          'To resolve these configuration issues, add the missing config variables to\n'+
-          '\`config/custom.js\`-- or in staging/production, set them up as system\n'+
-          'environment vars.  (If you don\'t have a Mailgun domain or secret, you can\n'+
-          'sign up for free at https://mailgun.com to receive sandbox credentials.)\n'+
-          '\n'+
-          '> Note that, for convenience during development, there is another alternative:\n'+
-          '> In lieu of setting up real Mailgun credentials, you can "fake" email\n'+
-          '> delivery by using any email address that ends in "@example.com".  This will\n'+
-          '> write automated emails to your logs rather than actually sending them.\n'+
-          '> (To simulate clicking on a link from an email, just copy and paste the link\n'+
-          '> from the terminal output into your browser.)\n'+
-          '\n'+
-          '[?] If you\'re unsure, visit https://sailsjs.com/support'
+          'Чтобы решить эти проблемы с конфигурацией, добавьте отсутствующие переменные конфигурации в \n' +
+          '`config/custom.js` - или в стадии подготовки/производства установите их как system \n' +
+          'окружающая среда (Если у вас нет домена или секрета Mailgun, вы можете \n '+
+        'зарегистрируйтесь бесплатно на https://mailgun.com, чтобы получить учетные данные песочницы.) \n' +
+        '> Обратите внимание, что для удобства при разработке существует другая альтернатива: \n' +
+        '> Вместо того, чтобы устанавливать настоящие учетные данные Mailgun, вы можете "подделать" электронную почту \n' +
+        '> доставка с использованием любого адреса электронной почты, который заканчивается на "@example.com". Это будет \n '+
+        '> пишите автоматические электронные письма в свои журналы, а не отправляйте их. \n' +
+        '> (Чтобы имитировать нажатие на ссылку из электронного письма, просто скопируйте и вставьте ссылку \n' +
+        '> из терминала выведите в ваш браузер.) \n' +
+        ' [?] Если вы не уверены, посетите https://sailsjs.com/support'
         );
       }
 
@@ -215,14 +213,14 @@ module.exports = {
         deferred.exec((err)=>{
           if (err) {
             sails.log.error(
-              'Background instruction failed:  Could not deliver email:\n'+
+              'Background instruction failed:  Не удалось доставить электронную почту:\n'+
               util.inspect(inputs,{depth:null})+'\n',
               'Error details:\n'+
               util.inspect(err)
             );
           } else {
             sails.log.info(
-              'Background instruction complete:  Email sent (or at least queued):\n'+
+              'Background instruction complete: электронное письмо отправлено (или хотя бы в очередь):\n'+
               util.inspect(inputs,{depth:null})
             );
           }

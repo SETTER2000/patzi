@@ -32,7 +32,7 @@ module.exports.bootstrap = async function () {
     // If this is _actually_ a production environment (real or simulated), or we have
     // `migrate: safe` enabled, then prevent accidentally removing all data!
     if (process.env.NODE_ENV === 'production' || sails.config.models.migrate === 'safe') {
-      sails.log('Since we are running with migrate: \'safe\' and/or NODE_ENV=production (in the "' + sails.config.environment + '" Sails environment, to be precise), skipping the rest of the bootstrap to avoid data loss...');
+      sails.log('Так как мы работаем с миграцией: \'safe\' and/or NODE_ENV=production (in the "' + sails.config.environment + '" Sails, если быть точным), пропуская оставшуюся часть начальной загрузки, чтобы избежать потери данных...');
       return;
     }//•
 
@@ -46,10 +46,10 @@ module.exports.bootstrap = async function () {
       return;
     }//•
 
-    sails.log('Running v' + HARD_CODED_DATA_VERSION + ' bootstrap script...  (' + (lastRunBootstrapInfo ? 'before this, the last time the bootstrap ran on this computer was for v' + lastRunBootstrapInfo.lastRunVersion + ' @ ' + (new Date(lastRunBootstrapInfo.lastRunAt)) : 'looks like this is the first time the bootstrap has run on this computer') + ')');
+    sails.log('Запуск v' + HARD_CODED_DATA_VERSION + ' bootstrap script...  (' + (lastRunBootstrapInfo ? 'before this, the last time the bootstrap ran on this computer was for v' + lastRunBootstrapInfo.lastRunVersion + ' @ ' + (new Date(lastRunBootstrapInfo.lastRunAt)) : 'looks like this is the first time the bootstrap has run on this computer') + ')');
   }
   else {
-    sails.log('Running bootstrap script because it was forced...  (either `--drop` or `--environment=test` was used)');
+    sails.log('Запуск скрипта начальной загрузки, поскольку он был вынужден ...  (either `--drop` or `--environment=test` использовался)');
   }
 
   // Since the hard-coded data version has been incremented, and we're running in
@@ -57,14 +57,13 @@ module.exports.bootstrap = async function () {
   for (let identity in sails.models) {
     await sails.models[identity].destroy({});
   }//∞
-
-   // Создаём группу пользователей admin
+  // Создаём группу пользователей admin
   let group = await Group.create({label: 'admin'}).fetch();
   // By convention, this is a good place to set up fake data during development.
   // По общему мнению, это хорошее место для настройки поддельных данных во время разработки.
   let ryanDahl = await User.create(
     {
-      emailAddress: 'ins09@mail.ru',
+      emailAddress: sails.config.custom.friendEmailAddress,
       fullName: 'Ryan Dahl',
       password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
       preferredLocale: 'en'
@@ -111,7 +110,7 @@ module.exports.bootstrap = async function () {
     force: true
   })
     .tolerate((err) => {
-      sails.log.warn('For some reason, could not write bootstrap version .json file.  This could be a result of a problem with your configured paths, or, if you are in production, a limitation of your hosting provider related to `pwd`.  As a workaround, try updating app.js to explicitly pass in `appPath: __dirname` instead of relying on `chdir`.  Current sails.config.appPath: `' + sails.config.appPath + '`.  Full error details: ' + err.stack + '\n\n(Proceeding anyway this time...)');
+      sails.log.warn('По какой-то причине не удалось записать загрузочную версию файла .json. Это может быть результатом проблемы с настроенными вами путями или, если вы работаете, ограничения хостинг-провайдера, связанного с `pwd`. В качестве обходного пути попробуйте обновить app.js, чтобы явно передать в `appPath: __dirname` вместо того, чтобы полагаться на` chdir`. Текущий sails.config.appPath: `' + sails.config.appPath + '`.  Полная информация об ошибке: ' + err.stack + '\n\n(Продолжим в любом случае в этот раз...)');
     });
 
 };
