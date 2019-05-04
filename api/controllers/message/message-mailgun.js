@@ -63,7 +63,7 @@ module.exports = {
     emailAlreadyInUse: {
       statusCode: 409,
       description: 'Указанный адрес электронной почты уже используется.',
-    },
+    }
 
   },
 
