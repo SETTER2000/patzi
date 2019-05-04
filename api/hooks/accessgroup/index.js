@@ -25,8 +25,12 @@ module.exports = function defineAccessGroupHook(sails) {
       let group = await Group.find({label: 'admin'}).populate('belongsToGroup', {where: {id: userId}});
       /*  console.log('"https://d3a1wbnh2r1l7y ', group[0].belongsToGroup);
       console.log('OBJ-keys', Object.keys(group[0].belongsToGroup).length > 0);*/
-      this.access = Object.keys(group[0].belongsToGroup).length > 0;
-      return this.access;
+
+        this.access = Object.keys(group[0].belongsToGroup).length > 0;
+        return this.access;
+
+        sails.console.error("Ошибка при создании группы доступа. Проверить загрузочный файл bootstrap.js.", e);
+
     }
   };
 

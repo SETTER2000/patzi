@@ -52,6 +52,7 @@ module.exports.bootstrap = async function () {
     sails.log('Запуск скрипта начальной загрузки, поскольку он был вынужден ...  (either `--drop` or `--environment=test` использовался)');
   }
 
+
   // Since the hard-coded data version has been incremented, and we're running in
   // a "throwaway data" environment, delete all records from all models.
   for (let identity in sails.models) {
@@ -85,6 +86,8 @@ module.exports.bootstrap = async function () {
   let group = await Group.create({label: 'admin'}).fetch();
   // Добавить пользователя alexFox.id в группу 'admin'
   await User.addToCollection(alexFox.id, 'groupIncludesUser', group.id);
+
+
   // В БУДУЩЕМ: Решить что с эти делать
   // Create some things
   /* await Thing.createEach([

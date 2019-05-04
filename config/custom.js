@@ -71,8 +71,7 @@ module.exports.custom = {
 
   // The sender that all outgoing emails will appear to come from.
   // Отправитель, от которого будут исходить все исходящие письма.
-  fromEmailAddress: 'info@poaleell.com',
-  fromName: 'The Poale Ell Team',
+
 
   // Email address for receiving support messages & other correspondences.
   // Адрес электронной почты для получения сообщений поддержки и другой корреспонденции.

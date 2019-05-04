@@ -5,7 +5,6 @@
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
-    "@chenfengyuan/datepicker": "^1.0.7",
     "@sailshq/connect-redis": "^3.2.1",
     "@sailshq/lodash": "^3.10.3",
     "@sailshq/socket.io-redis": "^5.2.0",
@@ -23,8 +22,7 @@
     "skipper-s3": "^0.6.0",
     "vue-fancybox": "^1.0.3",
     "vue-masonry-gallery": "^1.1.1",
-    "vue-slick": "^1.1.15",
-    "vuelidate": "^0.7.4"
+    "vue-slick": "^1.1.15"
   },
   "devDependencies": {
     "@sailshq/eslint": "^4.19.3",
