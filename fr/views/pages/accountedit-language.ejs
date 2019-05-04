@@ -22,7 +22,7 @@
             <div class="table-row">
 
               <div class="country">
-                <img src="http://d3a1wbnh2r1l7y.cloudfront.net/fRussia.jpg"
+                <img src="https://d3a1wbnh2r1l7y.cloudfront.net/fRussia.jpg"
                      alt="flag">
                 <%= __('Russian') %>
               </div>
@@ -48,7 +48,7 @@
             </div>
             <div class="table-row">
               <div class="country">
-                <img src="http://d3a1wbnh2r1l7y.cloudfront.net/fEnglich.jpg" alt="flag"><%= __('English') %></div>
+                <img src="https://d3a1wbnh2r1l7y.cloudfront.net/fEnglich.jpg" alt="flag"><%= __('English') %></div>
               <div class="visit">
                 <div class="primary-switch">
                   <input type="radio"
@@ -72,17 +72,19 @@
       </div>
 
       <div class="row">
-        <div class="col-sm-6">
-          <div class="form-group text-left">
-            <a class="btn btn-outline-info" href="/account"><%= __('Cancel') %></a>
-            <ajax-button type="submit" :syncing="syncing" class="btn btn-dark"><%= __('Save') %></ajax-button>
-          </div>
 
-        </div>
         <div class="col-sm-6">
           <p class="text-danger"
              v-if="cloudError"><%= __('An error occured while processing your request. Please check your information and try again, or') %>
             <a href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.</p>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group text-right">
+            <a class="btn btn-outline-info" href="/account"><%= __('Cancel') %></a>
+            <ajax-button type="submit" :syncing="syncing" class="btn btn-dark"><%= __('Save') %></ajax-button>
+          </div>
+
         </div>
       </div>
     </ajax-form>
