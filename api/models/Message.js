@@ -21,13 +21,13 @@ module.exports = {
     imageUploadFD:{
       type:'string',
       description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение, связанное с этой «вещью».',
-      required:true
+      // required:true
     },
 
     imageUploadMime:{
       type:'string',
       description:'Тип MIME для загруженного изображения.',
-      required:true
+      // required:true
     },
 
     sender:{
@@ -57,7 +57,7 @@ module.exports = {
     bodyWithoutQuotes:{
       type:'string',
       description:'?...сообщения.',
-      required:true
+      // required:true
     }
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

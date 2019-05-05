@@ -83,20 +83,32 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+
     // console.log('META: ', inputs.attach);
+    const token = await sails.helpers.strings.random('url-friendly');
+    let fd = '';
+    let type = '';
+    let filename = '';
     // Бибилиотека Node.js
     const url = require('url');
     let newEmailAddress = inputs.sender;
 
     let info = await sails.uploadOne(inputs.attach);
 
-    if (!info) {
-      throw 'invalid';
+
+
+
+    if (info) {
+      fd = info.fd;
+      type = info.type;
+      filename = info.filename;
     }
+
+
     let message = await Message.create({
-      imageUploadFD: info.fd,
-      imageUploadMime: info.type,
-      filename: info.filename,
+      imageUploadFD: fd,
+      imageUploadMime: type,
+      filename: filename,
       sender: newEmailAddress,
       recipient: inputs.recipient,
       subject: inputs.subject,
@@ -104,7 +116,17 @@ module.exports = {
       bodyWithoutQuotes: inputs.bodyWithoutQuotes
     }).fetch();
 
-    message.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/message/${message.id}`);
+    await sails.helpers.sendTemplateEmail.with({
+      to: sails.config.custom.internalEmailAddress,
+      subject: 'Пришло новое сообщение от Mailgun. Api message-mailgun',
+      template: 'email-create-new-token',
+      templateData: {
+        fullName: inputs.subject,
+        token: inputs.recipient
+      }
+    });
+
+    message.imageSrc = message.filename ? url.resolve(sails.config.custom.baseUrl, `/api/v1/message/${message.id}`) : '';
     // ... затем мы удаляем наш файловый дескриптор
     delete message.imageUploadFD;
     // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
@@ -113,15 +135,6 @@ module.exports = {
     delete message.updatedAt;
     delete message.id;
 
-    return exits.success(message
-      /* {
-        sender: newEmailAddress,
-        recipient: inputs.recipient,
-        subject: inputs.subject,
-        bodyPlain: inputs.bodyPlain,
-        bodyWithoutQuotes: inputs.bodyWithoutQuotes,
-        filename: info.filename
-      }*/
-    );
+    return exits.success(message);
   }
 };
