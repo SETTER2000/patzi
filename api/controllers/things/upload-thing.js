@@ -7,6 +7,7 @@ module.exports = {
   description: '',
 
   files: ['photo'], // именуем поле, через которое будет передоваться файл при загрузки
+
   inputs: {
     photo: {
       type: 'ref',

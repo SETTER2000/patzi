@@ -5,9 +5,16 @@ module.exports = {
 
 
   description: 'Входящие сообщения для сайта, пересылаемые сервисом Mailgun.',
-
+  // Всегда расположен должен быть прежде всех
+  files: ['attach'], // именуем поле, через которое будет передоваться файл при загрузки
 
   inputs: {
+
+    attach: {
+      type: 'ref',
+      description: 'Uploaded file stream.',
+      // required: true
+    },
 
     sender: {
       // required: true,
@@ -44,6 +51,13 @@ module.exports = {
       type: 'string',
       example: 'Frida Kahlo de Rivera',
       description: 'The user\'s full name.'
+    },
+
+    filename: {
+      // required: true,
+      type: 'string',
+      example: 'doc.txt',
+      description: 'Имя вложенного файла.'
     }
   },
 
@@ -56,9 +70,9 @@ module.exports = {
 
     invalid: {
       responseType: 'badRequest',
-      description: 'Unfortunately we could not accept your message.',
-      extendedDescription: 'If this request was sent from a graphical user interface, the request ' +
-      'parameters should have been validated/coerced _before_ they were sent.'
+      description: 'К сожалению, мы не смогли принять ваше сообщение.',
+      extendedDescription: `Если этот запрос был отправлен из графического интерфейса пользователя, запрос
+       параметры должны были быть проверены/принудительно _before_ тем как они были отправлены.`
     },
     emailAlreadyInUse: {
       statusCode: 409,
@@ -69,17 +83,45 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+    // console.log('META: ', inputs.attach);
+    // Бибилиотека Node.js
+    const url = require('url');
+    let newEmailAddress = inputs.sender;
 
-    let newEmailAddress = inputs.sender.toLowerCase();
+    let info = await sails.uploadOne(inputs.attach);
 
-    return exits.success(
-      {
+    if (!info) {
+      throw 'invalid';
+    }
+    let message = await Message.create({
+      imageUploadFD: info.fd,
+      imageUploadMime: info.type,
+      filename: info.filename,
+      sender: newEmailAddress,
+      recipient: inputs.recipient,
+      subject: inputs.subject,
+      bodyPlain: inputs.bodyPlain,
+      bodyWithoutQuotes: inputs.bodyWithoutQuotes
+    }).fetch();
+
+    message.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/message/${message.id}`);
+    // ... затем мы удаляем наш файловый дескриптор
+    delete message.imageUploadFD;
+    // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
+    delete message.imageUploadMime;
+    delete message.createdAt;
+    delete message.updatedAt;
+    delete message.id;
+
+    return exits.success(message
+      /* {
         sender: newEmailAddress,
         recipient: inputs.recipient,
         subject: inputs.subject,
         bodyPlain: inputs.bodyPlain,
         bodyWithoutQuotes: inputs.bodyWithoutQuotes,
-      }
+        filename: info.filename
+      }*/
     );
   }
 };
