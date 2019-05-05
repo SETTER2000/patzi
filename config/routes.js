@@ -96,5 +96,5 @@ module.exports.routes = {
   'POST    /api/v1/friends/add-friends': {action: 'friends/add-friends'},
   'POST    /api/v1/friends/approve-friend': {action: 'friends/approve-friend'},
   'GET     /sous': {action: 'security/grant-csrf-token'},
-  'POST   /api/v1/message/message-mailgun': {action: 'message/message-mailgun'},
+  'POST   /api/v1/message/message-mailgun': {action: 'message/message-mailgun',csrf:false},
 };

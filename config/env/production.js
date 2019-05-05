@@ -333,7 +333,8 @@ module.exports = {
      * (https://sailsjs.com/config/http)                                        *
      *                                                                          *
      ***************************************************************************/
-    trustProxy: true,
+    trustProxy:
+      true,
 
   },
 
@@ -408,7 +409,12 @@ module.exports = {
     //
     //  To additionally allow file uploads to be viewed by the public, add:
     //  ```
-    headers: {'x-amz-acl': 'public-read'},
+    headers:
+      {
+        'x-amz-acl':
+          'public-read'
+      }
+    ,
     //  ```
     //--------------------------------------------------------------------------
 
@@ -424,7 +430,8 @@ module.exports = {
    ***************************************************************************/
   custom: {
     baseUrl: 'https://example.com',
-    internalEmailAddress: 'info@example.com',
+    internalEmailAddress:
+      'info@example.com',
 
     // mailgunDomain: 'mg.example.com',
     // mailgunSecret: 'key-prod_fake_xx',
@@ -441,7 +448,9 @@ module.exports = {
     // ```
     //--------------------------------------------------------------------------
 
-  },
+  }
+  ,
 
 
 };
+

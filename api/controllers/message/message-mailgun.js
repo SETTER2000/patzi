@@ -51,12 +51,12 @@ module.exports = {
   exits: {
 
     success: {
-      description: 'New user account was created successfully.'
+      description: 'Message successfully received.'
     },
 
     invalid: {
       responseType: 'badRequest',
-      description: 'The provided fullName, password and/or email address are invalid.',
+      description: 'Unfortunately we could not accept your message.',
       extendedDescription: 'If this request was sent from a graphical user interface, the request ' +
       'parameters should have been validated/coerced _before_ they were sent.'
     },

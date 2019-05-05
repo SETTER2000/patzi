@@ -2,8 +2,7 @@
  * custom hook
  *
  * @description :: A hook definition.  Extends Sails by adding shadow routes, implicit actions, and/or initialization logic.
- * Определение крючка. Расширяет паруса, добавляя теневые маршруты, неявные действия и / или
- * логику инициализации.
+ * Определение крючка. Расширяет паруса, добавляя теневые маршруты, неявные действия и / или логику инициализации.
  * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
  */
 
@@ -32,12 +31,12 @@ module.exports = function defineCustomHook(sails) {
         let suffix = '';
         if (_.contains(['silly'], sails.config.log.level)) {
           suffix =
-            `
-> Совет: Чтобы исключить конфиденциальные учетные данные из системы контроля версий, используйте:
+`
+> Tip: To exclude sensitive credentials from source control, use:
 > • config/local.js (for local development)
 > • environment variables (for production)
 >
-> Если вы хотите проверить их в системе контроля версий, используйте:
+> If you want to check them in to source control, use:
 > • config/custom.js  (for development)
 > • config/env/staging.js  (for staging)
 > • config/env/production.js  (for production)
@@ -64,7 +63,7 @@ module.exports = function defineCustomHook(sails) {
         }
 
         sails.log.verbose(
-          `Some optional settings have not been configured yet:
+`Some optional settings have not been configured yet:
 ---------------------------------------------------------------------
 ${problems.join('\n')}
 
@@ -85,7 +84,7 @@ will be disabled and/or hidden in the UI.
       // and Mailgun packs with any available credentials.
       // После завершения инициализации "sails-hook-organics" настроить Stripe
       // и пакеты Mailgun с любыми доступными учетными данными.
-      sails.after('hook:organics:loaded', () => {
+      sails.after('hook:organics:loaded', ()=>{
 
         sails.helpers.stripe.configure({
           secret: sails.config.custom.stripeSecret
@@ -119,7 +118,7 @@ will be disabled and/or hidden in the UI.
       before: {
         '/*': {
           skipAssets: true,
-          fn: async function (req, res, next) {
+          fn: async function(req, res, next){
 
             var url = require('url');
 
@@ -182,26 +181,21 @@ will be disabled and/or hidden in the UI.
             var configuredBaseHostname;
             try {
               configuredBaseHostname = url.parse(sails.config.custom.baseUrl).host;
-            } catch (unusedErr) { /*…*/
-            }
+            } catch (unusedErr) { /*…*/}
             if ((sails.config.environment === 'staging' || sails.config.environment === 'production') && !req.isSocket && req.method === 'GET' && req.hostname !== configuredBaseHostname) {
-              sails.log.info('Redirecting GET request from `' + req.hostname + '` to configured expected host (`' + configuredBaseHostname + '`)...');
-              return res.redirect(sails.config.custom.baseUrl + req.url);
+              sails.log.info('Redirecting GET request from `'+req.hostname+'` to configured expected host (`'+configuredBaseHostname+'`)...');
+              return res.redirect(sails.config.custom.baseUrl+req.url);
             }//•
 
             // No session? Proceed as usual.
             // (e.g. request for a static asset)
             // Нет сессии? Действуйте как обычно.
             // (например, запрос на статический актив)
-            if (!req.session) {
-              return next();
-            }
+            if (!req.session) { return next(); }
 
             // Not logged in? Proceed as usual.
             // Не вошли? Действуйте как обычно.
-            if (!req.session.userId) {
-              return next();
-            }
+            if (!req.session.userId) { return next(); }
 
             // Otherwise, look up the logged-in user.
             // В противном случае ищите вошедшего в систему пользователя.
@@ -216,7 +210,7 @@ will be disabled and/or hidden in the UI.
             // стираем идентификатор пользователя из сеанса запрашивающего агента пользователя,
             // а затем отправить «неавторизованный» ответ.
             if (!loggedInUser) {
-              sails.log.warn('Каким-то образом учётная запись для вошедшего в систему пользователя (`' + req.session.userId + '`) без вести пропала....');
+              sails.log.warn('Somehow, the user record for the logged-in user (`'+req.session.userId+'`) has gone missing....');
               delete req.session.userId;
               return res.unauthorized();
             }
@@ -234,8 +228,7 @@ will be disabled and/or hidden in the UI.
             // Предоставляем запись пользователя как дополнительное свойство объекта запроса (`req.me`).
             //> Обратите внимание, что мы уверены, что `req.me` сначала не существует.
             if (req.me !== undefined) {
-              throw new Error('Невозможно присоединить зарегистрированного пользователя к req.me, ' +
-                'поскольку это свойство уже существует! (Это прикреплено где-то еще?)');
+              throw new Error('Cannot attach logged-in user as `req.me` because this property already exists!  (Is it being attached somewhere else?)');
             }
             req.me = loggedInUser;
 
@@ -243,23 +236,23 @@ will be disabled and/or hidden in the UI.
             // to the current timestamp.
             //
             // (Note: As an optimization, this is run behind the scenes to avoid adding needless latency.)
-            // Если наш атрибут «lastSeenAt» для этого пользователя имеет возраст не менее нескольких секунд,
-            // установите его к текущей отметке времени.
+            // Если наш атрибут «lastSeenAt» для этого пользователя имеет возраст не менее нескольких секунд, установите его
+            // к текущей отметке времени.
             //
             // (Примечание: как оптимизация, она запускается за кулисами, чтобы избежать добавления ненужных задержек.)
-            var MS_TO_BUFFER = 60 * 1000;
+            var MS_TO_BUFFER = 60*1000;
             var now = Date.now();
             if (loggedInUser.lastSeenAt < now - MS_TO_BUFFER) {
               User.updateOne({id: loggedInUser.id})
-                .set({lastSeenAt: now})
-                .exec((err) => {
-                  if (err) {
-                    sails.log.error('Background task failed: Could not update user (`' + loggedInUser.id + '`) with a new `lastSeenAt` timestamp.  Error details: ' + err.stack);
-                    return;
-                  }//•
-                  sails.log.verbose('Updated the `lastSeenAt` timestamp for user `' + loggedInUser.id + '`.');
-                  // Nothing else to do here.
-                });//_∏_  (Meanwhile...)
+              .set({ lastSeenAt: now })
+              .exec((err)=>{
+                if (err) {
+                  sails.log.error('Background task failed: Could not update user (`'+loggedInUser.id+'`) with a new `lastSeenAt` timestamp.  Error details: '+err.stack);
+                  return;
+                }//•
+                sails.log.verbose('Updated the `lastSeenAt` timestamp for user `'+loggedInUser.id+'`.');
+                // Nothing else to do here.
+              });//_∏_  (Meanwhile...)
             }//ﬁ
 
 
@@ -271,9 +264,7 @@ will be disabled and/or hidden in the UI.
             //> Также обратите внимание, что мы удаляем любые свойства, которые соответствуют защищенным атрибутам.
             if (req.method === 'GET') {
               if (res.locals.me !== undefined) {
-                throw new Error('Невозможно присоединить зарегистрированного пользователя как локальное ' +
-                  'представление `me`, потому что локальное представление уже существует! ' +
-                  '(Это прикреплено где-то еще?)');
+                throw new Error('Cannot attach logged-in user as the view local `me`, because this view local already exists!  (Is it being attached somewhere else?)');
               }
 
               // Exclude any fields corresponding with attributes that have `protect: true`.
@@ -287,14 +278,10 @@ will be disabled and/or hidden in the UI.
 
               // If there is still a "password" in sanitized user data, then delete it just to be safe.
               // (But also log a warning so this isn't hopelessly confusing.)
-              // Если в очищенных пользовательских данных все еще есть «пароль»,
-              // то удалите его просто для безопасности.
+              // Если в очищенных пользовательских данных все еще есть «пароль», то удалите его просто для безопасности.
               // (но также регистрируйте предупреждение, чтобы это не сбивало с толку.)
               if (sanitizedUser.password) {
-                sails.log.warn('Зарегистрированная пользовательская запись имеет свойство `пароль`, ' +
-                  'но оно все еще было там после удаления всех свойств, которые соответствуют атрибутам' +
-                  '` protect: true` в модели User. Так что, чтобы быть в безопасности, все равно удалите свойство ' +
-                  '`password` ...');
+                sails.log.warn('The logged in user record has a `password` property, but it was still there after pruning off all properties that match `protect: true` attributes in the User model.  So, just to be safe, removing the `password` property anyway...');
                 delete sanitizedUser.password;
               }//ﬁ
 
@@ -306,6 +293,7 @@ will be disabled and/or hidden in the UI.
               // включены для этого приложения, и требуется ли подтверждение электронной почты.
               res.locals.isBillingEnabled = sails.config.custom.enableBillingFeatures;
               res.locals.isEmailVerificationRequired = sails.config.custom.verifyEmailAddresses;
+
             }//ﬁ
 
             // Prevent the browser from caching logged-in users' pages.
@@ -317,11 +305,14 @@ will be disabled and/or hidden in the UI.
             //> • https://mixmax.com/blog/chrome-back-button-cache-no-store
             //> • https://madhatted.com/2013/6/16/you-do-not-understand-browser-history
             res.setHeader('Cache-Control', 'no-cache, no-store');
-            /* console.log('loggedInUser 2: ', req.me);*/
+
             return next();
           }
         }
       }
     }
+
+
   };
+
 };
