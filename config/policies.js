@@ -16,10 +16,11 @@ module.exports.policies = {
   '*': ['is-logged-in','localize'],
 
   // Bypass the `is-logged-in` policy for:
+  'group/*':'is-super-admin',
   'entrance/*': true,
   'account/logout': true,
   'message/message-mailgun': true,
-  'security/grant-csrf-token': true,
+  //'security/grant-csrf-token': true,
   'view-homepage-or-redirect': true,
   'deliver-contact-form-message': true,
 

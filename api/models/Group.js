@@ -19,6 +19,26 @@ module.exports = {
       required: true,
       unique: true
     },
+    subtitle: {
+      type: 'string',
+      example: 'Прекрасный, здоровый щенок.',
+      description: 'Описание щенка. Какая то интересная информация.'
+    },
+    filename: {
+      type: 'string',
+      example: 'my-file.jpg',
+      description: 'Название файла, который загружается.'
+    },
+    imageUploadFD:{
+      type:'string',
+      description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',
+      // required:true
+    },
+    imageUploadMime:{
+      type:'string',
+      description:'Тип MIME для загруженного изображения.',
+      // required:true
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -28,7 +48,10 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
+    whoCreate:{
+      model:'User',
+      required:true
+    },
     // Многие ко Многим (Many-to-Many)
     // Читаем как: В группу входит пользователь, belongsToGroup - ключ для объеденяющей таблице
     belongsToGroup: {collection: 'User', via: 'groupIncludesUser'}

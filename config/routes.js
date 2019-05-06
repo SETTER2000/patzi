@@ -48,7 +48,7 @@ module.exports.routes = {
   'GET /about': {action: 'view-about', locals: {currentSection: 'about'}},
   'GET /pricing': {action: 'view-pricing', locals: {currentSection: 'pricing'}},
 
-  'GET /group/group-home': {action: 'group/view-group-home', locals: {currentSection: 'group'}},
+  'GET /groups/:virtualPageSlug?': {action: 'group/view-group-home', locals: {currentSection: 'groups'}},
   'GET /message/message-home': {action: 'message/view-message-home', locals: {currentSection: 'message'}},
 
 
@@ -95,6 +95,12 @@ module.exports.routes = {
 
   'POST    /api/v1/friends/add-friends': {action: 'friends/add-friends'},
   'POST    /api/v1/friends/approve-friend': {action: 'friends/approve-friend'},
-  'GET     /sous': {action: 'security/grant-csrf-token'},
-  'POST   /api/v1/message/message-mailgun': {action: 'message/message-mailgun',csrf:false},
+  // Здесь только внутренний доступ откроется на получения токена.
+  // Если надо открыть извне доступ получению, нужно править sails.config.policies
+  //'GET     /sous': {action: 'security/grant-csrf-token'},
+  'POST   /api/v1/message/message-mailgun': {action: 'message/message-mailgun', csrf: false},
+
+  'POST   /api/v1/group/upload-group': {action: 'group/upload-group'},
+  'GET    /api/v1/group/:id': { action: 'group/download-group' },
+
 };

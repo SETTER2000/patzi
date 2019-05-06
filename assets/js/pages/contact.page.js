@@ -27,21 +27,16 @@ parasails.registerPage('contact', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
   },
-  mounted: async function() {
-    //…
+  mounted: function() {
+
+    this.$focus('[autofocus]');
+
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-
-    submittedForm: async function() {
-
-      // Show the success message.
-      this.cloudSuccess = true;
-
-    },
 
     handleParsingForm: function() {
 
@@ -80,5 +75,11 @@ parasails.registerPage('contact', {
       return argins;
     },
 
+    submittedForm: async function() {
+
+      // Show the success message.
+      this.cloudSuccess = true;
+
+    },
   }
 });

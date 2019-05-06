@@ -44,7 +44,7 @@ module.exports = {
     },
     imageUploadFD:{
       type:'string',
-      description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение, связанное с этой «вещью».',
+      description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',
       required:true
     },
     imageUploadMime:{

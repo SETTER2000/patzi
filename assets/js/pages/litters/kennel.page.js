@@ -117,7 +117,7 @@ parasails.registerPage('kennel', {
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
       // this.uploadLitterModalOpen = true;
-      this.admin ? this.goto('/litters/new') : alert('Не достаточно прав.');
+      this.me.isSuperAdmin ? this.goto('/litters/new') : alert('Не достаточно прав.');
       // this.selectedLitter = _.find(this.litters, {id: litterId});
     },
 

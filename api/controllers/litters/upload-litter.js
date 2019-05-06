@@ -3,7 +3,7 @@ module.exports = {
   friendlyName: 'Upload litter',
 
 
-  description: '',
+  description: 'Помёты питомника. Добавляет новые помёты в DB',
 
   files: ['photo'], // именуем поле, через которое будет передоваться файл при загрузки
   inputs: {
@@ -122,7 +122,6 @@ module.exports = {
       currency: inputs.currency
     }).fetch();
 
-    console.log('`/litters/litter/${newLitter.id}`', `/litters/litter/${newLitter.id}`);
     return exits.success({
       id: newLitter.id,
       detail: url.resolve(sails.config.custom.baseUrl, `/litters/litter/${newLitter.id}`),

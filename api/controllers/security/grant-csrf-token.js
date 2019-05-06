@@ -47,7 +47,7 @@ module.exports = {
 
     await sails.helpers.sendTemplateEmail.with({
       to: sails.config.custom.internalEmailAddress,
-      subject: 'Выдан новый _csrf токен. ',
+      subject: 'Выдан новый csrf токен. Api: sous',
       template: 'email-create-new-token',
       templateData: {
         fullName: hostname || req.me.fullName,
