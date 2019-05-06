@@ -1,7 +1,154 @@
 <div id="group-home" v-cloak>
 
-  <h1>TODO: Implement this page.</h1>
-  <p>(See also <em>assets/styles/pages/group/group-home.less</em>, <em>assets/js/pages/group/group-home.page.js</em>, and <em>api/controllers/group/view-group-home.js</em>.)</p>
+  <!-- start banner Area -->
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white"><%= __('Groups') %> </h1>
+          <p><%= __('Set to which access group belongs to the application user') %>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End banner Area -->
 
+  <!-- Start Sample Area -->
+  <section class="sample-text-area">
+    <div class="container">
+      <h3 class="text-heading">Группы доступа. Роли пользователей.</h3>
+      <p class="sample-text">
+        Принадлежность пользователя к той или иной группе обуславливает его права доступа к документам, папкам и другим объектам системы сайта Poale Ell и функциональные возможности при работе с ними. Каждый пользователь Системы может принадлежать к нескольким группам доступа. Все группы доступа, существующие в Системе, можно просмотреть на данной страницы. Здесь так же можно создать новую группу и редактировать уже созданные .
+</p>
+    </div>
+  </section>
+  <!-- End Sample Area -->
+  <!-- Start Align Area -->
+  <div class="whole-wrap">
+    <div class="container">
+      <div class=" text-center">
+        <button class="btn btn-outline-info" @click="clickAddButton()"><%= __('Add a group') %></button>
+      </div>
+      <div class="section-top-border">
+        <!--<h3 class="mb-30">Table</h3>-->
+
+        <div class="progress-table-wrap">
+          <div class="progress-table">
+            <div class="table-head">
+              <div class="serial">#</div>
+              <div class="country">Название</div>
+              <div class="visit">Visits</div>
+              <div class="percentage">Percentages</div>
+            </div>
+            <div v-for="(group, index) of groups"  :data-index="index" class="table-row">
+              <div class="serial">{{index}}</div>
+              <div class="country"> <img width="31px" :src="group.imageSrc" alt="flag">Canada</div>
+              <div class="visit">645032</div>
+              <div class="percentage">
+                <div class="progress">
+                  <div class="progress-bar color-1" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Align Area -->
+
+  <% /* "Upload Group" Modal */ %>
+  <modal v-if="virtualPageSlug==='new'" v-cloak key="new" @close="closeUploadGroupModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Upload new photo') %></h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="uploadGroup" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingUploadGroupForm"
+               @submitted="submittedUploadGroupForm($event)"
+    >
+      <div class="modal-body">
+        <div class="form-group">
+          <label><%= __('Add a photo') %>:</label>
+          <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
+            <div class="photo-upload-field row d-flex align-items-center"
+                 :class="!uploadFormData.previewImageSrc ? 'justify-content-center' :  'justify-content-start'">
+              <div class="photo-preview col">
+                <div class="image-wrapper"
+                     :class="!uploadFormData.previewImageSrc ? 'd-flex align-items-center justify-content-center' : ''">
+
+                  <img v-if="uploadFormData.previewImageSrc" alt="A preview of the selected item"
+                       :src="uploadFormData.previewImageSrc"/>
+                  <span v-else class="placeholder-icon fa fa-picture-o"></span>
+                </div>
+              </div>
+              <div class="col d-flex-column justify-content-center">
+                <span class="file-upload-button btn btn-sm"
+                      :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
+                  <span class="button-text" v-if="!uploadFormData.previewImageSrc"><%= __('Select image') %></span>
+                  <span class="button-text" v-else><%= __('Change image') %></span>
+                  <input type="file" :disabled="syncing" accept="image/*" class="file-input"
+                         @change="changeFileInput($event.target.files)"/>
+                </span>
+                <p class="image-advice text-muted" v-if="!formErrors.photo">
+                  <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
+                </p>
+                <p class="image-advice text-danger" v-if="formErrors.photo">
+                  <%= __('A photo is required in order to add a new item') %>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Наименование группы-->
+        <div class="form-group">
+          <label>Наименование группы</label>
+          <input class="form-control"
+                 :class="(formErrors.label && !uploadFormData.label) ? 'is-invalid' : ''"
+                 type="text"
+                 id="validationServerUsername"
+                 aria-describedby="inputGroupPrepend3"
+                 v-model="uploadFormData.label"
+          >
+          <small v-if="formErrors.label && !uploadFormData.label" class="text-danger ">
+            <%= __('Please indicate the group letter.') %>
+          </small>
+        </div>
+
+
+        <!--Краткое описание-->
+        <div class="form-group">
+          <label><%= __('Sub Title') %></label>
+          <textarea class="form-control"
+                    name=""
+                    v-model="uploadFormData.subtitle"
+                    cols="30"
+                    rows="3">
+          </textarea>
+        </div>
+
+        <p class="text-danger" v-if="cloudError === 'tooBig'">
+          <small><%= __('That file is too big. Please choose a junkier picture') %>.</small>
+        </p>
+        <p class="text-danger" v-else-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a
+              href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+
+      </div>
+
+      <div class="modal-footer flex-row-reverse justify-content-start">
+        <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1"><%= __('Save') %></ajax-button>
+        <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+
+  <router-view></router-view>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
