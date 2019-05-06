@@ -41,7 +41,7 @@ module.exports = {
       }
     },
     badRequest: {
-      description: 'Какие то проблемы возникли.',
+      description: 'Error',
       responseType: 'badRequest'
     }
   },

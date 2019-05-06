@@ -48,7 +48,7 @@ module.exports.routes = {
   'GET /about': {action: 'view-about', locals: {currentSection: 'about'}},
   'GET /pricing': {action: 'view-pricing', locals: {currentSection: 'pricing'}},
 
-  'GET /groups/:virtualPageSlug?': {action: 'group/view-group-home', locals: {currentSection: 'groups'}},
+  'GET /groups/:virtualPageSlug?': {action: 'groups/view-group-home', locals: {currentSection: 'groups'}},
   'GET /message/message-home': {action: 'message/view-message-home', locals: {currentSection: 'message'}},
 
 
@@ -100,7 +100,9 @@ module.exports.routes = {
   //'GET     /sous': {action: 'security/grant-csrf-token'},
   'POST   /api/v1/message/message-mailgun': {action: 'message/message-mailgun', csrf: false},
 
-  'POST   /api/v1/group/upload-group': {action: 'group/upload-group'},
-  'GET    /api/v1/group/:id': { action: 'group/download-group' },
+  'POST   /api/v1/groups/upload-group': {action: 'groups/upload-group'},
+  'GET    /api/v1/groups/:id': { action: 'groups/download-group' },
+  'DELETE /api/v1/groups/destroy-one-group': { action: 'groups/destroy-one-group' },
+  'PUT    /api/v1/groups/update-group': { action: 'groups/update-group' },
 
 };

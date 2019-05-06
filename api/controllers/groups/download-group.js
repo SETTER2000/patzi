@@ -38,7 +38,7 @@ module.exports = {
       throw 'notFound';
     }
 
-    let user = await User.findOne({id: this.req.me.id}).populate('friends');
+    // let user = await User.findOne({id: this.req.me.id}).populate('friends');
     /**
      * Если друзья имеют идентификатор (ID) владельца этой вещи,
      * то вам позволено это видеть, потому что один из ваших друзей
@@ -53,9 +53,9 @@ module.exports = {
      * "Если вы не являетесь владельцем фото и не один из ваших друзей тоже,
      * то это означает, что вам запрещено видеть эту вещь.
      */
-    if (this.req.me.id !== group.owner && !_.any(user.friends, {id: group.owner})) {
-      throw 'forbidden';
-    }
+    // if (this.req.me.id !== group.owner && !_.any(user.friends, {id: group.owner})) {
+    //   throw 'forbidden';
+    // }
 
     //************************************//
     // **** ФОРМИРУЕМ ЗАГРУЗКУ ФАЙЛА **** //
