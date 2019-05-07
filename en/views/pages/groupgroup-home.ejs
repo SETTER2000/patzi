@@ -18,8 +18,11 @@
     <div class="container">
       <h3 class="text-heading">Группы доступа. Роли пользователей.</h3>
       <p class="sample-text">
-        Принадлежность пользователя к той или иной группе обуславливает его права доступа к документам, папкам и другим объектам системы сайта Poale Ell и функциональные возможности при работе с ними. Каждый пользователь Системы может принадлежать к нескольким группам доступа. Все группы доступа, существующие в Системе, можно просмотреть на данной страницы. Здесь так же можно создать новую группу и редактировать уже созданные .
-</p>
+        Принадлежность пользователя к той или иной группе обуславливает его права доступа к документам, папкам и другим
+        объектам системы сайта Poale Ell и функциональные возможности при работе с ними. Каждый пользователь Системы
+        может принадлежать к нескольким группам доступа. Все группы доступа, существующие в Системе, можно просмотреть
+        на данной страницы. Здесь так же можно создать новую группу и редактировать уже созданные .
+      </p>
     </div>
   </section>
   <!-- End Sample Area -->
@@ -42,39 +45,55 @@
               <div class="visit">Изменить</div>
               <div class="visit">Удалить</div>
             </div>
-            <div v-for="(group, index) of groups"  :data-index="index" class="table-row">
-              <div class="serial">{{index+1}}</div>
-              <div class="country">
-                <img width="31px" :src="group.imageSrc" alt="flag">
-                {{group.label}}
-              </div>
-              <div class="visit "><span class="text-center">645032</span></div>
-              <div class="percentage">
-                <div class="progress">
-                  <div class="progress-bar color-1" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+            <div v-for="(group, index, key) of groups" :data-index="index" :key="group.id">
+              <div class="table-row">
+                <div class="serial">{{index+1}}</div>
+                <div class="country collapse" @click="collapse(group.id)">
+                  <img width="31px" :src="group.imageSrc" alt="flag">
+                  <span> {{group.label}}</span>
                 </div>
-              </div>
-              <div class="visit">
+                <div class="visit "><span class="text-center">645032</span></div>
+                <div class="percentage">
+                  <div class="progress">
+                    <div class="progress-bar color-1" role="progressbar" style="width: 80%" aria-valuenow="80"
+                         aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+                <div class="visit">
                 <span class="genric-btn success-border small" data-toggle="tooltip" data-placement="top"
                       title="<%= __('Edit') %>" @click="clickUpdateButton(group.id)">
                   edit
                 </span>
-              </div>
-              <div class="visit">
+                </div>
+                <div class="visit">
                 <span class="genric-btn primary-border small" data-toggle="tooltip" data-placement="top" title="Delete"
-                                       @click="clickDeleteGroup(group.id)">
+                      @click="clickDeleteGroup(group.id)">
                   <span class="ti-close"></span>
                 </span>
+                </div>
+              </div>
+
+              <div class="row" :data-index="index">
+                <transition name="collapse">
+                <div v-if="group.id===collaps" class="col">
+                  <!--<div class="collapse" :class="{show: group.id===collaps}">-->
+
+                      <div class="card card-body">
+                        {{ group.subtitle}}
+                      </div>
+
+                  <!--</div>-->
+                </div>
+                </transition>
               </div>
 
             </div>
-
           </div>
         </div>
       </div>
     </div>
   </div>
-  <%/*  End Align Area */%>
+  <% /*  End Align Area */ %>
 
   <% /* "Upload Group" Modal */ %>
   <modal v-if="virtualPageSlug==='new'"
@@ -112,7 +131,7 @@
                       :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
                   <span class="button-text" v-if="!uploadFormData.previewImageSrc"><%= __('Select image') %></span>
                   <span class="button-text" v-else><%= __('Change image') %></span>
-                  <input type="file" :disabled="syncing" accept="image/*"  class="file-input"
+                  <input type="file" :disabled="syncing" accept="image/*" class="file-input"
                          @change="changeFileInput($event.target.files)"/>
                 </span>
                 <p class="image-advice text-muted" v-if="!formErrors.photo">
@@ -125,7 +144,7 @@
           </div>
         </div>
 
-        <!--Наименование группы-->
+        <% /*Наименование группы*/ %>
         <div class="form-group">
           <label>Наименование группы</label>
           <input class="form-control"
@@ -140,8 +159,7 @@
           </small>
         </div>
 
-
-        <!--Краткое описание-->
+        <% /*Краткое описание*/ %>
         <div class="form-group">
           <label><%= __('Sub Title') %></label>
           <textarea class="form-control"
@@ -171,15 +189,11 @@
     </ajax-form>
   </modal>
 
-
-
-
   <% /* "Update group" modal */ %>
-  <!--<modal v-if="updateGroupModalOpen && selectedGroup" v-cloak key="edit"-->
   <modal v-if="virtualPageSlug==='edit' && selectedGroup"
          v-cloak key="edit"
          @close="closeUploadGroupModal()">
-    <%/*Зарезервировать*/%>
+    <% /*Редактировать*/ %>
     <div class="modal-header">
       <h5 class="modal-title"><%= __('Edit') %> {{selectedGroup.label || 'item'}}</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -191,9 +205,9 @@
                :cloud-error.sync="cloudError"
                :handle-parsing="handleParsingUpdateGroupForm"
                @submitted="submittedGroupFormUpdate($event)"
-               >
+    >
       <div class="modal-body">
-        <%/*Редактировать фото*/%>
+        <% /*Редактировать фото*/ %>
         <div class="form-group">
           <label><%= __('Edit a photo') %>:</label>
           <div class="photo-uploader" :class="!selectedGroup.imageSrc ? 'empty' :  ''">
@@ -225,17 +239,17 @@
             </div>
           </div>
         </div>
-
-       <!-- <div class="item-preview d-flex justify-content-center">
-          <div class="card">
-            <img alt="<%= __('A mysterious item') %>"
-                 :alt="selectedGroup.label ? selectedGroup.label : '<%= __('A mysterious item') %>'"
-                 :src="selectedGroup.imageSrc"/>
-          </div>
-        </div>-->
-
-
-
+        <% /*Краткое описание*/ %>
+        <div class="form-group">
+          <label><%= __('Sub Title') %></label>
+          <textarea class="form-control"
+                    name=""
+                    v-model="selectedGroup.subtitle"
+                    cols="30"
+                    rows="3">
+          </textarea>
+        </div>
+        <% /*Показ ошибок*/ %>
         <p class="text-danger" v-if="cloudError">
           <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
             <a href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.
@@ -248,14 +262,14 @@
         <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
       </div>
     </ajax-form>
-   <!-- <div class="modal-body" v-else>
+    <!-- <div class="modal-body" v-else>
       <p><%= __('Thank you for contacting, we will contact you shortly. Advance reservation comes into force after the agreement of the details and the adoption of a positive decision by the two parties.') %>
         <strong class="text-success">{{selectedGroup.label || 'item'}}</strong> know
         when you could drop by.</p>
       <p>Stay in touch with {{selectedGroup.fullName}} to confirm pickup details: <strong>{{selectedGroup.emailAddress}}</strong>
       </p>
     </div>-->
-  <!--  <div class="modal-footer" v-if="borrowFormSuccess">
+    <!--  <div class="modal-footer" v-if="borrowFormSuccess">
       <button data-dismiss="modal" class="btn btn-outline-success"><%= __('Got it') %></button>
     </div>-->
   </modal>
