@@ -8,11 +8,6 @@ parasails.registerPage('group-home', {
     virtualPageSlug: '',
 
 
-    selectedGroup: undefined,
-
-
-    showGroupModalOpen: false,
-
     uploadFormData: {
       label: '',
       photo: undefined,
@@ -31,6 +26,10 @@ parasails.registerPage('group-home', {
     scheduleReturnModalOpen: false,
     confirmReturnModalOpen: false,
 
+    selectedGroup: undefined,
+
+
+    showGroupModalOpen: false,
 
     // Состояние загрузки
     syncing: false,
@@ -62,13 +61,24 @@ parasails.registerPage('group-home', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+
+
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form>
-    clickAddButton: function (groupId) {
+    clickAddButton: function () {
       // this.uploadGroupModalOpen = true;
       this.me.isSuperAdmin ? this.goto('/groups/new') : alert('Не достаточно прав.');
+      // this.selectedGroup = _.find(this.groups, {id: groupId});
+    },
+
+
+    // Это кнопка вызывает модальное окно "Update <modal>" с <ajax-form>
+    clickUpdateButton: function (groupId) {
+      this.me.isSuperAdmin ? this.goto('/groups/edit') : alert('Не достаточно прав.');
       this.selectedGroup = _.find(this.groups, {id: groupId});
     },
+
+
     // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
     // Это кнопка вызывает модальное окно <modal> с <ajax-form>
     clickDeleteGroup: function (groupId) {
@@ -76,16 +86,19 @@ parasails.registerPage('group-home', {
       this.selectedGroup = _.find(this.groups, {id: groupId});
     },
 
+
     closeDeleteGroupModal: function () {
       this.selectedGroup = undefined;
       this.confirmDeleteGroupModalOpen = false;
     },
+
 
     handleParsingDeleteGroupForm: function () {
       return {
         id: this.selectedGroup.id
       };
     },
+
 
     submittedDeleteGroupForm: function () {
       _.remove(this.groups, {id: this.selectedGroup.id});
@@ -102,6 +115,7 @@ parasails.registerPage('group-home', {
       // this.selectedGroup = _.find(this.groups, {id: groupId});
     },
 
+
     // Обнуляет данные формы загрузки объекта, очищает поля формы
     _clearUploadGroupModal: function () {
       // Close modal
@@ -109,7 +123,8 @@ parasails.registerPage('group-home', {
       // Reset form data
       this.uploadFormData = {
         photo: undefined,
-        label: undefined,
+        label: '',
+        previewImageSrc: '',
         subtitle: undefined
       };
       // Clear error states
@@ -117,14 +132,15 @@ parasails.registerPage('group-home', {
       this.cloudError = '';
     },
 
-    _clearBorrowGroupModal: function () {
+    _clearGroupModalUpdate: function () {
       // Close modal
       this.updateGroupModalOpen = false;
       // Reset form data
-      this.borrowFormData = {
-        expectedReturnAt: undefined,
-        preliminaryPrice: undefined,
-        ourPreliminaryPrice: undefined
+      this.uploadFormData = {
+        label: '',
+        photo: undefined,
+        previewImageSrc: '',
+        subtitle: ''
       };
       this.selectedGroup = undefined;
       // Clear error states
@@ -169,7 +185,6 @@ parasails.registerPage('group-home', {
      */
     submittedUploadGroupForm: function (result) {
       // Добавлем новые данные в уже имеющийся массив groups
-      console.log(this.uploadFormData);
       this.groups.push({
         label: this.uploadFormData.label,
         id: result.id,
@@ -183,10 +198,41 @@ parasails.registerPage('group-home', {
       this._clearUploadGroupModal();
     },
 
+    // Метод для добавления файла
     changeFileInput: function (files) {
+      if (files.length !== 1 && !this.uploadFormData.photo) {
+        throw new Error('Consistency violation: `changeFileInput` was somehow called with an empty array of files, or with more than one file in the array!  This should never happen unless there is already an uploaded file tracked.');
+      }
+      let selectedFile = files[0];
+
+      // If you cancel from the native upload window when you already
+      // have a photo tracked, then we just avast (return early).
+      // In this case, we just leave whatever you had there before.
+      if (!selectedFile && this.uploadFormData.photo) {
+        return;
+      }
+
+      this.uploadFormData.photo = selectedFile;
+
+      // Set up the file preview for the UI:
+      var reader = new FileReader();
+      reader.onload = (event) => {
+        this.uploadFormData.previewImageSrc = event.target.result;
+
+        // Unbind this "onload" event.
+        delete reader.onload;
+      };
+      // Clear out any error messages about not providing an image.
+      this.formErrors.photo = false;
+      reader.readAsDataURL(selectedFile);
+
+    },
+
+    // Метод обработчик действии update файла
+    changeFileUpdate: function (files) {
 
       if (files.length !== 1 && !this.uploadFormData.photo) {
-        throw new Error('Consistency violation: `changeFileInput` ' +
+        throw new Error('Consistency violation: `changeFileUpdate` ' +
           'was somehow called with an empty array of files, ' +
           'or with more than one file in the array!  This should never happen unless ' +
           'there is already an uploaded file tracked.');
@@ -194,22 +240,18 @@ parasails.registerPage('group-home', {
 
       let selectedFile = files[0];
 
-      if (!selectedFile) {
-        this.uploadFormData.photo = undefined;
+      if (!selectedFile && !this.uploadFormData.photo) {
+        // this.uploadFormData.photo = undefined;
         return;
       }
-
-
       this.uploadFormData.photo = selectedFile;
 
-      // Set up the file preview for the UI:
+
       // Настройка предварительного просмотра файла для пользовательского интерфейса:
-      var reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = (event) => {
-        this.uploadFormData.previewImageSrc = event.target.result;
+        this.selectedGroup.imageSrc = event.target.result;
 
-
-        // Unbind this "onload" event.
         // Отмена привязки этого события onload.
         delete reader.onload;
       };
@@ -220,37 +262,30 @@ parasails.registerPage('group-home', {
     },
 
 
-    clickBorrow: function (groupId) {
-      this.selectedGroup = _.find(this.groups, {id: groupId});
-      this.uploadFormData.previewImageSrc = this.selectedGroup.imageSrc;
-      // Open the modal.
-      this.updateGroupModalOpen = true;
+    closeGroupModalUpdate: function () {
+      this._clearGroupModalUpdate();
     },
 
-    closeBorrowGroupModal: function () {
-      this._clearBorrowGroupModal();
-    },
+    // После проверки отправляеи=т на сервер данные
+    handleParsingUpdateGroupForm: function () {
 
-    handleParsingBorrowGroupForm: function () {
-      console.log('this.selectedGroup: ', this.selectedGroup);
       // Clear out any pre-existing error messages.
       // Удалите все существующие сообщения об ошибках
       this.formErrors = {};
+
       var argins = _.extend({id: this.selectedGroup.id}, this.uploadFormData);
 
-
-      // argins.expectedReturnAt = this.$refs.datepickerref.doParseDate().getTime();
-
-      // If there were any issues, they've already now been communicated to the user,
-      // so simply return undefined.  (This signifies that the submission should be
-      // cancelled.)
+      // Если были какие-либо проблемы, они уже были сообщены пользователю,
+      // так просто вернуть undefined. (Это означает, что представление должно быть
+      // отменено.)
       if (Object.keys(this.formErrors).length > 0) {
         return;
       }
-      return argins;
+
+      return _.omit(argins, ['previewImageSrc']);
     },
 
-    submittedBorrowGroupForm: function () {
+    submittedGroupFormUpdate: function (event) {
 
       // Показать сообщение об успехе.
       this.borrowFormSuccess = true;
@@ -258,9 +293,9 @@ parasails.registerPage('group-home', {
       // Обновление элемента в пользовательском интерфейсе.
       var borrowedItem = _.find(this.groups, {id: this.selectedGroup.id});
 
-      borrowedItem.imageSrc = this.uploadFormData.previewImageSrc;
-      // this.uploadFormData.previewImageSrc = '';
-      this.updateGroupModalOpen=false;
+      borrowedItem.photo = this.uploadFormData.photo;
+
+      this.selectedGroup = false;
 
     },
   }

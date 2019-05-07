@@ -58,6 +58,10 @@ module.exports.routes = {
   '/terms': '/legal/terms',
   '/help': '/contact',
   '/logout': '/api/v1/account/logout',
+  /*  '/groups': [
+    { policy: 'is-super-admin' },
+    { view: 'pages/group/group-home' }
+  ],*/
 
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
@@ -104,5 +108,6 @@ module.exports.routes = {
   'GET    /api/v1/groups/:id': { action: 'groups/download-group' },
   'DELETE /api/v1/groups/destroy-one-group': { action: 'groups/destroy-one-group' },
   'PUT    /api/v1/groups/update-group': { action: 'groups/update-group' },
+
 
 };

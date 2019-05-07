@@ -85,7 +85,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     // console.log('META: ', inputs.attach);
-    const token = await sails.helpers.strings.random('url-friendly');
+    // const token = await sails.helpers.strings.random('url-friendly');
     let fd = '';
     let type = '';
     let filename = '';

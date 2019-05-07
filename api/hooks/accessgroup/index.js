@@ -7,15 +7,15 @@
 
 module.exports = function defineAccessGroupHook(sails) {
   // This var will be private
-  var foo = 'bar';
-  let access = false;
+  // var foo = 'bar';
+  // let access = false;
   return {
 
     /**
      * Runs when this Sails app loads/lifts.
      */
     initialize: async function (cb) {
-      sails.on('hook:orm:loaded', function () {
+      sails.on('hook:orm:loaded',()=> {
 
         // This var will be public
 
@@ -31,7 +31,7 @@ module.exports = function defineAccessGroupHook(sails) {
     sayHi: function (name) {
       console.log(greet(name));
     },
-   /* isAdmin: async function (userId) {
+    /* isAdmin: async function (userId) {
       let group = await Group.find({label: 'admin'}).populate('belongsToGroup', {where: {id: userId}});
       console.log('GROUP: ', group[0].belongsToGroup);
       console.log('OBJ-keys', Object.keys(group[0].belongsToGroup).length > 0);

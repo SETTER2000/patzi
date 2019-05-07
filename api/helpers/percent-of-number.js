@@ -30,7 +30,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     let users = await User.find();
-    if (Object.keys(users).length < 1) return;
+    if (Object.keys(users).length < 1) {return;}
     let result = inputs.num/users.length * 100;
     return exits.success(result);
   }

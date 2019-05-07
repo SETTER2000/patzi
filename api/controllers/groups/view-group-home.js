@@ -16,13 +16,9 @@ module.exports = {
   },
 
 
-
   fn: async function (inputs, exits) {
     // Бибилиотека Node.js
     const url = require('url');
-    // const moment = require('moment');
-    // Устанавливаем для пользователя его локаль. Для соответствующего отображения даты.
-    // moment.locale(this.req.me.preferredLocale);
 
 
     // Выбираем авторизованного пользователя и всех его
@@ -44,26 +40,21 @@ module.exports = {
     // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
     // let friendIds = _.pluck(me.friends, 'id'); // friendIds: [id,id,id...]
     //
-    // let groups = await Group.find({
-    //   or: [{owner: this.req.me.id}, {owner: {in: friendIds}}]
-    // }).populate('owner');
+
 
     let groups = await Group.find({}).populate('belongsToGroup');
-    console.log('groups: ', groups);
-let percent = await sails.helpers.percentOfNumber.with({num:groups.length});
-console.log('GROUP: ',percent);
+
+
+    // let percent = await sails.helpers.percentOfNumber.with({num: groups.length});
+
+
     _.each(groups, (group) => {
       group.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/groups/${group.id}`);
       // ... затем мы удаляем наш файловый дескриптор
       delete group.imageUploadFD;
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
       delete group.imageUploadMime;
-      // Устанавливаем url к странице просмотра помёта
-      // Первый аргумент, базовый url
-      // group.detail =  `/groups/group/${group.id}`;
-      // group.born =  moment(group.born).format('L');
     });
-
 
 
     // Respond with view.

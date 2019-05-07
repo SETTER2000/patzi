@@ -67,8 +67,8 @@ module.exports = {
      */
 
 
-      // uploadOne - не будет работать без пакета sails-hook-uploads
-      // npm i --save sails-hook-uploads
+    // uploadOne - не будет работать без пакета sails-hook-uploads
+    // npm i --save sails-hook-uploads
     let info = await sails.uploadOne(inputs.photo);
     if (!info) {
       throw 'badRequest';

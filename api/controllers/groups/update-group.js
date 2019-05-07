@@ -44,8 +44,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    // Бибилиотека Node.js
-    const url = require('url');
+
     let info = await sails.uploadOne(inputs.photo);
     if (!info) {
       throw 'badRequest';
@@ -53,7 +52,8 @@ module.exports = {
     await Group.updateOne({id: inputs.id})
       .set({
         imageUploadFD: info.fd,
-        imageUploadMime: info.type
+        imageUploadMime: info.type,
+        filename: info.name
       });
 
     return exits.success({});
