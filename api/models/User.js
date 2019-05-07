@@ -173,16 +173,21 @@ It just means they have a customer entry in Stripe, which might or might not hav
       description: 'A JS timestamp (epoch ms) representing the moment at which this user most recently interacted with the backend while logged in (or 0 if they have not interacted with the backend at all yet).',
       example: 1502844074211
     },
-    gravr: {
+    gravatar: {
       type: 'string',
       description: 'Email адрес зарегистрированый в граватар сервисе',
       example: 'my-email@gmail.com',
       moreInfoUrl: 'https://ru.gravatar.com/'
     },
+    avatar: {
+      type: 'string',
+      description: 'Графическое представление пользователя, двумерное изображение (иконка).',
+      example: 'my-avatar.jpg'
+    },
     preferredLocale: {
       type: 'string',
-      description: 'Предпочитаемый язык интерфейса. Пользователь сам устанавливает эту ' +
-      'опцию в настройках своего аккаунта после авторизации.',
+      description: `Предпочитаемый язык интерфейса. Пользователь сам устанавливает эту
+                    опцию в настройках своего аккаунта после авторизации.`,
       example: 'ru',
       moreInfoUrl: 'https://gist.github.com/mikermcneil/0af155ed546f3ddf164b4885fb67830c; https://sailsjs.com/documentation/reference/request-req/req-set-locale',
       // defaultsTo: 'en',

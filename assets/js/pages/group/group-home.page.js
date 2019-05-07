@@ -27,8 +27,10 @@ parasails.registerPage('group-home', {
     confirmReturnModalOpen: false,
 
     selectedGroup: undefined,
-
-
+    collaps: undefined,
+    flag: false,
+    show:false,
+    locId: undefined,
     showGroupModalOpen: false,
 
     // Состояние загрузки
@@ -76,6 +78,7 @@ parasails.registerPage('group-home', {
     clickUpdateButton: function (groupId) {
       this.me.isSuperAdmin ? this.goto('/groups/edit') : alert('Не достаточно прав.');
       this.selectedGroup = _.find(this.groups, {id: groupId});
+      console.log('this.selectedGroup: ', this.selectedGroup);
     },
 
 
@@ -112,7 +115,6 @@ parasails.registerPage('group-home', {
     // Это кнопка вызывает модальное окно "ShowPhoto <modal>" с <ajax-form> для загрузки фото
     clickShowPhoto: function () {
       this.showGroupModalOpen = true;
-      // this.selectedGroup = _.find(this.groups, {id: groupId});
     },
 
 
@@ -241,10 +243,10 @@ parasails.registerPage('group-home', {
       let selectedFile = files[0];
 
       if (!selectedFile && !this.uploadFormData.photo) {
-        // this.uploadFormData.photo = undefined;
         return;
       }
       this.uploadFormData.photo = selectedFile;
+      this.uploadFormData.subtitle = selectedFile;
 
 
       // Настройка предварительного просмотра файла для пользовательского интерфейса:
@@ -262,6 +264,12 @@ parasails.registerPage('group-home', {
     },
 
 
+    collapse: function (id) {
+      this.collaps = (this.flag = !this.flag) ? ((this.locId === id) ? '' : id) : ((this.locId === id) ? '' : id);
+      this.locId = id;
+    },
+
+
     closeGroupModalUpdate: function () {
       this._clearGroupModalUpdate();
     },
@@ -272,9 +280,13 @@ parasails.registerPage('group-home', {
       // Clear out any pre-existing error messages.
       // Удалите все существующие сообщения об ошибках
       this.formErrors = {};
-
-      var argins = _.extend({id: this.selectedGroup.id}, this.uploadFormData);
-
+      if (Object.keys(this.selectedGroup.subtitle).length < 10) {
+        alert('Опишите пожалуйста группу. Для каких целей создана группа, какие политики доступа будет использовать. Не менее 10 знаков.');
+        return;
+      }
+      this.uploadFormData.subtitle = this.selectedGroup.subtitle;
+      const argins = _.extend({id: this.selectedGroup.id}, this.uploadFormData);
+      console.log('argins', argins);
       // Если были какие-либо проблемы, они уже были сообщены пользователю,
       // так просто вернуть undefined. (Это означает, что представление должно быть
       // отменено.)
@@ -294,6 +306,7 @@ parasails.registerPage('group-home', {
       var borrowedItem = _.find(this.groups, {id: this.selectedGroup.id});
 
       borrowedItem.photo = this.uploadFormData.photo;
+      borrowedItem.subtitle = this.uploadFormData.subtitle;
 
       this.selectedGroup = false;
 

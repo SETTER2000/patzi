@@ -1,4 +1,4 @@
- #group-home {
+#group-home {
 
   .listings {
     max-width: 1000px;
@@ -136,6 +136,37 @@
     }
   }
 
+  /* на появление */
+  .collapse-enter {
+    opacity: 0;
+  }
+  .collapse-enter-active {
+    transition: opacity 1s;
+  }
+  .collapse-enter-to {
+  }
+
+  /* на  исчезновение */
+  .collapse-leave {
+  }
+
+  .collapse-leave-active {
+    animation: 1s collapse-slide forwards;
+    transition: opacity 1s;
+  }
+
+  .collapse-leave-to {
+    opacity: 0;
+  }
+
+@keyframes collapse-slide{
+  from{
+    transform: translateX(0px);
+  }
+  to{
+    transform: translateX(-100px);
+  }
+}
 
   @media (max-width: 550px) {
     .listings .card .card-options {

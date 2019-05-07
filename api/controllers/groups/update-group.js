@@ -14,12 +14,17 @@ module.exports = {
     photo: {
       type: 'ref',
       description: 'Обновлённое фото группы пользователей.',
-      required: true
+      // required: true
     },
     id: {
       description: 'Идентификатор группы.',
       type: 'number',
       required: true
+    },
+    subtitle: {
+      type: 'string',
+      example: 'Описание группы. Для каких целей создана.',
+      description: 'Описание щенка. Какая то интересная информация.'
     }
 
   },
@@ -43,17 +48,21 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
+    let fd, type, name;
 
     let info = await sails.uploadOne(inputs.photo);
-    if (!info) {
-      throw 'badRequest';
+    if (info) {
+      // throw 'badRequest';
+      fd = info.fd;
+      type = info.type;
+      name = info.name;
     }
     await Group.updateOne({id: inputs.id})
       .set({
-        imageUploadFD: info.fd,
-        imageUploadMime: info.type,
-        filename: info.name
+        imageUploadFD: fd,
+        imageUploadMime: type,
+        filename: name,
+        subtitle: inputs.subtitle
       });
 
     return exits.success({});
