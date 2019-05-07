@@ -38,7 +38,7 @@
               <div class="serial">#</div>
               <div class="country">Название</div>
               <div class="visit">количество</div>
-              <div class="percentage">Cоотношение</div>
+              <div class="percentage">Соотношение</div>
               <div class="visit">Изменить</div>
               <div class="visit">Удалить</div>
             </div>
@@ -56,7 +56,7 @@
               </div>
               <div class="visit">
                 <span class="genric-btn success-border small" data-toggle="tooltip" data-placement="top"
-                      title="<%= __('to reserve') %>" @click="clickBorrow(group.id)">
+                      title="<%= __('Edit') %>" @click="clickUpdateButton(group.id)">
                   edit
                 </span>
               </div>
@@ -77,14 +77,18 @@
   <%/*  End Align Area */%>
 
   <% /* "Upload Group" Modal */ %>
-  <modal v-if="virtualPageSlug==='new'" v-cloak key="new" @close="closeUploadGroupModal()">
+  <modal v-if="virtualPageSlug==='new'"
+         v-cloak key="new"
+         @close="closeUploadGroupModal()">
     <div class="modal-header">
       <h5 class="modal-title"><%= __('Upload new photo') %></h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span>&times;</span>
       </button>
     </div>
-    <ajax-form action="uploadGroup" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+    <ajax-form action="uploadGroup"
+               :syncing.sync="syncing"
+               :cloud-error.sync="cloudError"
                :handle-parsing="handleParsingUploadGroupForm"
                @submitted="submittedUploadGroupForm($event)"
     >
@@ -108,7 +112,7 @@
                       :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
                   <span class="button-text" v-if="!uploadFormData.previewImageSrc"><%= __('Select image') %></span>
                   <span class="button-text" v-else><%= __('Change image') %></span>
-                  <input type="file" :disabled="syncing" accept="image/*" class="file-input"
+                  <input type="file" :disabled="syncing" accept="image/*"  class="file-input"
                          @change="changeFileInput($event.target.files)"/>
                 </span>
                 <p class="image-advice text-muted" v-if="!formErrors.photo">
@@ -167,8 +171,14 @@
     </ajax-form>
   </modal>
 
+
+
+
   <% /* "Update group" modal */ %>
-  <modal v-if="updateGroupModalOpen && selectedGroup" v-cloak key="borrow" @close="closeBorrowGroupModal()">
+  <!--<modal v-if="updateGroupModalOpen && selectedGroup" v-cloak key="edit"-->
+  <modal v-if="virtualPageSlug==='edit' && selectedGroup"
+         v-cloak key="edit"
+         @close="closeUploadGroupModal()">
     <%/*Зарезервировать*/%>
     <div class="modal-header">
       <h5 class="modal-title"><%= __('Edit') %> {{selectedGroup.label || 'item'}}</h5>
@@ -176,37 +186,35 @@
         <span>&times;</span>
       </button>
     </div>
-
     <ajax-form action="updateGroup"
                :syncing.sync="syncing"
                :cloud-error.sync="cloudError"
-               :handle-parsing="handleParsingBorrowGroupForm"
-               @submitted="submittedBorrowGroupForm($event)"
+               :handle-parsing="handleParsingUpdateGroupForm"
+               @submitted="submittedGroupFormUpdate($event)"
                >
       <div class="modal-body">
-
         <%/*Редактировать фото*/%>
         <div class="form-group">
           <label><%= __('Edit a photo') %>:</label>
-          <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
+          <div class="photo-uploader" :class="!selectedGroup.imageSrc ? 'empty' :  ''">
             <div class="photo-upload-field row d-flex align-items-center"
-                 :class="!uploadFormData.previewImageSrc ? 'justify-content-center' :  'justify-content-start'">
+                 :class="!selectedGroup.imageSrc ? 'justify-content-center' :  'justify-content-start'">
               <div class="photo-preview col">
                 <div class="image-wrapper"
-                     :class="!uploadFormData.previewImageSrc ? 'd-flex align-items-center justify-content-center' : ''">
+                     :class="!selectedGroup.imageSrc ? 'd-flex align-items-center justify-content-center' : ''">
 
-                  <img v-if="uploadFormData.previewImageSrc" alt="A preview of the selected item"
-                       :src="uploadFormData.previewImageSrc"/>
+                  <img v-if="selectedGroup.imageSrc" alt="A preview of the selected item"
+                       :src="selectedGroup.imageSrc"/>
                   <span v-else class="placeholder-icon fa fa-picture-o"></span>
                 </div>
               </div>
               <div class="col d-flex-column justify-content-center">
                 <span class="file-upload-button btn btn-sm"
-                      :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
-                  <span class="button-text" v-if="!uploadFormData.previewImageSrc"><%= __('Select image') %></span>
+                      :class="[formErrors.photo ? 'btn-outline-danger' : selectedGroup.imageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
+                  <span class="button-text" v-if="!selectedGroup.imageSrc"><%= __('Select image') %></span>
                   <span class="button-text" v-else><%= __('Change image') %></span>
-                  <input type="file" :disabled="syncing" accept="image/*" class="file-input"
-                         @change="changeFileInput($event.target.files)"/>
+                  <input type="file" multiple :disabled="syncing" accept="image/*" class="file-input"
+                         @change="changeFileUpdate($event.target.files)"/>
                 </span>
                 <p class="image-advice text-muted" v-if="!formErrors.photo">
                   <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
