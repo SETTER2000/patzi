@@ -48,7 +48,7 @@
             <div v-for="(group, index, key) of groups" :data-index="index" :key="group.id">
               <div class="table-row">
                 <div class="serial">{{index+1}}</div>
-                <div class="country collapse" @click="collapse(group.id)">
+                <div class="country collapse" @click="clickCollapse(group.id)">
                   <img width="31px" :src="group.imageSrc" alt="flag">
                   <span> {{group.label}}</span>
                 </div>
@@ -262,16 +262,7 @@
         <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
       </div>
     </ajax-form>
-    <!-- <div class="modal-body" v-else>
-      <p><%= __('Thank you for contacting, we will contact you shortly. Advance reservation comes into force after the agreement of the details and the adoption of a positive decision by the two parties.') %>
-        <strong class="text-success">{{selectedGroup.label || 'item'}}</strong> know
-        when you could drop by.</p>
-      <p>Stay in touch with {{selectedGroup.fullName}} to confirm pickup details: <strong>{{selectedGroup.emailAddress}}</strong>
-      </p>
-    </div>-->
-    <!--  <div class="modal-footer" v-if="borrowFormSuccess">
-      <button data-dismiss="modal" class="btn btn-outline-success"><%= __('Got it') %></button>
-    </div>-->
+
   </modal>
 
   <% /* "Confirm Delete Group" Modal */ %>
