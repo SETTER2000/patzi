@@ -142,17 +142,35 @@
                 <li><a href="blog-single.html">Blog Single</a></li>-->
               </ul>
             </li>
-            <li class="menu-has-children">
-              <a href="#"><%= __('Account') %></a>
-              <ul>
-                <li><a class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'account' ? 'current' : '' %>" href="/account"><%= __('Settings') %></a></li>
-                <% if(me.isSuperAdmin) { %>
-                <li ><a class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'groups' ? 'current' : '' %>" href="/groups"><%= __('Groups') %></a></li> <% } %>
+            <li class="menu-has-children avatar">
+              <% if(me.gravatar) { %>
+              <a href="#" class="avatar">
+                <img src="<%=me.gravatar%>" width="31px" class=" rounded-circle" :title="me.fullName" :alt="me.fullName"></a>
+              <%} else {%>
+                 <% if(me.avatar) {%>
+              <a href="#" class="avatar"><img :src="me.avatar" class="rounded-circle" :title="me.fullName" :alt="me.fullName"></a>
+              <%} else{%>
+              <a href="#" > <%= __('Account') %></a>
+              <%}%>
+              <%}%>
+              <ul class="avatar">
+                <li class="avatar"><a class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'account' ? 'current' : '' %>" href="/account"><%= __('Settings') %></a></li>
                 <li><a class="dropdown-item" href="/logout"><%= __('Sign out') %></a></li>
               </ul>
             </li>
+            <% if(me.isSuperAdmin) { %>
+            <li class="menu-has-children">
+              <a href="#"><span class="ti-settings"></span></a>
+              <ul>
+                <li><a class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'users' ? 'current' : '' %>" href="/users"><%= __('Users') %></a></li>
 
-            <% } else { %>
+                <li ><a class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'groups' ? 'current' : '' %>" href="/groups"><%= __('Groups') %></a></li>
+
+              </ul>
+            </li>
+            <%}%>
+            <% }
+            else { %>
             <!-- LOGGED-OUT NAVIGATION -->
             <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'faq' ? 'current' : '' %>" href="/faq">FAQ</a></li>
             <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'login' ? 'current' : '' %>" href="/login"><%= __('Log in') %></a></li>
