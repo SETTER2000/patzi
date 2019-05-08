@@ -266,5 +266,14 @@
 	"let us know": "let us know",
 	"Change avatar": "Change avatar",
 	"Avatar": "Avatar",
-	"Users": "Users"
+	"Users": "Users",
+	"Update personal info": "Update personal info",
+	"Full name": "Full name",
+	"Please enter your full name": "Please enter your full name",
+	"There is already an account using that email address": "There is already an account using that email address",
+	"Update personal avatar": "Update personal avatar",
+	"Edit a photo": "Edit a photo",
+	"Use mainly square images for better scaling of avatars.": "Use mainly square images for better scaling of avatars.",
+	"Picture size is no more than 100 kb.": "Picture size is no more than 100 kb.",
+	"Attention": "Attention"
 }

@@ -182,7 +182,7 @@ It just means they have a customer entry in Stripe, which might or might not hav
     avatar: {
       type: 'string',
       description: 'Графическое представление пользователя, двумерное изображение (иконка).',
-      example: 'my-avatar.jpg'
+      example: 'https://example.com/my-avatar.jpg'
     },
     preferredLocale: {
       type: 'string',

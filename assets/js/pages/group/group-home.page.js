@@ -264,7 +264,7 @@ parasails.registerPage('group-home', {
     },
 
 
-    collapse: function (id) {
+    clickCollapse: function (id) {
       this.collaps = (this.flag = !this.flag) ? ((this.locId === id) ? '' : id) : ((this.locId === id) ? '' : id);
       this.locId = id;
     },
@@ -274,7 +274,7 @@ parasails.registerPage('group-home', {
       this._clearGroupModalUpdate();
     },
 
-    // После проверки отправляеи=т на сервер данные
+    // После проверки отправляем на сервер данные
     handleParsingUpdateGroupForm: function () {
 
       // Clear out any pre-existing error messages.
@@ -286,7 +286,7 @@ parasails.registerPage('group-home', {
       }
       this.uploadFormData.subtitle = this.selectedGroup.subtitle;
       const argins = _.extend({id: this.selectedGroup.id}, this.uploadFormData);
-      console.log('argins', argins);
+
       // Если были какие-либо проблемы, они уже были сообщены пользователю,
       // так просто вернуть undefined. (Это означает, что представление должно быть
       // отменено.)

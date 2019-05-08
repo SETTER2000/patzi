@@ -169,8 +169,12 @@
 	"if the error persists": "если ошибка не устранена",
 	"Credit card": "Кредитная карта",
 	"Change card": "Изменить карту",
+	"Use mainly square images for better scaling of avatars.": "Используйте преимущественно квдратные изображения, для лучшего маштабирования аватарки.",
 	"Add card": "Прикрепить карту",
 	"Billing": "Оплата",
+	"Attention": "Внимание",
+	"Picture size is no more than 100 kb.": "Размер картинки не более 100 кб.",
+	"Update personal avatar": "Обновить личный аватар",
 	"contact support": "техподдержку",
 	"An error occured while processing your request. Please check your information and try again, or": "Произошла ошибка при обработке вашего запроса. Пожалуйста, проверьте информацию и попробуйте снова, или обратитесь в ",
 	"Your new password and confirmation do not match": "Ваш новый пароль и подтверждение не совпадают",
@@ -341,5 +345,6 @@
 	"In order to always get on a secure connection, enter the following URL in the address bar of the browser": "In order to always get on a secure connection, enter the following URL in the address bar of the browser",
 	"Date of group": "Date of group",
 	"Group letter": "Group letter",
-	"Please indicate the group letter.": "Please indicate the group letter."
+	"Please indicate the group letter.": "Please indicate the group letter.",
+	"Alert": "Alert"
 }
