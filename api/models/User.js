@@ -173,17 +173,49 @@ It just means they have a customer entry in Stripe, which might or might not hav
       description: 'A JS timestamp (epoch ms) representing the moment at which this user most recently interacted with the backend while logged in (or 0 if they have not interacted with the backend at all yet).',
       example: 1502844074211
     },
+
+
+    defaultIcon: {
+      type: 'string',
+      description: 'Какая иконка будет показываться по умолчанию на сайте. Два варианта всего avatar|gravatar',
+      isIn: ['avatar', 'gravatar'],
+      defaultsTo: 'gravatar'
+    },
+
     gravatar: {
       type: 'string',
       description: 'Email адрес зарегистрированый в граватар сервисе',
       example: 'my-email@gmail.com',
       moreInfoUrl: 'https://ru.gravatar.com/'
     },
+
+
     avatar: {
       type: 'string',
-      description: 'Графическое представление пользователя, двумерное изображение (иконка).',
-      example: 'https://example.com/my-avatar.jpg'
+      description: 'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',
+      moreInfoUrl: 'https://www.npmjs.com/package/skipper'
     },
+
+
+    avatarFD: {
+      type: 'string',
+      description: 'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',
+      moreInfoUrl: 'https://www.npmjs.com/package/skipper'
+    },
+
+
+    filename: {
+      type: 'string',
+      description: 'Имя загруженного файла картинки от пользователя.'
+    },
+
+
+    avatarMime: {
+      type: 'string',
+      description: 'Тип MIME для загруженного изображения.'
+    },
+
+
     preferredLocale: {
       type: 'string',
       description: `Предпочитаемый язык интерфейса. Пользователь сам устанавливает эту
@@ -191,8 +223,8 @@ It just means they have a customer entry in Stripe, which might or might not hav
       example: 'ru',
       moreInfoUrl: 'https://gist.github.com/mikermcneil/0af155ed546f3ddf164b4885fb67830c; https://sailsjs.com/documentation/reference/request-req/req-set-locale',
       // defaultsTo: 'en',
-
     },
+
 
     emailConfirmationReminderAlreadySent: {
       type: 'boolean',

@@ -3,7 +3,45 @@
   padding-top: 75px;
   padding-bottom: 75px;
 
+  .image-wrapper.round {
+    position: relative;
+    .rounded-circle.chek {
+      font-size: 12px;
+      font-weight: bolder;
+      display: block;
+      background-color: rgba(238, 238, 238, 0.80);
+      padding: 7px;
+      position: absolute;
+      left: 1em;
+      top: 4em;
+      z-index: 2;
 
+    }
+    .chek.act {
+      top: 7em;
+      left: 4em;
+      cursor: pointer;
+      opacity: 0;
+
+    }
+
+    &:hover {
+      .chek.act {
+        opacity: 1;
+      }
+    }
+
+  }
+  .transition1 {
+    transition: background-color 3s cubic-bezier(0.1, 0.8, 0.5, 2), color 3s 1s linear;
+
+    /* или */
+
+    /*   transition-property: background-color, color;
+       transition-duration: 3s;
+       transition-delay: 0s, 1s;
+       transition-timing-function: cubic-bezier(0.1, 0.8, 0.5, 2), linear;*/
+  }
   .listings {
     max-width: 1000px;
     margin: 0 auto;
@@ -96,8 +134,8 @@
           border-radius: 50%;
           img.personPhoto {
             width: auto;
-            height: 120%;
-            margin: 3px auto;
+            height: 100%;
+            margin: 0 auto;
           }
           img {
             width: 120px;
@@ -176,11 +214,11 @@
     opacity: 0;
   }
 
-  @keyframes collapse-slide{
-    from{
+  @keyframes collapse-slide {
+    from {
       transform: translateX(0px);
     }
-    to{
+    to {
       transform: translateX(-100px);
     }
   }
@@ -191,6 +229,7 @@
         opacity: 1;
       }
     }
+
   }
 
 }

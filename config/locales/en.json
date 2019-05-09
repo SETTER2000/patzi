@@ -275,5 +275,15 @@
 	"Edit a photo": "Edit a photo",
 	"Use mainly square images for better scaling of avatars.": "Use mainly square images for better scaling of avatars.",
 	"Picture size is no more than 100 kb.": "Picture size is no more than 100 kb.",
-	"Attention": "Attention"
+	"Attention": "Attention",
+	"Change card": "Change card",
+	"Change gravatar": "Change gravatar",
+	"Default": "Default",
+	"Set as default": "Set as default",
+	"New password": "New password",
+	"Please enter a password or choose \"Cancel\"": "Please enter a password or choose \"Cancel\"",
+	"Confirm password": "Confirm password",
+	"Your new password and confirmation do not match": "Your new password and confirmation do not match",
+	"Update personal gravatar": "Update personal gravatar",
+	"Please indicate the group letter.": "Please indicate the group letter."
 }

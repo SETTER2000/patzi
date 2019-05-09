@@ -36,7 +36,7 @@ module.exports.routes = {
   'GET /account/profile': {action: 'account/view-edit-profile'},
   'GET /account/language': {action: 'account/view-edit-language'},
   'GET /account/avatar': { action: 'account/view-edit-avatar' },
-
+  'GET /account/gravatar': { action: 'account/view-update-gravatar' },
   'GET /portfolio/:virtualPageSlug?': {action: 'things/view-available-things'},
 
   'GET /blog/:virtualPageSlug?': {action: 'blog/view-blog-home'},
@@ -85,6 +85,11 @@ module.exports.routes = {
   'PUT     /api/v1/account/update-profile': {action: 'account/update-profile'},
   'PUT     /api/v1/account/update-billing-card': {action: 'account/update-billing-card'},
   'PUT     /api/v1/account/update-avatar': { action: 'account/update-avatar' },
+  'GET     /api/v1/account/:id': { action: 'account/download-avatar' },
+  'PUT     /api/v1/account/update-default-icon': { action: 'account/update-default-icon' },
+  'POST    /api/v1/account/delete-avatar': { action: 'account/delete-avatar' },
+
+
   'PUT     /api/v1/entrance/login': {action: 'entrance/login'},
   'POST    /api/v1/entrance/signup': {action: 'entrance/signup'},
   'POST    /api/v1/entrance/send-password-recovery-email': {action: 'entrance/send-password-recovery-email'},

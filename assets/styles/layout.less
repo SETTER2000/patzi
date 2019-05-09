@@ -157,6 +157,32 @@ body.detected-mobile {
   // …
 }
 
+
+.photo-preview {
+  .image-wrapper.round {
+    background-color: @bg-lt-gray;
+    width: 31px;
+    height: 31px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 50%;
+    img.personPhoto {
+      width: auto;
+      height: 100%;
+      margin: 0 auto;
+    }
+    img {
+      width: 31px;
+    }
+    .placeholder-icon {
+      color: @text-muted;
+      font-size: 42px;
+    }
+  }
+}
+
+
+
 @media (max-width: 800px) {
   #page-wrap {
     padding-bottom: 75px;

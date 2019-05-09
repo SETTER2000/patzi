@@ -13,7 +13,11 @@ parasails.registerPage('account-overview', {
     syncingRemoveCard: false,
 
     // Form data
-    formData: { /* … */ },
+    formData: {
+      defaultIcon:undefined
+    },
+    // Состояние загрузки
+    syncing: false,
 
     // Server error state for the form
     cloudError: '',
@@ -28,11 +32,11 @@ parasails.registerPage('account-overview', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function (){
+  beforeMount: function () {
     _.extend(this, window.SAILS_LOCALS);
 
     this.isBillingEnabled = !!this.stripePublishableKey;
-
+    this.formData.defaultIcon = this.me.defaultIcon;
     // Determine whether there is billing info for this user.
     this.me.hasBillingCard = (
       this.me.billingCardBrand &&
@@ -41,7 +45,8 @@ parasails.registerPage('account-overview', {
       this.me.billingCardExpYear
     );
   },
-  mounted: async function() {
+
+  mounted: async function () {
     //…
   },
 
@@ -50,10 +55,12 @@ parasails.registerPage('account-overview', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
 
-    clickStripeCheckoutButton: async function() {
+    clickStripeCheckoutButton: async function () {
 
       // Prevent double-posting if it's still loading.
-      if(this.syncingUpdateCard) { return; }
+      if (this.syncingUpdateCard) {
+        return;
+      }
 
       // Show syncing state for opening checkout.
       this.syncingOpenCheckout = true;
@@ -74,9 +81,9 @@ parasails.registerPage('account-overview', {
       // info for this user in our backend.
       this.syncingUpdateCard = true;
       await Cloud.updateBillingCard.with(billingCardInfo)
-      .tolerate(()=>{
-        this.cloudError = true;
-      });
+        .tolerate(() => {
+          this.cloudError = true;
+        });
       this.syncingUpdateCard = false;
 
       // Upon success, update billing info in the UI.
@@ -86,16 +93,16 @@ parasails.registerPage('account-overview', {
       }
     },
 
-    clickRemoveCardButton: async function() {
+    clickRemoveCardButton: async function () {
       this.removeCardModalVisible = true;
     },
 
-    closeRemoveCardModal: async function() {
+    closeRemoveCardModal: async function () {
       this.removeCardModalVisible = false;
       this.cloudError = false;
     },
 
-    submittedRemoveCardForm: async function() {
+    submittedRemoveCardForm: async function () {
 
       // Update billing info on success.
       this.me.billingCardLast4 = undefined;
@@ -109,12 +116,43 @@ parasails.registerPage('account-overview', {
 
     },
 
-    handleParsingRemoveCardForm: function() {
+    clickStateDefaultIcon: async function(){
+
+    },
+
+    submittedUpdateDefaultIcon: async function (event) {
+      this.cloudError = false;
+console.log('event',event);
+console.log('this.me.defaultIcon',this.me.defaultIcon);
+      this.formData.defaultIcon = this.me.defaultIcon;
+      // Update billing info on success.
+      // this.me.billingCardLast4 = undefined;
+      // this.me.billingCardBrand = undefined;
+      // this.me.billingCardExpMonth = undefined;
+      // this.me.billingCardExpYear = undefined;
+      // this.me.hasBillingCard = false;
+
+      // Закрыть модальное и очистить его.
+      // this.closeRemoveCardModal();
+
+    },
+
+
+    handleParsingRemoveCardForm: function () {
       return {
         // Set to empty string to indicate the default payment source
         // for this customer is being completely removed.
         stripeToken: ''
       };
+    },
+
+
+    handleParsingIconForm: function () {
+
+      console.log('defaultIcon:: ', this.formData.defaultIcon);
+
+      return this.formData;
+
     },
 
   }

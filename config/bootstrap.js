@@ -74,8 +74,7 @@ module.exports.bootstrap = async function () {
     isSuperAdmin: true,
     preferredLocale: 'en',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
-    gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress),
-    avatar: 'https://d3a1wbnh2r1l7y.cloudfront.net/avatar-adam.jpg'
+    gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
   }).fetch();
 
   // Добавить Райана Даля , как одного из друзей Алекса Фокса

@@ -16,11 +16,6 @@ module.exports = {
       type: 'ref',
       description: 'Обновлённое фото группы пользователей.',
       // required: true
-    },
-    id: {
-      description: 'Идентификатор группы.',
-      type: 'number',
-      required: true
     }
 
   },
@@ -44,18 +39,31 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
+    // Бибилиотека Node.js
 
+
+    const url = require('url');
     let info = await sails.uploadOne(inputs.photo);
+    console.log('info::' , info);
+    let fd, type, filename, avatar='';
 
-    if (!info) {
-      throw 'badRequest';
+    if (info) {
+      // throw 'badRequest';
+      fd = info.fd;
+      type = info.type;
+      filename = info.filename;
+      avatar = url.resolve(sails.config.custom.baseUrl, `/api/v1/account/${this.req.me.id}`);
     }
-
+    // Update the record for the logged-in user.
+    await User.updateOne({id: this.req.me.id})
+      .set({
+        avatarFD: fd,
+        avatarMime: type,
+        filename: filename,
+        avatar: avatar
+      });
     console.log('info: ', info);
+    return exits.success();
 
-
-    return exits.success({});
   }
-
-
 };

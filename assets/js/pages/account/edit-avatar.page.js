@@ -19,7 +19,7 @@ parasails.registerPage('edit-avatar', {
     // For tracking client-side validation errors in our form.
     // > Has property set to `true` for each invalid property in `formData`.
     formErrors: {/* … */},
-
+    borrowFormSuccess: false,
     // Server error state for the form
     cloudError: '',
   },
@@ -32,7 +32,7 @@ parasails.registerPage('edit-avatar', {
     _.extend(this, SAILS_LOCALS);
     this.formData.avatar = this.me.avatar;
     this.formData.id = this.me.id;
-   /* this.formData.gravatar = this.me.gravatar;*/
+    /* this.formData.gravatar = this.me.gravatar;*/
   },
   mounted: async function () {
     //…
@@ -52,7 +52,13 @@ parasails.registerPage('edit-avatar', {
       window.location = '/account';
     },
 
-     // Роверяем данные перед отправкой
+
+    clickDeleteAvatar: async function () {
+      this.formData.avatar = '';
+    },
+
+
+    // Проверяем данные перед отправкой
     handleParsingFormUpdate: function () {
       const argins = this.formData;
       if (!argins.photo) {
@@ -61,7 +67,7 @@ parasails.registerPage('edit-avatar', {
       // Clear out any pre-existing error messages.
       this.formErrors = {};
 
-      console.log('argins: ' , argins);
+      console.log('argins: ', argins);
 
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined.  (This signifies that the submission should be
@@ -73,6 +79,14 @@ parasails.registerPage('edit-avatar', {
       return argins;
     },
 
+
+    handleParsingDefaultIconForm: function () {
+
+      console.log('id: ', this.req.me.id);
+
+      return this.formData;
+
+    },
 
     // Метод обработчик действии update файла
     changeFileUpdate: function (files) {
@@ -108,16 +122,16 @@ parasails.registerPage('edit-avatar', {
     },
 
 
-    submittedGroupFormUpdate: function (event) {
+    submittedFormUpdate: function (event) {
 
       // Показать сообщение об успехе.
       this.borrowFormSuccess = true;
-
+      console.log('event:: ', event);
       // Обновление элемента в пользовательском интерфейсе.
-      var borrowedItem = _.find(this.groups, {id: this.selectedGroup.id});
+      // var borrowedItem = _.find(this.groups, {id: this.selectedGroup.id});
 
-      borrowedItem.photo = this.uploadFormData.photo;
-      borrowedItem.subtitle = this.uploadFormData.subtitle;
+      // borrowedItem.photo = this.formData.photo;
+      // borrowedItem.subtitle = this.uploadFormData.subtitle;
 
       this.selectedGroup = false;
 

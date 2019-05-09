@@ -1,10 +1,10 @@
 module.exports = {
 
 
-  friendlyName: 'Download group',
+  friendlyName: 'Download avatar',
 
 
-  description: 'Загрузить файл группы (возвращая поток).',
+  description: 'Download avatar file (returning a stream).',
 
 
   inputs: {
@@ -18,7 +18,7 @@ module.exports = {
 
   exits: {
     success: {
-      outputDescription: 'The streaming bytes of the specified group\'s photo.',
+      outputDescription: 'The streaming bytes of the specified thing\'s photo.',
       outputType: 'ref'
     },
     forbidden: {
@@ -32,9 +32,9 @@ module.exports = {
 
   fn: async function (inputs) {
 
-    let group = await Group.findOne({id: inputs.id});
+    let user = await User.findOne({id: inputs.id});
 
-    if (!group) {
+    if (!user) {
       throw 'notFound';
     }
 
@@ -62,7 +62,7 @@ module.exports = {
     //************************************//
     // Set the mime type for the response
     // Это устанавливает mime тип ответа
-    this.res.type(group.imageUploadMime);
+    this.res.type(user.avatarMime);
 
     /**
      * startDownload - функция от модуля sails-hook-uploads
@@ -72,7 +72,7 @@ module.exports = {
      *
      * Ответ о благополучном завершении отдачи файла
      */
-    let downloading = await sails.startDownload(group.imageUploadFD);
+    let downloading = await sails.startDownload(user.avatarFD);
     return downloading;
 
   }

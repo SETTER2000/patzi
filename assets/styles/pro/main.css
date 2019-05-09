@@ -2628,9 +2628,9 @@ h1, h2, h3, h4, h5, h6 {
   margin-right: 0;
 }
 
-.menu-has-children.avatar {
-  margin-right: 39px;
-}
+/*.menu-has-children.avatar {*/
+  /*margin-right: 39px;*/
+/*}*/
 
 .nav-menu ul {
   margin: 28px 0 0 0;
