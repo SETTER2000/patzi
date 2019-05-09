@@ -60,7 +60,7 @@
     href="https://fonts.googleapis.com/css?family=Oswald:300,500,600|Roboto:400,700"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"/>
   <% /* Auto-injected «link» tags: */ %>
   <!--STYLES-->
   <link rel="stylesheet" href="/dependencies/jquery-ui/jquery-ui.css">
@@ -83,14 +83,13 @@
 </head>
 <body>
 <% if(!me){
-
 %>
 <div id="page-wrap">
   <% } %>
 
   <!-- Alert if email has not been confirmed -->
   <!-- Оповещение, если электронная почта не была подтверждена -->
-  <% if(me && me.emailChangeCandidate) {%>
+  <% if(me && me.emailChangeCandidate) { %>
   <div class="container-fluid">
     <div class="alert alert-secondary mt-2" role="alert">
       <%= __('Your updated email address needs verification. Until you click the link sent to') %>
@@ -129,32 +128,58 @@
         <nav id="nav-menu-container">
           <ul class="nav-menu">
             <% if(me) { %>
-            <li ><a href="/" class="active"> <%= __('Home-menu') %></a></li>
-            <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'about' ? 'current' : '' %>" href="/about"><%= __('About') %></a></li>
-            <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'kennel' ? 'current' : '' %>" href="/litters"><%= __('Litters') %></a></li>
-            <li><a class="nav-item nav-link   <%= typeof currentSection !== 'undefined' && currentSection === 'portfolio' ? 'current' : '' %>" href="/portfolio"><%= __('Portfolio') %></a></li>
+            <li><a href="/" class="active"> <%= __('Home-menu') %></a></li>
+            <li><a
+                class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'about' ? 'current' : '' %>"
+                href="/about"><%= __('About') %></a></li>
+            <li><a
+                class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'kennel' ? 'current' : '' %>"
+                href="/litters"><%= __('Litters') %></a></li>
+            <li><a
+                class="nav-item nav-link   <%= typeof currentSection !== 'undefined' && currentSection === 'portfolio' ? 'current' : '' %>"
+                href="/portfolio"><%= __('Portfolio') %></a></li>
             <li class="menu-has-children">
               <a href="#"><%= __('Pages') %></a>
               <ul>
-                <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'contact' ? 'current' : '' %>" href="/contact"><%= __('Contact') %></a></li>
-                <li><a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'pricing' ? 'current' : '' %>" href="/pricing"><%= __('Pricing') %></a></li>
-               <!-- <li><a href="/blog"><%= __('Blog') %></a></li>
+                <li><a
+                    class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'contact' ? 'current' : '' %>"
+                    href="/contact"><%= __('Contact') %></a></li>
+                <li><a
+                    class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'pricing' ? 'current' : '' %>"
+                    href="/pricing"><%= __('Pricing') %></a></li>
+                <!-- <li><a href="/blog"><%= __('Blog') %></a></li>
                 <li><a href="blog-single.html">Blog Single</a></li>-->
               </ul>
             </li>
             <li class="menu-has-children avatar">
-              <% if(me.gravatar) { %>
+              <% if(me.gravatar !== '' && me.defaultIcon === 'gravatar') { %>
               <a href="#" class="avatar">
-                <img src="<%=me.gravatar%>" width="31px" class=" rounded-circle" :title="me.fullName" :alt="me.fullName"></a>
-              <%} else {%>
-                 <% if(me.avatar) {%>
-              <a href="#" class="avatar"><img :src="me.avatar" class="rounded-circle" :title="me.fullName" :alt="me.fullName"></a>
-              <%} else{%>
-              <a href="#" > <%= __('Account') %></a>
-              <%}%>
-              <%}%>
+                <img src="<%= me.gravatar %>"
+                     width="31px"
+                     class=" rounded-circle"
+                     :title="me.fullName"
+                     :alt="me.fullName"
+                >
+              </a>
+              <% }else if(me.avatar !== '' && me.defaultIcon === 'avatar') { %>
+              <div class="photo-preview ">
+                <div class="image-wrapper round">
+                  <img src="<%= me.avatar %>"
+                       alt=""
+                       class="personPhoto"
+                       width="31px"
+                       :title="me.fullName"
+                       :alt="me.fullName">
+                </div>
+              </div>
+              <% }else if(!me.avatar && (!me.gravatar || me.gravatar) && (!me.defaultIcon || (me.defaultIcon !== 'gravatar'))) { %>
+              <a href="#"> Account</a>
+              <% } %>
+
               <ul class="avatar">
-                <li class="avatar"><a class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'account' ? 'current' : '' %>" href="/account"><%= __('Settings') %></a></li>
+                <li class="avatar"><a
+                    class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'account' ? 'current' : '' %>"
+                    href="/account"><%= __('Settings') %></a></li>
                 <li><a class="dropdown-item" href="/logout"><%= __('Sign out') %></a></li>
               </ul>
             </li>
@@ -162,22 +187,33 @@
             <li class="menu-has-children">
               <a href="#"><span class="ti-settings"></span></a>
               <ul>
-                <li><a class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'users' ? 'current' : '' %>" href="/users"><%= __('Users') %></a></li>
+                <li><a
+                    class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'users' ? 'current' : '' %>"
+                    href="/users"><%= __('Users') %></a></li>
 
-                <li ><a class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'groups' ? 'current' : '' %>" href="/groups"><%= __('Groups') %></a></li>
+                <li><a
+                    class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'groups' ? 'current' : '' %>"
+                    href="/groups"><%= __('Groups') %></a></li>
 
               </ul>
             </li>
-            <%}%>
+            <% } %>
             <% }
             else { %>
             <!-- LOGGED-OUT NAVIGATION -->
-            <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'faq' ? 'current' : '' %>" href="/faq">FAQ</a></li>
-            <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'login' ? 'current' : '' %>" href="/login"><%= __('Log in') %></a></li>
+            <li><a
+                class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'faq' ? 'current' : '' %>"
+                href="/faq">FAQ</a></li>
+            <li><a
+                class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'login' ? 'current' : '' %>"
+                href="/login"><%= __('Log in') %></a></li>
             <!-- Only in desktop nav -->
-            <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'signup' ? 'current' : '' %>" href="/signup"><%= __('Sign up') %></a></li>
+            <li><a
+                class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'signup' ? 'current' : '' %>"
+                href="/signup"><%= __('Sign up') %></a></li>
             <!-- Only in mobile nav -->
-            <li><a class="nav-item nav-link text-info ml-2 d-block d-md-none" href="/signup"><%= __('Sign up') %></a></li>
+            <li><a class="nav-item nav-link text-info ml-2 d-block d-md-none" href="/signup"><%= __('Sign up') %></a>
+            </li>
             <% } %>
           </ul>
         </nav>
@@ -207,7 +243,8 @@
               <form target="_blank" novalidate="true"
                     action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
                     method="get" class="form-inline">
-                <input class="form-control" name="EMAIL" placeholder="<%= __('Email Address') %>" onfocus="this.placeholder = ''"
+                <input class="form-control" name="EMAIL" placeholder="<%= __('Email Address') %>"
+                       onfocus="this.placeholder = ''"
                        onblur="this.placeholder = 'Email Address'"
                        required="" type="email">
                 <button class="click-btn btn btn-default"><i class="ti-arrow-right" aria-hidden="true"></i></button>
@@ -248,7 +285,8 @@
       <% /*  <small class="nav-item"><a class="nav-link text-info" target="_blank" href="https://github.com/mikermcneil/ration">Source code</a></small>*/ %>
       <small class="nav-item"><a class="nav-link text-info" href="/contact"><%= __('Contact') %><span
             class="d-none d-sm-inline"></span></a></small>
-      <small class="nav-item"><a class="nav-link text-info" href="/legal/terms"><%= __('Terms') %><span class="d-none d-sm-inline"> <%= __('of Use') %></span></a>
+      <small class="nav-item"><a class="nav-link text-info" href="/legal/terms"><%= __('Terms') %><span
+            class="d-none d-sm-inline"> <%= __('of Use') %></span></a>
       </small>
       <small class="nav-item"><a class="nav-link text-info" href="/legal/privacy"><%= __('Privacy') %><span
             class="d-none d-sm-inline"> <%= __('policy') %></span></a></small>
