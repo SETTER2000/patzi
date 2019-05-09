@@ -62,7 +62,7 @@ module.exports = {
         filename: filename,
         avatar: avatar
       });
-    console.log('info: ', info);
+    
     return exits.success();
 
   }
