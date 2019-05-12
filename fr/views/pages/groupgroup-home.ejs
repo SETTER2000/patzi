@@ -72,21 +72,17 @@
                 </span>
                 </div>
               </div>
-
-              <div class="row" :data-index="index">
-                <transition name="collapse">
-                <div v-if="group.id===collaps" class="col">
-                  <!--<div class="collapse" :class="{show: group.id===collaps}">-->
-
+              <div class="table-row">
+                <div class="col" :data-index="index">
+                  <transition name="collapse">
+                    <div v-if="group.id===collaps" class="col">
                       <div class="card card-body">
                         {{ group.subtitle}}
                       </div>
-
-                  <!--</div>-->
+                    </div>
+                  </transition>
                 </div>
-                </transition>
               </div>
-
             </div>
           </div>
         </div>
