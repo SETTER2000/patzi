@@ -135,7 +135,7 @@
             </div>
           </div>
         </div>
-        <!--Когда появились на свет?-->
+        <%/*Когда появились на свет?*/%>
         <div class="form-group">
           <label><%= __('When were born?') %></label>
           <datepicker ref="datepickerref"
@@ -147,7 +147,7 @@
           >
           </datepicker>
         </div>
-        <!--Буква помёта-->
+        <%/*Буква помёта*/%>
         <div class="form-group">
           <label><%= __('Litter letter') %></label>
           <input class="form-control"
@@ -161,7 +161,7 @@
             <%= __('Please indicate the litter letter.') %>
           </small>
         </div>
-        <!--Предварительное имя-->
+        <%/*Предварительное имя*/%>
         <div class="form-group">
           <label><%= __('Preliminary name') %></label>
           <input class="form-control"
@@ -175,7 +175,7 @@
             <%= __('Please indicate the litter letter.') %>
           </small>
         </div>
-        <!--Пол-->
+        <%/*Пол*/%>
         <div class="form-group row">
           <div class="col-sm-6">
             <div class="input-group mb-3">
@@ -222,8 +222,8 @@
           </div>
         </div>
 
+        <%/*Наша предварительная цена*/%>
         <div class="form-group row">
-          <!--Наша предварительная цена-->
           <div class="col-sm-6">
             <div class="form-group mt-4">
               <label><%= __('Our preliminary price') %></label>
@@ -236,7 +236,7 @@
               </div>
             </div>
           </div>
-          <!--Валюта-->
+          <%/*Валюта*/%>
           <div class="col-sm-6">
             <div class="form-group mt-4">
               <label><%= __('Currency') %></label>
@@ -258,7 +258,7 @@
         </div>
 
 
-        <!--Краткое описание-->
+        <%/*Краткое описание*/%>
         <div class="form-group">
           <label><%= __('Sub Title') %></label>
           <textarea class="form-control"
@@ -291,7 +291,7 @@
 
   <% /* "Borrow litter" modal */ %>
   <modal v-if="borrowLitterModalOpen && selectedLitter" v-cloak key="borrow" @close="closeBorrowLitterModal()">
-    <!--Зарезервировать-->
+    <%/*Зарезервировать*/%>
     <div class="modal-header">
       <h5 class="modal-title"><%= __('Make a reservation') %> {{selectedLitter.label || 'item'}}</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -309,7 +309,7 @@
                  :src="selectedLitter.imageSrc"/>
           </div>
         </div>
-        <!--Наша предварительная цена-->
+        <%/*Наша предварительная цена*/%>
         <div class="form-group row mt-4">
           <label for="staticEmail" class="col-sm-5 col-form-label"><%= __('Our preliminary price') %></label>
           <div class="col-sm-1">
@@ -398,7 +398,7 @@
     </ajax-form>
   </modal>
 
-  <% /* For virtual pages */ %>
+  <% /* For virtual pages */%>
   <router-view></router-view>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
