@@ -29,7 +29,7 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-console.log('inputs{', inputs);
+
     await User.updateOne({id: this.req.me.id})
       .set({
         defaultIcon: inputs.defaultIcon

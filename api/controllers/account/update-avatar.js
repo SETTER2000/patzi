@@ -38,13 +38,13 @@ module.exports = {
     }
   },
 
-  fn: async function (inputs, exits) {
+  fn: async function (inputs) {
     // Бибилиотека Node.js
 
 
     const url = require('url');
     let info = await sails.uploadOne(inputs.photo);
-    console.log('info::' , info);
+
     let fd, type, filename, avatar='';
 
     if (info) {
@@ -62,8 +62,5 @@ module.exports = {
         filename: filename,
         avatar: avatar
       });
-
-    return exits.success();
-
   }
 };
