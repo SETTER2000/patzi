@@ -26,11 +26,11 @@ module.exports = {
       // Информация о вновь созданной записи
       outputDescription: 'Information about the newly created record.',
       // Устанавливаем выходной тип данных. Хорошая практика для документирования кода.
-      outputType: {
+     /* outputType: {
         id: 'number',
         detail: 'string',
         imageSrc: 'string'
-      }
+      }*/
     },
     badRequest: {
       description: 'Error.',

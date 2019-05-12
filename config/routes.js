@@ -36,7 +36,6 @@ module.exports.routes = {
   'GET /account/profile': {action: 'account/view-edit-profile'},
   'GET /account/language': {action: 'account/view-edit-language'},
   'GET /account/avatar': { action: 'account/view-edit-avatar' },
-  'GET /account/gravatar': { action: 'account/view-update-gravatar' },
   'GET /portfolio/:virtualPageSlug?': {action: 'things/view-available-things'},
 
   'GET /blog/:virtualPageSlug?': {action: 'blog/view-blog-home'},
