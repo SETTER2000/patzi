@@ -41,7 +41,7 @@ module.exports = {
   fn: async function (inputs) {
     // Бибилиотека Node.js
 
-
+console.log('inputs:', inputs);
     const url = require('url');
     let info = await sails.uploadOne(inputs.photo);
 
@@ -54,6 +54,7 @@ module.exports = {
       filename = info.filename;
       avatar = url.resolve(sails.config.custom.baseUrl, `/api/v1/account/${this.req.me.id}`);
     }
+    console.log('info:', info);
     // Update the record for the logged-in user.
     await User.updateOne({id: this.req.me.id})
       .set({

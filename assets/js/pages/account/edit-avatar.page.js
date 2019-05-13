@@ -61,14 +61,17 @@ parasails.registerPage('edit-avatar', {
     // Проверяем данные перед отправкой
     handleParsingFormUpdate: function () {
       const argins = this.formData;
+
       if (!argins.photo) {
         this.formErrors.photo = true;
+        this.formData.avatar = undefined;
+
       }
       // Clear out any pre-existing error messages.
       this.formErrors = {};
 
       console.log('argins: ', argins);
-
+      // (argins) ? this.formData.avatar = '';
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined.  (This signifies that the submission should be
       // cancelled.)
@@ -126,14 +129,15 @@ parasails.registerPage('edit-avatar', {
 
       // Показать сообщение об успехе.
       this.borrowFormSuccess = true;
-      console.log('event:: ', event);
+      // console.log('event:: ', event);
       // Обновление элемента в пользовательском интерфейсе.
       // var borrowedItem = _.find(this.groups, {id: this.selectedGroup.id});
 
       // borrowedItem.photo = this.formData.photo;
       // borrowedItem.subtitle = this.uploadFormData.subtitle;
-
+      this.formData.photo = undefined;
       this.selectedGroup = false;
+      this.$forceUpdate();
 
     },
   }
