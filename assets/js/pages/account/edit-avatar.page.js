@@ -70,7 +70,7 @@ parasails.registerPage('edit-avatar', {
       // Clear out any pre-existing error messages.
       this.formErrors = {};
 
-      console.log('argins: ', argins);
+      // console.log('argins: ', argins);
       // (argins) ? this.formData.avatar = '';
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined.  (This signifies that the submission should be
@@ -85,7 +85,6 @@ parasails.registerPage('edit-avatar', {
 
     handleParsingDefaultIconForm: function () {
 
-      console.log('id: ', this.req.me.id);
 
       return this.formData;
 
