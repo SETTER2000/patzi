@@ -5,10 +5,11 @@
     <div class="row">
       <h1>TODO: Implement this page.</h1>
       <div class="col-md-12">
-        {{cols.length}}
+
         <!--  <table-poaleell :pCols="[...cols]" :pRows='[...rws]' />-->
-        <hello-world>
-        </hello-world>
+        <!--<hello-world msg="Welcome to Your Vue.js App" opt-select="[[...option]]"/>-->
+        <select-poaleell  options="option"  @valChanged="value=$event"></select-poaleell>
+        {{value}}
         <button class="btn btn-danger">Ok</button>
       </div>
     </div>
