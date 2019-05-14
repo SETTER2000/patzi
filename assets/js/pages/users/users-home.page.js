@@ -3,7 +3,14 @@ parasails.registerPage('users-home', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-    value:[],
+    value:'',
+    option: Array({
+      value: 'Option1',
+      label: 'Option1'
+    }, {
+      value: 'Option2',
+      label: 'Option2'
+    }),
     cols: [
       {
         label: 'Name222',
