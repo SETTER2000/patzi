@@ -127,6 +127,9 @@
     // Preliminary sanity check:
     // Make sure top-level def doesn't have anything sketchy like "beforeMounted"
     // or "beforeDestroyed", because those definitely aren't real things.
+    // Предварительная проверка работоспособности:
+    // Убедитесь, что на верхнем уровне def нет ничего отрывочного, например "beforeMounting"
+    // или "beforeDestroyed", потому что это определенно не настоящие вещи.
     var RECOMMENDATIONS_BY_UNRECOGNIZED_KEY = {
       beforeMounted: 'beforeMount',
       beforeMounting: 'beforeMount',
