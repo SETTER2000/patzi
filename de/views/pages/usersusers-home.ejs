@@ -1,19 +1,86 @@
-<div id="users-home" v-cloak>
-
-
-  <div class="container">
-    <div class="row">
-      <h1>TODO: Implement this page.</h1>
-      <div class="col-md-12">
-
-        <!--  <table-poaleell :pCols="[...cols]" :pRows='[...rws]' />-->
-        <!--<hello-world msg="Welcome to Your Vue.js App" opt-select="[[...option]]"/>-->
-        <Select-Poaleell  options="option"  @valChanged="value=$event"></Select-Poaleell>
-        {{value}}55
-
+<div id="users-home" class="content" v-cloak>
+  <!-- start banner Area -->
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white"><%= __('Users') %> </h1>
+          <p>Все пользователи системы.</p>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
+  <!-- End banner Area -->
 
+  <!-- Start Sample Area -->
+  <section class="sample-text-area">
+    <div class="container">
+      <h3 class="text-heading">Пользователи системы.</h3>
+      <p class="sample-text">
+       В данном разделе содержится вся информация о пользователях системы. Тех кто зарегистрировался и подтвердил свой email и тех кто ещё не подтвердил. Информация актуальна на данную секунду, так как обновление данных происходит мгновенно в реальном времени и не нуждается в перезагрузке страницы.
+      </p>
+    </div>
+  </section>
+  <!-- End Sample Area -->
+  <!-- Start Sample Area -->
+  <!-- Start Align Area -->
+  <div class="whole-wrap">
+    <div class="container">
+
+      <div class="row">
+        <div class="col-md-12 my-5">
+          {{getUsers}}
+          <el-select v-model="value" placeholder="<%= __('Select') %>">
+            <el-option
+              v-for="item in options"
+              :key="item.fullName"
+              :label="item.fullName"
+              :value="item.fullName">
+            </el-option>
+          </el-select>
+          <hr>
+
+
+          <template>
+            <el-table
+              ref="multipleTable"
+              :data="options"
+              style="width: 100%"
+              @selection-change="handleSelectionChange">
+              <el-table-column
+                type="selection"
+                width="55">
+              </el-table-column>
+              <el-table-column
+                label="Регистрация"
+                width="220">
+                <template slot-scope="scope">{{ scope.row.createdAt}}</template>
+              </el-table-column>
+              <el-table-column
+                property="fullName"
+                label="ФИО"
+                width="220">
+              </el-table-column>
+              <el-table-column
+                property="emailAddress"
+                label="eMail"
+                show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                property="emailStatus"
+                label="Подтверждён"
+                show-overflow-tooltip>
+              </el-table-column>
+            </el-table>
+            <div style="margin-top: 20px">
+              <el-button @click="toggleSelection([tableData[1], tableData[2]])">Toggle selection status of second and third rows</el-button>
+              <el-button @click="toggleSelection()">Clear selection</el-button>
+            </div>
+          </template>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
