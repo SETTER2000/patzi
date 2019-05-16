@@ -56,6 +56,11 @@ body {
   font-weight: 400;
   line-height: 1.625em;
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.content{
+  flex-grow: 1;
 }
 
 ol,
@@ -4706,3 +4711,4 @@ p.footer-text a:hover {
 /*color: #f81c1c; }*/
 
 /*# sourceMappingURL=main.css.map */
+

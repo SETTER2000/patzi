@@ -70,10 +70,14 @@ var jsFilesToInject = [
   'dependencies/lodash.js',
   'dependencies/jquery.min.js',
   'dependencies/vue.js',
+
   'dependencies/vue-router.js',
+  'dependencies/poaleell-components/*.js',
   'dependencies/moment.js',
   'dependencies/moment/**/*.js',
+
   'dependencies/**/*.js',
+
 
   // First amongst the app-level files, bring in cloud configuration
   'js/cloud.setup.js',
@@ -81,7 +85,7 @@ var jsFilesToInject = [
   // Bring in components & utilities before bringing in the rest (i.e. page scripts)
   // Внесите компоненты и утилиты, прежде чем вводить остальные (т.е. скрипты страниц)
   'js/components/**/*.js',
-  'dependencies/poaleell-components/*.js',
+
   'js/utilities/**/*.js',
 
   // All of the rest of your custom client-side js files will be injected here,
