@@ -90,9 +90,12 @@
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 
   <!--<link rel="stylesheet" type="text/css" href="//unpkg.com/element-ui@2.8.2/lib/theme-chalk/index.css"/>-->
-
 </head>
 <body>
+<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>
+&lt;!&ndash; import JavaScript &ndash;&gt;  <script src="//unpkg.com/element-ui/lib/umd/locale/<%= typeof me.preferredLocale !== 'undefined' && me.preferredLocale === 'ru' ? 'ru-RU' : 'en'%>.js"></script>
+<script src="//unpkg.com/element-ui/lib/umd/locale/ru-Ru.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
 <% if(!me){
 %>
 <div id="page-wrap">
@@ -139,25 +142,29 @@
         <nav id="nav-menu-container">
           <ul class="nav-menu">
             <% if(me) { %>
-            <li><a href="/" class="active"> <%= __('Home-menu') %></a></li>
-            <li><a
-                class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'about' ? 'current' : '' %>"
-                href="/about"><%= __('About') %></a></li>
-            <li><a
-                class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'kennel' ? 'current' : '' %>"
-                href="/litters"><%= __('Litters') %></a></li>
-            <li><a
-                class="nav-item nav-link   <%= typeof currentSection !== 'undefined' && currentSection === 'portfolio' ? 'current' : '' %>"
-                href="/portfolio"><%= __('Portfolio') %></a></li>
+            <li>
+              <a href="/" class="active"> <%= __('Home-menu') %></a>
+            </li>
+            <li>
+              <a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'about' ? 'current' : '' %>" href="/about"><%= __('About') %></a>
+            </li>
+            <li>
+              <a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'kennel' ? 'current' : '' %>" href="/litters"><%= __('Litters') %></a>
+            </li>
+            <li>
+              <a class="nav-item nav-link   <%= typeof currentSection !== 'undefined' && currentSection === 'portfolio' ? 'current' : '' %>" href="/portfolio"><%= __('Portfolio') %></a>
+            </li>
             <li class="menu-has-children">
               <a href="#"><%= __('Pages') %></a>
               <ul>
-                <li><a
-                    class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'contact' ? 'current' : '' %>"
-                    href="/contact"><%= __('Contact') %></a></li>
-                <li><a
-                    class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'pricing' ? 'current' : '' %>"
-                    href="/pricing"><%= __('Pricing') %></a></li>
+                <li>
+                  <a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'contact' ? 'current' : '' %>"
+                    href="/contact"><%= __('Contact') %></a>
+                </li>
+                <li>
+                  <a class="nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'pricing' ? 'current' : '' %>"
+                    href="/pricing"><%= __('Pricing') %></a>
+                </li>
                 <!-- <li><a href="/blog"><%= __('Blog') %></a></li>
                 <li><a href="blog-single.html">Blog Single</a></li>-->
               </ul>
@@ -185,42 +192,43 @@
               </div>
               <% }else if(!me.avatar && (!me.gravatar || me.gravatar) && (!me.defaultIcon || (me.defaultIcon !== 'gravatar'))) { %>
               <a href="#"> Account</a>
-              <% } %>
-
+              <% } else if(!me.avatar && !me.gravatar && ( me.defaultIcon ==='gravatar')){%>
+              <a href="#"> Account</a>
+              <%}%>
               <ul class="avatar">
-                <li class="avatar"><a
-                    class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'account' ? 'current' : '' %>"
-                    href="/account"><%= __('Settings') %></a></li>
-                <li><a class="dropdown-item" href="/logout"><%= __('Sign out') %></a></li>
+                <li class="avatar">
+                  <a class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'account' ? 'current' : '' %>"
+                    href="/account"><%= __('Settings') %></a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/logout"><%= __('Sign out') %></a>
+                </li>
               </ul>
             </li>
             <% if(me.isSuperAdmin) { %>
             <li class="menu-has-children">
               <a href="#"><span class="ti-settings"></span></a>
               <ul>
-                <li><a
-                    class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'users' ? 'current' : '' %>"
-                    href="/users"><%= __('Users') %></a></li>
-
-                <li><a
-                    class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'groups' ? 'current' : '' %>"
-                    href="/groups"><%= __('Groups') %></a></li>
-
+                <li>
+                  <a class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'users' ? 'current' : '' %>"
+                    href="/users"><%= __('Users') %></a>
+                </li>
+                <li>
+                  <a class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'groups' ? 'current' : '' %>"
+                    href="/groups"><%= __('Groups') %></a>
+                </li>
               </ul>
             </li>
             <% } %>
             <% }
             else { %>
             <!-- LOGGED-OUT NAVIGATION -->
-            <li><a
-                class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'faq' ? 'current' : '' %>"
+            <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'faq' ? 'current' : '' %>"
                 href="/faq">FAQ</a></li>
-            <li><a
-                class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'login' ? 'current' : '' %>"
+            <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'login' ? 'current' : '' %>"
                 href="/login"><%= __('Log in') %></a></li>
             <!-- Only in desktop nav -->
-            <li><a
-                class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'signup' ? 'current' : '' %>"
+            <li><a class="nav-item nav-link ml-2 ml-md-0 mr-2 nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'signup' ? 'current' : '' %>"
                 href="/signup"><%= __('Sign up') %></a></li>
             <!-- Only in mobile nav -->
             <li><a class="nav-item nav-link text-info ml-2 d-block d-md-none" href="/signup"><%= __('Sign up') %></a>
@@ -237,7 +245,7 @@
   <!-- start footer Area -->
   <% if(me){ %>
   <% /* Высокий*/ %>
-  <footer class="footer-area section-gap" v-once>
+  <footer class="footer-area section-gap" v-once >
     <div class="container">
       <div class="row">
         <div class="col-lg-5 col-md-6 col-sm-6">
@@ -744,8 +752,8 @@
   }
 
 </script>
-<script
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCi1WzkP0B6eptXv8PRt4UrmocL7cieOiI&callback=initMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%=sails.config.custom.googleMapKey%>&callback=initMap"></script>
+
 
 <!--<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>-->
 <script src='https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js'></script>

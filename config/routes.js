@@ -50,7 +50,7 @@ module.exports.routes = {
 
   'GET /groups/:virtualPageSlug?': {action: 'groups/view-group-home', locals: {currentSection: 'groups'}},
   'GET /message/message-home': {action: 'message/view-message-home', locals: {currentSection: 'message'}},
-  'GET /users': { action: 'users/view-users-home', locals: {currentSection: 'users'} },
+  'GET /users/:virtualPageSlug?': { action: 'users/view-users-home', locals: {currentSection: 'users'} },
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗

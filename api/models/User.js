@@ -225,6 +225,29 @@ It just means they have a customer entry in Stripe, which might or might not hav
       // defaultsTo: 'en',
     },
 
+    phone: {
+      type:'json',
+      columnType:'array',
+      description: 'Номера телефонов для связи'
+    },
+
+    kennel: {
+      type: 'string',
+      description: `Наименование питомника`,
+      example: 'Poale Ell',
+      // moreInfoUrl: 'https://gist.github.com/mikermcneil/0af155ed546f3ddf164b4885fb67830c; https://sailsjs.com/documentation/reference/request-req/req-set-locale',
+      // defaultsTo: 'en',
+    },
+
+
+    kennelAddress: {
+      type: 'string',
+      description: `Адрес питомника`,
+      example: 'Россия. Москва. ул. Остров д.1 к.1',
+      // moreInfoUrl: 'https://gist.github.com/mikermcneil/0af155ed546f3ddf164b4885fb67830c; https://sailsjs.com/documentation/reference/request-req/req-set-locale',
+      // defaultsTo: 'en',
+    },
+
 
     emailConfirmationReminderAlreadySent: {
       type: 'boolean',
@@ -252,7 +275,7 @@ It just means they have a customer entry in Stripe, which might or might not hav
     outboundFriendRequests: {collection: 'User', via: 'inboundFriendRequests'},
 
     // Многие ко Многим (Many-to-Many)
-    // Читаем как: Пользователь пренадлежит к группе, belongsToGroup - ключ для объеденяющей таблицы
+    // groupIncludesUser - читаем как: пользователь пренадлежит к группе, belongsToGroup - ключ для объеденяющей таблицы
     groupIncludesUser: {collection: 'Group', via: 'belongsToGroup'}
   },
 

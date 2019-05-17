@@ -4,6 +4,36 @@ parasails.registerPage('users-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     value: '',
+    value1: '',
+    value2: '',
+    value3: '',
+    value5: [],
+    value11: [],
+    search: '',
+    pickerOptions: {
+      shortcuts: [{
+        text: 'Today',
+        onClick(picker) {
+          picker.$emit('pick', new Date());
+        }
+      },
+        {
+          text: 'Yesterday',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() - 3600 * 1000 * 24);
+            picker.$emit('pick', date);
+          }
+        },
+        {
+          text: 'A week ago',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', date);
+          }
+        }]
+    },
     tableData: [
       {
         date: '2016-05-03',
@@ -70,7 +100,7 @@ parasails.registerPage('users-home', {
     _.extend(this, SAILS_LOCALS);
 
   },
-  filters:{
+  filters: {
     /*date: function (value) {
       // return value.toLocaleString();
       if (!value) return '';
@@ -104,6 +134,7 @@ parasails.registerPage('users-home', {
       })
     }
   },
+
   // created() {
   //   emitEvent.$on('valChanged', (e) => {
   //     this.val = e;
@@ -124,6 +155,22 @@ parasails.registerPage('users-home', {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    handleCurrentChange(val) {
+      this.currentRow = val;
+    },
+    filterHandler(value, row, column) {
+      const property = column['property'];
+      return row[property] === value;
+    },
+    handleEdit(index, row) {
+      console.log(index, row);
+    },
+    handleDelete(index, row) {
+      console.log(index, row);
+    },
+    handleClick() {
+      console.log('click');
     }
   }
 });

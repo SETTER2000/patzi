@@ -23,7 +23,8 @@ module.exports = async function (req, res, proceed) {
   // Then check that this user is a "super admin".
   // Затем убедитесь, что этот пользователь является «супер-администратором».
   if (!req.me.isSuperAdmin) {
-    return res.forbidden();
+    // return res.forbidden();
+    return res.notFound();
   }//•
 
   // IWMIH, we've got ourselves a "super admin".

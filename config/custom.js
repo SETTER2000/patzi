@@ -64,7 +64,8 @@ module.exports.custom = {
   // /\  Configure these to enable support for automated emails.
   // ||  (Important for password recovery, verification, contact form, etc.)
   //--------------------------------------------------------------------------
-
+  mailgunDomain: 'poaleell.com',
+  mailgunSecret: 'key-4bb01d6f085b327149c0dc8226f8763c',
 
 
   friendEmailAddress: 'ins09@mail.ru',
@@ -105,5 +106,5 @@ module.exports.custom = {
    *                                                                          *
    ***************************************************************************/
   // …
-  googleMapKey: 'AIzaSyCi1WzkP0B6eptXv8PRt4UrmocL7cieOiI',
+  googleMapKey: 'AIzaSyAUr7qK0Dq4YE52t90itw-EF0XHTkVuCIE',
 };
