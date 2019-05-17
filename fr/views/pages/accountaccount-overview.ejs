@@ -1,4 +1,4 @@
-<div id="account-overview" v-cloak>
+<div id="account-overview" class="content" v-cloak>
   <div class="container">
     <h1><%= __('My account') %></h1>
     <hr/>
@@ -95,7 +95,9 @@
 
     <div class="row mb-3">
       <div class="col-sm-6">
-        <h4>Gravatar</h4>
+        <h4>Gravatar   <el-tooltip class="item" effect="dark" content="<%= __('A Globally Recognized Avatar') %>. (https://ru.gravatar.com)" placement="right-start">
+            <i class="el-icon-question"></i>
+          </el-tooltip></h4>
       </div>
       <div class="col-sm-6">
 
