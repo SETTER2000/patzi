@@ -53,8 +53,8 @@ module.exports = {
       required:true
     },
     // Многие ко Многим (Many-to-Many)
-    // Читаем как: В группу входит пользователь, belongsToGroup - ключ для объеденяющей таблице
-    belongsToGroup: {collection: 'User', via: 'groupIncludesUser'}
+    // Читаем как: В группу входит пользователь, users - ключ для объеденяющей таблице
+    users: {collection: 'User', via: 'groups'}
   },
 
 };

@@ -26,7 +26,7 @@ module.exports = {
       // Информация о вновь созданной записи
       outputDescription: 'Information about the newly created record.',
       // Устанавливаем выходной тип данных. Хорошая практика для документирования кода.
-     /* outputType: {
+      /* outputType: {
         id: 'number',
         detail: 'string',
         imageSrc: 'string'
@@ -40,12 +40,10 @@ module.exports = {
 
   fn: async function (inputs) {
     // Бибилиотека Node.js
-
-console.log('inputs:', inputs);
     const url = require('url');
     let info = await sails.uploadOne(inputs.photo);
 
-    let fd, type, filename, avatar='';
+    let fd; let type; let filename; let avatar='';
 
     if (info) {
       // throw 'badRequest';

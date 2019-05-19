@@ -64,7 +64,8 @@ module.exports.custom = {
   // /\  Configure these to enable support for automated emails.
   // ||  (Important for password recovery, verification, contact form, etc.)
   //--------------------------------------------------------------------------
-
+  mailgunDomain: 'poaleell.com',
+  mailgunSecret: 'key-973de446f9288ced145244a3dec4a982',
 
 
   friendEmailAddress: 'ins09@mail.ru',

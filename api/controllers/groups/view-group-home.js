@@ -42,7 +42,7 @@ module.exports = {
     //
 
 
-    let groups = await Group.find({}).populate('belongsToGroup');
+    let groups = await Group.find({}).populate('users');
 
 
     // let percent = await sails.helpers.percentOfNumber.with({num: groups.length});

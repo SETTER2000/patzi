@@ -77,6 +77,24 @@ module.exports.bootstrap = async function () {
     gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
   }).fetch();
 
+  let adam = await User.create({
+    emailAddress: 'administrator.f@mail.ru',
+    fullName: 'Poale Ell Adam',
+    isSuperAdmin: true,
+    // preferredLocale: 'en',
+    password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
+    gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
+  }).fetch();
+
+  let bob = await User.create({
+    emailAddress: 'kremotory@mail.ru',
+    fullName: 'Bob Scott',
+    isSuperAdmin: true,
+    // preferredLocale: 'en',
+    password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
+    gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
+  }).fetch();
+
   // Добавить Райана Даля , как одного из друзей Алекса Фокса
   // и добавить Алекса Фокса в друзья Райану Далю
   await User.addToCollection(alexFox.id, 'friends', ryanDahl.id);
@@ -85,7 +103,7 @@ module.exports.bootstrap = async function () {
   // Создаём группу пользователей admin
   /*let group = await Group.create({label: 'admin'}).fetch();
   // Добавить пользователя alexFox.id в группу 'admin'
-  await User.addToCollection(alexFox.id, 'groupIncludesUser', group.id);*/
+  await User.addToCollection(alexFox.id, 'groups', group.id);*/
 
 
   // В БУДУЩЕМ: Решить что с эти делать

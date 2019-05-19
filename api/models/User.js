@@ -273,8 +273,9 @@ It just means they have a customer entry in Stripe, which might or might not hav
     outboundFriendRequests: {collection: 'User', via: 'inboundFriendRequests'},
 
     // Многие ко Многим (Many-to-Many)
-    // groupIncludesUser - читаем как: пользователь пренадлежит к группе, belongsToGroup - ключ для объеденяющей таблицы
-    groupIncludesUser: {collection: 'Group', via: 'belongsToGroup'}
+    // groups - читаем как: пользователь пренадлежит к группе, users - ключ для объединяющей таблицы
+    groups: {collection: 'Group', via: 'users'}
+    // groups: {collection: 'Group', via: 'users'}
   },
 
 

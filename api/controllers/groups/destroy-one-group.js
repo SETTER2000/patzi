@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Destroy one group',
 
 
-  description: 'Удаление группы',
+  description: 'Удаление группы из системы.',
 
 
   inputs: {

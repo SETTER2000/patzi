@@ -23,7 +23,9 @@ parasails.registerPage('available-things', {
   },
   filters: {
     capital: function (value) {
-      if (!value) {return '';}
+      if (!value) {
+        return '';
+      }
       value = value.toString();
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
@@ -110,7 +112,7 @@ parasails.registerPage('available-things', {
       this.uploadFormData = {
         photo: undefined,
         previewImageSrc: '',
-        label:undefined,
+        label: undefined,
       };
       // Clear error states
       this.formErrors = {};
@@ -127,10 +129,10 @@ parasails.registerPage('available-things', {
       this.formErrors = {};
       let argins = this.uploadFormData;
 
-      if(!argins.photo) {
+      if (!argins.photo) {
         this.formErrors.photo = true;
       }
-      if(!argins.label) {
+      if (!argins.label) {
         this.formErrors.label = true;
       }
       // If there were any issues, they've already now been communicated to the user,
@@ -156,9 +158,9 @@ parasails.registerPage('available-things', {
       this.things.push({
         label: this.uploadFormData.label,
         id: result.id,
-        imageSrc:result.imageSrc,
-        title:this.uploadFormData.title,
-        subtitle:this.uploadFormData.subtitle,
+        imageSrc: result.imageSrc,
+        title: this.uploadFormData.title,
+        subtitle: this.uploadFormData.subtitle,
         owner: {
           id: this.me.id,
           fullName: this.me.fullName,
@@ -188,7 +190,7 @@ parasails.registerPage('available-things', {
       // Set up the file preview for the UI:
       // Настройка предварительного просмотра файла для пользовательского интерфейса:
       var reader = new FileReader();
-      reader.onload = (event)=>{
+      reader.onload = (event) => {
         this.uploadFormData.previewImageSrc = event.target.result;
 
         // Unbind this "onload" event.
@@ -200,5 +202,6 @@ parasails.registerPage('available-things', {
       this.formErrors.photo = false;
       reader.readAsDataURL(selectedFile);
     }
+
   }
 });

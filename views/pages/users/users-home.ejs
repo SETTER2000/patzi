@@ -8,6 +8,7 @@
           <p>Все пользователи системы.</p>
         </div>
       </div>
+      <!--{{options}}-->
     </div>
   </section>
   <!-- End banner Area -->
@@ -17,75 +18,36 @@
     <div class="container">
       <h3 class="text-heading">Пользователи системы.</h3>
       <p class="sample-text">
-        В данном разделе содержится вся информация о пользователях системы. Тех кто зарегистрировался и подтвердил свой email и тех кто ещё
-        не подтвердил. Информация актуальна на данную секунду, так как обновление данных происходит мгновенно в реальном времени и не
+        В данном разделе содержится вся информация о пользователях системы. Тех кто зарегистрировался и подтвердил свой
+        email и тех кто ещё
+        не подтвердил. Информация актуальна на данную секунду, так как обновление данных происходит мгновенно в реальном
+        времени и не
         нуждается в перезагрузке страницы.
       </p>
+      <!--<p><button @click="sayHello()">Подключиться к сокету</button></p>-->
     </div>
   </section>
   <!-- End Sample Area -->
-  <!-- Start Align Area -->
-  <div class="whole-wrap">
-    <div class="container">
-      <div class="row">
 
 
-            <div class="col">
-              <span class="demonstration">Default Default</span>
-              <el-date-picker
-                v-model="value1"
-                type="datetime"
-                placeholder="Select date and time">
-              </el-date-picker>
-            </div>
-            <div class="col">
-              <span class="demonstration">With shortcuts</span>
-              <el-date-picker
-                v-model="value2"
-                type="datetime"
-                placeholder="Select date and time"
-                :picker-options="pickerOptions">
-              </el-date-picker>
-            </div>
-            <div class="col">
-              <span class="demonstration">With default time</span>
-              <el-date-picker
-                v-model="value3"
-                type="datetime"
-                placeholder="Select date and time"
-                default-time="12:00:00">
-              </el-date-picker>
-            </div>
-      </div>
-    </div>
-  </div>
   <!-- Start Align Area -->
   <div class="whole-wrap mb-5">
     <div class="container">
       <div class="row">
-        <div class="col-md-12 my-5">
-          {{getUsers}}
-          <el-select v-model="value" placeholder="<%= __('Select') %>">
-            <el-option
-              v-for="item in options"
-              :key="item.fullName"
-              :label="item.fullName"
-              :value="item.fullName">
-            </el-option>
-          </el-select>
+        <div class="col">
           <hr>
-
-
           <% /* __('TABLE') */ %>
-          <template>
+{{users.length}}
+          <template v-cloak>
             <el-table
               ref="multipleTable"
-              :data="options.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()) || data.emailAddress.includes(search.toLowerCase()))"
+              :data="getUsers.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()) || data.emailAddress.includes(search.toLowerCase()))"
               style="width: 100%"
               :default-sort="{prop: ['createdAt','emailStatus','fullName','emailAddress'], order: 'descending'}"
               highlight-current-row
               @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange">
+              @selection-change="handleSelectionChange"
+            >
               <el-table-column
                 type="index"
                 fixed="left"
@@ -97,31 +59,31 @@
                 width="55">
               </el-table-column>
               <el-table-column
-                property="createdAt"
+                property="createdAtFormatFilter"
                 label="Дата"
                 sortable
-                width="170"
+                width="220"
                 column-key="date"
-                :filters="[{text: '2016-05-01', value: '2016-05-01'}, {text: '2016-05-02', value: '2016-05-02'}, {text: '2016-05-03', value: '2016-05-03'}, {text: '2016-05-04', value: '2016-05-04'}]"
+                :filters="dateFilter"
                 :filter-method="filterHandler"
               >
                 <template slot-scope="scope">
                   <i class="el-icon-time"></i>
-                  {{ scope.row.createdAt}}
+                  {{ scope.row.createdAtFormat}}
                 </template>
               </el-table-column>
               <el-table-column
                 property="fullName"
                 label="ФИО"
                 sortable
-                width="170"
-               >
+                width="220"
+              >
                 <template slot-scope="scope">
                   <el-popover trigger="hover" placement="top">
                     <p>Питомник: {{ scope.row.kennel }}</p>
                     <p>Адрес: {{ scope.row.kennelAddress }}</p>
                     <div slot="reference" class="name-wrapper">
-                      <el-tag size="medium">{{ scope.row.fullName }}</el-tag>
+                      <el-tag size="small">{{ scope.row.fullName }}</el-tag>
                     </div>
                   </el-popover>
                 </template>
@@ -140,21 +102,23 @@
                 width="170"
                 show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="Группы" width="170">
+              <el-table-column label="Группы" width="190">
+                <template slot-scope="scope">
                   <el-select
                     v-model="value11"
                     multiple
                     collapse-tags
-                    style="margin-left: 20px;"
-                    placeholder="Select">
+                    placeholder="Select"
+                    @change="handleDelete(scope.$index, scope.row)"
+                  >
                     <el-option
-                      v-for="item in options"
-                      :key="item.value"
+                      v-for="item in scope.row.groups"
+                      :key="item.id"
                       :label="item.label"
-                      :value="item.value">
+                      :value="item.id">
                     </el-option>
                   </el-select>
-
+                </template>
               </el-table-column>
               <el-table-column
                 align="right"
@@ -168,26 +132,29 @@
                 <template slot-scope="scope">
                   <el-button
                     size="mini"
-                    @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+                    @click="handleEdit(scope.$index, scope.row)">Edit
+                  </el-button>
                   <el-button
                     size="mini"
                     type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+                    @click="handleDelete(scope.$index, scope.row)">Delete
+                  </el-button>
                 </template>
               </el-table-column>
-            <!--  <el-table-column
-                fixed="right"
-                label="Operations"
-                width="120">
-                <template slot-scope="scope">
-                  <el-button @click="handleClick" type="text" size="small">Detail</el-button>
-                  <el-button type="text" size="small">Edit</el-button>
-                </template>
-              </el-table-column>-->
+              <!--  <el-table-column
+                  fixed="right"
+                  label="Operations"
+                  width="120">
+                  <template slot-scope="scope">
+                    <el-button @click="handleClick" type="text" size="small">Detail</el-button>
+                    <el-button type="text" size="small">Edit</el-button>
+                  </template>
+                </el-table-column>-->
 
             </el-table>
             <div style="margin-top: 20px">
-              <el-button @click="toggleSelection([tableData[1], tableData[2]])">Переключить статус выбора второго и третьего рядов
+              <el-button @click="toggleSelection([tableData[1], tableData[2]])">Переключить статус выбора второго и
+                третьего рядов
               </el-button>
               <el-button @click="toggleSelection()">Очистить выбор</el-button>
             </div>
