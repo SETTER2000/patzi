@@ -62,7 +62,7 @@ module.exports = {
     if (delUser) {
       sails.log(`Deleted User with id: ${inputs.id}.`);
       let users = await User.find();
-      await sails.sockets.broadcast('user', 'hello', users);
+      await sails.sockets.broadcast('user', 'list', users);
     } else {
       sails.log(`There is no user with this ID in the database:  ${inputs.id}.`);
     }

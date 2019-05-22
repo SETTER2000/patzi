@@ -16,12 +16,15 @@ parasails.registerPage('users-home', {
     value2: '',
     value3: '',
     value5: [],
-    value11: [],
+    selectedGroup: [],
     search: '',
     text: '',
     confirm: false,
     rowTable: '',
     users: [],
+    fits: 'cover',
+    objOne:'',
+    dialogTableVisible: false,
     centerDialogVisible: false,
     centerDialogVisibleConfirm: false,
     pickerOptions: {
@@ -121,11 +124,11 @@ parasails.registerPage('users-home', {
     // Использование .get('/user') извлечет список текущих пользовательских моделей,
     // подписываем этот сокет на эти модели, И подписываем этот сокет
     // для уведомлений о новых моделях пользователей при их создании.
-    io.socket.get('/sockets/user/hello', function gotResponse(body, response) {
+    io.socket.get('/sockets/user/list', function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
-    io.socket.on('hello', data => this.users = data);
-
+    io.socket.on('list', (data) => this.users = data);
+    console.log('this.users', this.users);
   },
   // зарегистрировать директиву локально
   directives: {
@@ -197,7 +200,9 @@ parasails.registerPage('users-home', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+
     confirmDeletion() {
+
       this.centerDialogVisibleConfirm = false;
       this.confirm = true;
       let self = this;
@@ -222,7 +227,7 @@ parasails.registerPage('users-home', {
         // Это событие отправлено Sails "create", "update",
         // "удалить", "добавить" и "удалить" чертежи к любому сокету, который
         // подписан на один или несколько экземпляров модели User.
-        io.socket.on('hello', data => self.users = data);
+        io.socket.on('list', data => self.users = data);
 
         /**
          * TODO WEBSOCKET: End
@@ -231,21 +236,20 @@ parasails.registerPage('users-home', {
         self.confirm = false;
       }
     },
-    /*  handleClose(done) {
-        this.$confirm('Этого пользователя нельзя удалить. Это системная запись, возможно isSuperAdmin.')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {
-          });
-      },*/
+
     handleDelete(index, row) {
+      console.log('index', index);
+      console.log('row', row);
       this.text = `Вы действительно хотите удалить этого пользователя? 
         Учётную запись невозможно будет восстановить.`;
       this.centerDialogVisibleConfirm = true;
       this.rowTable = row;
-    }
-    ,
+    },
+    handleSelect(index, row){
+      console.log('selectedGroup', this.selectedGroup);
+      console.log('index', index);
+      console.log('row', row.id);
+    },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -254,39 +258,39 @@ parasails.registerPage('users-home', {
       } else {
         this.$refs.multipleTable.clearSelection();
       }
-    }
-    ,
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
-    }
-    ,
+    },
     handleCurrentChange(val) {
       this.currentRow = val;
-    }
-    ,
+    },
     filterHandler(value, row, column) {
       const property = column['property'];
       return row[property] === value;
-    }
-    ,
+    },
     handleEdit(index, row) {
       console.log(index, row);
-    }
-    ,
+    },
 
     handleClick() {
       console.log('click');
+    },
+
+    clickShowPhoto(index, row){
+      this.dialogTableVisible = true;
+      console.log('row:' ,row);
+      this.objOne=row;
     }
-    ,
 
 
     /**************** SOCKET.IO ****************/
     // sayHello: function () {
     //   // And use `io.socket.get()` to send a request to the server:
-    //   io.socket.get('/sockets/user/hello', function gotResponse(data, jwRes) {
+    //   io.socket.get('/sockets/user/list', function gotResponse(data, jwRes) {
     //     console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
     //   });
     // }
   }
-})
-;
+});
+

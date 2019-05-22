@@ -117,6 +117,7 @@ module.exports.routes = {
 
   'PUT    /api/v1/users/update-group': { action: 'users/update-group' },
   'DELETE /api/v1/users/destroy-one-group': { action: 'users/destroy-one-group' },
-  'GET    /sockets/user/hello': { action: 'users/hello' },
+  'GET    /sockets/user/list': { action: 'users/list' },
   'DELETE /users/destroy-one-user': { action: 'users/destroy-one-user', csrf:false},
+  'GET    /api/v1/users/:id': { action: 'users/download-photo' },
 };
