@@ -39,7 +39,7 @@ module.exports = {
     });
 
     let user = await User.findOne({
-      id: inputs.userId
+      id: inputs.userId,
     });
 
     if (!group) {

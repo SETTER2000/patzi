@@ -40,11 +40,11 @@ module.exports = {
       throw 'badRequest';
     }
 
-    // Have the socket which made the request join the "userSockets" room.
-    // Подключить сокет, который сделал запрос, к комнате «userSockets».
+    // Have the socket which made the request join the "user" room.
+    // Подключить сокет, который сделал запрос, к комнате «user».
     await sails.sockets.join(req, 'user');
-
-
+    let users = await User.find();
+    await sails.sockets.broadcast('user', 'hello', users);
     // Broadcast a notification to all the sockets who have joined
     // the "userSockets" room, excluding our newly added socket:
     // Трансляция уведомления всем сокетам, которые присоединились к
@@ -67,9 +67,9 @@ module.exports = {
     // присоединились к комнате "userSockets". Но это не обязательно означает, что они
     // _listening_. Другими словами, чтобы фактически обработать сообщение сокета,
     // подключенные сокеты должны прослушивать это конкретное событие (в этом
-    // case, мы транслировали наше сообщение с именем события "user").
+    // case, мы транслировали наше сообщение с именем события "hello").
     // код на стороне клиента, который вам нужно написать, выглядит следующим образом:
-    //   io.socket.on('user', function (broadcastedData){
+    //   io.socket.on('hello', function (broadcastedData){
     //       console.log(data.howdy);
     //       // => 'hi there!'
     //   }

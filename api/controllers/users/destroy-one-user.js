@@ -37,13 +37,24 @@ module.exports = {
       throw 'badRequest';
     }*/
 
-    let user = await User.findOne({
+    let admin = await User.findOne({
       id: this.req.me.id,
       isSuperAdmin: true
     });
 
-    if (!user) {
+    // Проверяем чтобы удаляемый объект не был супер админом
+    let isSuperAdmin = await User.findOne({
+      id: inputs.id,
+      isSuperAdmin: true
+    });
+
+
+    if (!admin) {
       throw 'badRequest';
+    }
+
+    if (inputs.id === admin.id || isSuperAdmin) {
+      throw 'notFound';
     }
 
     let delUser = await User.destroyOne({id: inputs.id});
@@ -51,7 +62,6 @@ module.exports = {
     if (delUser) {
       sails.log(`Deleted User with id: ${inputs.id}.`);
       let users = await User.find();
-      console.log('V users:', users);
       await sails.sockets.broadcast('user', 'hello', users);
     } else {
       sails.log(`There is no user with this ID in the database:  ${inputs.id}.`);

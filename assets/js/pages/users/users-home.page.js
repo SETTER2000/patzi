@@ -18,8 +18,12 @@ parasails.registerPage('users-home', {
     value5: [],
     value11: [],
     search: '',
+    text: '',
+    confirm: false,
+    rowTable: '',
     users: [],
-    // options: '',
+    centerDialogVisible: false,
+    centerDialogVisibleConfirm: false,
     pickerOptions: {
       shortcuts: [{
         text: 'Today',
@@ -27,22 +31,22 @@ parasails.registerPage('users-home', {
           picker.$emit('pick', new Date());
         }
       },
-      {
-        text: 'Yesterday',
-        onClick(picker) {
-          const date = new Date();
-          date.setTime(date.getTime() - 3600 * 1000 * 24);
-          picker.$emit('pick', date);
-        }
-      },
-      {
-        text: 'A week ago',
-        onClick(picker) {
-          const date = new Date();
-          date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-          picker.$emit('pick', date);
-        }
-      }]
+        {
+          text: 'Yesterday',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() - 3600 * 1000 * 24);
+            picker.$emit('pick', date);
+          }
+        },
+        {
+          text: 'A week ago',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', date);
+          }
+        }]
     },
     tableData: [
       {
@@ -101,27 +105,27 @@ parasails.registerPage('users-home', {
       }
     ],
   },
-  watch: {
-    // эта функция запускается при любом изменении вопроса
-    users: function (newUsers, oldUsers) {
-      this.getUsers = newUsers;
-      console.log('watcher: ', this.getUsers);
-    }
-  },
+  // watch: {
+  //   // эта функция запускается при любом изменении users
+  //   users: function (newUsers, oldUsers) {
+  //     this.getUsers = newUsers;
+  //     console.log('watcher: ', this.getUsers);
+  //   }
+  // },
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
-
     // Использование .get('/user') извлечет список текущих пользовательских моделей,
     // подписываем этот сокет на эти модели, И подписываем этот сокет
     // для уведомлений о новых моделях пользователей при их создании.
     io.socket.get('/sockets/user/hello', function gotResponse(body, response) {
-      // _.extend(this.users, body);
-      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
+    io.socket.on('hello', data => this.users = data);
+
   },
   // зарегистрировать директиву локально
   directives: {
@@ -153,19 +157,29 @@ parasails.registerPage('users-home', {
 
   mounted: function () {
     this.$emit('valChanged', this.value);
+
   },
+
+
   computed: {
     getUsers: {
       get: function () {
-        return this.users.filter((user) => {
-          return (user.fullName);
-        });
+        if (_.isArray(this.users)) {
+          return this.users.filter((user) => {
+            return (user.fullName);
+          });
+        }
+        return [];
       },
       set: function (newValue) {
         console.log('newValue:', newValue);
-        return newValue.filter((user) => {
-          return (user.fullName);
-        });
+        if (_.isArray(newValue)) {
+          return newValue.filter((user) => {
+            return (user.fullName);
+          });
+        }
+
+        return [];
       },
     },
     getTableData() {
@@ -177,37 +191,61 @@ parasails.registerPage('users-home', {
 
 
   // created() {
-  //   emitEvent.$on('valChanged', (e) => {
-  //     this.val = e;
-  //   })
+  //
   // },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    updateMessage: async function () {
-      /**
-       * TODO WEBSOCKET: Подключаемся к сокету обработка события user
-       */
-      // Автоматически созданный сокет отображается как io.socket.
-      // Используйте .on (), чтобы подписаться на событие 'user' на клиенте.
-      // Это событие отправлено Sails "create", "update",
-      // "удалить", "добавить" и "удалить" чертежи к любому сокету, который
-      // подписан на один или несколько экземпляров модели User.
-      await io.socket.on('hello', function (data) {
+    confirmDeletion() {
+      this.centerDialogVisibleConfirm = false;
+      this.confirm = true;
+      let self = this;
+      if (this.confirm) {
 
-        this.users = Object.assign({}, this.users, data);
-        console.log('this.users-1: ', this.users);
-      });
-      console.log('this.users-2: ', this.users);
-      /**
-       * TODO WEBSOCKET: End
-       */
-      // console.log(this.$el.textContent);// => 'не обновлено'
-      // await this.$nextTick();
-      // console.log(this.$el.textContent); // => 'обновлено'
 
+        /**
+         * TODO WEBSOCKET: Удаление объекта
+         */
+        io.socket.delete('/users/destroy-one-user', {'id': self.rowTable.id}, (data, jwRes) => {
+          if (jwRes.statusCode === 404) {
+            self.text = 'Этого пользователя нельзя удалить. Это системная запись, возможно isSuperAdmin.';
+            self.centerDialogVisible = true;
+          }
+          console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+        });
+        /**
+         * TODO WEBSOCKET: Подключаемся к сокету обработка события user
+         */
+        // Автоматически созданный сокет отображается как io.socket.
+        // Используйте .on (), чтобы подписаться на событие 'user' на клиенте.
+        // Это событие отправлено Sails "create", "update",
+        // "удалить", "добавить" и "удалить" чертежи к любому сокету, который
+        // подписан на один или несколько экземпляров модели User.
+        io.socket.on('hello', data => self.users = data);
+
+        /**
+         * TODO WEBSOCKET: End
+         */
+        self.rowTable = '';
+        self.confirm = false;
+      }
     },
+    /*  handleClose(done) {
+        this.$confirm('Этого пользователя нельзя удалить. Это системная запись, возможно isSuperAdmin.')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {
+          });
+      },*/
+    handleDelete(index, row) {
+      this.text = `Вы действительно хотите удалить этого пользователя? 
+        Учётную запись невозможно будет восстановить.`;
+      this.centerDialogVisibleConfirm = true;
+      this.rowTable = row;
+    }
+    ,
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -216,39 +254,39 @@ parasails.registerPage('users-home', {
       } else {
         this.$refs.multipleTable.clearSelection();
       }
-    },
+    }
+    ,
     handleSelectionChange(val) {
       this.multipleSelection = val;
-    },
+    }
+    ,
     handleCurrentChange(val) {
       this.currentRow = val;
-    },
+    }
+    ,
     filterHandler(value, row, column) {
       const property = column['property'];
       return row[property] === value;
-    },
+    }
+    ,
     handleEdit(index, row) {
       console.log(index, row);
-    },
-    handleDelete: async function (index, row) {
-      // console.log(index, row);
-      // /users/destroy-one-user
-      io.socket.delete('/users/destroy-one-user', {'id': row.id}, function gotResponse(data, jwRes) {
-        console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
-      });
-      await this.updateMessage();
-    },
+    }
+    ,
+
     handleClick() {
       console.log('click');
-    },
+    }
+    ,
 
 
     /**************** SOCKET.IO ****************/
-    sayHello: function () {
-      // And use `io.socket.get()` to send a request to the server:
-      io.socket.get('/sockets/user/hello', function gotResponse(data, jwRes) {
-        console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
-      });
-    }
+    // sayHello: function () {
+    //   // And use `io.socket.get()` to send a request to the server:
+    //   io.socket.get('/sockets/user/hello', function gotResponse(data, jwRes) {
+    //     console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+    //   });
+    // }
   }
-});
+})
+;
