@@ -8,6 +8,7 @@
           <p>Все пользователи системы.</p>
         </div>
       </div>
+
       <!--{{options}}-->
     </div>
   </section>
@@ -36,8 +37,36 @@
       <div class="row">
         <div class="col">
           <hr>
+
+          <el-dialog
+            title="ВНИМАНИЕ!"
+            :visible.sync="centerDialogVisible"
+            width="30%"
+            center>
+            <span>{{text}}</span>
+            <span slot="footer" class="dialog-footer">
+    <!--<el-button @click="centerDialogVisible = false">Cancel</el-button>-->
+    <el-button type="primary" @click="centerDialogVisible = false">Ok</el-button>
+  </span>
+          </el-dialog>
+
+
+
+          <el-dialog
+            title="ВНИМАНИЕ!"
+            :visible.sync="centerDialogVisibleConfirm"
+            width="30%"
+            center>
+            <span>{{text}}</span>
+            <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisibleConfirm = false">Отмена</el-button>
+    <el-button type="primary" @click="confirmDeletion()">Да</el-button>
+  </span>
+          </el-dialog>
+
+
           <% /* __('TABLE') */ %>
-{{users.length}}
+
           <template v-cloak>
             <el-table
               ref="multipleTable"
@@ -122,6 +151,7 @@
               </el-table-column>
               <el-table-column
                 align="right"
+                fixed="right"
                 width="170">
                 <template slot="header" slot-scope="scope">
                   <el-input
