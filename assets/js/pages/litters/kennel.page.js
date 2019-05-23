@@ -4,14 +4,37 @@ parasails.registerPage('kennel', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     litters: [],
-
+    dialogImageUrl: '',
+    dialogVisible: false,
     selectedLitter: undefined,
-
+    imageUrl: '',
     // Виртуальная часть URL
     virtualPageSlug: '',
 
     showLitterModalOpen: false,
-
+    value2: '',
+    pickerOptions: {
+      shortcuts: [{
+        text: 'Today',
+        onClick(picker) {
+          picker.$emit('pick', new Date());
+        }
+      }, {
+        text: 'Yesterday',
+        onClick(picker) {
+          const date = new Date();
+          date.setTime(date.getTime() - 3600 * 1000 * 24);
+          picker.$emit('pick', date);
+        }
+      }, {
+        text: 'A week ago',
+        onClick(picker) {
+          const date = new Date();
+          date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+          picker.$emit('pick', date);
+        }
+      }]
+    },
     uploadFormData: {
       label: '',
       photo: undefined,
@@ -332,5 +355,34 @@ parasails.registerPage('kennel', {
     },
 
 
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+
+    handlePictureCardPreview(file) {
+      console.log('file.url: ', file.url);
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+
+
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+
+    beforeAvatarUpload(file) {
+      // Проверка размера входящего файла картинки не более (MB)
+      let size = 1;
+      const isJPG = file.type === 'image/jpeg';
+      const isLt2M = file.size / 1024 / 1024 < size;
+
+      if (!isJPG) {
+        this.$message.error('Avatar picture must be JPG format!');
+      }
+      if (!isLt2M) {
+        this.$message.error(`Avatar picture size can not exceed ${size}MB!`);
+      }
+      return isJPG && isLt2M;
+    }
   }
 });

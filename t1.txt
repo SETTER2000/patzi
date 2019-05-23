@@ -1,0 +1,36 @@
+    <datepicker ref="datepickerref"
+                      v-model="uploadFormData.born"
+                      placeholder-text="(<%= __('Date of litter') %>)"
+                      :popup="true"
+                      :invalid="formErrors.born && !uploadFormData.born"
+                      validation-error-message="<%= __('Please set the date when puppies were born.') %>."
+          >
+          </datepicker>
+		  
+		  
+		   <div class="block">
+            <!--<span class="demonstration">With shortcuts</span>-->
+            <el-date-picker
+              v-model="uploadFormData.born"
+              type="datetime"
+              placeholder="<%= __('Select date and time') %>"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+          </div>
+		  
+		  
+		  
+		  <el-upload
+      action="/litters/files"
+      list-type="picture-card"
+      :on-success="handleAvatarSuccess"
+      :on-preview="handlePictureCardPreview"
+      :before-upload="beforeAvatarUpload"
+      multiple
+      name="photo"
+      :on-remove="handleRemove">
+      <i class="el-icon-plus"></i>
+    </el-upload>
+	
+	     console.log('uploadFormData.born: ', this.uploadFormData.born);
+        argins.born =  JSON.stringify(this.uploadFormData.born);

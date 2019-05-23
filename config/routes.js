@@ -98,6 +98,7 @@ module.exports.routes = {
   'POST    /api/v1/litters/upload-litter': {action: 'litters/upload-litter'},
   'GET     /api/v1/litters/:id': {action: 'litters/download-photo'},
   'PUT     /api/v1/litters/:id/puppy': {action: 'litters/reserve-puppy'},
+  'POST    /litters/files': { action: 'litters/upload-files' , csrf: false},
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},
   'GET     /api/v1/things/:id': {action: 'things/download-photo'},
