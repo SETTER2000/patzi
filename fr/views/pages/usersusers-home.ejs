@@ -83,23 +83,20 @@
             <el-table
               ref="multipleTable"
               :data="getUsers.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()) || data.emailAddress.includes(search.toLowerCase()))"
+              height="450"
               style="width: 100%"
               :default-sort="{prop: ['createdAt','emailStatus','fullName','emailAddress'], order: 'descending'}"
               highlight-current-row
               @current-change="handleCurrentChange"
               @selection-change="handleSelectionChange"
             >
-              <!-- <el-table-column
-                 type="index"
-                 fixed="left"
-                 width="50">
-               </el-table-column>-->
 
-              <el-table-column
+
+         <!--     <el-table-column
                 type="selection"
                 fixed="left"
                 width="30">
-              </el-table-column>
+              </el-table-column>-->
 
               <el-table-column
                 property="imageSrc"
@@ -118,6 +115,7 @@
                       </a>
                     </div>
                   </div>
+                  <div v-else class="photo-preview col"><div class="image-wrapper round  d-flex align-items-center justify-content-center"><!----> <!----> <span class="placeholder-icon fa fa-picture-o"></span></div></div>
                 </template>
               </el-table-column>
 
@@ -159,17 +157,19 @@
                 width="170"
                 show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="Группы" width="190">
+              <el-table-column label="Группы" width="240">
                 <template slot-scope="scope">
                   <el-select
-                    v-model="selectedGroup"
+                    v-model="scope.row.groups"
                     multiple
+                    :key="scope.row.id"
                     collapse-tags
+                    @remove-tag="handleDeleteGroup($event,scope.$index, scope.row)"
                     placeholder="Select"
                     @change="handleSelect(scope.$index, scope.row)"
                   >
                     <el-option
-                      v-for="item in scope.row.groups"
+                      v-for="item in scope.row.allGroups"
                       :key="item.id"
                       :label="item.label"
                       :value="item.id">
@@ -225,6 +225,9 @@
               <el-button @click="toggleSelection()">Очистить выбор</el-button>
             </div>
           </template>
+
+          <% /* __('END TABLE') */ %>
+
         </div>
       </div>
 
