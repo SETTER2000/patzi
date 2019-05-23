@@ -35,7 +35,7 @@ module.exports.routes = {
   'GET /account/password': {action: 'account/view-edit-password'},
   'GET /account/profile': {action: 'account/view-edit-profile'},
   'GET /account/language': {action: 'account/view-edit-language'},
-  'GET /account/avatar': { action: 'account/view-edit-avatar' },
+  'GET /account/avatar': {action: 'account/view-edit-avatar'},
   'GET /portfolio/:virtualPageSlug?': {action: 'things/view-available-things'},
 
   'GET /blog/:virtualPageSlug?': {action: 'blog/view-blog-home'},
@@ -50,7 +50,7 @@ module.exports.routes = {
 
   'GET /groups/:virtualPageSlug?': {action: 'groups/view-group-home', locals: {currentSection: 'groups'}},
   'GET /message/message-home': {action: 'message/view-message-home', locals: {currentSection: 'message'}},
-  'GET /users/:virtualPageSlug?': { action: 'users/view-users-home', locals: {currentSection: 'users'} },
+  'GET /users/:virtualPageSlug?': {action: 'users/view-users-home', locals: {currentSection: 'users'}},
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
@@ -83,10 +83,10 @@ module.exports.routes = {
   'PUT     /api/v1/account/update-language': {action: 'account/update-language'},
   'PUT     /api/v1/account/update-profile': {action: 'account/update-profile'},
   'PUT     /api/v1/account/update-billing-card': {action: 'account/update-billing-card'},
-  'PUT     /api/v1/account/update-avatar': { action: 'account/update-avatar' },
-  'GET     /api/v1/account/:id': { action: 'account/download-avatar' },
-  'PUT     /api/v1/account/update-default-icon': { action: 'account/update-default-icon' },
-  'POST    /api/v1/account/delete-avatar': { action: 'account/delete-avatar' },
+  'PUT     /api/v1/account/update-avatar': {action: 'account/update-avatar'},
+  'GET     /api/v1/account/:id': {action: 'account/download-avatar'},
+  'PUT     /api/v1/account/update-default-icon': {action: 'account/update-default-icon'},
+  'POST    /api/v1/account/delete-avatar': {action: 'account/delete-avatar'},
 
 
   'PUT     /api/v1/entrance/login': {action: 'entrance/login'},
@@ -111,13 +111,14 @@ module.exports.routes = {
   'POST   /api/v1/message/message-mailgun': {action: 'message/message-mailgun', csrf: false},
 
   'POST   /api/v1/groups/upload-group': {action: 'groups/upload-group'},
-  'GET    /api/v1/groups/:id': { action: 'groups/download-group' },
-  'DELETE /api/v1/groups/destroy-one-group': { action: 'groups/destroy-one-group' },
-  'PUT    /api/v1/groups/update-group': { action: 'groups/update-group' },
+  'GET    /api/v1/groups/:id': {action: 'groups/download-group'},
+  'DELETE /api/v1/groups/destroy-one-group': {action: 'groups/destroy-one-group'},
+  'PUT    /api/v1/groups/update-group': {action: 'groups/update-group'},
 
-  'PUT    /api/v1/users/update-group': { action: 'users/update-group' },
-  'DELETE /api/v1/users/destroy-one-group': { action: 'users/destroy-one-group' },
-  'GET    /sockets/user/list': { action: 'users/list' },
-  'DELETE /users/destroy-one-user': { action: 'users/destroy-one-user', csrf:false},
-  'GET    /api/v1/users/:id': { action: 'users/download-photo' },
+  'PUT    /users/update-user-group': {action: 'users/update-user-group', csrf: false},
+  // 'DELETE /api/v1/users/destroy-one-group': {action: 'users/destroy-one-group'},
+  'GET    /sockets/user/list': {action: 'users/list'},
+  'DELETE /users/destroy-one-user': {action: 'users/destroy-one-user', csrf: false},
+  'GET    /api/v1/users/:id': {action: 'users/download-photo'},
+  'DELETE /users/destroy-user-group': {action: 'users/destroy-user-group', csrf: false},
 };

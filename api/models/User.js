@@ -272,11 +272,13 @@ It just means they have a customer entry in Stripe, which might or might not hav
     // запросы на добавления в друзья
     outboundFriendRequests: {collection: 'User', via: 'inboundFriendRequests'},
 
-    // Многие ко Многим (Many-to-Many)
-    // groups - читаем как: пользователь пренадлежит к группе, users - ключ для объединяющей таблицы
-    groups: {collection: 'Group', via: 'users'}
-    // groups: {collection: 'Group', via: 'users'}
-  },
+    groups: {
+      collection: 'Group',
+      via: 'users',
+      description: `Многие ко Многим (Many-to-Many)
+      groups - читаем как: пользователь принадлежит к группе, users - ключ для объединяющей таблицы`
+    }
 
 
+    },
 };

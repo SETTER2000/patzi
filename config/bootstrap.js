@@ -100,9 +100,22 @@ module.exports.bootstrap = async function () {
   await User.addToCollection(ryanDahl.id, 'friends', alexFox.id);
 
   // Создаём группу пользователей admin
-  /*let group = await Group.create({label: 'admin'}).fetch();
+
+  let group2 = await Group.create({
+    label: 'user',
+    whoCreate:alexFox.id,
+    subtitle:'user - группа по умолчанию для всех зарегистрированных и подтвердивших свой email пользователей. Чтение. Комментарии.'
+  }).fetch();
+  let group3 = await Group.create({label: 'owner', whoCreate:alexFox.id }).fetch();
+  let group4 = await Group.create({label: 'breeder', whoCreate:alexFox.id }).fetch();
+  let group = await Group.create({
+    label: 'admin',
+    whoCreate:alexFox.id,
+    subtitle:'admin - самая привилегированная группа пользователей сайта. Права на управление сайтом. Удаление, Изменение, Добавление, Обновление.',
+  }).fetch();
   // Добавить пользователя alexFox.id в группу 'admin'
-  await User.addToCollection(alexFox.id, 'groups', group.id);*/
+  await User.addToCollection(alexFox.id, 'groups', group.id);
+
 
 
   // В БУДУЩЕМ: Решить что с эти делать

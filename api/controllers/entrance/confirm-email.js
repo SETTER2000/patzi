@@ -76,6 +76,11 @@ module.exports = {
       });
       this.req.session.userId = user.id;
 
+      let group = await Group.findOne({'label':'user'});
+      // Добавляем подтвердившего email пользователя в группу user.
+      await User.addToCollection(user.id, 'groups', group.id);
+
+
       if (this.req.wantsJSON) {
         return;
       } else {
@@ -95,6 +100,11 @@ module.exports = {
       // sure no one else managed to grab this email in the mean time since we
       // last checked its availability. (This is a relatively rare edge case--
       // see exit description.)
+      // Последняя линия защиты: поскольку кандидаты на смену электронной почты не защищены
+      // из-за ограничения уникальности в базе данных важно, чтобы мы
+      // уверен, что никто не смог получить это письмо в то время как мы
+      // последний раз проверял его наличие. (Это относительно редкий крайний случай -
+      // см. описание выхода.)
       if (await User.count({ emailAddress: user.emailChangeCandidate }) > 0) {
         throw 'emailAddressNoLongerAvailable';
       }
@@ -106,6 +116,13 @@ module.exports = {
       // > then one will be set up implicitly, so we'll need to persist it to our
       // > database.  (This could happen if Stripe credentials were not configured
       // > at the time this user was originally created.)
+      // Если включены функции выставления счетов, также обновите адрес электронной почты для выставления счетов
+      // связанная с пользователем запись клиента в Stripe API, чтобы убедиться, что он получает
+      // квитанции по электронной почте.
+      //> Примечание: если для этого пользователя еще не было записи клиента Stripe,
+      //> тогда один будет установлен неявно, поэтому нам нужно сохранить его в нашем
+      //> база данных. (Это может произойти, если учетные данные Stripe не были настроены
+      //> в то время, когда этот пользователь был изначально создан.)
       if(sails.config.custom.enableBillingFeatures) {
         let didNotAlreadyHaveCustomerId = (! user.stripeCustomerId);
         let stripeCustomerId = await sails.helpers.stripe.saveBillingInfo.with({
@@ -122,6 +139,9 @@ module.exports = {
       // Finally update the user in the database, store their id in the session
       // (just in case they aren't logged in already), then redirect them to
       // their "my account" page so they can see their updated email address.
+      // Наконец обновляем пользователей в базе данных, сохраняем их идентификатор в сеансе
+      // (на тот случай, если они еще не вошли в систему), затем перенаправьте их на
+      // их страница "Моя учетная запись", чтобы они могли видеть свой обновленный адрес электронной почты.
       await User.updateOne({ id: user.id })
       .set({
         emailStatus: 'confirmed',

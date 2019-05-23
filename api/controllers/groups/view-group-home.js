@@ -35,21 +35,22 @@ module.exports = {
      * }
      */
     // Функция pluck из встроенного в sails, lodash v3
-    // если версия Lodash 4, то эта функция заменена на map (_.map(users, 'firstName'))
+    // если версия Lodash 4, то эта функция заменена на map (_.map(groups, 'firstName'))
     // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
     // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
     // let friendIds = _.pluck(me.friends, 'id'); // friendIds: [id,id,id...]
     //
 
 
-    let groups = await Group.find({}).populate('users');
+    let groups = await Group.find().populate('users');
 
 
     // let percent = await sails.helpers.percentOfNumber.with({num: groups.length});
 
 
     _.each(groups, (group) => {
-      group.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/groups/${group.id}`);
+      // group.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/groups/${group.id}`);
+      group.imageSrc = group.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/groups/${group.id}`) : '';
       // ... затем мы удаляем наш файловый дескриптор
       delete group.imageUploadFD;
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию

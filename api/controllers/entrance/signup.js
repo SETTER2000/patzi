@@ -113,6 +113,11 @@ the account verification message.)
     // Store the user's new id in their session.
     this.req.session.userId = newUserRecord.id;
 
+
+
+
+
+
     if (sails.config.custom.verifyEmailAddresses) {
       // Send "confirm account" email
       await sails.helpers.sendTemplateEmail.with({

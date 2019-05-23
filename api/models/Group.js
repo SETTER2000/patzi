@@ -21,8 +21,8 @@ module.exports = {
     },
     subtitle: {
       type: 'string',
-      example: 'Прекрасный, здоровый щенок.',
-      description: 'Описание щенка. Какая то интересная информация.'
+      example: 'admin - Самая привилегированная группа пользователей сайта. Права на управление сайтом. Удаление, Изменение, Добавление, Обновление.',
+      description: 'Описание группы доступа.'
     },
     filename: {
       type: 'string',
@@ -36,6 +36,7 @@ module.exports = {
     },
     imageUploadMime:{
       type:'string',
+      example:'image/jpeg',
       description:'Тип MIME для загруженного изображения.',
       // required:true
     },

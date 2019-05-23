@@ -6,8 +6,9 @@ parasails.registerPage('group-home', {
     groups: [],
     // Виртуальная часть URL
     virtualPageSlug: '',
-
-
+    objOne:'',
+    dialogTableVisible:false,
+    centerDialogVisible:false,
     uploadFormData: {
       label: '',
       photo: undefined,
@@ -85,8 +86,9 @@ parasails.registerPage('group-home', {
     // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
     // Это кнопка вызывает модальное окно <modal> с <ajax-form>
     clickDeleteGroup: function (groupId) {
-      this.confirmDeleteGroupModalOpen = true;
+
       this.selectedGroup = _.find(this.groups, {id: groupId});
+      this.selectedGroup.label === 'user' ? this.centerDialogVisible=true : this.confirmDeleteGroupModalOpen = true;
     },
 
 
@@ -113,9 +115,9 @@ parasails.registerPage('group-home', {
 
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "ShowPhoto <modal>" с <ajax-form> для загрузки фото
-    clickShowPhoto: function () {
+    /*clickShowPhoto: function () {
       this.showGroupModalOpen = true;
-    },
+    },*/
 
 
     // Обнуляет данные формы загрузки объекта, очищает поля формы
@@ -311,5 +313,13 @@ parasails.registerPage('group-home', {
       this.selectedGroup = false;
 
     },
+
+    clickShowPhoto(index, row) {
+      this.dialogTableVisible = true;
+      console.log('row:', row);
+      this.objOne = row;
+    }
+
+
   }
 });

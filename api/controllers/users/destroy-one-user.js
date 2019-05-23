@@ -33,12 +33,12 @@ module.exports = {
 
     // Make sure this is a socket request (not traditional HTTP)
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
-    /*if (!req.isSocket) {
+    if (!req.isSocket) {
       throw 'badRequest';
-    }*/
+    }
 
     let admin = await User.findOne({
-      id: this.req.me.id,
+      id: req.me.id,
       isSuperAdmin: true
     });
 
@@ -61,8 +61,7 @@ module.exports = {
 
     if (delUser) {
       sails.log(`Deleted User with id: ${inputs.id}.`);
-      let users = await User.find();
-      await sails.sockets.broadcast('user', 'list', users);
+      await sails.sockets.broadcast('user', 'list');
     } else {
       sails.log(`There is no user with this ID in the database:  ${inputs.id}.`);
     }

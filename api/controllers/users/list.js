@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Get list',
 
 
-  description: '',
+  description: 'Обрабатывает сокет подключение клиента и отдаёт весь список пользователей системы.',
 
 
   inputs: {},
@@ -51,13 +51,13 @@ module.exports = {
 
 
     let format = 'LL HH:mm:ss';
-    let users = await User.find();
-    await sails.sockets.broadcast('user', 'list', users);
+    let users = await User.find().populate('groups');
+    // await sails.sockets.broadcast('user', 'list', users);
 
+    // Получить список групп, которые существуют в системе. Для вывода в select
+    let allGroups = await Group.find();
 
-    let groups = await Group.find();
-
-    _.each(groups, group => {
+    _.each(allGroups, group => {
       delete group.createdAt;
       delete group.updatedAt;
       delete group.filename;
@@ -81,14 +81,16 @@ module.exports = {
       user.imageSrc = user.avatarFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/users/${user.id}`) : '';
 
       // Добавляем массив групп для каждого пользователя
-      user.groups = groups;
+      user.allGroups = allGroups;
 
       // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
       user.createdAtFormat = moment(user.createdAt).format(format);
 
       // Столбец: Дата регистрации. Формат фильтра.
       user.createdAtFormatFilter = moment(user.createdAt).format('L');
-
+      // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
+      // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
+      user.groups = _.pluck(user.groups, 'id'); // friendIds: [id,id,id...]
 
       // Удаляем файловый дескриптор
       delete user.imageUploadFD;
@@ -104,6 +106,7 @@ module.exports = {
       delete user.billingCardLast4;
 
     });
+
     console.log('users: ', users);
     await sails.sockets.broadcast('user', 'list', users);
     // Respond with view.

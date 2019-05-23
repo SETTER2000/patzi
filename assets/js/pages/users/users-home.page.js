@@ -16,14 +16,14 @@ parasails.registerPage('users-home', {
     value2: '',
     value3: '',
     value5: [],
-    selectedGroup: [],
     search: '',
+    collapse:false,
     text: '',
     confirm: false,
     rowTable: '',
     users: [],
     fits: 'cover',
-    objOne:'',
+    objOne: '',
     dialogTableVisible: false,
     centerDialogVisible: false,
     centerDialogVisibleConfirm: false,
@@ -200,6 +200,12 @@ parasails.registerPage('users-home', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    async getList() {
+      await  io.socket.get('/sockets/user/list', function gotResponse(body, response) {
+        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      await  io.socket.on('list', (data) => this.users = data);
+    },
 
     confirmDeletion() {
 
@@ -216,19 +222,12 @@ parasails.registerPage('users-home', {
           if (jwRes.statusCode === 404) {
             self.text = 'Этого пользователя нельзя удалить. Это системная запись, возможно isSuperAdmin.';
             self.centerDialogVisible = true;
+          } else {
+            self.getList();
+            console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
           }
-          console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
-        });
-        /**
-         * TODO WEBSOCKET: Подключаемся к сокету обработка события user
-         */
-        // Автоматически созданный сокет отображается как io.socket.
-        // Используйте .on (), чтобы подписаться на событие 'user' на клиенте.
-        // Это событие отправлено Sails "create", "update",
-        // "удалить", "добавить" и "удалить" чертежи к любому сокету, который
-        // подписан на один или несколько экземпляров модели User.
-        io.socket.on('list', data => self.users = data);
 
+        });
         /**
          * TODO WEBSOCKET: End
          */
@@ -245,11 +244,26 @@ parasails.registerPage('users-home', {
       this.centerDialogVisibleConfirm = true;
       this.rowTable = row;
     },
-    handleSelect(index, row){
-      console.log('selectedGroup', this.selectedGroup);
-      console.log('index', index);
-      console.log('row', row.id);
+
+    handleSelect(index, row) {
+      console.log('Function handleSelect');
+      io.socket.put('/users/update-user-group', {'id': row.id, 'groupId': row.groups}, (data, jwRes) => {
+        this.getList();
+        console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+      });
+      // console.log('selectedGroup', this.selectedGroup);
+      // console.log('index', index);
+      // console.log('row', row.id);
     },
+
+
+    handleDeleteGroup(e, index, row) {
+      io.socket.delete('/users/destroy-user-group', {'id': row.id, 'groupId': [e]}, (data, jwRes) => {
+        this.getList();
+        console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+      });
+    },
+
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -277,10 +291,10 @@ parasails.registerPage('users-home', {
       console.log('click');
     },
 
-    clickShowPhoto(index, row){
+    clickShowPhoto(index, row) {
       this.dialogTableVisible = true;
-      console.log('row:' ,row);
-      this.objOne=row;
+      console.log('row:', row);
+      this.objOne = row;
     }
 
 
