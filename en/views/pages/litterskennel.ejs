@@ -59,13 +59,14 @@
                 {{litter.owner.fullName}}</span>
             </div>
           </div>
+
           <div class="card-options" v-else-if="!litter.borrowedBy">
             <span class="options-button" data-toggle="tooltip" data-placement="top" title="Delete"
                   @click="clickDeleteLitter(litter.id)"
                   v-if="litter.owner.id === me.id"><span class="fa fa-trash-o text-danger"></span></span>
             <span class="options-button borrow" data-toggle="tooltip" data-placement="top"
                   title="<%= __('to reserve') %>" @click="clickBorrow(litter.id)"
-                  v-else><span class="fa fa-handshake-o text-dark"></span></span>
+                  v-else-if="litter.ourPreliminaryPrice>0 && litter.owner.id !== me.id"><span class="fa fa-handshake-o text-dark"></span></span>
           </div>
           <a :href="litter.detail">
             <img alt="litter.title" :src="litter.imageSrc"/>
@@ -106,6 +107,7 @@
       <div class="modal-body">
         <div class="form-group">
           <label><%= __('Add a photo') %>:</label>
+
           <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
             <div class="photo-upload-field row d-flex align-items-center"
                  :class="!uploadFormData.previewImageSrc ? 'justify-content-center' :  'justify-content-start'">
@@ -135,9 +137,10 @@
             </div>
           </div>
         </div>
-        <%/*Когда появились на свет?*/%>
+        <%/* Дата и время рождения */%>
         <div class="form-group">
-          <label><%= __('When were born?') %></label>
+          <label><%= __('Date and time of birth') %></label>
+
           <datepicker ref="datepickerref"
                       v-model="uploadFormData.born"
                       placeholder-text="(<%= __('Date of litter') %>)"
