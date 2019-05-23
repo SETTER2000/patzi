@@ -32,9 +32,35 @@
       <div class=" text-center">
         <button class="btn btn-outline-info" @click="clickAddButton()"><%= __('Add a group') %></button>
       </div>
-      <div class="section-top-border">
-        <!--<h3 class="mb-30">Table</h3>-->
 
+      <% /*Диалоговое окно. Показывает фото профиля.*/ %>
+      <el-dialog :title="objOne.label" :visible.sync="dialogTableVisible">
+        <div class="demo-image__placeholder">
+          <div class="block">
+            <span class="demonstration">{{objOne.kennel}}</span>
+            <el-image :src="objOne.imageSrc">
+              <div slot="placeholder" class="image-slot">
+                Loading<span class="dot"><i class="el-icon-loading"></i></span>
+              </div>
+            </el-image>
+          </div>
+        </div>
+      </el-dialog>
+
+      <% /*Диалоговое окно. Объясняет почему нельзя удалить группу.*/ %>
+      <el-dialog
+        title="ВНИМАНИЕ!"
+        :visible.sync="centerDialogVisible"
+        width="30%"
+        center>
+        <div class="text-center">Эту группу нельзя удалить, группа является системной.</div>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="centerDialogVisible = false">Ок</el-button>
+        </span>
+      </el-dialog>
+
+
+      <div class="section-top-border">
         <div class="progress-table-wrap">
           <div class="progress-table">
             <div class="table-head">
@@ -48,9 +74,24 @@
             <div v-for="(group, index, key) of groups" :data-index="index" :key="group.id">
               <div class="table-row">
                 <div class="serial">{{index+1}}</div>
-                <div class="country collapse" @click="clickCollapse(group.id)">
-                  <img width="31px" :src="group.imageSrc" alt="flag">
-                  <span> {{group.label}}</span>
+                <div class="country collapse">
+                  <!--<img width="31px" :src="group.imageSrc" alt="flag">-->
+
+
+                  <div v-if="group.imageSrc" class="photo-preview">
+                    <div class="image-wrapper round">
+                      <a href="#" @click="clickShowPhoto(index, group)">
+                        <img :src="group.imageSrc" class="personPhoto"/>
+                      </a>
+                    </div>
+                  </div>
+                  <div v-else class="photo-preview">
+                    <div class="image-wrapper round  d-flex align-items-center justify-content-center"><!----> <!----> <span
+                        class="placeholder-icon fa fa-picture-o"></span></div>
+                  </div>
+
+
+                  <span @click="clickCollapse(group.id)"> {{group.label}}</span>
                 </div>
                 <div class="visit "><span class="text-center">645032</span></div>
                 <div class="percentage">
