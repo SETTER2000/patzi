@@ -201,6 +201,10 @@ parasails.registerPage('available-things', {
       // Удалите все сообщения об ошибках о не предоставлении изображения.
       this.formErrors.photo = false;
       reader.readAsDataURL(selectedFile);
+    },
+
+    clickEditThing(id){
+
     }
 
   }
