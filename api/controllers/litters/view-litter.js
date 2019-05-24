@@ -31,6 +31,7 @@ module.exports = {
 
     // Бибилиотека Node.js
     const url = require('url');
+    const moment = require('moment');
 
     let litter = await Litter.findOne({id: inputs.id});
 
@@ -38,6 +39,7 @@ module.exports = {
       throw 'notFound';
     }
 
+    litter.born = moment(litter.born).format('LL');
     // Устанавливаем свойство источника изображения
     // Первый аргумент, базовый url
     litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`);

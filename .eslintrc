@@ -67,7 +67,8 @@
     "Litter": true,
     "Group": true,
     "Message": true,
-    "Security": true
+    "Security": true,
+    "Dog": true
 
     // …and any others.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
