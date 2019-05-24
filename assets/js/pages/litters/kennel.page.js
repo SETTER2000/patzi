@@ -5,9 +5,12 @@ parasails.registerPage('kennel', {
   data: {
     litters: [],
     dialogImageUrl: '',
+    confirmDeleteModalOpen:false,
     dialogVisible: false,
     selectedLitter: undefined,
     imageUrl: '',
+    sire:'',
+    dam:'',
     // Виртуальная часть URL
     virtualPageSlug: '',
 
@@ -41,6 +44,8 @@ parasails.registerPage('kennel', {
       previewImageSrc: '',
       gender: '',
       type: '',
+      dam: '',
+      sire: '',
       preliminaryPrice: 0,
       ourPreliminaryPrice: 0,
       currency: ''
@@ -85,7 +90,7 @@ parasails.registerPage('kennel', {
       return value.charAt(0).toUpperCase() + value.slice(1);
     },
     date(value) {
-      return (!value)? '': moment(value).format('LLL');
+      return (!value) ? '' : moment(value).format('LLL');
     }
   },
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -162,6 +167,8 @@ parasails.registerPage('kennel', {
         born: undefined,
         label: undefined,
         gender: undefined,
+        sire: undefined,
+        dam: undefined,
         type: undefined,
         preliminaryPrice: undefined,
         ourPreliminaryPrice: undefined,
@@ -207,12 +214,12 @@ parasails.registerPage('kennel', {
       if (!argins.label) {
         this.formErrors.label = true;
       }
-      if (!argins.gender) {
+      /*if (!argins.gender) {
         this.formErrors.gender = true;
-      }
-      if (!argins.type) {
+      }*/
+     /* if (!argins.type) {
         this.formErrors.type = true;
-      }
+      }*/
 
 
       // If there were any issues, they've already now been communicated to the user,
@@ -252,6 +259,8 @@ parasails.registerPage('kennel', {
         id: result.id,
         imageSrc: result.imageSrc,
         title: this.uploadFormData.title,
+        sire: this.uploadFormData.sire,
+        dam: this.uploadFormData.dam,
         subtitle: this.uploadFormData.subtitle,
         born: this.uploadFormData.born,
         owner: {
@@ -383,6 +392,13 @@ parasails.registerPage('kennel', {
         this.$message.error(`Avatar picture size can not exceed ${size}MB!`);
       }
       return isJPG && isLt2M;
+    },
+
+
+    clickDelete(id) {
+      this.confirmDeleteModalOpen = true;
+      this.selectedThing = _.find(this.things, {id: id});
     }
+
   }
 });

@@ -4,14 +4,15 @@ parasails.registerPage('litter', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     dialogTableVisible: false,
+    autoplay:true,
     // fits:'contain',
     // fits:'scale-down',
     fits:'cover',
     items:[
-      {name:'Poale Ell Adam',src:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
-      {name:'Poale Ell Bell',src:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
-      {name:'Poale Ell Bazhen',src:'https://d3a1wbnh2r1l7y.cloudfront.net/Adam-10m.jpg'},
-      {name:'Poale Ell Barthalamew',src:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018.jpg'},
+      {label:'Poale Ell Adam',       imageSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
+      {label:'Poale Ell Bell',       imageSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
+      {label:'Poale Ell Bazhen',     imageSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/Adam-10m.jpg'},
+      {label:'Poale Ell Barthalamew',imageSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018.jpg'},
     ],
     litters:[],
     ratio:null,

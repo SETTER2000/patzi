@@ -76,6 +76,16 @@ module.exports = {
       type:'string',
       description:'Валюта продажи.'
     },
+
+    sire:{
+      type:'string',
+      description:'Кобель.'
+    },
+
+    dam:{
+      type:'string',
+      description:'Сука.'
+    },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝

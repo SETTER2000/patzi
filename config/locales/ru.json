@@ -242,6 +242,7 @@
 	"Add an dog": "Добавить собаку",
 	"All litter kennel": "Все помёты питомника",
 	"Add a photo": "Добавить фото",
+	"Photo for presentation": "Фото для презентации",
 	"Edit a photo": "Изменить фото",
 	"Add a group": "Добавить группу",
 	"Updating": "Обновление",
@@ -363,5 +364,8 @@
 	"points": "оценка",
 	"Pre puppy name at birth.": "Предварительное имя щенка при рождении.",
 	"Thank you for rating. Your vote has been counted!": "Спасибо за оценку. Ваш голос был учтён!",
-	"Dog": "Dog"
+	"Dog": "Dog",
+	"Beautiful Moments": "Beautiful Moments",
+	"Sire": "Sire",
+	"Dam": "Dam"
 }

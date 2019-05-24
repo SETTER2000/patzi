@@ -23,6 +23,16 @@ module.exports = {
       example: 'A2',
       description: 'Предварительное имя щенка после рождения.'
     },
+    dam: {
+      type: 'string',
+      example: 'Sasquehanna (FCI) Ella',
+      description: 'Сука.'
+    },
+    sire: {
+      type: 'string',
+      example: 'Poale Ell Adam',
+      description: 'Кобель.'
+    },
     subtitle: {
       type: 'string',
       example: 'Прекрасный, здоровый щенок.',
@@ -113,6 +123,8 @@ module.exports = {
       owner: this.req.me.id,
       label: inputs.label,
       title: inputs.title,
+      dam: inputs.dam,
+      sire: inputs.sire,
       subtitle: inputs.subtitle,
       born: inputs.born,
       gender: inputs.gender,

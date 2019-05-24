@@ -12,7 +12,6 @@ module.exports = {
     success: {
       viewTemplatePath: 'pages/litters/kennel'
     }
-
   },
 
 
@@ -56,6 +55,8 @@ module.exports = {
       delete litter.imageUploadFD;
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
       delete litter.imageUploadMime;
+
+      litter.born = moment(litter.born).format('LL');
       // Устанавливаем url к странице просмотра помёта
       // Первый аргумент, базовый url
       litter.detail =  `/litters/litter/${litter.id}`;
