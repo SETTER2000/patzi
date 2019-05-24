@@ -13,24 +13,24 @@
 
 
   <!-- Start Work Area Area -->
-  <section class="work-area section-gap-top" >
+  <section class="work-area section-gap-top">
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
           <div class="section-title text-center">
             <h3><%= __('Our Portfolio') %></h3>
-            <h2><span><%= __('Beautiful moments') %></span> </h2>
+            <h2><span><%= __('Beautiful moments') %></span></h2>
             <div v-if="me.isSuperAdmin" class="mt-5">
               <button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add a photo') %></button>
             </div>
           </div>
         </div>
         <!--<div class="col-lg-12 d-none">-->
-          <!--<div class="filters">-->
-            <!--<ul>-->
-              <!--<li class="active" data-filter=".all"></li>-->
-            <!--</ul>-->
-          <!--</div>-->
+        <!--<div class="filters">-->
+        <!--<ul>-->
+        <!--<li class="active" data-filter=".all"></li>-->
+        <!--</ul>-->
+        <!--</div>-->
         <!--</div>-->
       </div>
       <div class="container">
@@ -46,24 +46,38 @@
                title="">
               <img src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-3.jpg" alt=""/>
             </a>-->
-              <div class="col-md-3 col-sm-4 mx-1 my-1 item" v-for="(thing, key, index) in things" :key="index">
-                <!--<a class="fancybox" rel="gallery1" :href="thing.imageSrc" :title="thing.title">-->
-                <a  v-if="thing.owner.id === me.id" href="#"
-                   @click="clickDeleteThing(thing.id)">
-                <img  :src="thing.imageSrc" :alt="thing.label">
-                </a>
-                <div>{{thing.hi}}</div>
-                <!--<a rel="gallery1" href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-1.jpg" title="Codirosso spazzacamino (Massimo Greco _Foligno)" class="fancybox"><img src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-1.jpg" alt="" class="img-fluid"></a>-->
+            <div class="col-md-3 col-sm-4 mx-1 my-1 item" v-for="(thing, key, index) in things" :key="index">
+              <!--<a class="fancybox" rel="gallery1" :href="thing.imageSrc" :title="thing.title">-->
+
+
+              <img :src="thing.imageSrc"  class="gallery" :alt="thing.label">
+              <div  class="flx">
+                <div class="fixButton">
+                  <a class="p-button" v-if="thing.owner.id === me.id" href="#"
+                     @click="clickEditThing(thing.id)">
+                    <i class="el-icon-edit"></i>
+                  </a>
+                </div><div class="fixButton">
+                  <a class="p-button" v-if="thing.owner.id === me.id" href="#"
+                     @click="clickDeleteThing(thing.id)">
+                    <i class="el-icon-delete"></i>
+                  </a>
+                </div>
               </div>
+
+
+
+
+
+              <div>{{thing.hi}}</div>
+              <!--<a rel="gallery1" href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-1.jpg" title="Codirosso spazzacamino (Massimo Greco _Foligno)" class="fancybox"><img src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-1.jpg" alt="" class="img-fluid"></a>-->
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
   <!-- End Work Area Area -->
-
-
-
 
 
   <!--OLD GALLERY-->
@@ -150,9 +164,6 @@
       </div>
     </section>-->
 
-
-
-
   <% /* "Upload Thing" Modal */ %>
   <modal v-if="uploadThingModalOpen" v-cloak key="new"
          @close="closeUploadThingModal()">
@@ -190,7 +201,8 @@
                          @change="changeFileInput($event.target.files)"/>
                 </span>
                 <p class="image-advice text-muted" v-if="!formErrors.photo">
-                  <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %></p>
+                  <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
+                </p>
                 <p class="image-advice text-danger" v-if="formErrors.photo">
                   A photo is required in order to add a new item.</p>
               </div>
@@ -313,7 +325,9 @@
                @submitted="submittedDeleteThingForm()">
       <div class="modal-body">
         <p><%= __('Are you sure you want to remove this') %> {{selectedThing.label || 'item'}}?</p>
-        <p class="text-muted" v-if="selectedThing.borrowedBy"><%= __('We will no longer be able to assist with the return of this item, so you will need to contact') %> {{selectedThing.borrowedBy.fullName}} <%= __('directly to coordinate') %>.</p>
+        <p class="text-muted"
+           v-if="selectedThing.borrowedBy"><%= __('We will no longer be able to assist with the return of this item, so you will need to contact') %>
+          {{selectedThing.borrowedBy.fullName}} <%= __('directly to coordinate') %>.</p>
         <p v-else><%= __('This object will no longer be available to share with to show') %>.</p>
         <p class="text-danger" v-if="cloudError">
           <small><%= __('An error occured while processing your request. Please check your information and try again, or') %> <a
