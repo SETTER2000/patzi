@@ -34,7 +34,43 @@
           </div>
         </div>
       </div>
-      <div class="listings" v-if="litters.length > 0">
+
+      <div class="card text-center mb-5" v-for="(litter, index) in litters" :key="'litter'+litter.id">
+        <div class="card-header">
+          <%= __('Litter') %>: {{litter.label}}
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">  {{litter.born}}</h4>
+          <p class="card-text">
+            <a :href="litter.detail">
+
+              <img :src="litter.imageSrc" alt="litter.title" class="img-fluid gallery" >
+              <div v-if="me.isSuperAdmin" class="flx">
+               <!-- <div class="fixButton">
+                  <a class="p-button" href="#"
+                     @click="clickEdit(litter.id)">
+                    <i class="el-icon-edit"></i>
+                  </a>
+                </div>-->
+                <div class="fixButton">
+                  <a class="p-button" v-if="me.isSuperAdmin" href="#"
+                     @click="clickDeleteLitter(litter.id)">
+                    <i class="el-icon-delete"></i>
+                  </a>
+                </div>
+              </div>
+            </a>
+
+          </p>
+          <el-button type="danger" plain>{{litter.dam}}</el-button> <i class="ti-heart mx-1" style="font-size: 1.2rem; color: red"></i> <el-button type="danger" plain>{{litter.sire}}</el-button>
+          <!--<a href="#" class="btn btn-primary">Sasquehanna (FCI) Ella</a>  <a href="#" class="btn btn-primary">Olegro Katrin Naruto</a>-->
+        </div>
+     <!--   <div class="card-footer text-muted">
+          2 days ago
+        </div>-->
+      </div>
+
+  <!--    <div class="listings" v-if="litters.length > 0">
         <div class="card" :key="'litter'+litter.id"
              :class="[litter.owner.id === me.id ? 'mine' : '', litter.unavailable ? 'not-available' : '']"
              v-for="(litter, index) in litters"
@@ -50,6 +86,7 @@
                 {{litter.borrowedBy.fullName}}</span>
             </div>
           </div>
+
           <div class="card-options dropdown" v-else-if="litter.borrowedBy && litter.borrowedBy.id === me.id">
             <span class="options-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
                 class="fa fa-ellipsis-v"></span></span>
@@ -68,9 +105,11 @@
                   title="<%= __('to reserve') %>" @click="clickBorrow(litter.id)"
                   v-else-if="litter.ourPreliminaryPrice>0 && litter.owner.id !== me.id"><span class="fa fa-handshake-o text-dark"></span></span>
           </div>
+
           <a :href="litter.detail">
-            <img alt="litter.title" :src="litter.imageSrc"/>
+            <img :src="litter.imageSrc" alt="litter.title" class="img-fluid" >
           </a>
+
           <span class="label" v-if="litter.label">{{litter.title}}<br/></span>
           <small class="owner text-secondary" v-if="litter.owner.id === me.id"><span class="fa fa-home mr-1"></span>
             Mine
@@ -79,7 +118,7 @@
               class="fa fa-star-o mr-1"></span> <%= __('Borrowing') %>
           </small>
           <small class="owner text-primary" v-else>{{litter.born | date}}</small>
-          <!--<small class="owner text-primary" v-else>{{litter.owner.fullName}}</small>-->
+          &lt;!&ndash;<small class="owner text-primary" v-else>{{litter.owner.fullName}}</small>&ndash;&gt;
         </div>
       </div>
       <div v-else>
@@ -88,7 +127,8 @@
             <a href="/litters/new"
                @click="clickAddButton()"><%= __('Add your') %></a> <%= __('first litter show now') %>!
           </p></div>
-      </div>
+      </div>-->
+
     </div>
   </section>
   <!-- End Work Area Area -->
@@ -106,7 +146,7 @@
     >
       <div class="modal-body">
         <div class="form-group">
-          <label><%= __('Add a photo') %>:</label>
+          <label><%= __('Photo for presentation') %>:</label>
 
           <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
             <div class="photo-upload-field row d-flex align-items-center"
@@ -139,7 +179,7 @@
         </div>
         <%/* Дата и время рождения */%>
         <div class="form-group">
-          <label><%= __('Date and time of birth') %></label>
+          <label><%= __('Date of litter') %></label>
 
           <datepicker ref="datepickerref"
                       v-model="uploadFormData.born"
@@ -164,22 +204,37 @@
             <%= __('Please indicate the litter letter.') %>
           </small>
         </div>
-        <%/*Предварительное имя*/%>
+        <%/* Сука Dam*/%>
         <div class="form-group">
-          <label><%= __('Preliminary name') %></label>
+          <label><%= __('Dam') %></label>
           <input class="form-control"
-                 :class="formErrors.title ? 'is-invalid' : ''"
+                 :class="formErrors.dam ? 'is-invalid' : ''"
                  type="text"
                  id="validationServerUsername"
                  aria-describedby="inputGroupPrepend3"
-                 v-model.trim="uploadFormData.title"
-                 placeholder="A2">
-          <small v-if="formErrors.title" class="text-danger ">
+                 v-model.trim="uploadFormData.dam"
+                 placeholder="">
+          <small v-if="formErrors.dam" class="text-danger ">
+            <%= __('Please indicate the litter letter.') %>
+          </small>
+        </div>
+
+        <%/* Сука Dam*/%>
+        <div class="form-group">
+          <label><%= __('Sire') %></label>
+          <input class="form-control"
+                 :class="formErrors.sire ? 'is-invalid' : ''"
+                 type="text"
+                 id="validationServerUsername3"
+                 aria-describedby="inputGroupPrepend3"
+                 v-model.trim="uploadFormData.sire"
+                 placeholder="">
+          <small v-if="formErrors.sire" class="text-danger ">
             <%= __('Please indicate the litter letter.') %>
           </small>
         </div>
         <%/*Пол*/%>
-        <div class="form-group row">
+  <!--      <div class="form-group row">
           <div class="col-sm-6">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -202,7 +257,7 @@
               <%= __('Please indicate the litter letter.') %>
             </small>
           </div>
-          <!--Тип-->
+          &lt;!&ndash;Тип&ndash;&gt;
           <div class="col-sm-6">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -223,10 +278,10 @@
               <%= __('Please indicate the litter letter.') %>
             </small>
           </div>
-        </div>
+        </div>-->
 
         <%/*Наша предварительная цена*/%>
-        <div class="form-group row">
+     <!--   <div class="form-group row">
           <div class="col-sm-6">
             <div class="form-group mt-4">
               <label><%= __('Our preliminary price') %></label>
@@ -258,7 +313,7 @@
               </small>
             </div>
           </div>
-        </div>
+        </div>-->
 
 
         <%/*Краткое описание*/%>
