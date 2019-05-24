@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Login',
 
 
-  description: 'Log in using the provided email and password combination.',
+  description: 'Войдите, используя предоставленную комбинацию электронной почты и пароля.',
 
 
   extendedDescription:

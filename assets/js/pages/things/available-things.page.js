@@ -4,9 +4,20 @@ parasails.registerPage('available-things', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     things: [],
+    objID: 0,
+    autoplay: true,
+    value3: true,
+    value4: true,
+    items: [
+      {name: 'Poale Ell Adam', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
+      {name: 'Poale Ell Bell', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
+      {name: 'Poale Ell Bazhen', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Adam-10m.jpg'},
+      {name: 'Poale Ell Barthalamew', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018.jpg'},
+    ],
     confirmDeleteThingModalOpen: false,
     selectedThing: undefined,
-
+    centerDialogVisible: false,
+    photoVisible: false,
     uploadThingModalOpen: false,
     showThingModalOpen: false,
     uploadFormData: {
@@ -203,9 +214,13 @@ parasails.registerPage('available-things', {
       reader.readAsDataURL(selectedFile);
     },
 
-    clickEditThing(id){
-
+    clickEditThing(id) {
+      this.centerDialogVisible = true;
+    },
+    clickPhotoVisible(id, index) {
+      console.log('id: ', id);
+      this.photoVisible = true;
+      this.objID = id;
     }
-
   }
 });
