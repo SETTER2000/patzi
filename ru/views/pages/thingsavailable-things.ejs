@@ -1,4 +1,39 @@
 <div id="available-things" class="content" v-cloak>
+  <% /* Диалоговое окно Слайдер картинок */ %>
+  <el-dialog
+    title="<%= __('Beautiful Moments') %>"
+    :visible.sync="photoVisible"
+    width="80%"
+    center>
+    <div class="d-flex justify-content-end">
+    <el-switch
+      style="display: block"
+      v-model="autoplay"
+      active-color="#13ce66"
+      inactive-color="#ff4949"
+      active-text="Autoplay"
+      inactive-text="Disable ">
+    </el-switch>
+    </div>
+    <!--<span>It should be noted that the content will not be aligned in center by default</span>-->
+    <div class="block">
+      <!--<span class="demonstration">Switch when indicator is clicked</span>-->
+      <el-carousel :autoplay="autoplay" trigger="click" height="680px">
+        <el-carousel-item  v-for="(item, key, index) in things"  :key="index" >
+          <h3 class="small">{{ item.label }} key:{{key}} index:{{index}}</h3>
+          <div class="my-flex-cont">
+            <div class="my-flex-box" >
+              <img :src="item.imageSrc" alt="">
+            </div>
+          </div>
+        </el-carousel-item>
+      </el-carousel>
+    </div>
+    <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="photoVisible = false; ><%= __('Close') %></el-button>
+  </span>
+  </el-dialog>
+
   <section class="banner-area relative">
     <div class="container">
       <div class="row d-flex align-items-center justify-content-center">
@@ -50,23 +85,21 @@
               <!--<a class="fancybox" rel="gallery1" :href="thing.imageSrc" :title="thing.title">-->
 
 
-              <img :src="thing.imageSrc"  class="gallery" :alt="thing.label">
-              <div  class="flx">
+              <img :src="thing.imageSrc" @click="clickPhotoVisible(thing.id)" class="gallery" :alt="thing.label">
+              <div v-if="thing.owner.id === me.id" class="flx">
                 <div class="fixButton">
-                  <a class="p-button" v-if="thing.owner.id === me.id" href="#"
+                  <a class="p-button" href="#"
                      @click="clickEditThing(thing.id)">
                     <i class="el-icon-edit"></i>
                   </a>
-                </div><div class="fixButton">
+                </div>
+                <div class="fixButton">
                   <a class="p-button" v-if="thing.owner.id === me.id" href="#"
                      @click="clickDeleteThing(thing.id)">
                     <i class="el-icon-delete"></i>
                   </a>
                 </div>
               </div>
-
-
-
 
 
               <div>{{thing.hi}}</div>
