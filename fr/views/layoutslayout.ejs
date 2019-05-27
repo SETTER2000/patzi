@@ -34,6 +34,7 @@ Google Analytics, doivent être inclus que dans la production de:
     */
   if (sails.config.environment === 'production') { %>
   <!-- Google Analytics, Google Tag Manager, etc. -->
+
   <% }
   /* Otherwise, any such scripts are excluded, and we instead inject a
   robots/noindex meta tag to help prevent any unwanted visits from search engines.
@@ -163,6 +164,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 </head>
 <body>
+
 <% if(!me){%><div id="page-wrap"><% } %>
 
   <!-- Alert if email has not been confirmed -->
@@ -235,6 +237,9 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
                 </li>
                 <!-- <li><a href="/blog"><%= __('Blog') %></a></li>
                 <li><a href="blog-single.html">Blog Single</a></li>-->
+                <li>
+                  <a class="nav-item nav-link   <%= typeof currentSection !== 'undefined' && currentSection === 'kennels' ? 'current' : '' %>" href="/kennels"><%= __('Kennels') %></a>
+                </li>
               </ul>
             </li>
             <li class="menu-has-children avatar">
@@ -736,6 +741,14 @@ sur le pipeline des actifs entre les "SCRIPTS" et "SCRIPTS END", ou les deux.
 <script src="/dependencies/vue.js"></script>
 <script src="/dependencies/vue-router.js"></script>
 <script src="/dependencies/moment.js"></script>
+<script src="/dependencies/moment/locale/en-au.js"></script>
+<script src="/dependencies/moment/locale/en-ca.js"></script>
+<script src="/dependencies/moment/locale/en-gb.js"></script>
+<script src="/dependencies/moment/locale/en-ie.js"></script>
+<script src="/dependencies/moment/locale/en-il.js"></script>
+<script src="/dependencies/moment/locale/en-nz.js"></script>
+<script src="/dependencies/moment/locale/en-SG.js"></script>
+<script src="/dependencies/moment/locale/ru.js"></script>
 <script src="/dependencies/bootstrap.min.js"></script>
 <script src="/dependencies/cloud.js"></script>
 <script src="/dependencies/easing.min.js"></script>
@@ -797,6 +810,7 @@ sur le pipeline des actifs entre les "SCRIPTS" et "SCRIPTS END", ou les deux.
 <script src="/js/pages/faq.page.js"></script>
 <script src="/js/pages/group/group-home.page.js"></script>
 <script src="/js/pages/homepage.page.js"></script>
+<script src="/js/pages/kennels/kennels-home.page.js"></script>
 <script src="/js/pages/legal/privacy.page.js"></script>
 <script src="/js/pages/legal/terms.page.js"></script>
 <script src="/js/pages/litters/kennel.page.js"></script>
@@ -831,6 +845,9 @@ sur le pipeline des actifs entre les "SCRIPTS" et "SCRIPTS END", ou les deux.
 <script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
 <script>
+
+  (!!SAILS_LOCALS.me) ? moment.locale(SAILS_LOCALS.me.preferredLocal) : '';
+
   $(document).ready(function () {
 
     var $container = $('maçonnerie-container');
@@ -845,7 +862,7 @@ sur le pipeline des actifs entre les "SCRIPTS" et "SCRIPTS END", ou les deux.
   });
 
   // console.log('locle:', SAILS_LOCALS.me.preferredLocal);
-  (!!SAILS_LOCALS.me) ? moment.locale(SAILS_LOCALS.me.preferredLocal) : '';
+
 
 </script>
 
