@@ -1,40 +1,55 @@
 <div id="dogs-home" class="content" v-cloak>
 
-    <el-dialog title="<%= __('Portfolio') %>" :visible.sync="dialogTableVisible">
-      <template>
-        <el-carousel indicator-position="outside" height="65vh">
-          <el-carousel-item v-for="(item, index) of items" :key="index">
+  <el-dialog title="<%= __('Portfolio') %>" :visible.sync="dialogTableVisible">
+    <template>
+      <el-carousel indicator-position="outside" height="65vh">
+        <el-carousel-item v-for="(item, index) of items" :key="index">
 
-            <div class="d-flex justify-content-center align-items-center">
+          <div class="d-flex justify-content-center align-items-center">
 
-              <img :src="item.src" class="img-fluid height"
-                   alt="A generic square placeholder image with rounded corners in a figure.">
+            <img :src="item.src" class="img-fluid height"
+                 alt="A generic square placeholder image with rounded corners in a figure.">
 
 
+          </div>
+
+          <!--<el-image :src="item.src" class="img-fluid" :fit="fits"></el-image>-->
+
+        </el-carousel-item>
+      </el-carousel>
+    </template>
+  </el-dialog>
+
+  <!-- start banner Area -->
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white"><%= __('Chinese Crested Dog') %></h1>
+          <p class="text-white"><%= __('Dog catalog') %></p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End banner Area -->
+  <!-- Start Work Area Area -->
+  <section class="work-area section-gap-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3><%= __('Our Portfolio') %></h3>
+            <h2><span><%= __('Beautiful moments') %></span></h2>
+            <div v-if="me.isSuperAdmin" class="mt-5">
+              <button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add a photo') %></button>
             </div>
-
-            <!--<el-image :src="item.src" class="img-fluid" :fit="fits"></el-image>-->
-
-          </el-carousel-item>
-        </el-carousel>
-      </template>
-    </el-dialog>
-
-    <!-- start banner Area -->
-    <section class="banner-area relative">
-      <div class="container">
-        <div class="row d-flex align-items-center justify-content-center">
-          <div class="about-content col-lg-12">
-            <h1 class="text-white"><%= __('Chinese Crested Dog') %></h1>
-            <h3 class="text-white"><%= __('Dog catalog') %></h3>
           </div>
         </div>
       </div>
-    </section>
-    <!-- End banner Area -->
-
+    </div>
+  </section>
     <!-- Portfolio Details Area -->
-<!--    <section class="portfolio_details_area section-gap">
+    <!--    <section class="portfolio_details_area section-gap">
       <div class="container">
         <div class="portfolio_details_inner">
           <div class="row">
@@ -96,9 +111,9 @@
             aliquam quaerat voluptatem.</p>
         </div>
       </div>
-    </section>-->
+    </section>
     <!-- End Portfolio Details Area -->
 
-  </div>
+</div>
 
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
