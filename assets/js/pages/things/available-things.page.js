@@ -32,6 +32,8 @@ parasails.registerPage('available-things', {
     // Состояние ошибки сервера
     cloudError: '',
   },
+
+
   filters: {
     capital: function (value) {
       if (!value) {
@@ -57,6 +59,8 @@ parasails.registerPage('available-things', {
       return  (ru==='ru') ? `${dt}.${month}.${year}`:`${year}.${month}.${dt}`;*/
     }
   },
+
+
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
@@ -66,9 +70,12 @@ parasails.registerPage('available-things', {
     // использования в текущем компоненте.
     _.extend(this, SAILS_LOCALS);
   },
+
+
   mounted: async function () {
     //…
   },
+
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗

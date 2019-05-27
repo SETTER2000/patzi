@@ -277,8 +277,12 @@ It just means they have a customer entry in Stripe, which might or might not hav
       via: 'users',
       description: `Многие ко Многим (Many-to-Many)
       groups - читаем как: пользователь принадлежит к группе, users - ключ для объединяющей таблицы`
-    }
+    },
 
-
+    kennels: {
+      collection: 'kennel',
+      via: 'users',
+      dominant: true
+    },
     },
 };

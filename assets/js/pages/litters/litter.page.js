@@ -5,6 +5,20 @@ parasails.registerPage('litter', {
   data: {
     dialogTableVisible: false,
     autoplay:true,
+    isAfterDate:false,
+    url:null,
+    photos:[
+      {imagesSrc:'/images/elements/g1.jpg'},
+      {imagesSrc:'/images/elements/g2.jpg'},
+      {imagesSrc:'/images/elements/g3.jpg'},
+      {imagesSrc:'/images/elements/g4.jpg'},
+      {imagesSrc:'/images/elements/g5.jpg'},
+      {imagesSrc:'/images/elements/g6.jpg'},
+      {imagesSrc:'/images/elements/g7.jpg'},
+      {imagesSrc:'/images/elements/g8.jpg'},
+      {imagesSrc:'/images/elements/g9.jpg'},
+      {imagesSrc:'/images/elements/g10.jpg'},
+    ],
     // fits:'contain',
     // fits:'scale-down',
     fits:'cover',
@@ -25,10 +39,12 @@ parasails.registerPage('litter', {
   beforeMount: function() {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
+    this.isAfter();
   },
   mounted: async function() {
     //…
   },
+
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
@@ -43,6 +59,11 @@ parasails.registerPage('litter', {
     },
     showSlider(){
       this.dialogTableVisible= true;
+    },
+    isAfter(){
+      // Проверка даты
+      // Вернёт true, если this.litter.born  пока в будущем (не прошла)
+      this.isAfterDate = moment(new Date()).isSameOrBefore(moment(this.litter.born, "LL"));
     }
   }
 });

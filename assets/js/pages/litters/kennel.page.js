@@ -5,12 +5,13 @@ parasails.registerPage('kennel', {
   data: {
     litters: [],
     dialogImageUrl: '',
-    confirmDeleteModalOpen:false,
+    confirmDeleteModalOpen: false,
     dialogVisible: false,
     selectedLitter: undefined,
     imageUrl: '',
-    sire:'',
-    dam:'',
+    sire: '',
+    dam: '',
+
     // Виртуальная часть URL
     virtualPageSlug: '',
 
@@ -77,7 +78,9 @@ parasails.registerPage('kennel', {
 
 
   virtualPages: true,
+
   html5HistoryMode: 'history',
+
   virtualPagesRegExp: /^\/litters\/?([^\/]+)?/,
 
 
@@ -93,14 +96,17 @@ parasails.registerPage('kennel', {
       return (!value) ? '' : moment(value).format('LLL');
     }
   },
+
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
+    moment().locale(this.me.preferredLocale);
 
   },
+
   mounted: async function () {
     this.$find('[data-toggle="tooltip"]').tooltip();
   },
@@ -217,9 +223,9 @@ parasails.registerPage('kennel', {
       /*if (!argins.gender) {
         this.formErrors.gender = true;
       }*/
-     /* if (!argins.type) {
-        this.formErrors.type = true;
-      }*/
+      /* if (!argins.type) {
+         this.formErrors.type = true;
+       }*/
 
 
       // If there were any issues, they've already now been communicated to the user,
@@ -245,7 +251,8 @@ parasails.registerPage('kennel', {
      * Т.е. как только форма загрузки файла на сервере отработала без ошибок
      * эта функция получает результат и должна вставить новые данные на страницу.
      */
-    submittedUploadLitterForm: function (result) {
+    submittedUploadLitterForm:  function (result) {
+      console.log('this.uploadFormData.born:', this.uploadFormData.born);
       // Добавлем новые данные в уже имеющийся массив litters
       console.log(this.uploadFormData);
       this.litters.push({
@@ -262,7 +269,7 @@ parasails.registerPage('kennel', {
         sire: this.uploadFormData.sire,
         dam: this.uploadFormData.dam,
         subtitle: this.uploadFormData.subtitle,
-        born: this.uploadFormData.born,
+        born: moment(this.uploadFormData.born).locale(this.me.preferredLocale).format('LL'),
         owner: {
           id: this.me.id,
           fullName: this.me.fullName,

@@ -68,7 +68,8 @@
     "Group": true,
     "Message": true,
     "Security": true,
-    "Dog": true
+    "Dog": true,
+    "Kennel": true
 
     // …and any others.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

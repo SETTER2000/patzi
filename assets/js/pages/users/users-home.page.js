@@ -108,6 +108,8 @@ parasails.registerPage('users-home', {
       }
     ],
   },
+
+
   // watch: {
   //   // эта функция запускается при любом изменении users
   //   users: function (newUsers, oldUsers) {
@@ -130,6 +132,8 @@ parasails.registerPage('users-home', {
     io.socket.on('list', (data) => this.users = data);
     console.log('this.users', this.users);
   },
+
+
   // зарегистрировать директиву локально
   directives: {
     focus: {
@@ -139,6 +143,8 @@ parasails.registerPage('users-home', {
       }
     }
   },
+
+
   filters: {
     /*date: function (value) {
       // return value.toLocaleString();

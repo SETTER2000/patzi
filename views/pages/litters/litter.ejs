@@ -19,10 +19,10 @@
     <div class="block">
       <!--<span class="demonstration">Switch when indicator is clicked</span>-->
       <el-carousel :autoplay="autoplay" trigger="click" height="780px">
-        <el-carousel-item  v-for="(item, key, index) in items"  :key="index" >
+        <el-carousel-item v-for="(item, key, index) in items" :key="index">
           <h3 class="small text-center">{{ item.label }}</h3>
           <div class="my-flex-cont">
-            <div class="my-flex-box" >
+            <div class="my-flex-box">
               <img :src="item.imageSrc" class="gallery" alt="">
             </div>
           </div>
@@ -35,7 +35,7 @@
   </el-dialog>
 
 
-<!--  <el-dialog title="<%= __('Portfolio') %>" :visible.sync="dialogTableVisible">
+  <!--  <el-dialog title="<%= __('Portfolio') %>" :visible.sync="dialogTableVisible">
     <template>
       <el-carousel indicator-position="outside" height="65vh">
         <el-carousel-item v-for="(item, index) of items" :key="index">
@@ -60,8 +60,8 @@
     <div class="container">
       <div class="row d-flex align-items-center justify-content-center">
         <div class="about-content col-lg-12">
-          <h1 class="text-white">Litter Details</h1>
-          <p>Details about the litter</p>
+          <h1 class="text-white"><%= __('Litter Details') %></h1>
+          <p><%= __('Information about new arrivals to this world.') %></p>
         </div>
       </div>
     </div>
@@ -97,16 +97,24 @@
               </div>
 
               <ul class="list">
-                <li><span><%= __('Name') %>
-                    <el-tooltip class="item" effect="dark" content="<%= __('Pre puppy name at birth.') %>"
+                <li><span><%= __('Dob') %>
+                    <el-tooltip v-if="isAfterDate" class="item" effect="dark"
+                                content="<%= __("Date of litter. If the date has not yet arrived, then the mating has taken place and the birth is expected on that date.") %>"
                                 placement="right-start">
                            <i class="el-icon-question"></i>
                    </el-tooltip>
-                  </span>: {{litter.title}}
+                  </span>: {{litter.born}}
                 </li>
-                <li><span>Sire</span>: Alfa Laval De Lux Supernova</li>
-                <li><span>Dam</span>: Sasquehanna (FCI) Ella</li>
-                <li><span>Dob</span>: {{litter.born}}</li>
+                <li><span><%= __('Name') %>
+                    <el-tooltip class="item" effect="dark" content="<%= __("The letter with which the puppy's name should begin.") %>"
+                                placement="right-start">
+                           <i class="el-icon-question"></i>
+                   </el-tooltip>
+                  </span>: {{litter.label.toUpperCase()}}...
+                </li>
+                <li><span><%= __('Sire') %></span>: {{litter.sire}}</li>
+                <li><span><%= __('Dam') %></span>: {{litter.dam}}</li>
+
               </ul>
             </div>
           </div>
@@ -130,8 +138,27 @@
           dolore magnam
           aliquam quaerat voluptatem.</p>
       </div>
+      <div class="section-top-border">
+        <h3><%= __('Image Gallery') %></h3>
+        <div class="row gallery-item">
+          <div class="col-md-4" v-for="(photo, index) of photos" :key="index" v-if="index<3">
+            <a :href="`${photo.imagesSrc}`" class="img-gal"><div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div></a>
+          </div>
+          <div class="col-md-6" v-for="(photo, index) of photos" :key="index" v-if="index>2 && index<5">
+            <a :href="`${photo.imagesSrc}`" class="img-gal"><div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div></a>
+          </div>
+          <div class="col-md-4" v-for="(photo, index) of photos" :key="index" v-if="index>4 && index<8">
+            <a :href="`${photo.imagesSrc}`" class="img-gal"><div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div></a>
+          </div>
+          <div class="col-md-6" v-for="(photo, index) of photos" :key="index" v-if="index>7 && index<10">
+            <a :href="`${photo.imagesSrc}`" class="img-gal"><div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div></a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
+
   <!-- End Portfolio Details Area -->
 
 </div>

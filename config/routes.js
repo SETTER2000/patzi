@@ -51,10 +51,9 @@ module.exports.routes = {
   'GET /groups/:virtualPageSlug?': {action: 'groups/view-group-home', locals: {currentSection: 'groups'}},
   'GET /message/message-home': {action: 'message/view-message-home', locals: {currentSection: 'message'}},
   'GET /users/:virtualPageSlug?': {action: 'users/view-users-home', locals: {currentSection: 'users'}},
-  'GET /dogs/:virtualPageSlug?': { action: 'dogs/view-dogs-home', locals: {currentSection: 'dogs'} },
+  'GET /dogs/:virtualPageSlug?': {action: 'dogs/view-dogs-home', locals: {currentSection: 'dogs'}},
 
-
-
+  'GET /kennels/:virtualPageSlug?': {action: 'kennels/view-kennels-home', locals: {currentSection: 'kennels'}},
 
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
@@ -103,7 +102,7 @@ module.exports.routes = {
   'POST    /api/v1/litters/upload-litter': {action: 'litters/upload-litter'},
   'GET     /api/v1/litters/:id': {action: 'litters/download-photo'},
   'PUT     /api/v1/litters/:id/puppy': {action: 'litters/reserve-puppy'},
-  'POST    /litters/files': { action: 'litters/upload-files' , csrf: false},
+  'POST    /litters/files': {action: 'litters/upload-files', csrf: false},
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},
   'GET     /api/v1/things/:id': {action: 'things/download-photo'},
@@ -127,4 +126,7 @@ module.exports.routes = {
   'DELETE /users/destroy-one-user': {action: 'users/destroy-one-user', csrf: false},
   'GET    /api/v1/users/:id': {action: 'users/download-photo'},
   'DELETE /users/destroy-user-group': {action: 'users/destroy-user-group', csrf: false},
+
+  'POST   /api/v1/kennels/upload-kennel': {action: 'kennels/upload-kennel'},
+
 };

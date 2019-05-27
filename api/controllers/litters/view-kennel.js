@@ -18,6 +18,7 @@ module.exports = {
   fn: async function (inputs, exits) {
     // Бибилиотека Node.js
     const url = require('url');
+    // предотвратить преобразование UTC
     const moment = require('moment');
     // Устанавливаем для пользователя его локаль. Для соответствующего отображения даты.
     moment.locale(this.req.me.preferredLocale);
