@@ -103,20 +103,32 @@ module.exports.bootstrap = async function () {
 
   let group2 = await Group.create({
     label: 'user',
-    whoCreate:alexFox.id,
-    subtitle:'user - группа по умолчанию для всех зарегистрированных и подтвердивших свой email пользователей. Чтение. Комментарии.'
+    whoCreate: alexFox.id,
+    subtitle: 'user - группа по умолчанию для всех зарегистрированных и подтвердивших свой email пользователей. Чтение. Комментарии.'
   }).fetch();
-  let group3 = await Group.create({label: 'owner', whoCreate:alexFox.id }).fetch();
-  let group4 = await Group.create({label: 'breeder', whoCreate:alexFox.id }).fetch();
+  let group3 = await Group.create({label: 'owner', whoCreate: alexFox.id}).fetch();
+  let group4 = await Group.create({label: 'breeder', whoCreate: alexFox.id}).fetch();
   let group = await Group.create({
     label: 'admin',
-    whoCreate:alexFox.id,
-    subtitle:'admin - самая привилегированная группа пользователей сайта. Права на управление сайтом. Удаление, Изменение, Добавление, Обновление.',
+    whoCreate: alexFox.id,
+    subtitle: 'admin - самая привилегированная группа пользователей сайта. Права на управление сайтом. Удаление, Изменение, Добавление, Обновление.',
   }).fetch();
   // Добавить пользователя alexFox.id в группу 'admin'
   await User.addToCollection(alexFox.id, 'groups', group.id);
 
 
+  for(let y =0; y<1000; y++){
+
+    let nm = await sails.helpers.strings.random();
+    nm = await User.create({
+        emailAddress: `${nm}@mail.ru`,
+        fullName: nm,
+        password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
+        preferredLocale: 'en'
+      }).fetch();
+
+    await User.addToCollection(nm.id, 'groups', group2.id);
+  }
 
   // В БУДУЩЕМ: Решить что с эти делать
   // Create some things
