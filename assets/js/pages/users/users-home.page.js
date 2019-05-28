@@ -16,12 +16,17 @@ parasails.registerPage('users-home', {
     value2: '',
     value3: '',
     value5: [],
+    count: 5,
+    query: 5,
     search: '',
-    collapse:false,
+    collapse: false,
     text: '',
     confirm: false,
     rowTable: '',
     users: [],
+    loading: false,
+    options: [],
+    counts: 0,
     fits: 'cover',
     objOne: '',
     dialogTableVisible: false,
@@ -110,13 +115,13 @@ parasails.registerPage('users-home', {
   },
 
 
-  // watch: {
-  //   // эта функция запускается при любом изменении users
-  //   users: function (newUsers, oldUsers) {
-  //     this.getUsers = newUsers;
-  //     console.log('watcher: ', this.getUsers);
-  //   }
-  // },
+  watch: {
+    // эта функция запускается при любом изменении count
+    count: function (newUsers, oldUsers) {
+      this.count = newUsers;
+      this.getList();
+    }
+  },
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
@@ -126,11 +131,18 @@ parasails.registerPage('users-home', {
     // Использование .get('/user') извлечет список текущих пользовательских моделей,
     // подписываем этот сокет на эти модели, И подписываем этот сокет
     // для уведомлений о новых моделях пользователей при их создании.
-    io.socket.get('/sockets/user/list', function gotResponse(body, response) {
+    io.socket.get(`/sockets/user/list/${this.count}`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
-    io.socket.on('list', (data) => this.users = data);
-    console.log('this.users', this.users);
+    io.socket.get('/sockets/user/count-all', function gotResp(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    io.socket.on('list', (data) => {
+      this.users = _.get(data, 'users') ? data.users : this.users;
+      // this.count = _.get(data, 'count') ?  data.count : this.count;
+    });
+    io.socket.on('count-all', (data) => this.counts = data);
+
   },
 
 
@@ -181,7 +193,6 @@ parasails.registerPage('users-home', {
         return [];
       },
       set: function (newValue) {
-        console.log('newValue:', newValue);
         if (_.isArray(newValue)) {
           return newValue.filter((user) => {
             return (user.fullName);
@@ -191,6 +202,21 @@ parasails.registerPage('users-home', {
         return [];
       },
     },
+
+    // count: {
+    //   get: function () {
+    //     return 0;
+    //   },
+    //   set: function (newValue) {
+    //     if (_.isNumber(newValue)) {
+    //       this.getList();
+    //       return newValue;
+    //     }
+    //     return 0;
+    //   },
+    // },
+
+
     getTableData() {
       this.tableData = this.users.filter((user) => {
         return !_.isEmpty(user.fullName);
@@ -207,10 +233,37 @@ parasails.registerPage('users-home', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     async getList() {
-      await  io.socket.get('/sockets/user/list', function gotResponse(body, response) {
+      await  io.socket.get(`/sockets/user/list/${this.count}`, function gotResponse(body, response) {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-      await  io.socket.on('list', (data) => this.users = data);
+      await  io.socket.get('/sockets/user/count-all', function gotResp(body, response) {
+        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      await  io.socket.on('list', (data) => {
+        this.users = _.get(data, 'users') ? data.users : this.users;
+        // this.count = _.get(data, 'count') ?  data.count : this.count;
+      });
+      // Кол-во всего пользователей в системе
+      await  io.socket.on('count-all', (data) => this.counts = data);
+    },
+
+    async remoteMethod(query) {
+      if (query !== '') {
+        console.log('query: ', query);
+        this.loading = true;
+        await  io.socket.get(`/sockets/user/list/${this.count}/${query}`, function gotResponse(body, response) {
+          console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+        });
+        setTimeout(() => {
+          this.loading = false;
+          this.options = this.users.filter(item => {
+            console.log(item);
+            return item.fullName.toLowerCase().indexOf(query.toLowerCase()) > -1;
+          });
+        }, 200);
+      } else {
+        this.options = [];
+      }
     },
 
     confirmDeletion() {
@@ -224,13 +277,13 @@ parasails.registerPage('users-home', {
         /**
          * TODO WEBSOCKET: Удаление объекта
          */
-        io.socket.delete('/users/destroy-one-user', {'id': self.rowTable.id}, (data, jwRes) => {
+        io.socket.delete('/sockets/user/destroy-one-user', {'id': self.rowTable.id}, (data, jwRes) => {
           if (jwRes.statusCode === 404) {
             self.text = 'Этого пользователя нельзя удалить. Это системная запись, возможно isSuperAdmin.';
             self.centerDialogVisible = true;
           } else {
             self.getList();
-            console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+            // console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
           }
 
         });
@@ -253,7 +306,7 @@ parasails.registerPage('users-home', {
 
     handleSelect(index, row) {
       console.log('Function handleSelect');
-      io.socket.put('/users/update-user-group', {'id': row.id, 'groupId': row.groups}, (data, jwRes) => {
+      io.socket.put('/sockets/user/update-user-group', {'id': row.id, 'groupId': row.groups}, (data, jwRes) => {
         this.getList();
         console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
       });

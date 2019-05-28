@@ -7,7 +7,16 @@ module.exports = {
   description: 'Обрабатывает сокет подключение клиента и отдаёт весь список пользователей системы.',
 
 
-  inputs: {},
+  inputs: {
+    count: {
+      type: 'number',
+      description: 'Кол-во отдаваемых объектов.'
+    },
+    query: {
+      type: 'string',
+      description: 'Слово для поиска по коллекции.'
+    },
+  },
 
 
   exits: {
@@ -31,7 +40,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const req = this.req;
-
+    let data = {};
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
@@ -48,14 +57,19 @@ module.exports = {
     // Have the socket which made the request join the "user" room.
     // Подключить сокет, который сделал запрос, к комнате «user».
     await sails.sockets.join(req, 'user');
+// console.log('inputs.query-1: ', inputs.query);
+    // Проверка кол-ва объектов запрошеных с frontend
+    inputs.count = inputs.count < 1 ? 5 : inputs.count;
+    inputs.query = _.get(inputs, 'query') ? {"fullName":{ startsWith: inputs.query }} : {};
 
+    console.log('inputs.query: ', inputs.query);
+    format = 'LL HH:mm:ss';
+    let users = await User.find(inputs.query).limit(inputs.count).populate('groups');
 
-    let format = 'LL HH:mm:ss';
-    let users = await User.find().populate('groups');
-    // await sails.sockets.broadcast('user', 'list', users);
 
     // Получить список групп, которые существуют в системе. Для вывода в select
     let allGroups = await Group.find();
+
 
     _.each(allGroups, group => {
       delete group.createdAt;
@@ -106,14 +120,10 @@ module.exports = {
       delete user.billingCardLast4;
 
     });
-
-    console.log('users: ', users);
-    await sails.sockets.broadcast('user', 'list', users);
+    data.users = users;
+    data.count = inputs.count;
+    await sails.sockets.broadcast('user', 'list', data);
     // Respond with view.
     return exits.success();
-
-
   }
-
-
 };

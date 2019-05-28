@@ -12,6 +12,7 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
+
     emailAddress: {
       type: 'string',
       required: true,
@@ -20,6 +21,7 @@ module.exports = {
       maxLength: 200,
       example: 'mary.sue@example.com'
     },
+
 
     emailStatus: {
       type: 'string',
@@ -34,11 +36,13 @@ module.exports = {
 статус электронной почты, пока они не нажмут на ссылку в электронном письме с подтверждением.`
     },
 
+
     emailChangeCandidate: {
       type: 'string',
       isEmail: true,
       description: 'A still-unconfirmed email address that this user wants to change to (if relevant).'
     },
+
 
     password: {
       type: 'string',
@@ -48,6 +52,7 @@ module.exports = {
       example: '2$28a8eabna301089103-13948134nad'
     },
 
+
     fullName: {
       type: 'string',
       required: true,
@@ -55,6 +60,7 @@ module.exports = {
       maxLength: 120,
       example: 'Mary Sue van der McHenst'
     },
+
 
     isSuperAdmin: {
       type: 'boolean',
@@ -86,16 +92,16 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
 функции могут быть разделены на несколько разных ролей.
 
 Поэтому, хотя разграничение между isSuperAdmin и может быть неправильным подходом, это хорошее место 
-для начала.
-
-`
+для начала.`
     },
+
 
     passwordResetToken: {
       type: 'string',
       description: 'Уникальный токен, используемый для проверки личности пользователя при восстановлении пароля. ' +
       'Истекает после 1 использования или по истечении установленного количества времени.'
     },
+
 
     passwordResetTokenExpiresAt: {
       type: 'number',
@@ -104,16 +110,19 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       example: 1502844074211
     },
 
+
     emailProofToken: {
       type: 'string',
       description: 'A pseudorandom, probabilistically-unique token for use in our account verification emails.'
     },
+
 
     emailProofTokenExpiresAt: {
       type: 'number',
       description: 'A JS timestamp (epoch ms) representing the moment when this user\'s `emailProofToken` will expire (or 0 if the user currently has no such token).',
       example: 1502844074211
     },
+
 
     stripeCustomerId: {
       type: 'string',
@@ -124,6 +133,7 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
 It just means they have a customer entry in Stripe, which might or might not have a billing card.`
     },
 
+
     hasBillingCard: {
       type: 'boolean',
       description: 'Есть ли у этого пользователя платежная карта по умолчанию, подключенная в качестве способа оплаты.',
@@ -133,6 +143,7 @@ It just means they have a customer entry in Stripe, which might or might not hav
 без необходимости иметь платежную карту.`
     },
 
+
     billingCardBrand: {
       type: 'string',
       example: 'Visa',
@@ -140,12 +151,14 @@ It just means they have a customer entry in Stripe, which might or might not hav
       extendedDescription: 'To ensure PCI compliance, this data comes from Stripe, where it reflects the user\'s default payment source.'
     },
 
+
     billingCardLast4: {
       type: 'string',
       example: '4242',
       description: 'The last four digits of the card number for this user\'s default billing card (or empty string if no billing card is set up).',
       extendedDescription: 'To ensure PCI compliance, this data comes from Stripe, where it reflects the user\'s default payment source.'
     },
+
 
     billingCardExpMonth: {
       type: 'string',
@@ -161,12 +174,14 @@ It just means they have a customer entry in Stripe, which might or might not hav
       extendedDescription: 'To ensure PCI compliance, this data comes from Stripe, where it reflects the user\'s default payment source.'
     },
 
+
     tosAcceptedByIp: {
       type: 'string',
       description: 'The IP (ipv4) address of the request that accepted the terms of service.',
       extendedDescription: 'Useful for certain types of businesses and regulatory requirements (KYC, etc.)',
       moreInfoUrl: 'https://en.wikipedia.org/wiki/Know_your_customer'
     },
+
 
     lastSeenAt: {
       type: 'number',
@@ -181,6 +196,7 @@ It just means they have a customer entry in Stripe, which might or might not hav
       isIn: ['avatar', 'gravatar'],
       defaultsTo: 'gravatar'
     },
+
 
     gravatar: {
       type: 'string',
@@ -226,24 +242,9 @@ It just means they have a customer entry in Stripe, which might or might not hav
     },
 
     phone: {
-      type:'string',
+      type: 'ref',
       // columnType:'array',
       description: 'Номера телефонов для связи'
-    },
-
-    kennel: {
-      type: 'string',
-      description: `Наименование питомника`,
-      example: 'Poale Ell'
-    },
-
-
-    kennelAddress: {
-      type: 'string',
-      description: `Адрес питомника`,
-      example: 'Россия. Москва. ул. Остров д.1 к.1',
-      // moreInfoUrl: 'https://gist.github.com/mikermcneil/0af155ed546f3ddf164b4885fb67830c; https://sailsjs.com/documentation/reference/request-req/req-set-locale',
-      // defaultsTo: 'en',
     },
 
 
@@ -254,35 +255,57 @@ It just means they have a customer entry in Stripe, which might or might not hav
         `Письмо-напоминание. Письмо отправляется за 24 часа до истечения срока годности токена 
         на подтверждение адреса электронной почты при регистрации.`
     },
+
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
     // n/a
+
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
 
-    friends: {collection: 'User'},
-    // Входящие запросы на добавление в друзья, это набор пользователей через их исходящие
-    // запросы на добавления в друзья
-    inboundFriendRequests: {collection: 'User', via: 'outboundFriendRequests'},
-    // Исходящие от вас запросы на добавления в друзья, это набор пользователей через их входящие
-    // запросы на добавления в друзья
-    outboundFriendRequests: {collection: 'User', via: 'inboundFriendRequests'},
+    friends: {
+      collection: 'User'
+    },
+
+
+    inboundFriendRequests: {
+      collection: 'User',
+      via: 'outboundFriendRequests',
+      description: `Входящие запросы на добавление в друзья, это набор пользователей 
+      через их исходящие запросы на добавления в друзья.`
+    },
+
+
+    outboundFriendRequests: {
+      collection: 'User',
+      via: 'inboundFriendRequests',
+      description: `Исходящие от вас запросы на добавления в друзья, это набор пользователей 
+      через их входящие запросы на добавления в друзья.`
+    },
+
 
     groups: {
       collection: 'Group',
       via: 'users',
       description: `Многие ко Многим (Many-to-Many)
-      groups - читаем как: пользователь принадлежит к группе, users - ключ для объединяющей таблицы`
+      groups - читаем как: пользователь принадлежит к группе доступа, users - ключ для 
+      объединяющей таблицы.`
     },
+
 
     kennels: {
       collection: 'kennel',
       via: 'users',
       dominant: true
     },
-    },
+
+
+
+
+  },
 };

@@ -120,10 +120,10 @@ module.exports.routes = {
   'DELETE /api/v1/groups/destroy-one-group': {action: 'groups/destroy-one-group'},
   'PUT    /api/v1/groups/update-group': {action: 'groups/update-group'},
 
-  'PUT    /users/update-user-group': {action: 'users/update-user-group', csrf: false},
-  // 'DELETE /api/v1/users/destroy-one-group': {action: 'users/destroy-one-group'},
-  'GET    /sockets/user/list': {action: 'users/list'},
-  'DELETE /users/destroy-one-user': {action: 'users/destroy-one-user', csrf: false},
+  'PUT    /sockets/user/update-user-group': {action: 'users/update-user-group', csrf: false},
+  'GET    /sockets/user/list/:count?/:query?': {action: 'users/list'},
+  'GET    /sockets/user/count-all': { action: 'users/count-all' },
+  'DELETE /sockets/user/destroy-one-user': {action: 'users/destroy-one-user', csrf: false},
   'GET    /api/v1/users/:id': {action: 'users/download-photo'},
   'DELETE /users/destroy-user-group': {action: 'users/destroy-user-group', csrf: false},
 

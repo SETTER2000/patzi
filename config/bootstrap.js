@@ -117,15 +117,17 @@ module.exports.bootstrap = async function () {
   await User.addToCollection(alexFox.id, 'groups', group.id);
 
 
-  for(let y =0; y<1000; y++){
+  for (let y = 0; y < 100; y++) {
 
-    let nm = await sails.helpers.strings.random();
+    let nm = await sails.helpers.strings.random("alphanumeric", 6);
     nm = await User.create({
-        emailAddress: `${nm}@mail.ru`,
-        fullName: nm,
-        password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
-        preferredLocale: 'en'
-      }).fetch();
+      emailAddress: `${nm}@mail.ru`,
+      fullName: nm,
+      kennelAddress: nm,
+      phone:await sails.helpers.strings.random("alphanumeric", 6),
+      password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
+      preferredLocale: 'en'
+    }).fetch();
 
     await User.addToCollection(nm.id, 'groups', group2.id);
   }
