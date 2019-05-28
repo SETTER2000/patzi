@@ -26,213 +26,278 @@
         нуждается в перезагрузке страницы.
       </p>
       <!--<p><button @click="sayHello()">Подключиться к сокету</button></p>-->
+      <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+      <el-row :gutter="12">
+        <el-col :span="8">
+          <el-card shadow="hover">
+            <p class="text-center">Всего: {{counts}}</p>
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card shadow="hover">
+            <p class="text-center"> Заблокировано:</p>
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card shadow="hover">
+            <p class="text-center">Never</p>
+          </el-card>
+        </el-col>
+      </el-row>
     </div>
   </section>
   <!-- End Sample Area -->
+
+  <% /* Диалоговое окно. Предупредение о невозможности удалить пользователя. */ %>
+  <el-dialog
+    title="ВНИМАНИЕ!"
+    :visible.sync="centerDialogVisible"
+    width="30%"
+    center>
+    <span>{{text}}</span>
+    <span slot="footer" class="dialog-footer">
+    <!--<el-button @click="centerDialogVisible = false">Cancel</el-button>-->
+    <el-button type="primary" @click="centerDialogVisible = false">Ok</el-button>
+  </span>
+  </el-dialog>
+
+  <% /* Диалоговое окно. Подтверждение удаления объекта. */ %>
+  <el-dialog
+    title="ВНИМАНИЕ!"
+    :visible.sync="centerDialogVisibleConfirm"
+    width="30%"
+    center>
+    <span>{{text}}</span>
+    <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialogVisibleConfirm = false">Отмена</el-button>
+                <el-button type="primary" @click="confirmDeletion()">Да</el-button>
+             </span>
+  </el-dialog>
+
+  <% /* Диалоговое окно. Показывает фото профиля. */ %>
+  <el-dialog :title="objOne.fullName" :visible.sync="dialogTableVisible">
+    <div class="demo-image__placeholder">
+      <div class="block">
+        <span class="demonstration">{{objOne.kennel}}</span>
+        <el-image :src="objOne.imageSrc">
+          <div slot="placeholder" class="image-slot">
+            Loading<span class="dot">...</span>
+          </div>
+        </el-image>
+      </div>
+    </div>
+  </el-dialog>
 
 
   <!-- Start Align Area -->
   <div class="whole-wrap mb-5">
     <div class="container">
       <div class="row">
-        <div class="col">
-          <hr>
+        <div class="col mb-5">
 
-          <el-dialog
-            title="ВНИМАНИЕ!"
-            :visible.sync="centerDialogVisible"
-            width="30%"
-            center>
-            <span>{{text}}</span>
-            <span slot="footer" class="dialog-footer">
-    <!--<el-button @click="centerDialogVisible = false">Cancel</el-button>-->
-    <el-button type="primary" @click="centerDialogVisible = false">Ok</el-button>
-  </span>
-          </el-dialog>
-
-
-          <el-dialog
-            title="ВНИМАНИЕ!"
-            :visible.sync="centerDialogVisibleConfirm"
-            width="30%"
-            center>
-            <span>{{text}}</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="centerDialogVisibleConfirm = false">Отмена</el-button>
-                <el-button type="primary" @click="confirmDeletion()">Да</el-button>
-             </span>
-          </el-dialog>
-
-          <% /*Диалоговое окно. Показывает фото профиля.*/ %>
-          <el-dialog :title="objOne.fullName" :visible.sync="dialogTableVisible">
-            <div class="demo-image__placeholder">
-              <div class="block">
-                <span class="demonstration">{{objOne.kennel}}</span>
-                <el-image :src="objOne.imageSrc">
-                  <div slot="placeholder" class="image-slot">
-                    Loading<span class="dot">...</span>
-                  </div>
-                </el-image>
-              </div>
-            </div>
-          </el-dialog>
-
-          <% /* __('TABLE') */ %>
-
-          <template v-cloak>
-            <el-table
-              ref="multipleTable"
-              :data="getUsers.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()) || data.emailAddress.includes(search.toLowerCase()))"
-              height="450"
-              style="width: 100%"
-              :default-sort="{prop: ['createdAt','emailStatus','fullName','emailAddress'], order: 'descending'}"
-              highlight-current-row
-              @current-change="handleCurrentChange"
-              @selection-change="handleSelectionChange"
-            >
-
-
-         <!--     <el-table-column
-                type="selection"
-                fixed="left"
-                width="30">
-              </el-table-column>-->
-
-              <el-table-column
-                property="imageSrc"
-                label=""
-                fixed="left"
-                width="90">
-                <template slot="header" slot-scope="scope">
-
-                  <div class="d-flex justify-content-center"> <i class="el-icon-user-solid"></i></div>
-                </template>
-                <template slot-scope="scope">
-                  <div v-if="scope.row.imageSrc" class="photo-preview col">
-                    <div class="image-wrapper round">
-                      <a href="#" @click="clickShowPhoto(scope.$index,scope.row)">
-                        <img :src="scope.row.imageSrc" class="personPhoto"/>
-                      </a>
-                    </div>
-                  </div>
-                  <div v-else class="photo-preview col"><div class="image-wrapper round  d-flex align-items-center justify-content-center"><!----> <!----> <span class="placeholder-icon fa fa-picture-o"></span></div></div>
-                </template>
-              </el-table-column>
-
-
-              <el-table-column
-                property="createdAtFormatFilter"
-                label="Дата"
-                sortable
-                width="220"
-                column-key="date"
-                :filters="dateFilter"
-                :filter-method="filterHandler"
-              >
-                <template slot-scope="scope">
-                  <i class="el-icon-time"></i>
-                  {{ scope.row.createdAtFormat}}
-                </template>
-              </el-table-column>
-              <el-table-column
-                property="fullName"
-                label="ФИО"
-                sortable
-                width="150"
-              >
-                <template slot-scope="scope">
-                  <el-popover trigger="hover" placement="top">
-                    <p>Питомник: {{ scope.row.kennel }}</p>
-                    <p>Адрес: {{ scope.row.kennelAddress }}</p>
-                    <div slot="reference" class="name-wrapper">
-                      <el-tag size="small">{{ scope.row.fullName }}</el-tag>
-                    </div>
-                  </el-popover>
-                </template>
-              </el-table-column>
-              <el-table-column
-                property="emailAddress"
-                sortable
-                label="eMail"
-                width="170"
-                show-overflow-tooltip>
-                
-              </el-table-column>
-              <el-table-column label="Группы" width="240">
-                <template slot-scope="scope">
-                  <el-select
-                    v-model="scope.row.groups"
-                    multiple
-                    :key="scope.row.id"
-                    collapse-tags
-                    @remove-tag="handleDeleteGroup($event,scope.$index, scope.row)"
-                    placeholder="Select"
-                    @change="handleSelect(scope.$index, scope.row)"
-                  >
-                    <el-option
-                      v-for="item in scope.row.allGroups"
-                      :key="item.id"
-                      :label="item.label"
-                      :value="item.id">
-                    </el-option>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column
-                property="emailStatus"
-                sortable
-                label="Подтверждён"
-                width="170"
-                show-overflow-tooltip>
-              </el-table-column>
-
-              <el-table-column
-                align="right"
-                fixed="right"
-                width="170">
-                <template slot="header" slot-scope="scope">
-                  <el-input
-                    v-model="search"
-                    size="mini"
-                    placeholder="Email, ФИО"/>
-                </template>
-                <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    @click="handleEdit(scope.$index, scope.row)">Edit
-                  </el-button>
-                  <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">Delete
-                  </el-button>
-                </template>
-              </el-table-column>
-              <!--  <el-table-column
-                  fixed="right"
-                  label="Operations"
-                  width="120">
-                  <template slot-scope="scope">
-                    <el-button @click="handleClick" type="text" size="small">Detail</el-button>
-                    <el-button type="text" size="small">Edit</el-button>
-                  </template>
-                </el-table-column>-->
-
-            </el-table>
-            <div style="margin-top: 20px">
-              <el-button @click="toggleSelection([tableData[1], tableData[2]])">Переключить статус выбора второго и
-                третьего рядов
-              </el-button>
-              <el-button @click="toggleSelection()">Очистить выбор</el-button>
-            </div>
+          <% /* Кол-во строк в таблице. */ %>
+          <template>
+            <el-input-number v-model="count" :step="5" :min="5" :max="50" size="mini" step-strictly></el-input-number>
           </template>
 
-          <% /* __('END TABLE') */ %>
+        </div>
+        <div class="col-lg-2 ">
+
+          <% /* Удалённый поиск. Поиск на сервере. */ %>
+          <template >
+            <el-select
+              v-model="value"
+              multiple
+              filterable
+              remote
+              size="mini"
+              reserve-keyword
+              placeholder="Please enter a keyword"
+              :remote-method="remoteMethod"
+              :loading="loading">
+              <el-option
+                v-for="item in options"
+                :key="item.id"
+                :label="item.fullName"
+                :value="item.fullName">
+              </el-option>
+            </el-select>
+          </template>
+
 
         </div>
       </div>
 
+      <% /* __('TABLE')  height="650" */ %>
+      <template v-cloak>
+        <el-table
+          ref="multipleTable"
+          :data="getUsers.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()) || data.emailAddress.includes(search.toLowerCase()))"
+
+          style="width: 100%"
+          :default-sort="{prop: ['createdAt','emailStatus','fullName','emailAddress'], order: 'descending'}"
+          highlight-current-row
+          @current-change="handleCurrentChange"
+          @selection-change="handleSelectionChange"
+        >
+
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <p>Телефон: {{ props.row.phone }}</p>
+              <p>Город: {{ props.row.city }}</p>
+              <p>Адрес: {{ props.row.address }}</p>
+              <p>Сайт: {{ props.row.suite }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column
+            type="index"
+            fixed="left"
+            width="50">
+          </el-table-column>
+               <el-table-column
+                 type="selection"
+                 fixed="left"
+                 width="30">
+               </el-table-column>
+
+          <el-table-column
+            property="imageSrc"
+            label=""
+            fixed="left"
+            width="90">
+            <template slot="header" slot-scope="scope">
+
+              <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
+            </template>
+            <template slot-scope="scope">
+              <div v-if="scope.row.imageSrc" class="photo-preview col">
+                <div class="image-wrapper round">
+                  <a href="#" @click="clickShowPhoto(scope.$index,scope.row)">
+                    <img :src="scope.row.imageSrc" class="personPhoto"/>
+                  </a>
+                </div>
+              </div>
+              <div v-else class="photo-preview col">
+                <div class="image-wrapper round  d-flex align-items-center justify-content-center"><!----> <!----> <span
+                    class="placeholder-icon fa fa-picture-o"></span></div>
+              </div>
+            </template>
+          </el-table-column>
+
+
+          <el-table-column
+            property="createdAtFormatFilter"
+            label="Дата"
+            sortable
+            width="220"
+            column-key="date"
+            :filters="dateFilter"
+            :filter-method="filterHandler"
+          >
+            <template slot-scope="scope">
+              <i class="el-icon-time"></i>
+              {{ scope.row.createdAtFormat}}
+            </template>
+          </el-table-column>
+          <el-table-column
+            property="fullName"
+            label="ФИО"
+            sortable
+            width="150"
+          >
+            <template slot-scope="scope">
+              <el-popover trigger="hover" placement="top">
+                <p>Питомник: {{ scope.row.kennel }}</p>
+                <p>Адрес: {{ scope.row.kennelAddress }}</p>
+                <div slot="reference" class="name-wrapper">
+                  <el-tag size="small">{{ scope.row.fullName }}</el-tag>
+                </div>
+              </el-popover>
+            </template>
+          </el-table-column>
+          <el-table-column
+            property="emailAddress"
+            sortable
+            label="eMail"
+            width="170"
+            show-overflow-tooltip>
+
+          </el-table-column>
+          <el-table-column label="Группы" width="240">
+            <template slot-scope="scope">
+              <el-select
+                v-model="scope.row.groups"
+                multiple
+                :key="scope.row.id"
+                collapse-tags
+                @remove-tag="handleDeleteGroup($event,scope.$index, scope.row)"
+                placeholder="Select"
+                @change="handleSelect(scope.$index, scope.row)"
+              >
+                <el-option
+                  v-for="item in scope.row.allGroups"
+                  :key="item.id"
+                  :label="item.label"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column
+            property="emailStatus"
+            sortable
+            label="Подтверждён"
+            width="170"
+            show-overflow-tooltip>
+          </el-table-column>
+
+          <el-table-column
+            align="right"
+            fixed="right"
+            width="170">
+            <template slot="header" slot-scope="scope">
+              <el-input
+                v-model="search"
+                size="mini"
+                placeholder="Email, ФИО"/>
+            </template>
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)">Edit
+              </el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)">Delete
+              </el-button>
+            </template>
+          </el-table-column>
+          <!--  <el-table-column
+              fixed="right"
+              label="Operations"
+              width="120">
+              <template slot-scope="scope">
+                <el-button @click="handleClick" type="text" size="small">Detail</el-button>
+                <el-button type="text" size="small">Edit</el-button>
+              </template>
+            </el-table-column>-->
+
+        </el-table>
+        <div style="margin-top: 20px">
+          <el-button @click="toggleSelection([tableData[1], tableData[2]])">Переключить статус выбора второго и
+            третьего рядов
+          </el-button>
+          <el-button @click="toggleSelection()">Очистить выбор</el-button>
+        </div>
+      </template>
+
+      <% /* __('END TABLE') */ %>
+
     </div>
   </div>
+
 </div>
+
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
