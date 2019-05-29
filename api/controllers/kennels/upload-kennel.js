@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Upload kennel',
 
 
-  description: 'Создаём, добавляем новый питомнгик.',
+  description: 'Создаём, добавляем новый питомник.',
 
   files: ['photo'], // именуем поле, через которое будет передоваться файл при загрузки
 

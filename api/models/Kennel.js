@@ -70,7 +70,7 @@ module.exports = {
     registerNumber: {
       type: 'string',
       description: `Регистрационный номер.`,
-      example: 'www.poaleell.com'
+      example: '123964-54'
     },
 
 

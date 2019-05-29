@@ -15,7 +15,7 @@ parasails.registerPage('users-home', {
     value1: '',
     value2: '',
     value3: '',
-    plain:false,
+    plain: false,
     value5: [],
     count: 5,
     query: 5,
@@ -26,11 +26,33 @@ parasails.registerPage('users-home', {
     confirm: false,
     rowTable: '',
     users: [],
+    sizeForm: {
+      name: '',
+      region: '',
+      date1: '',
+      date2: '',
+      delivery: false,
+      type: [],
+      resource: '',
+      desc: ''
+    },
+    form: {
+      name: '',
+      region: '',
+      date1: '',
+      date2: '',
+      delivery: false,
+      type: [],
+      resource: '',
+      desc: ''
+    },
+    formLabelWidth: '120px',
     loading: false,
     options: [],
     counts: 0,
     fits: 'cover',
     objOne: '',
+    dialogFormVisible:false,
     dialogTableVisible: false,
     centerDialogVisible: false,
     centerDialogVisibleConfirm: false,
@@ -41,22 +63,22 @@ parasails.registerPage('users-home', {
           picker.$emit('pick', new Date());
         }
       },
-        {
-          text: 'Yesterday',
-          onClick(picker) {
-            const date = new Date();
-            date.setTime(date.getTime() - 3600 * 1000 * 24);
-            picker.$emit('pick', date);
-          }
-        },
-        {
-          text: 'A week ago',
-          onClick(picker) {
-            const date = new Date();
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', date);
-          }
-        }]
+      {
+        text: 'Yesterday',
+        onClick(picker) {
+          const date = new Date();
+          date.setTime(date.getTime() - 3600 * 1000 * 24);
+          picker.$emit('pick', date);
+        }
+      },
+      {
+        text: 'A week ago',
+        onClick(picker) {
+          const date = new Date();
+          date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+          picker.$emit('pick', date);
+        }
+      }]
     },
     tableData: [
       {
@@ -204,7 +226,13 @@ parasails.registerPage('users-home', {
         return [];
       },
     },
-
+    tableDateFilter: {
+      cache: false,
+      get: function () {
+        console.log('dateFilter: ', this.dateFilter);
+        return this.dateFilter;
+      }
+    }
     // count: {
     //   get: function () {
     //     return 0;
@@ -218,12 +246,6 @@ parasails.registerPage('users-home', {
     //   },
     // },
 
-
-    getTableData() {
-      this.tableData = this.users.filter((user) => {
-        return !_.isEmpty(user.fullName);
-      });
-    },
   },
 
 
@@ -253,7 +275,7 @@ parasails.registerPage('users-home', {
       if (query !== '') {
         this.arrSearch = query;
         this.loading = true;
-        console.log('this.arrSearch: ',  this.arrSearch);
+        console.log('this.arrSearch: ', this.arrSearch);
         await  io.socket.get(`/sockets/user/list/${this.count}/${this.arrSearch}`, function gotResp(body, response) {
           console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
         });
@@ -272,7 +294,10 @@ parasails.registerPage('users-home', {
     async changeSelectSearch(e) {
       this.arrSearch = e;
 
-      await  io.socket.put('/api/v1/users/update-search', {'count': this.count, 'query': this.arrSearch}, (data, response) => {
+      await  io.socket.put('/api/v1/users/update-search', {
+        'count': this.count,
+        'query': this.arrSearch
+      }, (data, response) => {
         console.log('Сервер ответил-2 кодом ' + response.statusCode + ' и данными: ', data);
       });
     },
@@ -295,7 +320,7 @@ parasails.registerPage('users-home', {
             this.centerDialogVisible = true;
 
           } else {
-            this.plain=true;
+            this.plain = true;
             this.mesSuccess('Учётная запись успешно удалена.');
             this.getList();
 
@@ -358,7 +383,7 @@ parasails.registerPage('users-home', {
       console.log('row', row);
       console.log('column', column);
       // this.arrSearch.push(value);
-      io.socket.put('/api/v1/users/update-filter-date', {'count': this.count, 'query': value}, (data, response) => {
+      io.socket.put('/api/v1/users/update-filter-date', {'count': 100, 'query': value}, (data, response) => {
         console.log('Сервер ответил-2 кодом ' + response.statusCode + ' и данными: ', data);
       });
 
@@ -366,6 +391,8 @@ parasails.registerPage('users-home', {
       const property = column['property'];
       return row[property] === value;
     },
+
+
     handleEdit(index, row) {
       console.log(index, row);
     },
@@ -381,9 +408,6 @@ parasails.registerPage('users-home', {
     },
 
 
-
-
-
     mesSuccess(text) {
       this.$notify({
         title: 'Success',
@@ -393,7 +417,7 @@ parasails.registerPage('users-home', {
       });
     },
 
-    mesWarning(text='') {
+    mesWarning(text = '') {
       this.$notify({
         title: 'Warning',
         message: text,
@@ -402,7 +426,7 @@ parasails.registerPage('users-home', {
       });
     },
 
-    mesInfo(text='') {
+    mesInfo(text = '') {
       this.$notify.info({
         title: 'Info',
         message: text,
@@ -410,22 +434,23 @@ parasails.registerPage('users-home', {
       });
     },
 
-    mesError(text='') {
+    mesError(text = '') {
       this.$notify.error({
         title: 'Error',
         message: text,
         offset: 100,
       });
+    },
+
+    handleMessage(index, row) {
+      this.dialogFormVisible = true;
+    },
+    onSubmit() {
+      console.log('submit!');
     }
 
 
-    /**************** SOCKET.IO ****************/
-    // sayHello: function () {
-    //   // And use `io.socket.get()` to send a request to the server:
-    //   io.socket.get('/sockets/user/list', function gotResponse(data, jwRes) {
-    //     console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
-    //   });
-    // }
   }
 });
+
 

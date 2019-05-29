@@ -72,8 +72,8 @@ module.exports = {
     //     'createdAt': {'>=': moment(dt, format).valueOf(), '<=': moment(dt, format).add(1, 'h').valueOf(),},
     //   }
     // });
-
-    console.log('inputs.query - UNIQ: ', inputs.query);
+    let i=0;
+    console.log('inputs.query - UNIQ: ', i=i+1);
     // Поиск записей в которых встречается подстрока inputs.query
     inputs.query = (_.isArray(inputs.query) && inputs.query.length < 1) ? {} :
       (_.isArray(inputs.query)) ? {or: inputs.query} :
