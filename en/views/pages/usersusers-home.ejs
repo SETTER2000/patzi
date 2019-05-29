@@ -49,6 +49,25 @@
   </section>
   <!-- End Sample Area -->
 
+  <% /* Диалоговое окно. Отправка сообщения. */ %>
+  <el-dialog title="Shipping address" :visible.sync="dialogFormVisible">
+    <el-form :model="form">
+      <el-form-item label="Promotion name" :label-width="formLabelWidth">
+        <el-input v-model="form.name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="Zones" :label-width="formLabelWidth">
+        <el-select v-model="form.region" placeholder="Please select a zone">
+          <el-option label="Zone No.1" value="shanghai"></el-option>
+          <el-option label="Zone No.2" value="beijing"></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false">Cancel</el-button>
+    <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
+  </span>
+  </el-dialog>
+
   <% /* Диалоговое окно. Предупредение о невозможности удалить пользователя. */ %>
   <el-dialog
     title="ВНИМАНИЕ!"
@@ -132,7 +151,7 @@
       </div>
 
       <% /* __('TABLE')  height="650" */ %>
-      <template v-cloak>
+      <template v-cloak >
         <el-table
           ref="multipleTable"
           :data="getUsers.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()) || data.emailAddress.includes(search.toLowerCase()))"
@@ -192,7 +211,7 @@
             sortable
             width="220"
             column-key="createdAtFormatFilter"
-            :filters="dateFilter"
+            :filters="tableDateFilter"
             :filter-method="filterHandler"
           >
             <template slot-scope="scope">
@@ -256,18 +275,20 @@
           <el-table-column
             align="right"
             fixed="right"
-            width="170">
+            width="140">
             <template slot="header" slot-scope="scope">
               <el-input
                 v-model="search"
                 size="mini"
                 placeholder="Email, ФИО"/>
             </template>
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)">Edit
-              </el-button>
+            <template slot-scope="scope" >
+              <el-button @click="handleMessage(scope.$index, scope.row)" type="info" icon="el-icon-message" circle></el-button>
+              <!--<el-button-->
+                <!--size="mini"-->
+                <!--@click="handleEdit(scope.$index, scope.row)">Edit-->
+              <!--</el-button>-->
+              <!--<el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit" circle></el-button>-->
               <!--<el-button-->
               <!--size="mini"-->
               <!--type="danger"-->
