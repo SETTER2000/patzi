@@ -112,10 +112,11 @@
               multiple
               filterable
               remote
+              clearable
               size="small"
               @change="changeSelectSearch($event)"
               reserve-keyword
-              placeholder="Please enter a keyword"
+              placeholder="ФИО. Поиск чувствителен к регистру."
               :remote-method="remoteMethod"
               :loading="loading">
               <el-option
@@ -143,18 +144,16 @@
           @current-change="handleCurrentChange"
           @selection-change="handleSelectionChange"
         >
-
-
           <el-table-column
             type="index"
             fixed="left"
-            width="50">
+            width="38">
           </el-table-column>
-          <el-table-column
-            type="selection"
-            fixed="left"
-            width="30">
-          </el-table-column>
+          <!--<el-table-column-->
+            <!--type="selection"-->
+            <!--fixed="left"-->
+            <!--width="30">-->
+          <!--</el-table-column>-->
 
           <el-table-column
             property="imageSrc"

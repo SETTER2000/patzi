@@ -58,7 +58,7 @@ module.exports = {
     // Have the socket which made the request join the "user" room.
     // Подключить сокет, который сделал запрос, к комнате «user».
     await sails.sockets.join(req, 'user');
-    // console.log('inputs.query-1: ', inputs.query);
+
     // Проверка кол-ва объектов запрошеных с frontend
     inputs.count = inputs.count < 1 ? 5 : inputs.count;
 
@@ -71,7 +71,6 @@ module.exports = {
       _.get(inputs, 'query') ? {'fullName': {contains: inputs.query}} : {};
 
 
-    console.log('inputs.query: ', inputs.query);
     let format = 'LL HH:mm:ss';
     let users = await User.find(inputs.query).limit(inputs.count).populate('groups');
 
