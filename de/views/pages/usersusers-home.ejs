@@ -1,4 +1,4 @@
-<div id="users-home" class="content" v-cloak>
+<div id="users-home" class="content pb-5" v-cloak>
   <!-- start banner Area -->
   <section class="banner-area relative">
     <div class="container">
@@ -71,7 +71,7 @@
     <span>{{text}}</span>
     <span slot="footer" class="dialog-footer">
                 <el-button @click="centerDialogVisibleConfirm = false">Отмена</el-button>
-                <el-button type="primary" @click="confirmDeletion()">Да</el-button>
+                <el-button  type="primary" @click="confirmDeletion()">Да</el-button>
              </span>
   </el-dialog>
 
@@ -88,7 +88,6 @@
       </div>
     </div>
   </el-dialog>
-
 
   <!-- Start Align Area -->
   <div class="whole-wrap mb-5">
@@ -192,7 +191,7 @@
             label="Дата"
             sortable
             width="220"
-            column-key="date"
+            column-key="createdAtFormatFilter"
             :filters="dateFilter"
             :filter-method="filterHandler"
           >
@@ -225,11 +224,12 @@
             show-overflow-tooltip>
 
           </el-table-column>
-          <el-table-column label="Группы" width="240">
+          <el-table-column label="Группы" width="160">
             <template slot-scope="scope">
               <el-select
                 v-model="scope.row.groups"
                 multiple
+                size="small"
                 :key="scope.row.id"
                 collapse-tags
                 @remove-tag="handleDeleteGroup($event,scope.$index, scope.row)"
@@ -268,11 +268,12 @@
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)">Edit
               </el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">Delete
-              </el-button>
+              <!--<el-button-->
+              <!--size="mini"-->
+              <!--type="danger"-->
+              <!--@click="handleDelete(scope.$index, scope.row)">Delete-->
+              <!--</el-button>-->
+              <el-button   @click="handleDelete(scope.$index, scope.row)" type="danger" icon="el-icon-delete" circle></el-button>
             </template>
           </el-table-column>
           <!--  <el-table-column
@@ -286,15 +287,17 @@
             </el-table-column>-->
 
         </el-table>
-        <div style="margin-top: 20px">
+       <% /*<div style="margin-top: 20px">
           <el-button @click="toggleSelection([tableData[1], tableData[2]])">Переключить статус выбора второго и
             третьего рядов
           </el-button>
           <el-button @click="toggleSelection()">Очистить выбор</el-button>
-        </div>
+        </div>*/%>
       </template>
 
       <% /* __('END TABLE') */ %>
+
+
 
     </div>
   </div>
