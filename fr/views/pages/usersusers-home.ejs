@@ -98,20 +98,22 @@
 
           <% /* Кол-во строк в таблице. */ %>
           <template>
-            <el-input-number v-model="count" :step="5" :min="5" :max="50" size="mini" step-strictly></el-input-number>
+            <el-input-number v-model="count" :step="5" :min="5" :max="50" size="small" step-strictly></el-input-number>
           </template>
 
         </div>
-        <div class="col-lg-2 ">
+        <div class="col-lg-6 ">
 
-          <% /* Удалённый поиск. Поиск на сервере. */ %>
-          <template >
+          <% /* Удалённый поиск по полю fullName. Поиск на сервере. */ %>
+          <template>
             <el-select
               v-model="value"
+              style="width: 100%"
               multiple
               filterable
               remote
-              size="mini"
+              size="small"
+              @change="changeSelectSearch($event)"
               reserve-keyword
               placeholder="Please enter a keyword"
               :remote-method="remoteMethod"
@@ -142,24 +144,17 @@
           @selection-change="handleSelectionChange"
         >
 
-          <el-table-column type="expand">
-            <template slot-scope="props">
-              <p>Телефон: {{ props.row.phone }}</p>
-              <p>Город: {{ props.row.city }}</p>
-              <p>Адрес: {{ props.row.address }}</p>
-              <p>Сайт: {{ props.row.suite }}</p>
-            </template>
-          </el-table-column>
+
           <el-table-column
             type="index"
             fixed="left"
             width="50">
           </el-table-column>
-               <el-table-column
-                 type="selection"
-                 fixed="left"
-                 width="30">
-               </el-table-column>
+          <el-table-column
+            type="selection"
+            fixed="left"
+            width="30">
+          </el-table-column>
 
           <el-table-column
             property="imageSrc"
@@ -185,7 +180,14 @@
             </template>
           </el-table-column>
 
-
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <p>Телефон: {{ props.row.phone }}</p>
+              <p>Город: {{ props.row.city }}</p>
+              <p>Адрес: {{ props.row.address }}</p>
+              <p>Сайт: {{ props.row.suite }}</p>
+            </template>
+          </el-table-column>
           <el-table-column
             property="createdAtFormatFilter"
             label="Дата"
