@@ -13,7 +13,7 @@ module.exports = {
       description: 'Кол-во отдаваемых объектов.'
     },
     query: {
-      type: 'string',
+      type: 'ref',
       description: 'Слово для поиска по коллекции.'
     },
   },
@@ -41,6 +41,7 @@ module.exports = {
   fn: async function (inputs, exits) {
     const req = this.req;
     let data = {};
+    let str = inputs.query;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
@@ -57,13 +58,21 @@ module.exports = {
     // Have the socket which made the request join the "user" room.
     // Подключить сокет, который сделал запрос, к комнате «user».
     await sails.sockets.join(req, 'user');
-// console.log('inputs.query-1: ', inputs.query);
+    // console.log('inputs.query-1: ', inputs.query);
     // Проверка кол-ва объектов запрошеных с frontend
     inputs.count = inputs.count < 1 ? 5 : inputs.count;
-    inputs.query = _.get(inputs, 'query') ? {"fullName":{ startsWith: inputs.query }} : {};
+
+
+    inputs.query = (_.isString(inputs.query) && (-1 < inputs.query.indexOf(','))) ? inputs.query.split(',') : inputs.query;
+
+
+    // Поиск записей в которых встречается подстрока inputs.query
+    inputs.query = _.isArray(inputs.query) ? {'fullName': {in: inputs.query}} :
+      _.get(inputs, 'query') ? {'fullName': {contains: inputs.query}} : {};
+
 
     console.log('inputs.query: ', inputs.query);
-    format = 'LL HH:mm:ss';
+    let format = 'LL HH:mm:ss';
     let users = await User.find(inputs.query).limit(inputs.count).populate('groups');
 
 

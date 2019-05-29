@@ -117,20 +117,35 @@ module.exports.bootstrap = async function () {
   await User.addToCollection(alexFox.id, 'groups', group.id);
 
 
+  let ar = [];
   for (let y = 0; y < 100; y++) {
-
-    let nm = await sails.helpers.strings.random("alphanumeric", 6);
-    nm = await User.create({
+    let nm = await sails.helpers.strings.random('alphanumeric', 6);
+    ar.push({
       emailAddress: `${nm}@mail.ru`,
       fullName: nm,
       kennelAddress: nm,
-      phone:await sails.helpers.strings.random("alphanumeric", 6),
+      phone: await sails.helpers.strings.random('alphanumeric', 5),
       password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
       preferredLocale: 'en'
-    }).fetch();
-
-    await User.addToCollection(nm.id, 'groups', group2.id);
+    });
   }
+  let createdUsers =  await User.createEach(ar).fetch();
+  sails.log(`Created ${createdUsers.length} user${createdUsers.length===1?'':'s'}.`);
+
+  // for (let y = 0; y < 100; y++) {
+  //
+  //   let nm = await sails.helpers.strings.random("alphanumeric", 6);
+  //   nm = await User.create({
+  //     emailAddress: `${nm}@mail.ru`,
+  //     fullName: nm,
+  //     kennelAddress: nm,
+  //     phone: await sails.helpers.strings.random("alphanumeric", 6),
+  //     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
+  //     preferredLocale: 'en'
+  //   }).fetch();
+  //
+  //   await User.addToCollection(nm.id, 'groups', group2.id);
+  // }
 
   // В БУДУЩЕМ: Решить что с эти делать
   // Create some things

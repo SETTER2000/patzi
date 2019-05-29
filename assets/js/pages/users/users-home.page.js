@@ -19,6 +19,7 @@ parasails.registerPage('users-home', {
     count: 5,
     query: 5,
     search: '',
+    arrSearch:[],
     collapse: false,
     text: '',
     confirm: false,
@@ -39,22 +40,22 @@ parasails.registerPage('users-home', {
           picker.$emit('pick', new Date());
         }
       },
-        {
-          text: 'Yesterday',
-          onClick(picker) {
-            const date = new Date();
-            date.setTime(date.getTime() - 3600 * 1000 * 24);
-            picker.$emit('pick', date);
-          }
-        },
-        {
-          text: 'A week ago',
-          onClick(picker) {
-            const date = new Date();
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', date);
-          }
-        }]
+      {
+        text: 'Yesterday',
+        onClick(picker) {
+          const date = new Date();
+          date.setTime(date.getTime() - 3600 * 1000 * 24);
+          picker.$emit('pick', date);
+        }
+      },
+      {
+        text: 'A week ago',
+        onClick(picker) {
+          const date = new Date();
+          date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+          picker.$emit('pick', date);
+        }
+      }]
     },
     tableData: [
       {
@@ -249,15 +250,15 @@ parasails.registerPage('users-home', {
 
     async remoteMethod(query) {
       if (query !== '') {
-        console.log('query: ', query);
+        this.arrSearch = query;
         this.loading = true;
-        await  io.socket.get(`/sockets/user/list/${this.count}/${query}`, function gotResponse(body, response) {
+        await  io.socket.get(`/sockets/user/list/${this.count}/${this.arrSearch}`, function gotResp(body, response) {
           console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
         });
         setTimeout(() => {
           this.loading = false;
           this.options = this.users.filter(item => {
-            console.log(item);
+            // console.log(item);
             return item.fullName.toLowerCase().indexOf(query.toLowerCase()) > -1;
           });
         }, 200);
@@ -265,6 +266,17 @@ parasails.registerPage('users-home', {
         this.options = [];
       }
     },
+
+    async changeSelectSearch(e){
+      this.arrSearch=e;
+      console.log('this.arrSearch:', this.arrSearch);
+
+      await  io.socket.get(`/sockets/user/list/${this.count}/${this.arrSearch}`, function gotRes(body, response) {
+        console.log('Сервер ответил-2 кодом ' + response.statusCode + ' и данными: ', body);
+      });
+    },
+
+
 
     confirmDeletion() {
 
@@ -354,7 +366,7 @@ parasails.registerPage('users-home', {
       this.dialogTableVisible = true;
       console.log('row:', row);
       this.objOne = row;
-    }
+    },
 
 
     /**************** SOCKET.IO ****************/

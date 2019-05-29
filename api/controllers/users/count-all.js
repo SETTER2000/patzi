@@ -42,8 +42,9 @@ module.exports = {
     // Подключить сокет, который сделал запрос, к комнате «user».
     await sails.sockets.join(req, 'user');
 
-    let count = await User.find();
-    await sails.sockets.broadcast('user', 'count-all', count.length);
+    // let count = await User.find();
+    let count = await User.count();
+    await sails.sockets.broadcast('user', 'count-all', count);
     // Respond with view.
     return exits.success();
 
