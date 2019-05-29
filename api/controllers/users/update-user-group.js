@@ -40,7 +40,8 @@ module.exports = {
     }
 
     // Добавить пользователя inputs.userId в группу inputs.groupId.
-    await User.addToCollection(inputs.id, 'groups', inputs.groupId);
+    let rs = await User.replaceCollection(inputs.id, 'groups', inputs.groupId);
+    console.log('RS:', rs);
     // await User.addToCollection(inputs.id, 'groups').members(inputs.groupId);
 
     await sails.sockets.broadcast('user', 'list');

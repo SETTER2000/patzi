@@ -40,18 +40,47 @@ module.exports = {
     // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
     // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
     // let friendIds = _.pluck(me.friends, 'id'); // friendIds: [id,id,id...]
-    // let format = 'LL HH:mm:ss';
+    let format = 'LL HH:mm';
     let users = await User.find();
 
     let dateFilter = [];
 
+    /**
+     * Здесь будем превращать поток байт в нормальное изображение для frontend
+     * исключая некоторые данные не нужные для страницы.
+     * Есть пару способов сделать это.
+     * 1. В цикле
+     * 2. С библиотекой Lodash
+     */
+    _.each(users, (user) => {
+      // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
+      user.createdAtFormat = moment(user.createdAt).format(format);
 
+      // Столбец: Дата регистрации. Формат фильтра.
+      user.createdAtFormatFilter = moment(user.createdAt).format(format);
+      // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
+
+      // Удаляем файловый дескриптор
+      delete user.imageUploadFD;
+      // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию и т.д....
+      delete user.imageUploadMime;
+      delete user.password;
+      delete user.passwordResetToken;
+      delete user.passwordResetTokenExpiresAt;
+      delete user.hasBillingCard;
+      delete user.billingCardBrand;
+      delete user.billingCardExpMonth;
+      delete user.billingCardExpYear;
+      delete user.billingCardLast4;
+
+    });
 
 
 
     // Собираем и форматируем данные для фильтра столбца Дата...
     dateFilter = users.map(user => {
-      let textVal = moment(user.createdAt).format('L');
+      let textVal = moment(user.createdAt).format(format);
+      // console.log('user.createdAtFormatFilter', user.createdAtFormatFilter);
       return {text: textVal, value: user.createdAtFormatFilter};
     });
 

@@ -117,8 +117,9 @@ module.exports.bootstrap = async function () {
   await User.addToCollection(alexFox.id, 'groups', group.id);
 
 
+
   let ar = [];
-  for (let y = 0; y < 100; y++) {
+  for (let y = 0; y < 20; y++) {
     let nm = await sails.helpers.strings.random('alphanumeric', 6);
     ar.push({
       emailAddress: `${nm}@mail.ru`,

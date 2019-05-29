@@ -15,11 +15,12 @@ parasails.registerPage('users-home', {
     value1: '',
     value2: '',
     value3: '',
+    plain:false,
     value5: [],
     count: 5,
     query: 5,
     search: '',
-    arrSearch:[],
+    arrSearch: [],
     collapse: false,
     text: '',
     confirm: false,
@@ -40,22 +41,22 @@ parasails.registerPage('users-home', {
           picker.$emit('pick', new Date());
         }
       },
-      {
-        text: 'Yesterday',
-        onClick(picker) {
-          const date = new Date();
-          date.setTime(date.getTime() - 3600 * 1000 * 24);
-          picker.$emit('pick', date);
-        }
-      },
-      {
-        text: 'A week ago',
-        onClick(picker) {
-          const date = new Date();
-          date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-          picker.$emit('pick', date);
-        }
-      }]
+        {
+          text: 'Yesterday',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() - 3600 * 1000 * 24);
+            picker.$emit('pick', date);
+          }
+        },
+        {
+          text: 'A week ago',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', date);
+          }
+        }]
     },
     tableData: [
       {
@@ -252,6 +253,7 @@ parasails.registerPage('users-home', {
       if (query !== '') {
         this.arrSearch = query;
         this.loading = true;
+        console.log('this.arrSearch: ',  this.arrSearch);
         await  io.socket.get(`/sockets/user/list/${this.count}/${this.arrSearch}`, function gotResp(body, response) {
           console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
         });
@@ -267,15 +269,13 @@ parasails.registerPage('users-home', {
       }
     },
 
-    async changeSelectSearch(e){
-      this.arrSearch=e;
-      console.log('this.arrSearch:', this.arrSearch);
+    async changeSelectSearch(e) {
+      this.arrSearch = e;
 
-      await  io.socket.get(`/sockets/user/list/${this.count}/${this.arrSearch}`, function gotRes(body, response) {
-        console.log('Сервер ответил-2 кодом ' + response.statusCode + ' и данными: ', body);
+      await  io.socket.put('/api/v1/users/update-search', {'count': this.count, 'query': this.arrSearch}, (data, response) => {
+        console.log('Сервер ответил-2 кодом ' + response.statusCode + ' и данными: ', data);
       });
     },
-
 
 
     confirmDeletion() {
@@ -289,21 +289,24 @@ parasails.registerPage('users-home', {
         /**
          * TODO WEBSOCKET: Удаление объекта
          */
-        io.socket.delete('/sockets/user/destroy-one-user', {'id': self.rowTable.id}, (data, jwRes) => {
+        io.socket.delete('/sockets/user/destroy-one-user', {'id': this.rowTable.id}, (data, jwRes) => {
           if (jwRes.statusCode === 404) {
-            self.text = 'Этого пользователя нельзя удалить. Это системная запись, возможно isSuperAdmin.';
-            self.centerDialogVisible = true;
-          } else {
-            self.getList();
-            // console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
-          }
+            this.text = 'Этого пользователя нельзя удалить. Это системная запись, возможно isSuperAdmin.';
+            this.centerDialogVisible = true;
 
+          } else {
+            this.plain=true;
+            this.mesSuccess('Учётная запись успешно удалена.');
+            this.getList();
+
+          }
+          console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
         });
         /**
          * TODO WEBSOCKET: End
          */
-        self.rowTable = '';
-        self.confirm = false;
+        this.rowTable = '';
+        this.confirm = false;
       }
     },
 
@@ -317,9 +320,9 @@ parasails.registerPage('users-home', {
     },
 
     handleSelect(index, row) {
-      console.log('Function handleSelect');
+
       io.socket.put('/sockets/user/update-user-group', {'id': row.id, 'groupId': row.groups}, (data, jwRes) => {
-        this.getList();
+        // this.getList();
         console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
       });
       // console.log('selectedGroup', this.selectedGroup);
@@ -330,8 +333,8 @@ parasails.registerPage('users-home', {
 
     handleDeleteGroup(e, index, row) {
       io.socket.delete('/users/destroy-user-group', {'id': row.id, 'groupId': [e]}, (data, jwRes) => {
-        this.getList();
         console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+        this.mesSuccess('Группа успешно удалена.');
       });
     },
 
@@ -351,6 +354,15 @@ parasails.registerPage('users-home', {
       this.currentRow = val;
     },
     filterHandler(value, row, column) {
+      console.log('value', value);
+      console.log('row', row);
+      console.log('column', column);
+      // this.arrSearch.push(value);
+      io.socket.put('/api/v1/users/update-filter-date', {'count': this.count, 'query': value}, (data, response) => {
+        console.log('Сервер ответил-2 кодом ' + response.statusCode + ' и данными: ', data);
+      });
+
+
       const property = column['property'];
       return row[property] === value;
     },
@@ -367,6 +379,44 @@ parasails.registerPage('users-home', {
       console.log('row:', row);
       this.objOne = row;
     },
+
+
+
+
+
+    mesSuccess(text) {
+      this.$notify({
+        title: 'Success',
+        message: text,
+        offset: 100,
+        type: 'success'
+      });
+    },
+
+    mesWarning(text='') {
+      this.$notify({
+        title: 'Warning',
+        message: text,
+        offset: 100,
+        type: 'warning'
+      });
+    },
+
+    mesInfo(text='') {
+      this.$notify.info({
+        title: 'Info',
+        message: text,
+        offset: 100,
+      });
+    },
+
+    mesError(text='') {
+      this.$notify.error({
+        title: 'Error',
+        message: text,
+        offset: 100,
+      });
+    }
 
 
     /**************** SOCKET.IO ****************/

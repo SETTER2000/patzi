@@ -1,10 +1,10 @@
 module.exports = {
 
 
-  friendlyName: 'Get list',
+  friendlyName: 'Update search',
 
 
-  description: 'Обрабатывает сокет подключение клиента и отдаёт весь список пользователей системы.',
+  description: '',
 
 
   inputs: {
@@ -14,7 +14,7 @@ module.exports = {
     },
     query: {
       type: 'ref',
-      description: 'Слово для поиска по коллекции.'
+      description: 'Массив слов для поиска по полю коллекции.'
     },
   },
 
@@ -41,7 +41,7 @@ module.exports = {
   fn: async function (inputs, exits) {
     const req = this.req;
     let data = {};
-    let str = inputs.query;
+
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
@@ -54,7 +54,7 @@ module.exports = {
     // Устанавливаем для пользователя его локаль. Для соответствующего отображения даты.
     moment.locale(this.req.me.preferredLocale);
 
-console.log('inputs.query: ', );
+    console.log('inputs.query: ', inputs.query);
     // Have the socket which made the request join the "user" room.
     // Подключить сокет, который сделал запрос, к комнате «user».
     await sails.sockets.join(req, 'user');
@@ -63,12 +63,10 @@ console.log('inputs.query: ', );
     inputs.count = inputs.count < 1 ? 5 : inputs.count;
 
 
-    inputs.query = (_.isString(inputs.query) && (-1 < inputs.query.indexOf(','))) ? inputs.query.split(',') : inputs.query;
-
-
     // Поиск записей в которых встречается подстрока inputs.query
-    inputs.query = _.isArray(inputs.query) ? {'fullName': {in: inputs.query}} :
-      _.get(inputs, 'query') ? {'fullName': {contains: inputs.query}} : {};
+    inputs.query = (_.isArray(inputs.query) && inputs.query.length < 1) ? {} :
+      (_.isArray(inputs.query)) ? {'fullName': {in: inputs.query}} :
+        _.get(inputs, 'query') ? {'fullName': {contains: inputs.query}} : {};
 
 
     let format = 'LL HH:mm';
@@ -109,7 +107,7 @@ console.log('inputs.query: ', );
       user.createdAtFormat = moment(user.createdAt).format(format);
 
       // Столбец: Дата регистрации. Формат фильтра.
-      user.createdAtFormatFilter = moment(user.createdAt).format(format);
+      user.createdAtFormatFilter = moment(user.createdAt).format('L');
       // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
       // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
       user.groups = _.pluck(user.groups, 'id'); // friendIds: [id,id,id...]
@@ -128,12 +126,12 @@ console.log('inputs.query: ', );
       delete user.billingCardLast4;
 
     });
-
-
     data.users = users;
     data.count = inputs.count;
     await sails.sockets.broadcast('user', 'list', data);
     // Respond with view.
     return exits.success();
   }
+
+
 };

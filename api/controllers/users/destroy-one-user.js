@@ -36,6 +36,8 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
+    // Подключить сокет, который сделал запрос, к комнате «user».
+    await sails.sockets.join(req, 'user');
 
     let admin = await User.findOne({
       id: req.me.id,
@@ -61,10 +63,11 @@ module.exports = {
 
     if (delUser) {
       sails.log(`Deleted User with id: ${inputs.id}.`);
-      await sails.sockets.broadcast('user', 'list');
+
     } else {
       sails.log(`There is no user with this ID in the database:  ${inputs.id}.`);
     }
+    await sails.sockets.broadcast('user', 'list');
     return exits.success();
   }
 
