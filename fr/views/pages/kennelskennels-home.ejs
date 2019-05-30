@@ -14,16 +14,12 @@
   <!-- Start Sample Area -->
   <section class="sample-text-area">
     <div class="container">
-      <h3 class="text-heading">Каталог питомников мира</h3>
+      <h3 class="text-heading"><%= __('World Kennel Catalog') %></h3>
       <p class="sample-text">
-       На странице представлены питомники Китайской Хохлатой Собаки, созданные по всему миру. Это база питомников не может
-        претендовать на полноту информации, как и любая другая база данных в мире. Вопрос  лишь того кто ей пользуется.
-        По мере роста и совершенствования механизма обновления и сбора данных по известным питомникам, данная база
-        будет собирать, поддерживать и обновлять актуальную информацию появляющуюся в открытом доступе на других сайтах в автоматическом
-        режиме. Генерируя полный список питомников мира Китайской Хохлатой Собаки.
+        <%= __('The page presents the Chinese Crested Dog Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested Dog kennels in the world.') %>
       </p>
       <div v-if="me.isSuperAdmin" class="mt-5 section-title text-center">
-        <button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add a photo') %></button>
+        <button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add kennel') %></button>
       </div>
     </div>
   </section>
@@ -46,7 +42,7 @@
 
         <div class="modal-body">
           <div class="form-group">
-            <label><%= __('Add a photo') %>:</label>
+            <label><%= __('Logo kennel') %>:</label>
             <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
               <div class="photo-upload-field row d-flex align-items-center"
                    :class="!uploadFormData.previewImageSrc ? 'justify-content-center' :  'justify-content-start'">
@@ -75,7 +71,7 @@
               </div>
             </div>
           </div>
-          <!--<div class="form-group"><label>Add a photo:</label>
+          <!--<div class="form-group"><label>Add kennel:</label>
             <div class="photo-uploader">
               <div class="photo-upload-field row d-flex align-items-center">
                 <div class="col d-flex-column justify-content-center">
@@ -99,8 +95,56 @@
               </div>
             </div>
           </div>-->
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+            <el-form-item label="Activity name" prop="name">
+              <el-input v-model="ruleForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="Activity zone" prop="region">
+              <el-select v-model="ruleForm.region" placeholder="Activity zone">
+                <el-option label="Zone one" value="shanghai"></el-option>
+                <el-option label="Zone two" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="Activity time" required>
+              <el-col :span="11">
+                <el-form-item prop="date1">
+                  <el-date-picker type="date" placeholder="Pick a date" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col class="line" :span="2">-</el-col>
+              <el-col :span="11">
+                <el-form-item prop="date2">
+                  <el-time-picker placeholder="Pick a time" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
+                </el-form-item>
+              </el-col>
+            </el-form-item>
+            <el-form-item label="Instant delivery" prop="delivery">
+              <el-switch v-model="ruleForm.delivery"></el-switch>
+            </el-form-item>
+            <el-form-item label="Activity type" prop="type">
+              <el-checkbox-group v-model="ruleForm.type">
+                <el-checkbox label="Online activities" name="type"></el-checkbox>
+                <el-checkbox label="Promotion activities" name="type"></el-checkbox>
+                <el-checkbox label="Offline activities" name="type"></el-checkbox>
+                <el-checkbox label="Simple brand exposure" name="type"></el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+            <el-form-item label="Resources" prop="resource">
+              <el-radio-group v-model="ruleForm.resource">
+                <el-radio label="Sponsorship"></el-radio>
+                <el-radio label="Venue"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="Activity form" prop="desc">
+              <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm')">Create</el-button>
+              <el-button @click="resetForm('ruleForm')">Reset</el-button>
+            </el-form-item>
+          </el-form>
           <div class="form-group">
-            <label><%= __('Who is it') %>?</label>
+            <label><%= __('Kennel name') %></label>
             <input class="form-control" :class="formErrors.label ? 'is-invalid' : ''"
                    type="text" v-model="uploadFormData.label" placeholder="Poale Ell Adam">
             <small v-if="formErrors.label" class="text-danger "><%= __('Please enter a name.') %></small>
@@ -127,7 +171,7 @@
 
         <!--<div class="modal-body">
           <div class="card border border-light bg-white  mb-3 w-100%">
-            <div class="card-header  bg-white text-left">Add a photo:</div>
+            <div class="card-header  bg-white text-left">Add kennel:</div>
             <div class="row no-gutters">
               <div class="col-md-6 pl-3 pt-3">
                 <img src="https://via.placeholder.com/340x210.jpg" class="card-img" alt="...">
