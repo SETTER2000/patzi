@@ -4,11 +4,73 @@ parasails.registerPage('kennels-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     kennels: [],
+    continent: ["Eurasia", "South America", "Africa",
+      "North America", "Australia"],
+    country: ["Alabama", "Alaska", "Arizona",
+      "Arkansas", "California", "Colorado",
+      "Connecticut", "Delaware", "Florida",
+      "Georgia", "Hawaii", "Idaho", "Illinois",
+      "Indiana", "Iowa", "Kansas", "Kentucky",
+      "Louisiana", "Maine", "Maryland",
+      "Massachusetts", "Michigan", "Minnesota",
+      "Mississippi", "Missouri", "Montana",
+      "Nebraska", "Nevada", "New Hampshire",
+      "New Jersey", "New Mexico", "New York",
+      "North Carolina", "North Dakota", "Ohio",
+      "Oklahoma", "Oregon", "Pennsylvania",
+      "Rhode Island", "South Carolina",
+      "South Dakota", "Tennessee", "Texas",
+      "Utah", "Vermont", "Virginia",
+      "Washington", "West Virginia", "Wisconsin",
+      "Wyoming"],
+    options: [],
+    value: [],
+    list: [],
+    loading: false,
     uploadModalOpen: false,
     uploadFormData: {
       label: '',
       photo: undefined,
       previewImageSrc: ''
+    },
+    ruleForm: {
+      label: '',
+      continent: null,
+      country: null,
+      date1: '',
+      date2: '',
+      delivery: false,
+      type: [],
+      resource: '',
+      desc: ''
+    },
+    centerDialogVisible: false,
+    rules: {
+      label: [
+        {required: true, message: 'Please input Kennel name', trigger: 'blur'},
+        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
+      ],
+      continent: [
+        {required: true, message: 'Please select your continent', trigger: 'change'}
+      ],
+      country: [
+        {required: true, message: 'Please select your country', trigger: 'change'}
+      ],
+      date1: [
+        {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
+      ],
+      date2: [
+        {type: 'date', required: true, message: 'Please pick a time', trigger: 'change'}
+      ],
+      type: [
+        {type: 'array', required: true, message: 'Please select at least one activity type', trigger: 'change'}
+      ],
+      resource: [
+        {required: true, message: 'Please select activity resource', trigger: 'change'}
+      ],
+      desc: [
+        {required: true, message: 'Please input activity form', trigger: 'blur'}
+      ]
     },
     // Состояние загрузки
     syncing: false,
@@ -21,12 +83,25 @@ parasails.registerPage('kennels-home', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function() {
+  beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
+    // Использование .get('/user') извлечет список текущих пользовательских моделей,
+    // подписываем этот сокет на эти модели, И подписываем этот сокет
+    // для уведомлений о новых моделях пользователей при их создании.
+    io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
+      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+
+    io.socket.on('list', (data) => {
+      this.continents = data;
+      // this.count = _.get(data, 'count') ?  data.count : this.count;
+    });
   },
-  mounted: async function() {
-    //…
+  mounted: async function () {
+    // this.list = this.states.map(item => {
+    //   return { value: item, label: item };
+    // });
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -147,6 +222,52 @@ parasails.registerPage('kennels-home', {
       this.uploadThingModalOpen = false;*/
     },
 
+
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert('submit!');
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+
+
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+
+    goTo(){
+      window.location = '/account';
+    },
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.options = this.list.filter(item => {
+            return item.label.toLowerCase()
+              .indexOf(query.toLowerCase()) > -1;
+          });
+        }, 200);
+      } else {
+        this.options = [];
+      }
+    },
+
+    changeSelectContinent() {
+      this.ruleForm.country = null;
+    },
+
+    getPull() {
+      let t = this.continents.filter(cont => {
+        return cont.id === this.ruleForm.continent;
+      });
+      // console.log(t[0]);
+      return t[0].countrys;
+    }
 
   }
 });

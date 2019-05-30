@@ -101,7 +101,7 @@ module.exports = {
     },
 
 
-    suite: {
+    site: {
       type: 'string',
       maxLength: 150,
       description: `Официльный сайт питомника. Без протокола http | https`,

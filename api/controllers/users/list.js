@@ -54,7 +54,6 @@ module.exports = {
     // Устанавливаем для пользователя его локаль. Для соответствующего отображения даты.
     moment.locale(this.req.me.preferredLocale);
 
-console.log('inputs.query: ', );
     // Have the socket which made the request join the "user" room.
     // Подключить сокет, который сделал запрос, к комнате «user».
     await sails.sockets.join(req, 'user');
@@ -70,7 +69,7 @@ console.log('inputs.query: ', );
     inputs.query = _.isArray(inputs.query) ? {'fullName': {in: inputs.query}} :
       _.get(inputs, 'query') ? {'fullName': {contains: inputs.query}} : {};
 
-
+    // Формат отображаемой даты
     let format = 'LL HH:mm';
     let users = await User.find(inputs.query).limit(inputs.count).populate('groups');
 

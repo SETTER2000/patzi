@@ -62,6 +62,7 @@ module.exports.routes = {
   '/terms': '/legal/terms',
   '/help': '/contact',
   '/logout': '/api/v1/account/logout',
+
   /*  '/groups': [
     { policy: 'is-super-admin' },
     { view: 'pages/group/group-home' }
@@ -131,4 +132,7 @@ module.exports.routes = {
 
   'POST   /api/v1/kennels/upload-kennel': {action: 'kennels/upload-kennel'},
 
+  'GET    /api/v1/continents/list': {action: 'continents/list'},
+  'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},
+  'POST   /api/v1/continents/create-continent': {action: 'continents/create-continent'},
 };
