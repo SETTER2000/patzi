@@ -18,43 +18,69 @@
       <p class="sample-text">
         <%= __('The page presents the Chinese Crested Dog Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested Dog kennels in the world.') %>
       </p>
-      <div v-if="me.isSuperAdmin" class="mt-5 section-title text-center">
+      <div v-if="me.hasBillingCard" class="mt-5 section-title text-center">
         <button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add kennel') %></button>
       </div>
+      <div class="mt-5 section-title text-center" v-else>
+        <button @click="centerDialogVisible = true" class="btn btn-outline-info"><%= __('Add kennel') %></button>
+      </div>
+
     </div>
   </section>
   <!-- End Sample Area -->
 
 
-    <% /* "Upload Kennel" Modal */ %>
-    <modal v-if="uploadModalOpen" v-cloak key="new"
-           @close="closeUploadModal()">
-      <div class="modal-header">
-        <h5 class="modal-title"><%= __('Upload new photo') %></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span>&times;</span>
-        </button>
-      </div>
 
-      <ajax-form action="uploadKennel" :syncing.sync="syncing" :cloud-error.sync="cloudError"
-                 :handle-parsing="handleParsingUploadForm"
-                 @submitted="submittedUploadForm($event)">
 
-        <div class="modal-body">
-          <div class="form-group">
-            <label><%= __('Logo kennel') %>:</label>
-            <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
-              <div class="photo-upload-field row d-flex align-items-center"
-                   :class="!uploadFormData.previewImageSrc ? 'justify-content-center' :  'justify-content-start'">
-                <div class="photo-preview col">
-                  <div class="image-wrapper"
-                       :class="!uploadFormData.previewImageSrc ? 'd-flex align-items-center justify-content-center' : ''">
-                    <img v-if="uploadFormData.previewImageSrc" alt="A preview of the selected item"
-                         :src="uploadFormData.previewImageSrc"/>
-                    <span v-else class="placeholder-icon fa fa-picture-o"></span>
-                  </div>
+
+  <% /* Диалоговое окно. Тарифы. */ %>
+  <el-dialog
+    title="<%= __('Warning') %>"
+    :visible.sync="centerDialogVisible"
+    width="53%"
+    style="margin-top: 17vh"
+    center>
+    <el-alert
+      title="<%= __('You have not linked a payment source to your account. In order to access paid features, you\'ll need to provide your credit card information. (Don\'t worry: you will only be charged when you\'ve reached the limit of your free plan.)') %>"
+      type="warning">
+    </el-alert>
+
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="goTo()"><%= __('Add card') %></el-button>
+    <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>
+  </span>
+  </el-dialog>
+
+
+  <% /* "Upload Kennel" Modal */ %>
+  <modal v-if="uploadModalOpen" v-cloak key="new"
+         @close="closeUploadModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Add your kennel') %></h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+
+    <ajax-form action="uploadKennel" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingUploadForm"
+               @submitted="submittedUploadForm($event)">
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label><%= __('Logo kennel') %>:</label>
+          <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
+            <div class="photo-upload-field row d-flex align-items-center"
+                 :class="!uploadFormData.previewImageSrc ? 'justify-content-center' :  'justify-content-start'">
+              <div class="photo-preview col">
+                <div class="image-wrapper"
+                     :class="!uploadFormData.previewImageSrc ? 'd-flex align-items-center justify-content-center' : ''">
+                  <img v-if="uploadFormData.previewImageSrc" alt="A preview of the selected item"
+                       :src="uploadFormData.previewImageSrc"/>
+                  <span v-else class="placeholder-icon fa fa-picture-o"></span>
                 </div>
-                <div class="col d-flex-column justify-content-center">
+              </div>
+              <div class="col d-flex-column justify-content-center">
                 <span class="file-upload-button btn btn-sm"
                       :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
                   <span class="button-text" v-if="!uploadFormData.previewImageSrc"><%= __('Select image') %></span>
@@ -62,164 +88,191 @@
                   <input type="file" :disabled="syncing" accept="image/*" class="file-input"
                          @change="changeFileInput($event.target.files)"/>
                 </span>
-                  <p class="image-advice text-muted" v-if="!formErrors.photo">
-                    <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
-                  </p>
-                  <p class="image-advice text-danger" v-if="formErrors.photo">
-                    A photo is required in order to add a new item.</p>
-                </div>
+                <p class="image-advice text-muted" v-if="!formErrors.photo">
+                  <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
+                </p>
+                <p class="image-advice text-danger" v-if="formErrors.photo">
+                  A photo is required in order to add a new item.</p>
               </div>
             </div>
           </div>
-          <!--<div class="form-group"><label>Add kennel:</label>
-            <div class="photo-uploader">
-              <div class="photo-upload-field row d-flex align-items-center">
-                <div class="col d-flex-column justify-content-center">
-                  &lt;!&ndash;
-                  :disabled - отключает input для приёма изображений,
-                   когда флаг синхронизации (syncing) содержит true
-                   Поробное описание в "JOURNAL" SAILS.JS.txt
-                  &ndash;&gt;
-                  <input type="file" @change="changeFileInput($event.target.files)"
-                         :disabled="syncing" accept="image/*" class="file-input">
-                  <p class="image-advice text-muted" v-if="!formErrors.photo">
-                    <strong>Tip</strong>: Make sure the item is front and center in the photo,
-                    so people know exactly what you're offering to share.
-                  </p>
-                  <p></p>
-                  <img :src="uploadFormData.photo" alt="">
-                  <p class="image-advice text-danger" v-if="formErrors.photo">
-                    A photo is required in order to add a new item.
-                  </p>
-                </div>
+        </div>
+        <!--<div class="form-group"><label>Add kennel:</label>
+          <div class="photo-uploader">
+            <div class="photo-upload-field row d-flex align-items-center">
+              <div class="col d-flex-column justify-content-center">
+                &lt;!&ndash;
+                :disabled - отключает input для приёма изображений,
+                 когда флаг синхронизации (syncing) содержит true
+                 Поробное описание в "JOURNAL" SAILS.JS.txt
+                &ndash;&gt;
+                <input type="file" @change="changeFileInput($event.target.files)"
+                       :disabled="syncing" accept="image/*" class="file-input">
+                <p class="image-advice text-muted" v-if="!formErrors.photo">
+                  <strong>Tip</strong>: Make sure the item is front and center in the photo,
+                  so people know exactly what you're offering to share.
+                </p>
+                <p></p>
+                <img :src="uploadFormData.photo" alt="">
+                <p class="image-advice text-danger" v-if="formErrors.photo">
+                  A photo is required in order to add a new item.
+                </p>
               </div>
             </div>
-          </div>-->
-          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
-            <el-form-item label="Activity name" prop="name">
-              <el-input v-model="ruleForm.name"></el-input>
-            </el-form-item>
-            <el-form-item label="Activity zone" prop="region">
-              <el-select v-model="ruleForm.region" placeholder="Activity zone">
-                <el-option label="Zone one" value="shanghai"></el-option>
-                <el-option label="Zone two" value="beijing"></el-option>
+          </div>
+        </div>-->
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+          <el-form-item label="<%= __('Kennel') %>" prop="label">
+            <el-input v-model="ruleForm.label"  placeholder="<%= __('Kennel name') %>"></el-input>
+          </el-form-item>
+
+
+          <el-form-item label="<%= __('Continent') %>" prop="continent">
+            <el-select @change="changeSelectContinent()" v-model="ruleForm.continent" placeholder="<%= __('Where is the nursery registered?') %>"
+                       style="width: 58%;">
+              <el-option v-for="item in continents"
+                         :key="item.id"
+                         :label="item.label"
+                         :value="item.id">
+            </el-select>
+          </el-form-item>
+
+
+          <template v-if="ruleForm.continent">
+            <el-form-item label="<%= __('Country') %>" prop="country">
+              <el-select v-model="ruleForm.country" placeholder="<%= __('Where is the nursery registered?') %>"
+                         style="width: 58%;">
+                <el-option v-for="item in getPull()"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
               </el-select>
             </el-form-item>
-            <el-form-item label="Activity time" required>
-              <el-col :span="11">
-                <el-form-item prop="date1">
-                  <el-date-picker type="date" placeholder="Pick a date" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col class="line" :span="2">-</el-col>
-              <el-col :span="11">
-                <el-form-item prop="date2">
-                  <el-time-picker placeholder="Pick a time" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
-                </el-form-item>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="Instant delivery" prop="delivery">
-              <el-switch v-model="ruleForm.delivery"></el-switch>
-            </el-form-item>
-            <el-form-item label="Activity type" prop="type">
-              <el-checkbox-group v-model="ruleForm.type">
-                <el-checkbox label="Online activities" name="type"></el-checkbox>
-                <el-checkbox label="Promotion activities" name="type"></el-checkbox>
-                <el-checkbox label="Offline activities" name="type"></el-checkbox>
-                <el-checkbox label="Simple brand exposure" name="type"></el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-            <el-form-item label="Resources" prop="resource">
-              <el-radio-group v-model="ruleForm.resource">
-                <el-radio label="Sponsorship"></el-radio>
-                <el-radio label="Venue"></el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="Activity form" prop="desc">
-              <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm')">Create</el-button>
-              <el-button @click="resetForm('ruleForm')">Reset</el-button>
-            </el-form-item>
-          </el-form>
-          <div class="form-group">
-            <label><%= __('Kennel name') %></label>
-            <input class="form-control" :class="formErrors.label ? 'is-invalid' : ''"
-                   type="text" v-model="uploadFormData.label" placeholder="Poale Ell Adam">
-            <small v-if="formErrors.label" class="text-danger "><%= __('Please enter a name.') %></small>
-          </div>
-          <div class="form-group">
-            <label><%= __('Title') %></label>
-            <input class="form-control" type="text" v-model="uploadFormData.title">
-          </div>
-          <div class="form-group">
-            <label><%= __('Sub Title') %></label>
-            <input class="form-control" type="text" v-model="uploadFormData.subtitle">
-          </div>
-          <p class="text-danger" v-if="cloudError === 'tooBig'">
-            <small><%= __('That file is too big. Please choose a junkier picture') %>.</small>
-          </p>
-          <p class="text-danger" v-else-if="cloudError">
-            <small><%= __('An error occured while processing your request. Please check your information and try again, or') %> <a
-                href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.
-            </small>
-          </p>
+          </template>
 
+          <el-form-item label="<%= __('Registered') %>" required>
+            <el-col :span="11">
+              <el-form-item prop="date1">
+                <el-date-picker type="date" placeholder="Pick a date" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+         <!--   <el-col class="line" :span="2">-</el-col>
+            <el-col :span="11">
+              <el-form-item prop="date2">
+                <el-time-picker placeholder="Pick a time" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
+              </el-form-item>
+            </el-col>-->
+          </el-form-item>
+
+          <el-form-item label="<%= __('Website') %>" prop="site" >
+            <el-input v-model="ruleForm.site" placeholder="<%= __('Without http|https://') %>"></el-input>
+          </el-form-item>
+
+          <el-form-item label="Instant delivery" prop="delivery">
+            <el-switch v-model="ruleForm.delivery"></el-switch>
+          </el-form-item>
+          <el-form-item label="Activity type" prop="type">
+            <el-checkbox-group v-model="ruleForm.type">
+              <el-checkbox label="Online activities" name="type"></el-checkbox>
+              <el-checkbox label="Promotion activities" name="type"></el-checkbox>
+              <el-checkbox label="Offline activities" name="type"></el-checkbox>
+              <el-checkbox label="Simple brand exposure" name="type"></el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="Resources" prop="resource">
+            <el-radio-group v-model="ruleForm.resource">
+              <el-radio label="Sponsorship"></el-radio>
+              <el-radio label="Venue"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="Activity form" prop="desc">
+            <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+          </el-form-item>
+          <el-form-item align="right">
+            <el-button data-dismiss="modal"><%= __('Close') %></el-button>
+            <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+
+          </el-form-item>
+        </el-form>
+
+        <div class="form-group">
+          <label><%= __('Kennel name') %></label>
+          <input class="form-control" :class="formErrors.label ? 'is-invalid' : ''"
+                 type="text" v-model="uploadFormData.label" placeholder="Poale Ell Adam">
+          <small v-if="formErrors.label" class="text-danger "><%= __('Please enter a name.') %></small>
         </div>
+        <div class="form-group">
+          <label><%= __('Title') %></label>
+          <input class="form-control" type="text" v-model="uploadFormData.title">
+        </div>
+        <div class="form-group">
+          <label><%= __('Sub Title') %></label>
+          <input class="form-control" type="text" v-model="uploadFormData.subtitle">
+        </div>
+        <p class="text-danger" v-if="cloudError === 'tooBig'">
+          <small><%= __('That file is too big. Please choose a junkier picture') %>.</small>
+        </p>
+        <p class="text-danger" v-else-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %> <a
+              href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+
+      </div>
 
 
-        <!--<div class="modal-body">
-          <div class="card border border-light bg-white  mb-3 w-100%">
-            <div class="card-header  bg-white text-left">Add kennel:</div>
-            <div class="row no-gutters">
-              <div class="col-md-6 pl-3 pt-3">
-                <img src="https://via.placeholder.com/340x210.jpg" class="card-img" alt="...">
-              </div>
-              <div class="col-md-6">
-                <div class="card-body bg-white">
-                  <div class="col d-flex-column justify-content-center">
-               &lt;!&ndash; <span class="file-upload-button btn btn-sm"
-                      :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
-               &ndash;&gt;   &lt;!&ndash;<span class="button-text" v-if="!uploadFormData.previewImageSrc">&lt;!&ndash;Select image&ndash;&gt;</span>
-                  <span class="button-text" v-else>Change image</span>&ndash;&gt;
-                  <input type="file" :disabled="syncing" accept="image/*"
-                         class="file-input" @change="changeFileInput($event.target.files)"/>
-           &lt;!&ndash;     </span>&ndash;&gt;
-                   &lt;!&ndash; <p class="image-advice text-muted" v-if="!formErrors.photo"><strong>Tip</strong>: Make sure the item
-                      is front and center in the photo, so people know exactly what you're offering to share.</p>
-                    <p class="image-advice text-danger" v-if="formErrors.photo">A photo is required in order to add a
-                      new item.</p>&ndash;&gt;
+      <!--<div class="modal-body">
+        <div class="card border border-light bg-white  mb-3 w-100%">
+          <div class="card-header  bg-white text-left">Add kennel:</div>
+          <div class="row no-gutters">
+            <div class="col-md-6 pl-3 pt-3">
+              <img src="https://via.placeholder.com/340x210.jpg" class="card-img" alt="...">
+            </div>
+            <div class="col-md-6">
+              <div class="card-body bg-white">
+                <div class="col d-flex-column justify-content-center">
+             &lt;!&ndash; <span class="file-upload-button btn btn-sm"
+                    :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
+             &ndash;&gt;   &lt;!&ndash;<span class="button-text" v-if="!uploadFormData.previewImageSrc">&lt;!&ndash;Select image&ndash;&gt;</span>
+                <span class="button-text" v-else>Change image</span>&ndash;&gt;
+                <input type="file" :disabled="syncing" accept="image/*"
+                       class="file-input" @change="changeFileInput($event.target.files)"/>
+         &lt;!&ndash;     </span>&ndash;&gt;
+                 &lt;!&ndash; <p class="image-advice text-muted" v-if="!formErrors.photo"><strong>Tip</strong>: Make sure the item
+                    is front and center in the photo, so people know exactly what you're offering to share.</p>
+                  <p class="image-advice text-danger" v-if="formErrors.photo">A photo is required in order to add a
+                    new item.</p>&ndash;&gt;
+                </div>
+                &lt;!&ndash;<h5 class="card-title">Card title</h5>&ndash;&gt;
+                &lt;!&ndash;<p><button class="btn btn-outline-success">Select image</button></p>&ndash;&gt;
+                <p class="card-text">This is a wider card with supporting text Lorem ipsum dolor sit amet, consectetur
+                  adipisicing elit. Corporis veritatis. Enim facilis quos tempora!.</p>
+                <p class="card-text">
+                  <small class="text-muted">Last updated 3 mins ago</small>
+                </p>
+                <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Small</span>
                   </div>
-                  &lt;!&ndash;<h5 class="card-title">Card title</h5>&ndash;&gt;
-                  &lt;!&ndash;<p><button class="btn btn-outline-success">Select image</button></p>&ndash;&gt;
-                  <p class="card-text">This is a wider card with supporting text Lorem ipsum dolor sit amet, consectetur
-                    adipisicing elit. Corporis veritatis. Enim facilis quos tempora!.</p>
-                  <p class="card-text">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                  </p>
-                  <div class="input-group input-group-sm mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroup-sizing-sm">Small</span>
-                    </div>
-                    <input type="text" class="form-control" aria-label="Sizing example input"
-                           aria-describedby="inputGroup-sizing-sm">
-                  </div>
+                  <input type="text" class="form-control" aria-label="Sizing example input"
+                         aria-describedby="inputGroup-sizing-sm">
                 </div>
               </div>
             </div>
           </div>
-          <p class="text-danger" v-if="cloudError">
-            <small>An error occured while processing your request. Please check your information and try again, or <a
-                href="/contact">contact support</a> if the error persists.
-            </small>
-          </p>
-        </div>-->
-        <div class="modal-footer flex-row-reverse justify-content-start">
-          <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1"><%= __('Save') %></ajax-button>
-          <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
         </div>
-      </ajax-form>
-    </modal>
+        <p class="text-danger" v-if="cloudError">
+          <small>An error occured while processing your request. Please check your information and try again, or <a
+              href="/contact">contact support</a> if the error persists.
+          </small>
+        </p>
+      </div>-->
+      <div class="modal-footer flex-row-reverse justify-content-start">
+        <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1"><%= __('Save') %></ajax-button>
+        <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
+      </div>
+    </ajax-form>
+  </modal>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
