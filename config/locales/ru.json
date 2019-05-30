@@ -242,6 +242,8 @@
 	"Add an dog": "Добавить собаку",
 	"All litter kennel": "Все помёты питомника",
 	"Add a photo": "Добавить фото",
+	"Add kennel": "Добавить питомник",
+	"Logo kennel": "Логотип питомника",
 	"Photo for presentation": "Фото для презентации",
 	"Edit a photo": "Изменить фото",
 	"Add a group": "Добавить группу",
@@ -373,7 +375,10 @@
 	"Litter Details": "Подробно о помёте",
 	"The letter with which the puppy's name should begin.": "Буква с которой должно начинаться имя щенка.",
 	"Dob": "Дата",
+	"World Kennel Catalog": "Каталог питомников мира",
 	"Chinese Crested Dog. Catalog of nurseries of the world.": "Китайская Хохлатая Собака. Каталог питомников мира.",
 	"Date of litter. If the date has not yet arrived, then the mating has taken place and the birth is expected on that date.": "Дата помёта. Если дата ещё не наступила, значит вязка состоялась и рождение ожидается на эту дату.",
-	"Kennels": "Питомники"
+	"Kennels": "Питомники",
+	"Kennel name": "Название питомника",
+	"The page presents the Chinese Crested Dog Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested Dog kennels in the world.": "На странице представлены питомники Китайской Хохлатой Собаки, созданные по всему миру. Это база питомников не может претендовать на полноту информации, как и любая другая база данных в мире. Вопрос лишь того кто ей пользуется. По мере роста и совершенствования механизма обновления и сбора данных по известным питомникам, данная база будет собирать, поддерживать и обновлять актуальную информацию появляющуюся в открытом доступе на других сайтах в автоматическом режиме. Генерируя полный список питомников мира Китайской Хохлатой Собаки.",
 }
