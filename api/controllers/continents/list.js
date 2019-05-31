@@ -80,7 +80,7 @@ module.exports = {
     });
 
     // Рассылаем данные всем подписанным на событие list данной комнаты.
-    await sails.sockets.broadcast('continent', 'list', continents);
+    await sails.sockets.broadcast('continent', 'list-continent', continents);
 
 
     // Respond with view.

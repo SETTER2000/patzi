@@ -16,12 +16,23 @@ module.exports = {
   },
 
 
-  fn: async function () {
+  fn: async function (inputs, exits) {
 
+    // Бибилиотека Node.js
+    const url = require('url');
+
+    // Выбираем авторизованного пользователя, который сделал этот запрос
+    // и всех его друзей по ассоциативному полю friends
+    let kennels = await Kennel.find().populate('country')
+      .populate('region')
+      .populate('whoCreate')
+      .populate('users');
+
+    console.log('kennels: ' , kennels);
     // Respond with view.
-    return {};
-
+    return exits.success({
+      kennels
+    });
   }
-
 
 };

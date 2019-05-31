@@ -335,5 +335,11 @@
 	"Where is the name of the dog in relation to the name of the kennel.": "Where is the name of the dog in relation to the name of the kennel.",
 	"right: KennelName DogName | left: DogName KennelName": "right: KennelName DogName | left: DogName KennelName",
 	"WebSite": "WebSite",
-	"Your kennel?": "Your kennel?"
+	"Your kennel?": "Your kennel?",
+	"Add logo": "Add logo",
+	"The official name": "The official name",
+	"Number": "Number",
+	"Name on": "Name on",
+	"right": "right",
+	"left": "left"
 }

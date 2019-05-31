@@ -130,9 +130,12 @@ module.exports.routes = {
   'GET    /api/v1/users/:id': {action: 'users/download-photo'},
   'DELETE /users/destroy-user-group': {action: 'users/destroy-user-group', csrf: false},
 
-  'POST   /api/v1/kennels/upload-kennel': {action: 'kennels/upload-kennel', csrf: false},
-
   'GET    /api/v1/continents/list': {action: 'continents/list'},
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},
   'POST   /api/v1/continents/create-continent': {action: 'continents/create-continent'},
+
+  'GET    /api/v1/kennels/list': { action: 'kennels/list' },
+  'POST   /api/v1/kennels/create-kennel': {action: 'kennels/create-kennel', csrf: false},
+
+  'POST   /api/v1/upload/photo': { action: 'upload/photo' , csrf: false},
 };

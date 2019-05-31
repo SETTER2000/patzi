@@ -6,10 +6,11 @@ parasails.registerPage('kennels-home', {
     kennels: [],
     options: [],
     continents: [],
+    files: [],
     text: '',
     value: [],
     list: [],
-    yourKennel:false,
+    yourKennel: false,
     loading: false,
     centerDialogVisibleConfirm: false,
     uploadModalOpen: false,
@@ -21,8 +22,10 @@ parasails.registerPage('kennels-home', {
     //   country: null
     // },
     ruleForm: {
+      file: undefined,
       label: '',
       website: '',
+      imageUrl: '',
       previewImageSrc: '',
       continent: null,
       dialogImageUrl: '',
@@ -32,7 +35,6 @@ parasails.registerPage('kennels-home', {
       registerNumber: '',
       dateCreate: '',
       subtitle: ''
-
     },
     centerDialogVisible: false,
     centerDialogKennelVisible: false,
@@ -83,7 +85,19 @@ parasails.registerPage('kennels-home', {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
-    io.socket.on('list', (data) => {
+
+    io.socket.get(`/api/v1/kennels/list`, function gotResponse(body, response) {
+      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+
+    // Ждём данные от загрузки нового питомника
+    io.socket.on('list-kennel', (data) => {
+      this.kennels = data;
+      console.log('this.kennels: ', this.kennels);
+      // this.count = _.get(data, 'count') ?  data.count : this.count;
+    });
+    // Получаем данные для селектов в форме
+    io.socket.on('list-continent', (data) => {
       this.continents = data;
       // this.count = _.get(data, 'count') ?  data.count : this.count;
     });
@@ -131,40 +145,6 @@ parasails.registerPage('kennels-home', {
       return _.omit(argins, ['previewImageSrc']);
     },
 
-
-    changeFileInput: function (files) {
-      if (files.length !== 1 && !this.uploadFormData.photo) {
-        throw new Error('Consistency violation: `changeFileInput` ' +
-          'was somehow called with an empty array of files, ' +
-          'or with more than one file in the array!  This should never happen unless ' +
-          'there is already an uploaded file tracked.');
-      }
-
-      let selectedFile = files[0];
-
-      if (!selectedFile) {
-        this.uploadFormData.photo = undefined;
-        return;
-      }
-
-
-      this.uploadFormData.photo = selectedFile;
-
-      // Set up the file preview for the UI:
-      // Настройка предварительного просмотра файла для пользовательского интерфейса:
-      var reader = new FileReader();
-      reader.onload = (event) => {
-        this.uploadFormData.previewImageSrc = event.target.result;
-
-        // Unbind this "onload" event.
-        // Отмена привязки этого события onload.
-        delete reader.onload;
-      };
-      // Clear out any error messages about not providing an image.
-      // Удалите все сообщения об ошибках о не предоставлении изображения.
-      this.formErrors.photo = false;
-      reader.readAsDataURL(selectedFile);
-    },
 
 
     submittedDeleteForm: function () {
@@ -220,9 +200,12 @@ parasails.registerPage('kennels-home', {
       this.$refs[formName].validate((valid) => {
         if (valid) {
 
-          // console.log('this.ruleForm.name: ', this.ruleForm.name);
+          console.log('this.ruleForm.file: ', this.ruleForm.file);
           // console.log('formName: ', formName.name);
+
+
           let data = {
+            file: this.ruleForm.file,
             label: this.ruleForm.label,
             dateCreate: JSON.stringify(this.ruleForm.dateCreate),
             continent: this.ruleForm.continent,
@@ -234,12 +217,14 @@ parasails.registerPage('kennels-home', {
             yourKennel: this.ruleForm.yourKennel
           };
 
-          io.socket.post('/api/v1/kennels/upload-kennel', data, (resData, jwRes) => {
-            (jwRes.statusCode === 200) ?  this.mesSuccess('Поздравляем! Питомник добавлен.') :
-            (jwRes.statusCode === 400) ?  this.mesError('Ошибка. Не смог создать!'):
-            (jwRes.statusCode >= 500) ?  this.mesError('Ошибка сервера! Невозможно создать.'):'';
+          io.socket.post('/api/v1/kennels/create-kennel', data, (resData, jwRes) => {
+            (jwRes.statusCode === 200) ? this.mesSuccess('Поздравляем! Питомник добавлен.') :
+              (jwRes.statusCode === 400) ? this.mesError('Ошибка. Не смог создать!') :
+                (jwRes.statusCode >= 500) ? this.mesError('Ошибка сервера! Невозможно создать.') : '';
             this.resetForm('ruleForm');
             this.centerDialogKennelVisible = false;
+            this.ruleForm.file=[];
+            this.ruleForm.imageUrl='';
           });
 
         } else {
@@ -282,7 +267,7 @@ parasails.registerPage('kennels-home', {
       return t[0].countrys;
     },
 
-    mesSuccess(text='') {
+    mesSuccess(text = '') {
       this.$notify({
         title: 'Success',
         message: text,
@@ -322,9 +307,43 @@ parasails.registerPage('kennels-home', {
     handlePictureCardPreview(file) {
       this.ruleForm.dialogImageUrl = file.url;
       this.ruleForm.dialogVisible = true;
+    },
+
+    submitUpload() {
+      // this.$refs.upload.data={label:'sssssssssss'};
+      this.$refs.upload.submit();
+    },
+
+    fileListing(file) {
+      console.log('FILE:', file);
+// console.log('fileList:',  fileList);
+    },
+
+
+    handleAvatarSuccess(res, file) {
+      this.files.push(file.response);
+      console.log('file response:  ', file.response);
+      this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
+      this.ruleForm.file = file.response;
+    },
+
+    beforeAvatarUpload(file) {
+      console.log('file.size: ' , file.size);
+      const isJPG = file.type === 'image/jpeg';
+      const isLt1M = file.size / 1024 / 1024 < 0.25;
+
+
+      if (!isJPG) {
+        this.$message.error('Logo picture must be JPG format!');
+      }
+      if (!isLt1M) {
+        this.$message.error('Logo picture size can not exceed 250Kb!');
+      }
+
+      if(isJPG && isLt1M)  this.$message.success('Logo uploaded successfully.');
+
+
+      return isJPG && isLt1M;
     }
-
-
-
   }
 });

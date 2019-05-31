@@ -31,6 +31,25 @@ module.exports = {
     },
 
 
+    filename: {
+      type: 'string',
+      example: 'my-file.jpg',
+      description: 'Название файла, который загружается.'
+    },
+
+
+    imageUploadFD:{
+      type:'string',
+      description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение, связанное с этой «вещью».'
+    },
+
+
+    imageUploadMime:{
+      type:'string',
+      description:'Тип MIME для загруженного изображения.'
+    },
+
+
     rightName: {
       type: 'boolean',
       defaultsTo: false,
@@ -42,16 +61,12 @@ module.exports = {
       type: 'string',
       description: `Наименование питомника`,
       example: 'Poale Ell',
-      unique: true,
-      required: true,
+      // unique: true,
+      // required: true,
       minLength: 2,
       maxLength: 150
     },
-    yourKennel: {
-      type: 'boolean',
-      description: `Это ваш питомник?`,
-      required: true
-    },
+
 
 
     type: {
@@ -165,6 +180,13 @@ module.exports = {
       required:true,
       description:'Кто создал запись в БД.'
     },
+
+
+    yourKennel: {
+      model:'User',
+      description: `Это ваш питомник?`
+    },
+
 
     country: {
       model: 'country',

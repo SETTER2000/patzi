@@ -376,7 +376,6 @@
 	"Litter Details": "Подробно о помёте",
 	"The letter with which the puppy's name should begin.": "Буква с которой должно начинаться имя щенка.",
 	"Dob": "Дата",
-
 	"Kennel registration number": "Регистрационный номер питомника",
 	"Registration date": "Дата регистрации",
 	"Registered": "Зарегистрирован",
@@ -402,6 +401,13 @@
 	"Where is the name of the dog in relation to the name of the kennel.": "Где расположено имя собаки по отношению к названию питомника.",
 	"Where is the nursery registered?": "Где зарегистрирован питомник",
 	"Kennel": "Питомник",
+	"Number": "Номер",
+	"left": "слева",
+	"right": "справа",
+	"Name on": "Имя",
+	"Add logo": "Добавьте логотип",
 	"'Please tell about the nurseries. It is very interesting.'": "Пожалуйста, расскажите о питомники. Это очень интересно.",
-	"Warning": "Внимание"
+	"Warning": "Внимание",
+	"The official name": "Официальное название",
+	"Where is the kennel registered?": "Где зарегистрирован питомник?"
 }
