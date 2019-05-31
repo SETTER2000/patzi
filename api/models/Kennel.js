@@ -33,7 +33,8 @@ module.exports = {
 
     rightName: {
       type: 'boolean',
-      defaultsTo: false
+      defaultsTo: false,
+      description:'true - имя питомника пишется справа от имени собаки.'
     },
 
 
@@ -45,6 +46,11 @@ module.exports = {
       required: true,
       minLength: 2,
       maxLength: 150
+    },
+    yourKennel: {
+      type: 'boolean',
+      description: `Это ваш питомник?`,
+      required: true
     },
 
 
@@ -109,17 +115,11 @@ module.exports = {
     },
 
 
+
     city: {
       type: 'string',
       description: `Город где расположен.`,
       example: 'Москва.'
-    },
-
-
-    country: {
-      type: 'string',
-      description: `Страна где зарегистрирован.`,
-      example: 'Россия.'
     },
 
 
@@ -139,19 +139,36 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
+
     dogs: {
       collection: 'dog',
-      via: 'kennels',
-      dominant: true,
-      description: 'Собаки питомника. Рождённые и приобретённые.'
+      via: 'kennel',
+      description: `У питомника, может быть много собак. One to Many. 
+      Собаки питомника. Рождённые и приобретённые.`
     },
-
 
 
     users: {
       collection: 'user',
       via: 'kennels',
       description: 'Владельцы питомника. Их может быть несколько, а так же один.'
+    },
+
+
+    region: {
+      model: 'continent',
+      description: 'Питомник может принадлежать только одному континенту. One to Many'
+    },
+
+    whoCreate:{
+      model:'User',
+      required:true,
+      description:'Кто создал запись в БД.'
+    },
+
+    country: {
+      model: 'country',
+      description: 'Питомник может принадлежать только одной стране. One to Many'
     }
   },
 

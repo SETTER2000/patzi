@@ -376,9 +376,13 @@
 	"Litter Details": "Подробно о помёте",
 	"The letter with which the puppy's name should begin.": "Буква с которой должно начинаться имя щенка.",
 	"Dob": "Дата",
+
+	"Kennel registration number": "Регистрационный номер питомника",
 	"Registration date": "Дата регистрации",
 	"Registered": "Зарегистрирован",
+	"Tell us about the kennel": "Расскажите о питомнике",
 	"Create": "Создать",
+	"Your kennel?": "Ваш питомник?",
 	"Without http|https://": "Без http|https://",
 	"Site": "Сайт",
 	"Website": "Веб-сайт",
@@ -393,7 +397,11 @@
 	"Kennel name": "Название питомника",
 	"The page presents the Chinese Crested Dog Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested Dog kennels in the world.": "На странице представлены питомники Китайской Хохлатой Собаки, созданные по всему миру. Это база питомников не может претендовать на полноту информации, как и любая другая база данных в мире. Вопрос лишь того кто ей пользуется. По мере роста и совершенствования механизма обновления и сбора данных по известным питомникам, данная база будет собирать, поддерживать и обновлять актуальную информацию появляющуюся в открытом доступе на других сайтах в автоматическом режиме. Генерируя полный список питомников мира Китайской Хохлатой Собаки.",
 	"Country": "Страна",
+	"WebSite": "Сайт",
+	"right: KennelName DogName | left: DogName KennelName": "справа: KennelName DogName | слева: DogName KennelName",
+	"Where is the name of the dog in relation to the name of the kennel.": "Где расположено имя собаки по отношению к названию питомника.",
 	"Where is the nursery registered?": "Где зарегистрирован питомник",
 	"Kennel": "Питомник",
+	"'Please tell about the nurseries. It is very interesting.'": "Пожалуйста, расскажите о питомники. Это очень интересно.",
 	"Warning": "Внимание"
 }

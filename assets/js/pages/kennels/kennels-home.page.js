@@ -4,51 +4,49 @@ parasails.registerPage('kennels-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     kennels: [],
-    continent: ["Eurasia", "South America", "Africa",
-      "North America", "Australia"],
-    country: ["Alabama", "Alaska", "Arizona",
-      "Arkansas", "California", "Colorado",
-      "Connecticut", "Delaware", "Florida",
-      "Georgia", "Hawaii", "Idaho", "Illinois",
-      "Indiana", "Iowa", "Kansas", "Kentucky",
-      "Louisiana", "Maine", "Maryland",
-      "Massachusetts", "Michigan", "Minnesota",
-      "Mississippi", "Missouri", "Montana",
-      "Nebraska", "Nevada", "New Hampshire",
-      "New Jersey", "New Mexico", "New York",
-      "North Carolina", "North Dakota", "Ohio",
-      "Oklahoma", "Oregon", "Pennsylvania",
-      "Rhode Island", "South Carolina",
-      "South Dakota", "Tennessee", "Texas",
-      "Utah", "Vermont", "Virginia",
-      "Washington", "West Virginia", "Wisconsin",
-      "Wyoming"],
     options: [],
+    continents: [],
+    text: '',
     value: [],
     list: [],
+    yourKennel:false,
     loading: false,
+    centerDialogVisibleConfirm: false,
     uploadModalOpen: false,
-    uploadFormData: {
-      label: '',
-      photo: undefined,
-      previewImageSrc: ''
-    },
+    // uploadFormData: {
+    //   label: '',
+    //   photo: undefined,
+    //   previewImageSrc: '',
+    //   continent: null,
+    //   country: null
+    // },
     ruleForm: {
       label: '',
+      website: '',
+      previewImageSrc: '',
       continent: null,
+      dialogImageUrl: '',
+      dialogVisible: false,
       country: null,
-      date1: '',
-      date2: '',
-      delivery: false,
-      type: [],
-      resource: '',
-      desc: ''
+      rightName: true,
+      registerNumber: '',
+      dateCreate: '',
+      subtitle: ''
+
     },
     centerDialogVisible: false,
+    centerDialogKennelVisible: false,
     rules: {
       label: [
-        {required: true, message: 'Please input Kennel name', trigger: 'blur'},
+        {required: true, message: 'Please input kennel name', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
+      ],
+      registerNumber: [
+        {required: true, message: 'Please input kennel name', trigger: 'blur'},
+        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
+      ],
+      region: [
+        {required: true, message: 'Please select Activity zone', trigger: 'change'}
       ],
       continent: [
         {required: true, message: 'Please select your continent', trigger: 'change'}
@@ -56,20 +54,12 @@ parasails.registerPage('kennels-home', {
       country: [
         {required: true, message: 'Please select your country', trigger: 'change'}
       ],
-      date1: [
+      dateCreate: [
         {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
       ],
-      date2: [
-        {type: 'date', required: true, message: 'Please pick a time', trigger: 'change'}
-      ],
-      type: [
-        {type: 'array', required: true, message: 'Please select at least one activity type', trigger: 'change'}
-      ],
-      resource: [
-        {required: true, message: 'Please select activity resource', trigger: 'change'}
-      ],
-      desc: [
-        {required: true, message: 'Please input activity form', trigger: 'blur'}
+      subtitle: [
+        {required: true, message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
+        {min: 10, max: 100, message: 'Length should be 10 to 100', trigger: 'blur'}
       ]
     },
     // Состояние загрузки
@@ -126,6 +116,9 @@ parasails.registerPage('kennels-home', {
       if (!argins.label) {
         this.formErrors.label = true;
       }
+
+      // argins.date1=JSON.stringify (this.uploadFormData.date1);
+
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined. (Thus signifies that the submission should be cancelled.)
       // Если были какие-либо проблемы, они были сообщены пользователю,
@@ -190,7 +183,7 @@ parasails.registerPage('kennels-home', {
         id: result.id,
         imageSrc: result.imageSrc,
         title: this.uploadFormData.title,
-        subtitle: this.uploadFormData.subtitle,
+        // dateCreate: JSON.stringify(this.uploadFormData.date1),
         owner: {
           id: this.me.id,
           fullName: this.me.fullName,
@@ -226,20 +219,40 @@ parasails.registerPage('kennels-home', {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+
+          // console.log('this.ruleForm.name: ', this.ruleForm.name);
+          // console.log('formName: ', formName.name);
+          let data = {
+            label: this.ruleForm.label,
+            dateCreate: JSON.stringify(this.ruleForm.dateCreate),
+            continent: this.ruleForm.continent,
+            country: this.ruleForm.country,
+            rightName: this.ruleForm.rightName,
+            site: this.ruleForm.site,
+            registerNumber: this.ruleForm.registerNumber,
+            subtitle: this.ruleForm.subtitle,
+            yourKennel: this.ruleForm.yourKennel
+          };
+
+          io.socket.post('/api/v1/kennels/upload-kennel', data, (resData, jwRes) => {
+            (jwRes.statusCode === 200) ?  this.mesSuccess('Поздравляем! Питомник добавлен.') :
+            (jwRes.statusCode === 400) ?  this.mesError('Ошибка. Не смог создать!'):
+            (jwRes.statusCode >= 500) ?  this.mesError('Ошибка сервера! Невозможно создать.'):'';
+            this.resetForm('ruleForm');
+            this.centerDialogKennelVisible = false;
+          });
+
         } else {
           console.log('error submit!!');
           return false;
         }
       });
     },
-
-
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
 
-    goTo(){
+    goTo() {
       window.location = '/account';
     },
     remoteMethod(query) {
@@ -267,7 +280,51 @@ parasails.registerPage('kennels-home', {
       });
       // console.log(t[0]);
       return t[0].countrys;
+    },
+
+    mesSuccess(text='') {
+      this.$notify({
+        title: 'Success',
+        message: text,
+        offset: 100,
+        type: 'success'
+      });
+    },
+
+    mesWarning(text = '') {
+      this.$notify({
+        title: 'Warning',
+        message: text,
+        offset: 100,
+        type: 'warning'
+      });
+    },
+
+    mesInfo(text = '') {
+      this.$notify.info({
+        title: 'Info',
+        message: text,
+        offset: 100,
+      });
+    },
+
+    mesError(text = '') {
+      this.$notify.error({
+        title: 'Error',
+        message: text,
+        offset: 100,
+      });
+    },
+
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePictureCardPreview(file) {
+      this.ruleForm.dialogImageUrl = file.url;
+      this.ruleForm.dialogVisible = true;
     }
+
+
 
   }
 });

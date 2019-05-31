@@ -324,5 +324,16 @@
 	"Registered": "Registered",
 	"Site": "Site",
 	"Without http|https://": "Without http|https://",
-	"Website": "Website"
+	"Website": "Website",
+	"Warning": "Warning",
+	"KENNEl": "KENNEl",
+	"Where is the kennel registered?": "Where is the kennel registered?",
+	"Kennel registration number": "Kennel registration number",
+	"Tell us about the nursery": "Tell us about the nursery",
+	"Us about": "Us about",
+	"Tell us about the kennel": "Tell us about the kennel",
+	"Where is the name of the dog in relation to the name of the kennel.": "Where is the name of the dog in relation to the name of the kennel.",
+	"right: KennelName DogName | left: DogName KennelName": "right: KennelName DogName | left: DogName KennelName",
+	"WebSite": "WebSite",
+	"Your kennel?": "Your kennel?"
 }

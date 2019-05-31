@@ -71,6 +71,13 @@ module.exports = {
       via: 'region',
       description: 'У континента, может быть много стран. One to Many'
     },
+
+    kennels: {
+      collection: 'kennel',
+      via: 'region',
+      description: `У континента, может быть много питомников. One to Many. 
+      Собаки питомника. Рождённые и приобретённые.`
+    },
   },
 
 };

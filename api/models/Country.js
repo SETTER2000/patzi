@@ -53,7 +53,13 @@ module.exports = {
     region: {
       model: 'continent',
       description: 'Страна может принадлежать только одному континенту. One to Many'
-    }
+    },
+
+    kennels: {
+      collection: 'kennel',
+      via: 'country',
+      description: `У страны, может быть много питомников. One to Many.`
+    },
   },
 
 };
