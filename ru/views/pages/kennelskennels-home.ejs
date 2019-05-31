@@ -10,7 +10,18 @@
       </div>
     </div>
   </section>
-
+  <% /* Диалоговое окно. Подтверждение удаления объекта. */ %>
+  <el-dialog
+    title="ВНИМАНИЕ!"
+    :visible.sync="centerDialogVisibleConfirm"
+    width="30%"
+    center>
+    <span>{{text}}</span>
+    <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialogVisibleConfirm = false">Отмена</el-button>
+                <el-button  type="primary" @click="confirmDeletion()">Да</el-button>
+             </span>
+  </el-dialog>
   <!-- Start Sample Area -->
   <section class="sample-text-area">
     <div class="container">
@@ -18,8 +29,9 @@
       <p class="sample-text">
         <%= __('The page presents the Chinese Crested Dog Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested Dog kennels in the world.') %>
       </p>
-      <div v-if="me.hasBillingCard" class="mt-5 section-title text-center">
+      <div v-if="me.hasBillingCard || me.isSuperAdmin" class="mt-5 section-title text-center">
         <button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add kennel') %></button>
+        <button @click="centerDialogKennelVisible=true" class="btn btn-outline-info"><%= __('KENNEl') %></button>
       </div>
       <div class="mt-5 section-title text-center" v-else>
         <button @click="centerDialogVisible = true" class="btn btn-outline-info"><%= __('Add kennel') %></button>
@@ -28,10 +40,6 @@
     </div>
   </section>
   <!-- End Sample Area -->
-
-
-
-
 
   <% /* Диалоговое окно. Тарифы. */ %>
   <el-dialog
@@ -51,6 +59,131 @@
   </span>
   </el-dialog>
 
+  <% /* Диалоговое окно. Добавить Питомник. */ %>
+  <el-dialog
+    title="<%= __('Warning') %>"
+    :visible.sync="centerDialogKennelVisible"
+    width="40%"
+    style="margin-top: 7vh;"
+    center>
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
+             label-width="120px" class="demo-ruleForm">
+
+      <el-upload
+        action="https://jsonplaceholder.typicode.com/posts/"
+        list-type="picture-card"
+        :on-preview="handlePictureCardPreview"
+        :on-remove="handleRemove">
+        <i class="el-icon-plus"></i>
+      </el-upload>
+      <el-dialog :visible.sync="ruleForm.dialogVisible">
+        <img width="100%" :src="ruleForm.dialogImageUrl" alt="">
+      </el-dialog>
+
+
+
+      <el-form-item label="Kennel" prop="label">
+        <el-input v-model="ruleForm.label"></el-input>
+      </el-form-item>
+
+
+      <el-form-item label="Number" prop="registerNumber">
+        <el-input v-model="ruleForm.registerNumber" placeholder="<%= __('Kennel registration number') %>"></el-input>
+      </el-form-item>
+
+
+      <el-form-item label="<%= __('Continent') %>" prop="continent">
+        <el-select @change="changeSelectContinent()" v-model="ruleForm.continent"
+                   placeholder="<%= __('Where is the nursery registered?') %>"
+                   style="width: 58%;">
+          <el-option v-for="item in continents"
+                     :key="item.id"
+                     :label="item.label"
+                     :value="item.id">
+        </el-select>
+      </el-form-item>
+
+      <transition name="el-fade-in-linear">
+        <template v-if="ruleForm.continent">
+          <el-form-item label="<%= __('Country') %>" prop="country">
+            <el-select v-model="ruleForm.country" placeholder="<%= __('Where is the kennel registered?') %>"
+                       style="width: 58%;">
+              <el-option v-for="item in getPull()"
+                         :key="item.id"
+                         :label="item.label"
+                         :value="item.id">
+            </el-select>
+          </el-form-item>
+        </template>
+      </transition>
+
+
+      <el-form-item label="Name on:" prop="rightName">
+        <el-switch
+          style="display: block"
+          v-model="ruleForm.rightName"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+          active-text="right"
+          inactive-text="left">
+        </el-switch>
+        <small><%= __('Where is the name of the dog in relation to the name of the kennel.') %> <strong>(<%= __('right: KennelName DogName | left: DogName KennelName') %>)</strong></small>
+      </el-form-item>
+
+      <el-form-item label="<%= __('Registered') %>" required>
+        <el-col :span="11">
+          <el-form-item prop="dateCreate">
+          <el-date-picker type="date" placeholder="<%= __('Registration date') %>"
+                          v-model="ruleForm.dateCreate"
+                          style="width: 100%;"></el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-form-item>
+
+
+      <el-form-item label="<%= __('WebSite') %>" prop="site">
+        <el-input placeholder="<%= __('Without http|https://') %>" v-model="ruleForm.site"></el-input>
+      </el-form-item>
+
+<!--
+      <el-form-item label="Activity type" prop="type">
+        <el-checkbox-group v-model="ruleForm.type">
+          <el-checkbox label="Online activities" name="type"></el-checkbox>
+          <el-checkbox label="Promotion activities" name="type"></el-checkbox>
+          <el-checkbox label="Offline activities" name="type"></el-checkbox>
+          <el-checkbox label="Simple brand exposure" name="type"></el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>-->
+      <el-form-item label="<%= __('Your kennel?') %>" prop="yourKennel">
+        <el-switch
+          v-model="ruleForm.yourKennel"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+          active-text="Yes!"
+          inactive-text="No"
+        >
+        </el-switch>
+      </el-form-item>
+
+
+      <el-form-item label="<%= __('About Us') %>" prop="subtitle">
+        <el-input placeholder="<%= __('Tell us about the kennel') %>" type="textarea" v-model="ruleForm.subtitle"></el-input>
+      </el-form-item>
+
+
+      <el-form-item>
+        <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+        <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+        <el-button @click="centerDialogKennelVisible = false"><%= __('Cancel') %></el-button>
+      </el-form-item>
+    </el-form>
+
+    <span slot="footer" class="dialog-footer">
+
+<!--    <el-button @click="goTo()"><%= __('Add card') %></el-button>
+    <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>-->
+  </span>
+  </el-dialog>
 
   <% /* "Upload Kennel" Modal */ %>
   <modal v-if="uploadModalOpen" v-cloak key="new"
@@ -62,11 +195,13 @@
       </button>
     </div>
 
-    <ajax-form action="uploadKennel" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+    <ajax-form action="uploadKennel" :syncing.sync="syncing"
+               :cloud-error.sync="cloudError"
                :handle-parsing="handleParsingUploadForm"
                @submitted="submittedUploadForm($event)">
 
       <div class="modal-body">
+
         <div class="form-group">
           <label><%= __('Logo kennel') %>:</label>
           <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
@@ -97,38 +232,15 @@
             </div>
           </div>
         </div>
-        <!--<div class="form-group"><label>Add kennel:</label>
-          <div class="photo-uploader">
-            <div class="photo-upload-field row d-flex align-items-center">
-              <div class="col d-flex-column justify-content-center">
-                &lt;!&ndash;
-                :disabled - отключает input для приёма изображений,
-                 когда флаг синхронизации (syncing) содержит true
-                 Поробное описание в "JOURNAL" SAILS.JS.txt
-                &ndash;&gt;
-                <input type="file" @change="changeFileInput($event.target.files)"
-                       :disabled="syncing" accept="image/*" class="file-input">
-                <p class="image-advice text-muted" v-if="!formErrors.photo">
-                  <strong>Tip</strong>: Make sure the item is front and center in the photo,
-                  so people know exactly what you're offering to share.
-                </p>
-                <p></p>
-                <img :src="uploadFormData.photo" alt="">
-                <p class="image-advice text-danger" v-if="formErrors.photo">
-                  A photo is required in order to add a new item.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>-->
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+
+        <!-- <el-form :model="uploadFormData" :rules="rules" ref="uploadFormData" label-width="120px" class="demo-uploadFormData">
           <el-form-item label="<%= __('Kennel') %>" prop="label">
-            <el-input v-model="ruleForm.label"  placeholder="<%= __('Kennel name') %>"></el-input>
+            <el-input v-model="uploadFormData.label"  placeholder="<%= __('Kennel name') %>"></el-input>
           </el-form-item>
 
 
           <el-form-item label="<%= __('Continent') %>" prop="continent">
-            <el-select @change="changeSelectContinent()" v-model="ruleForm.continent" placeholder="<%= __('Where is the nursery registered?') %>"
+            <el-select @change="changeSelectContinent()" v-model="uploadFormData.continent" placeholder="<%= __('Where is the nursery registered?') %>"
                        style="width: 58%;">
               <el-option v-for="item in continents"
                          :key="item.id"
@@ -138,9 +250,9 @@
           </el-form-item>
 
 
-          <template v-if="ruleForm.continent">
+          <template v-if="uploadFormData.continent">
             <el-form-item label="<%= __('Country') %>" prop="country">
-              <el-select v-model="ruleForm.country" placeholder="<%= __('Where is the nursery registered?') %>"
+              <el-select v-model="uploadFormData.country" placeholder="<%= __('Where is the nursery registered?') %>"
                          style="width: 58%;">
                 <el-option v-for="item in getPull()"
                            :key="item.id"
@@ -150,29 +262,30 @@
             </el-form-item>
           </template>
 
-          <el-form-item label="<%= __('Registered') %>" required>
-            <el-col :span="11">
-              <el-form-item prop="date1">
-                <el-date-picker type="date" placeholder="Pick a date" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
-              </el-form-item>
-            </el-col>
-         <!--   <el-col class="line" :span="2">-</el-col>
-            <el-col :span="11">
-              <el-form-item prop="date2">
-                <el-time-picker placeholder="Pick a time" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
-              </el-form-item>
-            </el-col>-->
-          </el-form-item>
+          &lt;!&ndash;<el-form-item label="<%= __('Registered') %>" required>&ndash;&gt;
+          &lt;!&ndash;<el-col :span="11">&ndash;&gt;
+          &lt;!&ndash;<el-form-item prop="date1">&ndash;&gt;
+          &lt;!&ndash;<el-date-picker type="date" placeholder="Pick a date" v-model="uploadFormData.date1" style="width: 100%;"></el-date-picker>&ndash;&gt;
+          &lt;!&ndash;</el-form-item>&ndash;&gt;
+          &lt;!&ndash;</el-col>&ndash;&gt;
+          &lt;!&ndash;&lt;!&ndash;   <el-col class="line" :span="2">-</el-col>&ndash;&gt;
+          &lt;!&ndash;<el-col :span="11">&ndash;&gt;
+          &lt;!&ndash;<el-form-item prop="date2">&ndash;&gt;
+          &lt;!&ndash;<el-time-picker placeholder="Pick a time" v-model="uploadFormData.date2" style="width: 100%;"></el-time-picker>&ndash;&gt;
+          &lt;!&ndash;</el-form-item>&ndash;&gt;
+          &lt;!&ndash;</el-col>&ndash;&gt;&ndash;&gt;
+          &lt;!&ndash;</el-form-item>&ndash;&gt;
 
           <el-form-item label="<%= __('Website') %>" prop="site" >
-            <el-input v-model="ruleForm.site" placeholder="<%= __('Without http|https://') %>"></el-input>
+            <el-input v-model="uploadFormData.site" placeholder="<%= __('Without http|https://') %>"></el-input>
           </el-form-item>
 
-          <el-form-item label="Instant delivery" prop="delivery">
-            <el-switch v-model="ruleForm.delivery"></el-switch>
+          <el-form-item label="Пишется справа" prop="delivery">
+            <el-switch v-model="uploadFormData.delivery"></el-switch>
           </el-form-item>
+
           <el-form-item label="Activity type" prop="type">
-            <el-checkbox-group v-model="ruleForm.type">
+            <el-checkbox-group v-model="uploadFormData.type">
               <el-checkbox label="Online activities" name="type"></el-checkbox>
               <el-checkbox label="Promotion activities" name="type"></el-checkbox>
               <el-checkbox label="Offline activities" name="type"></el-checkbox>
@@ -180,28 +293,43 @@
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="Resources" prop="resource">
-            <el-radio-group v-model="ruleForm.resource">
+            <el-radio-group v-model="uploadFormData.resource">
               <el-radio label="Sponsorship"></el-radio>
               <el-radio label="Venue"></el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="Activity form" prop="desc">
-            <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+            <el-input type="textarea" v-model="uploadFormData.desc"></el-input>
           </el-form-item>
           <el-form-item align="right">
             <el-button data-dismiss="modal"><%= __('Close') %></el-button>
-            <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
-            <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+            <el-button @click="resetForm('uploadFormData')"><%= __('Reset') %></el-button>
+            <el-button type="primary" @click="submitForm('uploadFormData')"><%= __('Create') %></el-button>
 
           </el-form-item>
-        </el-form>
+        </el-form>-->
 
         <div class="form-group">
-          <label><%= __('Kennel name') %></label>
+          <label><%= __('Kennel') %></label>
+          <el-input
+            placeholder="<%= __('Kennel name') %>"
+            v-model="uploadFormData.label"
+            clearable>
+          </el-input>
           <input class="form-control" :class="formErrors.label ? 'is-invalid' : ''"
-                 type="text" v-model="uploadFormData.label" placeholder="Poale Ell Adam">
+                 type="text" v-model="uploadFormData.label" placeholder="<%= __('Kennel name') %>">
           <small v-if="formErrors.label" class="text-danger "><%= __('Please enter a name.') %></small>
         </div>
+
+        <el-select @change="changeSelectContinent()" v-model="uploadFormData.continent"
+                   placeholder="<%= __('Where is the nursery registered?') %>"
+                   style="width: 58%;">
+          <el-option v-for="item in continents"
+                     :key="item.id"
+                     :label="item.label"
+                     :value="item.id">
+        </el-select>
+
         <div class="form-group">
           <label><%= __('Title') %></label>
           <input class="form-control" type="text" v-model="uploadFormData.title">
@@ -214,7 +342,8 @@
           <small><%= __('That file is too big. Please choose a junkier picture') %>.</small>
         </p>
         <p class="text-danger" v-else-if="cloudError">
-          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %> <a
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a
               href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.
           </small>
         </p>
@@ -271,6 +400,7 @@
       <div class="modal-footer flex-row-reverse justify-content-start">
         <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1"><%= __('Save') %></ajax-button>
         <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
+        <el-button @click="resetForm('uploadFormData')"><%= __('Reset') %></el-button>
       </div>
     </ajax-form>
   </modal>
