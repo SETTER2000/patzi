@@ -16,7 +16,7 @@ module.exports = function defineCustomHook(sails) {
      */
     initialize: async function () {
 
-      sails.log.info('Initializing hook... (`api/hooks/custom`)');
+     await sails.log.info('Initializing hook... (`api/hooks/custom`)');
 
       // Check Stripe/Mailgun configuration (for billing and emails).
       // Проверьте настройки Stripe / Mailgun (для выставления счетов и электронной почты).

@@ -60,6 +60,12 @@ module.exports = {
       via: 'country',
       description: `У страны, может быть много питомников. One to Many.`
     },
+
+    citys: {
+      collection: 'city',
+      via: 'region',
+      description: 'У страны, может быть много городов. One to Many'
+    }
   },
 
 };

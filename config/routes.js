@@ -134,8 +134,13 @@ module.exports.routes = {
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},
   'POST   /api/v1/continents/create-continent': {action: 'continents/create-continent'},
 
+  'GET    /api/v1/kennels/:id': { action: 'kennels/download-photo' },
   'GET    /api/v1/kennels/list': { action: 'kennels/list' },
   'POST   /api/v1/kennels/create-kennel': {action: 'kennels/create-kennel', csrf: false},
 
-  'POST   /api/v1/upload/photo': { action: 'upload/photo' , csrf: false},
+  'POST   /api/v1/upload/file': { action: 'upload/file' , csrf: false},
+
+  'GET    /api/v1/city/list/:countryId?': { action: 'city/list' },
+
+  'GET    /api/v1/country/list': { action: 'country/list' },
 };

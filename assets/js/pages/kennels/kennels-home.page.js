@@ -4,9 +4,17 @@ parasails.registerPage('kennels-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     kennels: [],
+    citys: [],
+    links: [],
+    cityId:undefined,
+    state1: '',
+    countryId: 0,
+    state2: '',
     options: [],
     continents: [],
+    countrys: [],
     files: [],
+    fileList: [],
     text: '',
     value: [],
     list: [],
@@ -14,15 +22,14 @@ parasails.registerPage('kennels-home', {
     loading: false,
     centerDialogVisibleConfirm: false,
     uploadModalOpen: false,
-    // uploadFormData: {
-    //   label: '',
-    //   photo: undefined,
-    //   previewImageSrc: '',
-    //   continent: null,
-    //   country: null
-    // },
     ruleForm: {
       file: undefined,
+      phones: [{
+        key: 1,
+        value: '',
+        fullName: '',
+      }],
+      email: '',
       label: '',
       website: '',
       imageUrl: '',
@@ -37,14 +44,14 @@ parasails.registerPage('kennels-home', {
       subtitle: ''
     },
     centerDialogVisible: false,
-    centerDialogKennelVisible: false,
+    centerDialogAdded: false,
     rules: {
       label: [
         {required: true, message: 'Please input kennel name', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
       ],
       registerNumber: [
-        {required: true, message: 'Please input kennel name', trigger: 'blur'},
+        {required: true, message: 'Please input register number', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
       ],
       region: [
@@ -85,85 +92,65 @@ parasails.registerPage('kennels-home', {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
+    io.socket.get(`/api/v1/country/list`, function gotResponse(body, response) {
+      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
 
     io.socket.get(`/api/v1/kennels/list`, function gotResponse(body, response) {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
-    // Ждём данные от загрузки нового питомника
-    io.socket.on('list-kennel', (data) => {
-      this.kennels = data;
-      console.log('this.kennels: ', this.kennels);
-      // this.count = _.get(data, 'count') ?  data.count : this.count;
-    });
+    // Принимаем данные по событию list-*
+    io.socket.on('list-kennel', data => this.kennels = data);
+
+    // Принимаем данные по событию list-*
+    io.socket.on('list-continent', data => this.continents = data);
+
     // Получаем данные для селектов в форме
-    io.socket.on('list-continent', (data) => {
-      this.continents = data;
-      // this.count = _.get(data, 'count') ?  data.count : this.count;
-    });
+    io.socket.on('list-country', data => this.countrys = data);
   },
-  mounted: async function () {
-    // this.list = this.states.map(item => {
-    //   return { value: item, label: item };
-    // });
+
+
+  mounted() {
+    this.links = this.cityList();
   },
+
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
-    // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
-    clickAddButton: function () {
-      this.uploadModalOpen = true;
-      // this.selectedThing = _.find(this.kennels, {id: thingId});
-    },
+    async getList() {
+      await io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
+        console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
 
+      await io.socket.get(`/api/v1/kennels/list`, function gotResponse(body, response) {
+        console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
 
-    handleParsingUploadForm: function () {
-      this.formErrors = {};
-      let argins = this.uploadFormData;
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-kennel', (data) => {
+        this.kennels = data;
+        console.log('this.kennels: ', this.kennels);
+      });
+      // Принимаем данные по событию list-*
+      await  io.socket.on('list-continent', (data) => {
+        this.continents = data;
+        // this.count = _.get(data, 'count') ?  data.count : this.count;
+      });
 
-      if (!argins.photo) {
-        this.formErrors.photo = true;
-      }
-      if (!argins.label) {
-        this.formErrors.label = true;
-      }
-
-      // argins.date1=JSON.stringify (this.uploadFormData.date1);
-
-      // If there were any issues, they've already now been communicated to the user,
-      // so simply return undefined. (Thus signifies that the submission should be cancelled.)
-      // Если были какие-либо проблемы, они были сообщены пользователю,
-      // так просто вернуть undefined. (Таким образом, означает,
-      // что представление должно быть отменено.)
-      if (Object.keys(this.formErrors).length > 0) {
-        return;
-      }
-      // return argins;
-      return _.omit(argins, ['previewImageSrc']);
-    },
-
-
-
-    submittedDeleteForm: function () {
-      _.remove(this.kennels, {id: this.selectedThing.id});
-      this.$forceUpdate();
-      this.confirmDeleteThingModalOpen = false;
-      this.selectedThing = undefined;
     },
 
 
     submittedUploadForm: function (result) {
-
       // Добавлем новые данные в уже имеющийся массив kennels
       this.kennels.push({
-        label: this.uploadFormData.label,
+        label: this.ruleForm.label,
         id: result.id,
         imageSrc: result.imageSrc,
-        title: this.uploadFormData.title,
-        // dateCreate: JSON.stringify(this.uploadFormData.date1),
+        title: this.ruleForm.title,
+        // dateCreate: JSON.stringify(this.ruleForm.date1),
         owner: {
           id: this.me.id,
           fullName: this.me.fullName,
@@ -178,8 +165,8 @@ parasails.registerPage('kennels-home', {
       // Close modal
       this.uploadModalOpen = false;
       // Reset form data
-      this.uploadFormData = {
-        photo: undefined,
+      this.ruleForm = {
+        file: undefined,
         previewImageSrc: '',
         label: undefined,
       };
@@ -191,55 +178,90 @@ parasails.registerPage('kennels-home', {
 
     closeUploadModal: function () {
       this._clearUploadModal();
-      /*this.selectedThing = undefined;
-      this.uploadThingModalOpen = false;*/
     },
 
 
-    submitForm(formName) {
+    async submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-
-          console.log('this.ruleForm.file: ', this.ruleForm.file);
-          // console.log('formName: ', formName.name);
-
-
-          let data = {
-            file: this.ruleForm.file,
-            label: this.ruleForm.label,
-            dateCreate: JSON.stringify(this.ruleForm.dateCreate),
-            continent: this.ruleForm.continent,
-            country: this.ruleForm.country,
-            rightName: this.ruleForm.rightName,
-            site: this.ruleForm.site,
-            registerNumber: this.ruleForm.registerNumber,
-            subtitle: this.ruleForm.subtitle,
-            yourKennel: this.ruleForm.yourKennel
-          };
-
-          io.socket.post('/api/v1/kennels/create-kennel', data, (resData, jwRes) => {
-            (jwRes.statusCode === 200) ? this.mesSuccess('Поздравляем! Питомник добавлен.') :
-              (jwRes.statusCode === 400) ? this.mesError('Ошибка. Не смог создать!') :
-                (jwRes.statusCode >= 500) ? this.mesError('Ошибка сервера! Невозможно создать.') : '';
-            this.resetForm('ruleForm');
-            this.centerDialogKennelVisible = false;
-            this.ruleForm.file=[];
-            this.ruleForm.imageUrl='';
-          });
-
+          this.addKennel();
         } else {
           console.log('error submit!!');
           return false;
         }
       });
     },
+
+
+    removeDomain(item) {
+      console.log('this.ruleForm.phones:', this.ruleForm.phones);
+      console.log('item phones:', item);
+      let index = this.ruleForm.phones.indexOf(item);
+      if (index !== -1) {
+        this.ruleForm.phones.splice(index, 1);
+      }
+    },
+
+
+    addDomain() {
+      this.ruleForm.phones.push({
+        key: Date.now(),
+        value: ''
+      });
+    },
+
+
     resetForm(formName) {
       this.$refs[formName].resetFields();
+      this.ruleForm.imageUrl = '';
     },
+
+    async confirmCity() {
+      this.centerDialogVisibleConfirm = true;
+      this.text = 'Вы не правильно указали город. Город не будет сохранён. Продолжить?';
+    },
+
+    async addKennel() {
+      let data = {
+        file: this.ruleForm.file,
+        label: this.ruleForm.label,
+        dateCreate: JSON.stringify(this.ruleForm.dateCreate),
+        continent: this.ruleForm.continent,
+        country: this.ruleForm.country,
+        city: this.cityId,
+        rightName: this.ruleForm.rightName,
+        site: this.ruleForm.site,
+        registerNumber: this.ruleForm.registerNumber,
+        subtitle: this.ruleForm.subtitle,
+        yourKennel: this.ruleForm.yourKennel,
+        address: this.ruleForm.address,
+        phones: this.ruleForm.phones
+      };
+
+
+      await io.socket.post('/api/v1/kennels/create-kennel', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess('Поздравляем! Питомник добавлен.')) :
+          (jwRes.statusCode === 400) ? this.mesError('Ошибка. Не смог создать!') :
+            (jwRes.statusCode >= 500) ? this.mesError('Ошибка сервера! Невозможно создать.') : '';
+
+        console.log('Сервер ответил-2 кодом ' + jwRes.statusCode + ' и данными: ', data);
+        this.centerDialogAdded = false;
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          this.ruleForm.file = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.phones[0].fullName = '';
+          this.getList();
+        }
+      });
+    },
+
 
     goTo() {
       window.location = '/account';
     },
+
+
     remoteMethod(query) {
       if (query !== '') {
         this.loading = true;
@@ -255,17 +277,27 @@ parasails.registerPage('kennels-home', {
       }
     },
 
+
     changeSelectContinent() {
       this.ruleForm.country = null;
     },
 
-    getPull() {
-      let t = this.continents.filter(cont => {
-        return cont.id === this.ruleForm.continent;
+
+    getPullCountry() {
+      let t = this.continents.filter(continent => {
+        return continent.id === this.ruleForm.continent;
       });
-      // console.log(t[0]);
       return t[0].countrys;
     },
+
+
+    getPullCity() {
+      let countrys = this.countrys.filter(country => {
+        return country.id === this.ruleForm.country;
+      });
+      return countrys[0].citys;
+    },
+
 
     mesSuccess(text = '') {
       this.$notify({
@@ -276,6 +308,7 @@ parasails.registerPage('kennels-home', {
       });
     },
 
+
     mesWarning(text = '') {
       this.$notify({
         title: 'Warning',
@@ -285,6 +318,7 @@ parasails.registerPage('kennels-home', {
       });
     },
 
+
     mesInfo(text = '') {
       this.$notify.info({
         title: 'Info',
@@ -292,6 +326,7 @@ parasails.registerPage('kennels-home', {
         offset: 100,
       });
     },
+
 
     mesError(text = '') {
       this.$notify.error({
@@ -301,49 +336,95 @@ parasails.registerPage('kennels-home', {
       });
     },
 
+
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
+
+
     handlePictureCardPreview(file) {
       this.ruleForm.dialogImageUrl = file.url;
       this.ruleForm.dialogVisible = true;
     },
+
 
     submitUpload() {
       // this.$refs.upload.data={label:'sssssssssss'};
       this.$refs.upload.submit();
     },
 
-    fileListing(file) {
-      console.log('FILE:', file);
-// console.log('fileList:',  fileList);
-    },
-
 
     handleAvatarSuccess(res, file) {
       this.files.push(file.response);
-      console.log('file response:  ', file.response);
       this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
       this.ruleForm.file = file.response;
     },
 
+
     beforeAvatarUpload(file) {
-      console.log('file.size: ' , file.size);
-      const isJPG = file.type === 'image/jpeg';
+      const isJPG = (file.type === 'image/jpeg') || (file.type === 'image/png');
       const isLt1M = file.size / 1024 / 1024 < 0.25;
-
-
       if (!isJPG) {
-        this.$message.error('Logo picture must be JPG format!');
+        this.$message.error('Logo picture must be JPG or PNG format!');
       }
       if (!isLt1M) {
         this.$message.error('Logo picture size can not exceed 250Kb!');
       }
-
-      if(isJPG && isLt1M)  this.$message.success('Logo uploaded successfully.');
-
-
       return isJPG && isLt1M;
+    },
+
+
+    /* Авто поиск по городам */
+    querySearch(queryString, cb) {
+      let links = this.citys;
+      let results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      cb(results);
+    },
+
+
+    async cityList() {
+
+      await io.socket.get(`/api/v1/city/list/${this.countryId}`, function gotResponse(body, response) {
+        console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-city', (data) => {
+        this.citys = data;
+      });
+    },
+
+
+    // Реагирует на событие change в поле города|city
+    async changeCountry(countryId) {
+      this.countryId = countryId;
+      console.log('this.ruleForm.city:', this.ruleForm.city);
+      await this.cityList();
+    },
+
+
+    async countryList() {
+      await io.socket.get(`/api/v1/country/list`, function gotResponse(body, response) {
+        console.log('Сервер country ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+
+      // Ждём данные от загрузки нового питомника
+      await io.socket.on('list-country', (data) => {
+        this.countrys = data;
+      });
+    },
+
+
+    createFilter(queryString) {
+      return (link) => {
+        return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+
+
+    async handleSelect(e) {
+      console.log('ВЫбор города: ', e);
+      this.cityId = (_.isNumber(e.id)) ? e.id : undefined;
     }
+
   }
 });

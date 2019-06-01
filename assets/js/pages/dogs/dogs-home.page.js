@@ -3,7 +3,8 @@ parasails.registerPage('dogs-home', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-
+    centerDialogAdded:false,
+    centerDialogVisible:false,
     dialogTableVisible: false,
     // fits:'contain',
     // fits:'scale-down',

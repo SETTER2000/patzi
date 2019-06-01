@@ -69,7 +69,10 @@
     "Message": true,
     "Security": true,
     "Dog": true,
-    "Kennel": true
+    "Kennel": true,
+    "City": true,
+    "Country": true,
+    "Continent": true
 
     // …and any others.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

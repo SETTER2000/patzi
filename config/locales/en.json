@@ -341,5 +341,21 @@
 	"Number": "Number",
 	"Name on": "Name on",
 	"right": "right",
-	"left": "left"
+	"left": "left",
+	"Add a file": "Add a file",
+	"Make sure the object is in the front and center of the file so that people understand exactly who you are representing.": "Make sure the object is in the front and center of the file so that people understand exactly who you are representing.",
+	"City": "City",
+	"Date": "Date",
+	"Address": "Address",
+	"Phones": "Phones",
+	"Without http:// | https://": "Without http:// | https://",
+	"Add phone": "Add phone",
+	"Remove phone": "Remove phone",
+	"Phone number": "Phone number",
+	"Full Name": "Full Name",
+	"Dog Catalog World": "Dog Catalog World",
+	"Add dog": "Add dog",
+	"'Phone can not be null'": "'Phone can not be null'",
+	"Phone can not be null": "Phone can not be null",
+	"The page presents dogs of the Chinese Crested Dog. This is a database of dogs of this breed can not claim to be complete information, like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on known dogs grows and improves, this database will collect, maintain and update the actual information that appears in open access to other sites in automatic mode. Generating a complete list of dogs of the world in the Chinese Crested Dog breed.": "The page presents dogs of the Chinese Crested Dog. This is a database of dogs of this breed can not claim to be complete information, like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on known dogs grows and improves, this database will collect, maintain and update the actual information that appears in open access to other sites in automatic mode. Generating a complete list of dogs of the world in the Chinese Crested Dog breed."
 }

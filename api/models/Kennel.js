@@ -130,12 +130,11 @@ module.exports = {
     },
 
 
-
-    city: {
-      type: 'string',
-      description: `Город где расположен.`,
-      example: 'Москва.'
+    phones:{
+      type:'ref',
+      description:'Список телефонов'
     },
+
 
 
     address: {
@@ -170,11 +169,6 @@ module.exports = {
     },
 
 
-    region: {
-      model: 'continent',
-      description: 'Питомник может принадлежать только одному континенту. One to Many'
-    },
-
     whoCreate:{
       model:'User',
       required:true,
@@ -188,10 +182,21 @@ module.exports = {
     },
 
 
+
+    region: {
+      model: 'continent',
+      description: 'Питомник может принадлежать только одному континенту. One to Many'
+    },
+
     country: {
       model: 'country',
       description: 'Питомник может принадлежать только одной стране. One to Many'
-    }
+    },
+
+    city: {
+      model: 'city',
+      description: `Питомник может принадлежать только одноу городу. One to Many.`
+    },
   },
 
 };

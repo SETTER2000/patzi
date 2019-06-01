@@ -27,6 +27,29 @@ module.exports = {
       description: 'Дополнительная информация. Описание питомника.'
     },
 
+
+    phones: {
+      description: 'Массив телефонов для связи.',
+      // Тип массив словарей
+      type: [{
+        key:'number',
+        value: 'string',
+        fullName: 'string'
+      }],
+      // type: ['string'],
+      // Пример данных, которые ожидаются на входе в экшен
+      example: [
+        {
+          key: 1,
+          value: '+7 (910) 406 7 406',
+          fullName: 'Olga Petrova'
+        }
+      ],
+      // required: true
+
+    },
+
+
     yourKennel: {
       type: 'boolean',
       description: 'Это ваш питомник?.',
@@ -44,6 +67,16 @@ module.exports = {
     },
 
     country: {
+      type: 'string',
+      description: 'Страна где находится питомник.'
+    },
+
+    address: {
+      type: 'string',
+      description: 'Адрес где находится питомник.'
+    },
+
+    city: {
       type: 'string',
       description: 'Город где находится питомник.'
     },
@@ -84,8 +117,11 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     // Бибилиотека Node.js
-    const req = this;
-
+    const req = this.req;
+    // Убедитесь, что это запрос сокета (не традиционный HTTP)
+    if (!req.isSocket) {
+      throw 'badRequest';
+    }
 
     console.log(inputs);
     // Have the socket which made the request join the "kennel" room.
@@ -101,7 +137,7 @@ module.exports = {
       imageUploadMime: inputs.file.type,
       filename: inputs.file.filename,
       label: inputs.label,
-      yourKennel: (inputs.yourKennel) ? this.req.me.id : '',
+      yourKennel: (inputs.yourKennel) ? this.req.me.id : null,
       whoCreate: this.req.me.id,
       rightName: inputs.rightName,
       registerNumber: inputs.registerNumber,
@@ -110,12 +146,13 @@ module.exports = {
       site: inputs.site,
       city: inputs.city,
       country: inputs.country,
-      continent: inputs.continent,
-      address: inputs.address
+      region: inputs.continent,
+      address: inputs.address,
+      phones: inputs.phones
     }).fetch();
 
-// Рассылаем данные всем подписанным на событие list данной комнаты.
-    await sails.sockets.broadcast('kennel', 'list-kennel', newKennel);
+    // Рассылаем данные всем подписанным на событие list данной комнаты.
+    await sails.sockets.broadcast('kennel', 'list-kennel');
 
     return exits.success();
   }

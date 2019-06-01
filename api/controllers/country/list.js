@@ -4,7 +4,6 @@ module.exports = {
   friendlyName: 'List',
 
 
-
   description: 'Обрабатывает сокет подключение клиента и отдаёт весь список объектов коллекции.',
 
 
@@ -15,14 +14,14 @@ module.exports = {
 
   exits: {
     success: {
-      anyData: 'Вы подключились к комнате kennel и слушаете событие list'
+      anyData: 'Вы подключились к комнате country и слушаете событие list'
     },
     notFound: {
       description: 'There is no such object with such ID.',
       responseType: 'notFound' // как раньше res.notFound(), сейчас это встроеная функция sails
     },
     forbidden: {
-      description: 'The kennel who makes this request does not have permission to delete this entry.',
+      description: 'The country who makes this request does not have permission to delete this entry.',
       responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
     },
     badRequest: {
@@ -48,45 +47,45 @@ module.exports = {
     // Формат отображаемой даты
     let format = 'LL HH:mm';
 
-    // Have the socket which made the request join the "kennel" room.
-    // Подключить сокет, который сделал запрос, к комнате «kennel».
-    await sails.sockets.join(req, 'kennel');
+    // Have the socket which made the request join the "country" room.
+    // Подключить сокет, который сделал запрос, к комнате «country».
+    await sails.sockets.join(req, 'country');
 
     // Выбираем весь список объектов данной коллекции.
-    let kennels = await Kennel.find().populate('country').populate('region').sort('label');
+    let countrys = await Country.find().populate('citys').sort('label');
 
-    _.each(kennels, (kennel) => {
+    /**
+     * Здесь будем превращать поток байт в нормальное изображение для frontend
+     * исключая некоторые данные не нужные для страницы.
+     * Есть пару способов сделать это.
+     * 1. В цикле
+     * 2. С библиотекой Lodash
+     */
+    // _.each(countrys, (country) => {
       // Устанавливаем свойство источника изображения
       // Первый аргумент, базовый url
-      kennel.imageSrc = kennel.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/kennels/${kennel.id}`) : '';
+      // country.imageSrc = country.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/countrys/${country.id}`) : '';
 
       // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
-      kennel.createdAtFormat = moment(kennel.createdAt).format(format);
+      // country.createdAtFormat = moment(country.createdAt).format(format);
 
       // Столбец: Дата регистрации. Формат фильтра.
-      kennel.createdAtFormatFilter = moment(kennel.createdAt).format(format);
-      // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
-      // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
-      kennel.groups = _.pluck(kennel.groups, 'id'); // friendIds: [id,id,id...]
+      // country.createdAtFormatFilter = moment(country.createdAt).format(format);
 
       // Удаляем файловый дескриптор
-      delete kennel.imageUploadFD;
+      // delete country.imageUploadFD;
+
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию и т.д....
-      delete kennel.imageUploadMime;
-    });
-
-
-
-
+      // delete country.imageUploadMime;
+    // });
 
     // Рассылаем данные всем подписанным на событие list данной комнаты.
-    await sails.sockets.broadcast('kennel', 'list-kennel', kennels);
+    await sails.sockets.broadcast('country', 'list-country', countrys);
 
 
     // Respond with view.
     return exits.success();
 
+
   }
-
-
 };
