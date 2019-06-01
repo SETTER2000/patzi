@@ -12,7 +12,7 @@
   </section>
   <% /* Диалоговое окно. Подтверждение удаления объекта. */ %>
   <el-dialog
-    title="ВНИМАНИЕ!"
+    title="<%= __('Warning') %>"
     :visible.sync="centerDialogVisibleConfirm"
     width="30%"
     center>
@@ -31,34 +31,24 @@
       </p>
       <div v-if="me.hasBillingCard || me.isSuperAdmin" class="mt-5 section-title text-center">
         <!--<button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add kennel') %></button>-->
-        <button @click="centerDialogKennelVisible=true" class="btn btn-outline-info"><%= __('Add kennel') %></button>
+        <button @click="centerDialogAdded=true" class="btn btn-outline-info"><%= __('Add kennel') %></button>
       </div>
       <div class="mt-5 section-title text-center" v-else>
         <button @click="centerDialogVisible = true" class="btn btn-outline-info"><%= __('Add kennel') %></button>
       </div>
 
-    </div>
-  </section>
-  <!-- End Sample Area -->
-
-  <!-- Start Sample Area -->
-  <section class="sample-text-area">
-    <div class="container">
-      <!--<h4 class="text-heading"><%= __('World Kennel Catalog') %></h4>-->
-
       <ul>
-        <li v-for="(item, index) of kennels" :key="index">
-         Имя питомника: {{item.label}} Страна: {{item.country.label}}
+        <li v-for="item of kennels">
+          <div></div>
+          <img :src="item.imageSrc" class="rounded float-left" alt="..." style="width: 18px;">
+          Имя питомника: {{item.label}}
+          Страна: {{item.country.label}}
+
         </li>
       </ul>
     </div>
   </section>
   <!-- End Sample Area -->
-
-
-
-
-
 
   <% /* Диалоговое окно. Тарифы. */ %>
   <el-dialog
@@ -81,38 +71,59 @@
   <% /* Диалоговое окно. Добавить Питомник. */ %>
   <el-dialog
     title="<%= __('Add your kennel') %>"
-    :visible.sync="centerDialogKennelVisible"
-    width="40%"
-    style="margin-top: 7vh;"
+    :visible.sync="centerDialogAdded"
+    width="50wh"
+    style="margin-top: 7vh; font-size: 3rem;"
     center>
 
-    <el-row :gutter="20">
-      <!--<el-col :span="2" v-if="ruleForm.imageUrl" >-->
-          <!--<transition name="el-fade-in-linear">-->
-            <!--<el-button type="success" icon="el-icon-check" circle ></el-button>-->
-            <!--&lt;!&ndash;<el-button icon="el-icon-search" circle v-else ></el-button>&ndash;&gt;-->
-          <!--</transition>-->
-      <!--</el-col>-->
-
-      <el-col :span="8" :offset="2">
+    <div class="container">
+      <div class="form-group">
         <label><%= __('Add logo') %>:</label>
-        <el-upload
-          class="avatar-uploader"
-          action="/api/v1/upload/photo"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload">
-          <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-      </el-col>
-      <el-col :span="12">
-        <div class="mt-5">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid asperiores distinctio doloremque illum nesciunt nihil perferendis porro rem sequi vel. Ducimus eligendi officia porro quod ratione! Amet eveniet quas suscipit.
+        <hr>
+        <div class="photo-uploader">
+          <div class="file-upload-field row d-flex align-items-center"
+               :class="!ruleForm.imageUrl ? 'justify-content-center' :  'justify-content-start'">
+            <div class="col-md-1"></div>
+            <div class="file-preview col ">
+              <el-upload
+                class="avatar-uploader"
+                action="/api/v1/upload/file"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload">
+                <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+
+              <!--    <el-upload
+                    class="upload-demo"
+                    drag
+                    action="/api/v1/upload/file"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :before-upload="beforeAvatarUpload"
+                    :on-success="handleAvatarSuccess"
+                    :file-list="fileList"
+                    multiple>
+                    <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
+                    <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div>
+                  </el-upload>-->
+
+
+            </div>
+            <div class="col d-flex-column justify-content-left">
+              <p class="image-advice text-muted" v-if="!formErrors.photo">
+                <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
+              </p>
+            </div>
+            <div class="col-md-1"></div>
+          </div>
         </div>
-      </el-col>
-      <el-col :span="2"></el-col>
-    </el-row>
+      </div>
+    </div>
+
 
     <el-row :gutter="20">
       <el-col :span="2"></el-col>
@@ -121,12 +132,16 @@
                  label-width="120px" class="demo-ruleForm">
 
           <el-form-item label="<%= __('Kennel') %>" prop="label">
-            <el-input placeholder="<%= __('The official name') %>" v-model="ruleForm.label"></el-input>
+            <el-input minlength="3" maxlength="80" show-word-limit
+                      placeholder="<%= __('The official name') %>"
+                      v-model="ruleForm.label"></el-input>
           </el-form-item>
 
 
           <el-form-item label="<%= __('Number') %>" prop="registerNumber">
-            <el-input v-model="ruleForm.registerNumber" placeholder="<%= __('Kennel registration number') %>"></el-input>
+            <el-input minlength="3" maxlength="20" show-word-limit
+                      v-model="ruleForm.registerNumber"
+                      placeholder="<%= __('Kennel registration number') %>"></el-input>
           </el-form-item>
 
 
@@ -145,8 +160,9 @@
             <template v-if="ruleForm.continent">
               <el-form-item label="<%= __('Country') %>" prop="country">
                 <el-select v-model="ruleForm.country" placeholder="<%= __('Where is the kennel registered?') %>"
-                           style="width: 58%;">
-                  <el-option v-for="item in getPull()"
+                           style="width: 58%;"
+                           @change="changeCountry">
+                  <el-option v-for="item in getPullCountry()"
                              :key="item.id"
                              :label="item.label"
                              :value="item.id">
@@ -155,6 +171,81 @@
             </template>
           </transition>
 
+
+          <transition name="el-fade-in-linear">
+            <template v-if="ruleForm.country">
+              <el-form-item label="<%= __('City') %>" prop="city">
+                <el-col :span="11">
+                  <el-autocomplete
+                    class="inline-input"
+                    v-model="ruleForm.city"
+                    :fetch-suggestions="querySearch"
+                    placeholder="Please Input"
+                    :trigger-on-focus="false"
+                    @select="handleSelect"
+
+                  ></el-autocomplete>
+                </el-col>
+              </el-form-item>
+            </template>
+          </transition>
+
+          <transition name="el-fade-in-linear">
+            <template v-if="ruleForm.city">
+              <el-form-item label="<%= __('Address') %>" prop="address">
+                <el-input minlength="3" maxlength="100" show-word-limit
+                          v-model="ruleForm.address"></el-input>
+              </el-form-item>
+            </template>
+          </transition>
+
+
+          <!--<transition name="el-fade-in-linear">-->
+          <!--<template v-if="ruleForm.city">-->
+          <!---->
+          <!--</template>-->
+          <!--</transition>-->
+
+
+          <el-form-item
+            v-for="(phone, index) in ruleForm.phones"
+            :label="'Phone: ' + `${index + 1}`"
+            :key="phone.key"
+            :prop="'phones.' + index + '.value'"
+            :rules="{ required: true, message: '<%= __('Phone can not be null') %>', trigger: 'blur' }">
+            <el-col :span="12">
+              <el-input placeholder="<%= __('Phone number') %>" v-model="phone.value"></el-input>
+              <el-input placeholder="<%= __('Full Name') %>" v-model="phone.fullName"></el-input>
+            </el-col>
+            <el-col :span="6">
+
+              <el-button-group>
+                <el-tooltip effect="dark" content="<%= __('Add phone') %>" placement="top-end">
+                  <el-button @click="addDomain" size="mini" round icon="el-icon-share"></el-button>
+                </el-tooltip>
+                <el-tooltip effect="dark" content="<%= __('Remove phone') %>" placement="top-start">
+                  <el-button @click.prevent="removeDomain(phone)" size="mini" round icon="el-icon-delete"></el-button>
+                </el-tooltip>
+              </el-button-group>
+
+              <!--<el-button ><%= __('Add phone') %></el-button>-->
+              <!--<el-button  ><%= __('Delete') %></el-button>-->
+            </el-col>
+            <el-col :span="6">
+
+            </el-col>
+          </el-form-item>
+
+
+          <el-form-item label="<%= __('Date') %>" required>
+            <el-col :span="11">
+              <el-form-item prop="dateCreate">
+                <el-date-picker type="date" placeholder="<%= __('Registration date') %>"
+                                v-model="ruleForm.dateCreate"
+                                style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-form-item>
 
           <el-form-item label="<%= __('Name on') %>:" prop="rightName">
             <el-switch
@@ -169,19 +260,12 @@
               <strong>(<%= __('right: KennelName DogName | left: DogName KennelName') %>)</strong></small>
           </el-form-item>
 
-          <el-form-item label="<%= __('Registered') %>" required>
-            <el-col :span="11">
-              <el-form-item prop="dateCreate">
-                <el-date-picker type="date" placeholder="<%= __('Registration date') %>"
-                                v-model="ruleForm.dateCreate"
-                                style="width: 100%;"></el-date-picker>
-              </el-form-item>
-            </el-col>
-          </el-form-item>
-
 
           <el-form-item label="<%= __('WebSite') %>" prop="site">
-            <el-input placeholder="<%= __('Without http|https://') %>" v-model="ruleForm.site"></el-input>
+            <el-input minlength="3" maxlength="30" show-word-limit
+                      placeholder="<%= __('Without http:// | https://') %>" v-model="ruleForm.site">
+              <template slot="prepend">//</template>
+            </el-input>
           </el-form-item>
 
           <el-form-item label="<%= __('Your kennel?') %>" prop="yourKennel">
@@ -196,249 +280,33 @@
           </el-form-item>
 
 
-          <el-form-item label="<%= __('About Us') %>" prop="subtitle">
-            <el-input placeholder="<%= __('Tell us about the kennel') %>" type="textarea" v-model="ruleForm.subtitle"></el-input>
+          <el-form-item v-if="ruleForm.yourKennel" label="<%= __('About Us') %>" prop="subtitle">
+            <el-input minlength="10" maxlength="100" show-word-limit
+                      placeholder="<%= __('Tell us about the kennel') %>" type="textarea"
+                      v-model="ruleForm.subtitle"></el-input>
           </el-form-item>
 
-
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
-            <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
-            <el-button @click="centerDialogKennelVisible = false"><%= __('Cancel') %></el-button>
-          </el-form-item>
+          <div class="my-3 pt-4">
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+              <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+              <el-button @click="centerDialogAdded = false"><%= __('Cancel') %></el-button>
+            </el-form-item>
+          </div>
         </el-form>
-      </el-col>
 
-    </el-row>
+</el-col>
+
+</el-row>
 
 
-
-
-    <span slot="footer" class="dialog-footer">
+<span slot="footer" class="dialog-footer">
 
 <!--    <el-button @click="goTo()"><%= __('Add card') %></el-button>
     <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>-->
   </span>
-  </el-dialog>
-
-  <% /* "Upload Kennel" Modal */ %>
-  <modal v-if="uploadModalOpen" v-cloak key="new"
-         @close="closeUploadModal()">
-    <div class="modal-header">
-      <h5 class="modal-title"><%= __('Add your kennel') %></h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span>&times;</span>
-      </button>
-    </div>
-
-    <ajax-form action="uploadKennel" :syncing.sync="syncing"
-               :cloud-error.sync="cloudError"
-               :handle-parsing="handleParsingUploadForm"
-               @submitted="submittedUploadForm($event)">
-
-      <div class="modal-body">
-
-        <div class="form-group">
-          <label><%= __('Logo kennel') %>:</label>
-          <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
-            <div class="photo-upload-field row d-flex align-items-center"
-                 :class="!uploadFormData.previewImageSrc ? 'justify-content-center' :  'justify-content-start'">
-              <div class="photo-preview col">
-                <div class="image-wrapper"
-                     :class="!uploadFormData.previewImageSrc ? 'd-flex align-items-center justify-content-center' : ''">
-                  <img v-if="uploadFormData.previewImageSrc" alt="A preview of the selected item"
-                       :src="uploadFormData.previewImageSrc"/>
-                  <span v-else class="placeholder-icon fa fa-picture-o"></span>
-                </div>
-              </div>
-              <div class="col d-flex-column justify-content-center">
-                <span class="file-upload-button btn btn-sm"
-                      :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
-                  <span class="button-text" v-if="!uploadFormData.previewImageSrc"><%= __('Select image') %></span>
-                  <span class="button-text" v-else>Change image</span>
-                  <input type="file" :disabled="syncing" accept="image/*" class="file-input"
-                         @change="changeFileInput($event.target.files)"/>
-                </span>
-                <p class="image-advice text-muted" v-if="!formErrors.photo">
-                  <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
-                </p>
-                <p class="image-advice text-danger" v-if="formErrors.photo">
-                  A photo is required in order to add a new item.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- <el-form :model="uploadFormData" :rules="rules" ref="uploadFormData" label-width="120px" class="demo-uploadFormData">
-          <el-form-item label="<%= __('Kennel') %>" prop="label">
-            <el-input v-model="uploadFormData.label"  placeholder="<%= __('Kennel name') %>"></el-input>
-          </el-form-item>
+</el-dialog>
 
 
-          <el-form-item label="<%= __('Continent') %>" prop="continent">
-            <el-select @change="changeSelectContinent()" v-model="uploadFormData.continent" placeholder="<%= __('Where is the nursery registered?') %>"
-                       style="width: 58%;">
-              <el-option v-for="item in continents"
-                         :key="item.id"
-                         :label="item.label"
-                         :value="item.id">
-            </el-select>
-          </el-form-item>
-
-
-          <template v-if="uploadFormData.continent">
-            <el-form-item label="<%= __('Country') %>" prop="country">
-              <el-select v-model="uploadFormData.country" placeholder="<%= __('Where is the nursery registered?') %>"
-                         style="width: 58%;">
-                <el-option v-for="item in getPull()"
-                           :key="item.id"
-                           :label="item.label"
-                           :value="item.id">
-              </el-select>
-            </el-form-item>
-          </template>
-
-          &lt;!&ndash;<el-form-item label="<%= __('Registered') %>" required>&ndash;&gt;
-          &lt;!&ndash;<el-col :span="11">&ndash;&gt;
-          &lt;!&ndash;<el-form-item prop="date1">&ndash;&gt;
-          &lt;!&ndash;<el-date-picker type="date" placeholder="Pick a date" v-model="uploadFormData.date1" style="width: 100%;"></el-date-picker>&ndash;&gt;
-          &lt;!&ndash;</el-form-item>&ndash;&gt;
-          &lt;!&ndash;</el-col>&ndash;&gt;
-          &lt;!&ndash;&lt;!&ndash;   <el-col class="line" :span="2">-</el-col>&ndash;&gt;
-          &lt;!&ndash;<el-col :span="11">&ndash;&gt;
-          &lt;!&ndash;<el-form-item prop="date2">&ndash;&gt;
-          &lt;!&ndash;<el-time-picker placeholder="Pick a time" v-model="uploadFormData.date2" style="width: 100%;"></el-time-picker>&ndash;&gt;
-          &lt;!&ndash;</el-form-item>&ndash;&gt;
-          &lt;!&ndash;</el-col>&ndash;&gt;&ndash;&gt;
-          &lt;!&ndash;</el-form-item>&ndash;&gt;
-
-          <el-form-item label="<%= __('Website') %>" prop="site" >
-            <el-input v-model="uploadFormData.site" placeholder="<%= __('Without http|https://') %>"></el-input>
-          </el-form-item>
-
-          <el-form-item label="Пишется справа" prop="delivery">
-            <el-switch v-model="uploadFormData.delivery"></el-switch>
-          </el-form-item>
-
-          <el-form-item label="Activity type" prop="type">
-            <el-checkbox-group v-model="uploadFormData.type">
-              <el-checkbox label="Online activities" name="type"></el-checkbox>
-              <el-checkbox label="Promotion activities" name="type"></el-checkbox>
-              <el-checkbox label="Offline activities" name="type"></el-checkbox>
-              <el-checkbox label="Simple brand exposure" name="type"></el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
-          <el-form-item label="Resources" prop="resource">
-            <el-radio-group v-model="uploadFormData.resource">
-              <el-radio label="Sponsorship"></el-radio>
-              <el-radio label="Venue"></el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="Activity form" prop="desc">
-            <el-input type="textarea" v-model="uploadFormData.desc"></el-input>
-          </el-form-item>
-          <el-form-item align="right">
-            <el-button data-dismiss="modal"><%= __('Close') %></el-button>
-            <el-button @click="resetForm('uploadFormData')"><%= __('Reset') %></el-button>
-            <el-button type="primary" @click="submitForm('uploadFormData')"><%= __('Create') %></el-button>
-
-          </el-form-item>
-        </el-form>-->
-
-        <div class="form-group">
-          <label><%= __('Kennel') %></label>
-          <el-input
-            placeholder="<%= __('Kennel name') %>"
-            v-model="uploadFormData.label"
-            clearable>
-          </el-input>
-          <input class="form-control" :class="formErrors.label ? 'is-invalid' : ''"
-                 type="text" v-model="uploadFormData.label" placeholder="<%= __('Kennel name') %>">
-          <small v-if="formErrors.label" class="text-danger "><%= __('Please enter a name.') %></small>
-        </div>
-
-        <el-select @change="changeSelectContinent()" v-model="uploadFormData.continent"
-                   placeholder="<%= __('Where is the nursery registered?') %>"
-                   style="width: 58%;">
-          <el-option v-for="item in continents"
-                     :key="item.id"
-                     :label="item.label"
-                     :value="item.id">
-        </el-select>
-
-        <div class="form-group">
-          <label><%= __('Title') %></label>
-          <input class="form-control" type="text" v-model="uploadFormData.title">
-        </div>
-        <div class="form-group">
-          <label><%= __('Sub Title') %></label>
-          <input class="form-control" type="text" v-model="uploadFormData.subtitle">
-        </div>
-        <p class="text-danger" v-if="cloudError === 'tooBig'">
-          <small><%= __('That file is too big. Please choose a junkier picture') %>.</small>
-        </p>
-        <p class="text-danger" v-else-if="cloudError">
-          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
-            <a
-              href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.
-          </small>
-        </p>
-
-      </div>
-
-
-      <!--<div class="modal-body">
-        <div class="card border border-light bg-white  mb-3 w-100%">
-          <div class="card-header  bg-white text-left">Add kennel:</div>
-          <div class="row no-gutters">
-            <div class="col-md-6 pl-3 pt-3">
-              <img src="https://via.placeholder.com/340x210.jpg" class="card-img" alt="...">
-            </div>
-            <div class="col-md-6">
-              <div class="card-body bg-white">
-                <div class="col d-flex-column justify-content-center">
-             &lt;!&ndash; <span class="file-upload-button btn btn-sm"
-                    :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
-             &ndash;&gt;   &lt;!&ndash;<span class="button-text" v-if="!uploadFormData.previewImageSrc">&lt;!&ndash;Select image&ndash;&gt;</span>
-                <span class="button-text" v-else>Change image</span>&ndash;&gt;
-                <input type="file" :disabled="syncing" accept="image/*"
-                       class="file-input" @change="changeFileInput($event.target.files)"/>
-         &lt;!&ndash;     </span>&ndash;&gt;
-                 &lt;!&ndash; <p class="image-advice text-muted" v-if="!formErrors.photo"><strong>Tip</strong>: Make sure the item
-                    is front and center in the photo, so people know exactly what you're offering to share.</p>
-                  <p class="image-advice text-danger" v-if="formErrors.photo">A photo is required in order to add a
-                    new item.</p>&ndash;&gt;
-                </div>
-                &lt;!&ndash;<h5 class="card-title">Card title</h5>&ndash;&gt;
-                &lt;!&ndash;<p><button class="btn btn-outline-success">Select image</button></p>&ndash;&gt;
-                <p class="card-text">This is a wider card with supporting text Lorem ipsum dolor sit amet, consectetur
-                  adipisicing elit. Corporis veritatis. Enim facilis quos tempora!.</p>
-                <p class="card-text">
-                  <small class="text-muted">Last updated 3 mins ago</small>
-                </p>
-                <div class="input-group input-group-sm mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Small</span>
-                  </div>
-                  <input type="text" class="form-control" aria-label="Sizing example input"
-                         aria-describedby="inputGroup-sizing-sm">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p class="text-danger" v-if="cloudError">
-          <small>An error occured while processing your request. Please check your information and try again, or <a
-              href="/contact">contact support</a> if the error persists.
-          </small>
-        </p>
-      </div>-->
-      <div class="modal-footer flex-row-reverse justify-content-start">
-        <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1"><%= __('Save') %></ajax-button>
-        <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
-        <el-button @click="resetForm('uploadFormData')"><%= __('Reset') %></el-button>
-      </div>
-    </ajax-form>
-  </modal>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
