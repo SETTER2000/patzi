@@ -6,9 +6,11 @@ parasails.registerPage('kennels-home', {
     kennels: [],
     citys: [],
     links: [],
-    cityId:undefined,
+    cityId: undefined,
     state1: '',
     countryId: 0,
+    url:"https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg",
+    fit:'cover',
     state2: '',
     options: [],
     continents: [],
@@ -38,11 +40,14 @@ parasails.registerPage('kennels-home', {
       dialogImageUrl: '',
       dialogVisible: false,
       country: null,
+
       rightName: true,
       registerNumber: '',
       dateCreate: '',
       subtitle: ''
     },
+    outerVisible: false,
+    innerVisible: false,
     centerDialogVisible: false,
     centerDialogAdded: false,
     rules: {
@@ -85,6 +90,16 @@ parasails.registerPage('kennels-home', {
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
+
+    function vowels(string) {
+      return _.filter(string, function (v) {
+        return /[aeiou]/i.test(v);
+      });
+    }
+
+    _.mixin({'vowels': vowels});
+
+
     // Использование .get('/user') извлечет список текущих пользовательских моделей,
     // подписываем этот сокет на эти модели, И подписываем этот сокет
     // для уведомлений о новых моделях пользователей при их создании.
@@ -115,7 +130,13 @@ parasails.registerPage('kennels-home', {
     this.links = this.cityList();
   },
 
-
+  computed: {
+    langSearch:{
+      get:function () {
+      return  (this.preferredLocale === 'ru') ? 'На русском поиск' : 'English search';
+      }
+    }
+  },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
@@ -287,7 +308,8 @@ parasails.registerPage('kennels-home', {
       let t = this.continents.filter(continent => {
         return continent.id === this.ruleForm.continent;
       });
-      return t[0].countrys;
+      let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
+      return _.sortBy(t[0].countrys, field);
     },
 
 
@@ -374,12 +396,7 @@ parasails.registerPage('kennels-home', {
     },
 
 
-    /* Авто поиск по городам */
-    querySearch(queryString, cb) {
-      let links = this.citys;
-      let results = queryString ? links.filter(this.createFilter(queryString)) : links;
-      cb(results);
-    },
+
 
 
     async cityList() {
@@ -404,7 +421,7 @@ parasails.registerPage('kennels-home', {
 
     async countryList() {
       await io.socket.get(`/api/v1/country/list`, function gotResponse(body, response) {
-        console.log('Сервер country ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервер country ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
 
       // Ждём данные от загрузки нового питомника
@@ -414,16 +431,31 @@ parasails.registerPage('kennels-home', {
     },
 
 
+    /* Авто поиск по городам */
+    querySearch(queryString, cb) {
+      let links = this.citys;
+      let results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      cb(results);
+    },
+
+
     createFilter(queryString) {
       return (link) => {
-        return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        return  (this.me.preferredLocale=== 'ru') ?  (link.labelRu.toLowerCase().indexOf(queryString.toLowerCase()) === 0) :
+         (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
 
 
     async handleSelect(e) {
       console.log('ВЫбор города: ', e);
+      console.log('LODASH MIXIN', _.vowels('fred'));
       this.cityId = (_.isNumber(e.id)) ? e.id : undefined;
+    },
+
+
+    goBack() {
+      console.log('go back');
     }
 
   }

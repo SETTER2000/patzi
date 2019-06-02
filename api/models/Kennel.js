@@ -12,6 +12,19 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+
+
+    label: {
+      type: 'string',
+      description: `Наименование питомника`,
+      example: 'Poale Ell',
+      unique: true,
+      required: true,
+      minLength: 3,
+      maxLength: 80
+    },
+
+
     section: {
       type: 'string',
       defaultsTo: 'Питомник'
@@ -55,18 +68,6 @@ module.exports = {
       defaultsTo: false,
       description:'true - имя питомника пишется справа от имени собаки.'
     },
-
-
-    label: {
-      type: 'string',
-      description: `Наименование питомника`,
-      example: 'Poale Ell',
-      // unique: true,
-      // required: true,
-      minLength: 2,
-      maxLength: 150
-    },
-
 
 
     type: {

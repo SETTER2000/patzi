@@ -52,7 +52,7 @@ module.exports = {
     await sails.sockets.join(req, 'country');
 
     // Выбираем весь список объектов данной коллекции.
-    let countrys = await Country.find().populate('citys').sort('label');
+    let countrys = await Country.find().sort('label ASC').populate('citys');
 
     /**
      * Здесь будем превращать поток байт в нормальное изображение для frontend
@@ -78,9 +78,9 @@ module.exports = {
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию и т.д....
       // delete country.imageUploadMime;
     // });
-
+// console.log(countrys);
     // Рассылаем данные всем подписанным на событие list данной комнаты.
-    await sails.sockets.broadcast('country', 'list-country', countrys);
+    sails.sockets.broadcast('country', 'list-country', countrys);
 
 
     // Respond with view.

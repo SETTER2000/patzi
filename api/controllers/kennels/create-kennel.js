@@ -123,7 +123,7 @@ module.exports = {
       throw 'badRequest';
     }
 
-    console.log(inputs);
+
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'kennel');
@@ -136,14 +136,14 @@ module.exports = {
       imageUploadFD: inputs.file.fd,
       imageUploadMime: inputs.file.type,
       filename: inputs.file.filename,
-      label: inputs.label,
+      label: _.trim(inputs.label),
       yourKennel: (inputs.yourKennel) ? this.req.me.id : null,
       whoCreate: this.req.me.id,
       rightName: inputs.rightName,
-      registerNumber: inputs.registerNumber,
+      registerNumber: _.trim(inputs.registerNumber),
       dateCreate: inputs.dateCreate,
       subtitle: inputs.subtitle,
-      site: inputs.site,
+      site: _.trim(inputs.site),
       city: inputs.city,
       country: inputs.country,
       region: inputs.continent,

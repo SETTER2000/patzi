@@ -10,7 +10,14 @@ module.exports = {
   attributes: {
     value:{
       type:'string',
-      description:'Название города'
+      example: 'Moscow',
+      description:'Наименование города на английском.'
+    },
+    labelRu: {
+      type: 'string',
+      example: 'Москва',
+      description: 'Наименование города на русском.',
+      moreInfoUrl:'https://ru.wikipedia.org/wiki/Россия'
     },
     link:{
       type:'string',
