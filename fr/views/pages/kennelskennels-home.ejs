@@ -25,6 +25,7 @@
   <!-- Start Sample Area -->
   <section class="sample-text-area">
     <div class="container">
+      <!--<el-page-header @back="goBack" content="detail"></el-page-header>-->
       <h3 class="text-heading"><%= __('World Kennel Catalog') %></h3>
       <p class="sample-text">
         <%= __('The page presents the Chinese Crested Dog Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested Dog kennels in the world.') %>
@@ -72,19 +73,41 @@
   <el-dialog
     title="<%= __('Add your kennel') %>"
     :visible.sync="centerDialogAdded"
-    width="50wh"
-    style="margin-top: 7vh; font-size: 3rem;"
+    custom-class="dialog-kennel-add"
     center>
 
+
+    <el-dialog
+      width="80%"
+      top="3vh"
+      title="Continents 6"
+      :visible.sync="innerVisible"
+      append-to-body>
+
+      <div class="justify-content-center">
+        <el-image
+          style="width: inherit; height: auto"
+          :src=url
+          :fit="fit"></el-image>
+
+      </div>
+    </el-dialog>
+
     <div class="container">
+      <div v-if="ruleForm.imageUrl" class="col">
+        <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
+      </div>
+      <!--<img src="https://d3a1wbnh2r1l7y.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" class="img-fluid" alt="Responsive image">-->
       <div class="form-group">
-        <label><%= __('Add logo') %>:</label>
+        <!--<svg width="200" height="100"-->
+        <!--xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">-->
+        <!--<image xlink:href="https://d3a1wbnh2r1l7y.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" height="100" width="200"/>-->
+        <!--</svg>-->
+        <label v-if="!ruleForm.imageUrl"> <%= __('Add logo') %>:</label>
         <hr>
         <div class="photo-uploader">
-          <div class="file-upload-field row d-flex align-items-center"
-               :class="!ruleForm.imageUrl ? 'justify-content-center' :  'justify-content-start'">
-            <div class="col-md-1"></div>
-            <div class="file-preview col ">
+          <div class="row file-upload-field  ">
+            <div class="file-preview  col-sm-12 col-md-4 el-col-md-offset-3 d-flex justify-content-center">
               <el-upload
                 class="avatar-uploader"
                 action="/api/v1/upload/file"
@@ -94,7 +117,6 @@
                 <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
-
               <!--    <el-upload
                     class="upload-demo"
                     drag
@@ -110,15 +132,13 @@
                     <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
                     <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div>
                   </el-upload>-->
-
-
             </div>
-            <div class="col d-flex-column justify-content-left">
+            <div class="col-sm-12  col-md-6">
               <p class="image-advice text-muted" v-if="!formErrors.photo">
                 <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
               </p>
             </div>
-            <div class="col-md-1"></div>
+
           </div>
         </div>
       </div>
@@ -144,60 +164,79 @@
                       placeholder="<%= __('Kennel registration number') %>"></el-input>
           </el-form-item>
 
+          <template>
+            <el-form-item label="<%= __('Continent') %>" prop="continent">
+              <el-select @change="changeSelectContinent()" v-model="ruleForm.continent"
+                         placeholder="<%= __('Where is the nursery registered?') %>"
+                         style="width: 58%;">
+                <el-option v-for="item in continents"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+              </el-select>
 
-          <el-form-item label="<%= __('Continent') %>" prop="continent">
-            <el-select @change="changeSelectContinent()" v-model="ruleForm.continent"
-                       placeholder="<%= __('Where is the nursery registered?') %>"
-                       style="width: 58%;">
-              <el-option v-for="item in continents"
-                         :key="item.id"
-                         :label="item.label"
-                         :value="item.id">
-            </el-select>
-          </el-form-item>
-
-          <transition name="el-fade-in-linear">
-            <template v-if="ruleForm.continent">
-              <el-form-item label="<%= __('Country') %>" prop="country">
-                <el-select v-model="ruleForm.country" placeholder="<%= __('Where is the kennel registered?') %>"
-                           style="width: 58%;"
-                           @change="changeCountry">
-                  <el-option v-for="item in getPullCountry()"
-                             :key="item.id"
-                             :label="item.label"
-                             :value="item.id">
-                </el-select>
-              </el-form-item>
-            </template>
-          </transition>
+              <el-tooltip class="ml-3" effect="dark" content="<%= __('Continental Information') %>"
+                          placement="top-start">
+                <el-button @click="innerVisible=true" size="mini" round icon="el-icon-question"></el-button>
+              </el-tooltip>
+            </el-form-item>
 
 
-          <transition name="el-fade-in-linear">
-            <template v-if="ruleForm.country">
-              <el-form-item label="<%= __('City') %>" prop="city">
-                <el-col :span="11">
-                  <el-autocomplete
-                    class="inline-input"
-                    v-model="ruleForm.city"
-                    :fetch-suggestions="querySearch"
-                    placeholder="Please Input"
-                    :trigger-on-focus="false"
-                    @select="handleSelect"
+          </template>
 
-                  ></el-autocomplete>
-                </el-col>
-              </el-form-item>
-            </template>
-          </transition>
 
-          <transition name="el-fade-in-linear">
-            <template v-if="ruleForm.city">
-              <el-form-item label="<%= __('Address') %>" prop="address">
-                <el-input minlength="3" maxlength="100" show-word-limit
-                          v-model="ruleForm.address"></el-input>
-              </el-form-item>
-            </template>
-          </transition>
+          <template v-if="ruleForm.continent">
+            <el-form-item label="<%= __('Country') %>" prop="country">
+              <el-select v-model="ruleForm.country" placeholder="<%= __('Where is the kennel registered?') %>"
+                         style="width: 58%;"
+                         @change="changeCountry">
+                <el-option v-for="item in getPullCountry()"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+              </el-select>
+            </el-form-item>
+          </template>
+
+
+          <template v-if="ruleForm.country">
+            <el-form-item label="<%= __('City') %>" prop="city">
+
+              <el-autocomplete
+                popper-class="my-autocomplete"
+                v-model="ruleForm.city"
+                :fetch-suggestions="querySearch"
+                placeholder="<%= __('Please Input City') %>"
+                :trigger-on-focus="false"
+                @select="handleSelect"
+              style="width:300px;"
+              >
+                <template  slot-scope="{ item }">
+
+                  <span class="value">{{ item.value }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+
+                </template>
+
+              </el-autocomplete>
+
+              <el-tooltip effect="dark" content="<%= __('English search') %>" placement="top-start">
+                <div size="mini" round class="el-icon-question ml-3"></div>
+              </el-tooltip>
+            </el-form-item>
+          </template>
+
+
+          <template v-if="ruleForm.city">
+            <el-form-item label="<%= __('Address') %>" prop="address">
+              <el-input placeholder="<%= __('street, house, building') %>" minlength="3" maxlength="100" show-word-limit
+                        v-model="ruleForm.address"></el-input>
+            </el-form-item>
+          </template>
 
 
           <!--<transition name="el-fade-in-linear">-->
@@ -249,15 +288,19 @@
 
           <el-form-item label="<%= __('Name on') %>:" prop="rightName">
             <el-switch
-              style="display: block"
               v-model="ruleForm.rightName"
               active-color="#13ce66"
               inactive-color="#ff4949"
               active-text="<%= __('right') %>"
               inactive-text="<%= __('left') %>">
             </el-switch>
-            <small><%= __('Where is the name of the dog in relation to the name of the kennel.') %>
-              <strong>(<%= __('right: KennelName DogName | left: DogName KennelName') %>)</strong></small>
+            <el-tooltip effect="dark" placement="top-start">
+              <div slot="content"><%= __('Where is the name of the dog in relation to the name of the kennel.') %><br>
+                (<%= __('right: KennelName DogName | left: DogName KennelName') %>)"
+              </div>
+              <div size="mini" round class="el-icon-question ml-3"></div>
+            </el-tooltip>
+
           </el-form-item>
 
 
@@ -277,6 +320,10 @@
               inactive-text="No"
             >
             </el-switch>
+            <el-tooltip effect="dark" placement="top-start">
+              <div slot="content"><%= __('Is the kennel registered to you, are you a breeder?') %></div>
+              <div size="mini" round class="el-icon-question ml-3"></div>
+            </el-tooltip>
           </el-form-item>
 
 
@@ -295,17 +342,17 @@
           </div>
         </el-form>
 
-</el-col>
+      </el-col>
 
-</el-row>
+    </el-row>
 
 
-<span slot="footer" class="dialog-footer">
+    <span slot="footer" class="dialog-footer">
 
 <!--    <el-button @click="goTo()"><%= __('Add card') %></el-button>
     <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>-->
   </span>
-</el-dialog>
+  </el-dialog>
 
 
 </div>
