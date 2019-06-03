@@ -85,6 +85,7 @@ module.exports = {
 
     dateCreate: {
       type: 'string',
+      required: true,
       description: `Дата создания.`
     },
 
@@ -92,6 +93,7 @@ module.exports = {
     registerNumber: {
       type: 'string',
       description: `Регистрационный номер.`,
+      required: true,
       example: '123964-54'
     },
 
@@ -99,27 +101,6 @@ module.exports = {
     location: {
       type: 'string',
       defaultsTo: ''
-    },
-
-
-    children: {
-      type: 'ref'
-    },
-
-
-    parent: {
-      type: 'string'
-
-    },
-
-
-    childrenObj: {
-      type: 'ref'
-    },
-
-
-    ancestors: {
-      type: 'ref'
     },
 
 
@@ -186,11 +167,13 @@ module.exports = {
 
     region: {
       model: 'continent',
+      required: true,
       description: 'Питомник может принадлежать только одному континенту. One to Many'
     },
 
     country: {
       model: 'country',
+      required: true,
       description: 'Питомник может принадлежать только одной стране. One to Many'
     },
 

@@ -6,6 +6,11 @@ parasails.registerPage('kennels-home', {
     kennels: [],
     citys: [],
     links: [],
+    mes:{
+      text400Err:'Ошибка. Не смог создать!',
+      text500Err:'Ошибка сервера! Невозможно создать.',
+      success:'Поздравляем! Объект успешно сздан.',
+    },
     cityId: undefined,
     state1: '',
     countryId: 0,
@@ -72,7 +77,7 @@ parasails.registerPage('kennels-home', {
         {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
       ],
       subtitle: [
-        {required: true, message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
+        { message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
         {min: 10, max: 100, message: 'Length should be 10 to 100', trigger: 'blur'}
       ]
     },
@@ -261,9 +266,9 @@ parasails.registerPage('kennels-home', {
 
 
       await io.socket.post('/api/v1/kennels/create-kennel', data, (data, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess('Поздравляем! Питомник добавлен.')) :
-          (jwRes.statusCode === 400) ? this.mesError('Ошибка. Не смог создать!') :
-            (jwRes.statusCode >= 500) ? this.mesError('Ошибка сервера! Невозможно создать.') : '';
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.mes.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.mes.text400Err) :
+            (jwRes.statusCode >= 500) ? this.mesError(this.mes.text500Err) : '';
 
         console.log('Сервер ответил-2 кодом ' + jwRes.statusCode + ' и данными: ', data);
         this.centerDialogAdded = false;
@@ -456,7 +461,11 @@ parasails.registerPage('kennels-home', {
 
     goBack() {
       console.log('go back');
-    }
+    },
+
+
+
+
 
   }
 });

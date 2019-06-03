@@ -131,3 +131,4 @@ lib-cov
 *.pid
 *.docx
 config/local.js
+t1.txt

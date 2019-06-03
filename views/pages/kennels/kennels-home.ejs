@@ -146,8 +146,8 @@
 
 
     <el-row :gutter="20">
-      <el-col :span="2"></el-col>
-      <el-col :span="22">
+      <el-col :span="1"></el-col>
+      <el-col :span="23">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
                  label-width="120px" class="demo-ruleForm">
 
@@ -213,17 +213,14 @@
                 placeholder="<%= __('Please Input City') %>"
                 :trigger-on-focus="false"
                 @select="handleSelect"
-              style="width:300px;"
+                style="width: 58%;"
               >
                 <template  slot-scope="{ item }">
 
                   <span class="value">{{ item.value }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
-
                 </template>
-
               </el-autocomplete>
-
               <el-tooltip effect="dark" content="<%= __('English search') %>" placement="top-start">
                 <div size="mini" round class="el-icon-question ml-3"></div>
               </el-tooltip>
@@ -246,12 +243,13 @@
           <!--</transition>-->
 
 
+          <%/* Как сделать обязательным заполнения телефона:
+               :rules="{ required: true, message: 'Phone can not be null', trigger: 'blur' }" */%>
           <el-form-item
             v-for="(phone, index) in ruleForm.phones"
             :label="'Phone: ' + `${index + 1}`"
             :key="phone.key"
-            :prop="'phones.' + index + '.value'"
-            :rules="{ required: true, message: '<%= __('Phone can not be null') %>', trigger: 'blur' }">
+            :prop="'phones.' + index + '.value'">
             <el-col :span="12">
               <el-input placeholder="<%= __('Phone number') %>" v-model="phone.value"></el-input>
               <el-input placeholder="<%= __('Full Name') %>" v-model="phone.fullName"></el-input>
@@ -279,9 +277,12 @@
           <el-form-item label="<%= __('Date') %>" required>
             <el-col :span="11">
               <el-form-item prop="dateCreate">
-                <el-date-picker type="date" placeholder="<%= __('Registration date') %>"
-                                v-model="ruleForm.dateCreate"
-                                style="width: 100%;"></el-date-picker>
+                <el-date-picker
+                  type="date"
+                  placeholder="<%= __('Registration date') %>"
+                  v-model="ruleForm.dateCreate"
+                  style="width: 100%;"
+                ></el-date-picker>
               </el-form-item>
             </el-col>
           </el-form-item>

@@ -18,7 +18,7 @@ module.exports = {
 
     file: {
       type: 'ref',
-      description: 'Массив с данными о загруженом файле.'
+      description: 'Массив с данными о загруженом файле. Логотип в данной коллекции.'
     },
 
 
@@ -58,6 +58,7 @@ module.exports = {
 
     registerNumber: {
       type: 'string',
+      required: true,
       description: 'Регистрационный номаер.'
     },
 
@@ -68,6 +69,7 @@ module.exports = {
 
     country: {
       type: 'string',
+      required: true,
       description: 'Страна где находится питомник.'
     },
 
@@ -83,11 +85,13 @@ module.exports = {
 
     continent: {
       type: 'string',
+      required: true,
       description: 'Континент где находится питомник.'
     },
 
     dateCreate: {
       type: 'string',
+      required: true,
       description: 'Дата создания.'
     },
 
