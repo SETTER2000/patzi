@@ -1,7 +1,7 @@
 module.exports = {
 
 
-  friendlyName: 'Create kennel',
+  friendlyName: 'Create dog',
 
 
   description: 'Создаём, добавляем новый питомник.',
@@ -12,13 +12,13 @@ module.exports = {
     label: {
       type: 'string',
       required: true,
-      description: 'Официальное наименование питомника.'
+      description: 'Официальное имя собаки.'
 
     },
 
-    file: {
+  fileList: {
       type: 'ref',
-      description: 'Массив с данными о загруженом файле. Логотип в данной коллекции.'
+      description: 'Массив с файлами данных о загруженных файлах.'
     },
 
 
@@ -28,7 +28,7 @@ module.exports = {
     },
 
 
-    phones: {
+   /* phones: {
       description: 'Массив телефонов для связи.',
       // Тип массив словарей
       type: [{
@@ -50,7 +50,7 @@ module.exports = {
     },
 
 
-    yourKennel: {
+    yourDog: {
       type: 'boolean',
       description: 'Это ваш питомник?.',
       defaultsTo:false
@@ -99,7 +99,7 @@ module.exports = {
       type: 'string',
       description: 'Имя собаки с какой стороны от названия питомника пишется.',
       example: 'left'
-    }
+    }*/
   },
 
 
@@ -130,33 +130,52 @@ module.exports = {
 
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
-    await sails.sockets.join(req, 'kennel');
+    await sails.sockets.join(req, 'dog');
     // inputs.file = inputs.file[0];
+console.log('FILELIST:', inputs.fileList.response);
 
+let list = [];
 
-    inputs.file = (_.get(inputs.file, 'fd')) ? inputs.file : '';
+list = _.pluck(inputs.fileList, 'response');
+console.log('LIST: ' , list);
+    // _.each(list, (file) => {
+    //   // Устанавливаем свойство источника изображения
+    //   // Первый аргумент, базовый url
+    //   // file.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/things/${thing.id}`);
+    //   //
+    //   // imageUploadFD: info.fd,
+    //   //   imageUploadMime: info.type,
+    //   //   filename: info.filename,
+    //   //
+    //   // // ... затем мы удаляем наш файловый дескриптор
+    //   // delete file.imageUploadFD;
+    //   // // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
+    //   // delete file.imageUploadMime;
+    // });
+    // inputs.file = (_.get(inputs.file, 'fd')) ? inputs.file : '';
 
-    let newKennel = await Kennel.create({
-      imageUploadFD: inputs.file.fd,
-      imageUploadMime: inputs.file.type,
-      filename: inputs.file.filename,
+    let newDog = await Dog.create({
+      fileList:list,
+      // imageUploadFD: inputs.file.fd,
+      // imageUploadMime: inputs.file.type,
+      // filename: inputs.file.filename,
       label: _.trim(inputs.label),
-      yourKennel: (inputs.yourKennel) ? this.req.me.id : null,
-      whoCreate: this.req.me.id,
-      rightName: inputs.rightName,
-      registerNumber: _.trim(inputs.registerNumber),
-      dateCreate: inputs.dateCreate,
+      // yourDog: (inputs.yourDog) ? this.req.me.id : null,
+      // whoCreate: this.req.me.id,
+      // rightName: inputs.rightName,
+      // registerNumber: _.trim(inputs.registerNumber),
+      // dateCreate: inputs.dateCreate,
       subtitle: inputs.subtitle,
-      site: _.trim(inputs.site),
-      city: inputs.city,
-      country: inputs.country,
-      region: inputs.continent,
-      address: inputs.address,
-      phones: inputs.phones
+      // site: _.trim(inputs.site),
+      // city: inputs.city,
+      // country: inputs.country,
+      // region: inputs.continent,
+      // address: inputs.address,
+      // phones: inputs.phones
     }).fetch();
 
     // Рассылаем данные всем подписанным на событие list данной комнаты.
-    await sails.sockets.broadcast('kennel', 'list-kennel');
+    await sails.sockets.broadcast('dog', 'list-dog');
 
     return exits.success();
   }

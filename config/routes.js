@@ -138,6 +138,9 @@ module.exports.routes = {
   'GET    /api/v1/kennels/list': { action: 'kennels/list' },
   'POST   /api/v1/kennels/create-kennel': {action: 'kennels/create-kennel', csrf: false},
 
+  'POST   /api/v1/dogs/create-dog': { action: 'dogs/create-dog', csrf: false },
+  'GET    /api/v1/dogs/list': { action: 'dogs/list' },
+
   'POST   /api/v1/upload/file': { action: 'upload/file' , csrf: false},
 
   'GET    /api/v1/city/list/:countryId?': { action: 'city/list' },

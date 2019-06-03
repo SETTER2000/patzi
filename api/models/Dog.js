@@ -13,7 +13,21 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
+    label: {
+      type: 'string',
+      description: `Наименование собаки. азвание питомника не пишется в имени.
+      Автоматически будет подставляться.`,
+      example: 'Adam',
+      unique: true,
+      required: true,
+      minLength: 2,
+      maxLength: 50
+    },
 
+    fileList: {
+      type: 'ref',
+      description: 'Массив с файлами данных о загруженных файлах.'
+    },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
@@ -25,8 +39,11 @@ module.exports = {
 
     kennel: {
       model: 'kennel',
-      description: 'Страна может принадлежать только одному континенту. One to Many'
-    }
+      description: 'Собака может принадлежать только одному питомнику. One to Many'
+    },
+
+
+
   },
 
 };
