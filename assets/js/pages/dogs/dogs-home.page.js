@@ -3,22 +3,57 @@ parasails.registerPage('dogs-home', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-    centerDialogAdded:false,
-    centerDialogVisible:false,
+    dogs: [],
+    kennels: [],
+    warning: '',
+    // Состояние загрузки
+    syncing: false,
+
+    // Состояние ошибки сервера
+    cloudError: '',
+
+    dialogFormVisible: false,
+    form: {
+      name: '',
+      region: '',
+      date1: '',
+      date2: '',
+      delivery: false,
+      type: [],
+      resource: '',
+      desc: ''
+    },
+    formLabelWidth: '120px',
+    mess: {
+      en: {
+        warnNoKennel: `At the moment there is no nursery in the database.
+         You should create at least one kennel to start with to add a dog.`
+      },
+      ru: {
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`
+      }
+    },
+
+    centerDialogAdded: false,
+    centerDialogVisible: false,
     dialogTableVisible: false,
-    innerVisible:false,
+    innerVisible: false,
     dialogImageUrl: '',
     dialogVisible: false,
-    url:"https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg",
-    fit:'cover',
+    url: "https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg",
+    fit: 'cover',
+    centerDialogVisibleWarnings: false,
     files: [],
-    fileList:[{name: 'Continents.jpg', url: 'https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg'}],
+    fileList: [{name: 'Continents.jpg', url: 'https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg'}],
     continents: [],
     formErrors: {},
-    mes:{
-      text400Err:'Ошибка. Не смог создать!',
-      text500Err:'Ошибка сервера! Невозможно создать.',
-      success:'Поздравляем! Объект успешно сздан.',
+
+    mes: {
+      text400Err: 'Ошибка. Не смог создать!',
+      text500Err: 'Ошибка сервера! Невозможно создать.',
+      text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
+      success: 'Поздравляем! Объект успешно сздан.',
     },
     rules: {
       label: [
@@ -35,14 +70,14 @@ parasails.registerPage('dogs-home', {
        continent: [
          {required: true, message: 'Please select your continent', trigger: 'change'}
        ],
-      country: [
-         {required: true, message: 'Please select your country', trigger: 'change'}
+      kennel: [
+         {required: true, message: 'Please select your kennel', trigger: 'change'}
        ],
        dateCreate: [
          {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
        ],*/
       subtitle: [
-        { message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
+        {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
         {min: 10, max: 100, message: 'Length should be 10 to 100', trigger: 'blur'}
       ]
     },
@@ -61,7 +96,7 @@ parasails.registerPage('dogs-home', {
       continent: null,
       dialogImageUrl: '',
       dialogVisible: false,
-      country: null,
+      kennel: null,
 
       rightName: true,
       registerNumber: '',
@@ -70,15 +105,15 @@ parasails.registerPage('dogs-home', {
     },
     // fits:'contain',
     // fits:'scale-down',
-    fits:'cover',
-    items:[
-      {name:'Poale Ell Adam',src:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
-      {name:'Poale Ell Bell',src:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
-      {name:'Poale Ell Bazhen',src:'https://d3a1wbnh2r1l7y.cloudfront.net/Adam-10m.jpg'},
-      {name:'Poale Ell Barthalamew',src:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018.jpg'},
+    fits: 'cover',
+    items: [
+      {name: 'Poale Ell Adam', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
+      {name: 'Poale Ell Bell', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
+      {name: 'Poale Ell Bazhen', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Adam-10m.jpg'},
+      {name: 'Poale Ell Barthalamew', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018.jpg'},
     ],
-    litters:[],
-    ratio:null,
+    litters: [],
+    ratio: null,
     colors: ['#99A9BF', '#F7BA2A', '#FF9900'] // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
 
   },
@@ -86,22 +121,40 @@ parasails.registerPage('dogs-home', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function() {
+  beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
+
+    io.socket.get(`/api/v1/kennels/list`, function gotResponse(body, response) {
+      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+
+    // Принимаем данные по событию list-*
+    io.socket.on('list-kennel', data => this.kennels = data);
   },
-  mounted: async function() {
+  mounted: async function () {
     //…
   },
+
+
+  computed: {
+    internationalization: {
+      get: function () {
+        return (this.me.preferredLocale === 'ru') ? this.mess.ru : this.mess.en;
+      }
+
+    },
+  },
+
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     async getList() {
-   /*   await io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
-        console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-      });*/
+      /*   await io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
+           console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+         });*/
 
       await io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
         console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -158,14 +211,14 @@ parasails.registerPage('dogs-home', {
     },
 
 
-    handlePreview(file){
+    handlePreview(file) {
       console.log(file);
     },
 
-    handleRemove(file,fileList){
-      console.log('FILE:',file);
-      console.log('FILELIST: ',fileList);
-      this.fileList=fileList;
+    handleRemove(file, fileList) {
+      console.log('FILE:', file);
+      console.log('FILELIST: ', fileList);
+      this.fileList = fileList;
     },
 
     addDomain() {
@@ -178,7 +231,7 @@ parasails.registerPage('dogs-home', {
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.fileList = [];
-      this.dialogImageUrl='';
+      this.dialogImageUrl = '';
     },
 
 
@@ -200,7 +253,7 @@ parasails.registerPage('dogs-home', {
         label: this.ruleForm.label,
         dateCreate: JSON.stringify(this.ruleForm.dateCreate),
         continent: this.ruleForm.continent,
-        country: this.ruleForm.country,
+        kennel: this.ruleForm.kennel,
         city: this.cityId,
         rightName: this.ruleForm.rightName,
         site: this.ruleForm.site,
@@ -215,9 +268,10 @@ parasails.registerPage('dogs-home', {
       await io.socket.post('/api/v1/dogs/create-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.mes.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.mes.text400Err) :
-            (jwRes.statusCode >= 500) ? this.mesError(this.mes.text500Err) : '';
+            (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.mes.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.mes.text500Err) : '';
 
-        console.log('Сервер ответил-2 кодом ' + jwRes.statusCode + ' и данными: ', data);
+        console.log('Сервер ответил-2 кодом ' + jwRes.statusCode + ' и данными: ', data.message);
         this.centerDialogAdded = false;
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
@@ -233,8 +287,6 @@ parasails.registerPage('dogs-home', {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-
-
 
 
     mesSuccess(text = '') {
@@ -273,5 +325,85 @@ parasails.registerPage('dogs-home', {
         offset: 100,
       });
     },
+
+
+    // Реагирует на событие change в поле питомники|kennel
+    async changeKennel(kennelId) {
+      this.kennelId = kennelId;
+      // console.log('this.ruleForm.city:', this.ruleForm.city);
+      // await this.cityList();
+    },
+
+
+    getPullKennel() {
+      return this.kennels;
+      // let t = this.continents.filter(continent => {
+      //   return continent.id === this.ruleForm.continent;
+      // });
+      // let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
+      // return _.sortBy(t[0].kennels, field);
+    },
+
+
+    async handleSelect(e) {
+      console.log('ВЫбор города: ', e);
+      console.log('LODASH MIXIN', _.vowels('fred'));
+      this.cityId = (_.isNumber(e.id)) ? e.id : undefined;
+    },
+
+
+    /* Авто поиск по городам */
+    querySearch(queryString, cb) {
+      let links = this.citys;
+      let results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      cb(results);
+    },
+
+
+    createFilter(queryString) {
+      return (link) => {
+        return (this.me.preferredLocale === 'ru') ? (link.labelRu.toLowerCase().indexOf(queryString.toLowerCase()) === 0) :
+          (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+
+    // Если массив kennel пустой, выводим сообщение.
+    clickAddDog() {
+      this.warning = this.internationalization.warnNoKennel;
+      (this.kennels.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
+    },
+
+    goToKennel() {
+      window.location = '/kennels';
+    },
+    goToCard() {
+      window.location = '/account';
+    },
+    feedback(e) {
+      console.log('CLICK^ ', e);
+      this.dialogFormVisible = true;
+    },
+
+
+    // Закрывает модальное окно для удаления объекта
+    closeDeleteThingModal: function () {
+      this.selectedThing = undefined;
+      this.confirmDeleteThingModalOpen = false;
+    },
+
+    handleParsingDeleteThingForm: function () {
+      return {
+        id: this.selectedThing.id
+      };
+    },
+
+    submittedDeleteThingForm: function () {
+      _.remove(this.things, {id: this.selectedThing.id});
+      this.$forceUpdate();
+      this.confirmDeleteThingModalOpen = false;
+      this.selectedThing = undefined;
+    },
+
+
   }
 });

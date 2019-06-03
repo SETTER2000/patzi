@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Create dog',
 
 
-  description: 'Создаём, добавляем новый питомник.',
+  description: 'Создаём, добавляем новую собаку.',
 
 
   inputs: {
@@ -12,11 +12,12 @@ module.exports = {
     label: {
       type: 'string',
       required: true,
+      unique:true,
       description: 'Официальное имя собаки.'
 
     },
 
-  fileList: {
+    fileList: {
       type: 'ref',
       description: 'Массив с файлами данных о загруженных файлах.'
     },
@@ -28,7 +29,7 @@ module.exports = {
     },
 
 
-   /* phones: {
+    /* phones: {
       description: 'Массив телефонов для связи.',
       // Тип массив словарей
       type: [{
@@ -132,12 +133,12 @@ module.exports = {
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
     // inputs.file = inputs.file[0];
-console.log('FILELIST:', inputs.fileList.response);
+    console.log('FILELIST:', inputs.fileList.response);
 
-let list = [];
+    let list = [];
 
-list = _.pluck(inputs.fileList, 'response');
-console.log('LIST: ' , list);
+    list = _.pluck(inputs.fileList, 'response');
+    console.log('LIST: ' , list);
     // _.each(list, (file) => {
     //   // Устанавливаем свойство источника изображения
     //   // Первый аргумент, базовый url

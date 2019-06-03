@@ -283,7 +283,7 @@ parasails.registerPage('kennels-home', {
     },
 
 
-    goTo() {
+    goToCard() {
       window.location = '/account';
     },
 
