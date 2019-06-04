@@ -166,6 +166,7 @@
 <body>
 
 <% if(!me){ %>
+<div class="content">
 <div id="page-wrap">
   <% } %>
 
@@ -399,30 +400,33 @@
     </div>
   </footer>
   <% } else { %>
-  <% /* Низкий */ %>
-  <footer id="page-footer" class="navbar navbar-light justify-content-between flex-row-reverse">
-    <div class="nav">
-      <% /*  <small class="nav-item"><a class="nav-link text-info" target="_blank" href="https://github.com/mikermcneil/ration">Source code</a></small>*/ %>
-      <small class="nav-item"><a class="nav-link text-info" href="/contact"><%= __('Contact') %><span
-            class="d-none d-sm-inline"></span></a></small>
-      <small class="nav-item"><a class="nav-link text-info" href="/legal/terms"><%= __('Terms') %><span
-            class="d-none d-sm-inline"> <%= __('of Use') %></span></a>
-      </small>
-      <small class="nav-item"><a class="nav-link text-info" href="/legal/privacy"><%= __('Privacy') %><span
-            class="d-none d-sm-inline"> <%= __('policy') %></span></a></small>
-      <% if(me) { %>
-      <small class="nav-item"><a class="nav-link text-info" href="/logout"><%= __('Sign out') %></a></small>
-      <% } %>
-    </div>
-    <small class="copy">Copyright &copy; 2019 <a target="_blank" href="/">Poale Ell.</a> <br class="xs-only"/>All rights
-      reserved.
-    </small>
 
-  </footer>
   <% } %>
   <!-- End footer Area -->
   <% if(!me){ %>
 </div>
+<% /* Низкий */ %>
+</div>
+<footer  class="footer  ">
+  <div class="navbar navbar-light justify-content-between flex-row-reverse">
+  <div class="nav">
+    <% /*  <small class="nav-item"><a class="nav-link text-info" target="_blank" href="https://github.com/mikermcneil/ration">Source code</a></small>*/ %>
+    <small class="nav-item"><a class="nav-link text-info" href="/contact"><%= __('Contact') %><span
+          class="d-none d-sm-inline"></span></a></small>
+    <small class="nav-item"><a class="nav-link text-info" href="/legal/terms"><%= __('Terms') %><span
+          class="d-none d-sm-inline"> <%= __('of Use') %></span></a>
+    </small>
+    <small class="nav-item"><a class="nav-link text-info" href="/legal/privacy"><%= __('Privacy') %><span
+          class="d-none d-sm-inline"> <%= __('policy') %></span></a></small>
+    <% if(me) { %>
+    <small class="nav-item"><a class="nav-link text-info" href="/logout"><%= __('Sign out') %></a></small>
+    <% } %>
+  </div>
+  <small class="copy">Copyright &copy; 2019 <a target="_blank" href="/">Poale Ell.</a> All rights
+    reserved.
+  </small>
+  </div>
+</footer>
 <% } %>
 <!-- ####################### Start Scroll to Top Area ####################### -->
 <div id="back-top">
@@ -804,6 +808,7 @@
 <script src="/dependencies/jquery.fancybox.min.js"></script>
 <script src="/dependencies/jquery.magnific-popup.min.js"></script>
 <script src="/dependencies/jquery.nice-select.min.js"></script>
+<script src="/dependencies/LoadGoogleMapCheckout.js"></script>
 <script src="/dependencies/mail-script.js"></script>
 <script src="/dependencies/main.js"></script>
 <script src="/dependencies/mn-accordion.js"></script>
@@ -863,20 +868,19 @@
 
 <% /* Load Google Map Checkout */ %>
 <script>
-  var map;
-
-  function initMap() {
-    if (document.getElementById('map') !== null) {
-      map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 55.636564706, lng: 37.516969567},
-        zoom: 16
-      });
-    }
-  }
+  // var map;
+  //
+  // function initMap() {
+  //   if (document.getElementById('map') !== null) {
+  //     map = new google.maps.Map(document.getElementById('map'), {
+  //       center: {lat: 55.636564706, lng: 37.516969567},
+  //       zoom: 16
+  //     });
+  //   }
+  // }
 
 </script>
-
-
+<script src='/dependencies/LoadGoogleMapCheckout.js'></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=<%= sails.config.custom.googleMapKey %>&callback=initMap"></script>
 
 
