@@ -1,4 +1,7 @@
 #kennels-home {
+
+
+
   .my-autocomplete {
       li {
         line-height: normal;
@@ -273,6 +276,54 @@
     height: 100px;
   }
 
+
+
+  .product-filter {
+    display: flex;
+    /**
+    Элементу <h2> присваивается flex-grow значение 1, так что h2 одновременно расширяет
+    гибкий контейнер до полной ширины и расширяет себя до полного оставшегося пространства
+    (что выравнивает выпадающие списки по правому краю).
+    */
+    h2 {
+      flex-grow: 1;
+    }
+    /*
+    Чтобы выровнять по горизонтали дочерние элементы нашего .sort container, мы также
+    сделаем его гибким контейнером. Вы можете вкладывать гибкие контейнеры!
+    */
+    .sort {
+      display: flex;
+
+      .collection-sort {
+        display: flex;
+        flex-direction: column;
+      }
+
+    }
+
+  }
+
+  .products {
+    display: flex;
+    flex-wrap: wrap;
+    .product-card {
+      padding: 2%;
+      flex: 1 16%;
+      &:first-child,&:nth-child(2){
+        flex: 2 46%;
+      }
+      .product-image img {
+        max-width: 100%;
+      }
+      .product-info {
+        margin-top: auto;
+      }
+    }
+  }
+
+
+
   @media (max-width: 1367px) {
     .item {
       height: 350px;
@@ -319,6 +370,14 @@
       height: 80px;
     }
   }
+
+
+  @media (max-width: 920px) {
+    .product-card {
+      flex: 1 21%;
+    }
+  }
+
 
   @media (max-width: 768px) {
     .item {

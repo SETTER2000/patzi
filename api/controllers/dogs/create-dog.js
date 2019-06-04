@@ -133,7 +133,7 @@ module.exports = {
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
     // inputs.file = inputs.file[0];
-    console.log('FILELIST:', inputs.fileList.response);
+    console.log('FILELIST:', inputs.fileList);
 
     let list = [];
 

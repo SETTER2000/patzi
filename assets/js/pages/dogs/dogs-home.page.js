@@ -24,17 +24,6 @@ parasails.registerPage('dogs-home', {
       desc: ''
     },
     formLabelWidth: '120px',
-    mess: {
-      en: {
-        warnNoKennel: `At the moment there is no nursery in the database.
-         You should create at least one kennel to start with to add a dog.`
-      },
-      ru: {
-        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
-        Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`
-      }
-    },
-
     centerDialogAdded: false,
     centerDialogVisible: false,
     dialogTableVisible: false,
@@ -48,13 +37,6 @@ parasails.registerPage('dogs-home', {
     fileList: [{name: 'Continents.jpg', url: 'https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg'}],
     continents: [],
     formErrors: {},
-
-    mes: {
-      text400Err: 'Ошибка. Не смог создать!',
-      text500Err: 'Ошибка сервера! Невозможно создать.',
-      text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
-      success: 'Поздравляем! Объект успешно сздан.',
-    },
     rules: {
       label: [
         {required: true, message: 'Please input dog name', trigger: 'blur'},
@@ -103,8 +85,6 @@ parasails.registerPage('dogs-home', {
       dateCreate: '',
       subtitle: ''
     },
-    // fits:'contain',
-    // fits:'scale-down',
     fits: 'cover',
     items: [
       {name: 'Poale Ell Adam', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
@@ -114,9 +94,27 @@ parasails.registerPage('dogs-home', {
     ],
     litters: [],
     ratio: null,
-    colors: ['#99A9BF', '#F7BA2A', '#FF9900'] // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
-
+    colors: ['#99A9BF', '#F7BA2A', '#FF9900'], // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+    dic: [
+      ['en', {
+        warnNoKennel: `At the moment there is no nursery in the database.
+         You should create at least one kennel to start with to add a dog.`,
+        text400Err: 'Error. Could not create! ',
+        text500Err: 'Server Error! Unable to create. ',
+        text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
+        success: 'Congratulations! Object successfully created. ',
+      }],
+      ['ru', {
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
+        text400Err: 'Ошибка. Не смог создать!',
+        text500Err: 'Ошибка сервера! Невозможно создать.',
+        text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
+        success: 'Поздравляем! Объект успешно создан.',
+      }]
+    ],
   },
+
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
@@ -124,6 +122,8 @@ parasails.registerPage('dogs-home', {
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
+
+
 
     io.socket.get(`/api/v1/kennels/list`, function gotResponse(body, response) {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -138,11 +138,11 @@ parasails.registerPage('dogs-home', {
 
 
   computed: {
-    internationalization: {
+    i19p: {
       get: function () {
-        return (this.me.preferredLocale === 'ru') ? this.mess.ru : this.mess.en;
+        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+        return new Map(this.dic).get(this.me.preferredLocale);
       }
-
     },
   },
 
@@ -264,12 +264,12 @@ parasails.registerPage('dogs-home', {
         phones: this.ruleForm.phones
       };
 
-
       await io.socket.post('/api/v1/dogs/create-dog', data, (data, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.mes.success)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.mes.text400Err) :
-            (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.mes.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.mes.text500Err) : '';
+        console.log('i19: ', this.i19p);
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
         console.log('Сервер ответил-2 кодом ' + jwRes.statusCode + ' и данными: ', data.message);
         this.centerDialogAdded = false;
@@ -369,7 +369,7 @@ parasails.registerPage('dogs-home', {
 
     // Если массив kennel пустой, выводим сообщение.
     clickAddDog() {
-      this.warning = this.internationalization.warnNoKennel;
+      this.warning = this.i19p.warnNoKennel;
       (this.kennels.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
     },
 

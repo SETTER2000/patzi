@@ -12,24 +12,26 @@ html, body {
   background-position: -8000px, -8000px;
   background-repeat: no-repeat;
 }
-#header.header-scrolled{
+
+#header.header-scrolled {
   //z-index: 10000;
 }
+
 header {
 
-  .logo{
+  .logo {
     position: relative;
-    display:inline-block;
-    height:34px;
+    display: inline-block;
+    height: 34px;
     width: 165px;
   }
   .logo::after {
-    content:'';
-    height:100%;
-    width:100%;
+    content: '';
+    height: 100%;
+    width: 100%;
     position: absolute;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     background-image: url("../images/logo.svg");
     background-position: center;
     background-repeat: no-repeat;
@@ -39,7 +41,7 @@ header {
     cursor: pointer;
     border-bottom: 3px solid transparent;
     &.nav-item {
-     // padding-left: 0px;
+      // padding-left: 0px;
       padding-right: 0px;
       margin-right: 20px;
       &:hover {
@@ -54,7 +56,7 @@ header {
     }
     &.dropdown-toggle {
       &:hover {
-        color: @accent-teal!important;
+        color: @accent-teal !important;
       }
     }
   }
@@ -66,43 +68,58 @@ header {
     left: auto;
     right: 0;
   }
-  .nav-menu > li.menu-has-children.avatar{
+  .nav-menu > li.menu-has-children.avatar {
     margin-right: 40px;
   }
 }
-footer{
-  .logo{
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Avoid the IE 10-11 `min-height` bug. */
+}
+
+.content {
+  flex: 1 0 auto;
+  //padding: 20px 0;
+}
+
+footer {
+  flex-shrink: 0;
+  padding: 20px;
+  .logo {
     top: 3px;
     position: relative;
-    display:inline-block;
+    display: inline-block;
     height: 16px;
-    width:78px;
+    width: 78px;
   }
   .logo::after {
-    content:'';
-    height:100%;
-    width:100%;
+    content: '';
+    height: 100%;
+    width: 100%;
     position: absolute;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     background-image: url("../images/logo-f.svg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
   }
   .logo:hover::after {
-    content:'';
-    height:100%;
-    width:100%;
+    content: '';
+    height: 100%;
+    width: 100%;
     position: absolute;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     background-image: url("../images/logo-fh.svg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
   }
 }
+
 #page-wrap {
   height: 100%;
   /* lesshint-disable */
@@ -112,36 +129,30 @@ footer{
   position: relative;
   padding-bottom: @footer-height;
 
-  .poaleell-ico{
+  .poaleell-ico {
     position: relative;
-    display:inline-block;
-    height:16px;
+    display: inline-block;
+    height: 16px;
     width: 16px;
   }
-  .poaleell-ico::after{
-    content:'';
-    height:100%;
-    width:100%;
+  .poaleell-ico::after {
+    content: '';
+    height: 100%;
+    width: 100%;
     position: absolute;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     background-image: url("../images/ico.svg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
   }
 
-
-
-
   // App-wide styles for our ajax buttons
   .ajax-button {
     .ajax-button();
   }
 }
-
-
-
 
 #page-footer {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -163,7 +174,6 @@ body.detected-mobile {
   // devices (like the iPad) as well as handset devices (like the iPhone).
   // …
 }
-
 
 .photo-preview {
   .image-wrapper.round {
@@ -188,7 +198,7 @@ body.detected-mobile {
   }
 }
 
-.el-upload-dragger{
+.el-upload-dragger {
   width: 43vw;
 }
 
@@ -213,6 +223,8 @@ body.detected-mobile {
   }
 }
 
+
+
 @media (max-width: 450px) {
   #page-wrap {
     padding-bottom: 85px;
@@ -224,3 +236,5 @@ body.detected-mobile {
     }
   }
 }
+
+

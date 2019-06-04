@@ -6,11 +6,7 @@ parasails.registerPage('kennels-home', {
     kennels: [],
     citys: [],
     links: [],
-    mes:{
-      text400Err:'Ошибка. Не смог создать!',
-      text500Err:'Ошибка сервера! Невозможно создать.',
-      success:'Поздравляем! Объект успешно сздан.',
-    },
+
     cityId: undefined,
     state1: '',
     countryId: 0,
@@ -87,6 +83,25 @@ parasails.registerPage('kennels-home', {
     formErrors: {},
     // Состояние ошибки сервера
     cloudError: '',
+    // Переводы
+    dic: [
+      ['en', {
+        warnNoKennel: `At the moment there is no nursery in the database.
+         You should create at least one kennel to start with to add a dog.`,
+        text400Err: 'Error. Could not create! ',
+        text500Err: 'Server Error! Unable to create. ',
+        text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
+        success: 'Congratulations! Object successfully created. ',
+      }],
+      ['ru', {
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
+        text400Err: 'Ошибка. Не смог создать!',
+        text500Err: 'Ошибка сервера! Невозможно создать.',
+        text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
+        success: 'Поздравляем! Объект успешно создан.',
+      }]
+    ],
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -140,7 +155,13 @@ parasails.registerPage('kennels-home', {
       get:function () {
       return  (this.preferredLocale === 'ru') ? 'На русском поиск' : 'English search';
       }
-    }
+    },
+    i19p: {
+      get: function () {
+        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+        return new Map(this.dic).get(this.me.preferredLocale);
+      }
+    },
   },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
@@ -266,9 +287,9 @@ parasails.registerPage('kennels-home', {
 
 
       await io.socket.post('/api/v1/kennels/create-kennel', data, (data, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.mes.success)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.mes.text400Err) :
-            (jwRes.statusCode >= 500) ? this.mesError(this.mes.text500Err) : '';
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
         console.log('Сервер ответил-2 кодом ' + jwRes.statusCode + ' и данными: ', data);
         this.centerDialogAdded = false;

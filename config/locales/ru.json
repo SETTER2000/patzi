@@ -441,5 +441,10 @@
 	"Owner": "Owner",
 	"Breeder": "Breeder",
 	"Club": "Club",
-	"User": "User"
+	"User": "User",
+	"Add dogs": "Add dogs",
+	"Edit dogs": "Edit dogs",
+	"Edit kennel": "Edit kennel",
+	"Add 3 dogs": "Add 3 dogs",
+	"Edit 3 dogs": "Edit 3 dogs"
 }
