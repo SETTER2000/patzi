@@ -410,15 +410,15 @@ parasails.registerPage('kennels-home', {
 
 
     beforeAvatarUpload(file) {
-      const isJPG = (file.type === 'image/jpeg') || (file.type === 'image/png');
+      const isIMG = (file.type === 'image/jpeg') || (file.type === 'image/png')|| (file.type === 'image/svg+xml');
       const isLt1M = file.size / 1024 / 1024 < 0.25;
-      if (!isJPG) {
-        this.$message.error('Logo picture must be JPG or PNG format!');
+      if (!isIMG) {
+        this.$message.error('Logo picture must be JPG, PNG or SVG format!');
       }
       if (!isLt1M) {
         this.$message.error('Logo picture size can not exceed 250Kb!');
       }
-      return isJPG && isLt1M;
+      return isIMG && isLt1M;
     },
 
 

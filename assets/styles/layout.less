@@ -11,6 +11,7 @@ html, body {
   background-image: url("../images/logo-fh.svg");
   background-position: -8000px, -8000px;
   background-repeat: no-repeat;
+  //background: linear-gradient(to top right, #FDB171, #FD987D);
 }
 
 #header.header-scrolled {
@@ -77,6 +78,44 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh; /* Avoid the IE 10-11 `min-height` bug. */
+
+  .circle {
+    float: left;
+    height: 200px;
+    width: 200px;
+    shape-outside: circle(25%);
+    shape-margin: 1rem;
+    clip-path: circle(25%);
+  //circle(50% at 0 50%);
+    background: linear-gradient(to top right, #FDB171, #FD987D);
+  }
+
+  .polygon {
+    float: left;
+    shape-outside: polygon(0 0, 0 300px, 200px 300px);
+    clip-path: polygon(0 0, 0 300px, 200px 300px);
+    height: 300px;
+    width: 300px;
+    background: linear-gradient(to top right, #86F7CC, #67D7F5);
+  }
+
+  .left {
+    float: left;
+    shape-outside: polygon(0 0, 0 300px, 200px 300px);
+    clip-path: polygon(0 0, 0 300px, 200px 300px);
+    background: linear-gradient(to top right, #67D7F5, #86F7CC);
+    height: 300px;
+    width: 300px;
+  }
+
+  .right {
+    float: right;
+    shape-outside: polygon(200px 300px, 300px 300px, 300px 0, 0 0);
+    clip-path: polygon(200px 300px, 300px 300px, 300px 0, 0 0);
+    background: linear-gradient(to bottom left, #67D7F5, #86F7CC);
+    height: 300px;
+    width: 300px;
+  }
 }
 
 .content {
