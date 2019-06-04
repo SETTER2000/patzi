@@ -157,7 +157,7 @@
       <%= __('There was an error updating your credit card information. Please check your information and try again, or') %>
       <a href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
     </div>
-    <div class="alert alert-secondary" v-else-if="isBillingEnabled">
+    <div class="alert alert-warning" v-else-if="isBillingEnabled">
       <%= __('You have not linked a payment source to your account. In order to access paid features, you\'ll need to provide your credit card information. (Don\'t worry: you will only be charged when you\'ve reached the limit of your free plan.)') %>
     </div>
   </div>
