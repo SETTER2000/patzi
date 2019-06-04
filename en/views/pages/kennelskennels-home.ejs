@@ -1,15 +1,5 @@
 <div id="kennels-home" v-cloak>
-  <section class="banner-area relative">
-    <div class="container">
-      <div class="row d-flex align-items-center justify-content-center">
-        <div class="about-content col-lg-12">
-          <h1 class="text-white"><%= __('Kennels') %></h1>
-          <p><%= __('Chinese Crested Dog. Catalog of nurseries of the world.') %> </p>
 
-        </div>
-      </div>
-    </div>
-  </section>
   <% /* Диалоговое окно. Подтверждение удаления объекта. */ %>
   <el-dialog
     title="<%= __('Warning') %>"
@@ -22,34 +12,7 @@
                 <el-button type="primary" @click="confirmDeletion()">Да</el-button>
              </span>
   </el-dialog>
-  <!-- Start Sample Area -->
-  <section class="sample-text-area">
-    <div class="container">
-      <!--<el-page-header @back="goBack" content="detail"></el-page-header>-->
-      <h3 class="text-heading"><%= __('World Kennel Catalog') %></h3>
-      <p class="sample-text">
-        <%= __('The page presents the Chinese Crested Dog Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested Dog kennels in the world.') %>
-      </p>
-      <div v-if="me.hasBillingCard || me.isSuperAdmin" class="mt-5 section-title text-center">
-        <!--<button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add kennel') %></button>-->
-        <button @click="centerDialogAdded=true" class="btn btn-outline-info"><%= __('Add kennel') %></button>
-      </div>
-      <div class="mt-5 section-title text-center" v-else>
-        <button @click="centerDialogVisible = true" class="btn btn-outline-info"><%= __('Add kennel') %></button>
-      </div>
 
-      <ul>
-        <li v-for="item of kennels">
-          <div></div>
-          <img :src="item.imageSrc" class="rounded float-left" alt="..." style="width: 18px;">
-          Имя питомника: {{item.label}}
-          Страна: {{item.country.label}}
-
-        </li>
-      </ul>
-    </div>
-  </section>
-  <!-- End Sample Area -->
 
   <% /* Диалоговое окно. Тарифы. */ %>
   <el-dialog
@@ -68,6 +31,7 @@
     <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>
   </span>
   </el-dialog>
+
 
   <% /* Диалоговое окно. Добавить Питомник. */ %>
   <el-dialog
@@ -356,5 +320,82 @@
   </el-dialog>
 
 
+  <% /* Главный банер, с названием страницы. */ %>
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white"><%= __('Kennels') %></h1>
+          <p><%= __('Chinese Crested Dog. Catalog of nurseries of the world.') %> </p>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <%/*Описание страницы. Первый блок текста.*/%>
+  <section class="sample-text-area">
+    <div class="container">
+      <!--<el-page-header @back="goBack" content="detail"></el-page-header>-->
+      <h3 class="text-heading"><%= __('World Kennel Catalog') %></h3>
+      <p class="sample-text">
+        <%= __('The page presents the Chinese Crested Dog Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested Dog kennels in the world.') %>
+      </p>
+      <div v-if="me.hasBillingCard || me.isSuperAdmin" class="mt-5 section-title text-center">
+        <!--<button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add kennel') %></button>-->
+        <button @click="centerDialogAdded=true" class="btn btn-outline-info"><%= __('Add kennel') %></button>
+      </div>
+      <div class="mt-5 section-title text-center" v-else>
+        <button @click="centerDialogVisible = true" class="btn btn-outline-info"><%= __('Add kennel') %></button>
+      </div>
+    </div>
+  </section>
+
+  <%/*Фильтр и блоки фото.*/%>
+<div class="container">
+      <nav class="product-filter">
+
+        <h2><%= __('Continents') %></h2>
+
+        <%/*Фильтры*/%>
+        <div class="sort">
+
+          <div class="collection-sort">
+            <label>Filter by:</label>
+            <select>
+              <option value="/">All Jackets</option>
+            </select>
+          </div>
+
+          <div class="collection-sort">
+            <label>Sort by:</label>
+            <select>
+              <option value="/">Featured</option>
+            </select>
+          </div>
+
+        </div>
+
+      </nav>
+      <section class="products">
+
+        <!-- It's likely you'll need to link the card somewhere. You could add a button in the info, link the titles, or even wrap the entire card in an <a href="..."> -->
+
+
+        <div class="product-card" v-for="item of kennels">
+          <div class="product-image">
+            <img :src="item.imageSrc">
+          </div>
+          <div class="product-info">
+            <h5>Имя питомника: {{item.label}}</h5>
+            <h6>Страна: {{item.country.label}}</h6>
+          </div>
+        </div>
+
+        <!-- more products -->
+
+      </section>
+</div>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
