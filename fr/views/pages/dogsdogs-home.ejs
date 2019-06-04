@@ -157,14 +157,15 @@
   <el-dialog
     title="<%= __('Warning') %>"
     :visible.sync="centerDialogVisibleWarnings"
-    width="53%"
+    width="45%"
     style="margin-top: 17vh"
     center>
-    {{warning}}
+    <p class="text-center">{{warning}}</p>
+
 
     <span slot="footer" class="dialog-footer">
-    <el-button @click="goToKennel()"><%= __('Add kennel') %></el-button>
-    <el-button type="primary" @click="centerDialogVisibleWarnings = false"><%= __('Close') %></el-button>
+    <el-button  @click="centerDialogVisibleWarnings = false"><%= __('Close') %></el-button>
+      <el-button type="success" @click="goToKennel()"><%= __('Add kennel') %></el-button>
   </span>
   </el-dialog>
 
