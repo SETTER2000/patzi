@@ -1,19 +1,170 @@
 <div id="dogs-home" class="content" v-cloak>
+
+  <div @click="feedback($event)" class="rasp">
+    <i class="ti-announcement"></i> <%= __('Feedback about this page?') %>
+  </div>
+
+  <% /* Диалоговое окно. Feedback about this page?. */ %>
+  <modal v-if="dialogFormVisible" v-cloak key="delete"
+         @close="closeDeleteThingModal()">
+    <ajax-form action="deliverContactFormMessage" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingDeleteThingForm"
+               @submitted="submittedDeleteThingForm()">
+      <div class="modal-body">
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" @click="dialogFormVisible=false"><%= __('Cancel') %></button>
+        <button type="submit" class="btn btn-danger ml-1"><%= __('Send feedback') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+  <!-- <el-dialog title="" :visible.sync="dialogFormVisible" class="text">
+     <textarea class="form-control text" id="exampleFormControlTextarea1" rows="10"></textarea>
+     <span slot="footer" class="dialog-footer">
+     <el-button @click="dialogFormVisible = false">Cancel</el-button>
+     <el-button type="primary" @click="dialogFormVisible = false">Send feedback</el-button>
+   </span>
+   </el-dialog>-->
+
   <% /* Диалоговое окно. Тарифы. */ %>
   <el-dialog
-    title="<%= __('Warning') %>"
     :visible.sync="centerDialogVisible"
+    width="70%"
+    style="margin-top: 1vh"
+    center>
+
+
+    <!-- Start Pricing Area -->
+    <section class="">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="section-title text-center">
+              <h3><%= __('Annual subscription') %></h3>
+              <h2 class="mt-5"><span><%= __('Tariff Plans') %></span></h2>
+              <p>
+              <ul>
+                <li><span class="ti-close cross mx-2 text-danger"></span><%= __('Not included in the price') %></li>
+              </ul>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <el-alert
+            title="<%= __('You have not linked a payment source to your account. In order to access paid features, you\'ll need to provide your credit card information. (Don\'t worry: you will only be charged when you\'ve reached the limit of your free plan.)') %>"
+            type="warning">
+          </el-alert>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="pricing_item">
+              <h3 class="p_title"><%= __('User') %></h3>
+              <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+              <h1 class="p_price">&euro;0</h1>
+              <div class="p_list">
+                <ul>
+
+                  <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
+                  <li><span class="ti-check"></span> <%= __('Write comments') %></li>
+                  <li><span class="ti-close cross"></span><%= __('Add dogs') %> </li>
+                  <li><span class="ti-close cross"></span> <%= __('Edit dogs') %></li>
+                  <li><span class="ti-close cross"></span> <%= __('Add kennel') %></li>
+                  <li><span class="ti-close cross"></span> <%= __('Edit kennel') %></li>
+                </ul>
+                <!--<a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">-->
+                  <!--<span>D</span>-->
+                  <!--<span>e</span>-->
+                  <!--<span>t</span>-->
+                  <!--<span>a</span>-->
+                  <!--<span>i</span>-->
+                  <!--<span>l</span>-->
+                  <!--<span>e</span>-->
+                  <!--<span>d</span>-->
+                <!--</a>-->
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="pricing_item">
+              <h3 class="p_title"><%= __('Owner') %></h3>
+              <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+              <h1 class="p_price">&euro;5</h1>
+              <div class="p_list">
+                <ul>
+                  <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
+                  <li><span class="ti-check"></span> <%= __('Write comments') %></li>
+                  <li><span class="ti-check"></span> <%= __('Add 3 dogs') %></li>
+                  <li><span class="ti-check"></span> <%= __('Edit 3 dogs') %></li>
+                  <li><span class="ti-close cross"></span> <%= __('Add kennel') %></li>
+                  <li><span class="ti-close cross"></span> <%= __('Edit kennel') %></li>
+
+                </ul>
+                <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
+                  <span>D</span>
+                  <span>e</span>
+                  <span>t</span>
+                  <span>a</span>
+                  <span>i</span>
+                  <span>l</span>
+                  <span>e</span>
+                  <span>d</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="pricing_item">
+              <h3 class="p_title"><%= __('Breeder') %></h3>
+              <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+              <h1 class="p_price">&euro;8</h1>
+              <div class="p_list">
+                <ul>
+                  <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
+                  <li><span class="ti-check"></span> <%= __('Write comments') %></li>
+                  <li><span class="ti-check"></span> <%= __('Add dogs') %></li>
+                  <li><span class="ti-check"></span> <%= __('Edit dogs') %></li>
+                  <li><span class="ti-check"></span> <%= __('Add kennel') %></li>
+                  <li><span class="ti-check"></span> <%= __('Edit kennel') %></li>
+                </ul>
+                <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
+                  <span>D</span>
+                  <span>e</span>
+                  <span>t</span>
+                  <span>a</span>
+                  <span>i</span>
+                  <span>l</span>
+                  <span>e</span>
+                  <span>d</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div slot="footer" class="dialog-footer mb-3 pb-5">
+
+    <el-button  @click="centerDialogVisible = false"><%= __('Close') %></el-button>
+      <el-button type="success"  @click="goToCard()" size="large"><%= __('Add card') %></el-button>
+  </div>
+  </el-dialog>
+
+  <% /* Диалоговое окно. Предупреждение | Warning. */ %>
+  <el-dialog
+    title="<%= __('Warning') %>"
+    :visible.sync="centerDialogVisibleWarnings"
     width="53%"
     style="margin-top: 17vh"
     center>
-    <el-alert
-      title="<%= __('You have not linked a payment source to your account. In order to access paid features, you\'ll need to provide your credit card information. (Don\'t worry: you will only be charged when you\'ve reached the limit of your free plan.)') %>"
-      type="warning">
-    </el-alert>
+    {{warning}}
 
     <span slot="footer" class="dialog-footer">
-    <el-button @click="goTo()"><%= __('Add card') %></el-button>
-    <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>
+    <el-button @click="goToKennel()"><%= __('Add kennel') %></el-button>
+    <el-button type="primary" @click="centerDialogVisibleWarnings = false"><%= __('Close') %></el-button>
   </span>
   </el-dialog>
 
@@ -53,7 +204,7 @@
       </p>
       <div v-if="me.hasBillingCard || me.isSuperAdmin" class="mt-5 section-title text-center">
         <!--<button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add dog') %></button>-->
-        <button @click="centerDialogAdded=true" class="btn btn-outline-info"><%= __('Add dog') %></button>
+        <button @click="clickAddDog()" class="btn btn-outline-info"><%= __('Add dog') %></button>
       </div>
       <div class="mt-5 section-title text-center" v-else>
         <button @click="centerDialogVisible = true" class="btn btn-outline-info"><%= __('Add dog') %></button>
@@ -61,7 +212,6 @@
     </div>
   </section>
   <!-- End Sample Area -->
-
 
   <% /* Диалоговое окно. Добавить собаку. */ %>
   <el-dialog
@@ -93,7 +243,7 @@
       </div>
       <!--<img src="https://d3a1wbnh2r1l7y.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" class="img-fluid" alt="Responsive image">-->
       <div class="form-group py-2">
-        <h5 ><%= __('Multiple upload photos') %></h5>
+        <h5><%= __('Multiple upload photos') %></h5>
         <label v-if="!ruleForm.imageUrl">
           <%= __('Make albums, dividing by event or by time group of photos. Describe events, tell about the photo, thereby structuring your memories and events.') %>
         </label>
@@ -101,16 +251,6 @@
         <div class="photo-uploader">
           <div class="row">
             <div class="col-md-12 ">
-              <!--<el-upload-->
-                <!--class="avatar-uploader"-->
-                <!--action="/api/v1/upload/file"-->
-                <!--:show-file-list="false"-->
-                <!--:on-success="handleAvatarSuccess"-->
-                <!--:before-upload="beforeAvatarUpload">-->
-                <!--<img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar">-->
-                <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-              <!--</el-upload>-->
-
               <el-upload
                 action="/api/v1/upload/file"
                 drag
@@ -125,28 +265,7 @@
               <el-dialog :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt="">
               </el-dialog>
-              <!--    <el-upload
-                    class="upload-demo"
-                    drag
-                    action="/api/v1/upload/file"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :before-upload="beforeAvatarUpload"
-                    :on-success="handleAvatarSuccess"
-                    :file-list="fileList"
-                    multiple>
-                    <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="">
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
-                    <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div>
-                  </el-upload>-->
             </div>
-            <!--<div class="col-sm-12  col-md-6">-->
-              <!--<p class="image-advice text-muted" v-if="!formErrors.photo">-->
-                <!--<strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>-->
-              <!--</p>-->
-            <!--</div>-->
-
           </div>
         </div>
       </div>
@@ -159,11 +278,28 @@
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
                  label-width="120px" class="demo-ruleForm">
 
-          <el-form-item label="<%= __('Dog') %>" prop="label">
-            <el-input minlength="3" maxlength="80" show-word-limit
-                      placeholder="<%= __('The official name') %>"
-                      v-model="ruleForm.label"></el-input>
+
+          <el-form-item label="<%= __('Kennel') %>" prop="kennel">
+            <el-select v-model="ruleForm.kennel" placeholder="<%= __('Where is the kennel registered?') %>"
+                       style="width: 58%;"
+                       @change="changeKennel">
+              <el-option v-for="item in getPullKennel()"
+                         :key="item.id"
+                         :label="item.label"
+                         :value="item.id">
+                <span style="float: left">{{ item.label }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+            </el-select>
           </el-form-item>
+
+
+          <template v-if="ruleForm.kennel">
+            <el-form-item label="<%= __('Dog') %>" prop="label">
+              <el-input minlength="3" maxlength="80" show-word-limit
+                        placeholder="<%= __('The official name') %>"
+                        v-model="ruleForm.label"></el-input>
+            </el-form-item>
+          </template>
 
 
           <el-form-item label="<%= __('Number') %>" prop="registerNumber">
@@ -195,23 +331,7 @@
           </template>-->
 
 
-          <template v-if="ruleForm.continent">
-            <el-form-item label="<%= __('Country') %>" prop="country">
-              <el-select v-model="ruleForm.country" placeholder="<%= __('Where is the kennel registered?') %>"
-                         style="width: 58%;"
-                         @change="changeCountry">
-                <el-option v-for="item in getPullCountry()"
-                           :key="item.id"
-                           :label="item.label"
-                           :value="item.id">
-                  <span style="float: left">{{ item.label }}</span>
-                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
-              </el-select>
-            </el-form-item>
-          </template>
-
-
-          <template v-if="ruleForm.country">
+          <template v-if="ruleForm.kennel">
             <el-form-item label="<%= __('City') %>" prop="city">
 
               <el-autocomplete
@@ -223,7 +343,7 @@
                 @select="handleSelect"
                 style="width: 58%;"
               >
-                <template  slot-scope="{ item }">
+                <template slot-scope="{ item }">
 
                   <span class="value">{{ item.value }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
@@ -250,9 +370,8 @@
           <!--</template>-->
           <!--</transition>-->
 
-
-          <%/* Как сделать обязательным заполнения телефона:
-               :rules="{ required: true, message: 'Phone can not be null', trigger: 'blur' }" */%>
+          <% /* Как сделать обязательным заполнения телефона:
+               :rules="{ required: true, message: 'Phone can not be null', trigger: 'blur' }" */ %>
           <el-form-item
             v-for="(phone, index) in ruleForm.phones"
             :label="'Phone: ' + `${index + 1}`"
@@ -362,7 +481,6 @@
     <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>-->
   </span>
   </el-dialog>
-
 
 
   <!-- Portfolio Details Area -->
