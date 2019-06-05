@@ -1,5 +1,5 @@
 <div id="dogs-home" class="content" v-cloak>
-
+  <p class="text-danger" v-if="cloudError === 'dogAlreadyInUse'"><%= __('There is already an account using that email address') %>.</p>
   <div @click="feedback($event)" class="rasp">
     <i class="ti-announcement"></i> <%= __('Feedback about this page?') %>
   </div>
