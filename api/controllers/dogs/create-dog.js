@@ -12,8 +12,9 @@ module.exports = {
     label: {
       type: 'string',
       required: true,
-      unique:true,
-      description: 'Официальное имя собаки.'
+      description: `Официальное имя собаки. Поле обязательно для заполнения.
+      В рамках всей коллекции это поле не может быть сделано уникальным, только проверка имени вместе 
+      с названием питомника может однозначно установить уникальность собаки в базе.`
 
     },
 
@@ -28,6 +29,10 @@ module.exports = {
       description: 'Дополнительная информация. Описание питомника.'
     },
 
+    kennel:{
+      type:'number',
+      description:'Идентификатор питомника'
+    }
 
     /* phones: {
       description: 'Массив телефонов для связи.',
@@ -116,7 +121,17 @@ module.exports = {
     badRequest: {
       description: 'No image upload was provided.',
       responseType: 'badRequest'
-    }
+    },
+
+    dogAlreadyInUse: {
+      statusCode: 409,
+      description: 'The specified dog name is already in use.',
+    },
+
+    dogAlreadyInUseRU: {
+      statusCode: 409,
+      description: 'Указанное имя собаки уже используется.',
+    },
   },
 
 
@@ -138,7 +153,7 @@ module.exports = {
     let list = [];
 
     list = _.pluck(inputs.fileList, 'response');
-    console.log('LIST: ' , list);
+    console.log('LIST: ', list);
     // _.each(list, (file) => {
     //   // Устанавливаем свойство источника изображения
     //   // Первый аргумент, базовый url
@@ -155,25 +170,36 @@ module.exports = {
     // });
     // inputs.file = (_.get(inputs.file, 'fd')) ? inputs.file : '';
 
-    let newDog = await Dog.create({
-      fileList:list,
-      // imageUploadFD: inputs.file.fd,
-      // imageUploadMime: inputs.file.type,
-      // filename: inputs.file.filename,
-      label: _.trim(inputs.label),
-      // yourDog: (inputs.yourDog) ? this.req.me.id : null,
-      // whoCreate: this.req.me.id,
-      // rightName: inputs.rightName,
-      // registerNumber: _.trim(inputs.registerNumber),
-      // dateCreate: inputs.dateCreate,
-      subtitle: inputs.subtitle,
-      // site: _.trim(inputs.site),
-      // city: inputs.city,
-      // country: inputs.country,
-      // region: inputs.continent,
-      // address: inputs.address,
-      // phones: inputs.phones
-    }).fetch();
+    // Проверка существования такой же собаки.
+    let conflictingDog = await Dog.findOne({
+      kennel: inputs.kennel, label: inputs.label
+    });
+
+    console.log('conflictingDog', conflictingDog);
+    if (conflictingDog) {
+      throw (req.me.preferredLocale === 'ru') ? 'dogAlreadyInUseRU' : 'dogAlreadyInUse';
+    } else {
+      let newDog = await Dog.create({
+        fileList: list,
+        // imageUploadFD: inputs.file.fd,
+        // imageUploadMime: inputs.file.type,
+        // filename: inputs.file.filename,
+        label: _.trim(inputs.label),
+        // yourDog: (inputs.yourDog) ? this.req.me.id : null,
+        // whoCreate: this.req.me.id,
+        // rightName: inputs.rightName,
+        // registerNumber: _.trim(inputs.registerNumber),
+        // dateCreate: inputs.dateCreate,
+        subtitle: inputs.subtitle,
+        // site: _.trim(inputs.site),
+        // city: inputs.city,
+        // country: inputs.country,
+        // region: inputs.continent,
+        // address: inputs.address,
+        // phones: inputs.phones
+      }).fetch();
+    }
+
 
     // Рассылаем данные всем подписанным на событие list данной комнаты.
     await sails.sockets.broadcast('dog', 'list-dog');

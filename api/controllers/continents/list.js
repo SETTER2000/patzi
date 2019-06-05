@@ -37,6 +37,7 @@ module.exports = {
       throw 'badRequest';
     }
 
+    let data={continents:[]};
     // Бибилиотека Node.js
     const url = require('url');
     const moment = require('moment');
@@ -52,7 +53,24 @@ module.exports = {
     await sails.sockets.join(req, 'continent');
 
     // Выбираем весь список объектов данной коллекции.
-    let continents = await Continent.find().populate('countrys').sort('label');
+    let continents = await Continent.find().populate('countrys').sort('label ASC');
+    // По какому полю делать сортировку городов, зависит от языка
+    let sort = (this.req.me.preferredLocale === 'ru')? 'labelRu' : 'value';
+    // let continents = await Continent.find().populate('countrys');
+
+    let ken = '';
+    await Continent.stream()
+      .sort('label ASC')
+      .populate('countrys', {
+        sort: 'label ASC'
+      })
+      .eachRecord(async (records)=>{
+
+
+      console.log(records);
+
+        ken++;
+      });
 
     /**
      * Здесь будем превращать поток байт в нормальное изображение для frontend
@@ -78,9 +96,10 @@ module.exports = {
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию и т.д....
       delete continent.imageUploadMime;
     });
+    data.continents = continents;
 
     // Рассылаем данные всем подписанным на событие list данной комнаты.
-    await sails.sockets.broadcast('continent', 'list-continent', continents);
+    await sails.sockets.broadcast('continent', 'list-continent', data);
 
 
     // Respond with view.

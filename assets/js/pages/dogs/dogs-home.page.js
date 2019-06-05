@@ -268,10 +268,12 @@ parasails.registerPage('dogs-home', {
         console.log('i19: ', this.i19p);
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-            (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+          (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+            // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
-        console.log('Сервер ответил-2 кодом ' + jwRes.statusCode + ' и данными: ', data.message);
+        console.log(jwRes.headers);
+        console.log(`Сервер ответил-2 кодом ${jwRes.statusCode} (${jwRes.headers['x-exit-description']})  и данными: `, data);
         this.centerDialogAdded = false;
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');

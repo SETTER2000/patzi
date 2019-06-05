@@ -15,10 +15,9 @@ module.exports = {
 
     label: {
       type: 'string',
-      description: `Наименование собаки. азвание питомника не пишется в имени.
+      description: `Имя собаки. Название питомника не пишется в имени.
       Автоматически будет подставляться.`,
       example: 'Adam',
-      unique: true,
       required: true,
       minLength: 2,
       maxLength: 50
