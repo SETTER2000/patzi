@@ -13,7 +13,6 @@
              </span>
   </el-dialog>
 
-
   <% /* Диалоговое окно. Тарифы. */ %>
   <el-dialog
     title="<%= __('Warning') %>"
@@ -31,7 +30,6 @@
     <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>
   </span>
   </el-dialog>
-
 
   <% /* Диалоговое окно. Добавить Питомник. */ %>
   <el-dialog
@@ -179,7 +177,7 @@
                 @select="handleSelect"
                 style="width: 58%;"
               >
-                <template  slot-scope="{ item }">
+                <template slot-scope="{ item }">
 
                   <span class="value">{{ item.value }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
@@ -206,9 +204,8 @@
           <!--</template>-->
           <!--</transition>-->
 
-
-          <%/* Как сделать обязательным заполнения телефона:
-               :rules="{ required: true, message: 'Phone can not be null', trigger: 'blur' }" */%>
+          <% /* Как сделать обязательным заполнения телефона:
+               :rules="{ required: true, message: 'Phone can not be null', trigger: 'blur' }" */ %>
           <el-form-item
             v-for="(phone, index) in ruleForm.phones"
             :label="'Phone: ' + `${index + 1}`"
@@ -319,7 +316,6 @@
   </span>
   </el-dialog>
 
-
   <% /* Главный банер, с названием страницы. */ %>
   <section class="banner-area relative">
     <div class="container">
@@ -333,8 +329,7 @@
     </div>
   </section>
 
-
-  <%/*Описание страницы. Первый блок текста.*/%>
+  <% /*Описание страницы. Первый блок текста.*/ %>
   <section class="sample-text-area">
     <div class="container">
       <!--<el-page-header @back="goBack" content="detail"></el-page-header>-->
@@ -352,22 +347,34 @@
     </div>
   </section>
 
-  <%/*Фильтр и блоки фото.*/%>
-<div class="container">
-      <nav class="product-filter">
 
-        <h2><%= __('Continents') %></h2>
 
-        <%/*Фильтры*/%>
+  <% /*Фильтр и блоки фото.*/ %>
+  <section class="about-area ">
+    <div class="container">
+
+
+      <% /*ФИЛЬТР ПИТОМНИКОВ*/ %>
+          <!--<span class="demonstration">Display all tags (default)</span>-->
+      <div v-if="kennels.length>0" class="pb-5">
+          <el-cascader
+            :options="optionsTest"
+            :props="props"
+            placeholder="<%= __('Select kennel') %>"
+            clearable>
+          </el-cascader>
+      </div>
+
+ <!--     <nav class="product-filter">
+        <h2><%= __('Kennels') %></h2>
+        <% /*Фильтры*/ %>
         <div class="sort">
-
           <div class="collection-sort">
             <label>Filter by:</label>
             <select>
               <option value="/">All Jackets</option>
             </select>
           </div>
-
           <div class="collection-sort">
             <label>Sort by:</label>
             <select>
@@ -376,26 +383,26 @@
           </div>
 
         </div>
+      </nav>-->
 
-      </nav>
+      <% /*ФОТО*/ %>
       <section class="products">
-
         <!-- It's likely you'll need to link the card somewhere. You could add a button in the info, link the titles, or even wrap the entire card in an <a href="..."> -->
-
-
         <div class="product-card" v-for="item of kennels">
-          <div class="product-image">
-            <img :src="item.imageSrc">
-          </div>
+          <transition name="collapse">
+            <div class="product-image">
+              <img :src="item.imageSrc">
+            </div>
+          </transition>
           <div class="product-info">
-            <h5>Имя питомника: {{item.label}}</h5>
-            <h6>Страна: {{item.country.label}}</h6>
+            <h5><%= __('Kennel') %>: {{item.label}}</h5>
+            <h6><%= __('Country') %>: {{item.country.label}}</h6>
           </div>
         </div>
-
         <!-- more products -->
-
       </section>
+    </div>
+  </section>
 </div>
-</div>
+
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
