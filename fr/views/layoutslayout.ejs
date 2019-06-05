@@ -67,6 +67,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
   <link rel="stylesheet" href="/dependencies/jquery-ui/jquery-ui.css">
   <link rel="stylesheet" href="/dependencies/jquery-ui/jquery-ui.structure.css">
   <link rel="stylesheet" href="/dependencies/jquery-ui/jquery-ui.theme.css">
+  <link rel="stylesheet" href="/styles/element_v291.css">
   <link rel="stylesheet" href="/styles/elements/alert.css">
   <link rel="stylesheet" href="/styles/elements/aside.css">
   <link rel="stylesheet" href="/styles/elements/autocomplete.css">
@@ -784,7 +785,7 @@ sur le pipeline des actifs entre les "SCRIPTS" et "SCRIPTS END", ou les deux.
 <script src="/dependencies/bootstrap.min.js"></script>
 <script src="/dependencies/cloud.js"></script>
 <script src="/dependencies/easing.min.js"></script>
-<script src="/dependencies/element-ui@2.8.2.js"></script>
+<script src="/dependencies/element_v291.js"></script>
 <script src="/dependencies/hoverIntent.js"></script>
 <script src="/dependencies/isotope.pkgd.js"></script>
 <script src="/dependencies/jquery-imagefill.js"></script>
@@ -896,8 +897,9 @@ sur le pipeline des actifs entre les "SCRIPTS" et "SCRIPTS END", ou les deux.
 <script>
 
   let lang = ELEMENT.lang.en
-  lang =  (SAILS_LOCALS.me && SAILS_LOCALS.me.preferredLocale === 'ru')?ELEMENT.lang.ruRU:lang;
+  lang =  (SAILS_LOCALS.me && SAILS_LOCALS.me.preferredLocale === 'ru') ? ELEMENT.lang.ruRU : lang;
 
+  console.log('Current language: ', lang);
   ELEMENT.locale(lang);
 
 
