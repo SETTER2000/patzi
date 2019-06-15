@@ -1,6 +1,80 @@
 #kennel {
 
 
+  .photo-uploader {
+    // padding: 5px;
+    .photo-upload-field {
+      min-height: 150px;
+      .file-upload-button {
+        position: relative;
+        cursor: pointer;
+        .file-input {
+          opacity: 0;
+          width: 100%;
+          height: 100%;
+          top: 0px;
+          left: 0px;
+          position: absolute;
+          cursor: pointer;
+        }
+      }
+
+      .photo-preview {
+        .image-wrapper {
+          background-color: @bg-lt-gray;
+          width: 100%;
+          img {
+            width: 100%;
+          }
+          .placeholder-icon {
+            color: @text-muted;
+            font-size: 42px;
+          }
+        }
+      }
+
+      .image-advice {
+        margin-top: 15px;
+        font-size: 13px;
+        line-height: 16px;
+      }
+    }
+    &.empty {
+      .image-wrapper {
+        min-height: 150px;
+      }
+    }
+  }
+
+  .item-preview {
+    .card {
+      padding: 10px;
+      width: 100%;
+      max-width: 250px;
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  .field-wrap {
+    position: relative;
+    .datepicker-wrapper {
+      .form-control {
+        padding-left: 50px;
+      }
+    }
+    .datepicker-label {
+      position: absolute;
+      top: 9px;
+      left: 10px;
+      font-size: 14px;
+    }
+  }
+
+
+
   .my-flex-cont {
     display: flex;
     flex-flow: row-reverse nowrap;
@@ -233,11 +307,118 @@
   }
 
 
+
+  .el-upload-dragger{
+    width: 146px;
+    height: 146px;
+  }
+
+  @media (max-width: 1367px) {
+    .item {
+      height: 350px;
+    }
+
+    .dialog-kennel-add {
+      width: 70vw;
+    }
+
+    .single-gallery-image {
+      background-size: contain !important;
+      height: 130px;
+    }
+    .rasp{
+      display : none;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .item {
+      height: 350px;
+    }
+
+    .dialog-kennel-add {
+      width: 80vw;
+    }
+
+    .single-gallery-image {
+      background-size: contain !important;
+      height: 120px;
+    }
+    .rasp{
+      display : none;
+    }
+  }
+
+  @media (max-width: 992px) {
+    .item {
+      height: 300px;
+    }
+
+    .dialog-kennel-add {
+      width: 90vw;
+    }
+
+    .single-gallery-image {
+      background-size: contain !important;
+      height: 80px;
+    }
+    .rasp{
+      display : none;
+    }
+
+  }
+
+  @media (max-width: 768px) {
+    .item {
+      height: 100vh;
+    }
+
+    .single-gallery-image {
+      background-size: contain !important;
+      height: 100px;
+    }
+
+    .el-upload-dragger{
+      width: inherit;
+      height: inherit;
+    }
+    .el-upload--picture-card{
+      width: 290px;
+      height: 148px;
+    }
+    .el-upload-list--picture-card .el-upload-list__item{
+      width: 290px;
+      height: 148px;
+      img{
+        height: 100%;
+      }
+    }
+    .rasp{
+      display : none;
+    }
+  }
   @media (max-width: 550px) {
     .listings .card .card-options {
       .options-toggle, .options-button {
         opacity: 1;
       }
     }
+    .rasp{
+      display : none;
+    }
   }
+  @media (max-width: 480px) {
+    .item {
+      height: 100vh;
+    }
+
+    .single-gallery-image {
+      background-size: contain !important;
+      height: 60px;
+    }
+    .rasp{
+      display : none;
+    }
+  }
+
 }

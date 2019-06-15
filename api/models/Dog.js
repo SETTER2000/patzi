@@ -23,9 +23,25 @@ module.exports = {
       maxLength: 50
     },
 
-    fileList: {
-      type: 'ref',
-      description: 'Массив с файлами данных о загруженных файлах.'
+    gender: {
+      type: 'string',
+      description: `Пол собак. В смысле не пол собаки, а конец есть или нет.`,
+      example: 'sire, dam',
+      required: true,
+      minLength: 3,
+      maxLength: 4
+    },
+
+    dateBirth: {
+      type: 'string',
+      required: true,
+      description: 'Дата рождения.'
+    },
+
+
+    nickname: {
+      type: 'string',
+      description: 'Кличка, ласковое имя.'
     },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -41,6 +57,11 @@ module.exports = {
       description: 'Собака может принадлежать только одному питомнику. One to Many'
     },
 
+    images: {
+      collection: 'image',
+      via: 'dog',
+      description: `У собаки, может быть много фотографий. One to Many.`
+    },
 
 
   },

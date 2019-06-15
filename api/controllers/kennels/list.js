@@ -79,7 +79,7 @@ module.exports = {
 
 
 
-    // Рассылаем данные всем подписанным на событие list данной комнаты.
+    // Рассылаем данные всем подписанным на событие list-* данной комнаты.
     await sails.sockets.broadcast('kennel', 'list-kennel', kennels);
 
 

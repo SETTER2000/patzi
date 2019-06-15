@@ -60,15 +60,20 @@ module.exports = {
      * либо информацию о загруженных данных файла.)
      */
     let info = await sails.upload(inputs.file);
-    console.log('IHFO PHOTO: ', info);
+    // console.log('IHFO PHOTO: ', info);
+
     if (!info) {
       throw 'badRequest';
     }
+
+
     info = info[0];
+
+
+
+
     // All done.
     return exits.success(info);
 
   }
-
-
 };

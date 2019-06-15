@@ -31,7 +31,9 @@ module.exports = {
 
 
   fn: async function (inputs) {
+
     let kennel = await Kennel.findOne({id: inputs.id});
+
     if (!kennel) {
       throw 'notFound';
     }

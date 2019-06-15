@@ -140,8 +140,9 @@ module.exports.routes = {
 
   'POST   /api/v1/dogs/create-dog': { action: 'dogs/create-dog', csrf: false },
   'GET    /api/v1/dogs/list': { action: 'dogs/list' },
-
-  'POST   /api/v1/upload/file': { action: 'upload/file' , csrf: false},
+  'GET    /api/v1/dogs/list-sire': { action: 'dogs/list-sire' },
+  'GET    /api/v1/dogs/list-dam': { action: 'dogs/list-dam' },
+  'POST   /api/v1/files/upload': { action: 'files/upload' , csrf: false},
 
   'GET    /api/v1/city/list/:countryId?': { action: 'city/list' },
 

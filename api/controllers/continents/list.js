@@ -65,10 +65,6 @@ module.exports = {
         sort: 'label ASC'
       })
       .eachRecord(async (records)=>{
-
-
-      console.log(records);
-
         ken++;
       });
 

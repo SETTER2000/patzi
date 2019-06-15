@@ -72,7 +72,8 @@
     "Kennel": true,
     "City": true,
     "Country": true,
-    "Continent": true
+    "Continent": true,
+    "Image": true
 
     // …and any others.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

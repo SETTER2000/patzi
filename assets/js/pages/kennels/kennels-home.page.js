@@ -3,88 +3,88 @@ parasails.registerPage('kennels-home', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-    kennels: false,
+    kennels: [],
     citys: [],
     links: [],
-    props: { multiple: true },
+    props: {multiple: true},
     optionsTest: [
       {
-      value: 1,
-      label: 'Asia',
-      children: [{
-        value: 2,
-        label: 'China',
-        children: [
-          { value: 3, label: 'Beijing' },
-          { value: 4, label: 'Shanghai' },
-          { value: 5, label: 'Hangzhou' }
-        ]
-      }, {
-        value: 6,
-        label: 'Japan',
-        children: [
-          { value: 7, label: 'Tokyo' },
-          { value: 8, label: 'Osaka' },
-          { value: 9, label: 'Kyoto' }
-        ]
-      }, {
-        value: 10,
-        label: 'Korea',
-        children: [
-          { value: 11, label: 'Seoul' },
-          { value: 12, label: 'Busan' },
-          { value: 13, label: 'Taegu' }
-        ]
-      }]
-    },
+        value: 1,
+        label: 'Asia',
+        children: [{
+          value: 2,
+          label: 'China',
+          children: [
+            {value: 3, label: 'Beijing'},
+            {value: 4, label: 'Shanghai'},
+            {value: 5, label: 'Hangzhou'}
+          ]
+        }, {
+          value: 6,
+          label: 'Japan',
+          children: [
+            {value: 7, label: 'Tokyo'},
+            {value: 8, label: 'Osaka'},
+            {value: 9, label: 'Kyoto'}
+          ]
+        }, {
+          value: 10,
+          label: 'Korea',
+          children: [
+            {value: 11, label: 'Seoul'},
+            {value: 12, label: 'Busan'},
+            {value: 13, label: 'Taegu'}
+          ]
+        }]
+      },
       {
-      value: 14,
-      label: 'Europe',
-      children: [{
-        value: 15,
-        label: 'France',
-        children: [
-          { value: 16, label: 'Paris' },
-          { value: 17, label: 'Marseille' },
-          { value: 18, label: 'Lyon' }
-        ]
-      }, {
-        value: 19,
-        label: 'UK',
-        children: [
-          { value: 20, label: 'London' },
-          { value: 21, label: 'Birmingham' },
-          { value: 22, label: 'Manchester' }
-        ]
-      }]
-    },
+        value: 14,
+        label: 'Europe',
+        children: [{
+          value: 15,
+          label: 'France',
+          children: [
+            {value: 16, label: 'Paris'},
+            {value: 17, label: 'Marseille'},
+            {value: 18, label: 'Lyon'}
+          ]
+        }, {
+          value: 19,
+          label: 'UK',
+          children: [
+            {value: 20, label: 'London'},
+            {value: 21, label: 'Birmingham'},
+            {value: 22, label: 'Manchester'}
+          ]
+        }]
+      },
       {
-      value: 23,
-      label: 'North America',
-      children: [{
-        value: 24,
-        label: 'US',
-        children: [
-          { value: 25, label: 'New York' },
-          { value: 26, label: 'Los Angeles' },
-          { value: 27, label: 'Washington' }
-        ]
-      }, {
-        value: 28,
-        label: 'Canada',
-        children: [
-          { value: 29, label: 'Toronto' },
-          { value: 30, label: 'Montreal' },
-          { value: 31, label: 'Ottawa' }
-        ]
-      }]
-    }
+        value: 23,
+        label: 'North America',
+        children: [{
+          value: 24,
+          label: 'US',
+          children: [
+            {value: 25, label: 'New York'},
+            {value: 26, label: 'Los Angeles'},
+            {value: 27, label: 'Washington'}
+          ]
+        }, {
+          value: 28,
+          label: 'Canada',
+          children: [
+            {value: 29, label: 'Toronto'},
+            {value: 30, label: 'Montreal'},
+            {value: 31, label: 'Ottawa'}
+          ]
+        }]
+      }
     ],
     cityId: undefined,
     state1: '',
     countryId: 0,
-    url:"https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg",
-    fit:'cover',
+    url: "https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg",
+    fit: 'cover',
     state2: '',
     options: [],
     continents: [],
@@ -146,7 +146,7 @@ parasails.registerPage('kennels-home', {
         {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
       ],
       subtitle: [
-        { message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
+        {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
         {min: 10, max: 100, message: 'Length should be 10 to 100', trigger: 'blur'}
       ]
     },
@@ -224,9 +224,9 @@ parasails.registerPage('kennels-home', {
   },
 
   computed: {
-    langSearch:{
-      get:function () {
-      return  (this.preferredLocale === 'ru') ? 'На русском поиск' : 'English search';
+    langSearch: {
+      get: function () {
+        return (this.preferredLocale === 'ru') ? 'На русском поиск' : 'English search';
       }
     },
     i19p: {
@@ -301,6 +301,7 @@ parasails.registerPage('kennels-home', {
 
 
     async submitForm(formName) {
+      console.log(formName);
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.addKennel();
@@ -340,7 +341,7 @@ parasails.registerPage('kennels-home', {
       this.text = 'Вы не правильно указали город. Город не будет сохранён. Продолжить?';
     },
 
-    async addKennel() {
+    addKennel: async function () {
       let data = {
         file: this.ruleForm.file,
         label: this.ruleForm.label,
@@ -361,7 +362,8 @@ parasails.registerPage('kennels-home', {
       await io.socket.post('/api/v1/kennels/create-kennel', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-            (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+            (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
         console.log('Сервер ответил-2 кодом ' + jwRes.statusCode + ' и данными: ', data);
         this.centerDialogAdded = false;
@@ -482,7 +484,7 @@ parasails.registerPage('kennels-home', {
 
 
     beforeAvatarUpload(file) {
-      const isIMG = (file.type === 'image/jpeg') || (file.type === 'image/png')|| (file.type === 'image/svg+xml');
+      const isIMG = (file.type === 'image/jpeg') || (file.type === 'image/png') || (file.type === 'image/svg+xml');
       const isLt1M = file.size / 1024 / 1024 < 0.25;
       if (!isIMG) {
         this.$message.error('Logo picture must be JPG, PNG or SVG format!');
@@ -492,9 +494,6 @@ parasails.registerPage('kennels-home', {
       }
       return isIMG && isLt1M;
     },
-
-
-
 
 
     async cityList() {
@@ -539,8 +538,8 @@ parasails.registerPage('kennels-home', {
 
     createFilter(queryString) {
       return (link) => {
-        return  (this.me.preferredLocale=== 'ru') ?  (link.labelRu.toLowerCase().indexOf(queryString.toLowerCase()) === 0) :
-         (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        return (this.me.preferredLocale === 'ru') ? (link.labelRu.toLowerCase().indexOf(queryString.toLowerCase()) === 0) :
+          (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
 
@@ -555,8 +554,6 @@ parasails.registerPage('kennels-home', {
     goBack() {
       console.log('go back');
     },
-
-
 
 
 

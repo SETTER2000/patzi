@@ -1,16 +1,17 @@
 module.exports = {
 
 
-  friendlyName: 'List',
+  friendlyName: 'List dam',
 
 
   description: 'Обрабатывает сокет подключение клиента и отдаёт весь список объектов коллекции.',
 
 
 
+
   exits: {
     success: {
-      anyData: 'Вы подключились к комнате dog и слушаете событие list'
+      anyData: 'Вы подключились к комнате dog и слушаете событие list-dam'
     },
     notFound: {
       description: 'There is no such object with such ID.',
@@ -32,14 +33,10 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-
-    // Бибилиотека Node.js
-    const url = require('url');
     const moment = require('moment');
 
     // Устанавливаем соответствующую локаль для даты, установленую пользователем.
     moment.locale(this.req.me.preferredLocale);
-
     // Формат отображаемой даты
     let format = 'LL HH:mm';
 
@@ -47,29 +44,17 @@ module.exports = {
     // Подключить сокет, который сделал запрос, к комнате «dog».
     await sails.sockets.join(req, 'dog');
 
-
-    // Выбираем весь список объектов данной коллекции.
-    let dogs = await Dog.find()
-      .populate('kennel')
-      .populate('images');
-
-    _.each(dogs, (dog) => {
-      // Устанавливаем свойство источника изображения
-      // Первый аргумент, базовый url
-      //  dog.imageSrc = dog.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/dogs/${dog.id}`) : '';
-
-      // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
-      dog.createdAtFormat = moment(dog.createdAt).format(format);
-
-      // Столбец: Дата регистрации. Формат фильтра.
-      dog.createdAtFormatFilter = moment(dog.createdAt).format(format);
-      // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
-      // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
-      dog.groups = _.pluck(dog.groups, 'id'); // friendIds: [id,id,id...]
-
+    // Выбираем всех собак согласно гендорному признаку
+    let dams = await Dog.find({gender: 'dam'}).populate('kennel').populate('images');
+    // Определяем расположение названия питомника относительно имя собаки
+    // и формируем динамически новое свойство value для элемента select
+    _.each(dams, (dam) => {
+      dam.value = (dam.kennel.rightName) ? `${dam.kennel.label} ${dam.label}` :
+        `${dam.label} ${dam.kennel.label}`;
     });
 
-    await sails.sockets.broadcast('dog', 'list-dog', dogs);
+    await sails.sockets.broadcast('dog', 'list-dam', dams);
+
 
     // Respond with view.
     return exits.success();

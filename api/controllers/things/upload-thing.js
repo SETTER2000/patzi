@@ -49,7 +49,8 @@ module.exports = {
     console.log(inputs);
 
     /**
-     * Принимает мета данные загружаемого файла
+     * * Функция uploadOne возвращает объект UploadedFileMetadata
+     * с данными о загрузке.
      * UploadedFileMetadata {
           fd:  // fd - дескриптор файла
            'D:\\__PROJECTS\\Sails\\patzi\\.tmp\\uploads\\46ca9ce1-f7d5-44c9-8f8a-85dd7f3bcc89.JPG',

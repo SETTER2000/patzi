@@ -1583,7 +1583,7 @@ module.exports.bootstrap = async function () {
   let ar = [];
   for (let y = 0; y < 20; y++) {
     let nm = await sails.helpers.strings.random('alphanumeric', 6);
-    ar.push({
+    await ar.push({
       emailAddress: `${nm}@mail.ru`,
       fullName: nm,
       kennelAddress: nm,

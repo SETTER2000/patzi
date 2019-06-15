@@ -28,7 +28,6 @@ module.exports = {
       .populate('whoCreate')
       .populate('users');
 
-    console.log('kennels: ' , kennels);
     // Respond with view.
     return exits.success({
       kennels

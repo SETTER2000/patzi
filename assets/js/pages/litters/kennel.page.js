@@ -4,14 +4,27 @@ parasails.registerPage('kennel', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     litters: [],
+    dams: [],
+    sires: [],
+    fileList: [],
     dialogImageUrl: '',
+    centerDialogAdded: false,
     confirmDeleteModalOpen: false,
     dialogVisible: false,
     selectedLitter: undefined,
     imageUrl: '',
     sire: '',
     dam: '',
-
+    sizeLess: 500,
+    innerVisible: false,
+    url: 'https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg',
+    fit: 'cover',
+    ruleForm: {
+      sire:'',
+      dam:'',
+      label:''
+    },
+    rules: {},
     // Виртуальная часть URL
     virtualPageSlug: '',
 
@@ -73,7 +86,28 @@ parasails.registerPage('kennel', {
     cloudError: '',
 
     borrowFormSuccess: false,
-    scheduleReturnFormSuccess: false
+    scheduleReturnFormSuccess: false,
+
+    dic: [
+      ['en', {
+        warnNoKennel: `At the moment there is no nursery in the database.
+         You should create at least one kennel to start with to add a dog.`,
+        text400Err: 'Error. Could not create! ',
+        text500Err: 'Server Error! Unable to create. ',
+        text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
+        success: 'Congratulations! Object successfully created. ',
+        selectGender: 'Please select a dog gender.',
+      }],
+      ['ru', {
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
+        text400Err: 'Ошибка. Не смог создать!',
+        text500Err: 'Ошибка сервера! Невозможно создать.',
+        text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
+        success: 'Поздравляем! Объект успешно создан.',
+        selectGender: 'Пожалуйста выберите пол собаки.',
+      }]
+    ],
   },
 
 
@@ -104,11 +138,25 @@ parasails.registerPage('kennel', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
+    // Кобели
+    this.sireList();
 
+    // Суки
+    this.damList();
   },
 
   mounted: async function () {
     this.$find('[data-toggle="tooltip"]').tooltip();
+  },
+
+
+  computed: {
+    i19p: {
+      get: function () {
+        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+        return new Map(this.dic).get(this.me.preferredLocale);
+      }
+    },
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -150,11 +198,18 @@ parasails.registerPage('kennel', {
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
+
+      this.me.isSuperAdmin ?  this.centerDialogAdded = true : alert('Не достаточно прав.');
+      // this.me.isSuperAdmin ? this.goto('/litters/new') : alert('Не достаточно прав.');
       // this.uploadLitterModalOpen = true;
-      this.me.isSuperAdmin ? this.goto('/litters/new') : alert('Не достаточно прав.');
+
       // this.selectedLitter = _.find(this.litters, {id: litterId});
     },
-
+    // Если массив kennel пустой, выводим сообщение.
+    // clickAddButton() {
+    //   this.warning = this.i19p.warnNoKennel;
+    //   (this.kennels) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
+    // },
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "ShowPhoto <modal>" с <ajax-form> для загрузки фото
     clickShowPhoto: function () {
@@ -251,7 +306,7 @@ parasails.registerPage('kennel', {
      * Т.е. как только форма загрузки файла на сервере отработала без ошибок
      * эта функция получает результат и должна вставить новые данные на страницу.
      */
-    submittedUploadLitterForm:  function (result) {
+    submittedUploadLitterForm: function (result) {
       console.log('this.uploadFormData.born:', this.uploadFormData.born);
       // Добавлем новые данные в уже имеющийся массив litters
       console.log(this.uploadFormData);
@@ -405,7 +460,158 @@ parasails.registerPage('kennel', {
     clickDelete(id) {
       this.confirmDeleteModalOpen = true;
       this.selectedThing = _.find(this.things, {id: id});
-    }
+    },
+
+
+    // Выбираем всех кобелей
+    async sireList() {
+      await io.socket.get(`/api/v1/dogs/list-sire`, function gotResponse(body, response) {
+        console.log('Сервис Dogs sire ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-sire', (data) => {
+        console.log('sires: ' , data);
+        this.sires = data;
+      });
+    },
+    // Выбираем всех сук
+    async damList() {
+      await io.socket.get(`/api/v1/dogs/list-dam`, function gotResponse(body, response) {
+        console.log('Сервис Dogs dam ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-dam', (data) => {
+        console.log('dams: ' , data);
+        this.dams = data;
+      });
+    },
+
+    /* Авто поиск по собакам. Кобели. */
+    querySearchSires(queryString, cb) {
+      let links = this.sires;
+      console.log('LINKS querySearchSires: ', links);
+      let results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      cb(results);
+    },
+
+    /* Авто поиск по собакам. Суки. */
+    querySearchDams(queryString, cb) {
+      let links = this.dams;
+      // console.log('LINKS querySearchDams: ', links);
+      let results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      cb(results);
+    },
+
+
+    createFilter: function (queryString) {
+      return (link) => {
+        return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1);
+      };
+    },
+
+    async handleSelect(e) {
+      this.dogId = (_.isNumber(e.id)) ? e.id : undefined;
+    },
+
+
+    async submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.addLitter();
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+
+
+    async addLitter() {
+      let data = {
+        fileList: this.fileList,
+        label: this.ruleForm.label,
+        dateBirth: JSON.stringify(this.ruleForm.dateBirth),
+        gender: this.ruleForm.gender,
+        kennel: this.ruleForm.kennel,
+        nickname: this.ruleForm.nickname,
+
+        site: this.ruleForm.site,
+        registerNumber: this.ruleForm.registerNumber,
+        subtitle: this.ruleForm.subtitle,
+        yourKennel: this.ruleForm.yourKennel,
+        address: this.ruleForm.address,
+        phones: this.ruleForm.phones
+      };
+
+      await io.socket.post('/api/v1/dogs/create-dog', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+
+        this.centerDialogAdded = false;
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          this.ruleForm.file = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.phones[0].fullName = '';
+          this.getList();
+        }
+      });
+    },
+
+
+
+    mesSuccess(text = '') {
+      this.$notify({
+        title: 'Success',
+        message: text,
+        offset: 100,
+        type: 'success'
+      });
+    },
+
+
+    mesWarning(text = '') {
+      this.$notify({
+        title: 'Warning',
+        message: text,
+        offset: 100,
+        type: 'warning'
+      });
+    },
+
+
+    mesInfo(text = '') {
+      this.$notify.info({
+        title: 'Info',
+        message: text,
+        offset: 100,
+      });
+    },
+
+
+    mesError(text = '') {
+      this.$notify.error({
+        title: 'Error',
+        message: text,
+        offset: 100,
+      });
+    },
+
+
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+      this.fileList = [];
+      this.ruleForm.imageUrl = '';
+    },
+
+
+
+
+
+
 
   }
 });
