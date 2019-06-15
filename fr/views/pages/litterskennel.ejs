@@ -1,5 +1,161 @@
 <div id="kennel" class="content" v-cloak>
 
+  <% /* Диалоговое окно. Добавить Помёт NEW. */ %>
+  <el-dialog
+    title="<%= __('Add your Litter') %>"
+    :visible.sync="centerDialogAdded"
+    custom-class="dialog-kennel-add"
+    center>
+
+    <el-dialog
+      width="80%"
+      top="3vh"
+      title="Continents 6"
+      :visible.sync="innerVisible"
+      append-to-body>
+      <div class="justify-content-center">
+        <el-image
+          style="width: inherit; height: auto"
+          :src=url
+          :fit="fit"></el-image>
+      </div>
+    </el-dialog>
+
+    <div class="container">
+      <div v-if="ruleForm.imageUrl" class="col">
+        <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
+      </div>
+      <!--<img src="https://d3a1wbnh2r1l7y.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" class="img-fluid" alt="Responsive image">-->
+      <div class="form-group py-2">
+        <h5><%= __('Multiple upload photos') %></h5>
+        <label v-if="!ruleForm.imageUrl">
+          <%= __('Make albums, dividing by event or by time group of photos. Describe events, tell about the photo, thereby structuring your memories and events.') %>
+        </label>
+        <hr>
+        <div class="photo-uploader">
+          <div class="row">
+            <div class="col-md-12 ">
+              <el-upload
+                action="/api/v1/files/upload"
+                drag
+                multiple
+                list-type="picture-card"
+                :file-list="fileList"
+                :on-preview="handlePictureCardPreview"
+                :on-remove="handleRemove"
+                :thumbnail-mode="true"
+                :before-upload="beforeAvatarUpload"
+              >
+                <i class="el-icon-plus"></i>
+                <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
+                  {{sizeLess}}<%= __('Kb') %></div>
+              </el-upload>
+              <br>
+              <el-dialog :visible.sync="dialogVisible">
+                <img width="100%" :src="dialogImageUrl" alt="">
+              </el-dialog>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <el-row :gutter="22">
+      <el-col :span="1"></el-col>
+      <el-col :span="23">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
+                 label-width="120px" class="demo-ruleForm">
+          <% /* Дата помёта NEW */ %>
+          <el-form-item label="<%= __('Date of litter') %>">
+            <el-form-item prop="born">
+              <el-date-picker
+                v-model="ruleForm.born"
+                type="datetime"
+                placeholder="<%= __('Select date and time') %>"
+                default-time="12:00:00">
+              </el-date-picker>
+            </el-form-item>
+          </el-form-item>
+          <% /* Буква помёта NEW */ %>
+          <el-form-item label="<%= __('Litter letter') %>">
+            <el-form-item prop="born">
+              <el-input
+                size="medium"
+                placeholder="A"
+                v-model="ruleForm.label">
+              </el-input>
+            </el-form-item>
+          </el-form-item>
+
+
+          <!--<div class="form-group">-->
+            <!--<label><%= __('Litter letter') %></label>-->
+            <!--<input class="form-control"-->
+                   <!--:class="(formErrors.label && !uploadFormData.label) ? 'is-invalid' : ''"-->
+                   <!--type="text"-->
+                   <!--id="validationServerUsername"-->
+                   <!--aria-describedby="inputGroupPrepend3"-->
+                   <!--v-model.trim="uploadFormData.label"-->
+                   <!--placeholder="A">-->
+            <!--<small v-if="formErrors.label && !uploadFormData.label" class="text-danger ">-->
+              <!--<%= __('Please indicate the litter letter.') %>-->
+            <!--</small>-->
+          <!--</div>-->
+
+          <% /* Кобель Sire NEW */ %>
+          <template v-if="sires">
+            <el-form-item label="<%= __('Sire') %>" prop="sire">
+              <el-autocomplete
+                popper-class="my-autocomplete"
+                v-model="ruleForm.sire"
+                :fetch-suggestions="querySearchSires"
+                placeholder="<%= __("Start typing the dog's name") %>"
+                :trigger-on-focus="false"
+                @select="handleSelect"
+                style="width: 58%;"
+              ><i slot="prefix" class="el-autocomplete__icon el-icon-male"></i>
+                <template slot-scope="{ item }">
+                  <span class="value">{{ item.value }}</span>
+                  <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
+                </template>
+              </el-autocomplete>
+            </el-form-item>
+          </template>
+          <% /* Сука Dam NEW */ %>
+          <template v-if="dams">
+            <el-form-item label="<%= __('Dam') %>" prop="dam">
+              <el-autocomplete
+                popper-class="my-autocomplete"
+                v-model="ruleForm.dam"
+                :fetch-suggestions="querySearchDams"
+                placeholder="<%= __("Start typing the dog's name") %>"
+                :trigger-on-focus="false"
+                @select="handleSelect"
+                style="width: 58%;"
+              ><i slot="prefix" class="el-autocomplete__icon el-icon-female"></i>
+                <template slot-scope="{ item }">
+                  <span class="value">{{ item.value }}</span>
+                  <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
+                </template>
+              </el-autocomplete>
+            </el-form-item>
+          </template>
+          <% /* Кнопки управления */ %>
+          <div class="my-3 pt-4">
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+              <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+              <el-button @click="centerDialogAdded = false"><%= __('Cancel') %></el-button>
+            </el-form-item>
+          </div>
+        </el-form>
+      </el-col>
+    </el-row>
+    <span slot="footer" class="dialog-footer">
+  </span>
+  </el-dialog>
+
+
   <!-- start banner Area -->
   <section class="banner-area relative">
     <div class="container">
@@ -40,18 +196,18 @@
           <%= __('Litter') %>: {{litter.label}}
         </div>
         <div class="card-body">
-          <h4 class="card-title">  {{litter.born}}</h4>
+          <h4 class="card-title"> {{litter.born}}</h4>
           <p class="card-text">
             <a :href="litter.detail">
 
-              <img :src="litter.imageSrc" alt="litter.title" class="img-fluid gallery" >
+              <img :src="litter.imageSrc" alt="litter.title" class="img-fluid gallery">
               <div v-if="me.isSuperAdmin" class="flx">
-               <!-- <div class="fixButton">
-                  <a class="p-button" href="#"
-                     @click="clickEdit(litter.id)">
-                    <i class="el-icon-edit"></i>
-                  </a>
-                </div>-->
+                <!-- <div class="fixButton">
+                   <a class="p-button" href="#"
+                      @click="clickEdit(litter.id)">
+                     <i class="el-icon-edit"></i>
+                   </a>
+                 </div>-->
                 <div class="fixButton">
                   <a class="p-button" v-if="me.isSuperAdmin" href="#"
                      @click="clickDeleteLitter(litter.id)">
@@ -62,15 +218,17 @@
             </a>
 
           </p>
-          <el-button type="danger" plain>{{litter.dam}}</el-button> <i class="ti-heart mx-1" style="font-size: 1.2rem; color: red"></i> <el-button type="danger" plain>{{litter.sire}}</el-button>
+          <el-button type="danger" plain>{{litter.dam}}</el-button>
+          <i class="ti-heart mx-1" style="font-size: 1.2rem; color: red"></i>
+          <el-button type="danger" plain>{{litter.sire}}</el-button>
           <!--<a href="#" class="btn btn-primary">Sasquehanna (FCI) Ella</a>  <a href="#" class="btn btn-primary">Olegro Katrin Naruto</a>-->
         </div>
-     <!--   <div class="card-footer text-muted">
-          2 days ago
-        </div>-->
+        <!--   <div class="card-footer text-muted">
+             2 days ago
+           </div>-->
       </div>
 
-  <!--    <div class="listings" v-if="litters.length > 0">
+      <!--    <div class="listings" v-if="litters.length > 0">
         <div class="card" :key="'litter'+litter.id"
              :class="[litter.owner.id === me.id ? 'mine' : '', litter.unavailable ? 'not-available' : '']"
              v-for="(litter, index) in litters"
@@ -131,7 +289,7 @@
 
     </div>
   </section>
-  <!-- End Work Area Area -->
+
   <% /* "Upload Litter" Modal */ %>
   <modal v-if="virtualPageSlug==='new'" v-cloak key="new" @close="closeUploadLitterModal()">
     <div class="modal-header">
@@ -177,7 +335,7 @@
             </div>
           </div>
         </div>
-        <%/* Дата и время рождения */%>
+        <% /* Дата и время рождения */ %>
         <div class="form-group">
           <label><%= __('Date of litter') %></label>
 
@@ -189,8 +347,21 @@
                       validation-error-message="<%= __('Please set the date when puppies were born.') %>."
           >
           </datepicker>
+
+          <!--<el-form-item label="<%= __('Date') %>" required>-->
+          <!--<el-col :span="11">-->
+          <!--<el-form-item prop="dateCreate">-->
+          <!--<el-date-picker-->
+          <!--type="date"-->
+          <!--placeholder="<%= __('Registration date') %>"-->
+          <!--v-model="uploadFormData.born"-->
+          <!--style="width: 100%;"-->
+          <!--&gt;</el-date-picker>-->
+          <!--</el-form-item>-->
+          <!--</el-col>-->
+          <!--</el-form-item>-->
         </div>
-        <%/*Буква помёта*/%>
+        <% /*Буква помёта*/ %>
         <div class="form-group">
           <label><%= __('Litter letter') %></label>
           <input class="form-control"
@@ -204,8 +375,9 @@
             <%= __('Please indicate the litter letter.') %>
           </small>
         </div>
-        <%/* Сука Dam*/%>
-        <div class="form-group">
+
+        <% /* Сука Dam*/ %>
+        <!-- <div class="form-group">
           <label><%= __('Dam') %></label>
           <input class="form-control"
                  :class="formErrors.dam ? 'is-invalid' : ''"
@@ -217,10 +389,9 @@
           <small v-if="formErrors.dam" class="text-danger ">
             <%= __('Please indicate the litter letter.') %>
           </small>
-        </div>
-
-        <%/* Сука Dam*/%>
-        <div class="form-group">
+        </div>-->
+        <% /* Кобель Sire*/ %>
+        <!--       <div class="form-group">
           <label><%= __('Sire') %></label>
           <input class="form-control"
                  :class="formErrors.sire ? 'is-invalid' : ''"
@@ -232,9 +403,9 @@
           <small v-if="formErrors.sire" class="text-danger ">
             <%= __('Please indicate the litter letter.') %>
           </small>
-        </div>
-        <%/*Пол*/%>
-  <!--      <div class="form-group row">
+        </div>-->
+        <% /*Пол*/ %>
+        <!--      <div class="form-group row">
           <div class="col-sm-6">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -279,9 +450,8 @@
             </small>
           </div>
         </div>-->
-
-        <%/*Наша предварительная цена*/%>
-     <!--   <div class="form-group row">
+        <% /*Наша предварительная цена*/ %>
+        <!--   <div class="form-group row">
           <div class="col-sm-6">
             <div class="form-group mt-4">
               <label><%= __('Our preliminary price') %></label>
@@ -294,7 +464,7 @@
               </div>
             </div>
           </div>
-          <%/*Валюта*/%>
+          <% /*Валюта*/ %>
           <div class="col-sm-6">
             <div class="form-group mt-4">
               <label><%= __('Currency') %></label>
@@ -315,8 +485,7 @@
           </div>
         </div>-->
 
-
-        <%/*Краткое описание*/%>
+        <% /*Краткое описание*/ %>
         <div class="form-group">
           <label><%= __('Sub Title') %></label>
           <textarea class="form-control"
@@ -349,7 +518,7 @@
 
   <% /* "Borrow litter" modal */ %>
   <modal v-if="borrowLitterModalOpen && selectedLitter" v-cloak key="borrow" @close="closeBorrowLitterModal()">
-    <%/*Зарезервировать*/%>
+    <% /*Зарезервировать*/ %>
     <div class="modal-header">
       <h5 class="modal-title"><%= __('Make a reservation') %> {{selectedLitter.label || 'item'}}</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -367,7 +536,7 @@
                  :src="selectedLitter.imageSrc"/>
           </div>
         </div>
-        <%/*Наша предварительная цена*/%>
+        <% /*Наша предварительная цена*/ %>
         <div class="form-group row mt-4">
           <label for="staticEmail" class="col-sm-5 col-form-label"><%= __('Our preliminary price') %></label>
           <div class="col-sm-1">
@@ -456,7 +625,7 @@
     </ajax-form>
   </modal>
 
-  <% /* For virtual pages */%>
+  <% /* For virtual pages */ %>
   <router-view></router-view>
 </div>
 <%- /* Exposez server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
