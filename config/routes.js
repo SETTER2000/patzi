@@ -42,7 +42,7 @@ module.exports.routes = {
 
 
   'GET /litters/litter/:id': {action: 'litters/view-litter'},
-  'GET /litters/:virtualPageSlug?': {action: 'litters/view-kennel'},
+  'GET /litters/:virtualPageSlug?': {action: 'litters/view-litters-home'},
 
   'GET /contact': {action: 'view-contact', locals: {currentSection: 'contact'}},
   'GET /about': {action: 'view-about', locals: {currentSection: 'about'}},
@@ -104,6 +104,7 @@ module.exports.routes = {
   'GET     /api/v1/litters/:id': {action: 'litters/download-photo'},
   'PUT     /api/v1/litters/:id/puppy': {action: 'litters/reserve-puppy'},
   'POST    /litters/files': {action: 'litters/upload-files', csrf: false},
+  'POST    /api/v1/litters/create-litter': { action: 'litters/create-litter', csrf: false },
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},
   'GET     /api/v1/things/:id': {action: 'things/download-photo'},

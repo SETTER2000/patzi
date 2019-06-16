@@ -377,7 +377,6 @@
 	"Add litter": "Добавить помёт",
 	"Dam": "Сука",
 	"Kb": "Кб",
-
 	"jpg/png files with a size less than ": "файлы jpg / png размером менее",
 	"Start typing the dog's name": "Начните набирать имя собаки",
 	"Image Gallery": "Галерея",
@@ -455,12 +454,18 @@
 	"Breeder": "Заводчик",
 	"Parents": "Родители",
 	"Club": "Клуб",
+	"Dog's registration number": "Регистрационный номер собаки",
+	"Beautiful star litter!": "Прекрасный звёздный помёт!",
 	"User": "Пользователь",
+	"RKF": "РКФ",
+	"Federation": "Федерация",
+	"Description": "Описание",
 	"Add dogs": "Добавить собак",
 	"Edit dogs": "Редактировать собак",
 	"Edit kennel": "Редактировать питомник",
 	"Add 3 dogs": "Добавить 3 собак",
 	"Edit 3 dogs": "Редактировать 3 собаки",
 	"register": "регистр",
-	"Dog registration number": "Регистрационный номер собаки"
+	"Dog registration number": "Регистрационный номер собаки",
+	"Add your Litter": "Добавьте свой питомник"
 }

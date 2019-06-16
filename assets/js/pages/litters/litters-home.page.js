@@ -7,9 +7,11 @@ parasails.registerPage('kennel', {
     dams: [],
     sires: [],
     fileList: [],
+    warning: '',
     dialogImageUrl: '',
     centerDialogAdded: false,
     confirmDeleteModalOpen: false,
+    centerDialogVisibleWarnings:false,
     dialogVisible: false,
     selectedLitter: undefined,
     imageUrl: '',
@@ -90,6 +92,7 @@ parasails.registerPage('kennel', {
 
     dic: [
       ['en', {
+        warnNoDogs: `There is no possibility to create a litter, while at least one pair of dogs is missing.`,
         warnNoKennel: `At the moment there is no nursery in the database.
          You should create at least one kennel to start with to add a dog.`,
         text400Err: 'Error. Could not create! ',
@@ -99,6 +102,7 @@ parasails.registerPage('kennel', {
         selectGender: 'Please select a dog gender.',
       }],
       ['ru', {
+        warnNoDogs: `Нет возможности создать помёт, пока отсутствует хотя бы одна пара собак.`,
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         text400Err: 'Ошибка. Не смог создать!',
@@ -198,8 +202,10 @@ parasails.registerPage('kennel', {
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
-
-      this.me.isSuperAdmin ?  this.centerDialogAdded = true : alert('Не достаточно прав.');
+      //
+      // this.me.isSuperAdmin ?  this.centerDialogAdded = true : alert('Не достаточно прав.');
+      this.warning = this.i19p.warnNoDogs;
+      (this.sires.length > 0 && this.dam.length > 0 ) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
       // this.me.isSuperAdmin ? this.goto('/litters/new') : alert('Не достаточно прав.');
       // this.uploadLitterModalOpen = true;
 
@@ -527,23 +533,21 @@ parasails.registerPage('kennel', {
 
 
     async addLitter() {
+      // ruleForm: {
+      //   sire:'',
+      //     dam:'',
+      //     label:''
+      // },
       let data = {
         fileList: this.fileList,
-        label: this.ruleForm.label,
-        dateBirth: JSON.stringify(this.ruleForm.dateBirth),
-        gender: this.ruleForm.gender,
-        kennel: this.ruleForm.kennel,
-        nickname: this.ruleForm.nickname,
-
-        site: this.ruleForm.site,
-        registerNumber: this.ruleForm.registerNumber,
-        subtitle: this.ruleForm.subtitle,
-        yourKennel: this.ruleForm.yourKennel,
-        address: this.ruleForm.address,
-        phones: this.ruleForm.phones
+        letter: this.ruleForm.letter,
+        dam: this.ruleForm.dam,
+        sire: this.ruleForm.sire,
+        born: JSON.stringify(this.ruleForm.born),
+        description: this.ruleForm.description,
       };
 
-      await io.socket.post('/api/v1/dogs/create-dog', data, (data, jwRes) => {
+      await io.socket.post('/api/v1/litters/create-litter', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
@@ -551,6 +555,7 @@ parasails.registerPage('kennel', {
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
         this.centerDialogAdded = false;
+
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           this.ruleForm.file = [];
@@ -608,7 +613,9 @@ parasails.registerPage('kennel', {
     },
 
 
-
+    goTo(path) {
+      window.location = `/${path}`;
+    },
 
 
 

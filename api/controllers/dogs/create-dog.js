@@ -117,7 +117,7 @@ module.exports = {
       throw (req.me.preferredLocale === 'ru') ? 'dogAlreadyInUseRU' : 'dogAlreadyInUse';
     }
 
-
+    // Создаём собаку
     let newDog = await Dog.create({
       kennel: inputs.kennel,
       gender: inputs.gender,
@@ -138,7 +138,7 @@ module.exports = {
     }).fetch();
 
 
-    // Рассылаем данные всем подписанным на событие list данной комнаты.
+    // Рассылаем данные всем подписанным на событие list-* данной комнаты.
     await sails.sockets.broadcast('dog', 'list-dog');
 
     return exits.success();

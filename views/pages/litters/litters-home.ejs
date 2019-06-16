@@ -1,4 +1,19 @@
 <div id="kennel" class="content" v-cloak>
+  <% /* Диалоговое окно. Предупреждение | Warning. */ %>
+  <el-dialog
+    title="<%= __('Warning') %>"
+    :visible.sync="centerDialogVisibleWarnings"
+    width="45%"
+    style="margin-top: 17vh"
+    center>
+    <p class="text-center">{{warning}}</p>
+
+
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisibleWarnings = false"><%= __('Close') %></el-button>
+      <el-button type="success" @click="goTo('dogs')"><%= __('Add dog') %></el-button>
+  </span>
+  </el-dialog>
 
   <% /* Диалоговое окно. Добавить Помёт NEW. */ %>
   <el-dialog
@@ -76,30 +91,32 @@
               </el-date-picker>
             </el-form-item>
           </el-form-item>
+
+
           <% /* Буква помёта NEW */ %>
           <el-form-item label="<%= __('Litter letter') %>">
-            <el-form-item prop="born">
+            <el-form-item prop="letter">
               <el-input
                 size="medium"
                 placeholder="A"
-                v-model="ruleForm.label">
+                v-model="ruleForm.letter">
               </el-input>
             </el-form-item>
           </el-form-item>
 
 
           <!--<div class="form-group">-->
-            <!--<label><%= __('Litter letter') %></label>-->
-            <!--<input class="form-control"-->
-                   <!--:class="(formErrors.label && !uploadFormData.label) ? 'is-invalid' : ''"-->
-                   <!--type="text"-->
-                   <!--id="validationServerUsername"-->
-                   <!--aria-describedby="inputGroupPrepend3"-->
-                   <!--v-model.trim="uploadFormData.label"-->
-                   <!--placeholder="A">-->
-            <!--<small v-if="formErrors.label && !uploadFormData.label" class="text-danger ">-->
-              <!--<%= __('Please indicate the litter letter.') %>-->
-            <!--</small>-->
+          <!--<label><%= __('Litter letter') %></label>-->
+          <!--<input class="form-control"-->
+          <!--:class="(formErrors.label && !uploadFormData.label) ? 'is-invalid' : ''"-->
+          <!--type="text"-->
+          <!--id="validationServerUsername"-->
+          <!--aria-describedby="inputGroupPrepend3"-->
+          <!--v-model.trim="uploadFormData.label"-->
+          <!--placeholder="A">-->
+          <!--<small v-if="formErrors.label && !uploadFormData.label" class="text-danger ">-->
+          <!--<%= __('Please indicate the litter letter.') %>-->
+          <!--</small>-->
           <!--</div>-->
 
           <% /* Кобель Sire NEW */ %>
@@ -140,6 +157,21 @@
               </el-autocomplete>
             </el-form-item>
           </template>
+
+          <% /* Описание помёта NEW */ %>
+          <template >
+            <el-form-item label="<%= __('Description') %>" prop="description">
+              <el-input
+                type="textarea"
+                placeholder="<%= __('Beautiful star litter!') %>"
+                v-model="ruleForm.description"
+                maxlength="300"
+                show-word-limit
+              >
+              </el-input>
+            </el-form-item>
+          </template>
+
           <% /* Кнопки управления */ %>
           <div class="my-3 pt-4">
             <el-form-item>

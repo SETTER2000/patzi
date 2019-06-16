@@ -74,18 +74,23 @@ parasails.registerPage('dogs-home', {
         {min: 10, max: 100, message: 'Length should be 10 to 100', trigger: 'blur'}
       ]
     },
+    resetFederation:[{
+      key: 1,
+      value: '',
+      registerNumber:''
+    }],
     ruleForm: {
       file: undefined,
-      phones: [{
+      federations:[{
         key: 1,
-        value: '',
-        fullName: '',
+        value: 'FCI',
+        registerNumber:''
       }],
       sire:'',
       dam:'',
       gender: '',
       label: '',
-      website: '',
+      federation: '1',
       imageUrl: '',
       previewImageSrc: '',
       continent: null,
@@ -97,6 +102,8 @@ parasails.registerPage('dogs-home', {
       subtitle: ''
     },
     fits: 'cover',
+    select:'',
+    labelPosition:'top',
     items: [
       {name: 'Poale Ell Adam', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
       {name: 'Poale Ell Bell', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
@@ -256,17 +263,13 @@ parasails.registerPage('dogs-home', {
       this.fileList = fileList;
     },
 
-    addDomain() {
-      this.ruleForm.phones.push({
-        key: Date.now(),
-        value: ''
-      });
-    },
+
 
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.fileList = [];
       this.ruleForm.imageUrl = '';
+      this.ruleForm.federations = this.resetFederation;
     },
 
 
@@ -290,6 +293,7 @@ parasails.registerPage('dogs-home', {
         gender: this.ruleForm.gender,
         kennel: this.ruleForm.kennel,
         nickname: this.ruleForm.nickname,
+        federation: this.ruleForm.federation,
 
         site: this.ruleForm.site,
         registerNumber: this.ruleForm.registerNumber,
@@ -311,7 +315,7 @@ parasails.registerPage('dogs-home', {
           this.resetForm('ruleForm');
           this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
-          this.ruleForm.phones[0].fullName = '';
+          this.ruleForm.federations = this.resetFederation;
           this.getList();
         }
       });
@@ -465,7 +469,19 @@ parasails.registerPage('dogs-home', {
       this.confirmDeleteThingModalOpen = false;
       this.selectedThing = undefined;
     },
+    copyElement() {
+      this.ruleForm.federations.push({
+        key: Date.now(),
+        value: ''
+      });
+    },
 
 
+    removeElement(item) {
+      var index = this.ruleForm.federations.indexOf(item);
+      if (index !== -1) {
+        this.ruleForm.federations.splice(index, 1);
+      }
+    },
   }
 });

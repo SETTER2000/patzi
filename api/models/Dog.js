@@ -64,6 +64,12 @@ module.exports = {
     },
 
 
+    litters: {
+      collection: 'litter',
+      via: 'dogs',
+      description:' У собаки может быть много помётов. Many to Many (Многие-ко-многим)'
+    },
+
   },
 
 };

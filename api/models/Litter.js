@@ -12,21 +12,23 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-    label: {
+
+
+    born: {
+      type: 'string',
+      example: 1502844074211,
+      required: true,
+      description: 'Дата помёта.'
+    },
+
+
+    letter: {
       type: 'string',
       example: 'A',
       description: 'Буква помёта. Должна быть уникальна.',
-      // required: true,
-      // unique: true
     },
-    born: {
-      type: 'number',
-      example: 1502844074211,
-      // type: 'string',
-      // columnType: 'date',
-      // example: '10.04.2016',
-      description: 'Дата появления на свет помёта.'
-    },
+
+
     title: {
       type: 'string',
       example: 'A2',
@@ -42,28 +44,23 @@ module.exports = {
       example: 'my-file.jpg',
       description: 'Название файла, который загружается.'
     },
-    imageUploadFD:{
-      type:'string',
-      description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',
-      required:true
-    },
-    imageUploadMime:{
-      type:'string',
-      description:'Тип MIME для загруженного изображения.',
-      required:true
-    },
-    gender:{
-      type:'string',
-      description:'Половая пренадлежность щенка.',
-      example:'dam, sire'
-      // required:true
-    },
-    type:{
-      type:'string',
-      description:'Тип собаки',
-      example: 'hairless, powderpuff'
-      // required:true
-    },
+    // imageUploadFD:{
+    //   type:'string',
+    //   description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',
+    //   required:true
+    // },
+    // imageUploadMime:{
+    //   type:'string',
+    //   description:'Тип MIME для загруженного изображения.',
+    //   required:true
+    // },
+    // gender:{
+    //   type:'string',
+    //   description:'Половая пренадлежность щенка.',
+    //   example:'dam, sire'
+    //   // required:true
+    // },
+
     ourPreliminaryPrice:{
       type:'number',
       description:'Наша предварительная цена на щенка.'
@@ -77,15 +74,7 @@ module.exports = {
       description:'Валюта продажи.'
     },
 
-    sire:{
-      type:'string',
-      description:'Кобель.'
-    },
 
-    dam:{
-      type:'string',
-      description:'Сука.'
-    },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
@@ -94,12 +83,28 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+
+
+    // Добавить ссылку на Dog
+    dogs: {
+      collection: 'dog',
+      via: 'litters',
+      description:'Помёт может принадлежать нескольким собакам. Many to Many (Многие-ко-многим)'
+    },
+
     owner:{
       model:'User',
       required:true
     },
-    borrowedBy: { model: 'User', description: 'Пользователь, который попросил одолжить этот товар.' },
-  },
 
+
+    //   borrowedBy: {
+    //     model: 'User',
+    //     description: 'Пользователь, который попросил одолжить этот товар.' },
+    //
+    //
+
+
+  },
 };
 
