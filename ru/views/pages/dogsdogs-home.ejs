@@ -246,7 +246,12 @@
         <label v-if="!ruleForm.imageUrl">
           <%= __('Make albums, dividing by event or by time group of photos. Describe events, tell about the photo, thereby structuring your memories and events.') %>
         </label>
-        <hr>
+
+
+        <div class="my-2">
+          <el-divider content-position="left"><%= __('Add photo') %></el-divider>
+        </div>
+
         <div class="photo-uploader">
           <div class="row">
             <div class="col-md-12 ">
@@ -293,6 +298,7 @@
                          :value="item.id">
                 <span style="float: left">{{ item.label }}</span>
                 <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+              </el-option>
             </el-select>
             <el-tooltip effect="dark"
                         content="<%= __("If you have not found your cattery, go to the \"Kennels\" section and create it.") %>"
@@ -311,7 +317,7 @@
           </template>
 
 
-         <!-- <el-form-item label="<%= __('DoB') %>" required>
+          <!-- <el-form-item label="<%= __('DoB') %>" required>
             <el-col :span="11">
               <el-form-item prop="dateBirth">
                 <el-date-picker
@@ -325,55 +331,70 @@
           </el-form-item>-->
 
 
-
-          <el-form-item label="<%= __('DoB') %>">
+          <el-form-item label="<%= __('DoB') %>" prop="dateBirth">
             <el-col :span="11">
-              <el-form-item prop="dateBirth">
-            <el-date-picker
-              v-model="ruleForm.dateBirth"
-              type="datetime"
-              placeholder="<%= __('Select date and time') %>"
-              default-time="12:00:00">
-            </el-date-picker>
-              </el-form-item>
+              <el-date-picker
+                v-model="ruleForm.dateBirth"
+                type="datetime"
+                placeholder="<%= __('Select date and time') %>"
+                default-time="12:00:00">
+              </el-date-picker>
             </el-col>
           </el-form-item>
-
 
 
           <el-form-item label="<%= __('Gender') %>" prop="gender">
             <el-col :span="11">
-                <el-radio v-model="ruleForm.gender" label="sire" border size="medium"><%= __('Sire') %></el-radio>
-                <el-radio v-model="ruleForm.gender" label="dam" border size="medium"><%= __('Dam') %></el-radio>
+              <el-radio-group v-model="ruleForm.gender">
+              <el-radio  label="sire" border size="medium"><%= __('Sire') %></el-radio>
+              <el-radio  label="dam" border size="medium"><%= __('Dam') %></el-radio>
+              </el-radio-group>
             </el-col>
           </el-form-item>
 
 
-          <template >
+          <template>
             <el-form-item label="<%= __('Nickname') %>" prop="nickname">
-              <el-col :span="11">
-              <el-input style="max-width: 220px" minlength="3" maxlength="20" show-word-limit
-                        placeholder="<%= __('Affectionate name') %>"
-                        v-model="ruleForm.nickname"></el-input>
-              <el-tooltip effect="dark"
-                          content="<%= __("How do you call the house, a nickname, affectionate name") %>"
-                          placement="top-start">
-                <div size="mini" round class="el-icon-question ml-3"></div>
-              </el-tooltip>
+              <el-col :span="14">
+                <el-input style="max-width: 210px" minlength="3" maxlength="20" show-word-limit
+                          placeholder="<%= __('Affectionate name') %>"
+                          v-model="ruleForm.nickname"></el-input>
+                <el-tooltip effect="dark"
+                            content="<%= __("How do you call the house, a nickname, affectionate name") %>"
+                            placement="top-start">
+                  <div size="mini" round class="el-icon-question ml-3"></div>
+                </el-tooltip>
               </el-col>
             </el-form-item>
           </template>
 
 
 
+          <el-form-item
+            v-for="(federation, index) in ruleForm.federations"
+            :label="'№ ' + index"
+            :key="federation.key"
+            :prop="'federations.' + index + '.registerNumber'"
+            :rules="{required: true, message: 'Federation can not be null', trigger: 'blur'}">
+            <el-input placeholder="<%= __("Dog's registration number") %>" v-model="federation.registerNumber"
+                      class="input-with-select">
 
-
-          <el-form-item label="<%= __('Pedigree №') %>" prop="tavro">
-            <el-col :span="11">
-            <el-input  style="max-width: 220px" minlength="3" maxlength="20" show-word-limit
-                      v-model="ruleForm.registerNumber"
-                      placeholder="<%= __('Dog registration number') %>"></el-input>
-            </el-col>
+              <el-select v-model="federation.value" slot="prepend" class="wds" placeholder="Select">
+                <el-option label="FCI" value="1"></el-option>
+                <el-option label="<%= __('RKF') %>" value="2"></el-option>
+                <el-option label="BCU" value="3"></el-option>
+                <el-option label="UKU" value="4"></el-option>
+                <el-option label="IKC" value="5"></el-option>
+                <el-option label="VDH" value="6"></el-option>
+                <el-option label="KCG" value="7"></el-option>
+              </el-select>
+              <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
+              <!--</el-form-item>-->
+              <!--<el-button slot="prepend" disabled>{{ruleForm.federation}}</el-button>-->
+              <el-button slot="append" @click="copyElement" icon="el-icon-copy-document"></el-button>
+              <el-button slot="append" @click.prevent="removeElement(federation)" icon="el-icon-delete"></el-button>
+            </el-input>
+            <!--</el-form-item>-->
           </el-form-item>
 
 
@@ -422,16 +443,15 @@
           </template>
 
 
-
           <!--<template v-if="ruleForm.city">-->
-            <!--<el-form-item label="<%= __('Address') %>" prop="address">-->
-              <!--<el-input placeholder="<%= __('street, house, building') %>" minlength="3" maxlength="100" show-word-limit-->
-                        <!--v-model="ruleForm.address"></el-input>-->
-            <!--</el-form-item>-->
+          <!--<el-form-item label="<%= __('Address') %>" prop="address">-->
+          <!--<el-input placeholder="<%= __('street, house, building') %>" minlength="3" maxlength="100" show-word-limit-->
+          <!--v-model="ruleForm.address"></el-input>-->
+          <!--</el-form-item>-->
           <!--</template>-->
 
 
-        <!--  <el-form-item label="<%= __('Name on') %>:" prop="rightName">
+          <!--  <el-form-item label="<%= __('Name on') %>:" prop="rightName">
             <el-switch
               v-model="ruleForm.rightName"
               active-color="#13ce66"
