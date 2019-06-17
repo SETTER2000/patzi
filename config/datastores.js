@@ -56,13 +56,16 @@ module.exports.datastores = {
     host: 'localhost',
     port: 27017,
     user: 'fox', //optional
-    //password:process.env.MONGO_PASS , // set MONGO_PASS=4211817&& sails lift
-
+    password:'4211817',
+    //password:process.env.MONGO_PASS ,
+    // set MONGO_PASS=4211817 && sails lift
+    // set MONGO_PASS=4211817 && sails console --redis
     database: 'patzi', //optional
     connectTimeoutMS: 300000,
-    keepAlive: 300000
+    keepAlive: 300000,
     // adapter: 'sails-mongo',
     // url: 'mongodb://fox@localhost/patzi'
+
   },
 
 
