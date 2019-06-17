@@ -19,6 +19,7 @@
     "sails-hook-orm": "^2.1.1",
     "sails-hook-sockets": "^1.5.5",
     "sails-hook-uploads": "^0.4.2",
+    "sails-mongo": "^1.0.1",
     "sails-mysql": "^1.0.1",
     "skipper-s3": "^0.6.0",
     "vue-fancybox": "^1.0.3",

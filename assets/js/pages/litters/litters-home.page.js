@@ -142,6 +142,11 @@ parasails.registerPage('kennel', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
+
+
+    this.getList();
+
+
     // Кобели
     this.sireList();
 
@@ -172,20 +177,16 @@ parasails.registerPage('kennel', {
            console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
          });*/
 
-      await io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
-        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      await io.socket.get(`/api/v1/litters/list`, function gotResponse(body, response) {
+        console.log('Сервер litters/list ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
 
       // Принимаем данные по событию list-*
-      await io.socket.on('list-dog', (data) => {
-        this.dogs = data;
-        // console.log('this.dogs: ', this.dogs);
+      await io.socket.on('list-litter', (data) => {
+        this.litters = data;
+        console.log('this.litters: ', this.litters);
       });
-      // Принимаем данные по событию list-*
-      await  io.socket.on('list-continent', (data) => {
-        this.continents = data;
-        // this.count = _.get(data, 'count') ?  data.count : this.count;
-      });
+
 
     },
     // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
@@ -216,20 +217,12 @@ parasails.registerPage('kennel', {
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
-      //
-      // this.me.isSuperAdmin ?  this.centerDialogAdded = true : alert('Не достаточно прав.');
       this.warning = this.i19p.warnNoDogs;
-      (this.sires.length > 0 && this.dams.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
-      // this.me.isSuperAdmin ? this.goto('/litters/new') : alert('Не достаточно прав.');
-      // this.uploadLitterModalOpen = true;
-
-      // this.selectedLitter = _.find(this.litters, {id: litterId});
+      (this.sires.length > 0 && this.dams.length > 0) ? this.centerDialogAdded = true :
+        this.centerDialogVisibleWarnings = true;
     },
-    // Если массив kennel пустой, выводим сообщение.
-    // clickAddButton() {
-    //   this.warning = this.i19p.warnNoKennel;
-    //   (this.kennels) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
-    // },
+
+
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "ShowPhoto <modal>" с <ajax-form> для загрузки фото
     clickShowPhoto: function () {
@@ -326,32 +319,32 @@ parasails.registerPage('kennel', {
      * Т.е. как только форма загрузки файла на сервере отработала без ошибок
      * эта функция получает результат и должна вставить новые данные на страницу.
      */
-    submittedUploadLitterForm: function (result) {
-      console.log('this.uploadFormData.born:', this.uploadFormData.born);
-      // Добавлем новые данные в уже имеющийся массив litters
-      console.log(this.uploadFormData);
-      this.litters.push({
-        label: this.uploadFormData.label,
-        gender: this.uploadFormData.gender,
-        type: this.uploadFormData.type,
-        detail: result.detail,
-        preliminaryPrice: this.uploadFormData.preliminaryPrice,
-        ourPreliminaryPrice: this.uploadFormData.ourPreliminaryPrice,
-        currency: this.uploadFormData.currency,
-        id: result.id,
-        imageSrc: result.imageSrc,
-        title: this.uploadFormData.title,
-        sire: this.uploadFormData.sire,
-        dam: this.uploadFormData.dam,
-        subtitle: this.uploadFormData.subtitle,
-        born: moment(this.uploadFormData.born).locale(this.me.preferredLocale).format('LL'),
-        owner: {
-          id: this.me.id,
-          fullName: this.me.fullName,
-        },
-      });
-      this._clearUploadLitterModal();
-    },
+    // submittedUploadLitterForm: function (result) {
+    //   console.log('this.uploadFormData.born:', this.uploadFormData.born);
+    //   // Добавлем новые данные в уже имеющийся массив litters
+    //   console.log(this.uploadFormData);
+    //   this.litters.push({
+    //     label: this.uploadFormData.label,
+    //     gender: this.uploadFormData.gender,
+    //     type: this.uploadFormData.type,
+    //     detail: result.detail,
+    //     preliminaryPrice: this.uploadFormData.preliminaryPrice,
+    //     ourPreliminaryPrice: this.uploadFormData.ourPreliminaryPrice,
+    //     currency: this.uploadFormData.currency,
+    //     id: result.id,
+    //     imageSrc: result.imageSrc,
+    //     title: this.uploadFormData.title,
+    //     sire: this.uploadFormData.sire,
+    //     dam: this.uploadFormData.dam,
+    //     subtitle: this.uploadFormData.subtitle,
+    //     born: moment(this.uploadFormData.born).locale(this.me.preferredLocale).format('LL'),
+    //     owner: {
+    //       id: this.me.id,
+    //       fullName: this.me.fullName,
+    //     },
+    //   });
+    //   this._clearUploadLitterModal();
+    // },
 
     changeFileInput: function (files) {
       if (files.length !== 1 && !this.uploadFormData.photo) {
@@ -388,12 +381,12 @@ parasails.registerPage('kennel', {
     },
 
 
-    clickBorrow: function (litterId) {
-      this.selectedLitter = _.find(this.litters, {id: litterId});
-
-      // Open the modal.
-      this.borrowLitterModalOpen = true;
-    },
+    // clickBorrow: function (litterId) {
+    //   this.selectedLitter = _.find(this.litters, {id: litterId});
+    //
+    //   // Open the modal.
+    //   this.borrowLitterModalOpen = true;
+    // },
 
     closeBorrowLitterModal: function () {
       this._clearBorrowLitterModal();
@@ -433,17 +426,17 @@ parasails.registerPage('kennel', {
       return argins;
     },
 
-    submittedBorrowLitterForm: function () {
-
-      // Show success message.
-      // Показать сообщение об успехе.
-      this.borrowFormSuccess = true;
-
-      // Update the borrowed item in the UI.
-      // Обновление элемента в пользовательском интерфейсе.
-      var borrowedItem = _.find(this.litters, {id: this.selectedLitter.id});
-      borrowedItem.borrowedBy = this.me;
-    },
+    // submittedBorrowLitterForm: function () {
+    //
+    //   // Show success message.
+    //   // Показать сообщение об успехе.
+    //   this.borrowFormSuccess = true;
+    //
+    //   // Update the borrowed item in the UI.
+    //   // Обновление элемента в пользовательском интерфейсе.
+    //   var borrowedItem = _.find(this.litters, {id: this.selectedLitter.id});
+    //   borrowedItem.borrowedBy = this.me;
+    // },
 
 
     handleRemove(file, fileList) {
@@ -582,7 +575,7 @@ console.log(jwRes.headers);
           this.resetForm('ruleForm');
           this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
-          // this.getList();
+          this.getList();
         }
       });
     },

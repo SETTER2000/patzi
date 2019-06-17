@@ -35,11 +35,15 @@ module.exports = {
       example: 'A2',
       description: 'Предварительное имя щенка после рождения.'
     },
+
+
     subtitle: {
       type: 'string',
       example: 'Прекрасный, здоровый щенок.',
       description: 'Описание щенка. Какая то интересная информация.'
     },
+
+
     filename: {
       type: 'string',
       example: 'my-file.jpg',
@@ -66,10 +70,14 @@ module.exports = {
       type:'number',
       description:'Наша предварительная цена на щенка.'
     },
+
+
     preliminaryPrice:{
       type:'number',
       description:'Покупатель предложил цену за щенка.'
     },
+
+
     currency:{
       type:'string',
       description:'Валюта продажи.'
@@ -92,6 +100,7 @@ module.exports = {
       via: 'litters',
       description:'Помёт может принадлежать нескольким собакам. Many to Many (Многие-ко-многим)'
     },
+
 
     images: {
       collection: 'image',

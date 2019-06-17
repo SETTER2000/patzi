@@ -119,7 +119,7 @@ module.exports = {
 
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    await sails.sockets.broadcast('dog', 'list-dog');
+    await sails.sockets.broadcast('litter', 'list-litter');
 
 
     return exits.success();

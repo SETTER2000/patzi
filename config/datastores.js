@@ -52,6 +52,17 @@ module.exports.datastores = {
 
     // url: 'mysql://user:password@host:port/database',
 
+    adapter: 'sails-mongo',
+    host: 'localhost',
+    port: 27017,
+    user: 'fox', //optional
+    //password:process.env.MONGO_PASS , // set MONGO_PASS=4211817&& sails lift
+
+    database: 'patzi', //optional
+    connectTimeoutMS: 300000,
+    keepAlive: 300000
+    // adapter: 'sails-mongo',
+    // url: 'mongodb://fox@localhost/patzi'
   },
 
 
