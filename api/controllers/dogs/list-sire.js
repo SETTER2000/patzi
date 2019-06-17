@@ -54,7 +54,7 @@ module.exports = {
         `${sire.label} ${sire.kennel.label}`;
     });
 
-    console.log('СИРЕСССС', sires);
+
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
     await sails.sockets.broadcast('dog', 'list-sire', sires);
 

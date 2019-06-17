@@ -11,7 +11,7 @@ parasails.registerPage('kennel', {
     dialogImageUrl: '',
     centerDialogAdded: false,
     confirmDeleteModalOpen: false,
-    centerDialogVisibleWarnings:false,
+    centerDialogVisibleWarnings: false,
     dialogVisible: false,
     selectedLitter: undefined,
     imageUrl: '',
@@ -22,9 +22,9 @@ parasails.registerPage('kennel', {
     url: 'https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg',
     fit: 'cover',
     ruleForm: {
-      sire:'',
-      dam:'',
-      label:''
+      sire: '',
+      dam: '',
+      label: ''
     },
     rules: {},
     // Виртуальная часть URL
@@ -167,13 +167,27 @@ parasails.registerPage('kennel', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    /* clickLitter: async function (litterId) {
+    async getList() {
+      /*   await io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
+           console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+         });*/
 
-      /!*await Cloud.destroyOneLitters.with({id:litterId});
-      _.remove(this.litters, {id:litterId});
-      this.$forceUpdate();*!/
-    }*/
+      await io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
+        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
 
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-dog', (data) => {
+        this.dogs = data;
+        // console.log('this.dogs: ', this.dogs);
+      });
+      // Принимаем данные по событию list-*
+      await  io.socket.on('list-continent', (data) => {
+        this.continents = data;
+        // this.count = _.get(data, 'count') ?  data.count : this.count;
+      });
+
+    },
     // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
     // Это кнопка вызывает модальное окно <modal> с <ajax-form>
     clickDeleteLitter: function (litterId) {
@@ -205,7 +219,7 @@ parasails.registerPage('kennel', {
       //
       // this.me.isSuperAdmin ?  this.centerDialogAdded = true : alert('Не достаточно прав.');
       this.warning = this.i19p.warnNoDogs;
-      (this.sires.length > 0 && this.dam.length > 0 ) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
+      (this.sires.length > 0 && this.dams.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
       // this.me.isSuperAdmin ? this.goto('/litters/new') : alert('Не достаточно прав.');
       // this.uploadLitterModalOpen = true;
 
@@ -433,7 +447,7 @@ parasails.registerPage('kennel', {
 
 
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      this.fileList = fileList;
     },
 
     handlePictureCardPreview(file) {
@@ -476,7 +490,7 @@ parasails.registerPage('kennel', {
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-sire', (data) => {
-        console.log('sires: ' , data);
+        console.log('sires: ', data);
         this.sires = data;
       });
     },
@@ -487,7 +501,7 @@ parasails.registerPage('kennel', {
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-dam', (data) => {
-        console.log('dams: ' , data);
+        console.log('dams: ', data);
         this.dams = data;
       });
     },
@@ -531,6 +545,13 @@ parasails.registerPage('kennel', {
       });
     },
 
+     getIdDam(){
+      return  _.pluck(this.dams.filter(dam => (dam.value === this.ruleForm.dam) ? dam.id : ''), 'id').toString();
+    },
+
+     getIdSire(){
+      return  _.pluck(this.sires.filter(sire => (sire.value === this.ruleForm.sire) ? sire.id : ''), 'id').toString();
+    },
 
     async addLitter() {
       // ruleForm: {
@@ -538,11 +559,12 @@ parasails.registerPage('kennel', {
       //     dam:'',
       //     label:''
       // },
+      console.log('this.fileList: ', this.fileList);
       let data = {
         fileList: this.fileList,
         letter: this.ruleForm.letter,
-        dam: this.ruleForm.dam,
-        sire: this.ruleForm.sire,
+        dam: this.getIdDam(),
+        sire: this.getIdSire(),
         born: JSON.stringify(this.ruleForm.born),
         description: this.ruleForm.description,
       };
@@ -553,19 +575,17 @@ parasails.registerPage('kennel', {
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-
+console.log(jwRes.headers);
         this.centerDialogAdded = false;
 
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
-          this.ruleForm.phones[0].fullName = '';
-          this.getList();
+          // this.getList();
         }
       });
     },
-
 
 
     mesSuccess(text = '') {
@@ -616,8 +636,6 @@ parasails.registerPage('kennel', {
     goTo(path) {
       window.location = `/${path}`;
     },
-
-
 
 
   }

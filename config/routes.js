@@ -148,4 +148,7 @@ module.exports.routes = {
   'GET    /api/v1/city/list/:countryId?': { action: 'city/list' },
 
   'GET    /api/v1/country/list': { action: 'country/list' },
+
+  'GET    /api/v1/files/download/:section/:id': { action: 'files/download' },
+
 };

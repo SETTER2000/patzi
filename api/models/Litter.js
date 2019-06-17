@@ -16,7 +16,7 @@ module.exports = {
 
     born: {
       type: 'string',
-      example: 1502844074211,
+      example: '2019-06-10T09:00:00.000Z',
       required: true,
       description: 'Дата помёта.'
     },
@@ -24,6 +24,7 @@ module.exports = {
 
     letter: {
       type: 'string',
+      required: true,
       example: 'A',
       description: 'Буква помёта. Должна быть уникальна.',
     },
@@ -91,6 +92,13 @@ module.exports = {
       via: 'litters',
       description:'Помёт может принадлежать нескольким собакам. Many to Many (Многие-ко-многим)'
     },
+
+    images: {
+      collection: 'image',
+      via: 'litter',
+      description: `У помёта, может быть много фотографий. One to Many.`
+    },
+
 
     owner:{
       model:'User',

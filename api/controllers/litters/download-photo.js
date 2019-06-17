@@ -62,7 +62,7 @@ module.exports = {
     //************************************//
     // Set the mime type for the response
     // Это устанавливает mime тип ответа
-    this.res.type(litter.imageUploadMime);
+    // this.res.type(litter.imageUploadMime);
 
     /**
      * startDownload - функция от модуля sails-hook-uploads
@@ -72,8 +72,8 @@ module.exports = {
      *
      * Ответ о благополучном завершении отдачи файла
      */
-    let downloading = await sails.startDownload(litter.imageUploadFD);
-    return downloading;
+    // let downloading = await sails.startDownload(litter.imageUploadFD);
+    // return downloading;
   }
 
 };

@@ -140,7 +140,7 @@ module.exports = {
       imageUploadFD: inputs.file.fd,
       imageUploadMime: inputs.file.type,
       filename: inputs.file.filename,
-      label: _.startCase(_.trim(inputs.label)),
+      label: _.startCase(inputs.label.toString().toLowerCase()).replace(/Fci\b/g, '(FCI)'),
       yourKennel: (inputs.yourKennel) ? this.req.me.id : null,
       whoCreate: this.req.me.id,
       rightName: inputs.rightName,

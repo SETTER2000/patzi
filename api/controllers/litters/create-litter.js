@@ -8,25 +8,23 @@ module.exports = {
 
 
   inputs: {
+    fileList: {
+      type: 'ref',
+      description: 'Массив с файлами данных о загруженных файлах.'
+    },
 
     letter: {
       type: 'string',
-    //  required: true,
+     required: true,
       description: 'Буква помёта.',
       example: 'A'
     },
 
     born: {
-      type: 'number',
-      example: 1502844074211,
+      type: 'string',
+      required: true,
       description: 'Дата появления на свет помёта.',
       //required: true
-    },
-
-
-    fileList: {
-      type: 'ref',
-      description: 'Массив с файлами данных о загруженных файлах.'
     },
 
 
@@ -73,13 +71,15 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-console.log('inputs:', inputs);
+
     // Бибилиотека Node.js
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
+      console.log('HHIOOOo');
       throw 'badRequest';
     }
+
 
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'litter');
@@ -91,7 +91,7 @@ console.log('inputs:', inputs);
 
     // Создать помёт
     let litter = await Litter.create({
-      letter: _.trim(inputs.letter),
+      letter: _.trim(inputs.letter).toUpperCase(),
       born: inputs.born,
       owner: this.req.me.id,
       description: inputs.description,

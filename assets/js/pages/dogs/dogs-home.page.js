@@ -286,6 +286,8 @@ parasails.registerPage('dogs-home', {
 
 
     async addDog() {
+
+      console.log('this.fileList: ', this.fileList);
       let data = {
         fileList: this.fileList,
         label: this.ruleForm.label,
@@ -412,6 +414,7 @@ parasails.registerPage('dogs-home', {
 
     /* Авто поиск по собакам. Кобели. */
     querySearchSires(queryString, cb) {
+      this.sireList();
       let links = this.sires;
       console.log('LINKS querySearchSires: ', links);
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
@@ -420,6 +423,7 @@ parasails.registerPage('dogs-home', {
 
     /* Авто поиск по собакам. Суки. */
     querySearchDams(queryString, cb) {
+      this.damList();
       let links = this.dams;
       console.log('LINKS querySearchDams: ', links);
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
@@ -439,12 +443,10 @@ parasails.registerPage('dogs-home', {
       (this.kennels.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
     },
 
-    goToKennel() {
-      window.location = '/kennels';
+    goTo(path) {
+      window.location = `/${path}`;
     },
-    goToCard() {
-      window.location = '/account';
-    },
+
     feedback(e) {
       console.log('CLICK^ ', e);
       this.dialogFormVisible = true;

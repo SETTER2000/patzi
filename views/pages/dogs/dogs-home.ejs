@@ -150,7 +150,7 @@
     <div slot="footer" class="dialog-footer mb-3 pb-5">
 
       <el-button @click="centerDialogVisible = false"><%= __('Close') %></el-button>
-      <el-button type="success" @click="goToCard()" size="large"><%= __('Add card') %></el-button>
+      <el-button type="success" @click="goTo('account')" size="large"><%= __('Add card') %></el-button>
     </div>
   </el-dialog>
 
@@ -166,7 +166,7 @@
 
     <span slot="footer" class="dialog-footer">
     <el-button @click="centerDialogVisibleWarnings = false"><%= __('Close') %></el-button>
-      <el-button type="success" @click="goToKennel()"><%= __('Add kennel') %></el-button>
+      <el-button type="success" @click="goTo('kennels')"><%= __('Add kennel') %></el-button>
   </span>
   </el-dialog>
 
@@ -301,10 +301,17 @@
               </el-option>
             </el-select>
             <el-tooltip effect="dark"
+                        content="<%= __("Add kennel") %>"
+                        placement="top-start">
+              <el-button @click="goTo('kennels')" size="mini" round icon="el-icon-plus"></el-button>
+            </el-tooltip>
+            <el-tooltip effect="dark"
                         content="<%= __("If you have not found your cattery, go to the \"Kennels\" section and create it.") %>"
                         placement="top-start">
+
               <div size="mini" round class="el-icon-question ml-3"></div>
             </el-tooltip>
+
           </el-form-item>
 
 

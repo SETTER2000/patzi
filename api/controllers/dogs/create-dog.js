@@ -119,14 +119,11 @@ module.exports = {
 
     // Создаём собаку
     let newDog = await Dog.create({
+      label:  _.startCase(inputs.label.toString().toLowerCase()).replace(/Fci\b/g, '(FCI)'),
       kennel: inputs.kennel,
       gender: inputs.gender,
       dateBirth: inputs.dateBirth,
       nickname: inputs.nickname,
-      // imageUploadFD: inputs.file.fd,
-      // imageUploadMime: inputs.file.type,
-      // filename: inputs.file.filename,
-      label: _.trim(inputs.label),
       subtitle: inputs.subtitle,
     }).fetch();
 
