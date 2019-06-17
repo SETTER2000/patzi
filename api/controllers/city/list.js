@@ -9,7 +9,7 @@ module.exports = {
 
   inputs: {
     countryId: {
-      type: 'number',
+      type: 'string',
       description: 'Идентификатор страны, по которой нужно вернуть города.'
     }
   },

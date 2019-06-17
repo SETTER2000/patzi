@@ -10,7 +10,7 @@ module.exports = {
   inputs: {
     id: {
       description: 'Идентификатор, чье фото мы скачиваем.',
-      type: 'number',
+      type: 'string',
       required: true
     }
   },

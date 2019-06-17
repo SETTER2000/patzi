@@ -9,7 +9,7 @@ module.exports = {
 
   inputs: {
     id: {
-      type: 'number',
+      type: 'string',
       description: 'ID пользователя которого исключают из группы.'
       // whereToGet: {description: 'Credit card info is provided by Stripe after completing the checkout flow.'}
     },

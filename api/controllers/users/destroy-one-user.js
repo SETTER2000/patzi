@@ -9,7 +9,7 @@ module.exports = {
 
   inputs: {
     id: {
-      type: 'number',
+      type: 'string',
       description: 'Идентификатор пользователя, которого удаляем.'
     }
   },

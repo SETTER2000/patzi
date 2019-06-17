@@ -18,7 +18,7 @@ module.exports = {
     },
     id: {
       description: 'Идентификатор группы.',
-      type: 'number',
+      type: 'string',
       required: true
     },
     subtitle: {

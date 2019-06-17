@@ -9,7 +9,7 @@ module.exports = {
   inputs: {
     id: {
       description: 'Идентификатор помёта.',
-      type: 'number',
+      type: 'string',
       required: true
     }
   },

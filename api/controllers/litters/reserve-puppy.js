@@ -11,7 +11,7 @@ module.exports = {
 
     id: {
       description: 'The id of the thing being borrowed',
-      type: 'number',
+      type: 'string',
       required: true
     },
 

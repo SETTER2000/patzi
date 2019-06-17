@@ -15,7 +15,7 @@ module.exports = {
     },
     id: {
       description: 'Идентификатор объекта из данной коллекции.',
-      type: 'number',
+      type: 'string',
       required: true
     },
 
