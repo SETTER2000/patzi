@@ -130,6 +130,7 @@
             <el-form-item label="<%= __('Continent') %>" prop="continent">
               <el-select @change="changeSelectContinent()" v-model="ruleForm.continent"
                          placeholder="<%= __('Where is the nursery registered?') %>"
+                         :clearable="true"
                          style="width: 58%;">
                 <el-option v-for="item in continents"
                            :key="item.id"
@@ -151,8 +152,11 @@
 
           <template v-if="ruleForm.continent">
             <el-form-item label="<%= __('Country') %>" prop="country">
-              <el-select v-model="ruleForm.country" placeholder="<%= __('Where is the kennel registered?') %>"
+              <el-select v-model="ruleForm.country"
+                         placeholder="<%= __('Where is the kennel registered?') %>"
                          style="width: 58%;"
+                         :clearable="true"
+                         @visible-change="changeSelectCountry"
                          @change="changeCountry">
                 <el-option v-for="item in getPullCountry()"
                            :key="item.id"
