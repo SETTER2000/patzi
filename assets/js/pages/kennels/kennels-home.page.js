@@ -398,7 +398,12 @@ parasails.registerPage('kennels-home', {
       }
     },
 
-
+      changeSelectCountry() {
+      console.log('changeSelectCountry: ');
+       // this.ruleForm.city = null;
+     },
+    
+    
     changeSelectContinent() {
       this.ruleForm.country = null;
     },
