@@ -11,7 +11,8 @@ module.exports = {
     value:{
       type:'string',
       example: 'Moscow',
-      description:'Наименование города на английском.'
+      description:'Наименование города на английском.',
+      required: true
     },
     labelRu: {
       type: 'string',
