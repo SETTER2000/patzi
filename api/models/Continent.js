@@ -6,8 +6,10 @@
  */
 
 module.exports = {
+  datastores: 'mongoDbConnect',
 
   attributes: {
+    id: {type: 'string', columnName: '_id', required:true},
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
@@ -18,35 +20,35 @@ module.exports = {
       description: 'Наименование континента.',
       required: true,
       unique: true,
-      moreInfoUrl:'https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BD%D1%82%D0%B8%D0%BD%D0%B5%D0%BD%D1%82#%D0%95%D0%B2%D1%80%D0%B0%D0%B7%D0%B8%D1%8F'
+      moreInfoUrl: 'https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BD%D1%82%D0%B8%D0%BD%D0%B5%D0%BD%D1%82#%D0%95%D0%B2%D1%80%D0%B0%D0%B7%D0%B8%D1%8F'
     },
 
     labelRu: {
       type: 'string',
       example: 'Европа',
       description: 'Наименование континента.',
-      moreInfoUrl:'https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BD%D1%82%D0%B8%D0%BD%D0%B5%D0%BD%D1%82#%D0%95%D0%B2%D1%80%D0%B0%D0%B7%D0%B8%D1%8F'
+      moreInfoUrl: 'https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BD%D1%82%D0%B8%D0%BD%D0%B5%D0%BD%D1%82#%D0%95%D0%B2%D1%80%D0%B0%D0%B7%D0%B8%D1%8F'
     },
 
     description: {
       type: 'string',
       example: 'Евра́зия — самый большой материк на Земле, и единственный, омываемый четырьмя океанами: на юге — Индийским, на севере — Северным Ледовитым, на западе — Атлантическим, на востоке — Тихим. Континент расположен в Северном полушарии между 9° з. д. и 169° з. д., при этом часть островов Евразии находится в Южном полушарии.',
       description: 'Описание континента.',
-      moreInfoUrl:'https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BD%D1%82%D0%B8%D0%BD%D0%B5%D0%BD%D1%82#%D0%95%D0%B2%D1%80%D0%B0%D0%B7%D0%B8%D1%8F'
+      moreInfoUrl: 'https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BD%D1%82%D0%B8%D0%BD%D0%B5%D0%BD%D1%82#%D0%95%D0%B2%D1%80%D0%B0%D0%B7%D0%B8%D1%8F'
     },
 
 
-    imageUploadFD:{
-      type:'string',
-      description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',
+    imageUploadFD: {
+      type: 'string',
+      description: 'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',
       //required:true
     },
 
 
-    imageUploadMime:{
-      type:'string',
-      description:'Тип MIME для загруженного изображения.',
-     // required:true
+    imageUploadMime: {
+      type: 'string',
+      description: 'Тип MIME для загруженного изображения.',
+      // required:true
     },
 
 
@@ -66,10 +68,10 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
-    whoCreate:{
-      model:'User',
-      required:true,
-      description:'Кто создал запись в БД.'
+    whoCreate: {
+      model: 'User',
+      required: true,
+      description: 'Кто создал запись в БД.'
     },
 
 

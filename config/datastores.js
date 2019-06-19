@@ -17,42 +17,61 @@ module.exports.datastores = {
 
 
   /***************************************************************************
-  *                                                                          *
-  * Your app's default datastore.                                            *
-  *                                                                          *
-  * Sails apps read and write to local disk by default, using a built-in     *
-  * database adapter called `sails-disk`.  This feature is purely for        *
-  * convenience during development; since `sails-disk` is not designed for   *
-  * use in a production environment.                                         *
-  *                                                                          *
-  * To use a different db _in development_, follow the directions below.     *
-  * Otherwise, just leave the default datastore as-is, with no `adapter`.    *
-  *                                                                          *
-  * (For production configuration, see `config/env/production.js`.)          *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * Your app's default datastore.                                            *
+   *                                                                          *
+   * Sails apps read and write to local disk by default, using a built-in     *
+   * database adapter called `sails-disk`.  This feature is purely for        *
+   * convenience during development; since `sails-disk` is not designed for   *
+   * use in a production environment.                                         *
+   *                                                                          *
+   * To use a different db _in development_, follow the directions below.     *
+   * Otherwise, just leave the default datastore as-is, with no `adapter`.    *
+   *                                                                          *
+   * (For production configuration, see `config/env/production.js`.)          *
+   *                                                                          *
+   ***************************************************************************/
 
-  default: {
-
-    /***************************************************************************
-    *                                                                          *
-    * Want to use a different database during development?                     *
-    *                                                                          *
-    * 1. Choose an adapter:                                                    *
-    *    https://sailsjs.com/plugins/databases                                 *
-    *                                                                          *
-    * 2. Install it as a dependency of your Sails app.                         *
-    *    (For example:  npm install sails-mysql --save)                        *
-    *                                                                          *
-    * 3. Then pass it in, along with a connection URL.                         *
-    *    (See https://sailsjs.com/config/datastores for help.)                 *
-    *                                                                          *
-    ***************************************************************************/
-    // adapter: 'sails-mysql',
-    // url: 'mysql://user:password@host:port/database',
-
-    adapter: 'sails-mongo',
-
+  // default: {
+  //
+  //   /***************************************************************************
+  //   *                                                                          *
+  //   * Want to use a different database during development?                     *
+  //   *                                                                          *
+  //   * 1. Choose an adapter:                                                    *
+  //   *    https://sailsjs.com/plugins/databases                                 *
+  //   *                                                                          *
+  //   * 2. Install it as a dependency of your Sails app.                         *
+  //   *    (For example:  npm install sails-mysql --save)                        *
+  //   *                                                                          *
+  //   * 3. Then pass it in, along with a connection URL.                         *
+  //   *    (See https://sailsjs.com/config/datastores for help.)                 *
+  //   *                                                                          *
+  //   ***************************************************************************/
+  //   // adapter: 'sails-mysql',
+  //   // url: 'mysql://user:password@host:port/database',
+  //   // url: 'mysql://adam-at-461068669279:qNcpc6q9kC9CpfslhQegM9+Ucm3U6JSsQySkqoHArGA=@patzi.cpiteotrtqu9.us-east-1.rds.amazonaws.com:3306/city',
+  //
+  //   //
+  //   // host: 'localhost',
+  //   // port: 27017,
+  //   // user: 'fox', //optional
+  //   // password:'4211817',
+  //   // database: 'patzi', //optional
+  //   // connectTimeoutMS: 300000,
+  //   // keepAlive: 300000,
+  //   // adapter: require('sails-mongo'),
+  //   // url: 'mongodb://fox:4211817@localhost:27017/patzi',
+  //
+  //   //password:process.env.MONGO_PASS ,
+  //   // set MONGO_PASS=4211817 && sails lift
+  //   // set MONGO_PASS=4211817 && sails console --redis
+  //   // adapter: 'sails-mongo',
+  //   // url: 'mongodb://fox@localhost/patzi'
+  //   // url:''
+  // },
+  mongoDbConnect: {
+    adapter: require('sails-mongo'),
     host: 'localhost',
     port: 27017,
     user: 'fox', //optional
@@ -60,13 +79,10 @@ module.exports.datastores = {
     database: 'patzi', //optional
     connectTimeoutMS: 300000,
     keepAlive: 300000,
-    //password:process.env.MONGO_PASS ,
-    // set MONGO_PASS=4211817 && sails lift
-    // set MONGO_PASS=4211817 && sails console --redis
-    // adapter: 'sails-mongo',
-    // url: 'mongodb://fox@localhost/patzi'
-    // url:''
+    //url: 'mongodb://fox:4211817@localhost:27017/patzi',
   },
-
-
+  mysqlDbConnect: {
+    adapter: require('sails-mysql'),
+    url: 'mysql://root@localhost:3306/geodata',
+  }
 };

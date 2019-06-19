@@ -6,8 +6,9 @@
  */
 
 module.exports = {
-
+  datastores: 'mongoDbConnect',
   attributes: {
+    id: {type: 'string', columnName: '_id', required:true},
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗

@@ -6,28 +6,30 @@
  */
 
 module.exports = {
+  datastores: 'mongoDbConnect',
 
   attributes: {
-    value:{
-      type:'string',
+    id: {type: 'string', columnName: '_id', required:true},
+    value: {
+      type: 'string',
       example: 'Moscow',
-      description:'Наименование города на английском.',
+      description: 'Наименование города на английском.',
       required: true
     },
     labelRu: {
       type: 'string',
       example: 'Москва',
       description: 'Наименование города на русском.',
-      moreInfoUrl:'https://ru.wikipedia.org/wiki/Россия'
+      moreInfoUrl: 'https://ru.wikipedia.org/wiki/Россия'
     },
-    link:{
-      type:'string',
-      description:'Линк'
+    link: {
+      type: 'string',
+      description: 'Линк'
     },
 
-    description:{
-      type:'string',
-      description:'Описание города'
+    description: {
+      type: 'string',
+      description: 'Описание города'
     },
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
@@ -45,10 +47,10 @@ module.exports = {
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
 
-    whoCreate:{
-      model:'User',
-      required:true,
-      description:'Кто создал запись в БД.'
+    whoCreate: {
+      model: 'User',
+      required: true,
+      description: 'Кто создал запись в БД.'
     },
 
 

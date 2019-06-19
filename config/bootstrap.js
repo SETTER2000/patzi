@@ -76,7 +76,7 @@ module.exports.bootstrap = async function () {
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
     gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
   }).fetch();
-
+console.log('alexFox::: ID' , alexFox);
   let adam = await User.create({
     emailAddress: 'administrator.f@mail.ru',
     fullName: 'Poale Ell Adam',

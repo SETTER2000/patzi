@@ -6,8 +6,9 @@
  */
 
 module.exports = {
-
+  datastores: 'mongoDbConnect',
   attributes: {
+    id: {type: 'string', columnName: '_id', required:true},
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
@@ -35,15 +36,15 @@ module.exports = {
       description: 'Название файла, который загружается.'
     },
 
-    imageUploadFD:{
-      type:'string',
-      description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение, связанное с этой «вещью».',
-      required:true
+    imageUploadFD: {
+      type: 'string',
+      description: 'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение, связанное с этой «вещью».',
+      required: true
     },
-    imageUploadMime:{
-      type:'string',
-      description:'Тип MIME для загруженного изображения.',
-      required:true
+    imageUploadMime: {
+      type: 'string',
+      description: 'Тип MIME для загруженного изображения.',
+      required: true
     },
     expectedReturnAt: {
       type: 'number',
@@ -63,9 +64,9 @@ module.exports = {
     //   model:'User',
     //   required:true
     // }
-    owner: { model: 'User',required:true, description: 'Пользователь, который загрузил этот элемент.' },
+    owner: {model: 'User', required: true, description: 'Пользователь, который загрузил этот элемент.'},
 
-    borrowedBy: { model: 'User', description: 'Пользователь, который попросил одолжить этот товар.' },
+    borrowedBy: {model: 'User', description: 'Пользователь, который попросил одолжить этот товар.'},
   },
 
 };

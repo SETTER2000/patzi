@@ -5,9 +5,10 @@
  */
 
 module.exports = {
-
+  datastores: 'mongoDbConnect',
   attributes: {
 
+    id: {type: 'string', columnName: '_id', required: true},
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
@@ -303,8 +304,6 @@ It just means they have a customer entry in Stripe, which might or might not hav
       via: 'users',
       dominant: true
     },
-
-
 
 
   },
