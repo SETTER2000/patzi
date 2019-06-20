@@ -6,19 +6,8 @@
  */
 
 module.exports = {
-  schema: true,
-  migrate: 'safe',
-  datastore: 'mysqlDb',
-  tableName: '_cities',
+
   attributes: {
-
-    id: {
-      type: 'number',
-      unique: true,
-      columnName: 'city_id',
-      autoIncrement: true
-    },
-
 
     value: {
       type: 'string',
@@ -26,8 +15,6 @@ module.exports = {
       description: 'Наименование города на английском.',
       required: true
     },
-
-
     labelRu: {
       type: 'string',
       example: 'Москва',
@@ -68,9 +55,8 @@ module.exports = {
 
     // Add a reference to User
     region: {
-      model: 'region',
-      description: 'Город может принадлежать только одной стране. One to Many',
-      columnName: 'region_id',
+      model: 'country',
+      description: 'Город может принадлежать только одной стране. One to Many'
     }
   },
 

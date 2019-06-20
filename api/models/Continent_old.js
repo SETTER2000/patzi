@@ -6,22 +6,12 @@
  */
 
 module.exports = {
- /* schema: true,
-  migrate: 'safe',
-  datastore: 'mysqlDb',
-  attributes: {
+
+/*  attributes: {
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-
-    id: {
-      type: 'number',
-      unique: true,
-      autoIncrement: true
-    },
-
-
     label: {
       type: 'string',
       example: 'Europe',

@@ -76,7 +76,7 @@ module.exports.bootstrap = async function () {
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
     gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
   }).fetch();
-console.log('alexFox::: ID' , alexFox);
+// console.log('alexFox::: ID' , alexFox);
   let adam = await User.create({
     emailAddress: 'administrator.f@mail.ru',
     fullName: 'Poale Ell Adam',
@@ -117,7 +117,7 @@ console.log('alexFox::: ID' , alexFox);
   await User.addToCollection(alexFox.id, 'groups', group.id);
 
 
-  let continentEurasia = await Continent.create({
+ /* let continentEurasia = await Continent.create({
     label: 'Eurasia',
     labelRu: 'Евразия',
     whoCreate: alexFox.id,
@@ -156,13 +156,6 @@ console.log('alexFox::: ID' , alexFox);
     description: 'Австра́лия (от лат. australis — «южный») — континент, расположенный в Восточном и Южном полушариях Земли. Вся территория материка является основной частью государства Австралия. Материк входит в часть света Австралия и Океания. Самый маленький и сухой материк.'
   }).fetch();
 
-
-  // let country = await Country.create({
-  //   label: 'Russia',
-  //   whoCreate: alexFox.id,
-  //   region: continentEurasia.id,
-  //   description: 'Росси́я, официально также Росси́йская Федера́ция[e] (РФ[f]) — государство в Восточной Европе и Северной Азии. Территория России в рамках её конституционного устройства[c] составляет 17 125 191[6] км²; население страны (в пределах её заявленной территории[c]) составляет 146 781 095[7] чел. (2019). Занимает первое место в мире по территории, шестое — по объёму ВВП по ППС и девятое — по численности населения.'
-  // }).fetch();
 
 
   let arrCountryEurasia = [
@@ -1578,7 +1571,7 @@ console.log('alexFox::: ID' , alexFox);
   let resCountryAfrica = await Country.createEach(arrCountryAfrica).fetch();
   let resCountryAustralia = await Country.createEach(arrCountryAustralia).fetch();
   // console.log('resCountryEurasia: ', resCountryEurasia);
-
+*/
 
   let ar = [];
   for (let y = 0; y < 20; y++) {

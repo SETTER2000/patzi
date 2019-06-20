@@ -59,7 +59,8 @@ module.exports.models = {
    *                                                                          *
    ***************************************************************************/
 
-  schema: true,
+  // schema: true,
+  datastore:'mongodb',
 
 
   /***************************************************************************
@@ -82,7 +83,8 @@ module.exports.models = {
    *                                                                          *
    ***************************************************************************/
 
-  migrate: 'alter',
+  migrate: 'safe',
+  // migrate: 'alter',
 
 
   /***************************************************************************
@@ -107,7 +109,7 @@ module.exports.models = {
     createdAt: {type: 'number', autoCreatedAt: true,},
     updatedAt: {type: 'number', autoUpdatedAt: true,},
     // id: { type: 'number', autoIncrement: true}, // <-- for SQL databases
-    // id: {type: 'string', columnName: '_id'}, // <-- for MongoDB
+    id: {type: 'string', columnName: '_id'}, // <-- for MongoDB
     //--------------------------------------------------------------------------
     //  /\   Using MongoDB?
     //  ||   Replace `id` above with this instead:
