@@ -126,7 +126,7 @@
                       placeholder="<%= __('Kennel registration number') %>"></el-input>
           </el-form-item>
 
-          <template>
+        <!--  <template>
             <el-form-item label="<%= __('Continent') %>" prop="continent">
               <el-select @change="changeSelectContinent()" v-model="ruleForm.continent"
                          placeholder="<%= __('Where is the nursery registered?') %>"
@@ -147,10 +147,11 @@
             </el-form-item>
 
 
-          </template>
+          </template>-->
 
 
-          <template v-if="ruleForm.continent">
+          <!--<template v-if="ruleForm.continent">-->
+          <template >
             <el-form-item label="<%= __('Country') %>" prop="country">
               <el-select v-model="ruleForm.country"
                          placeholder="<%= __('Where is the kennel registered?') %>"
