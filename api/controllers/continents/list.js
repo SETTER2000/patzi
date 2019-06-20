@@ -75,23 +75,23 @@ module.exports = {
      * 1. В цикле
      * 2. С библиотекой Lodash
      */
-    _.each(continents, (continent) => {
-      // Устанавливаем свойство источника изображения
-      // Первый аргумент, базовый url
-      continent.imageSrc = continent.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/continents/${continent.id}`) : '';
-
-      // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
-      continent.createdAtFormat = moment(continent.createdAt).format(format);
-
-      // Столбец: Дата регистрации. Формат фильтра.
-      continent.createdAtFormatFilter = moment(continent.createdAt).format(format);
-
-      // Удаляем файловый дескриптор
-      delete continent.imageUploadFD;
-
-      // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию и т.д....
-      delete continent.imageUploadMime;
-    });
+    // _.each(continents, (continent) => {
+    //   // Устанавливаем свойство источника изображения
+    //   // Первый аргумент, базовый url
+    //   // continent.imageSrc = continent.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/continents/${continent.id}`) : '';
+    //
+    //   // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
+    //   // continent.createdAtFormat = moment(continent.createdAt).format(format);
+    //   //
+    //   // // Столбец: Дата регистрации. Формат фильтра.
+    //   // continent.createdAtFormatFilter = moment(continent.createdAt).format(format);
+    //
+    //   // Удаляем файловый дескриптор
+    //   delete continent.imageUploadFD;
+    //
+    //   // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию и т.д....
+    //   delete continent.imageUploadMime;
+    // });
     data.continents = continents;
 
     // Рассылаем данные всем подписанным на событие list данной комнаты.

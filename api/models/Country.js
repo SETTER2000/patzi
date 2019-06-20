@@ -98,11 +98,11 @@ module.exports = {
     },
 
 
-    // regions: {
-    //   collection: 'region',
-    //   via: 'region',
-    //   description: 'У страны, может быть много регионов. One to Many'
-    // }
+    regions: {
+      collection: 'region',
+      via: 'country',
+      description: 'У страны, может быть много регионов. One to Many'
+    }
   },
 
 };

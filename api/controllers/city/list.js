@@ -73,8 +73,7 @@ module.exports = {
 
       // Удаляем файловый дескриптор
       // delete city.imageUploadFD;
-      delete city.updatedAt;
-      delete city.createdAt;
+
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию и т.д....
       // delete city.imageUploadMime;
     });
