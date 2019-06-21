@@ -6,10 +6,12 @@
  */
 
 module.exports = {
+
   schema: true,
   migrate: 'safe',
   datastore: 'mysqlDb',
   tableName: '_countries',
+
   attributes: {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
@@ -36,6 +38,7 @@ module.exports = {
       moreInfoUrl: 'https://en.wikipedia.org/wiki/Russia'
     },
 
+
     labelRu: {
       type: 'string',
       example: 'Россия',
@@ -43,6 +46,7 @@ module.exports = {
       description: 'Наименование страны на русском.',
       moreInfoUrl: 'https://ru.wikipedia.org/wiki/Россия'
     },
+
 
     labelUa: {type: 'string', columnName: 'title_ua'},
     labelBe: {type: 'string', columnName: 'title_be'},
@@ -85,10 +89,7 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    // region: {
-    //   model: 'continent',
-    //   description: 'Страна может принадлежать только одному континенту. One to Many'
-    // },
+
 
 
     kennels: {
@@ -97,6 +98,11 @@ module.exports = {
       description: `У страны, может быть много питомников. One to Many.`
     },
 
+    continent: {
+      model: 'continent',
+      description: 'Страна может принадлежать только одному континенту. One to Many',
+      columnName: 'id'
+    },
 
     regions: {
       collection: 'region',

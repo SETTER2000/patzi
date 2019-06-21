@@ -52,7 +52,7 @@ module.exports = {
     await sails.sockets.join(req, 'country');
 
     // Выбираем весь список объектов данной коллекции.
-    let countrys = await Country.find().sort('label ASC').populate('citys',{limit:1500});
+    let countrys = await Country.find().sort('label ASC').populate('regions',{limit:1500});
 
     /**
      * Здесь будем превращать поток байт в нормальное изображение для frontend

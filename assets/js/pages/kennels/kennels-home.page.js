@@ -133,6 +133,7 @@ parasails.registerPage('kennels-home', {
         {required: true, message: 'Please input register number', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
       ],
+
       region: [
         {required: true, message: 'Please select Activity zone', trigger: 'change'}
       ],
@@ -195,7 +196,7 @@ parasails.registerPage('kennels-home', {
 
     // Подписываемся на комнату continent  и событие list-continent
     io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
-      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      console.log('Сервер continents ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
     // Подписываемся на комнату country  и событие list-country
@@ -402,8 +403,8 @@ parasails.registerPage('kennels-home', {
       console.log('changeSelectCountry: ');
        // this.ruleForm.city = null;
      },
-    
-    
+
+
     changeSelectContinent() {
       this.ruleForm.country = null;
     },

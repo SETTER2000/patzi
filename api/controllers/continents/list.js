@@ -58,15 +58,15 @@ module.exports = {
     let sort = (this.req.me.preferredLocale === 'ru')? 'labelRu' : 'value';
     // let continents = await Continent.find().populate('countrys');
 
-    let ken = '';
-    await Continent.stream()
-      .sort('label ASC')
-      .populate('countrys', {
-        sort: 'label ASC'
-      })
-      .eachRecord(async (records)=>{
-        ken++;
-      });
+    // let ken = '';
+    // await Continent.stream()
+    //   .sort('label ASC')
+    //   .populate('countrys', {
+    //     sort: 'label ASC'
+    //   })
+    //   .eachRecord(async (records)=>{
+    //     ken++;
+    //   });
 
     /**
      * Здесь будем превращать поток байт в нормальное изображение для frontend

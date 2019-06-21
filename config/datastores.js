@@ -34,6 +34,7 @@ module.exports.datastores = {
 
   mysqlDb: {
     adapter: 'sails-mysql',
+    // url: 'mysql://root@localhost:3306/flk'
     url: 'mysql://root@localhost:3306/geodata'
   },
 

@@ -57,7 +57,7 @@ module.exports = {
     // Выбираем весь список объектов данной коллекции.
     let citys = await City.find(query);
 
-    _.each(citys, (city) => {
+    // _.each(citys, (city) => {
       // Устанавливаем свойство источника изображения
       // Первый аргумент, базовый url
       // city.imageSrc = city.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/citys/${city.id}`) : '';
@@ -76,7 +76,7 @@ module.exports = {
 
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию и т.д....
       // delete city.imageUploadMime;
-    });
+    // });
 
 
     // Рассылаем данные всем подписанным на событие list данной комнаты.
