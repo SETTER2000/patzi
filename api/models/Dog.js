@@ -27,7 +27,7 @@ module.exports = {
       type: 'string',
       description: `Пол собак. В смысле не пол собаки, а конец есть или нет.`,
       example: 'sire, dam',
-      isIn: ['sire, dam'],
+      isIn: ['sire', 'dam'],
       required: true,
       minLength: 3,
       maxLength: 4

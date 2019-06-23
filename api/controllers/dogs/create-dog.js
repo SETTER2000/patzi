@@ -116,7 +116,7 @@ module.exports = {
     if (conflictingDog) {
       throw (req.me.preferredLocale === 'ru') ? 'dogAlreadyInUseRU' : 'dogAlreadyInUse';
     }
-
+console.log('inputs.gender', inputs.gender);
     // Создаём собаку
     let newDog = await Dog.create({
       label:  _.startCase(inputs.label.toString().toLowerCase()).replace(/Fci\b/g, '(FCI)'),
