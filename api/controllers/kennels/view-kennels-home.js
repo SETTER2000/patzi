@@ -23,7 +23,9 @@ module.exports = {
 
     // Выбираем авторизованного пользователя, который сделал этот запрос
     // и всех его друзей по ассоциативному полю friends
-    let kennels = await Kennel.find().populate('country')
+    let kennels = await Kennel.find()
+      .populate('continent')
+      .populate('country')
       .populate('region')
       .populate('whoCreate')
       .populate('users');

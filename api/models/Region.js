@@ -10,6 +10,7 @@ module.exports = {
   migrate: 'safe',
   datastore: 'mysqlDb',
   tableName: '_regions',
+  dontUseObjectIds: true,
   attributes: {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
@@ -24,7 +25,7 @@ module.exports = {
     },
 
 
-    value: {type: 'string', columnName: 'title_en'},
+    label: {type: 'string', columnName: 'title_en'},
     labelRu: {type: 'string', columnName: 'title_ru'},
     labelUa: {type: 'string', columnName: 'title_ua'},
     labelBe: {type: 'string', columnName: 'title_be'},
@@ -47,11 +48,24 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+    kennels: {
+      collection: 'kennel',
+      via: 'region',
+      description: `У региона, может быть много питомников. One to Many.`
+    },
+
 
     country: {
       model: 'country',
       description: 'Регион может принадлежать только одной стране. One to Many',
       columnName: 'country_id',
+    },
+
+
+    citys: {
+      collection: 'city',
+      via: 'region',
+      description: 'У региона, может быть много городов. One to Many'
     }
   }
 };

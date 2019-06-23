@@ -41,7 +41,8 @@
   // или могли бы воспользоваться некоторыми советами, перейдите по адресу https://sailsjs.com/support.
   // - - - - -
   "env": {
-    "node": true
+    "node": true,
+    "es6": true
   },
 
   "parserOptions": {
@@ -73,6 +74,7 @@
     "City": true,
     "Country": true,
     "Continent": true,
+    "Region": true,
     "Image": true
 
     // …and any others.

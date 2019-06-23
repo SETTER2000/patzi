@@ -11,7 +11,7 @@ module.exports = {
   migrate: 'safe',
   datastore: 'mysqlDb',
   tableName: '_countries',
-
+  dontUseObjectIds: true,
   attributes: {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
@@ -59,7 +59,7 @@ module.exports = {
     labelJa: {type: 'string', columnName: 'title_ja'},
     labelLt: {type: 'string', columnName: 'title_lt'},
     labelLv: {type: 'string', columnName: 'title_lv'},
-    labelC: {type: 'string', columnName: 'title_cz'},
+    labelCz: {type: 'string', columnName: 'title_cz'},
     // description: {
     //   type: 'string',
     //   example: 'Росси́я, официально также Росси́йская Федера́ция[e] (РФ[f]) — государство в Восточной Европе и Северной Азии. Территория России в рамках её конституционного устройства[c] составляет 17 125 191[6] км²; население страны (в пределах её заявленной территории[c]) составляет 146 781 095[7] чел. (2019). Занимает первое место в мире по территории, шестое — по объёму ВВП по ППС и девятое — по численности населения.',

@@ -8,8 +8,8 @@
     center>
     <span>{{text}}</span>
     <span slot="footer" class="dialog-footer">
-                <el-button @click="centerDialogVisibleConfirm = false">Отмена</el-button>
-                <el-button type="primary" @click="confirmDeletion()">Да</el-button>
+                <el-button @click="centerDialogVisibleConfirm = false"><%= __('Cancel') %></el-button>
+                <el-button type="primary" @click="confirmDeletion()"><%= __('Yes') %></el-button>
              </span>
   </el-dialog>
 
@@ -138,6 +138,7 @@
                            :value="item.id">
                   <span style="float: left">{{ item.label }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
               </el-select>
 
               <el-tooltip class="ml-3" effect="dark" content="<%= __('Continental Information') %>"
@@ -158,13 +159,34 @@
                          style="width: 58%;"
                          :clearable="true"
                          @visible-change="changeSelectCountry"
-                         @change="changeCountry">
+                        >
                 <el-option v-for="item in getPullCountry()"
                            :key="item.id"
                            :label="item.label"
                            :value="item.id">
                   <span style="float: left">{{ item.label }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </template>
+
+          <template v-if="ruleForm.country">
+          <!--<template >-->
+            <el-form-item label="<%= __('Region') %>" prop="region">
+              <el-select v-model="ruleForm.region"
+                         placeholder="<%= __('Where is the kennel registered?') %>"
+                         style="width: 58%;"
+                         :clearable="true"
+                         @visible-change="changeSelectRegion"
+                         @change="changeRegion">
+                <el-option v-for="item in getPullRegion()"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: rgb(132,146,166); font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
               </el-select>
             </el-form-item>
           </template>
@@ -397,6 +419,23 @@
           <transition name="collapse">
             <div class="product-image">
               <img :src="item.imageSrc">
+
+
+              <% /* КНОПКИ Удаления питомника */%>
+              <div class="flx">
+                <div class="fixButton">
+                  <a class="p-button" href="#"
+                     @click="clickEditKennel(item.id)">
+                    <i class="el-icon-edit"></i>
+                  </a>
+                </div>
+                <div class="fixButton">
+                  <a class="p-button"  href="#"
+                     @click="clickDeleteObject(item.id)">
+                    <i class="el-icon-delete"></i>
+                  </a>
+                </div>
+              </div>
             </div>
           </transition>
           <div class="product-info">

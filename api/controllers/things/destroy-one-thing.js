@@ -17,7 +17,7 @@ module.exports = {
 
   exits: {
     notFound:{
-      description: 'Не существует такой вещи с таким ID.',
+      description: 'Не существует такого объекта с таким ID.',
       responseType:'notFound' // как раньше res.notFound(), сейчас это встроеная функция sails
     },
     forbidden: {

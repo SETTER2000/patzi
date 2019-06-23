@@ -104,8 +104,8 @@ module.exports.routes = {
   'GET     /api/v1/litters/:id': {action: 'litters/download-photo'},
   'PUT     /api/v1/litters/:id/puppy': {action: 'litters/reserve-puppy'},
   'POST    /litters/files': {action: 'litters/upload-files', csrf: false},
-  'POST    /api/v1/litters/create-litter': { action: 'litters/create-litter', csrf: false },
-  'GET     /api/v1/litters/list': { action: 'litters/list' },
+  'POST    /api/v1/litters/create-litter': {action: 'litters/create-litter', csrf: false},
+  'GET     /api/v1/litters/list': {action: 'litters/list'},
 
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},
@@ -137,22 +137,25 @@ module.exports.routes = {
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},
   'POST   /api/v1/continents/create-continent': {action: 'continents/create-continent'},
 
-  'GET    /api/v1/kennels/:id': { action: 'kennels/download-photo' },
-  'GET    /api/v1/kennels/list': { action: 'kennels/list' },
+  'GET    /api/v1/kennels/:id': {action: 'kennels/download-photo'},
+  'GET    /api/v1/kennels/list': {action: 'kennels/list'},
   'POST   /api/v1/kennels/create-kennel': {action: 'kennels/create-kennel', csrf: false},
-
-  'POST   /api/v1/dogs/create-dog': { action: 'dogs/create-dog', csrf: false },
-  'GET    /api/v1/dogs/list': { action: 'dogs/list' },
-  'GET    /api/v1/dogs/list-sire': { action: 'dogs/list-sire' },
-  'GET    /api/v1/dogs/list-dam': { action: 'dogs/list-dam' },
-  'POST   /api/v1/files/upload': { action: 'files/upload' , csrf: false},
-
-  'GET    /api/v1/city/list/:countryId?': { action: 'city/list' },
-
-  'GET    /api/v1/country/list': { action: 'country/list' },
-
-  'GET    /api/v1/files/download/:section/:id': { action: 'files/download' },
+  'DELETE /api/v1/kennels/destroy-one-kennel': {action: 'kennels/destroy-one-kennel', csrf: false},
 
 
-  'POST /api/v1/region/create-region': { action: 'region/create-region' },
+  'POST   /api/v1/dogs/create-dog': {action: 'dogs/create-dog', csrf: false},
+  'GET    /api/v1/dogs/list': {action: 'dogs/list'},
+  'GET    /api/v1/dogs/list-sire': {action: 'dogs/list-sire'},
+  'GET    /api/v1/dogs/list-dam': {action: 'dogs/list-dam'},
+  'POST   /api/v1/files/upload': {action: 'files/upload', csrf: false},
+
+  'GET    /api/v1/city/list/:regionId?': {action: 'city/list'},
+
+  'GET    /api/v1/country/list': {action: 'country/list'},
+
+  'GET    /api/v1/files/download/:section/:id': {action: 'files/download'},
+
+
+  'POST   /api/v1/region/create-region': {action: 'region/create-region'},
+  'GET    /api/v1/region/list': {action: 'region/list'},
 };

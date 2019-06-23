@@ -8,9 +8,9 @@ module.exports = {
 
 
   inputs: {
-    countryId: {
+    regionId: {
       type: 'string',
-      description: 'Идентификатор страны, по которой нужно вернуть города.'
+      description: 'Идентификатор региона, по которому нужно вернуть города.'
     }
   },
 
@@ -39,11 +39,11 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-
+console.log('inputs.regionId::' , inputs.regionId);
     // Бибилиотека Node.js
     const url = require('url');
     const moment = require('moment');
-    let query = (inputs.countryId) ? {region: inputs.countryId} : {};
+    let query = (inputs.regionId) ? {region: inputs.regionId} : {region:0};
     // Устанавливаем соответствующую локаль для даты, установленую пользователем.
     moment.locale(this.req.me.preferredLocale);
 

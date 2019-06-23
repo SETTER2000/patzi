@@ -34,8 +34,13 @@ module.exports.datastores = {
 
   mysqlDb: {
     adapter: 'sails-mysql',
+    host:'localhost',
+    user:'root',
+    password:'4211817',
+    database:'geodata'
+    // database:'flk'
     // url: 'mysql://root@localhost:3306/flk'
-    url: 'mysql://root@localhost:3306/geodata'
+    // url: 'mysql://root@localhost:3306/geodata'
   },
 
   mongodb: {
@@ -48,42 +53,42 @@ module.exports.datastores = {
     //url: 'mongodb://fox:4211817@localhost:27017/patzi',
   },
   // default: {
-    //
-    //   /***************************************************************************
-    //   *                                                                          *
-    //   * Want to use a different database during development?                     *
-    //   *                                                                          *
-    //   * 1. Choose an adapter:                                                    *
-    //   *    https://sailsjs.com/plugins/databases                                 *
-    //   *                                                                          *
-    //   * 2. Install it as a dependency of your Sails app.                         *
-    //   *    (For example:  npm install sails-mysql --save)                        *
-    //   *                                                                          *
-    //   * 3. Then pass it in, along with a connection URL.                         *
-    //   *    (See https://sailsjs.com/config/datastores for help.)                 *
-    //   *                                                                          *
-    //   ***************************************************************************/
-    //   // adapter: 'sails-mysql',
-    //   // url: 'mysql://user:password@host:port/database',
-    //   // url: 'mysql://adam-at-461068669279:qNcpc6q9kC9CpfslhQegM9+Ucm3U6JSsQySkqoHArGA=@patzi.cpiteotrtqu9.us-east-1.rds.amazonaws.com:3306/city',
-    //
-    //   //
-    //   // host: 'localhost',
-    //   // port: 27017,
-    //   // user: 'fox', //optional
-    //   // password:'4211817',
-    //   // database: 'patzi', //optional
-    //   // connectTimeoutMS: 300000,
-    //   // keepAlive: 300000,
-    //   // adapter: require('sails-mongo'),
-    //   // url: 'mongodb://fox:4211817@localhost:27017/patzi',
-    //
-    //   //password:process.env.MONGO_PASS ,
-    //   // set MONGO_PASS=4211817 && sails lift
-    //   // set MONGO_PASS=4211817 && sails console --redis
-    //   // adapter: 'sails-mongo',
-    //   // url: 'mongodb://fox@localhost/patzi'
-    //   // url:''
+  //
+  //   /***************************************************************************
+  //   *                                                                          *
+  //   * Want to use a different database during development?                     *
+  //   *                                                                          *
+  //   * 1. Choose an adapter:                                                    *
+  //   *    https://sailsjs.com/plugins/databases                                 *
+  //   *                                                                          *
+  //   * 2. Install it as a dependency of your Sails app.                         *
+  //   *    (For example:  npm install sails-mysql --save)                        *
+  //   *                                                                          *
+  //   * 3. Then pass it in, along with a connection URL.                         *
+  //   *    (See https://sailsjs.com/config/datastores for help.)                 *
+  //   *                                                                          *
+  //   ***************************************************************************/
+  //   // adapter: 'sails-mysql',
+  //   // url: 'mysql://user:password@host:port/database',
+  //   // url: 'mysql://adam-at-461068669279:qNcpc6q9kC9CpfslhQegM9+Ucm3U6JSsQySkqoHArGA=@patzi.cpiteotrtqu9.us-east-1.rds.amazonaws.com:3306/city',
+  //
+  //   //
+  //   // host: 'localhost',
+  //   // port: 27017,
+  //   // user: 'fox', //optional
+  //   // password:'4211817',
+  //   // database: 'patzi', //optional
+  //   // connectTimeoutMS: 300000,
+  //   // keepAlive: 300000,
+  //   // adapter: require('sails-mongo'),
+  //   // url: 'mongodb://fox:4211817@localhost:27017/patzi',
+  //
+  //   //password:process.env.MONGO_PASS ,
+  //   // set MONGO_PASS=4211817 && sails lift
+  //   // set MONGO_PASS=4211817 && sails console --redis
+  //   // adapter: 'sails-mongo',
+  //   // url: 'mongodb://fox@localhost/patzi'
+  //   // url:''
 
 
 

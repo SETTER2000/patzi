@@ -10,6 +10,7 @@ module.exports = {
   migrate: 'safe',
   datastore: 'mysqlDb',
   tableName: '_cities',
+  dontUseObjectIds: true,
   attributes: {
     createdAt: false,
     updatedAt: false,
@@ -39,6 +40,9 @@ module.exports = {
     },
 
 
+
+    // regionId: {type: 'string', columnName: 'region_id'},
+
     labelUa: {type: 'string', columnName: 'title_ua'},
     labelBe: {type: 'string', columnName: 'title_be'},
     labelEs: {type: 'string', columnName: 'title_es'},
@@ -50,8 +54,7 @@ module.exports = {
     labelJa: {type: 'string', columnName: 'title_ja'},
     labelLt: {type: 'string', columnName: 'title_lt'},
     labelLv: {type: 'string', columnName: 'title_lv'},
-    labelC: {type: 'string', columnName: 'title_cz'},
-
+    labelCz: {type: 'string', columnName: 'title_cz'},
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
@@ -77,7 +80,7 @@ module.exports = {
     // Add a reference to User
     region: {
       model: 'region',
-      description: 'Город может принадлежать только одной стране. One to Many',
+      description: 'Город может принадлежать только одному региону. One to Many',
       columnName: 'region_id',
     }
   },

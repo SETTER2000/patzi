@@ -53,7 +53,7 @@ module.exports = {
     await sails.sockets.join(req, 'continent');
 
     // Выбираем весь список объектов данной коллекции.
-    let continents = await Continent.find().populate('countrys').sort('label ASC');
+    data.continents =await Continent.find().populate('countrys').sort('label ASC');
     // По какому полю делать сортировку городов, зависит от языка
     let sort = (this.req.me.preferredLocale === 'ru')? 'labelRu' : 'value';
     // let continents = await Continent.find().populate('countrys');
@@ -92,7 +92,7 @@ module.exports = {
     //   // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию и т.д....
     //   delete continent.imageUploadMime;
     // });
-    data.continents = continents;
+
 
     // Рассылаем данные всем подписанным на событие list данной комнаты.
     await sails.sockets.broadcast('continent', 'list-continent', data);

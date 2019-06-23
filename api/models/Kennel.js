@@ -164,7 +164,7 @@ module.exports = {
 
 
 
-    region: {
+    continent: {
       model: 'continent',
       required: true,
       description: 'Питомник может принадлежать только одному континенту. One to Many'
@@ -172,6 +172,12 @@ module.exports = {
 
     country: {
       model: 'country',
+      required: true,
+      description: 'Питомник может принадлежать только одной стране. One to Many'
+    },
+
+    region: {
+      model: 'region',
       required: true,
       description: 'Питомник может принадлежать только одной стране. One to Many'
     },

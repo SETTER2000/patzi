@@ -36,7 +36,7 @@ module.exports = {
       throw 'notFound';
     }
     if (group.label === 'user') {
-      throw forbidden;
+      throw 'forbidden';
     }
     // if (group.owner !== this.req.me.id) {
     //   throw 'forbidden';

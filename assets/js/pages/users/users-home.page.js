@@ -141,7 +141,7 @@ parasails.registerPage('users-home', {
 
   watch: {
     // эта функция запускается при любом изменении count
-    count: function (newUsers, oldUsers) {
+    count: function (newUsers) {
       this.count = newUsers;
       this.getList();
     }
@@ -165,7 +165,7 @@ parasails.registerPage('users-home', {
       this.users = _.get(data, 'users') ? data.users : this.users;
       // this.count = _.get(data, 'count') ?  data.count : this.count;
     });
-    io.socket.on('count-all', (data) => this.counts = data);
+    io.socket.on('count-all', (data) => {this.counts = data;});
 
   },
 
@@ -268,7 +268,7 @@ parasails.registerPage('users-home', {
         // this.count = _.get(data, 'count') ?  data.count : this.count;
       });
       // Кол-во всего пользователей в системе
-      await  io.socket.on('count-all', (data) => this.counts = data);
+      await  io.socket.on('count-all', (data) => {this.counts = data;});
     },
 
     async remoteMethod(query) {

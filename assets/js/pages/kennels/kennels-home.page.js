@@ -82,13 +82,16 @@ parasails.registerPage('kennels-home', {
     ],
     cityId: undefined,
     state1: '',
-    countryId: 0,
-    url: "https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg",
+    selectedKennel: undefined,
+    // countryId: 0,
+    regionId: 0,
+    url: 'https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg',
     fit: 'cover',
     state2: '',
     options: [],
     continents: [],
     countrys: [],
+    regions: [],
     files: [],
     fileList: [],
     text: '',
@@ -162,18 +165,28 @@ parasails.registerPage('kennels-home', {
       ['en', {
         warnNoKennel: `At the moment there is no nursery in the database.
          You should create at least one kennel to start with to add a dog.`,
-        text400Err: 'Error. Could not create! ',
+        warnNotRecover:'After deletion, the object cannot be restored. Delete object?',
+        text400Err: 'Could not create! ',
+        text400ErrDel: 'Could not delete! ',
+        text403ErrForbd: 'Mistake! Could not remove. You may not have permission to delete this object. ',
+        text404Err: 'Not found object! ',
         text500Err: 'Server Error! Unable to create. ',
         text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
         success: 'Congratulations! Object successfully created. ',
+        successDel: 'Object successfully delete. ',
       }],
       ['ru', {
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
-        text400Err: 'Ошибка. Не смог создать!',
+        warnNotRecover:'После удаления объект невозможно будет восстановить. Удалить объект?',
+        text400Err: 'Не смог создать!',
+        text400ErrDel: 'Не удалось удалить!',
+        text403ErrForbd: 'Не смог удалить. Возможно у вас нет прав на удаление данного объекта. ',
+        text404Err: 'Не могу найти объект! ',
         text500Err: 'Ошибка сервера! Невозможно создать.',
         text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
         success: 'Поздравляем! Объект успешно создан.',
+        successDel: 'Объект успешно удален. ',
       }]
     ],
   },
@@ -186,7 +199,7 @@ parasails.registerPage('kennels-home', {
     _.extend(this, SAILS_LOCALS);
 
     function vowels(string) {
-      return _.filter(string, function (v) {
+      return _.filter(string, (v) => {
         return /[aeiou]/i.test(v);
       });
     }
@@ -209,14 +222,21 @@ parasails.registerPage('kennels-home', {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
-    // Принимаем данные по событию list-*
-    io.socket.on('list-kennel', data => this.kennels = data);
+
 
     // Принимаем данные по событию list-*
-    io.socket.on('list-continent', data => this.continents = data.continents);
+    io.socket.on('list-kennel', (data) => {
+      console.log('data KENNELS:', data);
+      this.kennels = data;});
+
+    // Принимаем данные по событию list-*
+    io.socket.on('list-continent', (data) => {this.continents = data.continents;});
 
     // Получаем данные для селектов в форме
-    io.socket.on('list-country', data => this.countrys = data);
+    io.socket.on('list-country', (data ) => {this.countrys = data.countrys;});
+
+    // Получаем данные для селектов в форме
+    io.socket.on('list-region', (data ) => {this.regions = data.regions;});
   },
 
 
@@ -252,10 +272,15 @@ parasails.registerPage('kennels-home', {
 
       // Принимаем данные по событию list-*
       await io.socket.on('list-kennel', (data) => {
-        this.kennels = data;
+        this.kennels = data.kennels;
       });
       // Принимаем данные по событию list-*
       await  io.socket.on('list-continent', (data) => {
+        this.continents = data.continents;
+        // this.count = _.get(data, 'count') ?  data.count : this.count;
+      });
+      // Принимаем данные по событию list-*
+      await  io.socket.on('list-country', (data) => {
         this.continents = data.continents;
         // this.count = _.get(data, 'count') ?  data.count : this.count;
       });
@@ -349,6 +374,7 @@ parasails.registerPage('kennels-home', {
         dateCreate: JSON.stringify(this.ruleForm.dateCreate),
         continent: this.ruleForm.continent,
         country: this.ruleForm.country,
+        region: this.ruleForm.region,
         city: this.cityId,
         rightName: this.ruleForm.rightName,
         site: this.ruleForm.site,
@@ -366,19 +392,56 @@ parasails.registerPage('kennels-home', {
             (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
-        console.log('Сервер ответил-2 кодом ' + jwRes.statusCode + ' и данными: ', data);
+        console.log('Сервер create-kennel ответил кодом ' + jwRes.statusCode + ' и данными: ', data);
+
+
+
         this.centerDialogAdded = false;
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
           this.ruleForm.phones[0].fullName = '';
-          this.getList();
+          // this.getList();
+
+          // // Подписываемся на комнату kennel  и событие list-kennel
+          // io.socket.get(`/api/v1/kennels/list`, function gotResponse(body, response) {
+          //   console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+          // });
+          //
+          // // Принимаем данные по событию list-*
+          // io.socket.on('list-kennel', (data) => {this.kennels = data;});
         }
       });
     },
 
+    // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
+    // Это кнопка вызывает модальное окно <modal> с <ajax-form>
+    // для удаления объекта
+    clickDeleteObject: function (id) {
+      this.text = this.i19p.warnNotRecover;
+      this.centerDialogVisibleConfirm = true;
+      this.selectedKennel = _.find(this.kennels, {id: id});
+    },
 
+    // Закрывает модальное окно для удаления объекта
+    closeDeleteKennelModal: function () {
+      this.selectedKennel = undefined;
+      this.centerDialogVisibleConfirm = false;
+    },
+
+    handleParsingDeleteKennelForm: function () {
+      return {
+        id: this.selectedKennel.id
+      };
+    },
+
+    submittedDeleteKennelForm: function () {
+      _.remove(this.things, {id: this.selectedKennel.id});
+      this.$forceUpdate();
+      this.centerDialogVisibleConfirm = false;
+      this.selectedKennel = undefined;
+    },
     goToCard() {
       window.location = '/account';
     },
@@ -399,10 +462,15 @@ parasails.registerPage('kennels-home', {
       }
     },
 
-      changeSelectCountry() {
+    changeSelectCountry() {
       console.log('changeSelectCountry: ');
-       // this.ruleForm.city = null;
-     },
+      // this.ruleForm.city = null;
+    },
+
+    changeSelectRegion() {
+      console.log('changeSelectRegion: ');
+      // this.ruleForm.city = null;
+    },
 
 
     changeSelectContinent() {
@@ -419,11 +487,21 @@ parasails.registerPage('kennels-home', {
     },
 
 
-    getPullCity() {
-      let countrys = this.countrys.filter(country => {
+    getPullRegion() {
+      let t = this.countrys.filter(country => {
         return country.id === this.ruleForm.country;
       });
-      return countrys[0].citys;
+      let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
+      console.log('t[0].regions: ', t[0].regions);
+      return _.sortBy(t[0].regions, field);
+    },
+
+
+    getPullCity() {
+      let regions = this.regions.filter(region => {
+        return region.id === this.ruleForm.country;
+      });
+      return regions[0].citys;
     },
 
 
@@ -504,7 +582,7 @@ parasails.registerPage('kennels-home', {
 
     async cityList() {
 
-      await io.socket.get(`/api/v1/city/list/${this.countryId}`, function gotResponse(body, response) {
+      await io.socket.get(`/api/v1/city/list/${this.regionId}`, function gotResponse(body, response) {
         console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
@@ -515,8 +593,15 @@ parasails.registerPage('kennels-home', {
 
 
     // Реагирует на событие change в поле города|city
-    async changeCountry(countryId) {
-      this.countryId = countryId;
+    // async changeCountry(countryId) {
+    //   this.countryId = countryId;
+    //   console.log('this.ruleForm.city:', this.ruleForm.city);
+    //   await this.cityList();
+    // },
+
+    // Реагирует на событие change в поле города|city
+    async changeRegion(regionId) {
+      this.regionId = regionId;
       console.log('this.ruleForm.city:', this.ruleForm.city);
       await this.cityList();
     },
@@ -530,6 +615,19 @@ parasails.registerPage('kennels-home', {
       // Ждём данные от загрузки нового питомника
       await io.socket.on('list-country', (data) => {
         this.countrys = data;
+      });
+    },
+
+
+
+    async regionList() {
+      await io.socket.get(`/api/v1/region/list`, function gotResponse(body, response) {
+        // console.log('Сервер country ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+
+      // Ждём данные от загрузки нового питомника
+      await io.socket.on('list-region', (data) => {
+        this.regions = data;
       });
     },
 
@@ -561,7 +659,37 @@ parasails.registerPage('kennels-home', {
       console.log('go back');
     },
 
+    confirmDeletion() {
 
+      this.centerDialogVisibleConfirm = false;
+      this.confirm = true;
+      let self = this;
+      if (this.confirm) {
+
+
+        /**
+         * TODO WEBSOCKET: Удаление объекта
+         */
+        io.socket.delete('/api/v1/kennels/destroy-one-kennel', {'id': this.selectedKennel.id}, (data, jwRes) => {
+
+            (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successDel)) :
+              (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrDel) :
+              (jwRes.statusCode === 403) ? this.mesError(this.i19p.text403ErrForbd) :
+              (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
+                (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
+                  (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+
+
+
+          console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+        });
+        /**
+         * TODO WEBSOCKET: End
+         */
+        this.rowTable = '';
+        this.confirm = false;
+      }
+    },
 
   }
 });

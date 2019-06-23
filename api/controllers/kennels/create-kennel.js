@@ -67,21 +67,6 @@ module.exports = {
       description: 'Сайт.'
     },
 
-    country: {
-      type: 'string',
-      required: true,
-      description: 'Страна где находится питомник.'
-    },
-
-    address: {
-      type: 'string',
-      description: 'Адрес где находится питомник.'
-    },
-
-    city: {
-      type: 'string',
-      description: 'Город где находится питомник.'
-    },
 
     continent: {
       type: 'string',
@@ -89,10 +74,40 @@ module.exports = {
       description: 'Континент где находится питомник.'
     },
 
+
+    country: {
+      type: 'string',
+      required: true,
+      description: 'Страна где находится питомник.'
+    },
+
+
+
+    region: {
+      type: 'string',
+      required: true,
+      description: 'Край, область где находится питомник.'
+    },
+
+
+
+    city: {
+      type: 'string',
+      description: 'Город где находится питомник.'
+    },
+
+
+
+    address: {
+      type: 'string',
+      description: 'Адрес где находится питомник.'
+    },
+
+
     dateCreate: {
       type: 'string',
       required: true,
-      description: 'Дата создания.'
+      description: 'Дата создания питомника.'
     },
 
     rightName: {
@@ -131,7 +146,6 @@ module.exports = {
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'kennel');
-    // inputs.file = inputs.file[0];
 
 
     inputs.file = (_.get(inputs.file, 'fd')) ? inputs.file : '';
@@ -150,13 +164,21 @@ module.exports = {
       site: _.trim(inputs.site),
       city: inputs.city,
       country: inputs.country,
-      region: inputs.continent,
+      continent: inputs.continent,
+      region: inputs.region,
       address: inputs.address,
       phones: inputs.phones
     }).fetch();
 
+    if (!newKennel) {
+      throw 'badRequest';
+    }
+
+    // Вызываем помощника сформировать правильно данные для ответа.
+    let res = await sails.helpers.formatCollectionKennel(req);
+
     // Рассылаем данные всем подписанным на событие list данной комнаты.
-    await sails.sockets.broadcast('kennel', 'list-kennel');
+    await sails.sockets.broadcast('kennel', 'list-kennel',res.collection);
 
     return exits.success();
   }
