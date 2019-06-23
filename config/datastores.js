@@ -39,8 +39,8 @@ module.exports.datastores = {
     password:'4211817',
     database:'geodata'
     // database:'flk'
-    // url: 'mysql://root@localhost:3306/flk'
-    // url: 'mysql://root@localhost:3306/geodata'
+
+
   },
 
   mongodb: {
@@ -51,6 +51,7 @@ module.exports.datastores = {
     password: '4211817',
     database: 'patzi', //optional
     //url: 'mongodb://fox:4211817@localhost:27017/patzi',
+
   },
   // default: {
   //
