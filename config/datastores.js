@@ -41,9 +41,9 @@ module.exports.datastores = {
     // database:'flk'
     url: 'mysql://root:4211817@localhost:3306/geodata'
     // url: 'mysql://root:4211817@localhost:3306/flk'
-
-
-  },
+    // url: 'mysql://root:4211817@localhost:3306/flk'
+  //
+    },
 
   mongodb: {
     adapter: 'sails-mongo',
