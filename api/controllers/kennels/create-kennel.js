@@ -24,6 +24,7 @@ module.exports = {
 
     subtitle: {
       type: 'string',
+      maxLength:300,
       description: 'Дополнительная информация. Описание питомника.'
     },
 

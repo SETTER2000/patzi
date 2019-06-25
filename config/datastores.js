@@ -40,6 +40,8 @@ module.exports.datastores = {
     // database:'geodata'
     // database:'flk'
     url: 'mysql://root:4211817@localhost:3306/geodata'
+    // url: 'mysql://root:4211817@localhost:3306/flk'
+
 
   },
 
@@ -47,9 +49,10 @@ module.exports.datastores = {
     adapter: 'sails-mongo',
     host: 'localhost',
     port: 27017,
-    user: 'fox', //optional
+    user: 'fox',
     password: '4211817',
-    database: 'patzi', //optional
+    database: 'patzi'
+
     //url: 'mongodb://fox:4211817@localhost:27017/patzi',
 
   },

@@ -97,7 +97,7 @@ parasails.registerPage('kennels-home', {
     text: '',
     value: [],
     list: [],
-    yourKennel: false,
+
     loading: false,
     centerDialogVisibleConfirm: false,
     uploadModalOpen: false,
@@ -117,7 +117,7 @@ parasails.registerPage('kennels-home', {
       dialogImageUrl: '',
       dialogVisible: false,
       country: null,
-
+      yourKennel: false,
       rightName: true,
       registerNumber: '',
       dateCreate: '',
@@ -136,7 +136,6 @@ parasails.registerPage('kennels-home', {
         {required: true, message: 'Please input register number', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
       ],
-
       region: [
         {required: true, message: 'Please select Activity zone', trigger: 'change'}
       ],
@@ -151,7 +150,7 @@ parasails.registerPage('kennels-home', {
       ],
       subtitle: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
-        {min: 10, max: 100, message: 'Length should be 10 to 100', trigger: 'blur'}
+        {min: 10, max: 300, message: 'Length should be 10 to 100', trigger: 'blur'}
       ]
     },
     // Состояние загрузки
