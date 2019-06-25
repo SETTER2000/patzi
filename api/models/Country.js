@@ -9,7 +9,7 @@ module.exports = {
 
   schema: true,
   migrate: 'safe',
-  datastore: 'mysqlDb',
+  datastore: 'mysql',
   tableName: '_countries',
   dontUseObjectIds: true,
   attributes: {

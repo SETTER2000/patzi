@@ -12,7 +12,7 @@
  * For more information on configuring datastores, check out:
  * https://sailsjs.com/config/datastores
  */
-
+const fs =require('fs');
 module.exports.datastores = {
 
 
@@ -32,16 +32,19 @@ module.exports.datastores = {
    *                                                                          *
    ***************************************************************************/
 
-  mysqlDb: {
+  mysql: {
     adapter: 'sails-mysql',
-    // host:'localhost',
-    // user:'root',
+    // host:'instancepatzi.cpiteotrtqu9.us-east-1.rds.amazonaws.com',
+    // user:'adam',
     // password:'4211817',
-    // database:'geodata'
+    // database:'patzi',
+    ssl  : {
+      ca : fs.readFileSync(__dirname + '/rds-combined-ca-bundle.pem')
+    },
     // database:'flk'
-    url: 'mysql://root:4211817@localhost:3306/geodata'
+    // url: 'mysql://root:4211817@localhost:3306/geodata'
     // url: 'mysql://root:4211817@localhost:3306/flk'
-    // url: 'mysql://root:4211817@localhost:3306/flk'
+
   //
     },
 
@@ -74,7 +77,7 @@ module.exports.datastores = {
   //   ***************************************************************************/
   //   // adapter: 'sails-mysql',
   //   // url: 'mysql://user:password@host:port/database',
-  //   // url: 'mysql://adam-at-461068669279:qNcpc6q9kC9CpfslhQegM9+Ucm3U6JSsQySkqoHArGA=@patzi.cpiteotrtqu9.us-east-1.rds.amazonaws.com:3306/city',
+
   //
   //   //
   //   // host: 'localhost',
