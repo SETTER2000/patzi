@@ -12,7 +12,7 @@
  * For more information on configuring datastores, check out:
  * https://sailsjs.com/config/datastores
  */
-const fs =require('fs');
+
 module.exports.datastores = {
 
 
