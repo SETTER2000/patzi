@@ -79,6 +79,25 @@ body {
   flex-direction: column;
   height: 100vh; /* Avoid the IE 10-11 `min-height` bug. */
 
+  .groom {
+    position: relative;
+    display: inline-block;
+    height: 30px;
+    width: 16px;
+  }
+  .groom::after {
+    content: '';
+    height: 100%;
+    width: 100%;
+    color: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("https://d3a1wbnh2r1l7y.cloudfront.net/brush.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
   //.circle {
   //  float: left;
   //  height: 200px;
@@ -261,8 +280,6 @@ body.detected-mobile {
     }
   }
 }
-
-
 
 @media (max-width: 450px) {
   #page-wrap {

@@ -34,19 +34,15 @@ module.exports.datastores = {
 
   mysql: {
     adapter: 'sails-mysql',
-    // host:'localhost',
-    // user:'root',
-    // password:'4211817',
-    // database:'patzi',
-    ssl  : {
-      ca : fs.readFileSync(__dirname + '/rds-combined-ca-bundle.pem')
-    },
-    // database:'flk'
-    // url: 'mysql://root:4211817@localhost:3306/geodata'
-    // url: 'mysql://root:4211817@localhost:3306/flk'
-
-  //
-    },
+    host:'localhost',
+    user:'root',
+    password:'4211817',
+    database:'geo',
+    // database:'flk',
+    // ssl: {
+    //   ca: fs.readFileSync(__dirname + '/rds-combined-ca-bundle.pem')
+    // },
+  },
 
   mongodb: {
     adapter: 'sails-mongo',
@@ -78,30 +74,5 @@ module.exports.datastores = {
   //   // adapter: 'sails-mysql',
   //   // url: 'mysql://user:password@host:port/database',
 
-  //
-  //   //
-  //   // host: 'localhost',
-  //   // port: 27017,
-  //   // user: 'fox', //optional
-  //   // password:'4211817',
-  //   // database: 'patzi', //optional
-  //   // connectTimeoutMS: 300000,
-  //   // keepAlive: 300000,
-  //   // adapter: require('sails-mongo'),
-  //   // url: 'mongodb://fox:4211817@localhost:27017/patzi',
-  //
-  //   //password:process.env.MONGO_PASS ,
-  //   // set MONGO_PASS=4211817 && sails lift
-  //   // set MONGO_PASS=4211817 && sails console --redis
-  //   // adapter: 'sails-mongo',
-  //   // url: 'mongodb://fox@localhost/patzi'
-  //   // url:''
-
-
-
-
-
-
-
-  // },
+// }
 };
