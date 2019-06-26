@@ -8,6 +8,7 @@ parasails.registerPage('dogs-home', {
     dams: [],
     sires: [],
     warning: '',
+
     value: 0,
     // Состояние загрузки
     syncing: false,
@@ -34,7 +35,7 @@ parasails.registerPage('dogs-home', {
     innerVisible: false,
     dialogImageUrl: '',
     dialogVisible: false,
-    url: 'https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg',
+    url: 'https://d3a1wbnh2r1l7y.cloudfront.net/Izmerit_holku.svg',
     fit: 'cover',
     centerDialogVisibleWarnings: false,
     files: [],
@@ -49,6 +50,10 @@ parasails.registerPage('dogs-home', {
         {required: true, message: 'Please input dog name', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
       ],
+      // growth: [
+      //   {required: true, message: 'Please input height dog', trigger: 'change'},
+      //   // {min: 20, max: 40, message: 'Height should be 20 to 40 cm', trigger: 'change'}
+      // ],
       gender: [
         {required: true, message: 'Please select a dog gender.', trigger: 'change'}
       ],
@@ -122,6 +127,7 @@ parasails.registerPage('dogs-home', {
         text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
         success: 'Congratulations! Object successfully created. ',
         selectGender: 'Please select a dog gender.',
+        growth: "How to measure a dog's height?",
       }],
       ['ru', {
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
@@ -131,6 +137,7 @@ parasails.registerPage('dogs-home', {
         text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
         success: 'Поздравляем! Объект успешно создан.',
         selectGender: 'Пожалуйста выберите пол собаки.',
+        growth: 'Как измерить рост собаки?',
       }]
     ],
   },

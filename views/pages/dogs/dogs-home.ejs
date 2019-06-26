@@ -223,14 +223,14 @@
     custom-class="dialog-kennel-add"
     center>
     <el-dialog
-      width="80%"
+      width="60%"
       top="3vh"
-      title="Continents 6"
+      :title="i19p.growth"
       :visible.sync="innerVisible"
       append-to-body>
       <div class="justify-content-center">
         <el-image
-          style="width: inherit; height: auto"
+          style="width: inherit; height: auto; "
           :src=url
           :fit="fit"></el-image>
       </div>
@@ -353,8 +353,8 @@
           <el-form-item label="<%= __('Gender') %>" prop="gender">
             <el-col :span="12">
               <el-radio-group v-model="ruleForm.gender">
-              <el-radio  label="sire" border size="medium"><%= __('Sire') %></el-radio>
-              <el-radio  label="dam" border size="medium"><%= __('Dam') %></el-radio>
+                <el-radio label="sire" border size="medium"><%= __('Sire') %></el-radio>
+                <el-radio label="dam" border size="medium"><%= __('Dam') %></el-radio>
               </el-radio-group>
             </el-col>
           </el-form-item>
@@ -374,7 +374,6 @@
               </el-col>
             </el-form-item>
           </template>
-
 
 
           <el-form-item
@@ -403,6 +402,26 @@
             </el-input>
             <!--</el-form-item>-->
           </el-form-item>
+
+          <% /* РОСТ */ %>
+          <template>
+            <el-form-item label="<%= __('Dog height (cm)') %>" prop="growth">
+              <el-col :span="16">
+                <div class="block">
+                  <el-slider
+                    v-model="ruleForm.growth"
+                    :min="20"
+                    :max="40"
+                    show-input>
+                  </el-slider>
+                </div>
+              </el-col>
+              <el-tooltip class="ml-3" effect="dark" content="<%= __("How to measure a dog's height?") %>"
+                          placement="top-start">
+                <el-button @click="innerVisible=true" size="mini" round icon="el-icon-question"></el-button>
+              </el-tooltip>
+            </el-form-item>
+          </template>
 
 
           <div class="my-sm-5">
