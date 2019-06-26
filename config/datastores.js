@@ -34,8 +34,8 @@ module.exports.datastores = {
 
   mysql: {
     adapter: 'sails-mysql',
-    // host:'instancepatzi.cpiteotrtqu9.us-east-1.rds.amazonaws.com',
-    // user:'adam',
+    // host:'localhost',
+    // user:'root',
     // password:'4211817',
     // database:'patzi',
     ssl  : {
