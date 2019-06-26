@@ -84,7 +84,7 @@ module.exports = {
     },
     mysql: {
       ssl: {
-        ca: fs.readFileSync(__dirname + '../rds-combined-ca-bundle.pem')
+        ca: fs.readFileSync(__dirname + '/../rds-combined-ca-bundle.pem')
       },
     }
   },
