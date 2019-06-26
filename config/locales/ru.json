@@ -469,6 +469,8 @@
 	"Add 3 dogs": "Добавить 3 собак",
 	"Edit 3 dogs": "Редактировать 3 собаки",
 	"register": "регистр",
+	"Weight (g)": "Вес (гр)",
+	"Growth (cm)": "Рост (cм)",
 	"Region": "Область, край",
 	"Dog registration number": "Регистрационный номер собаки",
 	"Add your Litter": "Добавьте свой питомник",
@@ -479,9 +481,13 @@
 	"Your account is nearly ready. All you have to do is click the link we sent to": "Ваш аккаунт почти готов. Все, что вам нужно сделать, это нажать на ссылку, которую мы отправили",
 	"Your password and confirmation do not match": "Ваш пароль и подтверждение не совпадают",
 	"here": "здесь",
+	"Powderpuff left, right hairless": "Слева пуховая, справа голая.",
+	"What is it?": "Что это?",
 	"You can still access your dashboard now, but some features will be unvavailable until we've verified your email address": "Вы по-прежнему можете получить доступ к своей панели мониторинга, но некоторые функции будут недоступны, пока мы не проверим ваш адрес электронной почты",
 	"Check your email": "Проверьте свою электронную почту",
 	"Please enter a password": "Пожалуйста, введите пароль",
 	"An error occured while processing your request. Please check your information and try again, or ": "Произошла ошибка при обработке вашего запроса. Пожалуйста, проверьте информацию и попробуйте снова, или",
-	"Add photo": "Добавить фото"
+	"Add photo": "Добавить фото",
+	"Hairless": "Голая",
+	"Powderpuff": "Пуховая"
 }

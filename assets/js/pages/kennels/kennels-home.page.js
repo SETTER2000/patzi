@@ -7,6 +7,7 @@ parasails.registerPage('kennels-home', {
     citys: [],
     links: [],
     props: {multiple: true},
+    website:null,
     optionsTest: [
       {
         value: 1,
@@ -376,7 +377,7 @@ parasails.registerPage('kennels-home', {
         region: this.ruleForm.region,
         city: this.cityId,
         rightName: this.ruleForm.rightName,
-        site: this.ruleForm.site,
+        site: this.ruleForm.website,
         registerNumber: this.ruleForm.registerNumber,
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
@@ -491,7 +492,6 @@ parasails.registerPage('kennels-home', {
         return country.id === this.ruleForm.country;
       });
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
-      console.log('t[0].regions: ', t[0].regions);
       return _.sortBy(t[0].regions, field);
     },
 

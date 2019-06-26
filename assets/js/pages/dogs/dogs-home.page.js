@@ -6,9 +6,10 @@ parasails.registerPage('dogs-home', {
     dogs: [],
     kennels: [],
     dams: [],
+    dialog:{},
     sires: [],
     warning: '',
-
+    titleDialog: '',
     value: 0,
     // Состояние загрузки
     syncing: false,
@@ -35,7 +36,6 @@ parasails.registerPage('dogs-home', {
     innerVisible: false,
     dialogImageUrl: '',
     dialogVisible: false,
-    url: 'https://d3a1wbnh2r1l7y.cloudfront.net/Izmerit_holku.svg',
     fit: 'cover',
     centerDialogVisibleWarnings: false,
     files: [],
@@ -79,20 +79,20 @@ parasails.registerPage('dogs-home', {
         {min: 10, max: 100, message: 'Length should be 10 to 100', trigger: 'blur'}
       ]
     },
-    resetFederation:[{
+    resetFederation: [{
       key: 1,
       value: '',
-      registerNumber:''
+      registerNumber: ''
     }],
     ruleForm: {
       file: undefined,
-      federations:[{
+      federations: [{
         key: 1,
         value: 'FCI',
-        registerNumber:''
+        registerNumber: ''
       }],
-      sire:'',
-      dam:'',
+      sire: '',
+      dam: '',
       gender: '',
       label: '',
       federation: '1',
@@ -104,11 +104,14 @@ parasails.registerPage('dogs-home', {
       kennel: null,
       registerNumber: '',
       dateBirth: '',
-      subtitle: ''
+      subtitle: '',
+      weight: 10,
+      growth: 20,
+      type: '',
     },
     fits: 'cover',
-    select:'',
-    labelPosition:'top',
+    select: '',
+    labelPosition: 'top',
     items: [
       {name: 'Poale Ell Adam', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
       {name: 'Poale Ell Bell', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
@@ -118,6 +121,7 @@ parasails.registerPage('dogs-home', {
     litters: [],
     ratio: null,
     colors: ['#99A9BF', '#F7BA2A', '#FF9900'], // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+
     dic: [
       ['en', {
         warnNoKennel: `At the moment there is no nursery in the database.
@@ -127,7 +131,8 @@ parasails.registerPage('dogs-home', {
         text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
         success: 'Congratulations! Object successfully created. ',
         selectGender: 'Please select a dog gender.',
-        growth: "How to measure a dog's height?",
+        growth: 'How to measure a dog\'s height?',
+        hairless: 'What is a down or naked dog?',
       }],
       ['ru', {
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
@@ -138,8 +143,16 @@ parasails.registerPage('dogs-home', {
         success: 'Поздравляем! Объект успешно создан.',
         selectGender: 'Пожалуйста выберите пол собаки.',
         growth: 'Как измерить рост собаки?',
+        hairless: 'HЧто такое пуховая или голая собака?',
       }]
     ],
+    map:[
+      ['growth',{
+        src:'https://d3a1wbnh2r1l7y.cloudfront.net/Izmerit_holku.svg',
+      }],
+      ['hairless',{
+        src:'https://d3a1wbnh2r1l7y.cloudfront.net/Hairless_OR_Powderpuff.jpg',
+      }]],
   },
 
 
@@ -271,7 +284,6 @@ parasails.registerPage('dogs-home', {
     },
 
 
-
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.fileList = [];
@@ -303,13 +315,14 @@ parasails.registerPage('dogs-home', {
         kennel: this.ruleForm.kennel,
         nickname: this.ruleForm.nickname,
         federation: this.ruleForm.federation,
+        weight: this.ruleForm.weight,
+        growth: this.ruleForm.growth,
+        type: this.ruleForm.type,
 
-        site: this.ruleForm.site,
+
         registerNumber: this.ruleForm.registerNumber,
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
-        address: this.ruleForm.address,
-        phones: this.ruleForm.phones
       };
 
       await io.socket.post('/api/v1/dogs/create-dog', data, (data, jwRes) => {
@@ -391,7 +404,14 @@ parasails.registerPage('dogs-home', {
       // return _.sortBy(t[0].kennels, field);
     },
 
+    showDialog(string) {
+      this.innerVisible = true;
+      this.dialog =  new Map(this.map).get(string);
+      // this.dialog.header = this.i19p[string];
 
+
+console.log('DIALOOO:' ,this.dialog.dio());
+    },
     async handleSelect(e) {
       this.dogId = (_.isNumber(e.id)) ? e.id : undefined;
     },
@@ -403,7 +423,7 @@ parasails.registerPage('dogs-home', {
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-sire', (data) => {
-        console.log('sires: ' , data);
+        console.log('sires: ', data);
         this.sires = data;
       });
     },
@@ -414,7 +434,7 @@ parasails.registerPage('dogs-home', {
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-dam', (data) => {
-        console.log('dams: ' , data);
+        console.log('dams: ', data);
         this.dams = data;
       });
     },
@@ -440,7 +460,7 @@ parasails.registerPage('dogs-home', {
 
     createFilter: function (queryString) {
       return (link) => {
-        return  (link.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1);
+        return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1);
       };
     },
 

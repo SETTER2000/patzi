@@ -223,17 +223,32 @@
     custom-class="dialog-kennel-add"
     center>
     <el-dialog
-      width="60%"
-      top="3vh"
-      :title="i19p.growth"
+      width="90%"
+      height="90%"
+      top="5vh"
+      :title="dialog.header"
       :visible.sync="innerVisible"
       append-to-body>
-      <div class="justify-content-center">
-        <el-image
-          style="width: inherit; height: auto; "
-          :src=url
-          :fit="fit"></el-image>
+      <div class="block" style="display: flex; justify-content: center; flex-wrap:wrap;  align-items: stretch;">
+
+        <div class="text-center"><p>{{dialog.description}}</p></div>
+
+
+        <el-image :src="dialog.src">
+          <div slot="placeholder" class="image-slot">
+            Loading<span class="dot">...</span>
+          </div>
+        </el-image>
       </div>
+      <!--<div class="justify-content-center">-->
+        <!--<el-image-->
+          <!--style="width: inherit; height: auto; "-->
+          <!--:src="dialog.src"-->
+          <!--:fit="fit"></el-image>-->
+        <!--<div class="demo-image__lazy">-->
+          <!--<el-image v-for="url in dialog.src" :key="url" :src="url" lazy></el-image>-->
+        <!--</div>-->
+      <!--</div>-->
     </el-dialog>
 
     <div class="container">
@@ -360,6 +375,8 @@
           </el-form-item>
 
 
+
+
           <template>
             <el-form-item label="<%= __('Nickname') %>" prop="nickname">
               <el-col :span="14">
@@ -403,9 +420,23 @@
             <!--</el-form-item>-->
           </el-form-item>
 
+          <%/* ТИП */%>
+          <el-form-item label="<%= __('Type') %>" prop="type">
+            <el-col :span="16">
+              <el-radio-group v-model="ruleForm.type">
+                <el-radio label="hairless" border size="medium"><%= __('Hairless') %></el-radio>
+                <el-radio label="powderpuff" border size="medium"><%= __('Powderpuff') %></el-radio>
+              </el-radio-group>
+            </el-col>
+            <el-tooltip class="ml-3" effect="dark" content="<%= __("What is it?") %>"
+                        placement="top-start">
+              <el-button @click="showDialog('hairless')" size="mini" round icon="el-icon-question"></el-button>
+            </el-tooltip>
+          </el-form-item>
+
           <% /* РОСТ */ %>
           <template>
-            <el-form-item label="<%= __('Dog height (cm)') %>" prop="growth">
+            <el-form-item label="<%= __('Growth (cm)') %>" prop="growth">
               <el-col :span="16">
                 <div class="block">
                   <el-slider
@@ -418,8 +449,30 @@
               </el-col>
               <el-tooltip class="ml-3" effect="dark" content="<%= __("How to measure a dog's height?") %>"
                           placement="top-start">
-                <el-button @click="innerVisible=true" size="mini" round icon="el-icon-question"></el-button>
+                <el-button @click="showDialog('growth')" size="mini" round icon="el-icon-question"></el-button>
               </el-tooltip>
+            </el-form-item>
+          </template>
+
+
+          <% /* ВЕС */ %>
+          <template>
+            <el-form-item label="<%= __('Weight (g)') %>" prop="weight">
+              <el-col :span="16">
+                <div class="block">
+                  <el-slider
+                    v-model="ruleForm.weight"
+                    :min="20"
+                    :max="10000"
+                    :step="10"
+                    show-input>
+                  </el-slider>
+                </div>
+              </el-col>
+             <!-- <el-tooltip class="ml-3" effect="dark" content="<%= __("How to measure a dog's height?") %>"
+                          placement="top-start">
+                <el-button @click="innerVisible=true" size="mini" round icon="el-icon-question"></el-button>
+              </el-tooltip>-->
             </el-form-item>
           </template>
 
