@@ -24,7 +24,7 @@
  * For more best practices and tips, see:
  * https://sailsjs.com/docs/concepts/deployment
  */
-const fs =require('fs');
+const fs = require('fs');
 module.exports = {
 
 
