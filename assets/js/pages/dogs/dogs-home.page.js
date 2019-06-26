@@ -407,10 +407,9 @@ parasails.registerPage('dogs-home', {
     showDialog(string) {
       this.innerVisible = true;
       this.dialog =  new Map(this.map).get(string);
-      // this.dialog.header = this.i19p[string];
+      this.dialog.header = this.i19p[string];
 
 
-console.log('DIALOOO:' ,this.dialog.dio());
     },
     async handleSelect(e) {
       this.dogId = (_.isNumber(e.id)) ? e.id : undefined;
