@@ -90,7 +90,9 @@
 	"Erect ears": "Стоячие уши",
 	"Delivery": "Доставка",
 	"Sign up": "Регистрация",
+	"Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of dogs by color, but rather an attempt to provide more information on the appearance of the dog. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding dogs.": "Китайская хохлатая может иметь любое сочетание цветов, как предписано в стандарте FCI 288. Данный пункт не относится к классификации собаки по по цветовому признаку, это скорее попытка дать больше информации по внешнему виду собаки. Люди в своей жизни всегда имеют приоритеты, это касается и цвета, предпочтение того или иного цвета часто становится определяющим при покупке или вязки собак.",
 	"Dog height (cm)": "Рост (см)",
+	"Does the standard dictate the definition of color?": "Стандарт предписывает определение цвета?",
 	"How to measure a dog's height?": "Как измерить рост собаки?",
 	"Forgot your password": "Забыли пароль",
 	"Remember me": "Запомни меня",
@@ -489,5 +491,8 @@
 	"An error occured while processing your request. Please check your information and try again, or ": "Произошла ошибка при обработке вашего запроса. Пожалуйста, проверьте информацию и попробуйте снова, или",
 	"Add photo": "Добавить фото",
 	"Hairless": "Голая",
-	"Powderpuff": "Пуховая"
+	"Powderpuff": "Пуховая",
+	"Stamp": "Клеймо",
+	"Stamp Dog number in the registry.": "Клеймо. Номер собаки в реестре.",
+	"Color": "Цвет"
 }

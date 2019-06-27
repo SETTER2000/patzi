@@ -33,6 +33,7 @@ module.exports = {
       maxLength: 4
     },
 
+
     dateBirth: {
       type: 'string',
       required: true,
@@ -44,6 +45,47 @@ module.exports = {
       type: 'string',
       description: 'Кличка, ласковое имя.'
     },
+
+
+    weight: {
+      type: 'number',
+      description: 'Вес. В граммах.',
+      example:4500
+    },
+
+
+    growth: {
+      type: 'number',
+      description: 'Рост. В сантиметрах.',
+      example:30
+    },
+
+
+    type: {
+      type: 'string',
+      description: 'Тип. Возможны два варианта.',
+      example:'hairless, powderpuff',
+      isIn: ['hairless', 'powderpuff'],
+    },
+
+    color: {
+      type: 'string',
+      description: 'Цвет.',
+      // example:'hairless, powderpuff',
+    },
+
+    stamp: {
+      type: 'string',
+      description: 'Клеймо. Номер собаки в реестре.',
+      // example:'hairless, powderpuff',
+    },
+    // weight: this.ruleForm.weight,
+    // growth: this.ruleForm.growth,
+    // type: this.ruleForm.type,
+    // color: this.ruleForm.color,
+    // stamp: this.ruleForm.stamp,
+
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝

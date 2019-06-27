@@ -76,7 +76,6 @@ module.exports = {
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
-      console.log('HHIOOOo');
       throw 'badRequest';
     }
 
@@ -97,6 +96,9 @@ module.exports = {
       description: inputs.description,
     }).fetch();
 
+// Добавить собаку inputs.sire к помёту litter.id
+    await Litter.addToCollection(litter.id, 'dogs', inputs.sire);
+    await Litter.addToCollection(litter.id, 'dogs', inputs.dam);
 
     // Если не создан возвращаем ошибку.
     if (!litter) {

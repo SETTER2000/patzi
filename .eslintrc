@@ -75,6 +75,7 @@
     "Country": true,
     "Continent": true,
     "Region": true,
+    "Color": true,
     "Image": true
 
     // …and any others.

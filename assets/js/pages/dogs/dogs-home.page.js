@@ -7,17 +7,22 @@ parasails.registerPage('dogs-home', {
     kennels: [],
     dams: [],
     dialog:{},
+    loading:{},
+    fullscreenLoading: false,
     sires: [],
+    colors: [],
     warning: '',
     titleDialog: '',
     value: 0,
+
+    valueColor: '',
     // Состояние загрузки
     syncing: false,
     // Ограничение размера одного файла картинки при загрузки
     sizeLess: 500,
     // Состояние ошибки сервера
     cloudError: '',
-
+    subtitle:'',
     dialogFormVisible: false,
     // form: {
     //   name: '',
@@ -76,7 +81,7 @@ parasails.registerPage('dogs-home', {
        */
       subtitle: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
-        {min: 10, max: 100, message: 'Length should be 10 to 100', trigger: 'blur'}
+        {max: 700, message: 'Length should be 10 to 100', trigger: 'blur'}
       ]
     },
     resetFederation: [{
@@ -92,6 +97,7 @@ parasails.registerPage('dogs-home', {
         registerNumber: ''
       }],
       sire: '',
+      color:'',
       dam: '',
       gender: '',
       label: '',
@@ -120,7 +126,7 @@ parasails.registerPage('dogs-home', {
     ],
     litters: [],
     ratio: null,
-    colors: ['#99A9BF', '#F7BA2A', '#FF9900'], // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+   // colors: ['#99A9BF', '#F7BA2A', '#FF9900'], // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
 
     dic: [
       ['en', {
@@ -133,6 +139,8 @@ parasails.registerPage('dogs-home', {
         selectGender: 'Please select a dog gender.',
         growth: 'How to measure a dog\'s height?',
         hairless: 'What is a down or naked dog?',
+        infoColor:'Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of dogs by color, but rather an attempt to provide more information on the appearance of the dog. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding dogs.',
+        whyColor:'Why determine the color.',
       }],
       ['ru', {
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
@@ -143,7 +151,9 @@ parasails.registerPage('dogs-home', {
         success: 'Поздравляем! Объект успешно создан.',
         selectGender: 'Пожалуйста выберите пол собаки.',
         growth: 'Как измерить рост собаки?',
-        hairless: 'HЧто такое пуховая или голая собака?',
+        hairless: 'Что такое пуховая или голая собака?',
+        infoColor:'Китайская хохлатая может иметь любое сочетание цветов, как предписано в стандарте FCI 288. <br>Данный пункт не относится к классификации собаки по по цветовому признаку, это скорее попытка дать больше информации по внешнему виду собаки. Люди в своей жизни всегда имеют приоритеты, это касается и цвета, предпочтение того или иного цвета часто становится определяющим при покупке или вязки собак.',
+        whyColor:'Зачем определять цвет.',
       }]
     ],
     map:[
@@ -169,10 +179,19 @@ parasails.registerPage('dogs-home', {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
-    // Принимаем данные по событию list-*
-    io.socket.on('list-kennel', data => {
-      this.kennels = data;
+
+    // Подключаемся к комнате color
+    io.socket.get(`/api/v1/colors/list`, function gotResponse(body, response) {
+      console.log('Сервер color ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
+
+    // Принимаем данные по событию list-*
+    io.socket.on('list-kennel', data => { this.kennels = data; });
+
+
+    // Получаем данные для селектов в форме
+    io.socket.on('list-color', (data) => {this.colors = data.colors;});
+
 
     /* Весь список*/
     this.getList();
@@ -306,7 +325,7 @@ parasails.registerPage('dogs-home', {
 
     async addDog() {
 
-      console.log('this.fileList: ', this.fileList);
+      this.openFullScreen();
       let data = {
         fileList: this.fileList,
         label: this.ruleForm.label,
@@ -318,6 +337,8 @@ parasails.registerPage('dogs-home', {
         weight: this.ruleForm.weight,
         growth: this.ruleForm.growth,
         type: this.ruleForm.type,
+        color: this.ruleForm.color,
+        stamp: this.ruleForm.stamp,
 
 
         registerNumber: this.ruleForm.registerNumber,
@@ -333,6 +354,7 @@ parasails.registerPage('dogs-home', {
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
         this.centerDialogAdded = false;
+        this.loading.close();
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           this.ruleForm.file = [];
@@ -422,7 +444,6 @@ parasails.registerPage('dogs-home', {
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-sire', (data) => {
-        console.log('sires: ', data);
         this.sires = data;
       });
     },
@@ -433,7 +454,6 @@ parasails.registerPage('dogs-home', {
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-dam', (data) => {
-        console.log('dams: ', data);
         this.dams = data;
       });
     },
@@ -478,6 +498,11 @@ parasails.registerPage('dogs-home', {
       this.dialogFormVisible = true;
     },
 
+    open() {
+      this.$alert(`<p>${this.i19p.infoColor}</p>`, this.i19p.whyColor, {
+        dangerouslyUseHTMLString: true
+      });
+    },
 
     // Закрывает модальное окно для удаления объекта
     closeDeleteThingModal: function () {
@@ -511,5 +536,25 @@ parasails.registerPage('dogs-home', {
         this.ruleForm.federations.splice(index, 1);
       }
     },
+
+    openFullScreen() {
+      this.loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+      // setTimeout(() => {
+      //   loading.close();
+      // }, 2000);
+    },
+
+
+    getPullColor() {
+
+      let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'value';
+      return _.sortBy(this.colors, field);
+    },
+
   }
 });
