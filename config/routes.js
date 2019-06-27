@@ -153,7 +153,7 @@ module.exports.routes = {
 
   'GET    /api/v1/country/list': {action: 'country/list'},
 
-  'GET    /api/v1/files/download/:section/:id': {action: 'files/download'},
+  'GET    /api/v1/files/download/:collection/:id/:key': {action: 'files/download'},
 
 
   'POST   /api/v1/region/create-region': {action: 'region/create-region'},

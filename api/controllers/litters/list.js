@@ -6,7 +6,6 @@ module.exports = {
   description: 'Обрабатывает сокет подключение клиента и отдаёт весь список объектов коллекции.',
 
 
-
   exits: {
     success: {
       anyData: 'Вы подключились к комнате litter и слушаете событие list'
@@ -53,25 +52,51 @@ module.exports = {
       .populate('owner')
       .populate('images');
 
-    let kennels = '';
+    let littersNew = [];
 
-    _.each(litters, (litter) => {
+
+    await _.each(litters, async (litter) => {
+      // litter.images = litter.images[0].img;
+      const {dogs, images, description, id} = litter;
+      const {img} = images[0];
+     // img = !_.isEmpty(img) ? img : {imageSrc:''};
+      littersNew.push({dogs, images: img, description, id, owner: litter.owner.fullName});
+      // let i = 0;
+      // await  _.each(litter.images[0].img, (img) => {
+      //   // console.log('IMG_FD', img.fd);
+      //   img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litter.id}/${i = i + 1}`) : '';
+      //   console.log('img.imageSrc:::: ', img.imageSrc);
+      // });
       // Устанавливаем свойство источника изображения
       // Первый аргумент, базовый url
       //  litter.imageSrc = litter.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`) : '';
 
       // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
-      litter.createdAtFormat = moment(litter.createdAt).format(format);
+      // litter.createdAtFormat = moment(litter.createdAt).format(format);
 
       // Столбец: Дата регистрации. Формат фильтра.
-      litter.createdAtFormatFilter = moment(litter.createdAt).format(format);
+      //litter.createdAtFormatFilter = moment(litter.createdAt).format(format);
       // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
       // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
-      litter.groups = _.pluck(litter.groups, 'id'); // friendIds: [id,id,id...]
+      // litter.groups = _.pluck(litter.groups, 'id'); // friendIds: [id,id,id...]
 
     });
+    let litterId;
+    _.each(littersNew, async (litter) => {
+      litterId = litter.id;
+      litter.images = await litter.images.map((img, i) => {
+        // console.log('III: ', litterId + '/' + i);
 
-    await sails.sockets.broadcast('litter', 'list-litter', litters);
+        img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litterId}/${i}`) : '';
+        return img.imageSrc;
+      });
+
+
+    });
+    // console.log('litters:::: ', litters);
+    console.log('littersNew:::: ', littersNew);
+
+    await sails.sockets.broadcast('litter', 'list-litter', littersNew);
 
     // Respond with view.
     return exits.success();

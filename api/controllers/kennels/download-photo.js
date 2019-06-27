@@ -9,7 +9,7 @@ module.exports = {
 
   inputs: {
     id: {
-      description: 'Идентификатор, чье фото мы скачиваем.',
+      description: 'Идентификатор объекта.',
       type: 'string',
       required: true
     }
@@ -62,6 +62,7 @@ module.exports = {
      *
      * Ответ о благополучном завершении отдачи файла
      */
+
     return  kennel.imageUploadFD ? await sails.startDownload(kennel.imageUploadFD) : '';
 
   }

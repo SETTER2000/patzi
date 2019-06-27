@@ -304,7 +304,22 @@ It just means they have a customer entry in Stripe, which might or might not hav
       via: 'users',
       dominant: true
     },
-
+    //
 
   },
+  getFullName: function () {
+    return this.gravatar + ' ' + this.emailAddress ;
+  },
+  // findWithSameNameAsPerson: async function (opts) {
+  //   var person = await Person.findOne({ id: opts.id });
+  //
+  //   if (!person) {
+  //     throw require('flaverr')({
+  //       message: `Cannot find monkeys with the same name as the person w/ id=${opts.id} because that person does not exist.`,
+  //       code: 'E_UNKNOWN_PERSON'
+  //     });
+  //   }
+  //
+  //   return await Monkey.find({ name: person.name });
+  // }
 };
