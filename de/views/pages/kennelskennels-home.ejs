@@ -126,6 +126,22 @@
                       placeholder="<%= __('Kennel registration number') %>"></el-input>
           </el-form-item>
 
+
+          <el-form-item label="<%= __('Date') %>" required>
+            <el-col :span="11">
+              <el-form-item prop="dateCreate">
+                <el-date-picker
+                  type="date"
+                  placeholder="<%= __('Registration date') %>"
+                  v-model="ruleForm.dateCreate"
+                  style="width: 100%;"
+                />
+              </el-form-item>
+            </el-col>
+          </el-form-item>
+
+
+
          <template>
             <el-form-item label="<%= __('Continent') %>" prop="continent">
               <el-select @change="changeSelectContinent()" v-model="ruleForm.continent"
@@ -262,18 +278,7 @@
           </el-form-item>
 
 
-          <el-form-item label="<%= __('Date') %>" required>
-            <el-col :span="11">
-              <el-form-item prop="dateCreate">
-                <el-date-picker
-                  type="date"
-                  placeholder="<%= __('Registration date') %>"
-                  v-model="ruleForm.dateCreate"
-                  style="width: 100%;"
-                />
-              </el-form-item>
-            </el-col>
-          </el-form-item>
+
 
           <el-form-item label="<%= __('Name on') %>:" prop="rightName">
             <el-switch
