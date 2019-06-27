@@ -92,7 +92,6 @@
             </el-form-item>
           </el-form-item>
 
-
           <% /* Буква помёта NEW */ %>
           <el-form-item label="<%= __('Litter letter') %>">
             <el-form-item prop="letter">
@@ -159,7 +158,7 @@
           </template>
 
           <% /* Описание помёта NEW */ %>
-          <template >
+          <template>
             <el-form-item label="<%= __('Description') %>" prop="description">
               <el-input
                 type="textarea"
@@ -232,9 +231,7 @@
           <p class="card-text">
             <a :href="litter.detail">
 
-              <img :src="litter.imageSrc" alt="litter.title" class="img-fluid gallery">
-
-
+              <img :src="litter.images[0].imageSrc" alt="litter.title" class="img-fluid gallery">
 
 
               <div v-if="me.isSuperAdmin" class="flx">
@@ -253,18 +250,32 @@
               </div>
             </a>
           </p>
-          <div v-for="(img, index) in litter.images.img" >
-wwwww
-            {{img.fd}}
+          <!--<div v-for="(img, index) in litter.images.img">-->
+          <!--wwwww-->
+          <!--{{img.fd}}-->
 
+          <!--</div>-->
+
+
+          <div class="flex-container buttons nowrap">
+            <span v-for="(dog, index) in litter.dogs">
+            <el-button type="danger" plain>{{dog.gender}}: {{dog.label}}</el-button>
+                 <i v-if="index<1" class="ti-heart mx-2" style="font-size: 1.2rem; color: red"></i>
+            </span>
           </div>
-<div v-for="(dog, index) in litter.dogs" >
-          <el-button type="danger" plain>{{dog.gender}}{{dog.label}}</el-button>
-          <i class="ti-heart mx-1" style="font-size: 1.2rem; color: red"></i>
-          <el-button type="danger" plain>{{dog.gender}}{{dog.label}}</el-button>
-</div>
-          <!--<a href="#" class="btn btn-primary">Sasquehanna (FCI) Ella</a>  <a href="#" class="btn btn-primary">Olegro Katrin Naruto</a>-->
         </div>
+
+
+        <ul class="flex-container wrap" >
+          <li class="flex-item"  v-for="(img, index) in litter.images" :key="img.id">
+
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="img.imageSrc"
+              :fit="fit"></el-image>
+          </li>
+
+        </ul>
         <!--   <div class="card-footer text-muted">
              2 days ago
            </div>-->
