@@ -75,13 +75,15 @@
         <div class="row">
           <div class="col-md-6">
             <div class="left_img">
-              <a href="#" @click="showSlider()"><img class="img-fluid" :src="litter.imageSrc" alt=""></a>
+              <a href="#" @click="showSlider()">
+                <img class="img-fluid" :src="litter.imageSrc" alt="">
+              </a>
             </div>
           </div>
 
           <div class="offset-md-1 col-md-5">
             <div class="portfolio_right_text mt-30">
-              <h4><%= __('Litter') %> {{litter.label.toUpperCase()}}</h4>
+              <h4><%= __('Litter') %> {{litter.letter.toUpperCase()}}</h4>
               <p v-if="litter.subtitle">{{litter.subtitle}}</p>
               <div class="block mb-5">
 
@@ -111,7 +113,7 @@
                                 placement="right-start">
                            <i class="el-icon-question"></i>
                    </el-tooltip>
-                  </span>: {{litter.label.toUpperCase()}}...
+                  </span>: {{litter.letter.toUpperCase()}}...
                 </li>
                 <li><span><%= __('Sire') %></span>: {{litter.sire}}</li>
                 <li><span><%= __('Dam') %></span>: {{litter.dam}}</li>
