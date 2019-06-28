@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Update cover album',
 
 
-  description: '',
+  description: 'Обновляет обложку альбома.',
 
 
   inputs: {
@@ -20,7 +20,6 @@ module.exports = {
       description: `Идентификатор помёта.`,
       required: true
     }
-
   },
 
 
@@ -48,18 +47,20 @@ module.exports = {
       throw 'badRequest';
     }
 
-    console.log('COVER INPUTS:: ', inputs.cover);
-    // Бибилиотека Node.js
-    const url = require('url');
+    // console.log('COVER INPUTS:: ', inputs.cover);
 
-    let q = {};
-    q[inputs.collection] = inputs.id;
 
-    let info = Image.findOne(q);
 
-    console.log('Выбрали коллекцию с фотографиями:', info);
 
-    await sails.sockets.broadcast(inputs.collection, `list-${inputs.collection}`);
+    // let info = await Image.findOne(q);
+    // Update the record for the logged-in user.
+    await Litter.updateOne({id: inputs.id})
+      .set({
+        cover: inputs.cover
+      });
+
+
+    // await sails.sockets.broadcast(inputs.collection, `list-${inputs.collection}`);
 
     // All done.
     return exits.success();

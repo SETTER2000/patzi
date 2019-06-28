@@ -200,13 +200,16 @@ parasails.registerPage('litters-home', {
 
 
     },
+
+
     async coverPhoto(id,index) {
-      await io.socket.put(`/api/v1/litters/update-cover-album`, {id:id,cover:index}, function gotResponse(body, response) {
+      await io.socket.put(`/api/v1/litters/update-cover-album`, {id:id,cover:index}, (body, response) =>{
+        this.litters.map(litter=>{(litter.id===id) ? litter.cover=index : litter;});
         console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-      console.log('FFFFFFF: ', o.hasOwnProperty('images'));
-      return o.hasOwnProperty('images');
     },
+
+
     // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
     // Это кнопка вызывает модальное окно <modal> с <ajax-form>
     clickDeleteLitter: function (litterId) {
@@ -571,7 +574,7 @@ parasails.registerPage('litters-home', {
       //     label:''
       // },
       console.log('this.fileList: ', this.fileList);
-
+      this.openFullScreen();
       let data = {
         fileList: this.fileList,
         letter: this.ruleForm.letter,
@@ -587,9 +590,10 @@ parasails.registerPage('litters-home', {
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-        console.log(jwRes.headers);
-        this.centerDialogAdded = false;
 
+
+        this.centerDialogAdded = false;
+        this.loading.close();
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           this.ruleForm.file = [];
@@ -649,6 +653,16 @@ parasails.registerPage('litters-home', {
       window.location = `/${path}`;
     },
 
-
+    openFullScreen() {
+      this.loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+      // setTimeout(() => {
+      //   loading.close();
+      // }, 2000);
+    },
   }
 });

@@ -165,13 +165,14 @@ console.log('inputs.fileList DOG-create: ', inputs.fileList);
       stamp:  inputs.stamp,
     }).fetch();
 
-
-    // Записываем фото на собаку
-    let image = await Image.create({
-      img: list,
-      dog: newDog.id
-    }).fetch();
-
+    // Если масиив с фотографиями не пустой, то добавляем его в коллекцию Image
+    if (!_.isEmpty(list)) {
+      // Записываем фото на собаку
+      let image = await Image.create({
+        img: list,
+        dog: newDog.id
+      }).fetch();
+    }
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
     await sails.sockets.broadcast('dog', 'list-dog');

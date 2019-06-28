@@ -52,7 +52,7 @@ module.exports = {
     if (!collectionObject) {
       throw 'notFound';
     }
-   let arr =  collectionObject.img.filter((im,index)=>inputs.key === index);
+   let arr =  await collectionObject.img.filter((im,index)=>inputs.key === index);
     if (!arr) {
       throw 'notFound';
     }

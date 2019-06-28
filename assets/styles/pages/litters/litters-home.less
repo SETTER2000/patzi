@@ -1,10 +1,70 @@
 #litters-home {
+  .img-fluid {
+    height: 700px;
+    .el-image__inner {
+      width: auto;
+    }
+  }
+
+  .ell-relation {
+    position: relative;
+    .ell-position-button {
+      opacity: .5;
+      position: absolute;
+      right: 0;
+      &.check {
+        opacity: 1;
+      }
+      &:hover {
+        opacity: .9;
+      }
+    }
+  }
+
+  //start  flex img
+  .object-fit_fill {
+    object-fit: fill
+  }
+  .object-fit_contain {
+    object-fit: contain
+  }
+  .object-fit_cover {
+    object-fit: cover
+  }
+  .object-fit_none {
+    object-fit: none
+  }
+  .object-fit_scale-down {
+    object-fit: scale-down
+  }
+  img.ell {
+    height: 120px;
+    background-color: #444;
+  }
+  img.ell {
+    width: 100%;
+  }
+  .ell-image-flex {
+    float: left;
+    width: 100%;
+    margin: 0 30px 20px 0;
+
+    &:nth-child(2n) {
+      clear: left;
+    }
+
+    &:nth-child(2n+1) {
+      margin-right: 0;
+    }
+  }
+  //end
+
   .flex-container {
     padding: 0;
     margin: 0;
     list-style: none;
-    border:none;
-    justify-content:center;
+    border: none;
+    justify-content: center;
     -ms-box-orient: horizontal;
     display: -webkit-box;
     display: -moz-box;
@@ -14,14 +74,14 @@
     display: flex;
   }
   .flex-container.buttons {
-    border:none;
+    border: none;
   }
-  .nowrap  {
+  .nowrap {
     -webkit-flex-wrap: nowrap;
     flex-wrap: nowrap;
   }
 
-  .wrap    {
+  .wrap {
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
   }
@@ -29,7 +89,7 @@
     background: #e4e4e4;
   }
 
-  .wrap-reverse         {
+  .wrap-reverse {
     -webkit-flex-wrap: wrap-reverse;
     flex-wrap: wrap-reverse;
   }
@@ -40,11 +100,11 @@
   .flex-item {
     background: tomato;
     padding: 5px;
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     margin: 10px;
 
-    line-height: 100px;
+    line-height: 120px;
     color: white;
     font-weight: bold;
     font-size: 2em;
@@ -123,8 +183,6 @@
     }
   }
 
-
-
   .my-flex-cont {
     display: flex;
     flex-flow: row-reverse nowrap;
@@ -133,12 +191,11 @@
     align-content: center;
     height: 780px;
 
-
     .my-flex-box {
       margin: 5px;
       padding: 5px;
       flex: 0 1 auto;
-      img{
+      img {
         height: 80vh;
       }
     }
@@ -147,7 +204,7 @@
   img.gallery {
     opacity: .9;
     &:hover {
-      +.flx {
+      + .flx {
         opacity: .8;
       }
       opacity: .9;
@@ -180,14 +237,14 @@
         align-items: center;
         align-content: center;
         height: 32px;
-        &:hover{
+        &:hover {
 
           background-color: orangered;
           color: white;
 
           border-radius: 50%;
         }
-        .el-icon-* {
+        .el-icon- * {
           flex: 0 1 auto;
         }
       }
@@ -218,7 +275,6 @@
     height: 178px;
     display: block;
   }
-
 
   .listings {
     max-width: 1000px;
@@ -356,9 +412,7 @@
     }
   }
 
-
-
-  .el-upload-dragger{
+  .el-upload-dragger {
     width: 146px;
     height: 146px;
   }
@@ -376,8 +430,9 @@
       background-size: contain !important;
       height: 130px;
     }
-    .rasp{
-      display : none;
+
+    .rasp {
+      display: none;
     }
   }
 
@@ -394,8 +449,9 @@
       background-size: contain !important;
       height: 120px;
     }
-    .rasp{
-      display : none;
+
+    .rasp {
+      display: none;
     }
   }
 
@@ -412,8 +468,9 @@
       background-size: contain !important;
       height: 80px;
     }
-    .rasp{
-      display : none;
+
+    .rasp {
+      display: none;
     }
 
   }
@@ -428,23 +485,26 @@
       height: 100px;
     }
 
-    .el-upload-dragger{
+    .el-upload-dragger {
       width: inherit;
       height: inherit;
     }
-    .el-upload--picture-card{
+
+    .el-upload--picture-card {
       width: 290px;
       height: 148px;
     }
-    .el-upload-list--picture-card .el-upload-list__item{
+
+    .el-upload-list--picture-card .el-upload-list__item {
       width: 290px;
       height: 148px;
-      img{
+      img {
         height: 100%;
       }
     }
-    .rasp{
-      display : none;
+
+    .rasp {
+      display: none;
     }
   }
   @media (max-width: 550px) {
@@ -453,8 +513,9 @@
         opacity: 1;
       }
     }
-    .rasp{
-      display : none;
+
+    .rasp {
+      display: none;
     }
   }
   @media (max-width: 480px) {
@@ -466,8 +527,9 @@
       background-size: contain !important;
       height: 60px;
     }
-    .rasp{
-      display : none;
+
+    .rasp {
+      display: none;
     }
   }
 
