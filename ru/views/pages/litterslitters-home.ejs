@@ -1,4 +1,4 @@
-<div id="kennel" class="content" v-cloak>
+<div id="litters-home" class="content" v-cloak>
   <% /* Диалоговое окно. Предупреждение | Warning. */ %>
   <el-dialog
     title="<%= __('Warning') %>"
@@ -85,7 +85,7 @@
             <el-form-item prop="born">
               <el-date-picker
                 v-model="ruleForm.born"
-                type="datetime"
+                type="date"
                 placeholder="<%= __('Select date and time') %>"
                 default-time="12:00:00">
               </el-date-picker>
@@ -222,60 +222,83 @@
         </div>
       </div>
 
-      <div class="card text-center mb-5" v-for="(litter, index) in litters" :key="'litter'+litter.id">
+      <div class="card text-center mb-5" v-for="(litter, index) in litters" :key="litter.id">
         <div class="card-header">
           <%= __('Litter') %>: {{litter.letter}}
         </div>
         <div class="card-body">
           <h4 class="card-title"> {{litter.born}}</h4>
-          <p class="card-text">
-            <a :href="litter.detail">
-
-              <img :src="litter.images[0].imageSrc" alt="litter.title" class="img-fluid gallery">
+          <div class="card-text">
 
 
-              <div v-if="me.isSuperAdmin" class="flx">
-                <!-- <div class="fixButton">
-                   <a class="p-button" href="#"
-                      @click="clickEdit(litter.id)">
-                     <i class="el-icon-edit"></i>
-                   </a>
-                 </div>-->
-                <div class="fixButton">
-                  <a class="p-button" v-if="me.isSuperAdmin" href="#"
-                     @click="clickDeleteLitter(litter.id)">
-                    <i class="el-icon-delete"></i>
-                  </a>
-                </div>
+            <template v-for="(im ,index) in litter.images">
+              <div v-if="im.imageSrc" >
+                <a :href="im.detail">
+                  <el-image :src="im.imageSrc" v-if="index===litter.cover"   class="img-fluid" :lazy="true">
+                    <div slot="placeholder" class="image-slot">
+                      Loading<span class="dot">...</span>
+                    </div>
+                  </el-image>
+
+                  <!--<img :src="im.imageSrc" v-if="index===photoKey"  alt="">-->
+
+                </a>
               </div>
-            </a>
-          </p>
-          <!--<div v-for="(img, index) in litter.images.img">-->
-          <!--wwwww-->
-          <!--{{img.fd}}-->
+              <div v-else>
+                <el-image>
+                  <div slot="error" class="image-slot">
+                    <i class="el-icon-picture-outline"></i>
+                  </div>
+                </el-image>
+              </div>
+            </template>
 
-          <!--</div>-->
 
+            <div v-if="me.isSuperAdmin" class="flx">
+              <!-- <div class="fixButton">
+                 <a class="p-button" href="#"
+                    @click="clickEdit(litter.id)">
+                   <i class="el-icon-edit"></i>
+                 </a>
+               </div>-->
+              <div class="fixButton">
+                <a class="p-button" v-if="me.isSuperAdmin" href="#"
+                   @click="clickDeleteLitter(litter.id)">
+                  <i class="el-icon-delete"></i>
+                </a>
+              </div>
+            </div>
 
+          </div>
           <div class="flex-container buttons nowrap">
             <span v-for="(dog, index) in litter.dogs">
             <el-button type="danger" plain>{{dog.gender}}: {{dog.label}}</el-button>
-                 <i v-if="index<1" class="ti-heart mx-2" style="font-size: 1.2rem; color: red"></i>
+                 <i v-if="index > -1 && index < 1" class="ti-heart mx-2" style="font-size: 1.2rem; color: red"></i>
             </span>
           </div>
+
+
+          <ul class="flex-container wrap" v-if="litter.images">
+            <li class="flex-item" v-for="(img, index) in litter.images" :key="img.id">
+              <!--img: {{img.imageSrc}}-->
+              <span @click="coverPhoto(litter.id,index)" href="">
+              <img :src="img.imageSrc" style="width: 100px; height: 100px" alt="">
+              </span>
+              <!--<el-image-->
+              <!--style="width: 100px; height: 100px"-->
+              <!--:src="img.imageSrc"-->
+              <!--:fit="fit">-->
+              <!--<div slot="error" class="image-slot">-->
+              <!--<i class="el-icon-picture-outline"></i>-->
+              <!--</div>-->
+              <!--</el-image>-->
+            </li>
+
+          </ul>
+
         </div>
 
 
-        <ul class="flex-container wrap" >
-          <li class="flex-item"  v-for="(img, index) in litter.images" :key="img.id">
-
-            <el-image
-              style="width: 100px; height: 100px"
-              :src="img.imageSrc"
-              :fit="fit"></el-image>
-          </li>
-
-        </ul>
         <!--   <div class="card-footer text-muted">
              2 days ago
            </div>-->
@@ -396,6 +419,7 @@
                       v-model="uploadFormData.born"
                       placeholder-text="(<%= __('Date of litter') %>)"
                       :popup="true"
+
                       :invalid="formErrors.born && !uploadFormData.born"
                       validation-error-message="<%= __('Please set the date when puppies were born.') %>."
           >
@@ -638,7 +662,8 @@
       <p><%= __('Thank you for contacting, we will contact you shortly. Advance reservation comes into force after the agreement of the details and the adoption of a positive decision by the two parties.') %>
         <strong class="text-success">{{selectedLitter.label || 'item'}}</strong> know
         when you could drop by.</p>
-      <p>Stay in touch with {{selectedLitter.owner.fullName}} to confirm pickup details: <strong>{{selectedLitter.owner.emailAddress}}</strong>
+      <p>Stay in touch with {{selectedLitter.owner.fullName}} to confirm pickup details:
+        <strong>{{selectedLitter.owner.emailAddress}}</strong>
       </p>
     </div>
     <div class="modal-footer" v-if="borrowFormSuccess">
