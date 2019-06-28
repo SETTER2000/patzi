@@ -232,10 +232,10 @@
 
 
             <template v-for="(im ,index) in litter.images">
-              <div v-if="im.imageSrc" >
+              <div v-if="im.imageSrc">
                 <a :href="im.detail">
-                  <el-image :src="im.imageSrc" v-if="index===litter.cover"   class="img-fluid" :lazy="true">
-                    <div slot="placeholder" class="image-slot">
+                  <el-image :src="im.imageSrc" v-if="index===litter.cover"  class="img-fluid" :lazy="true">
+                    <div slot="placeholder" class="image-slot" style="height:500px;">
                       Loading<span class="dot">...</span>
                     </div>
                   </el-image>
@@ -254,7 +254,7 @@
             </template>
 
 
-            <div v-if="me.isSuperAdmin" class="flx">
+            <div v-if="me.isSuperAdmin || me.isAdmin" class="flx">
               <!-- <div class="fixButton">
                  <a class="p-button" href="#"
                     @click="clickEdit(litter.id)">
@@ -268,34 +268,38 @@
                 </a>
               </div>
             </div>
-
           </div>
-          <div class="flex-container buttons nowrap">
+
+          <div class="flex-container buttons nowrap mt-3">
             <span v-for="(dog, index) in litter.dogs">
             <el-button type="danger" plain>{{dog.gender}}: {{dog.label}}</el-button>
                  <i v-if="index > -1 && index < 1" class="ti-heart mx-2" style="font-size: 1.2rem; color: red"></i>
             </span>
           </div>
 
+          <el-divider content-position="left"><%= __('Puppies from this litter') %></el-divider>
+
 
           <ul class="flex-container wrap" v-if="litter.images">
             <li class="flex-item" v-for="(img, index) in litter.images" :key="img.id">
-              <!--img: {{img.imageSrc}}-->
-              <span @click="coverPhoto(litter.id,index)" href="">
-              <img :src="img.imageSrc" style="width: 100px; height: 100px" alt="">
-              </span>
-              <!--<el-image-->
-              <!--style="width: 100px; height: 100px"-->
-              <!--:src="img.imageSrc"-->
-              <!--:fit="fit">-->
-              <!--<div slot="error" class="image-slot">-->
-              <!--<i class="el-icon-picture-outline"></i>-->
-              <!--</div>-->
-              <!--</el-image>-->
+              <template v-if="me.isSuperAdmin">
+                <div  class="ell-relation" v-if="litter.cover === index">
+                  <el-button type="warning" size="mini" title="<%= __("Album's cover") %>"
+                             class="ell-position-button check" icon="el-icon-star-off"
+                             circle/>
+                </div>
+                <div class="ell-relation" v-else>
+                  <el-button  size="mini" title="<%= __('Make an album cover') %>"
+                              class="ell-position-button"  @click="coverPhoto(litter.id,index)"
+                             icon="el-icon-document" circle></el-button>
+                </div>
+              </template>
+
+              <div class="ell-image-flex">
+                <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
+              </div>
             </li>
-
           </ul>
-
         </div>
 
 
