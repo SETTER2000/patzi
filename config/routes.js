@@ -106,6 +106,8 @@ module.exports.routes = {
   'POST    /litters/files': {action: 'litters/upload-files', csrf: false},
   'POST    /api/v1/litters/create-litter': {action: 'litters/create-litter', csrf: false},
   'GET     /api/v1/litters/list': {action: 'litters/list'},
+  'PUT     /api/v1/litters/update-cover-album': { action: 'litters/update-cover-album', csrf: false },
+
 
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},
@@ -148,6 +150,7 @@ module.exports.routes = {
   'GET    /api/v1/dogs/list-sire': {action: 'dogs/list-sire'},
   'GET    /api/v1/dogs/list-dam': {action: 'dogs/list-dam'},
   'POST   /api/v1/files/upload': {action: 'files/upload', csrf: false},
+  // 'POST   /api/v1/files/set-album-cover': { action: 'files/set-album-cover', csrf: false },
 
   'GET    /api/v1/city/list/:regionId?': {action: 'city/list'},
 

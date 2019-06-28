@@ -44,6 +44,15 @@ module.exports = {
     },
 
 
+    cover: {
+      type: 'number',
+      defaultsTo:0,
+      example: 5,
+      description: `Номер ключа в массиве фотографий, который определяет главную фотографию альбома.
+                    Обложка альбома.`
+    },
+
+
     filename: {
       type: 'string',
       example: 'my-file.jpg',
@@ -66,21 +75,21 @@ module.exports = {
     //   // required:true
     // },
 
-    ourPreliminaryPrice:{
-      type:'number',
-      description:'Наша предварительная цена на щенка.'
+    ourPreliminaryPrice: {
+      type: 'number',
+      description: 'Наша предварительная цена на щенка.'
     },
 
 
-    preliminaryPrice:{
-      type:'number',
-      description:'Покупатель предложил цену за щенка.'
+    preliminaryPrice: {
+      type: 'number',
+      description: 'Покупатель предложил цену за щенка.'
     },
 
 
-    currency:{
-      type:'string',
-      description:'Валюта продажи.'
+    currency: {
+      type: 'string',
+      description: 'Валюта продажи.'
     },
 
 
@@ -98,7 +107,7 @@ module.exports = {
     dogs: {
       collection: 'dog',
       via: 'litters',
-      description:'Помёт может принадлежать нескольким собакам. Many to Many (Многие-ко-многим)'
+      description: 'Помёт может принадлежать нескольким собакам. Many to Many (Многие-ко-многим)'
     },
 
 
@@ -109,9 +118,9 @@ module.exports = {
     },
 
 
-    owner:{
-      model:'User',
-      required:true
+    owner: {
+      model: 'User',
+      required: true
     },
 
 

@@ -59,8 +59,10 @@ module.exports = {
      * или входящую загрузку файла Sails из файла 0 или 1; возвращает либо undefined словарь,
      * либо информацию о загруженных данных файла.)
      */
+
+    // console.log("inputs.file::", inputs.file);
     let info = await sails.upload(inputs.file);
-    // console.log('IHFO PHOTO: ', info);
+
 
     if (!info) {
       throw 'badRequest';
@@ -71,7 +73,7 @@ module.exports = {
 
 
 
-
+    console.log('FILES/UPLOAD.JS файл картинки загружен в .tmp: ', info);
     // All done.
     return exits.success(info);
 

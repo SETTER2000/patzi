@@ -368,6 +368,7 @@ parasails.registerPage('kennels-home', {
     },
 
     addKennel: async function () {
+      this.openFullScreen();
       let data = {
         file: this.ruleForm.file,
         label: this.ruleForm.label,
@@ -394,9 +395,9 @@ parasails.registerPage('kennels-home', {
 
         console.log('Сервер create-kennel ответил кодом ' + jwRes.statusCode + ' и данными: ', data);
 
-
-
         this.centerDialogAdded = false;
+        this.loading.close();
+
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           this.ruleForm.file = [];
@@ -688,6 +689,19 @@ parasails.registerPage('kennels-home', {
         this.rowTable = '';
         this.confirm = false;
       }
+    },
+
+
+    openFullScreen() {
+      this.loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+      // setTimeout(() => {
+      //   loading.close();
+      // }, 2000);
     },
 
   }

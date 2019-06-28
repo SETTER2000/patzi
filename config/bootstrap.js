@@ -1679,7 +1679,7 @@ module.exports.bootstrap = async function () {
  */
 
   let ar = [];
-  for (let y = 0; y < 20; y++) {
+  for (let y = 0; y < 5; y++) {
     let nm = await sails.helpers.strings.random('alphanumeric', 6);
     await ar.push({
       emailAddress: `${nm}@mail.ru`,

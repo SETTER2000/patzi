@@ -132,9 +132,8 @@ module.exports = {
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
 
-
-    let list = [];
-    list = _.pluck(inputs.fileList, 'response');
+console.log('inputs.fileList DOG-create: ', inputs.fileList);
+    let list  = _.pluck(inputs.fileList, 'response');
 
 
     // Удаляем название питомника из имени собаки

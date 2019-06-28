@@ -57,10 +57,11 @@ module.exports = {
 
     await _.each(litters, async (litter) => {
       // litter.images = litter.images[0].img;
-      const {dogs, images, description, id} = litter;
-      const {img} = images[0];
-     // img = !_.isEmpty(img) ? img : {imageSrc:''};
-      littersNew.push({dogs, images: img, description, id, owner: litter.owner.fullName});
+      const {dogs, images, description, cover, letter, id} = litter;
+      const {img} = !_.isEmpty(images[0]) ? images[0] : '';
+      // img = !_.isEmpty(img) ? img : {imageSrc:''};
+
+      littersNew.push({dogs, images: img, description, id, cover, letter, owner: litter.owner.fullName});
       // let i = 0;
       // await  _.each(litter.images[0].img, (img) => {
       //   // console.log('IMG_FD', img.fd);
@@ -81,17 +82,18 @@ module.exports = {
       // litter.groups = _.pluck(litter.groups, 'id'); // friendIds: [id,id,id...]
 
     });
+
+
+    // Формируем массив с картинками
     let litterId;
     _.each(littersNew, async (litter) => {
       litterId = litter.id;
-      litter.images = await litter.images.map((img, i) => {
-        // console.log('III: ', litterId + '/' + i);
-
+      litter.images = (!_.isEmpty(litter.images))? await litter.images.map((img, i) => {
         img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litterId}/${i}`) : '';
-        return img.imageSrc;
-      });
-
-
+        img.detail = `/litters/litter/${litterId}`;
+        return img;
+      }): '';
+      // litter.images.push({imageSrc:'https://via.placeholder.com/150.png'});
     });
     // console.log('litters:::: ', litters);
     console.log('littersNew:::: ', littersNew);

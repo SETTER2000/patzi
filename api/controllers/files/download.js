@@ -38,6 +38,7 @@ module.exports = {
       responseType: 'forbidden'
     },
     notFound: {
+      outputDescription: 'I can not find a photo..',
       responseType: 'notFound'
     }
   },
@@ -55,7 +56,7 @@ module.exports = {
     if (!arr) {
       throw 'notFound';
     }
-console.log('ARRRR: ', arr);
+// console.log('ARRRR: ', arr);
     /**
      * ПЕРЕВЕРНУЛИ: === -> !== , || -> &&,  _.any -> !_.any
      * Так что теперь мы говорим:
@@ -71,7 +72,10 @@ console.log('ARRRR: ', arr);
     //************************************//
     // Set the mime type for the response
     // Это устанавливает mime тип ответа
-    // this.res.type(images.imageUploadMime);
+    if (!arr[0].fd) {
+      throw 'notFound';
+    }
+    this.res.type(arr[0].type);
 
     /**
      * startDownload - функция от модуля sails-hook-uploads
@@ -82,6 +86,6 @@ console.log('ARRRR: ', arr);
      * Ответ о благополучном завершении отдачи файла
      */
 
-    return arr[0].fd ? await sails.startDownload(arr[0].fd) : '';
+    return await sails.startDownload(arr[0].fd);
   }
 };

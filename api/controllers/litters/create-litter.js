@@ -15,7 +15,7 @@ module.exports = {
 
     letter: {
       type: 'string',
-     required: true,
+      required: true,
       description: 'Буква помёта.',
       example: 'A'
     },
@@ -86,6 +86,7 @@ module.exports = {
 
     let list = [];
     list = _.pluck(inputs.fileList, 'response');
+    console.log('CREATE-LITTER:: ', inputs.fileList);
 
 
     // Создать помёт
@@ -96,9 +97,6 @@ module.exports = {
       description: inputs.description,
     }).fetch();
 
-// Добавить собаку inputs.sire к помёту litter.id
-    await Litter.addToCollection(litter.id, 'dogs', inputs.sire);
-    await Litter.addToCollection(litter.id, 'dogs', inputs.dam);
 
     // Если не создан возвращаем ошибку.
     if (!litter) {
@@ -110,14 +108,19 @@ module.exports = {
     // Первый аргумент Идентификатор помёта
     // Второй аргумент - это свойство модели по которому будет создана связь. Оно прописано во второй модели.
     // Третий аргумент Идентификаторы собак в массиве
+    // Добавить собаку inputs.sire к помёту litter.id
+    // await Litter.addToCollection(litter.id, 'dogs', inputs.sire);
+    // await Litter.addToCollection(litter.id, 'dogs', inputs.dam);
     await Litter.addToCollection(litter.id, 'dogs', [inputs.sire, inputs.dam]);
 
-
-    // Записываем фото на помёт
-    let image = await Image.create({
-      img: list,
-      litter: litter.id
-    }).fetch();
+    // Если масиив с фотографиями не пустой, то добавляем его в коллекцию Image
+    if (!_.isEmpty(list)) {
+      // Записываем фото на помёт
+      let image = await Image.create({
+        img: list,
+        litter: litter.id
+      }).fetch();
+    }
 
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.

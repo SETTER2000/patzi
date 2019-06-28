@@ -1,4 +1,4 @@
-parasails.registerPage('kennel', {
+parasails.registerPage('litters-home', {
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
@@ -6,6 +6,7 @@ parasails.registerPage('kennel', {
     litters: [],
     dams: [],
     sires: [],
+    keyRootPhotoAlbum: 6,
     fileList: [],
     warning: '',
     dialogImageUrl: '',
@@ -166,6 +167,16 @@ parasails.registerPage('kennel', {
         return new Map(this.dic).get(this.me.preferredLocale);
       }
     },
+    photoCover: function () {
+      return this.keyRootPhotoAlbum - 1;
+    }
+    // isPhoto: function () {
+    //   return  this.litters.filter(litter => {
+    //     !_.isUndefined(litter.images);
+    //     console.log('IMAGE: ',litter.images);
+    //   });
+    // }
+
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -188,6 +199,13 @@ parasails.registerPage('kennel', {
       });
 
 
+    },
+    async coverPhoto(id,index) {
+      await io.socket.put(`/api/v1/litters/update-cover-album`, {id:id,cover:index}, function gotResponse(body, response) {
+        console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      console.log('FFFFFFF: ', o.hasOwnProperty('images'));
+      return o.hasOwnProperty('images');
     },
     // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
     // Это кнопка вызывает модальное окно <modal> с <ajax-form>
@@ -479,22 +497,22 @@ parasails.registerPage('kennel', {
     // Выбираем всех кобелей
     async sireList() {
       await io.socket.get(`/api/v1/dogs/list-sire`, function gotResponse(body, response) {
-        console.log('Сервис Dogs sire ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервис Dogs sire ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-sire', (data) => {
-        console.log('sires: ', data);
+        // console.log('sires: ', data);
         this.sires = data;
       });
     },
     // Выбираем всех сук
     async damList() {
       await io.socket.get(`/api/v1/dogs/list-dam`, function gotResponse(body, response) {
-        console.log('Сервис Dogs dam ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервис Dogs dam ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-dam', (data) => {
-        console.log('dams: ', data);
+        // console.log('dams: ', data);
         this.dams = data;
       });
     },
@@ -538,12 +556,12 @@ parasails.registerPage('kennel', {
       });
     },
 
-     getIdDam(){
-      return  _.pluck(this.dams.filter(dam => (dam.value === this.ruleForm.dam) ? dam.id : ''), 'id').toString();
+    getIdDam() {
+      return _.pluck(this.dams.filter(dam => (dam.value === this.ruleForm.dam) ? dam.id : ''), 'id').toString();
     },
 
-     getIdSire(){
-      return  _.pluck(this.sires.filter(sire => (sire.value === this.ruleForm.sire) ? sire.id : ''), 'id').toString();
+    getIdSire() {
+      return _.pluck(this.sires.filter(sire => (sire.value === this.ruleForm.sire) ? sire.id : ''), 'id').toString();
     },
 
     async addLitter() {
@@ -553,6 +571,7 @@ parasails.registerPage('kennel', {
       //     label:''
       // },
       console.log('this.fileList: ', this.fileList);
+
       let data = {
         fileList: this.fileList,
         letter: this.ruleForm.letter,
@@ -568,7 +587,7 @@ parasails.registerPage('kennel', {
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-console.log(jwRes.headers);
+        console.log(jwRes.headers);
         this.centerDialogAdded = false;
 
         if (jwRes.statusCode === 200) {

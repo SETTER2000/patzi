@@ -38,8 +38,8 @@ module.exports = {
     if (!litter) {
       throw 'notFound';
     }
-
-    litter.born = moment(litter.born).format('LL');
+console.log('litter.born: ',litter.born);
+    litter.born = moment(litter.born, moment.HTML5_FMT.DATETIME_LOCAL).format('LL');
     // Устанавливаем свойство источника изображения
     // Первый аргумент, базовый url
     litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`);
