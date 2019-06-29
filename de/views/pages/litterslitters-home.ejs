@@ -277,7 +277,7 @@
             </span>
           </div>
 
-          <el-divider content-position="left"><%= __('Puppies this litter') %></el-divider>
+          <el-divider v-if="litter.images" content-position="left"><%= __('Puppies this litter') %></el-divider>
 
 
           <ul class="flex-container wrap" v-if="litter.images">
