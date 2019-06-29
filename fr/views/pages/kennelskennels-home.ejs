@@ -379,25 +379,23 @@
     </div>
   </section>
 
-
-
   <% /*Фильтр и блоки фото.*/ %>
   <section class="about-area ">
     <div class="container">
 
 
       <% /*ФИЛЬТР ПИТОМНИКОВ*/ %>
-          <!--<span class="demonstration">Display all tags (default)</span>-->
+      <!--<span class="demonstration">Display all tags (default)</span>-->
       <div v-if="kennels" class="pb-5">
-          <el-cascader
-            :options="optionsTest"
-            :props="props"
-            placeholder="<%= __('Select kennel') %>"
-            clearable>
-          </el-cascader>
+        <el-cascader
+          :options="optionsTest"
+          :props="props"
+          placeholder="<%= __('Select kennel') %>"
+          clearable>
+        </el-cascader>
       </div>
 
- <!--     <nav class="product-filter">
+      <!--     <nav class="product-filter">
         <h2><%= __('Kennels') %></h2>
         <% /*Фильтры*/ %>
         <div class="sort">
@@ -452,6 +450,8 @@
       </section>
     </div>
   </section>
+
+
 </div>
 
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
