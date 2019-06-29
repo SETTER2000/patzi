@@ -12,8 +12,12 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-
-
+    // getFullName:{
+    //   type:'ref',
+    // },
+    // getFullName: function () {
+    //   return this.fullName + ' ' + this.emailAddress ;
+    // },
     emailAddress: {
       type: 'string',
       required: true,
@@ -307,9 +311,14 @@ It just means they have a customer entry in Stripe, which might or might not hav
     //
 
   },
-  getFullName: function () {
-    return this.gravatar + ' ' + this.emailAddress ;
-  },
+
+  // methods: {
+  //   toJSON: () => _.pick(this, ['fullName', 'phone']),
+  //   getName: () => [this.fullName, this.phone].join(' ')
+  // },
+  // getFullName: function () {
+  //   return this.gravatar + ' ' + this.emailAddress ;
+  // },
   // findWithSameNameAsPerson: async function (opts) {
   //   var person = await Person.findOne({ id: opts.id });
   //

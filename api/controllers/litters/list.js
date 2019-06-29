@@ -68,29 +68,33 @@ module.exports = {
       const {images, dogs} = litter;
       const {img} = !_.isEmpty(images[0]) ? images[0] : '';
 
-     // await dogs.map(async dog=>{
-     //    dog.kennelName = await Kennel.findOne({id:dog.kennel});
-     //  });
-      litter.sire = dogs.find(dog =>dog.gender === 'sire').label;
-      litter.dam = dogs.find(dog =>dog.gender === 'dam').label;
+      // await dogs.map(async dog=>{
+      //    dog.kennelName = await Kennel.findOne({id:dog.kennel});
+      //  });
+      litter.sire = dogs.find(dog => dog.gender === 'sire').label;
+      litter.dam = dogs.find(dog => dog.gender === 'dam').label;
+
+      litter.sireKennelId = dogs.find(dog => dog.gender === 'sire').kennel;
+      litter.damKennelId = dogs.find(dog => dog.gender === 'dam').kennel;
 
 
-      if(litter.dam){
-        litter.damKennelId = dogs.find(dog =>dog.kennel).id;
-      }else{
-        litter.sireKennelId = dogs.find(dog =>dog.kennel).id;
-      }
+      // if(litter.dam){
+      //   litter.damKennelId = dogs.find(dog =>dog.kennel).id;
+      // }else{
+      //   litter.sireKennelId = dogs.find(dog =>dog.kennel).id;
+      // }
       // litter.kennelId = dogs.find(_.pluck(dog, 'kennel'));
 
       // litter.born = moment.utc(litter.born);
-      litter.bornNt =  moment(litter.born).format(dateFormat);
+      litter.bornNt = moment(litter.born).format(dateFormat);
       // litter.nameKennel = await sails.helpers.getFullNameKennel(litter.kennelId);
       litter.images = img;
       litter.ownerFullName = litter.owner.fullName;
       delete litter.createdAt;
       delete litter.updatedAt;
       delete litter.owner;
-
+      // litter.sireKennelName = await sails.helpers.getFullNameKennel(litter);
+      // console.log('NAME KENNEL::', await sails.helpers.getFullNameKennel(litter));
       // Столбец: Дата регистрации. Формат фильтра.
       //litter.createdAtFormatFilter = moment(litter.createdAt).format(format);
       // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
@@ -99,7 +103,23 @@ module.exports = {
 
     });
 
+    await _.each(litters, async (litter) => {
+      let kennel = await Kennel.findOne({id: litter.damKennelId});
+      console.log('DASSS: ' ,kennel.label);
+      litter.nameKennel =kennel.label;
 
+    });
+    // litters.map(async litter=>{
+    //    litter.sireKennelName = await sails.helpers.getFullNameKennel(litter.sireKennelId);
+    //    litter.damKennelName = await sails.helpers.getFullNameKennel(litter.damKennelId);
+    //   litter.sireName  = `${litter.sireKennelName} ${litter.sire}`;
+    //   litter.damName  = `${litter.damKennelName} ${litter.dam}`;
+    //
+    //
+    //  });
+
+
+    // litter.damKennelName = dogs.find(dog =>dog.gender === 'dam').kennel;
     // Формируем массив с картинками
     let litterId;
     await _.each(litters, async (litter) => {
@@ -111,6 +131,8 @@ module.exports = {
       }) : '';
       // litter.images.push({imageSrc:'https://via.placeholder.com/150.png'});
     });
+
+
     // console.log('litters:::: ', litters);
     console.log('litters:::: ', litters);
 

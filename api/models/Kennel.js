@@ -50,22 +50,22 @@ module.exports = {
     },
 
 
-    imageUploadFD:{
-      type:'string',
-      description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение, связанное с этой «вещью».'
+    imageUploadFD: {
+      type: 'string',
+      description: 'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение, связанное с этой «вещью».'
     },
 
 
-    imageUploadMime:{
-      type:'string',
-      description:'Тип MIME для загруженного изображения.'
+    imageUploadMime: {
+      type: 'string',
+      description: 'Тип MIME для загруженного изображения.'
     },
 
 
     rightName: {
       type: 'boolean',
       defaultsTo: false,
-      description:'true - имя питомника пишется справа от имени собаки.'
+      description: 'true - имя питомника пишется справа от имени собаки.'
     },
 
 
@@ -111,11 +111,10 @@ module.exports = {
     },
 
 
-    phones:{
-      type:'ref',
-      description:'Список телефонов'
+    phones: {
+      type: 'ref',
+      description: 'Список телефонов'
     },
-
 
 
     address: {
@@ -150,18 +149,17 @@ module.exports = {
     },
 
 
-    whoCreate:{
-      model:'User',
-      required:true,
-      description:'Кто создал запись в БД.'
+    whoCreate: {
+      model: 'User',
+      required: true,
+      description: 'Кто создал запись в БД.'
     },
 
 
     yourKennel: {
-      model:'User',
+      model: 'User',
       description: `Это ваш питомник?`
     },
-
 
 
     continent: {
@@ -187,6 +185,16 @@ module.exports = {
       description: `Питомник может принадлежать только одноу городу. One to Many.`
     },
   },
-
+  // findNameKennel: async function (opts) {
+  //   let kennel = await Kennel.findOne({id: opts.id});
+  //
+  //   if (!kennel) {
+  //     throw require('flaverr')({
+  //       message: `Cannot find monkeys with the same name as the person w/ id=${opts.id} because that person does not exist.`,
+  //       code: 'E_UNKNOWN_PERSON'
+  //     });
+  //   }
+  //   return kennel.label;
+  // }
 };
 

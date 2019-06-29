@@ -71,6 +71,7 @@ module.exports.bootstrap = async function () {
   let alexFox = await User.create({
     emailAddress: sails.config.custom.internalEmailAddress,
     fullName: 'Alex Fox',
+    // getFullName: 'function(){return  `${this.fullName} ${this.emailAddress}`;}',
     isSuperAdmin: true,
     preferredLocale: 'en',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),

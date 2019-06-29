@@ -162,5 +162,7 @@ module.exports.routes = {
   'POST   /api/v1/region/create-region': {action: 'region/create-region'},
   'GET    /api/v1/region/list': {action: 'region/list'},
 
-  'GET    /api/v1/colors/list': { action: 'colors/list' }
+  'GET    /api/v1/colors/list': { action: 'colors/list' },
+
+  'GET    /native': { action: 'litters/list-native' },
 };
