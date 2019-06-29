@@ -74,6 +74,8 @@ module.exports = {
 
     // Бибилиотека Node.js
     const req = this.req;
+    const moment = require('moment');
+
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
@@ -92,7 +94,7 @@ module.exports = {
     // Создать помёт
     let litter = await Litter.create({
       letter: _.trim(inputs.letter).toUpperCase(),
-      born: inputs.born,
+      born: inputs.born.replace(/"([^"]+(?="))"/g,'$1'),
       owner: this.req.me.id,
       description: inputs.description,
     }).fetch();

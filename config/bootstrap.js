@@ -1694,6 +1694,115 @@ module.exports.bootstrap = async function () {
   sails.log(`Created ${createdUsers.length} user${createdUsers.length === 1 ? '' : 's'}.`);
 
 
+  let kennelsArr = [
+    {
+      label: `Sasquehanna`,
+      rightName: true,
+      dateCreate: "2017-11-02T21:00:00.000Z",
+      registerNumber: '000000',
+      whoCreate: alexFox.id,
+      continent: 1,
+      country: 1,
+      region: 5468685,
+    },
+    {
+      label: `Zlato Dinastii`,
+      rightName: true,
+      dateCreate: "2017-11-02T21:00:00.000Z",
+      registerNumber: '000000',
+      whoCreate: alexFox.id,
+      continent: 1,
+      country: 1,
+      region: 5468685,
+    },
+    {
+      label: `Poale Ell`,
+      rightName: true,
+      dateCreate: "2017-11-02T21:00:00.000Z",
+      registerNumber: '000000',
+      whoCreate: alexFox.id,
+      continent: 1,
+      country: 1,
+      region: 5468685,
+    },
+    {
+      label: `Alfa Laval`,
+      rightName: true,
+      dateCreate: "2017-11-02T21:00:00.000Z",
+      registerNumber: '000000',
+      whoCreate: alexFox.id,
+      continent: 1,
+      country: 1,
+      region: 5468685,
+    },
+    {
+      label: `Olegro Katrin`,
+      rightName: true,
+      dateCreate: "2017-11-02T21:00:00.000Z",
+      registerNumber: '000000',
+      whoCreate: alexFox.id,
+      continent: 1,
+      country: 1,
+      region: 5468685,
+    },
+    {
+      label: `Laisand Island`,
+      rightName: true,
+      dateCreate: "2017-11-02T21:00:00.000Z",
+      registerNumber: '000000',
+      whoCreate: alexFox.id,
+      continent: 1,
+      country: 1,
+      region: 5468685,
+    },
+  ];
+  let createdKennels = await Kennel.createEach(kennelsArr).fetch();
+  sails.log(`Created ${createdKennels.length} kennel${createdKennels.length === 1 ? '' : 's'}.`);
+  const dogsArr = [
+    {
+      label: `Adam`,
+      gender: 'sire',
+      dateBirth: "2017-11-02T21:00:00.000Z",
+      kennel: 'Poale Ell'
+    },
+    {
+      label: `Bell`,
+      gender: 'dam',
+      dateBirth: "2017-11-02T21:00:00.000Z",
+      kennel: 'Poale Ell'
+    },
+    {
+      label: `(FCI) Ella`,
+      gender: 'dam',
+      dateBirth: "2017-11-02T21:00:00.000Z",
+      kennel: 'Sasquehanna'
+    },
+    {
+      label: `Lux`,
+      gender: 'sire',
+      dateBirth: "2017-11-02T21:00:00.000Z",
+      kennel: 'Alfa Laval'
+    },
+    {
+      label: `Naruto`,
+      gender: 'sire',
+      dateBirth: "2017-11-02T21:00:00.000Z",
+      kennel: 'Olegro Katrin'
+    },
+    {
+      label: `Neron`,
+      gender: 'sire',
+      dateBirth: "2017-11-02T21:00:00.000Z",
+      kennel: 'Zlato Dinastii'
+    },
+  ];
+
+  dogsArr.map(dog => {
+    dog.kennel = createdKennels.find(kennel=>kennel.label === dog.kennel).id;
+  });
+
+  let createdDogs = await Dog.createEach(dogsArr).fetch();
+  sails.log(`Created ${createdDogs.length} dog${createdDogs.length === 1 ? '' : 's'}.`);
   // for (let y = 0; y < 100; y++) {
   //
   //   let nm = await sails.helpers.strings.random("alphanumeric", 6);

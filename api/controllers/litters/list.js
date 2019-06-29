@@ -52,28 +52,44 @@ module.exports = {
       .populate('owner')
       .populate('images');
 
-    let littersNew = [];
 
+    // let newLitter = litters.map((litter)={
+    //   litter.dogs
+    // });
+
+    // Функция pluck из встроенного в sails, lodash v3
+    // если версия Lodash 4, то эта функция заменена на map (_.map(users, 'firstName'))
+    // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
+    // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
+    // let litterIds = _.pluck(litters, 'id'); // friendIds: [id,id,id...]
+    const dateFormat = 'LL';
 
     await _.each(litters, async (litter) => {
-      // litter.images = litter.images[0].img;
-      const {dogs, images, description, cover, letter, id} = litter;
+      const {images, dogs} = litter;
       const {img} = !_.isEmpty(images[0]) ? images[0] : '';
-      // img = !_.isEmpty(img) ? img : {imageSrc:''};
 
-      littersNew.push({dogs, images: img, description, id, cover, letter, owner: litter.owner.fullName});
-      // let i = 0;
-      // await  _.each(litter.images[0].img, (img) => {
-      //   // console.log('IMG_FD', img.fd);
-      //   img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litter.id}/${i = i + 1}`) : '';
-      //   console.log('img.imageSrc:::: ', img.imageSrc);
-      // });
-      // Устанавливаем свойство источника изображения
-      // Первый аргумент, базовый url
-      //  litter.imageSrc = litter.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`) : '';
+     // await dogs.map(async dog=>{
+     //    dog.kennelName = await Kennel.findOne({id:dog.kennel});
+     //  });
+      litter.sire = dogs.find(dog =>dog.gender === 'sire').label;
+      litter.dam = dogs.find(dog =>dog.gender === 'dam').label;
 
-      // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
-      // litter.createdAtFormat = moment(litter.createdAt).format(format);
+
+      if(litter.dam){
+        litter.damKennelId = dogs.find(dog =>dog.kennel).id;
+      }else{
+        litter.sireKennelId = dogs.find(dog =>dog.kennel).id;
+      }
+      // litter.kennelId = dogs.find(_.pluck(dog, 'kennel'));
+
+      // litter.born = moment.utc(litter.born);
+      litter.bornNt =  moment(litter.born).format(dateFormat);
+      // litter.nameKennel = await sails.helpers.getFullNameKennel(litter.kennelId);
+      litter.images = img;
+      litter.ownerFullName = litter.owner.fullName;
+      delete litter.createdAt;
+      delete litter.updatedAt;
+      delete litter.owner;
 
       // Столбец: Дата регистрации. Формат фильтра.
       //litter.createdAtFormatFilter = moment(litter.createdAt).format(format);
@@ -86,19 +102,19 @@ module.exports = {
 
     // Формируем массив с картинками
     let litterId;
-    _.each(littersNew, async (litter) => {
+    await _.each(litters, async (litter) => {
       litterId = litter.id;
-      litter.images = (!_.isEmpty(litter.images))? await litter.images.map((img, i) => {
+      litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((img, i) => {
         img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litterId}/${i}`) : '';
         img.detail = `/litters/litter/${litterId}`;
         return img;
-      }): '';
+      }) : '';
       // litter.images.push({imageSrc:'https://via.placeholder.com/150.png'});
     });
     // console.log('litters:::: ', litters);
-    console.log('littersNew:::: ', littersNew);
+    console.log('litters:::: ', litters);
 
-    await sails.sockets.broadcast('litter', 'list-litter', littersNew);
+    await sails.sockets.broadcast('litter', 'list-litter', litters);
 
     // Respond with view.
     return exits.success();

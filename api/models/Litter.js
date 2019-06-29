@@ -53,11 +53,11 @@ module.exports = {
     },
 
 
-    filename: {
-      type: 'string',
-      example: 'my-file.jpg',
-      description: 'Название файла, который загружается.'
-    },
+    // filename: {
+    //   type: 'string',
+    //   example: 'my-file.jpg',
+    //   description: 'Название файла, который загружается.'
+    // },
     // imageUploadFD:{
     //   type:'string',
     //   description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',

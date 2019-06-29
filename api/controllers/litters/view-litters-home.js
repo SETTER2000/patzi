@@ -59,7 +59,8 @@ module.exports = {
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
       delete litter.imageUploadMime;
 
-      litter.born = moment(litter.born,"dd.MM.YYYY").format('LL');
+
+      // litter.born = moment(litter.born,"dd.MM.YYYY").format('LL');
       // Устанавливаем url к странице просмотра помёта
       // Первый аргумент, базовый url
       litter.detail =  `/litters/litter/${litter.id}`;
