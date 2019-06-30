@@ -72,7 +72,6 @@ var jsFilesToInject = [
   'dependencies/vue.js',
 
   'dependencies/vue-router.js',
-  'dependencies/poaleell-components/*.js',
   'dependencies/moment.js',
   'dependencies/moment/**/*.js',
 

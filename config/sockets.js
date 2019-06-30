@@ -30,6 +30,7 @@ module.exports.sockets = {
   // transports: [ 'websocket' ],
 
 
+
   /***************************************************************************
   *                                                                          *
   * `beforeConnect`                                                          *

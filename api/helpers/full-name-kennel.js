@@ -1,8 +1,7 @@
 module.exports = {
 
 
-  friendlyName: 'Get full name kennel',
-
+  friendlyName: 'Full name kennel',
 
   description: 'Возвращает наименование питомника по ID',
 
@@ -28,8 +27,6 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
-    console.log('Входящий ID: ' ,inputs.id);
     // Выбираем весь список объектов данной коллекции.
     let kennel = await Kennel.findOne({id: inputs.id});
     if (!kennel) {

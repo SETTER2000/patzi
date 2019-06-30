@@ -48,11 +48,18 @@ module.exports = {
 
     // Выбираем весь список объектов данной коллекции.
     let litters = await Litter.find()
-      .populate('dogs')
+      .limit(1000)
+      .sort('born DESC')
+      .populate('dogs', {limit: 2, sort: 'gender DESC'})
       .populate('owner')
       .populate('images');
 
+    // let litterIds = _.pluck(litters, 'id');
+    // console.log('litterIds:: ' , litterIds);
 
+
+    // let dogs = await Dog.find({litters:{in:litterIds}});
+    // console.log('dogs: ', dogs);
     // let newLitter = litters.map((litter)={
     //   litter.dogs
     // });
@@ -63,17 +70,21 @@ module.exports = {
     // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
     // let litterIds = _.pluck(litters, 'id'); // friendIds: [id,id,id...]
     const dateFormat = 'LL';
-
+    let nameKennelDam = '';
+    let nameDog = '';
     await _.each(litters, async (litter) => {
       const {images, dogs} = litter;
       const {img} = !_.isEmpty(images[0]) ? images[0] : '';
+      // litter.nameKennelDam = await sails.helpers.fullNameKennel(_.result(_.indexBy(litter.dogs, 'gender'), 'dam').kennel);
+      // nameDog = _.result(_.indexBy(litter.dogs, 'gender'), 'dam').label;
 
       // await dogs.map(async dog=>{
       //    dog.kennelName = await Kennel.findOne({id:dog.kennel});
       //  });
       litter.sire = dogs.find(dog => dog.gender === 'sire').label;
       litter.dam = dogs.find(dog => dog.gender === 'dam').label;
-
+      // console.log('r: ', `${nameKennelDam} ${nameDog}`);
+      // litter.dam = `${litter.nameKennelDam } ${litter.dam}`;
       litter.sireKennelId = dogs.find(dog => dog.gender === 'sire').kennel;
       litter.damKennelId = dogs.find(dog => dog.gender === 'dam').kennel;
 
@@ -105,8 +116,9 @@ module.exports = {
 
     await _.each(litters, async (litter) => {
       let kennel = await Kennel.findOne({id: litter.damKennelId});
-      console.log('DASSS: ' ,kennel.label);
-      litter.nameKennel =kennel.label;
+      console.log('kennel.label:: ', kennel.label);
+
+      litter.nameKennel = kennel.label;
 
     });
     // litters.map(async litter=>{
@@ -129,12 +141,27 @@ module.exports = {
         img.detail = `/litters/litter/${litterId}`;
         return img;
       }) : '';
+
+      // litter.dogs = (!_.isEmpty(litter.dogs)) ? await litter.dogs.map(async (dog, y) => {
+      //   dog.kennelName = dog.kennel ? await sails.helpers.fullNameKennel(dog.kennel) : '';
+      //   console.log(y);
+      //   return dog;
+      // }) : '';
+
+
       // litter.images.push({imageSrc:'https://via.placeholder.com/150.png'});
     });
 
 
-    // console.log('litters:::: ', litters);
-    console.log('litters:::: ', litters);
+    await litters.map(async (litter) => {
+      litter.kennelName = litter.damKennelId ? await sails.helpers.fullNameKennel(litter.damKennelId) : '';
+      return litter;
+    });
+
+    if (!litters) {
+      throw 'badRequest';
+    }
+
 
     await sails.sockets.broadcast('litter', 'list-litter', litters);
 

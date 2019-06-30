@@ -465,7 +465,7 @@ parasails.registerPage('litters-home', {
     },
 
     handlePictureCardPreview(file) {
-      console.log('file.url: ', file.url);
+      // console.log('file.url: ', file.url);
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },

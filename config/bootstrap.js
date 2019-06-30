@@ -71,7 +71,7 @@ module.exports.bootstrap = async function () {
   let alexFox = await User.create({
     emailAddress: sails.config.custom.internalEmailAddress,
     fullName: 'Alex Fox',
-    // getFullName: 'function(){return  `${this.fullName} ${this.emailAddress}`;}',
+    // getFullName: function(){return  `${this.fullName} ${this.emailAddress}`;},
     isSuperAdmin: true,
     preferredLocale: 'en',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
@@ -1699,7 +1699,7 @@ module.exports.bootstrap = async function () {
     {
       label: `Sasquehanna`,
       rightName: true,
-      dateCreate: "2017-11-02T21:00:00.000Z",
+      dateCreate: '2017-11-02T21:00:00.000Z',
       registerNumber: '000000',
       whoCreate: alexFox.id,
       continent: 1,
@@ -1709,7 +1709,7 @@ module.exports.bootstrap = async function () {
     {
       label: `Zlato Dinastii`,
       rightName: true,
-      dateCreate: "2017-11-02T21:00:00.000Z",
+      dateCreate: '2017-11-02T21:00:00.000Z',
       registerNumber: '000000',
       whoCreate: alexFox.id,
       continent: 1,
@@ -1719,7 +1719,7 @@ module.exports.bootstrap = async function () {
     {
       label: `Poale Ell`,
       rightName: true,
-      dateCreate: "2017-11-02T21:00:00.000Z",
+      dateCreate: '2017-11-02T21:00:00.000Z',
       registerNumber: '000000',
       whoCreate: alexFox.id,
       continent: 1,
@@ -1729,7 +1729,7 @@ module.exports.bootstrap = async function () {
     {
       label: `Alfa Laval`,
       rightName: true,
-      dateCreate: "2017-11-02T21:00:00.000Z",
+      dateCreate: '2017-11-02T21:00:00.000Z',
       registerNumber: '000000',
       whoCreate: alexFox.id,
       continent: 1,
@@ -1739,7 +1739,7 @@ module.exports.bootstrap = async function () {
     {
       label: `Olegro Katrin`,
       rightName: true,
-      dateCreate: "2017-11-02T21:00:00.000Z",
+      dateCreate: '2017-11-02T21:00:00.000Z',
       registerNumber: '000000',
       whoCreate: alexFox.id,
       continent: 1,
@@ -1749,7 +1749,7 @@ module.exports.bootstrap = async function () {
     {
       label: `Laisand Island`,
       rightName: true,
-      dateCreate: "2017-11-02T21:00:00.000Z",
+      dateCreate: '2017-11-02T21:00:00.000Z',
       registerNumber: '000000',
       whoCreate: alexFox.id,
       continent: 1,
@@ -1763,37 +1763,37 @@ module.exports.bootstrap = async function () {
     {
       label: `Adam`,
       gender: 'sire',
-      dateBirth: "2017-11-02T21:00:00.000Z",
+      dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Poale Ell'
     },
     {
       label: `Bell`,
       gender: 'dam',
-      dateBirth: "2017-11-02T21:00:00.000Z",
+      dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Poale Ell'
     },
     {
       label: `(FCI) Ella`,
       gender: 'dam',
-      dateBirth: "2017-11-02T21:00:00.000Z",
+      dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Sasquehanna'
     },
     {
-      label: `Lux`,
+      label: `De Lux Supernova`,
       gender: 'sire',
-      dateBirth: "2017-11-02T21:00:00.000Z",
+      dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Alfa Laval'
     },
     {
       label: `Naruto`,
       gender: 'sire',
-      dateBirth: "2017-11-02T21:00:00.000Z",
+      dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Olegro Katrin'
     },
     {
       label: `Neron`,
       gender: 'sire',
-      dateBirth: "2017-11-02T21:00:00.000Z",
+      dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Zlato Dinastii'
     },
   ];
