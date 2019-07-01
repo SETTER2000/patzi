@@ -124,11 +124,11 @@ module.exports = {
     },
 
 
-    //   borrowedBy: {
-    //     model: 'User',
-    //     description: 'Пользователь, который попросил одолжить этот товар.' },
-    //
-    //
+    kennel: {
+      model: 'kennel',
+      description: 'Помёт может принадлежать только одному питомнику. One to Many'
+    },
+
 
 
   },

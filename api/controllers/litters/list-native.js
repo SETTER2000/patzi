@@ -32,8 +32,7 @@ module.exports = {
     const collection = db.collection('litter');
 
 
-    collection.find({letter: 'A'})
-
+    /*    collection.find({letter: 'A'})*/
 
 
     /*collection.aggregate([{
@@ -45,6 +44,15 @@ module.exports = {
       }
 
     ])*/
+    collection.aggregate([{
+      $lookup:
+        {
+          from: "dog_litters__litter_dogs",
+          localField: "_id",
+          foreignField: "litter_dogs",
+          as: "inventory_docs"
+        }
+    }])
       .toArray((err, results) => {
         if (err) {
           throw 'badRequest';

@@ -55,17 +55,17 @@ module.exports.datastores = {
     //url: 'mongodb://fox:4211817@localhost:27017/patzi',
 
   },
-  mongoTest: {
-    adapter: 'sails-mongo',
-    host: 'localhost',
-    port: 27017,
-    user: 'alex',
-    password: '4211817',
-    database: 'test',
-
-    //url: 'mongodb://fox:4211817@localhost:27017/patzi',
-
-  },
+  // mongoTest: {
+  //   adapter: 'sails-mongo',
+  //   host: 'localhost',
+  //   port: 27017,
+  //   user: 'alex',
+  //   password: '4211817',
+  //   database: 'test',
+  //
+  //   //url: 'mongodb://fox:4211817@localhost:27017/patzi',
+  //
+  // },
   // default: {
   //
   //   /***************************************************************************

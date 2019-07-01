@@ -1804,6 +1804,43 @@ module.exports.bootstrap = async function () {
 
   let createdDogs = await Dog.createEach(dogsArr).fetch();
   sails.log(`Created ${createdDogs.length} dog${createdDogs.length === 1 ? '' : 's'}.`);
+
+
+ // Нужно создать индекс по полям предков в DB, чтобы включить быстрый поиск по узлам предков:
+  // db.categories.createIndex( { ancestors: 1 } )
+  let categories = await  Category.createEach( [{ name: "MongoDB", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
+    { name: "dbm", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
+    { name: "Databases", ancestors: [ "Books", "Programming" ], parent: "Programming" },
+    { name: "Languages", ancestors: [ "Books", "Programming" ], parent: "Programming" },
+    { name: "Programming", ancestors: [ "Books" ], parent: "Books" },
+    { name: "Books", ancestors: [ ], parent: null }]).fetch();
+
+  let tree = await  Tree.createEach( [{ name: "MongoDB", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
+    { name: "dbm", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
+    { name: "Databases", ancestors: [ "Books", "Programming" ], parent: "Programming" },
+    { name: "Languages", ancestors: [ "Books", "Programming" ], parent: "Programming" },
+    { name: "Programming", ancestors: [ "Books" ], parent: "Books" },
+    { name: "Books", ancestors: [ ], parent: null }]).fetch();
+
+  sails.log(`Created ${tree.length} tree${tree.length === 1 ? '' : 's'}.`);
+
+  let airports  = await  Airports.createEach( [
+    {"airport" : "JFK", "connects" : [ "BOS", "ORD" ] },
+    {"airport" : "BOS", "connects" : [ "JFK", "PWM" ] },
+    {"airport" : "ORD", "connects" : [ "JFK" ] },
+    {"airport" : "PWM", "connects" : [ "BOS", "LHR" ] },
+    {"airport" : "LHR", "connects" : [ "PWM" ] }]).fetch();
+
+  sails.log(`Created ${airports.length} airport${airports.length === 1 ? '' : 's'}.`);
+
+  let travelers   = await  Travelers.createEach( [
+    {"name" : "Dev", "nearestAirport" : "JFK" },
+    {"name" : "Eliot", "nearestAirport" : "JFK" },
+    {"name" : "Jeff", "nearestAirport" : "BOS"}
+  ]).fetch();
+
+  sails.log(`Created ${travelers.length} traveler${travelers.length === 1 ? '' : 's'}.`);
+
   // for (let y = 0; y < 100; y++) {
   //
   //   let nm = await sails.helpers.strings.random("alphanumeric", 6);
