@@ -55,7 +55,7 @@
           <div class="section-title text-center">
             <h3><%= __('Our Portfolio') %></h3>
             <h2><span><%= __('Beautiful moments') %></span></h2>
-            <div v-if="me.isSuperAdmin" class="mt-5">
+            <div v-if="me.isSuperAdmin || me.isAdmin" class="mt-5">
               <button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add a photo') %></button>
             </div>
           </div>

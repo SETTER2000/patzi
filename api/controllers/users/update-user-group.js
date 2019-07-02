@@ -13,12 +13,11 @@ module.exports = {
       description: 'ID пользователя у которого обновляется группа доступа.'
       // whereToGet: {description: 'Credit card info is provided by Stripe after completing the checkout flow.'}
     },
-    groupId:{
-      type:'ref',
+    groupId: {
+      type: 'ref',
       description: 'Массив ID групп в которую входит пользователь.'
     }
   },
-
 
 
   fn: async function (inputs) {
@@ -40,9 +39,16 @@ module.exports = {
     }
 
     // Добавить пользователя inputs.userId в группу inputs.groupId.
-    let rs = await User.replaceCollection(inputs.id, 'groups', inputs.groupId);
-    console.log('RS:', rs);
-    // await User.addToCollection(inputs.id, 'groups').members(inputs.groupId);
+    await User.replaceCollection(inputs.id, 'groups', inputs.groupId);
+
+
+    //
+    let user = await User.findOne({where: {id: inputs.id}, select: ['fullName']})
+      .populate('groups');
+console.log('USER: ' ,user);
+    let isAdmin = false;
+    await _.each(user.groups, group => {isAdmin = (group.label === 'admin');});
+    await User.update({id: inputs.id},{isAdmin:isAdmin});
 
     await sails.sockets.broadcast('user', 'list');
   }

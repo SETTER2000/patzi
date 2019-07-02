@@ -59,7 +59,7 @@ module.exports.models = {
    *                                                                          *
    ***************************************************************************/
 
-  schema: true,
+  // schema: true,
   datastore:'mongodb',
 
 

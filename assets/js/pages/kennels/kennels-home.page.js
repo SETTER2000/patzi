@@ -198,14 +198,6 @@ parasails.registerPage('kennels-home', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
 
-    function vowels(string) {
-      return _.filter(string, (v) => {
-        return /[aeiou]/i.test(v);
-      });
-    }
-
-    _.mixin({'vowels': vowels});
-
 
     // Подписываемся на комнату continent  и событие list-continent
     io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
@@ -245,9 +237,10 @@ parasails.registerPage('kennels-home', {
   },
 
   computed: {
+
     langSearch: {
       get: function () {
-        return (this.preferredLocale === 'ru') ? 'На русском поиск' : 'English search';
+        return (this.me.preferredLocale === 'ru') ? 'На русском поиск' : 'English search';
       }
     },
     i19p: {
@@ -649,8 +642,6 @@ parasails.registerPage('kennels-home', {
 
 
     async handleSelect(e) {
-      console.log('ВЫбор города: ', e);
-      console.log('LODASH MIXIN', _.vowels('fred'));
       this.cityId = (_.isNumber(e.id)) ? e.id : undefined;
     },
 

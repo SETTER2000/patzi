@@ -64,6 +64,7 @@ module.exports.bootstrap = async function () {
     {
       emailAddress: sails.config.custom.friendEmailAddress,
       fullName: 'Ryan Dahl',
+      isAdmin: false,
       password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
       preferredLocale: 'en'
     }).fetch();
@@ -71,6 +72,7 @@ module.exports.bootstrap = async function () {
   let alexFox = await User.create({
     emailAddress: sails.config.custom.internalEmailAddress,
     fullName: 'Alex Fox',
+    isAdmin: false,
     // getFullName: function(){return  `${this.fullName} ${this.emailAddress}`;},
     isSuperAdmin: true,
     preferredLocale: 'en',
@@ -81,6 +83,7 @@ module.exports.bootstrap = async function () {
   let adam = await User.create({
     emailAddress: 'administrator.f@mail.ru',
     fullName: 'Poale Ell Adam',
+    isAdmin: false,
     // preferredLocale: 'en',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
     gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
@@ -89,6 +92,7 @@ module.exports.bootstrap = async function () {
   let bob = await User.create({
     emailAddress: 'kremotory@mail.ru',
     fullName: 'Bob Scott',
+    isAdmin: false,
     isSuperAdmin: true,
     // preferredLocale: 'en',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
@@ -1799,48 +1803,48 @@ module.exports.bootstrap = async function () {
   ];
 
   dogsArr.map(dog => {
-    dog.kennel = createdKennels.find(kennel=>kennel.label === dog.kennel).id;
+    dog.kennel = createdKennels.find(kennel => kennel.label === dog.kennel).id;
   });
 
   let createdDogs = await Dog.createEach(dogsArr).fetch();
   sails.log(`Created ${createdDogs.length} dog${createdDogs.length === 1 ? '' : 's'}.`);
 
 
- // Нужно создать индекс по полям предков в DB, чтобы включить быстрый поиск по узлам предков:
+  // Нужно создать индекс по полям предков в DB, чтобы включить быстрый поиск по узлам предков:
   // db.categories.createIndex( { ancestors: 1 } )
-  let categories = await  Category.createEach( [{ name: "MongoDB", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
-    { name: "dbm", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
-    { name: "Databases", ancestors: [ "Books", "Programming" ], parent: "Programming" },
-    { name: "Languages", ancestors: [ "Books", "Programming" ], parent: "Programming" },
-    { name: "Programming", ancestors: [ "Books" ], parent: "Books" },
-    { name: "Books", ancestors: [ ], parent: null }]).fetch();
+  // let categories = await  Category.createEach( [{ name: "MongoDB", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
+  //   { name: "dbm", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
+  //   { name: "Databases", ancestors: [ "Books", "Programming" ], parent: "Programming" },
+  //   { name: "Languages", ancestors: [ "Books", "Programming" ], parent: "Programming" },
+  //   { name: "Programming", ancestors: [ "Books" ], parent: "Books" },
+  //   { name: "Books", ancestors: [ ], parent: null }]).fetch();
+  //
+  // let tree = await  Tree.createEach( [{ name: "MongoDB", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
+  //   { name: "dbm", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
+  //   { name: "Databases", ancestors: [ "Books", "Programming" ], parent: "Programming" },
+  //   { name: "Languages", ancestors: [ "Books", "Programming" ], parent: "Programming" },
+  //   { name: "Programming", ancestors: [ "Books" ], parent: "Books" },
+  //   { name: "Books", ancestors: [ ], parent: null }]).fetch();
 
-  let tree = await  Tree.createEach( [{ name: "MongoDB", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
-    { name: "dbm", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
-    { name: "Databases", ancestors: [ "Books", "Programming" ], parent: "Programming" },
-    { name: "Languages", ancestors: [ "Books", "Programming" ], parent: "Programming" },
-    { name: "Programming", ancestors: [ "Books" ], parent: "Books" },
-    { name: "Books", ancestors: [ ], parent: null }]).fetch();
+  // sails.log(`Created ${tree.length} tree${tree.length === 1 ? '' : 's'}.`);
 
-  sails.log(`Created ${tree.length} tree${tree.length === 1 ? '' : 's'}.`);
+  /* let airports  = await  Airports.createEach( [
+     {"airport" : "JFK", "connects" : [ "BOS", "ORD" ] },
+     {"airport" : "BOS", "connects" : [ "JFK", "PWM" ] },
+     {"airport" : "ORD", "connects" : [ "JFK" ] },
+     {"airport" : "PWM", "connects" : [ "BOS", "LHR" ] },
+     {"airport" : "LHR", "connects" : [ "PWM" ] }]).fetch();
 
-  let airports  = await  Airports.createEach( [
-    {"airport" : "JFK", "connects" : [ "BOS", "ORD" ] },
-    {"airport" : "BOS", "connects" : [ "JFK", "PWM" ] },
-    {"airport" : "ORD", "connects" : [ "JFK" ] },
-    {"airport" : "PWM", "connects" : [ "BOS", "LHR" ] },
-    {"airport" : "LHR", "connects" : [ "PWM" ] }]).fetch();
+   sails.log(`Created ${airports.length} airport${airports.length === 1 ? '' : 's'}.`);
 
-  sails.log(`Created ${airports.length} airport${airports.length === 1 ? '' : 's'}.`);
+   let travelers   = await  Travelers.createEach( [
+     {"name" : "Dev", "nearestAirport" : "JFK" },
+     {"name" : "Eliot", "nearestAirport" : "JFK" },
+     {"name" : "Jeff", "nearestAirport" : "BOS"}
+   ]).fetch();
 
-  let travelers   = await  Travelers.createEach( [
-    {"name" : "Dev", "nearestAirport" : "JFK" },
-    {"name" : "Eliot", "nearestAirport" : "JFK" },
-    {"name" : "Jeff", "nearestAirport" : "BOS"}
-  ]).fetch();
-
-  sails.log(`Created ${travelers.length} traveler${travelers.length === 1 ? '' : 's'}.`);
-
+   sails.log(`Created ${travelers.length} traveler${travelers.length === 1 ? '' : 's'}.`);
+ */
   // for (let y = 0; y < 100; y++) {
   //
   //   let nm = await sails.helpers.strings.random("alphanumeric", 6);

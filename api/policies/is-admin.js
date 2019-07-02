@@ -20,15 +20,30 @@ module.exports = async function (req, res, proceed) {
     return res.unauthorized();
   }//•
 
-  // Then check that this user is a "super admin".
-  // Затем убедитесь, что этот пользователь является «супер-администратором».
-  if (!req.me.isSuperAdmin) {
+  if (!req.me.isAdmin) {
     // return res.forbidden();
     return res.notFound();
   }//•
-
-  // IWMIH, we've got ourselves a "super admin".
-  // IWMIH, у нас есть «супер админ».
+  // let user = await User.findOne({
+  //   where: {id: req.me.id},
+  //   select: ['fullName']
+  // })
+  //   .populate('groups');
+  // // console.log('GROUPSSS: ', user);
+  //
+  // await _.each(user.groups, group => {
+  //   req.me.isAdmin = (group.label === 'admin');
+  //   // req.me[`is_${group.label}`] =  (group.label);
+  // });
+  //
+  // // Then check that this user is a "super admin".
+  // // Затем убедитесь, что этот пользователь является «супер-администратором».
+  // if (!req.me.isAdmin) {
+  //   // return res.forbidden();
+  //   return res.notFound();
+  // }//•
+  // await User.update({id: req.me.id},{isAdmin:true});
+  // IWMIH, у нас есть «админ».
   return proceed();
 
 };

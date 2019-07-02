@@ -5,7 +5,7 @@
  */
 
 module.exports = {
-
+  schema: true,
   attributes: {
 
 
@@ -66,6 +66,12 @@ module.exports = {
       example: 'Mary Sue van der McHenst'
     },
 
+
+    isAdmin: {
+      type: 'boolean',
+      description: 'Является ли этот пользователь «администратором»',
+      defaultsTo:false
+    },
 
     isSuperAdmin: {
       type: 'boolean',
