@@ -249,11 +249,11 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
                   </li>
                   <!-- <li><a href="/blog"><%= __('Blog') %></a></li>
                 <li><a href="blog-single.html">Blog Single</a></li>-->
-                  <li>
+                 <!-- <li>
                     <a
                       class="nav-item nav-link   <%= typeof currentSection !== 'undefined' && currentSection === 'kennels' ? 'current' : '' %>"
                       href="/kennels"><%= __('Kennels') %></a>
-                  </li>
+                  </li>-->
                 </ul>
               </li>
               <li class="menu-has-children avatar">
@@ -293,10 +293,11 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
                   </li>
                 </ul>
               </li>
-              <% if(me.isSuperAdmin) { %>
+              <% if(me.isSuperAdmin || me.isAdmin) { %>
               <li class="menu-has-children">
                 <a href="#"><span class="ti-settings"></span></a>
                 <ul>
+                  <% if(me.isSuperAdmin ) { %>
                   <li>
                     <a
                       class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'users' ? 'current' : '' %>"
@@ -306,6 +307,12 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
                     <a
                       class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'groups' ? 'current' : '' %>"
                       href="/groups"><%= __('Groups') %></a>
+                  </li>
+                  <%}%>
+                  <li>
+                    <a
+                      class="nav-item nav-link   <%= typeof currentSection !== 'undefined' && currentSection === 'kennels' ? 'current' : '' %>"
+                      href="/kennels"><%= __('Kennels') %></a>
                   </li>
                 </ul>
               </li>
