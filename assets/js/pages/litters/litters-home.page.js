@@ -239,7 +239,7 @@ parasails.registerPage('litters-home', {
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
       this.warning = this.i19p.warnNoDogs;
-      (this.sires.length > 0 && this.dams.length > 0) ? this.centerDialogAdded = true :
+     return (this.sires.length > 0 && this.dams.length > 0) ? this.centerDialogAdded = true :
         this.centerDialogVisibleWarnings = true;
     },
 
@@ -500,11 +500,11 @@ parasails.registerPage('litters-home', {
     // Выбираем всех кобелей
     async sireList() {
       await io.socket.get(`/api/v1/dogs/list-sire`, function gotResponse(body, response) {
-        // console.log('Сервис Dogs sire ответил кодом ' + response.statusCode + ' и данными: ', body);
+        console.log('Сервис Dogs sire ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-sire', (data) => {
-        // console.log('sires: ', data);
+        console.log('sires: ', data);
         this.sires = data;
       });
     },
@@ -515,7 +515,7 @@ parasails.registerPage('litters-home', {
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-dam', (data) => {
-        // console.log('dams: ', data);
+        console.log('dams: ', data);
         this.dams = data;
       });
     },
