@@ -1,10 +1,11 @@
 module.exports = {
 
 
-  friendlyName: 'Destroy one kennel',
+  friendlyName: 'Destroy one dog',
 
-  description: `Удалить один питомник. Питомник может быть удалён после того как удалены 
-  все собаки привязанные к питомнику.`,
+  description: `Удалить одну собаку. При удалении собаки все объекты связанные с ней, 
+  кроме родительского т.е Kennel, не должны быть затронуты ошибкой рассинхронизации данных. Так как 
+  они имеют тип документов и содержат данные о собаки, а не ссылки на данный объект.`,
 
 
   inputs: {
@@ -49,37 +50,38 @@ module.exports = {
     //   throw 'forbiddenLitter';
     // }
 
-
-    let kennel = await Kennel.find({id:inputs.id}).populate('dogs');
-    if (!_.isEmpty(kennel[0].dogs) ){
-      throw 'badRequestDog';
+    //
+    // let kennel = await Kennel.find({id:inputs.id}).populate('dogs');
+    // if (!_.isEmpty(kennel[0].dogs) ){
+    //   throw 'badRequestDog';
+    // }
+    //
+    let dog = await Dog.findOne({
+      id: inputs.id
+    });
+    //
+    if (!dog) {
+      throw 'notFound';
     }
-    //
-    // let kennel = await Kennel.findOne({
-    //   id: inputs.id
-    // });
-    //
-    // if (!kennel) {
-    //   throw 'notFound';
+
+    // if (dog.owner !== this.req.me.id && !this.req.me.isSuperAdmin) {
+    //   throw 'forbidden';
     // }
 
-    if (kennel.owner !== this.req.me.id && !this.req.me.isSuperAdmin) {
-      throw 'forbidden';
-    }
 
-
-    await Dog.findOne({id: inputs.id});
-
-    await Kennel.destroy({id: inputs.id});
+    // await Dog.findOne({id: inputs.id});
+    //
+    await Dog.destroy({id: inputs.id});
 
     // Вызываем помощника сформировать правильно данные для ответа.
-    let res = await sails.helpers.formatCollectionKennel(req);
+    // let res = await sails.helpers.formatCollectionKennel(req);
 
 
     // Рассылаем данные всем подписанным на событие list данной комнаты.
-    await sails.sockets.broadcast('kennel', 'list-kennel', res.collection);
+    // await sails.sockets.broadcast('kennel', 'list-kennel', res.collection);
 
     // Respond with view.
     return exits.success();
   }
+
 };

@@ -50,7 +50,7 @@ module.exports = {
     let litters = await Litter.find()
       .limit(1000)
       .sort('born DESC')
-      .populate('dogs', {limit: 2, sort: 'gender DESC'})
+      // .populate('dogs', {limit: 2, sort: 'gender DESC'})
       .populate('owner')
       .populate('images');
 
@@ -81,12 +81,12 @@ module.exports = {
       // await dogs.map(async dog=>{
       //    dog.kennelName = await Kennel.findOne({id:dog.kennel});
       //  });
-      litter.sire = dogs.find(dog => dog.gender === 'sire').label;
-      litter.dam = dogs.find(dog => dog.gender === 'dam').label;
+      // litter.sire = dogs.find(dog => dog.gender === 'sire').label;
+      // litter.dam = dogs.find(dog => dog.gender === 'dam').label;
       // console.log('r: ', `${nameKennelDam} ${nameDog}`);
       // litter.dam = `${litter.nameKennelDam } ${litter.dam}`;
-      litter.sireKennelId = dogs.find(dog => dog.gender === 'sire').kennel;
-      litter.damKennelId = dogs.find(dog => dog.gender === 'dam').kennel;
+      // litter.sireKennelId = dogs.find(dog => dog.gender === 'sire').kennel;
+      // litter.damKennelId = dogs.find(dog => dog.gender === 'dam').kennel;
 
 
       // if(litter.dam){
@@ -114,13 +114,13 @@ module.exports = {
 
     });
 
-    await _.each(litters, async (litter) => {
-      let kennel = await Kennel.findOne({id: litter.damKennelId});
-      console.log('kennel.label:: ', kennel.label);
-
-      litter.nameKennel = kennel.label;
-
-    });
+    // await _.each(litters, async (litter) => {
+    //   let kennel = await Kennel.findOne({id: litter.damKennelId});
+    //   console.log('kennel.label:: ', kennel.label);
+    //
+    //   litter.nameKennel = kennel.label;
+    //
+    // });
     // litters.map(async litter=>{
     //    litter.sireKennelName = await sails.helpers.getFullNameKennel(litter.sireKennelId);
     //    litter.damKennelName = await sails.helpers.getFullNameKennel(litter.damKennelId);

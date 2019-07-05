@@ -46,13 +46,32 @@ module.exports = {
 
     cover: {
       type: 'number',
-      defaultsTo:0,
+      defaultsTo: 0,
       example: 5,
       description: `Номер ключа в массиве фотографий, который определяет главную фотографию альбома.
                     Обложка альбома.`
     },
 
+    sire: {
+      type: 'ref',
+      description: 'Кобель учавствующий в помёте, т.е. отец.',
+      defaultsTo: [],
+      example: ['5d1f1b04fbe834262cb22c53','Poale Ell Adam']
+    },
 
+    dam: {
+      type: 'ref',
+      description: 'Сука учавствующий в помёте, т.е. мать.',
+      defaultsTo: [],
+      example: ['5d1f1b04fbe834262cbb8c53','Sasquehanna Ella']
+    },
+
+    // dogs: {
+    //   type: 'ref',
+    //   description: 'Собаки учавствующие в помёте, т.е. родители.',
+    //   defaultsTo: [],
+    //   example: [{id:'5d1f1b04fbe834262cbb8c53',label:'Poale Ell Adam'},{id:'5d1f1b04fbe834262cb22c53',label:'Sasquehanna Ella'}]
+    // },
     // filename: {
     //   type: 'string',
     //   example: 'my-file.jpg',
@@ -104,11 +123,11 @@ module.exports = {
 
 
     // Добавить ссылку на Dog
-    dogs: {
-      collection: 'dog',
-      via: 'litters',
-      description: 'Помёт может принадлежать нескольким собакам. Many to Many (Многие-ко-многим)'
-    },
+    /*  dogs: {
+        collection: 'dog',
+        via: 'litters',
+        description: 'Помёт может принадлежать нескольким собакам. Many to Many (Многие-ко-многим)'
+      },*/
 
 
     images: {
@@ -128,7 +147,6 @@ module.exports = {
       model: 'kennel',
       description: 'Помёт может принадлежать только одному питомнику. One to Many'
     },
-
 
 
   },

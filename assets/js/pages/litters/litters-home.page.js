@@ -563,8 +563,27 @@ parasails.registerPage('litters-home', {
       return _.pluck(this.dams.filter(dam => (dam.value === this.ruleForm.dam) ? dam.id : ''), 'id').toString();
     },
 
+    // Получаем ID кобеля помёта
     getIdSire() {
       return _.pluck(this.sires.filter(sire => (sire.value === this.ruleForm.sire) ? sire.id : ''), 'id').toString();
+    },
+
+
+    // Получаем массив [id, label] кобеля помёта
+    getSireArr() {
+      let arr=[];
+      arr.push(this.getIdSire());
+      arr.push(this.ruleForm.sire);
+      return arr;
+    },
+
+
+    // Получаем массив [id, label] суки помёта
+    getDamArr() {
+      let arr=[];
+      arr.push(this.getIdDam());
+      arr.push(this.ruleForm.dam);
+      return arr;
     },
 
     async addLitter() {
@@ -578,8 +597,8 @@ parasails.registerPage('litters-home', {
       let data = {
         fileList: this.fileList,
         letter: this.ruleForm.letter,
-        dam: this.getIdDam(),
-        sire: this.getIdSire(),
+        dam: this.getDamArr(),
+        sire: this.getSireArr(),
         born: JSON.stringify(this.ruleForm.born),
         description: this.ruleForm.description,
       };
@@ -650,7 +669,7 @@ parasails.registerPage('litters-home', {
 
 
     goTo(path) {
-      window.location = `/${path}`;
+      window.location = `${path}`;
     },
 
     openFullScreen() {

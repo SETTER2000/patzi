@@ -98,7 +98,6 @@ parasails.registerPage('kennels-home', {
     text: '',
     value: [],
     list: [],
-
     loading: false,
     centerDialogVisibleConfirm: false,
     uploadModalOpen: false,
@@ -168,6 +167,7 @@ parasails.registerPage('kennels-home', {
         warnNotRecover:'After deletion, the object cannot be restored. Delete object?',
         text400Err: 'Could not create! ',
         text400ErrDel: 'Could not delete! ',
+        badRequestDog: 'Cannot be deleted! You have associated files: cattery. You should remove all dogs associated with this kennel.',
         text403ErrForbd: 'Mistake! Could not remove. You may not have permission to delete this object. ',
         text404Err: 'Not found object! ',
         text500Err: 'Server Error! Unable to create. ',
@@ -181,6 +181,7 @@ parasails.registerPage('kennels-home', {
         warnNotRecover:'После удаления объект невозможно будет восстановить. Удалить объект?',
         text400Err: 'Не смог создать!',
         text400ErrDel: 'Не удалось удалить!',
+        badRequestDog: 'Не возможно удалить! У вас есть связанные файлы: собака. Вам следует удалить всех собак связанны с данным питомником.',
         text403ErrForbd: 'Не смог удалить. Возможно у вас нет прав на удаление данного объекта. ',
         text404Err: 'Не могу найти объект! ',
         text500Err: 'Ошибка сервера! Невозможно создать.',
@@ -664,13 +665,18 @@ parasails.registerPage('kennels-home', {
         io.socket.delete('/api/v1/kennels/destroy-one-kennel', {'id': this.selectedKennel.id}, (data, jwRes) => {
 
             (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successDel)) :
+              (jwRes.statusCode === 400 && jwRes.headers['x-exit'] === 'badRequestDog') ? this.mesError(this.i19p.badRequestDog):
               (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrDel) :
               (jwRes.statusCode === 403) ? this.mesError(this.i19p.text403ErrForbd) :
               (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
                 (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
                   (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
-
+console.log('jwRes.headers: ',jwRes.headers['x-exit']);
+console.log('jwRes.headers: ', jwRes.headers);
+/*
+* jwRes.headers:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}
+* */
 
           console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
         });

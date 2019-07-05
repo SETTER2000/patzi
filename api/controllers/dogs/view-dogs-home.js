@@ -6,6 +6,14 @@ module.exports = {
 
   description: 'Display "Dogs home" page.',
 
+  inputs: {
+
+    id: {
+      type: 'string',
+      description: `Идентификатор собаки. Если требуется страница собаки.`
+    },
+  },
+
 
   exits: {
 
@@ -19,7 +27,6 @@ module.exports = {
       responseType: 'notFound'
     }
   },
-
 
 
   fn: async function (inputs, exits) {

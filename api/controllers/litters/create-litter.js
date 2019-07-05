@@ -37,14 +37,14 @@ module.exports = {
 
 
     dam: {
-      type: 'string',
+      type: 'ref',
       example: 'Sasquehanna (FCI) Ella',
       description: 'Сука.'
     },
 
 
     sire: {
-      type: 'string',
+      type: 'ref',
       example: 'Poale Ell Adam',
       description: 'Кобель.'
     }
@@ -94,6 +94,8 @@ module.exports = {
     // Создать помёт
     let litter = await Litter.create({
       letter: _.trim(inputs.letter).toUpperCase(),
+      sire:inputs.sire,
+      dam:inputs.dam,
       born: inputs.born.replace(/"([^"]+(?="))"/g,'$1'),
       owner: this.req.me.id,
       description: inputs.description,
@@ -113,7 +115,7 @@ module.exports = {
     // Добавить собаку inputs.sire к помёту litter.id
     // await Litter.addToCollection(litter.id, 'dogs', inputs.sire);
     // await Litter.addToCollection(litter.id, 'dogs', inputs.dam);
-    await Litter.addToCollection(litter.id, 'dogs', [inputs.sire, inputs.dam]);
+    // await Litter.addToCollection(litter.id, 'dogs', [inputs.sire, inputs.dam]);
 
     // Если масиив с фотографиями не пустой, то добавляем его в коллекцию Image
     if (!_.isEmpty(list)) {

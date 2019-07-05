@@ -77,6 +77,10 @@ parasails.registerPage('litter', {
       // Проверка даты
       // Вернёт true, если this.litter.born  пока в будущем (не прошла)
       this.isAfterDate = moment(new Date()).isSameOrBefore(moment(this.litter.born, "LL"));
-    }
-  }
+    },
+
+    goTo(path) {
+      window.location = `${path}`;
+    },
+  },
 });

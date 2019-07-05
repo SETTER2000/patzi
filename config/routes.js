@@ -51,7 +51,10 @@ module.exports.routes = {
   'GET /groups/:virtualPageSlug?': {action: 'groups/view-group-home', locals: {currentSection: 'groups'}},
   'GET /message/message-home': {action: 'message/view-message-home', locals: {currentSection: 'message'}},
   'GET /users/:virtualPageSlug?': {action: 'users/view-users-home', locals: {currentSection: 'users'}},
+
+  'GET /dogs/dog/:id': { action: 'dogs/view-dog' },
   'GET /dogs/:virtualPageSlug?': {action: 'dogs/view-dogs-home', locals: {currentSection: 'dogs'}},
+
 
   'GET /kennels/:virtualPageSlug?': {action: 'kennels/view-kennels-home', locals: {currentSection: 'kennels'}},
 
@@ -149,6 +152,8 @@ module.exports.routes = {
   'GET    /api/v1/dogs/list': {action: 'dogs/list'},
   'GET    /api/v1/dogs/list-sire': {action: 'dogs/list-sire'},
   'GET    /api/v1/dogs/list-dam': {action: 'dogs/list-dam'},
+  'DELETE /api/v1/dogs/destroy-one-dog': { action: 'dogs/destroy-one-dog', csrf: false },
+
   'POST   /api/v1/files/upload': {action: 'files/upload', csrf: false},
   // 'POST   /api/v1/files/set-album-cover': { action: 'files/set-album-cover', csrf: false },
 
