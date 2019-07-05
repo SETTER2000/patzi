@@ -115,8 +115,8 @@
                    </el-tooltip>
                   </span>: {{litter.letter.toUpperCase()}}...
                 </li>
-                <li><span><%= __('Sire') %></span>: {{litter.sire}}</li>
-                <li><span><%= __('Dam') %></span>: {{litter.dam}}</li>
+                <li><span><%= __('Sire') %></span>: <a @click="goTo(`/dogs/${litter.sire[0]}`)"> {{litter.sire[1]}}</a></li>
+                <li><span><%= __('Dam') %></span>: <a @click="goTo(`/dogs/${litter.dam[0]}`)"> {{litter.dam[1]}}</a></li>
 
               </ul>
             </div>
