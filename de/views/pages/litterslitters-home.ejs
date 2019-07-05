@@ -230,7 +230,7 @@
           <h4 class="card-title"> {{litter.bornNt}}</h4>
           <div class="card-text">
 
-
+            <%/*Главное фото помёта*/%>
             <template v-for="(im ,index) in litter.images">
               <div v-if="im.imageSrc">
                 <a :href="im.detail">
@@ -254,6 +254,7 @@
             </template>
 
 
+            <%/* Кнопка "Удалить помёт"*/%>
             <div v-if="me.isSuperAdmin || me.isAdmin" class="flx">
               <!-- <div class="fixButton">
                  <a class="p-button" href="#"
@@ -270,11 +271,13 @@
             </div>
           </div>
 
+
+          <%/* Кнопки: Отец, Мать*/%>
           <div class="flex-container buttons nowrap mt-3">
-            <span v-for="(dog, index) in litter.dogs">
-            <el-button type="danger" plain>{{dog.gender}}: {{dog.label}}</el-button>
-                 <i v-if="index > -1 && index < 1" class="ti-heart mx-2" style="font-size: 1.2rem; color: red"></i>
-            </span>
+
+            <el-button type="danger" @click="goTo(`/dogs/dog/${litter.sire[0]}`)" plain><%= __('sire') %>: {{litter.sire[1]}}</el-button>
+                 <i  class="ti-heart mx-2" style="font-size: 1.2rem; color: red"></i>
+            <el-button type="danger" @click="goTo(`/dogs/dog/${litter.dam[0]}`)" plain><%= __('dam') %>: {{litter.dam[1]}}</el-button>
           </div>
 
           <el-divider v-if="litter.images" content-position="left"><%= __('Puppies this litter') %></el-divider>
