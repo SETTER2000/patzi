@@ -67,7 +67,6 @@
     </div>
   </section>
 
-
   <% /* Portfolio Details Area */ %>
   <section class="portfolio_details_area section-gap">
     <div class="container">
@@ -76,7 +75,7 @@
           <div class="col-md-6">
             <div class="left_img">
               <a href="#" @click="showSlider()">
-                <img class="img-fluid" :src="litter.imageSrc" alt="">
+                <img class="img-fluid" :src="litter.images[0].imageSrc" alt="">
               </a>
             </div>
           </div>
@@ -115,88 +114,79 @@
                    </el-tooltip>
                   </span>: {{litter.letter.toUpperCase()}}...
                 </li>
-                <li><span><%= __('Sire') %></span>: <a @click="goTo(`/dogs/${litter.sire[0]}`)"> {{litter.sire[1]}}</a></li>
-                <li><span><%= __('Dam') %></span>: <a @click="goTo(`/dogs/${litter.dam[0]}`)"> {{litter.dam[1]}}</a></li>
+                <li><span><%= __('Sire') %></span>: <a @click="goTo(`/dogs/${litter.sire[0]}`)"> {{litter.sire[1]}}</a>
+                </li>
+                <li><span><%= __('Dam') %></span>: <a @click="goTo(`/dogs/${litter.dam[0]}`)"> {{litter.dam[1]}}</a>
+                </li>
 
               </ul>
             </div>
           </div>
         </div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-          dolore magna
-          aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat.
-          Duis aute irure dolor in reprehenderit.</p>
-        <p>Voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-          sunt
-          in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit
-          voluptatem
-          accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
-          architecto
-          beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
-          sed quia
-          consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem
-          ipsum quia
-          dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et
-          dolore magnam
-          aliquam quaerat voluptatem.</p>
+       {{litter.description}}
       </div>
       <div class="section-top-border">
         <h3><%= __('Image Gallery') %></h3>
         <div class="row gallery-item">
-          <div class="col-md-4" v-for="(photo, index) of photos" :key="index" v-if="index<3">
-            <a :href="`${photo.imagesSrc}`" class="img-gal">
-              <div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div>
+          <template v-for="(photo ,index) in litter.images" >
+            <a :href="`${photo.imageSrc}`" class="img-gal">
+              <div class="single-gallery-image"
+                   :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>
             </a>
-          </div>
-          <div class="col-md-6" v-for="(photo, index) of photos" :key="index" v-if="index>2 && index<5">
-            <a :href="`${photo.imagesSrc}`" class="img-gal">
-              <div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div>
-            </a>
-          </div>
-          <div class="col-md-4" v-for="(photo, index) of photos" :key="index" v-if="index>4 && index<8">
-            <a :href="`${photo.imagesSrc}`" class="img-gal">
-              <div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div>
-            </a>
-          </div>
-          <div class="col-md-6" v-for="(photo, index) of photos" :key="index" v-if="index>7 && index<10">
-            <a :href="`${photo.imagesSrc}`" class="img-gal">
-              <div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div>
-            </a>
-          </div>
-          <div class="col-md-4" v-for="(photo, index) of photos" :key="index" v-if="index>9 && index<13">
-            <a :href="`${photo.imagesSrc}`" class="img-gal">
-              <div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div>
-            </a>
-          </div>
-          <div class="col-md-6" v-for="(photo, index) of photos" :key="index" v-if="index>12 && index<15">
-            <a :href="`${photo.imagesSrc}`" class="img-gal">
-              <div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div>
-            </a>
-          </div>
-          <div class="col-md-4" v-for="(photo, index) of photos" :key="index" v-if="index>14 && index<18">
-            <a :href="`${photo.imagesSrc}`" class="img-gal">
-              <div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div>
-            </a>
-          </div>
-          <div class="col-md-6" v-for="(photo, index) of photos" :key="index" v-if="index>17 && index<20">
-            <a :href="`${photo.imagesSrc}`" class="img-gal">
-              <div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div>
-            </a>
-          </div>
-          <div class="col-md-4" v-for="(photo, index) of photos" :key="index" v-if="index>19 && index<23">
-            <a :href="`${photo.imagesSrc}`" class="img-gal">
-              <div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div>
-            </a>
-          </div>
-          <div class="col-md-6" v-for="(photo, index) of photos" :key="index" v-if="index>22 && index<25">
-            <a :href="`${photo.imagesSrc}`" class="img-gal">
-              <div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imagesSrc}')` }"></div>
-            </a>
-          </div>
+          </template>
+            <!--<div class="col-md-4"  >-->
+              <!--<a :href="`${photo.imageSrc}`" class="img-gal">-->
+                <!--<div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>-->
+              <!--</a>-->
+            <!--</div>-->
+            <!--<div class="col-md-6"   v-if="index>2 && index<5">-->
+              <!--<a :href="`${photo.imageSrc}`" class="img-gal">-->
+                <!--<div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>-->
+              <!--</a>-->
+            <!--</div>-->
+
+          <!--<div class="col-md-4" v-for="(photo, index) of photos" :key="index" v-if="index>4 && index<8">-->
+            <!--<a :href="`${photo.imageSrc}`" class="img-gal">-->
+              <!--<div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>-->
+            <!--</a>-->
+          <!--</div>-->
+          <!--<div class="col-md-6" v-for="(photo, index) of photos" :key="index" v-if="index>7 && index<10">-->
+            <!--<a :href="`${photo.imageSrc}`" class="img-gal">-->
+              <!--<div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>-->
+            <!--</a>-->
+          <!--</div>-->
+          <!--<div class="col-md-4" v-for="(photo, index) of photos" :key="index" v-if="index>9 && index<13">-->
+            <!--<a :href="`${photo.imageSrc}`" class="img-gal">-->
+              <!--<div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>-->
+            <!--</a>-->
+          <!--</div>-->
+          <!--<div class="col-md-6" v-for="(photo, index) of photos" :key="index" v-if="index>12 && index<15">-->
+            <!--<a :href="`${photo.imageSrc}`" class="img-gal">-->
+              <!--<div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>-->
+            <!--</a>-->
+          <!--</div>-->
+          <!--<div class="col-md-4" v-for="(photo, index) of photos" :key="index" v-if="index>14 && index<18">-->
+            <!--<a :href="`${photo.imageSrc}`" class="img-gal">-->
+              <!--<div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>-->
+            <!--</a>-->
+          <!--</div>-->
+          <!--<div class="col-md-6" v-for="(photo, index) of photos" :key="index" v-if="index>17 && index<20">-->
+            <!--<a :href="`${photo.imageSrc}`" class="img-gal">-->
+              <!--<div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>-->
+            <!--</a>-->
+          <!--</div>-->
+          <!--<div class="col-md-4" v-for="(photo, index) of photos" :key="index" v-if="index>19 && index<23">-->
+            <!--<a :href="`${photo.imageSrc}`" class="img-gal">-->
+              <!--<div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>-->
+            <!--</a>-->
+          <!--</div>-->
+          <!--<div class="col-md-6" v-for="(photo, index) of photos" :key="index" v-if="index>22 && index<25">-->
+            <!--<a :href="`${photo.imageSrc}`" class="img-gal">-->
+              <!--<div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>-->
+            <!--</a>-->
+          <!--</div>-->
         </div>
       </div>
-
     </div>
   </section>
 
