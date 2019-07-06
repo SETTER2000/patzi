@@ -50,13 +50,14 @@
         <div class="photo-uploader">
           <div class="row">
             <div class="col-md-12 ">
-
-              <el-upload
+              <% /*Загрузка фото*/ %>
+              <!--<el-upload
                 action="/api/v1/files/upload"
                 drag
                 ref="upload"
                 multiple
                 :limit=limit
+                :show-file-list="false"
                 list-type="picture-card"
                 :on-exceed="handleExceed"
                 :file-list="ruleForm.file"
@@ -64,19 +65,37 @@
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :thumbnail-mode="true"
-                :on-progress="handleProgress"
-                :before-upload="beforeUpload"
-
-              >
+                :before-upload="beforeUpload" >
                 <i class="el-icon-plus"></i>
                 <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
                   {{sizeLess}}<%= __('Kb') %></div>
+              </el-upload>-->
+
+              <!--<el-dialog :visible.sync="dialogVisible">-->
+                <!--<img width="100%" :src="dialogImageUrl" alt="">-->
+              <!--</el-dialog>-->
+<!---------------------------------------------------------------------------------------->
+              <% /*Загрузка фото NEW*/ %>
+              <el-upload
+                action="/api/v1/files/upload"
+                list-type="picture-card"
+                multiple
+                ref="upload"
+                :on-preview="handlePictureCardPreview"
+                :before-upload="beforeUpload"
+                :limit="limit"
+                :on-success="handleSuccess"
+                :on-exceed="handleExceed"
+                :on-remove="handleRemove">
+                <i class="el-icon-plus"></i>
               </el-upload>
-              <br>
               <el-dialog :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt="">
               </el-dialog>
 
+
+
+              <!------------------------------------------------------------------------------->
             </div>
           </div>
         </div>
@@ -232,61 +251,66 @@
         </div>
       </div>
 
-      <div class="card text-center mb-5" v-for="(litter, index) in litters" :key="litter.id">
+      <div class="card text-center mb-1" v-for="(litter, index) in litters" :key="litter.id + '-letter'">
         <div class="card-header">
           <%= __('Litter') %>: {{litter.letter}}
         </div>
 
         <div class="card-body">
           <h4 class="card-title"> {{litter.bornNt}}</h4>
-
-
+          <div class="card-text"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque dicta, fugit
+              inventore natus odit, possimus praesentium quae, quis sunt ullam velit vero voluptatem voluptates?
+              Consectetur enim molestiae possimus praesentium unde.</p></div>
           <div class="card-text">
+            <!--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis eligendi fuga id modi nam officia vero. Accusamus aut corporis culpa cumque deleniti deserunt enim incidunt, minus nisi quidem similique sint?</p>-->
+            <!--<el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>-->
 
+            <% /*Главное фото помёта*/ %>
 
-          <% /*Главное фото помёта*/ %>
-              <template v-if="litter.images.length" v-for="(im ,index, key) in litter.images" >
+            <ul v-if="litter.images.length">
+
+              <li v-for="(im ,index, key) in litter.images" :key="index + '-lst'">
+                <keep-alive>
                 <div v-if="im.imageSrc">
                   <a :href="im.detail">
-                    <el-image :src="im.imageSrc" v-if="index===litter.cover"  class="img-fluid" :lazy="true">
+                    <el-image :src="im.imageSrc" v-if="index===litter.cover" :lazy="true">
                       <div slot="placeholder" class="image-slot" style="height:500px;">
                         Loading<span class="dot">...</span>
                       </div>
                     </el-image>
-
-                    <!--<img :src="im.imageSrc" v-if="index===photoKey"  alt="">-->
-
+                    <!--    <img :src="im.imageSrc" v-if="index===photoKey"  alt="">-->
                   </a>
                 </div>
                 <div v-else>
-                <!--  <el-image >
+                  <el-image>
                     <div slot="error" class="img-fluid image-slot">
                       <i class="el-icon-picture-outline"></i>
                     </div>
-                  </el-image>-->
+                  </el-image>
                 </div>
-              </template>
-
+                </keep-alive>
+              </li>
+            </ul>
 
             <% /* Кнопка "Удалить помёт"*/ %>
             <div v-if="me.isSuperAdmin || me.isAdmin" class="flx">
-              <!-- <div class="fixButton">
-                 <a class="p-button" href="#"
-                    @click="clickEdit(litter.id)">
-                   <i class="el-icon-edit"></i>
-                 </a>
-               </div>-->
               <div class="fixButton">
                 <a class="p-button" v-if="me.isSuperAdmin" href="#"
                    @click="clickDeleteLitter(litter.id)">
                   <i class="el-icon-delete"></i>
                 </a>
               </div>
+              <div class="fixButton">
+                <a class="p-button" href="#"
+                   @click="clickEdit(litter.id)">
+                  <i class="el-icon-edit"></i>
+                </a>
+              </div>
             </div>
           </div>
 
           <% /* Кнопки: Отец, Мать*/ %>
-          <div class="flex-container buttons nowrap mt-3">
+          <div class="flex-container buttons wrap  mt-3">
 
             <el-button type="danger" icon="el-icon-male" @click="goTo(`/dogs/dog/${litter.sire[0]}`)" plain>
               {{litter.sire[1]}}
@@ -303,7 +327,7 @@
 
           <% /*Маленькие фото. Превью.*/ %>
           <ul class="flex-container wrap" v-if="litter.images">
-            <li class="flex-item" v-for="(img, index) in litter.images" :key="index">
+            <li class="flex-item" v-for="(img, index, key) in litter.images"  :key="index +  '-label'">
               <template v-if="me.isSuperAdmin">
                 <div class="ell-relation" v-if="litter.cover === index">
                   <el-button type="warning" size="mini" title="<%= __("Album's cover") %>"
@@ -315,6 +339,7 @@
                              class="ell-position-button" @click="coverPhoto(litter.id,index)"
                              icon="el-icon-document" circle></el-button>
                 </div>
+
               </template>
               <div class="ell-image-flex">
                 <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
@@ -392,7 +417,7 @@
   </section>
 
   <% /* "Upload Litter" Modal */ %>
- <!-- <modal v-if="virtualPageSlug==='new'" v-cloak key="new" @close="closeUploadLitterModal()">
+  <!-- <modal v-if="virtualPageSlug==='new'" v-cloak key="new" @close="closeUploadLitterModal()">
     <div class="modal-header">
       <h5 class="modal-title"><%= __('Upload new photo') %></h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
