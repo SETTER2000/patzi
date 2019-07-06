@@ -154,7 +154,7 @@ module.exports.routes = {
   'GET    /api/v1/dogs/list-dam': {action: 'dogs/list-dam'},
   'DELETE /api/v1/dogs/destroy-one-dog': { action: 'dogs/destroy-one-dog', csrf: false },
 
-  'POST   /api/v1/files/upload': {action: 'files/upload', csrf: false},
+  'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},
   // 'POST   /api/v1/files/set-album-cover': { action: 'files/set-album-cover', csrf: false },
 
   'GET    /api/v1/city/list/:regionId?': {action: 'city/list'},

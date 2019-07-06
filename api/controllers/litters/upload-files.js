@@ -35,7 +35,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     // console.log('REQ:', this.req);
-    console.log('IIIIINPUDSS: ', inputs);
+    // console.log('IIIIINPUDSS: ', inputs);
 
     // uploadOne - не будет работать без пакета sails-hook-uploads
     // npm i --save sails-hook-uploads
@@ -44,6 +44,7 @@ module.exports = {
       throw 'badRequest';
     }
 
+    console.log('Litter:/upload/files:', info);
 
     // All done.
     return exits.success();

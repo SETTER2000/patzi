@@ -6,8 +6,10 @@ parasails.registerPage('litters-home', {
     litters: [],
     dams: [],
     sires: [],
+    limit: 50,
+    imageUrl2:'',
     keyRootPhotoAlbum: 6,
-    fileList: [],
+    // fileList: [],
     warning: '',
     dialogImageUrl: '',
     centerDialogAdded: false,
@@ -25,7 +27,9 @@ parasails.registerPage('litters-home', {
     ruleForm: {
       sire: '',
       dam: '',
-      label: ''
+      label: '',
+      data:[],
+      fileList:[],
     },
     rules: {},
     // Виртуальная часть URL
@@ -101,6 +105,11 @@ parasails.registerPage('litters-home', {
         text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
         success: 'Congratulations! Object successfully created. ',
         selectGender: 'Please select a dog gender.',
+        limitExceededText: `The limit is: `,
+        limitExceededText2: `you selected `,
+        limitExceededText3: `Total: `,
+        files: `files`,
+        successUploadFiles: `Files uploaded successfully!`,
       }],
       ['ru', {
         warnNoDogs: `Нет возможности создать помёт, пока отсутствует хотя бы одна пара собак.`,
@@ -111,6 +120,11 @@ parasails.registerPage('litters-home', {
         text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
         success: 'Поздравляем! Объект успешно создан.',
         selectGender: 'Пожалуйста выберите пол собаки.',
+        limitExceededText: `Лимит`,
+        limitExceededText2: `вы выбрали`,
+        limitExceededText3: `Всего`,
+        files: `файлов`,
+        successUploadFiles: `Файлы успешно загружены!`,
       }]
     ],
   },
@@ -195,16 +209,18 @@ parasails.registerPage('litters-home', {
       // Принимаем данные по событию list-*
       await io.socket.on('list-litter', (data) => {
         this.litters = data;
-        console.log('this.litters: ', this.litters);
+        // console.log('this.litters: ', this.litters);
       });
 
 
     },
 
 
-    async coverPhoto(id,index) {
-      await io.socket.put(`/api/v1/litters/update-cover-album`, {id:id,cover:index}, (body, response) =>{
-        this.litters.map(litter=>{(litter.id===id) ? litter.cover=index : litter;});
+    async coverPhoto(id, index) {
+      await io.socket.put(`/api/v1/litters/update-cover-album`, {id: id, cover: index}, (body, response) => {
+        this.litters.map(litter => {
+          (litter.id === id) ? litter.cover = index : litter;
+        });
         console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
     },
@@ -239,7 +255,7 @@ parasails.registerPage('litters-home', {
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
       this.warning = this.i19p.warnNoDogs;
-     return (this.sires.length > 0 && this.dams.length > 0) ? this.centerDialogAdded = true :
+      (this.sires.length > 0 && this.dams.length > 0) ? this.centerDialogAdded = true :
         this.centerDialogVisibleWarnings = true;
     },
 
@@ -461,34 +477,26 @@ parasails.registerPage('litters-home', {
 
 
     handleRemove(file, fileList) {
-      this.fileList = fileList;
+      // console.log('file, fileList:: ** :');
+      // console.log(file, fileList);
+      this.ruleForm.fileList = fileList;
     },
 
-    handlePictureCardPreview(file) {
-      // console.log('file.url: ', file.url);
+    handlePreview(file) {
+      console.log('handlePreview:: ** :', file);
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
 
 
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+    // функция перехвата при превышении лимита
+    handleExceed(files, fileList) {
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      ${files.length + fileList.length} ${this.i19p.files}`);
     },
 
-    beforeAvatarUpload(file) {
-      // Проверка размера входящего файла картинки не более (MB)
-      let size = 1;
-      const isJPG = file.type === 'image/jpeg';
-      const isLt2M = file.size / 1024 / 1024 < size;
 
-      if (!isJPG) {
-        this.$message.error('Avatar picture must be JPG format!');
-      }
-      if (!isLt2M) {
-        this.$message.error(`Avatar picture size can not exceed ${size}MB!`);
-      }
-      return isJPG && isLt2M;
-    },
 
 
     clickDelete(id) {
@@ -559,6 +567,73 @@ parasails.registerPage('litters-home', {
       });
     },
 
+    beforeUpload(file, fileList) {
+      // Проверка размера входящего файла картинки не более (MB)
+      let size = 1;
+      const isJPG = file.type === 'image/jpeg';
+      const isLt2M = file.size / 1024 / 1024 < size;
+
+      if (!isJPG) {
+        this.$message.error('Avatar picture must be JPG format!');
+      }
+
+      if (!isLt2M) {
+        this.$message.error(`Avatar picture size can not exceed ${size}MB!`);
+      }
+
+      // else{
+      //   this.$message.info(this.i19p.successUploadFiles);
+      // }
+      // // setTimeout(()=>{  }, 3000);
+
+      // console.log('xxx file xxx: ', file);
+      // console.log('xxx fileList xxx: ', fileList);
+
+      return isJPG && isLt2M;
+
+    },
+
+
+    handleSuccess(res, file) {
+      // console.log('RESSS:', res);
+      // this.litters.images.push({imageSrc : URL.createObjectURL(file.raw)});
+      this.ruleForm.fileList.push(res);
+      // console.log('this.imageUrl2 ', `/api/v1/litters/${this.imageUrl2}` );
+    },
+
+    async addLitter() {
+      //this.$refs.upload.submit();
+      // console.log('this.ruleForm.fileList: ****||| ', this.ruleForm.fileList);
+      this.openFullScreen();
+      let data = {
+        fileList: this.ruleForm.fileList,
+        letter: this.ruleForm.letter,
+        dam: this.getDamArr(),
+        sire: this.getSireArr(),
+        born: JSON.stringify(this.ruleForm.born),
+        description: this.ruleForm.description,
+      };
+
+      io.socket.post('/api/v1/litters/create-litter', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+
+        this.centerDialogAdded = false;
+        this.loading.close();
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          // this.ruleForm.fileList = [];
+          //           // this.ruleForm.list = [];
+          //           // this.ruleForm.imageUrl = '';
+          this.getList();
+        }
+      });
+    },
+
+
     getIdDam() {
       return _.pluck(this.dams.filter(dam => (dam.value === this.ruleForm.dam) ? dam.id : ''), 'id').toString();
     },
@@ -571,7 +646,7 @@ parasails.registerPage('litters-home', {
 
     // Получаем массив [id, label] кобеля помёта
     getSireArr() {
-      let arr=[];
+      let arr = [];
       arr.push(this.getIdSire());
       arr.push(this.ruleForm.sire);
       return arr;
@@ -580,47 +655,22 @@ parasails.registerPage('litters-home', {
 
     // Получаем массив [id, label] суки помёта
     getDamArr() {
-      let arr=[];
+      let arr = [];
       arr.push(this.getIdDam());
       arr.push(this.ruleForm.dam);
       return arr;
     },
 
-    async addLitter() {
-      // ruleForm: {
-      //   sire:'',
-      //     dam:'',
-      //     label:''
-      // },
-      console.log('this.fileList: ', this.fileList);
-      this.openFullScreen();
-      let data = {
-        fileList: this.fileList,
-        letter: this.ruleForm.letter,
-        dam: this.getDamArr(),
-        sire: this.getSireArr(),
-        born: JSON.stringify(this.ruleForm.born),
-        description: this.ruleForm.description,
-      };
 
-      await io.socket.post('/api/v1/litters/create-litter', data, (data, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-
-
-        this.centerDialogAdded = false;
-        this.loading.close();
-        if (jwRes.statusCode === 200) {
-          this.resetForm('ruleForm');
-          this.ruleForm.file = [];
-          this.ruleForm.imageUrl = '';
-          this.getList();
-        }
-      });
+    handleProgress(ev, rawFile) {
+      /* let file = this.getFile(rawFile);
+       this.onProgress(ev, file, this.uploadFiles);
+       file.status = 'uploading';
+       file.percentage = ev.percent || 0;*/
     },
+
+
+
 
 
     mesSuccess(text = '') {
@@ -662,9 +712,12 @@ parasails.registerPage('litters-home', {
 
 
     resetForm(formName) {
+      this.$refs.upload.clearFiles();
       this.$refs[formName].resetFields();
-      this.fileList = [];
+      this.ruleForm.fileList = [];
+      this.ruleForm.list = [];
       this.ruleForm.imageUrl = '';
+
     },
 
 

@@ -32,14 +32,25 @@ module.exports = {
     // Бибилиотека Node.js
     const url = require('url');
     const moment = require('moment');
-
-    let litter = await Litter.findOne({id: inputs.id});
+    // Формат отображаемой даты
+    let format = 'LL';
+    let litter = await Litter.findOne({id: inputs.id}).populate('owner');
 
     if (!litter) {
       throw 'notFound';
     }
-console.log('litter.born: ',litter.born);
-    litter.born = moment(litter.born, moment.HTML5_FMT.DATETIME_LOCAL).format('LL');
+
+    // Формируем массив с картинками
+
+    litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((image, i) => {
+      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${inputs.id}/${i}`) : '';
+      // image.detail = `/litters/litter/${litterId}`;
+        return image;
+      }) : '';
+
+
+
+    litter.born = moment(litter.born, moment.HTML5_FMT.DATETIME_LOCAL).format(format);
     // Устанавливаем свойство источника изображения
     // Первый аргумент, базовый url
     litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`);

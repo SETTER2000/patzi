@@ -50,11 +50,11 @@ module.exports = {
       description: 'Фотография может принадлежать только одному владельцу. One to Many'
     },
 
-
-    litter: {
-      model: 'litter',
-      description: 'Фотография или массив фото может принадлежать только одному владельцу. One to Many'
-    },
+    //
+    // litter: {
+    //   model: 'litter',
+    //   description: 'Фотография или массив фото может принадлежать только одному владельцу. One to Many'
+    // },
   },
 
 };

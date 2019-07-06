@@ -86,15 +86,29 @@ module.exports = {
     await sails.sockets.join(req, 'litter');
 
 
-    let list = [];
-    list = _.pluck(inputs.fileList, 'response');
-    console.log('CREATE-LITTER:: ', inputs.fileList);
+
+    // console.log('inputs.fileList::', inputs.fileList);
+    // // list = _.pluck(inputs.fileList, 'response');
+    // console.log('list-1:: ', inputs.fileList);
+    // let iterator = list.keys();
+    if(inputs.fileList){
+      _.each(inputs.fileList, img=>{
+        delete img.filename;
+        delete img.status;
+        delete img.field;
+      });
+    }
+
+    console.log('list-2:: ', inputs.fileList);
+
+    // console.log('CREATE-LITTER:: ', inputs.fileList);
 
 
     // Создать помёт
     let litter = await Litter.create({
       letter: _.trim(inputs.letter).toUpperCase(),
       sire:inputs.sire,
+      images:inputs.fileList,
       dam:inputs.dam,
       born: inputs.born.replace(/"([^"]+(?="))"/g,'$1'),
       owner: this.req.me.id,
@@ -118,13 +132,13 @@ module.exports = {
     // await Litter.addToCollection(litter.id, 'dogs', [inputs.sire, inputs.dam]);
 
     // Если масиив с фотографиями не пустой, то добавляем его в коллекцию Image
-    if (!_.isEmpty(list)) {
-      // Записываем фото на помёт
-      let image = await Image.create({
-        img: list,
-        litter: litter.id
-      }).fetch();
-    }
+    // if (!_.isEmpty(list)) {
+    //   // Записываем фото на помёт
+    //   let image = await Image.create({
+    //     img: list,
+    //     litter: litter.id
+    //   }).fetch();
+    // }
 
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.

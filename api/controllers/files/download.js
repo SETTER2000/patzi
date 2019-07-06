@@ -45,18 +45,39 @@ module.exports = {
 
 
   fn: async function (inputs) {
-    let query = {};
-    query[inputs.collection] = inputs.id;
 
-    let collectionObject = await Image.findOne(query);
+    let collection = _.capitalize(inputs.collection);
+    let collectionObject = '';
+
+    switch (collection) {
+      case 'Litter':
+        collectionObject = await Litter.findOne(inputs.id);
+        break;
+      case 'Kennel':
+        collectionObject = await Kennel.findOne(inputs.id);
+        break;
+      case 'User':
+        collectionObject = await User.findOne(inputs.id);
+        break;
+      case 'Dog':
+        collectionObject = await Dog.findOne(inputs.id);
+        break;
+      case 'Thing':
+        collectionObject = await Thing.findOne(inputs.id);
+        break;
+    }
+
     if (!collectionObject) {
+      console.log('Не найдено!' + collectionObject);
       throw 'notFound';
     }
-   let arr =  await collectionObject.img.filter((im,index)=>inputs.key === index);
+
+
+    let arr = await collectionObject.images.filter((image, index) => inputs.key === index);
     if (!arr) {
       throw 'notFound';
     }
-// console.log('ARRRR: ', arr);
+
     /**
      * ПЕРЕВЕРНУЛИ: === -> !== , || -> &&,  _.any -> !_.any
      * Так что теперь мы говорим:

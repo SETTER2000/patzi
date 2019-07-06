@@ -497,5 +497,7 @@
 	"Puppies this litter": "Щенки этого помёта",
 	"Stamp": "Клеймо",
 	"Stamp Dog number in the registry.": "Клеймо. Номер собаки в реестре.",
-	"Color": "Цвет"
+	"Color": "Цвет",
+	"sire": "sire",
+	"dam": "dam"
 }

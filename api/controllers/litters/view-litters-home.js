@@ -45,9 +45,7 @@ module.exports = {
 
     let litters = await Litter.find({
       or: [{owner: this.req.me.id}, {owner: {in: friendIds}}]
-    })
-      .populate('images')
-      .populate('owner');
+    }).populate('owner');
 
 
 
@@ -68,14 +66,10 @@ module.exports = {
     });
 
 
-
     // Respond with view.
     return exits.success({
       litters,
       currentSection: 'litters-home'
     });
-
   }
-
-
 };

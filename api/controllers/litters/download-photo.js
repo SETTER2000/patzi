@@ -72,8 +72,8 @@ module.exports = {
      *
      * Ответ о благополучном завершении отдачи файла
      */
-    // let downloading = await sails.startDownload(litter.imageUploadFD);
-    // return downloading;
+    let downloading = await sails.startDownload(litter.imageUploadFD);
+    return downloading;
   }
 
 };

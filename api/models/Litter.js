@@ -66,6 +66,12 @@ module.exports = {
       example: ['5d1f1b04fbe834262cbb8c53','Sasquehanna Ella']
     },
 
+    images: {
+      type: 'ref',
+      defaultsTo: [],
+      example: ['5d1f1b04fbe834262cbb8c53','5d1f1b04fbe834262cbb8c54'],
+      description: `FD загруженных фотографий`
+    },
     // dogs: {
     //   type: 'ref',
     //   description: 'Собаки учавствующие в помёте, т.е. родители.',
@@ -130,11 +136,11 @@ module.exports = {
       },*/
 
 
-    images: {
-      collection: 'image',
-      via: 'litter',
-      description: `У помёта, может быть много фотографий. One to Many.`
-    },
+    // images: {
+    //   collection: 'image',
+    //   via: 'litter',
+    //   description: `У помёта, может быть много фотографий. One to Many.`
+    // },
 
 
     owner: {

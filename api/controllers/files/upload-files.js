@@ -35,6 +35,10 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
+    const req = this.req;
+
+    // await sails.sockets.join(req, 'litter');
+
     /**
      * Функция uploadOne возвращает объект UploadedFileMetadata
      * с данными о загрузке.
@@ -72,8 +76,8 @@ module.exports = {
     info = info[0];
 
 
-
-    console.log('FILES/UPLOAD.JS файл картинки загружен в .tmp: ', info);
+    // console.log('FILES/UPLOAD.JS файл картинки загружен в .tmp: ', info);
+    // await sails.sockets.broadcast('files', 'list-file', info);
     // All done.
     return exits.success(info);
 
