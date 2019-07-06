@@ -7,33 +7,38 @@ parasails.registerPage('litter', {
     autoplay:true,
     isAfterDate:false,
     url:null,
-    photos:[
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/1_1.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/1_2.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/1_3.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/2_1.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/2_2.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/2_3.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/3_1.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/3_2.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/3_3.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/3_4.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/3_5.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/3_6.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/3_7.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/3_8.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/4_1.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/4_2.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/4_3.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/4_4.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/4_5.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/4_6.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/4_7.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/4_8.jpg'},
-      {imagesSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/4_9.jpg'},
+    dic: [
+      ['en', {
+        warnNoDogs: `There is no possibility to create a litter, while at least one pair of dogs is missing.`,
+        warnNoKennel: `At the moment there is no nursery in the database.
+         You should create at least one kennel to start with to add a dog.`,
+        text400Err: 'Error. Could not create! ',
+        text500Err: 'Server Error! Unable to create. ',
+        text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
+        success: 'Congratulations! Object successfully created. ',
+        selectGender: 'Please select a dog gender.',
+        limitExceededText: `The limit is: `,
+        limitExceededText2: `you selected `,
+        limitExceededText3: `Total: `,
+        files: `files`,
+        successUploadFiles: `Files uploaded successfully!`,
+      }],
+      ['ru', {
+        warnNoDogs: `Нет возможности создать помёт, пока отсутствует хотя бы одна пара собак.`,
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
+        text400Err: 'Ошибка. Не смог создать!',
+        text500Err: 'Ошибка сервера! Невозможно создать.',
+        text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
+        success: 'Поздравляем! Объект успешно создан.',
+        selectGender: 'Пожалуйста выберите пол собаки.',
+        limitExceededText: `Лимит`,
+        limitExceededText2: `вы выбрали`,
+        limitExceededText3: `Всего`,
+        files: `файлов`,
+        successUploadFiles: `Файлы успешно загружены!`,
+      }]
     ],
-    // fits:'contain',
-    // fits:'scale-down',
     fits:'cover',
     items:[
       {label:'Poale Ell Adam',       imageSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
@@ -58,7 +63,35 @@ parasails.registerPage('litter', {
     //…
   },
 
+  computed: {
+    i19p: {
+      get: function () {
+        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+        return new Map(this.dic).get(this.me.preferredLocale);
+      }
+    },
+    // photoCover: function () {
+    //   return this.keyRootPhotoAlbum - 1;
+    // },
+    // Вытаскивает фото для обложки альбома
+    photos: function () {
+      // return _.pickBy(this.litters, function(u) {
+      //   return u.active;
+      // });
+      return this.litter.images;
+      // _.each(this.litters, async (litter) => {
+      //
+      // });
+      // console.log('DXXX:', this.litters.filter(litter => litter.images[litter.cover]));
+    }
+    // isPhoto: function () {
+    //   return  this.litters.filter(litter => {
+    //     !_.isUndefined(litter.images);
+    //     console.log('IMAGE: ',litter.images);
+    //   });
+    // }
 
+  },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝

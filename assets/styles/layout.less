@@ -13,25 +13,30 @@ html, body {
   background-repeat: no-repeat;
   //background: linear-gradient(to top right, #FDB171, #FD987D);
 }
-
+#header{
+  padding: 0!important;
+}
 #header.header-scrolled {
   //z-index: 10000;
 }
 
 header {
 
+  .main-menu{
+    padding-top: 10px;
+  }
   .logo {
     position: relative;
     display: inline-block;
-    height: 34px;
-    width: 165px;
+    height: 26px;
+    width: 122px;
   }
   .logo::after {
     content: '';
     height: 100%;
     width: 100%;
     position: absolute;
-    top: 0;
+    top: -5px;
     left: 0;
     background-image: url("../images/logo.svg");
     background-position: center;
@@ -68,6 +73,10 @@ header {
   .dropdown-menu.account-menu {
     left: auto;
     right: 0;
+  }
+  .nav-menu ul {
+    margin: 16px 0 0 0;
+     box-shadow: 0px 0px 10px rgba(127, 137, 161, 0.25);
   }
   .nav-menu > li.menu-has-children.avatar {
     margin-right: 40px;
@@ -232,7 +241,9 @@ body.detected-mobile {
   // devices (like the iPad) as well as handset devices (like the iPhone).
   // …
 }
-
+.section-gap {
+  padding: 80px 0;
+}
 .photo-preview {
   .image-wrapper.round {
     background-color: @bg-lt-gray;

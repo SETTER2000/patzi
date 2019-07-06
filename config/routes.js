@@ -164,6 +164,9 @@ module.exports.routes = {
   'GET    /api/v1/files/download/:collection/:id/:key': {action: 'files/download'},
 
 
+  'GET    /undefined': {action: 'files/undefined'},
+
+
   'POST   /api/v1/region/create-region': {action: 'region/create-region'},
   'GET    /api/v1/region/list': {action: 'region/list'},
 

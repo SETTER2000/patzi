@@ -7,7 +7,7 @@ parasails.registerPage('litters-home', {
     dams: [],
     sires: [],
     limit: 50,
-    imageUrl2:'',
+    imageUrl2: '',
     keyRootPhotoAlbum: 6,
     // fileList: [],
     warning: '',
@@ -28,8 +28,9 @@ parasails.registerPage('litters-home', {
       sire: '',
       dam: '',
       label: '',
-      data:[],
-      fileList:[],
+      data: [],
+      fileList: [],
+      file: []
     },
     rules: {},
     // Виртуальная часть URL
@@ -181,8 +182,18 @@ parasails.registerPage('litters-home', {
         return new Map(this.dic).get(this.me.preferredLocale);
       }
     },
+    // photoCover: function () {
+    //   return this.keyRootPhotoAlbum - 1;
+    // },
+    // Вытаскивает фото для обложки альбома
     photoCover: function () {
-      return this.keyRootPhotoAlbum - 1;
+      // return _.pickBy(this.litters, function(u) {
+      //   return u.active;
+      // });
+      _.each(this.litters, async (litter) => {
+
+      });
+      console.log('DXXX:', this.litters.filter(litter => litter.images[litter.cover]));
     }
     // isPhoto: function () {
     //   return  this.litters.filter(litter => {
@@ -475,12 +486,14 @@ parasails.registerPage('litters-home', {
     //   borrowedItem.borrowedBy = this.me;
     // },
 
-
     handleRemove(file, fileList) {
-      // console.log('file, fileList:: ** :');
-      // console.log(file, fileList);
-      this.ruleForm.fileList = fileList;
+      console.log(file, fileList);
     },
+    // handleRemove(file, fileList) {
+    //   // console.log('file, fileList:: ** :');
+    //   // console.log(file, fileList);
+    //   this.ruleForm.fileList = fileList;
+    // },
 
     handlePreview(file) {
       console.log('handlePreview:: ** :', file);
@@ -488,15 +501,16 @@ parasails.registerPage('litters-home', {
       this.dialogVisible = true;
     },
 
-
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
     // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
-
-
 
 
     clickDelete(id) {
@@ -567,7 +581,7 @@ parasails.registerPage('litters-home', {
       });
     },
 
-    beforeUpload(file, fileList) {
+    beforeUpload(file) {
       // Проверка размера входящего файла картинки не более (MB)
       let size = 1;
       const isJPG = file.type === 'image/jpeg';
@@ -662,15 +676,12 @@ parasails.registerPage('litters-home', {
     },
 
 
-    handleProgress(ev, rawFile) {
-      /* let file = this.getFile(rawFile);
-       this.onProgress(ev, file, this.uploadFiles);
-       file.status = 'uploading';
-       file.percentage = ev.percent || 0;*/
-    },
-
-
-
+    // handleProgress(ev, rawFile) {
+    //   /* let file = this.getFile(rawFile);
+    //    this.onProgress(ev, file, this.uploadFiles);
+    //    file.status = 'uploading';
+    //    file.percentage = ev.percent || 0;*/
+    // },
 
 
     mesSuccess(text = '') {
