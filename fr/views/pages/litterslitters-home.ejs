@@ -50,16 +50,23 @@
         <div class="photo-uploader">
           <div class="row">
             <div class="col-md-12 ">
+
               <el-upload
                 action="/api/v1/files/upload"
                 drag
+                ref="upload"
                 multiple
+                :limit=limit
                 list-type="picture-card"
-                :file-list="fileList"
-                :on-preview="handlePictureCardPreview"
+                :on-exceed="handleExceed"
+                :file-list="ruleForm.file"
+                :on-success="handleSuccess"
+                :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :thumbnail-mode="true"
-                :before-upload="beforeAvatarUpload"
+                :on-progress="handleProgress"
+                :before-upload="beforeUpload"
+
               >
                 <i class="el-icon-plus"></i>
                 <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
@@ -69,6 +76,7 @@
               <el-dialog :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt="">
               </el-dialog>
+
             </div>
           </div>
         </div>
@@ -80,6 +88,7 @@
       <el-col :span="23">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
                  label-width="120px" class="demo-ruleForm">
+
           <% /* Дата помёта NEW */ %>
           <el-form-item label="<%= __('Date of litter') %>">
             <el-form-item prop="born">
@@ -130,6 +139,7 @@
                 @select="handleSelect"
                 style="width: 58%;"
               ><i slot="prefix" class="el-autocomplete__icon el-icon-male"></i>
+
                 <template slot-scope="{ item }">
                   <span class="value">{{ item.value }}</span>
                   <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
@@ -226,35 +236,39 @@
         <div class="card-header">
           <%= __('Litter') %>: {{litter.letter}}
         </div>
+
         <div class="card-body">
           <h4 class="card-title"> {{litter.bornNt}}</h4>
+
+
           <div class="card-text">
 
-            <%/*Главное фото помёта*/%>
-            <template v-for="(im ,index) in litter.images">
-              <div v-if="im.imageSrc">
-                <a :href="im.detail">
-                  <el-image :src="im.imageSrc" v-if="index===litter.cover"  class="img-fluid" :lazy="true">
-                    <div slot="placeholder" class="image-slot" style="height:500px;">
-                      Loading<span class="dot">...</span>
+
+          <% /*Главное фото помёта*/ %>
+              <template v-if="litter.images.length" v-for="(im ,index, key) in litter.images" >
+                <div v-if="im.imageSrc">
+                  <a :href="im.detail">
+                    <el-image :src="im.imageSrc" v-if="index===litter.cover"  class="img-fluid" :lazy="true">
+                      <div slot="placeholder" class="image-slot" style="height:500px;">
+                        Loading<span class="dot">...</span>
+                      </div>
+                    </el-image>
+
+                    <!--<img :src="im.imageSrc" v-if="index===photoKey"  alt="">-->
+
+                  </a>
+                </div>
+                <div v-else>
+                <!--  <el-image >
+                    <div slot="error" class="img-fluid image-slot">
+                      <i class="el-icon-picture-outline"></i>
                     </div>
-                  </el-image>
-
-                  <!--<img :src="im.imageSrc" v-if="index===photoKey"  alt="">-->
-
-                </a>
-              </div>
-              <div v-else>
-                <el-image>
-                  <div slot="error" class="img-fluid image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-              </div>
-            </template>
+                  </el-image>-->
+                </div>
+              </template>
 
 
-            <%/* Кнопка "Удалить помёт"*/%>
+            <% /* Кнопка "Удалить помёт"*/ %>
             <div v-if="me.isSuperAdmin || me.isAdmin" class="flx">
               <!-- <div class="fixButton">
                  <a class="p-button" href="#"
@@ -271,40 +285,44 @@
             </div>
           </div>
 
-
-          <%/* Кнопки: Отец, Мать*/%>
+          <% /* Кнопки: Отец, Мать*/ %>
           <div class="flex-container buttons nowrap mt-3">
 
-            <el-button type="danger" @click="goTo(`/dogs/dog/${litter.sire[0]}`)" plain><%= __('sire') %>: {{litter.sire[1]}}</el-button>
-                 <i  class="ti-heart mx-2" style="font-size: 1.2rem; color: red"></i>
-            <el-button type="danger" @click="goTo(`/dogs/dog/${litter.dam[0]}`)" plain><%= __('dam') %>: {{litter.dam[1]}}</el-button>
+            <el-button type="danger" icon="el-icon-male" @click="goTo(`/dogs/dog/${litter.sire[0]}`)" plain>
+              {{litter.sire[1]}}
+            </el-button>
+            <!--<i class="ti-heart mx-2" style="font-size: 1.2rem; color: red"></i>-->
+
+            <!--<i class="el-icon-female" style="font-size: 1.2rem; color: red"></i>-->
+            <el-button type="danger" icon="el-icon-female" @click="goTo(`/dogs/dog/${litter.dam[0]}`)" plain>
+              {{litter.dam[1]}}
+            </el-button>
           </div>
 
           <el-divider v-if="litter.images" content-position="left"><%= __('Puppies this litter') %></el-divider>
 
-
+          <% /*Маленькие фото. Превью.*/ %>
           <ul class="flex-container wrap" v-if="litter.images">
-            <li class="flex-item" v-for="(img, index) in litter.images" :key="img.id">
+            <li class="flex-item" v-for="(img, index) in litter.images" :key="index">
               <template v-if="me.isSuperAdmin">
-                <div  class="ell-relation" v-if="litter.cover === index">
+                <div class="ell-relation" v-if="litter.cover === index">
                   <el-button type="warning" size="mini" title="<%= __("Album's cover") %>"
                              class="ell-position-button check" icon="el-icon-star-off"
                              circle/>
                 </div>
                 <div class="ell-relation" v-else>
-                  <el-button  size="mini" title="<%= __('Make an album cover') %>"
-                              class="ell-position-button"  @click="coverPhoto(litter.id,index)"
+                  <el-button size="mini" title="<%= __('Make an album cover') %>"
+                             class="ell-position-button" @click="coverPhoto(litter.id,index)"
                              icon="el-icon-document" circle></el-button>
                 </div>
               </template>
-
               <div class="ell-image-flex">
                 <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
               </div>
+
             </li>
           </ul>
         </div>
-
 
         <!--   <div class="card-footer text-muted">
              2 days ago
@@ -374,7 +392,7 @@
   </section>
 
   <% /* "Upload Litter" Modal */ %>
-  <modal v-if="virtualPageSlug==='new'" v-cloak key="new" @close="closeUploadLitterModal()">
+ <!-- <modal v-if="virtualPageSlug==='new'" v-cloak key="new" @close="closeUploadLitterModal()">
     <div class="modal-header">
       <h5 class="modal-title"><%= __('Upload new photo') %></h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -432,18 +450,18 @@
           >
           </datepicker>
 
-          <!--<el-form-item label="<%= __('Date') %>" required>-->
-          <!--<el-col :span="11">-->
-          <!--<el-form-item prop="dateCreate">-->
-          <!--<el-date-picker-->
-          <!--type="date"-->
-          <!--placeholder="<%= __('Registration date') %>"-->
-          <!--v-model="uploadFormData.born"-->
-          <!--style="width: 100%;"-->
-          <!--&gt;</el-date-picker>-->
-          <!--</el-form-item>-->
-          <!--</el-col>-->
-          <!--</el-form-item>-->
+          &lt;!&ndash;<el-form-item label="<%= __('Date') %>" required>&ndash;&gt;
+          &lt;!&ndash;<el-col :span="11">&ndash;&gt;
+          &lt;!&ndash;<el-form-item prop="dateCreate">&ndash;&gt;
+          &lt;!&ndash;<el-date-picker&ndash;&gt;
+          &lt;!&ndash;type="date"&ndash;&gt;
+          &lt;!&ndash;placeholder="<%= __('Registration date') %>"&ndash;&gt;
+          &lt;!&ndash;v-model="uploadFormData.born"&ndash;&gt;
+          &lt;!&ndash;style="width: 100%;"&ndash;&gt;
+          &lt;!&ndash;&gt;</el-date-picker>&ndash;&gt;
+          &lt;!&ndash;</el-form-item>&ndash;&gt;
+          &lt;!&ndash;</el-col>&ndash;&gt;
+          &lt;!&ndash;</el-form-item>&ndash;&gt;
         </div>
         <% /*Буква помёта*/ %>
         <div class="form-group">
@@ -461,7 +479,7 @@
         </div>
 
         <% /* Сука Dam*/ %>
-        <!-- <div class="form-group">
+        &lt;!&ndash; <div class="form-group">
           <label><%= __('Dam') %></label>
           <input class="form-control"
                  :class="formErrors.dam ? 'is-invalid' : ''"
@@ -473,9 +491,9 @@
           <small v-if="formErrors.dam" class="text-danger ">
             <%= __('Please indicate the litter letter.') %>
           </small>
-        </div>-->
+        </div>&ndash;&gt;
         <% /* Кобель Sire*/ %>
-        <!--       <div class="form-group">
+        &lt;!&ndash;       <div class="form-group">
           <label><%= __('Sire') %></label>
           <input class="form-control"
                  :class="formErrors.sire ? 'is-invalid' : ''"
@@ -487,9 +505,9 @@
           <small v-if="formErrors.sire" class="text-danger ">
             <%= __('Please indicate the litter letter.') %>
           </small>
-        </div>-->
+        </div>&ndash;&gt;
         <% /*Пол*/ %>
-        <!--      <div class="form-group row">
+        &lt;!&ndash;      <div class="form-group row">
           <div class="col-sm-6">
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -533,9 +551,9 @@
               <%= __('Please indicate the litter letter.') %>
             </small>
           </div>
-        </div>-->
+        </div>&ndash;&gt;
         <% /*Наша предварительная цена*/ %>
-        <!--   <div class="form-group row">
+        &lt;!&ndash;   <div class="form-group row">
           <div class="col-sm-6">
             <div class="form-group mt-4">
               <label><%= __('Our preliminary price') %></label>
@@ -567,7 +585,7 @@
               </small>
             </div>
           </div>
-        </div>-->
+        </div>&ndash;&gt;
 
         <% /*Краткое описание*/ %>
         <div class="form-group">
@@ -598,10 +616,10 @@
         <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
       </div>
     </ajax-form>
-  </modal>
+  </modal>-->
 
   <% /* "Borrow litter" modal */ %>
-  <modal v-if="borrowLitterModalOpen && selectedLitter" v-cloak key="borrow" @close="closeBorrowLitterModal()">
+  <!--<modal v-if="borrowLitterModalOpen && selectedLitter" v-cloak key="borrow" @close="closeBorrowLitterModal()">
     <% /*Зарезервировать*/ %>
     <div class="modal-header">
       <h5 class="modal-title"><%= __('Make a reservation') %> {{selectedLitter.label || 'item'}}</h5>
@@ -629,7 +647,7 @@
           <div class="col-sm-6">
             <input class="form-control-plaintext" type="text" v-model="selectedLitter.ourPreliminaryPrice" readonly>
           </div>
-          <!--<input class="form-control" type="text" placeholder="<%= __('€1000 - €1200') %>" v-model="borrowFormData.preliminaryPrice" :class="[formErrors.preliminaryPrice ? 'is-invalid' : '']">-->
+          &lt;!&ndash;<input class="form-control" type="text" placeholder="<%= __('€1000 - €1200') %>" v-model="borrowFormData.preliminaryPrice" :class="[formErrors.preliminaryPrice ? 'is-invalid' : '']">&ndash;&gt;
           <div class="invalid-feedback"
                v-if="formErrors.ourPreliminaryPrice"><%= __('Please indicate your preliminary price.') %></div>
         </div>
@@ -677,7 +695,7 @@
       <button data-dismiss="modal" class="btn btn-outline-success"><%= __('Got it') %></button>
     </div>
   </modal>
-
+-->
   <% /* "Confirm Delete Litter" Modal */ %>
   <modal v-if="confirmDeleteLitterModalOpen && selectedLitter" v-cloak key="delete"
          @close="closeDeleteLitterModal()">
