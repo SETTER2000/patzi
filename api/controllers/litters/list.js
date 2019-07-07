@@ -83,7 +83,7 @@ module.exports = {
     }
 
     // console.log('litters/list.js: ', litters[0].images);
-    console.log('litters/list.js: ', litters);
+    // console.log('litters/list.js: ', litters);
     await sails.sockets.broadcast('litter', 'list-litter', litters);
     return exits.success();
   }

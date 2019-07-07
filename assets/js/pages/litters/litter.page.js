@@ -7,6 +7,9 @@ parasails.registerPage('litter', {
     autoplay:true,
     isAfterDate:false,
     url:null,
+    fit: 'cover',
+    indexPhoto:0,
+
     dic: [
       ['en', {
         warnNoDogs: `There is no possibility to create a litter, while at least one pair of dogs is missing.`,
@@ -73,7 +76,7 @@ parasails.registerPage('litter', {
     // photoCover: function () {
     //   return this.keyRootPhotoAlbum - 1;
     // },
-    // Вытаскивает фото для обложки альбома
+
     photos: function () {
       // return _.pickBy(this.litters, function(u) {
       //   return u.active;
@@ -83,6 +86,17 @@ parasails.registerPage('litter', {
       //
       // });
       // console.log('DXXX:', this.litters.filter(litter => litter.images[litter.cover]));
+    },
+
+    indexSlide:{
+      get: function () {
+        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+        return this.indexPhoto;
+      },
+      set: function (i) {
+        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+        this.indexPhoto = i;
+      }
     }
     // isPhoto: function () {
     //   return  this.litters.filter(litter => {
@@ -103,9 +117,7 @@ parasails.registerPage('litter', {
         type: 'success'
       });
     },
-    showSlider(){
-      this.dialogTableVisible= true;
-    },
+
     isAfter(){
       // Проверка даты
       // Вернёт true, если this.litter.born  пока в будущем (не прошла)
@@ -114,6 +126,28 @@ parasails.registerPage('litter', {
 
     goTo(path) {
       window.location = `${path}`;
+    },
+
+    // handlerCloseDialogSlider(){
+    //   this.indexPhoto=0;
+    //   this.autoplay=false;
+    // },
+
+    showSlider(litterId,indexPhoto){
+      this.dialogTableVisible= true;
+      this.litterId = litterId;
+      this.indexSlide=indexPhoto;
+      this.handlerSetActiveSlider();
+      console.log('this.litterId: ',this.litterId);
+      console.log('this.indexPhoto: ',this.indexPhoto);
+    },
+
+    handlerCloseDialogSlider(){
+      this.indexPhoto=0;
+      this.autoplay=false;
+    },
+    handlerSetActiveSlider(){
+      return this.indexPhoto;
     },
   },
 });

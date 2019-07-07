@@ -38,7 +38,7 @@
     object-fit: scale-down
   }
   img.ell {
-    height: 100px;
+    height: 160px;
     background-color: #444;
   }
   img.ell {
@@ -95,9 +95,9 @@
       //background: tomato;
       background: #e4e4e4;
       padding: 0;
-      width: 104px;
-      height: 100px;
-      margin: 1px;
+      width: 164px;
+      height: 160px;
+      margin: .5px;
 
       line-height: 100px;
       color: white;
@@ -195,23 +195,49 @@
     }
   }
 
+ /* .my-flex-cont {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    //align-items: center;
+    //align-content: center;
+    width: 100%;
+
+
+    //.my-flex-box {
+    //  //margin: 5px;
+    //  //padding: 5px;
+    //  //flex: 0 1 auto;
+    //  top:0;
+    //  img {
+    //    position: absolute;
+    //    top:0;
+    //    //height: 100vh;
+    //  }
+    //}
+  }*/
+
+
+  /* start CSS SLIDER DIALOG */
+  .el-carousel__item{
+    padding-right: 5px;
+  }
   .my-flex-cont {
     display: flex;
     flex-flow: row-reverse nowrap;
     justify-content: center;
     align-items: center;
     align-content: center;
-    height: 780px;
-
+    height: 100%;
     .my-flex-box {
-      margin: 5px;
-      padding: 5px;
       flex: 0 1 auto;
-      img {
-        height: 80vh;
-      }
     }
   }
+  .el-carousel__indicator--horizontal {
+    display: none;
+    padding: 0;
+  }
+  /* end CSS SLIDER DIALOG */
 
   img.gallery {
     opacity: .9;

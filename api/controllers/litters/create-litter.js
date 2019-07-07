@@ -75,6 +75,8 @@ module.exports = {
     // Бибилиотека Node.js
     const req = this.req;
     const moment = require('moment');
+    const tz = require('moment-timezone');
+    moment.locale('en');
 
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
@@ -101,16 +103,16 @@ module.exports = {
 
     console.log('list-2:: ', inputs.fileList);
 
-    // console.log('CREATE-LITTER:: ', inputs.fileList);
+    console.log('CREATE-LITTER inputs.born:: ', inputs.born);
 
-
+    let born = inputs.born.replace(/"([^"]+(?="))"/g,'$1');
     // Создать помёт
     let litter = await Litter.create({
       letter: _.trim(inputs.letter).toUpperCase(),
       sire:inputs.sire,
       images:inputs.fileList,
       dam:inputs.dam,
-      born: inputs.born.replace(/"([^"]+(?="))"/g,'$1'),
+      born: moment(born).tz('Europe/Moscow').format('LL'),
       owner: this.req.me.id,
       description: inputs.description,
     }).fetch();

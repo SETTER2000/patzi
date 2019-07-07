@@ -247,8 +247,16 @@ $(document).ready(function () {
     }
   });
 
+  //----------- Datepicker js ----------------//
+  // $(document).ready(function () {
+  //   if($(document).width()<1024) {$('.container').addClass('container-fluid').removeClass('container');}
+  //   if($(document).width()>1025) {$('.container-fluid').addClass('container').removeClass('container-fluid');}
+  // });
+  if($(document).width()<1024) {$('.container').addClass('container-fluid').removeClass('container');}
+  if($(document).width()>1025) {$('.container-fluid').addClass('container').removeClass('container-fluid');}
+
+
 
 });
-
 
 
