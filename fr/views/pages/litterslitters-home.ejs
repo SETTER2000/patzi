@@ -1,4 +1,53 @@
 <div id="litters-home" class="content" v-cloak>
+  <% /* Диалоговое окно Слайдер картинок */ %>
+  <el-dialog
+    title="<%= __('Parents') %>"
+    :visible.sync="dialogTableVisible"
+    :fullscreen="true"
+    top="1vh"
+    :close="handlerCloseDialogSlider"
+    center>
+    <div class="d-flex justify-content-end">
+      <el-switch
+        style="display: block"
+        v-model="autoplay"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        active-text="Autoplay"
+        inactive-text="Disable ">
+      </el-switch>
+    </div>
+    <!--<span>It should be noted that the content will not be aligned in center by default</span>-->
+    <div class="block">
+      <!--<span class="demonstration">Switch when indicator is clicked</span>-->
+      <el-carousel
+        :autoplay="autoplay"
+        trigger="click"
+        height="80vh"
+        :initial-index="indexSlide"
+        :next="handlerSetActiveSlider(indexPhoto)"
+      >
+        <el-carousel-item v-for="(item, key, index) in photos"  :key="index">
+          <h3 class="small text-center">{{ item.label }}</h3>
+          <div class="my-flex-cont">
+            <div class="my-flex-box">
+          <el-image
+            :src="item.imageSrc"
+            :fit="fit"></el-image>
+          <!--<div class="my-flex-cont">-->
+            <!--<div class="my-flex-box">-->
+              <!--<img :src="item.imageSrc" class="gallery" alt="">-->
+            </div>
+          </div>
+          <!--</div>-->
+        </el-carousel-item>
+      </el-carousel>
+    </div>
+    <!--<span slot="footer" class="dialog-footer">-->
+    <!--<el-button type="primary" @click="dialogTableVisible = false" ><%= __('Close') %></el-button>-->
+    <!--</span>-->
+  </el-dialog>
+
   <% /* Диалоговое окно. Предупреждение | Warning. */ %>
   <el-dialog
     title="<%= __('Warning') %>"
@@ -20,6 +69,7 @@
     title="<%= __('Add your Litter') %>"
     :visible.sync="centerDialogAdded"
     custom-class="dialog-kennel-add"
+    :fullscreen="false"
     center>
 
     <el-dialog
@@ -311,19 +361,20 @@
 
           <% /* Кнопки: Отец, Мать*/ %>
           <div class="flex-container buttons wrap  mt-3">
-
-            <el-button type="danger" icon="el-icon-male" @click="goTo(`/dogs/dog/${litter.sire[0]}`)" plain>
+            <el-link class="mr-lg-3" type="danger" icon="el-icon-female" @click="goTo(`/dogs/dog/${litter.dam[0]}`)" >
+              {{litter.dam[1]}}
+            </el-link>&nbsp;
+             <el-link class="mr-lg-3" type="danger" icon="el-icon-male" @click="goTo(`/dogs/dog/${litter.sire[0]}`)" >
               {{litter.sire[1]}}
-            </el-button>
+            </el-link>
             <!--<i class="ti-heart mx-2" style="font-size: 1.2rem; color: red"></i>-->
 
             <!--<i class="el-icon-female" style="font-size: 1.2rem; color: red"></i>-->
-            <el-button type="danger" icon="el-icon-female" @click="goTo(`/dogs/dog/${litter.dam[0]}`)" plain>
-              {{litter.dam[1]}}
-            </el-button>
+
           </div>
 
-          <el-divider v-if="litter.images" content-position="left"><%= __('Puppies this litter') %></el-divider>
+
+          <el-divider v-if="litter.images" content-position="left"><%= __('Parents') %></el-divider>
 
           <% /*Маленькие фото. Превью.*/ %>
           <ul class="flex-container wrap" v-if="litter.images">
@@ -342,7 +393,9 @@
 
               </template>
               <div class="ell-image-flex">
+                <a href="#" @click="showSlider(litter.id, index)">
                 <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
+                </a>
               </div>
 
             </li>
