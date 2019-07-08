@@ -53,7 +53,8 @@ module.exports = {
       .populate('owner');
 
     await _.each(litters, async (litter) => {
-      litter.bornNt = moment(litter.born).format(format);
+      litter.bornNt = moment.unix(litter.born).format(format);
+      // litter.bornNt = moment(litter.born).format(format);
       litter.ownerFullName = litter.owner.fullName;
       delete litter.createdAt;
       delete litter.updatedAt;
