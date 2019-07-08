@@ -112,7 +112,7 @@ module.exports = {
       sire:inputs.sire,
       images:inputs.fileList,
       dam:inputs.dam,
-      born: moment(born).utc().format('X'),
+      born: moment(born).format(),
       owner: this.req.me.id,
       description: inputs.description,
     }).fetch();
