@@ -112,7 +112,7 @@ module.exports = {
       sire:inputs.sire,
       images:inputs.fileList,
       dam:inputs.dam,
-      born: moment(born).format(),
+      born: moment.tz(born, 'Europe/Moscow').format(),
       owner: this.req.me.id,
       description: inputs.description,
     }).fetch();
