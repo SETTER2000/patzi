@@ -101,9 +101,9 @@ module.exports = {
       });
     }
 
-    console.log('list-2:: ', inputs.fileList);
-
-    console.log('CREATE-LITTER inputs.born:: ', inputs.born);
+    // console.log('list-2:: ', inputs.fileList);
+    //
+    // console.log('CREATE-LITTER inputs.born:: ', inputs.born);
 
     let born = inputs.born.replace(/"([^"]+(?="))"/g,'$1');
     // Создать помёт

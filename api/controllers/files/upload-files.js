@@ -37,7 +37,8 @@ module.exports = {
   fn: async function (inputs, exits) {
     const req = this.req;
 
-    // await sails.sockets.join(req, 'litter');
+
+    await sails.sockets.join(req, 'litter');
 
     /**
      * Функция uploadOne возвращает объект UploadedFileMetadata
@@ -64,18 +65,44 @@ module.exports = {
      * либо информацию о загруженных данных файла.)
      */
 
+
+
+
     // console.log("inputs.file::", inputs.file);
     let info = await sails.upload(inputs.file);
+    // console.log('info: ', info);
+    // console.log('inputs.file: ' , inputs.file);
 
+    // let fd = _.pluck(info, 'fd')[0];
+    // // console.log('FD:', fd);
+    // gm(fd)
+    //   .resize(353, 257)
+    //   .autoOrient()
+    //   .write(fd, function (err) {
+    //     if (!err) console.log(' Error resizing file! ');
+    //   });
+
+    // fs.readFile(fd, function(err, data){
+    //   if(err){
+    //     console.error(err);
+    //   }else{
+    //     console.log(data);
+    //     gm(data)
+    //       .resize(353, 257)
+    //       .autoOrient()
+    //       .write(data, function (err) {
+    //         if (!err) console.log(' hooray! ');
+    //       });
+    //     if (!info) {
+    //       throw 'badRequest';
+    //     }
+    //   }
+    // });
+    info = info[0];
 
     if (!info) {
       throw 'badRequest';
     }
-
-
-    info = info[0];
-
-
     // console.log('FILES/UPLOAD.JS файл картинки загружен в .tmp: ', info);
     // await sails.sockets.broadcast('files', 'list-file', info);
     // All done.
