@@ -36,9 +36,12 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const req = this.req;
-
-
-    await sails.sockets.join(req, 'litter');
+// https://github.com/balderdashy/sails/issues/4604
+    var fs = require('fs');
+// let r =  req.allParams();
+// console.log('REQQ: ', r.file);
+    var gm = require('gm').subClass({imageMagick: true});
+    // await sails.sockets.join(req, 'litter');
 
     /**
      * Функция uploadOne возвращает объект UploadedFileMetadata
@@ -64,12 +67,61 @@ module.exports = {
      * или входящую загрузку файла Sails из файла 0 или 1; возвращает либо undefined словарь,
      * либо информацию о загруженных данных файла.)
      */
+    const { Transform } = require('stream');
+    // var stream = require('stream');
+    const SkipperDiskAdapter = require('skipper-disk');
+    const receiver = SkipperDiskAdapter().receive({/* opts */});
+    const upstream = req.file('file');
+    // var intermediateStream = new stream.PassThrough();
+    // var intermediateStream = new stream.PassThrough();
+    /**
+     * В upstream.pipe README написано:
+     * Также имейте в виду, что вы должны сначала перехватить апстрим и прикрепить свойство
+     * fd (дескриптор файла) к каждому входящему потоку файлов. В настоящее время я пытаюсь
+     * выяснить, как на самом деле сделать это, так как я не могу найти примеры для этого :(
+     *
+     */
+    upstream.on('data',(chunk) => {
+      // console.log(chunk);
+    });
+    const myTransform = new Transform({
+      transform(chunk, encoding, callback) {
+        return  console.log('DDS: ', chunk);
+        //
+        // gm(chunk).resize('500','500').stream().pipe(chunk);
+        // console.log(chunk);
+        callback();
+      }
+    });
+    // intermediateStream._transform = function(data, encoding, callback){
+    //   console.log('DDS: ', data);
+    //   //
+    //   // gm(data).resize('500','500').stream().pipe(data);
+    //   // console.log(data);
+    //   callback();
+    // };
+    upstream.pipe(myTransform).pipe(receiver);
+    // gm('/path/to/my/img.jpg')
+    //   .resize('200', '200')
+    //   .stream(function (err, stdout, stderr) {
+    //     var writeStream = fs.createWriteStream('/path/to/my/resized.jpg');
+    //     stdout.pipe(writeStream);
+    //   });
+    // ... build an intermediate transform stream to do what you need, e.g. `MyIntermediateStream`...
 
-
-
-
-    // console.log("inputs.file::", inputs.file);
+    // var readStream = req.file('file');
+    // gm(readStream, '2.jpg')
+    //   .write('.tmp/reformat.png', function (err) {
+    //     if (!err) console.log('done');
+    //   });
+    //
+    // // console.log("inputs.file::", inputs.file);
     let info = await sails.upload(inputs.file);
+    // req.file('file').upload(inputs.file, (err, files)=>{
+    //   if(err) {console.log(err);}
+    //   console.log('File is now resized to 100px width and uploaded to ./storedImage.png');
+    //    info = files;
+    // });
     // console.log('info: ', info);
     // console.log('inputs.file: ' , inputs.file);
 
