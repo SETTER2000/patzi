@@ -67,11 +67,11 @@ module.exports = {
      * или входящую загрузку файла Sails из файла 0 или 1; возвращает либо undefined словарь,
      * либо информацию о загруженных данных файла.)
      */
-    const { Transform } = require('stream');
+  /*  const {Transform} = require('stream');
     // var stream = require('stream');
     const SkipperDiskAdapter = require('skipper-disk');
-    const receiver = SkipperDiskAdapter().receive({/* opts */});
-    const upstream = req.file('file');
+    const receiver = SkipperDiskAdapter().receive({/!* opts *!/});
+    const upstream = req.file('file');*/
     // var intermediateStream = new stream.PassThrough();
     // var intermediateStream = new stream.PassThrough();
     /**
@@ -81,26 +81,46 @@ module.exports = {
      * выяснить, как на самом деле сделать это, так как я не могу найти примеры для этого :(
      *
      */
-    upstream.on('data',(chunk) => {
+    // upstream.setEncoding('utf8');
+  /*  upstream.on('data', (chunk) => {
       // console.log(chunk);
+      if (!chunk) {
+        console.log('Данные закончились!');//сообщаем, что данные закончились
+        // this.push(null);
+
+      } else {
+        // this.push(chunk);
+        console.log('Данные chunk: ', chunk);
+        console.log(`-------------------------------------------------------------------------------`);
+        console.log('Данные chunk._readableState: ', chunk._readableState);
+        console.log(`*******************************************************************************`);
+      }
+      /!**
+       * С помощью chunk._readableState.buffer - можно получить все данные буфера
+       *!/
+      console.log('objectMode: ', chunk._readableState.objectMode);
+      console.log('highWaterMark: ', chunk._readableState.highWaterMark);
+      console.log('buffer: ', chunk._readableState.buffer);//[] - пустой массив
+      console.log('length: ', chunk._readableState.length);//0 - кол-во буфер объектов
+      console.log('flowing: ', chunk._readableState.flowing);//null
+      console.log('encoding: ', chunk._readableState.encoding);//null
     });
     const myTransform = new Transform({
       transform(chunk, encoding, callback) {
-        return  console.log('DDS: ', chunk);
+
+        return console.log('DDS: ', chunk);
         //
         // gm(chunk).resize('500','500').stream().pipe(chunk);
         // console.log(chunk);
-        callback();
+
+        // callback();
       }
     });
-    // intermediateStream._transform = function(data, encoding, callback){
-    //   console.log('DDS: ', data);
-    //   //
-    //   // gm(data).resize('500','500').stream().pipe(data);
-    //   // console.log(data);
-    //   callback();
-    // };
-    upstream.pipe(myTransform).pipe(receiver);
+    upstream.pipe(myTransform).pipe(receiver);*/
+
+
+
+
     // gm('/path/to/my/img.jpg')
     //   .resize('200', '200')
     //   .stream(function (err, stdout, stderr) {
