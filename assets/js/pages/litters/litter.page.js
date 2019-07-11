@@ -4,12 +4,12 @@ parasails.registerPage('litter', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     dialogTableVisible: false,
-    autoplay:true,
-    isAfterDate:false,
-    url:null,
+    autoplay: true,
+    isAfterDate: false,
+    url: null,
     fit: 'cover',
-    indexPhoto:0,
-    letters:[],
+    indexPhoto: 0,
+    letters: [],
     dic: [
       ['en', {
         warnNoDogs: `There is no possibility to create a litter, while at least one pair of dogs is missing.`,
@@ -42,35 +42,35 @@ parasails.registerPage('litter', {
         successUploadFiles: `Файлы успешно загружены!`,
       }]
     ],
-    fits:'cover',
-    items:[
-      {label:'Poale Ell Adam',       imageSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
-      {label:'Poale Ell Bell',       imageSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
-      {label:'Poale Ell Bazhen',     imageSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/Adam-10m.jpg'},
-      {label:'Poale Ell Barthalamew',imageSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018.jpg'},
+    fits: 'cover',
+    items: [
+      {label: 'Poale Ell Adam', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
+      {label: 'Poale Ell Bell', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
+      {label: 'Poale Ell Bazhen', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Adam-10m.jpg'},
+      {label: 'Poale Ell Barthalamew', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018.jpg'},
     ],
-    litters:[],
-    // ratio:null,
-    ratios:[],
+    litters: [],
+    ratio: null,
+    ratios: [],
     colors: ['#99A9BF', '#F7BA2A', '#FF9900'] // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function() {
+  beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     this.isAfter();
-
+    this.ratio = _.last(_.pluck(this.me.ratio, 'litter'));
     // Кобели
     this.letterList();
 
     // Ratio Рейтинги
-    this.updateRatioList();
+
 
   },
-  mounted: async function() {
+  mounted: async function () {
     //…
   },
 
@@ -95,18 +95,18 @@ parasails.registerPage('litter', {
       // });
       // console.log('DXXX:', this.litters.filter(litter => litter.images[litter.cover]));
     },
-    ratio:  {
-      get: function () {
-        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
-        return _.last(this.ratios);
-      },
-      set: function (i) {
-        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
-        this.ratios = [i];
-      }
-    },
+    /* ratio: {
+       get: function () {
+         // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+         return _.last(this.ratios);
+       },
+       set: function (i) {
+         // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+         this.ratios = [i];
+       }
+     },*/
 
-    indexSlide:{
+    indexSlide: {
       get: function () {
         // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
         return this.indexPhoto;
@@ -129,11 +129,40 @@ parasails.registerPage('litter', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
 
-    changeRatio() {
-      this.ratios = (_.isArray(this.ratios))?  this.ratios : [];
-      this.ratios.push(this.ratio);
+    changeRatio: function () {
+      /**
+       * Выбираем все объекты со свойством litter,
+       * т.е. по сути все объекты с оценками принадлежащие к данному помёту и данной коллекции.
+       */
+      let ratio = this.me.ratio.filter(rat => {
+        return !_.isNull(rat.litter);
+      });
+
+      // Выбираем всё остальное не касающиеся данной коллекции,
+      // для формирования нового массива всех оценок.
+      let ratioNew = this.me.ratio.filter(rat => {
+        !_.isElement(rat.litter);
+      });
+
+      /**
+       * Если длинна массива больше 5 то убираем старую запись
+       * Таким образом кол-во отметок поставленных данным пользователем всегда равно
+       * последним пяти оценкам. Это скорее для статистики нежели для представления.
+       * @type {Array}
+       */
+      ratio = (!_.isArray(ratio)) ? [] : ratio.length > 6 ? ratio.slice(1) : ratio;
+      // Добавляем новую оценку в формирующийся массив оценок данной коллекции
+      ratio.push({litter: this.ratio});
+      // Объединяем новый массив оценок данной коллекции с другими оценками по другим коллекциям
+      ratioNew.push(ratio);
+      // Обнуляем данные пользователя по всем рейтингам
+      this.ratios = '';
+      // Вносим новые, обновлённые данные по рейтингам
+      this.ratios = ratioNew[0];
+      // Отправляем на сервер для обновления свойства ratio у текущего пользователя
+      // Все оценки поставленные пользователем, хранятся в коллекции User.ratio
       this.updateRatioList();
-      console.log('FFF:', this.ratio);
+      //  Выводим благодарность на монитор
       this.$message({
         message: 'Спасибо за оценку. Ваш голос был учтён!',
         type: 'success'
@@ -142,12 +171,10 @@ parasails.registerPage('litter', {
 
     // Обновляем рейтинг
     async updateRatioList() {
-      console.log('this.ratios 1: ', this.ratios);
-
-      let data={
-        ratios:this.ratios
+      let data = {
+        ratios: this.ratios
       };
-      await io.socket.post(`/api/v1/users/update-ratio`,data, function gotResponse(body, response) {
+      await io.socket.post(`/api/v1/users/update-ratio`, data, function gotResponse(body, response) {
         console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
@@ -170,10 +197,10 @@ parasails.registerPage('litter', {
       });
     },
 
-    isAfter(){
+    isAfter() {
       // Проверка даты
       // Вернёт true, если this.litter.born  пока в будущем (не прошла)
-      this.isAfterDate = moment(new Date()).isSameOrBefore(moment(this.litter.born, "LL"));
+      this.isAfterDate = moment(new Date()).isSameOrBefore(moment(this.litter.born, 'LL'));
     },
 
     goTo(path) {
@@ -185,20 +212,20 @@ parasails.registerPage('litter', {
     //   this.autoplay=false;
     // },
 
-    showSlider(litterId,indexPhoto){
-      this.dialogTableVisible= true;
+    showSlider(litterId, indexPhoto) {
+      this.dialogTableVisible = true;
       this.litterId = litterId;
-      this.indexSlide=indexPhoto;
+      this.indexSlide = indexPhoto;
       this.handlerSetActiveSlider();
-      console.log('this.litterId: ',this.litterId);
-      console.log('this.indexPhoto: ',this.indexPhoto);
+      console.log('this.litterId: ', this.litterId);
+      console.log('this.indexPhoto: ', this.indexPhoto);
     },
 
-    handlerCloseDialogSlider(){
-      this.indexPhoto=0;
-      this.autoplay=false;
+    handlerCloseDialogSlider() {
+      this.indexPhoto = 0;
+      this.autoplay = false;
     },
-    handlerSetActiveSlider(){
+    handlerSetActiveSlider() {
       return this.indexPhoto;
     },
   },
