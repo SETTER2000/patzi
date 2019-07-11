@@ -258,6 +258,12 @@ It just means they have a customer entry in Stripe, which might or might not hav
       description: 'Номера телефонов для связи'
     },
 
+    ratio: {
+      type: 'ref',
+      example:[{litter:[1,2,5]},{dog:[4,3,5]}],
+      description: 'Массив голосований'
+    },
+
 
     emailConfirmationReminderAlreadySent: {
       type: 'boolean',

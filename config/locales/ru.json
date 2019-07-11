@@ -500,5 +500,8 @@
 	"Stamp Dog number in the registry.": "Клеймо. Номер собаки в реестре.",
 	"Color": "Цвет",
 	"sire": "sire",
-	"dam": "dam"
+	"dam": "dam",
+	"litters": "litters",
+	"litter": "litter",
+	"home": "home"
 }

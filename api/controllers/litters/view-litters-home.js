@@ -51,7 +51,7 @@ module.exports = {
 
 
     _.each(litters, (litter) => {
-      litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`);
+      litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.letter}`);
       // ... затем мы удаляем наш файловый дескриптор
       delete litter.imageUploadFD;
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию

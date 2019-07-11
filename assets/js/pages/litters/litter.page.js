@@ -9,7 +9,7 @@ parasails.registerPage('litter', {
     url:null,
     fit: 'cover',
     indexPhoto:0,
-
+    letters:[],
     dic: [
       ['en', {
         warnNoDogs: `There is no possibility to create a litter, while at least one pair of dogs is missing.`,
@@ -50,7 +50,8 @@ parasails.registerPage('litter', {
       {label:'Poale Ell Barthalamew',imageSrc:'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018.jpg'},
     ],
     litters:[],
-    ratio:null,
+    // ratio:null,
+    ratios:[],
     colors: ['#99A9BF', '#F7BA2A', '#FF9900'] // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
   },
 
@@ -61,6 +62,13 @@ parasails.registerPage('litter', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     this.isAfter();
+
+    // Кобели
+    this.letterList();
+
+    // Ratio Рейтинги
+    this.updateRatioList();
+
   },
   mounted: async function() {
     //…
@@ -87,6 +95,16 @@ parasails.registerPage('litter', {
       // });
       // console.log('DXXX:', this.litters.filter(litter => litter.images[litter.cover]));
     },
+    ratio:  {
+      get: function () {
+        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+        return _.last(this.ratios);
+      },
+      set: function (i) {
+        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+        this.ratios = [i];
+      }
+    },
 
     indexSlide:{
       get: function () {
@@ -112,9 +130,43 @@ parasails.registerPage('litter', {
   methods: {
 
     changeRatio() {
+      this.ratios = (_.isArray(this.ratios))?  this.ratios : [];
+      this.ratios.push(this.ratio);
+      this.updateRatioList();
+      console.log('FFF:', this.ratio);
       this.$message({
         message: 'Спасибо за оценку. Ваш голос был учтён!',
         type: 'success'
+      });
+    },
+
+    // Обновляем рейтинг
+    async updateRatioList() {
+      console.log('this.ratios 1: ', this.ratios);
+
+      let data={
+        ratios:this.ratios
+      };
+      await io.socket.post(`/api/v1/users/update-ratio`,data, function gotResponse(body, response) {
+        console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.on('user-ratio', (data) => {
+        console.log('server return ratios: ', data);
+        this.ratios = data;
+        console.log('this.ratio: ', this.ratio);
+      });
+    },
+
+    // Выбираем все буквы помётов
+    async letterList() {
+      await io.socket.get(`/api/v1/litters/list-letter`, function gotResponse(body, response) {
+        console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-letter', (data) => {
+        console.log('letter: ', data);
+        this.letters = data;
       });
     },
 

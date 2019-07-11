@@ -10,6 +10,11 @@ module.exports = {
     id: {
       description: 'Идентификатор помёта.',
       type: 'string',
+      // required: true
+    },
+    letter: {
+      description: 'Идентификатор помёта.',
+      type: 'string',
       required: true
     }
   },
@@ -34,7 +39,8 @@ module.exports = {
     const moment = require('moment');
     // Формат отображаемой даты
     let format = 'LL';
-    let litter = await Litter.findOne({id: inputs.id}).populate('owner');
+    let litter = await Litter.findOne({letter: inputs.letter}).populate('owner');
+    // let litter = await Litter.findOne({id: inputs.id}).populate('owner');
 
     if (!litter) {
       throw 'notFound';
@@ -44,13 +50,13 @@ module.exports = {
     // Формируем массив с картинками
 
     litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((image, i) => {
-      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${inputs.id}/images/${i}`) : '';
+      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litter.id}/images/${i}`) : '';
       // image.detail = `/litters/litter/${litterId}`;
       delete image.fd;
       return image;
     }) : '';
     litter.puppies = (!_.isEmpty(litter.puppies)) ? await litter.puppies.map((image, i) => {
-      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${inputs.id}/puppies/${i}`) : '';
+      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litter.id}/puppies/${i}`) : '';
       // image.detail = `/litters/litter/${litterId}`;
       delete image.fd;
       return image;
@@ -61,7 +67,8 @@ module.exports = {
     // Устанавливаем свойство источника изображения
     // Первый аргумент, базовый url
     litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`);
-    litter.bornNt = moment(litter.born).format(format);
+    // litter.bornNt = moment(litter.born).format(format);
+    litter.bornNt = moment.parseZone(litter.born).format(format);
 
     // ... затем мы удаляем наш файловый дескриптор
     delete litter.imageUploadFD;

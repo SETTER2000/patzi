@@ -577,6 +577,7 @@ parasails.registerPage('litters-home', {
         this.sires = data;
       });
     },
+
     // Выбираем всех сук
     async damList() {
       await io.socket.get(`/api/v1/dogs/list-dam`, function gotResponse(body, response) {

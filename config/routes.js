@@ -41,7 +41,8 @@ module.exports.routes = {
   'GET /blog/:virtualPageSlug?': {action: 'blog/view-blog-home'},
 
 
-  'GET /litters/litter/:id': {action: 'litters/view-litter'},
+  // 'GET /litters/litter/:id': {action: 'litters/view-litter'},
+  'GET /litters/litter/:letter': {action: 'litters/view-litter'},
   'GET /litters/:virtualPageSlug?': {action: 'litters/view-litters-home'},
 
   'GET /contact': {action: 'view-contact', locals: {currentSection: 'contact'}},
@@ -110,6 +111,7 @@ module.exports.routes = {
   'POST    /api/v1/litters/create-litter': {action: 'litters/create-litter', csrf: false},
   'GET     /api/v1/litters/list': {action: 'litters/list'},
   'PUT     /api/v1/litters/update-cover-album': { action: 'litters/update-cover-album', csrf: false },
+  'GET     /api/v1/litters/list-letter': { action: 'litters/list-letter'},
 
 
 
@@ -137,6 +139,9 @@ module.exports.routes = {
   'DELETE /sockets/user/destroy-one-user': {action: 'users/destroy-one-user', csrf: false},
   'GET    /api/v1/users/:id': {action: 'users/download-photo'},
   'DELETE /users/destroy-user-group': {action: 'users/destroy-user-group', csrf: false},
+  'POST   /api/v1/users/update-ratio': { action: 'users/update-ratio', csrf: false },
+
+
 
   'GET    /api/v1/continents/list': {action: 'continents/list'},
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},

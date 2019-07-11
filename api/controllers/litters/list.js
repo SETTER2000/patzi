@@ -69,14 +69,14 @@ module.exports = {
       litterId = litter.id;
       litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((img, i) => {
         img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litterId}/images/${i}`) : '';
-        img.detail = `/litters/litter/${litterId}`;
+        img.detail = `/litters/litter/${litter.letter}`;
         delete img.fd;
         return img;
       }) : '';
 
       litter.puppies = (!_.isEmpty(litter.puppies)) ? await litter.puppies.map((img, i) => {
         img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litterId}/puppies/${i}`) : '';
-        img.detail = `/litters/litter/${litterId}`;
+        img.detail = `/litters/litter/${litter.letter}`;
         delete img.fd;
         return img;
       }) : '';
