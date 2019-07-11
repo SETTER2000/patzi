@@ -96,11 +96,11 @@
         <label v-if="!ruleForm.imageUrl">
           <%= __('Make albums, dividing by event or by time group of photos. Describe events, tell about the photo, thereby structuring your memories and events.') %>
         </label>
-        <hr>
+        <el-divider  content-position="left"><%= __('Parents') %></el-divider>
         <div class="photo-uploader">
           <div class="row">
             <div class="col-md-12 ">
-              <% /*Загрузка фото*/ %>
+              <% /*Загрузка фото родителей*/ %>
               <!--<el-upload
                 action="/api/v1/files/upload"
                 drag
@@ -137,6 +137,34 @@
                 :on-success="handleSuccess"
                 :on-exceed="handleExceed"
                 :on-remove="handleRemove">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+              <el-dialog :visible.sync="dialogVisible">
+                <img width="100%" :src="dialogImageUrl" alt="">
+              </el-dialog>
+
+
+
+              <!------------------------------------------------------------------------------->
+            </div>
+          </div>
+        </div>
+        <el-divider content-position="left"><%= __('Puppies this litter') %></el-divider>
+        <div class="photo-uploader">
+          <div class="row">
+            <div class="col-md-12 ">
+              <% /*Загрузка фото щенков*/ %>
+              <el-upload
+                action="/api/v1/files/upload"
+                list-type="picture-card"
+                multiple
+                ref="upload"
+                :on-preview="handlePictureCardPreview"
+                :before-upload="beforeUpload"
+                :limit="limit"
+                :on-success="handleSuccessPuppies"
+                :on-exceed="handleExceedPuppies"
+                :on-remove="handleRemovePuppies">
                 <i class="el-icon-plus"></i>
               </el-upload>
               <el-dialog :visible.sync="dialogVisible">
