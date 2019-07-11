@@ -121,6 +121,27 @@
       <div class="portfolio_details_inner">
         <div class="row">
           <div class="col-md-6">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+              <el-breadcrumb-item><a href="/"><%= __('Home-menu') %></a></el-breadcrumb-item>
+              <el-breadcrumb-item><a href="/litters"><%= __('Litters') %></a></el-breadcrumb-item>
+              <el-breadcrumb-item><%= __('Litter') %> {{litter.letter}}</el-breadcrumb-item>
+              <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
+            </el-breadcrumb>
+          </div>
+          <div class="col-md-6">
+            <div class="text-right">
+            <el-button-group v-for="(lett, index) in letters" :key="lett.id">
+
+              <el-button v-if="lett.letter === litter.letter" @click="goTo(lett.link)" type="warning" size="mini" >
+                {{lett.letter}}</el-button>
+              <el-button v-else @click="goTo(lett.letter)"  size="mini" >
+                {{lett.letter}}</el-button>
+            </el-button-group>
+          </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
             <div class="left_img">
               <ul v-if="litter.images.length">
                 <li v-for="(img ,index, key) in litter.images" :key="index + '-lst'">
@@ -142,7 +163,7 @@
               <h4><%= __('Litter') %> {{litter.letter.toUpperCase()}}</h4>
               <p v-if="litter.subtitle">{{litter.subtitle}}</p>
               <div class="block mb-5">
-
+                ratio = {{ratio}}
                 <el-rate
                   v-model="ratio"
                   :colors="colors"
@@ -182,10 +203,10 @@
         </div>
         {{litter.description}}
       </div>
-      <el-divider  content-position="left"><%= __('Puppies this litter') %>.
+      <el-divider content-position="left"><%= __('Puppies this litter') %>.
         <span v-if="litter.puppies">{{litter.bornNt}}</span>
         <span v-else><%= __('It has not happened yet. We wait...') %></span></el-divider>
-     <em class="text-center"></em>
+      <em class="text-center"></em>
       <div class="card-body">
         <!--<h4 class="card-title"> {{litter.bornNt}}</h4>-->
         <div class="card-text"><p>{{litter.subtitle}}</p></div>
@@ -197,13 +218,13 @@
               <template v-if="me.isSuperAdmin">
                 <div class="ell-relation" v-if="litter.cover === index">
                   <!--<el-button type="warning" size="mini" title="<%= __("Album's cover") %>"-->
-                             <!--class="ell-position-button check" icon="el-icon-star-off"-->
-                             <!--circle/>-->
+                  <!--class="ell-position-button check" icon="el-icon-star-off"-->
+                  <!--circle/>-->
                 </div>
                 <div class="ell-relation" v-else>
                   <!--<el-button size="mini" title="<%= __('Make an album cover') %>"-->
-                             <!--class="ell-position-button" @click="coverPhoto(litter.id,index)"-->
-                             <!--icon="el-icon-document" circle></el-button>-->
+                  <!--class="ell-position-button" @click="coverPhoto(litter.id,index)"-->
+                  <!--icon="el-icon-document" circle></el-button>-->
                 </div>
 
               </template>
