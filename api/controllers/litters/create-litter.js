@@ -10,7 +10,11 @@ module.exports = {
   inputs: {
     fileList: {
       type: 'ref',
-      description: 'Массив с файлами данных о загруженных файлах.'
+      description: 'Массив с fd ссылками на фото родителей.'
+    },
+    puppies: {
+      type: 'ref',
+      description: 'Массив с fd ссылками на фото щенков.'
     },
 
     letter: {
@@ -88,13 +92,21 @@ module.exports = {
     await sails.sockets.join(req, 'litter');
 
 
-
     // console.log('inputs.fileList::', inputs.fileList);
     // // list = _.pluck(inputs.fileList, 'response');
     // console.log('list-1:: ', inputs.fileList);
     // let iterator = list.keys();
-    if(inputs.fileList){
-      _.each(inputs.fileList, img=>{
+    if (inputs.fileList) {
+      _.each(inputs.fileList, img => {
+        delete img.filename;
+        delete img.status;
+        delete img.field;
+      });
+    }
+
+    console.log('inputs.puppies: ', inputs.puppies);
+    if (inputs.puppies) {
+      _.each(inputs.puppies, img => {
         delete img.filename;
         delete img.status;
         delete img.field;
@@ -105,13 +117,14 @@ module.exports = {
     //
     // console.log('CREATE-LITTER inputs.born:: ', inputs.born);
 
-    let born = inputs.born.replace(/"([^"]+(?="))"/g,'$1');
+    let born = inputs.born.replace(/"([^"]+(?="))"/g, '$1');
     // Создать помёт
     let litter = await Litter.create({
       letter: _.trim(inputs.letter).toUpperCase(),
-      sire:inputs.sire,
-      images:inputs.fileList,
-      dam:inputs.dam,
+      sire: inputs.sire,
+      images: inputs.fileList,
+      puppies: inputs.puppies,
+      dam: inputs.dam,
       born: moment.tz(born, 'Europe/Moscow').format(),
       owner: this.req.me.id,
       description: inputs.description,

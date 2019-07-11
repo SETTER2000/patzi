@@ -34,6 +34,7 @@ parasails.registerPage('litters-home', {
       label: '',
       data: [],
       fileList: [],
+      fileListPuppies: [],
       file: []
     },
     rules: {},
@@ -240,7 +241,7 @@ parasails.registerPage('litters-home', {
       // Принимаем данные по событию list-*
       await io.socket.on('list-litter', (data) => {
         this.litters = data;
-        // console.log('this.litters: ', this.litters);
+        console.log('this.litters: ', this.litters);
       });
 
 
@@ -521,6 +522,20 @@ parasails.registerPage('litters-home', {
       // this.ruleForm.fileList = fileList;
     },
 
+    handleRemovePuppies(file, fileList) {
+      // console.log('file:: ** :');
+      // console.log(file);
+      // console.log('fileList:: ** :');
+      // console.log(fileList);
+      this.ruleForm.fileListPuppies=[];
+      this.ruleForm.fileListPuppies = _.pluck(fileList, 'response');
+      // this.ruleForm.fileList = _.remove(this.ruleForm.fileList, file);
+      console.log(' Remove this.ruleForm.fileListPuppies: ',  this.ruleForm.fileListPuppies);
+
+      // this.ruleForm.fileList.push(fileList);
+      // this.ruleForm.fileList = fileList;
+    },
+
     handlePreview(file) {
       console.log('handlePreview:: ** :', file);
       this.dialogImageUrl = file.url;
@@ -533,6 +548,12 @@ parasails.registerPage('litters-home', {
     },
     // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      ${files.length + fileList.length} ${this.i19p.files}`);
+    },
+
+    handleExceedPuppies(files, fileList) {
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
       ${files.length + fileList.length} ${this.i19p.files}`);
@@ -607,6 +628,7 @@ parasails.registerPage('litters-home', {
       });
     },
 
+
     beforeUpload(file) {
       // Проверка размера входящего файла картинки не более (MB)
       let size = 1;
@@ -614,11 +636,11 @@ parasails.registerPage('litters-home', {
       const isLt2M = file.size / 1024 / 1024 < size;
 
       if (!isJPG) {
-        this.$message.error('Avatar picture must be JPG format!');
+        this.$message.error('Picture must be JPG format!');
       }
 
       if (!isLt2M) {
-        this.$message.error(`Avatar picture size can not exceed ${size}MB!`);
+        this.$message.error(`Picture size can not exceed ${size}MB!`);
       }
 
       // else{
@@ -641,12 +663,22 @@ parasails.registerPage('litters-home', {
       console.log('this.ruleForm.fileList YYY: ', this.ruleForm.fileList );
     },
 
+
+    handleSuccessPuppies(res, file) {
+      console.log('Uploads Puppies:', res);
+      // this.litters.images.push({imageSrc : URL.createObjectURL(file.raw)});
+
+      this.ruleForm.fileListPuppies.push(res);
+      console.log('this.ruleForm.fileListPuppies YYY: ', this.ruleForm.fileListPuppies );
+    },
+
     async addLitter() {
       // this.$refs.upload.submit();
       console.log('this.ruleForm.fileList: ****||| ', this.ruleForm.fileList);
       this.openFullScreen();
       let data = {
         fileList: this.ruleForm.fileList,
+        puppies: this.ruleForm.fileListPuppies,
         letter: this.ruleForm.letter,
         dam: this.getDamArr(),
         sire: this.getSireArr(),
@@ -752,6 +784,7 @@ parasails.registerPage('litters-home', {
       this.$refs.upload.clearFiles();
       this.$refs[formName].resetFields();
       this.ruleForm.fileList = [];
+      this.ruleForm.fileListPuppies = [];
       this.ruleForm.list = [];
       this.ruleForm.imageUrl = '';
 

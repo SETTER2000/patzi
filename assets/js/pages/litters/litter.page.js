@@ -81,7 +81,7 @@ parasails.registerPage('litter', {
       // return _.pickBy(this.litters, function(u) {
       //   return u.active;
       // });
-      return this.litter.images;
+      return this.litter.puppies;
       // _.each(this.litters, async (litter) => {
       //
       // });

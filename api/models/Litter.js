@@ -70,7 +70,13 @@ module.exports = {
       type: 'ref',
       defaultsTo: [],
       example: ['5d1f1b04fbe834262cbb8c53','5d1f1b04fbe834262cbb8c54'],
-      description: `FD загруженных фотографий`
+      description: `FD загруженных фотографий родителей`
+    },
+    puppies: {
+      type: 'ref',
+      defaultsTo: [],
+      example: ['5d1f1b04fbe834262cbb8c53','5d1f1b04fbe834262cbb8c54'],
+      description: `FD загруженных фотографий щенков`
     },
     // dogs: {
     //   type: 'ref',

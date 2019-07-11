@@ -41,7 +41,7 @@ module.exports = {
 статус электронной почты, пока они не нажмут на ссылку в электронном письме с подтверждением.`
     },
 
-
+    // votingLitter: {},
     emailChangeCandidate: {
       type: 'string',
       isEmail: true,
@@ -70,7 +70,7 @@ module.exports = {
     isAdmin: {
       type: 'boolean',
       description: 'Является ли этот пользователь «администратором»',
-      defaultsTo:false
+      defaultsTo: false
     },
 
     isSuperAdmin: {

@@ -9,9 +9,14 @@ module.exports = {
 
   inputs: {
     collection: {
-      description: 'Наименование коллекции.',
       type: 'string',
-      required: true
+      required: true,
+      description: 'Наименование коллекции.'
+    },
+    folder:{
+      type: 'string',
+      required: true,
+      description: 'Наименование альбома.'
     },
 
     id: {
@@ -21,7 +26,7 @@ module.exports = {
     },
 
     key: {
-      description: 'Ключ картинки в массиве картинок.',
+      description: 'Ключ картинки в массиве картинок данного альбома.',
       type: 'number',
       required: true
     },
@@ -49,6 +54,10 @@ module.exports = {
     let collection = _.capitalize(inputs.collection);
     let collectionObject = '';
 
+    // Если название альбома существует, то выводим его | images
+    let folder = inputs.folder ? inputs.folder : 'images';
+
+
     switch (collection) {
       case 'Litter':
         collectionObject = await Litter.findOne(inputs.id);
@@ -73,7 +82,7 @@ module.exports = {
     }
 
 
-    let arr = await collectionObject.images.filter((image, index) => inputs.key === index);
+    let arr = await collectionObject[folder].filter((image, index) => inputs.key === index);
     if (!arr) {
       throw 'notFound';
     }

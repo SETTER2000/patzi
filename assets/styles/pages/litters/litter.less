@@ -2,9 +2,125 @@
   .el-dialog--center .el-dialog__body{
     padding-top: 0;
   }
-  //.el-dialog.el-dialog--center{
-  //  margin-top: 3vh!important;
-  //}
+  //start  flex img
+  .object-fit_fill {
+    object-fit: fill
+  }
+  .object-fit_contain {
+    object-fit: contain
+  }
+  .object-fit_cover {
+    object-fit: cover
+  }
+  .object-fit_none {
+    object-fit: none
+  }
+  .object-fit_scale-down {
+    object-fit: scale-down
+  }
+  img.ell {
+    height: 160px;
+    background-color: #444;
+  }
+  img.ell {
+    width: 100%;
+  }
+  .ell-image-flex {
+    float: left;
+    width: 100%;
+    margin: 0 30px 20px 0;
+
+    &:nth-child(2n) {
+      clear: left;
+    }
+
+    &:nth-child(2n+1) {
+      margin-right: 0;
+    }
+  }
+  .img-fluid {
+    height: 700px;
+    .el-image__inner {
+      width: auto;
+    }
+  }
+
+  .ell-relation {
+    position: relative;
+    .ell-position-button {
+      opacity: .5;
+      position: absolute;
+      right: 0;
+      &.check {
+        opacity: 1;
+      }
+      &:hover {
+        opacity: .9;
+      }
+    }
+  }
+  .flex-container {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    border: none;
+    justify-content: center;
+    -ms-box-orient: horizontal;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: flex;
+  }
+  .flex-container.buttons {
+    border: none;
+  }
+  .nowrap {
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+  }
+
+  .wrap {
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-content: space-evenly;
+
+    .flex-item {
+      flex-direction: row;
+      //flex-direction: column;
+
+      //background: tomato;
+      background: #e4e4e4;
+      padding: 0;
+      width: 164px;
+      height: 160px;
+      margin: .5px;
+
+      line-height: 100px;
+      color: white;
+      font-weight: bold;
+      font-size: 2em;
+      text-align: center;
+      .el-button{
+        margin: 2px;
+      }
+    }
+  }
+  .wrap li {
+    background: #e4e4e4;
+  }
+
+  .wrap-reverse {
+    -webkit-flex-wrap: wrap-reverse;
+    flex-wrap: wrap-reverse;
+  }
+  .wrap-reverse li {
+    background: deepskyblue;
+  }
+
 
   .el-switch{
     height: 40px;

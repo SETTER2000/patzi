@@ -161,7 +161,7 @@ module.exports.routes = {
 
   'GET    /api/v1/country/list': {action: 'country/list'},
 
-  'GET    /api/v1/files/download/:collection/:id/:key': {action: 'files/download'},
+  'GET    /api/v1/files/download/:collection/:id/:folder/:key': {action: 'files/download'},
 
 
   'GET    /undefined': {action: 'files/undefined'},
