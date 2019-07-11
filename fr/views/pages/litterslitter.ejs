@@ -27,7 +27,7 @@
         :initial-index="indexSlide"
         :next="handlerSetActiveSlider(indexPhoto)"
       >
-        <el-carousel-item v-for="(item, key, index) in photos"  :key="index">
+        <el-carousel-item v-for="(item, key, index) in photos" :key="index">
           <h3 class="small text-center">{{ item.label }}</h3>
           <div class="my-flex-cont">
             <!--<div class="my-flex-box">-->
@@ -48,7 +48,7 @@
     <!--</span>-->
   </el-dialog>
   <% /* Диалоговое окно Слайдер картинок */ %>
-<!--  <el-dialog
+  <!--  <el-dialog
     title="<%= __('Parents') %>"
     :visible.sync="dialogTableVisible"
     width="60%"
@@ -182,17 +182,48 @@
         </div>
         {{litter.description}}
       </div>
-      <el-divider v-if="litter.images" content-position="left"><%= __('Puppies this litter') %></el-divider>
-      <div class="section-top-border">
-        <!--<h3><%= __('Image Gallery') %></h3>-->
+      <el-divider  content-position="left"><%= __('Puppies this litter') %>.
+        <span v-if="litter.puppies">{{litter.bornNt}}</span>
+        <span v-else><%= __('It has not happened yet. We wait...') %></span></el-divider>
+     <em class="text-center"></em>
+      <div class="card-body">
+        <!--<h4 class="card-title"> {{litter.bornNt}}</h4>-->
+        <div class="card-text"><p>{{litter.subtitle}}</p></div>
+        <div class="card-text">
 
-        <div class="row gallery-item">
-          <template v-for="(photo ,index) in litter.images">
-            <a :href="`${photo.imageSrc}`" class="img-gal">
-              <div class="single-gallery-image"
-                   :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>
-            </a>
-          </template>
+          <% /*Маленькие фото. Превью.*/ %>
+          <ul class="flex-container wrap" v-if="litter.puppies">
+            <li class="flex-item" v-for="(img, index, key) in litter.puppies" :key="index +  '-label'">
+              <template v-if="me.isSuperAdmin">
+                <div class="ell-relation" v-if="litter.cover === index">
+                  <!--<el-button type="warning" size="mini" title="<%= __("Album's cover") %>"-->
+                             <!--class="ell-position-button check" icon="el-icon-star-off"-->
+                             <!--circle/>-->
+                </div>
+                <div class="ell-relation" v-else>
+                  <!--<el-button size="mini" title="<%= __('Make an album cover') %>"-->
+                             <!--class="ell-position-button" @click="coverPhoto(litter.id,index)"-->
+                             <!--icon="el-icon-document" circle></el-button>-->
+                </div>
+
+              </template>
+              <div class="ell-image-flex">
+                <a href="#" @click="showSlider(litter.id, index)">
+                  <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
+                </a>
+              </div>
+
+            </li>
+          </ul>
+
+
+          <!--<div class="row gallery-item">-->
+          <!-- <template v-for="(photo ,index) in litter.puppies">
+             <a :href="`${photo.imageSrc}`" class="img-gal">
+               <div class="single-gallery-image"
+                    :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>
+             </a>
+           </template>-->
           <!--<div class="col-md-4"  >-->
           <!--<a :href="`${photo.imageSrc}`" class="img-gal">-->
           <!--<div class="single-gallery-image" :style="{ backgroundImage: `url('${photo.imageSrc}')` }"></div>-->
