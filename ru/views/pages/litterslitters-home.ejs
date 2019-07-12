@@ -187,26 +187,22 @@
                  label-width="120px" class="demo-ruleForm">
 
           <% /* Дата помёта NEW */ %>
-          <el-form-item label="<%= __('Date of litter') %>">
-            <el-form-item prop="born">
+          <el-form-item label="<%= __('Date of litter') %>" prop="born">
               <el-date-picker
                 v-model="ruleForm.born"
                 type="date"
                 placeholder="<%= __('Select date and time') %>"
                 default-time="12:00:00">
               </el-date-picker>
-            </el-form-item>
           </el-form-item>
 
           <% /* Буква помёта NEW */ %>
-          <el-form-item label="<%= __('Litter letter') %>">
-            <el-form-item prop="letter">
+          <el-form-item label="<%= __('Litter letter') %>" prop="letter">
               <el-input
                 size="medium"
                 placeholder="A"
                 v-model="ruleForm.letter">
               </el-input>
-            </el-form-item>
           </el-form-item>
 
 
