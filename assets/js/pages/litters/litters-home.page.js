@@ -4,13 +4,14 @@ parasails.registerPage('litters-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     litters: [],
+    letters: [],
     dams: [],
     dialogTableVisible: false,
-    autoplay:true,
+    autoplay: true,
     sires: [],
     limit: 50,
-    litterId:'',
-    indexPhoto:0,
+    litterId: '',
+    indexPhoto: 0,
     imageUrl2: '',
     keyRootPhotoAlbum: 6,
     // fileList: [],
@@ -37,7 +38,25 @@ parasails.registerPage('litters-home', {
       fileListPuppies: [],
       file: []
     },
-    rules: {},
+    rules: {
+      born: [
+        {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
+      ],
+      // kennel: [
+      //   {required: true, message: 'Please select kennel name', trigger: 'change'}
+      // ],
+      letter: [
+        {required: true, message: 'Please enter a litter letter', trigger: 'blur'},
+        {min: 1, max: 5, message: 'Length should be 1 to 5', trigger: 'blur'}
+      ],
+      // growth: [
+      //   {required: true, message: 'Please input height dog', trigger: 'change'},
+      //   // {min: 20, max: 40, message: 'Height should be 20 to 40 cm', trigger: 'change'}
+      // ],
+      // gender: [
+      //   {required: true, message: 'Please select a dog gender.', trigger: 'change'}
+      // ],
+    },
     // Виртуальная часть URL
     virtualPageSlug: '',
 
@@ -173,6 +192,9 @@ parasails.registerPage('litters-home', {
 
     // Суки
     this.damList();
+
+    // Буквы помётов
+    this.letterList()
   },
 
   mounted: async function () {
@@ -198,22 +220,22 @@ parasails.registerPage('litters-home', {
       _.each(this.litters, async (litter) => {
 
       });
-      console.log('DXXX:', this.litters.filter(litter => litter.images[litter.cover]));
+      // console.log('DXXX:', this.litters.filter(litter => litter.images[litter.cover]));
     },
     photos: function () {
       // return _.pickBy(this.litters, function(u) {
       //   return u.active;
       // });
-      return  (_.isArray(this.litters)) ? _.pluck(this.litters.filter(litter=>litter.id === this.litterId),'images')[0] : '';
+      return (_.isArray(this.litters)) ? _.pluck(this.litters.filter(litter => litter.id === this.litterId), 'images')[0] : '';
     },
-    indexSlide:{
+    indexSlide: {
       get: function () {
         // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
         return this.indexPhoto;
       },
       set: function (i) {
         // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
-       this.indexPhoto = i;
+        this.indexPhoto = i;
       }
     }
     // isPhoto: function () {
@@ -235,13 +257,13 @@ parasails.registerPage('litters-home', {
          });*/
 
       await io.socket.get(`/api/v1/litters/list`, function gotResponse(body, response) {
-        console.log('Сервер litters/list ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервер litters/list ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
 
       // Принимаем данные по событию list-*
       await io.socket.on('list-litter', (data) => {
         this.litters = data;
-        console.log('this.litters: ', this.litters);
+        // console.log('this.litters: ', this.litters);
       });
 
 
@@ -253,7 +275,7 @@ parasails.registerPage('litters-home', {
         this.litters.map(litter => {
           (litter.id === id) ? litter.cover = index : litter;
         });
-        console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
     },
 
@@ -513,7 +535,7 @@ parasails.registerPage('litters-home', {
       // console.log(file);
       // console.log('fileList:: ** :');
       // console.log(fileList);
-      this.ruleForm.fileList=[];
+      this.ruleForm.fileList = [];
       this.ruleForm.fileList = _.pluck(fileList, 'response');
       // this.ruleForm.fileList = _.remove(this.ruleForm.fileList, file);
       // console.log(' Remove this.ruleForm.fileList:: ',  this.ruleForm.fileList);
@@ -527,10 +549,10 @@ parasails.registerPage('litters-home', {
       // console.log(file);
       // console.log('fileList:: ** :');
       // console.log(fileList);
-      this.ruleForm.fileListPuppies=[];
+      this.ruleForm.fileListPuppies = [];
       this.ruleForm.fileListPuppies = _.pluck(fileList, 'response');
       // this.ruleForm.fileList = _.remove(this.ruleForm.fileList, file);
-      console.log(' Remove this.ruleForm.fileListPuppies: ',  this.ruleForm.fileListPuppies);
+      console.log(' Remove this.ruleForm.fileListPuppies: ', this.ruleForm.fileListPuppies);
 
       // this.ruleForm.fileList.push(fileList);
       // this.ruleForm.fileList = fileList;
@@ -569,11 +591,11 @@ parasails.registerPage('litters-home', {
     // Выбираем всех кобелей
     async sireList() {
       await io.socket.get(`/api/v1/dogs/list-sire`, function gotResponse(body, response) {
-        console.log('Сервис Dogs sire ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервис Dogs sire ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-sire', (data) => {
-        console.log('sires: ', data);
+        // console.log('sires: ', data);
         this.sires = data;
       });
     },
@@ -585,7 +607,7 @@ parasails.registerPage('litters-home', {
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-dam', (data) => {
-        console.log('dams: ', data);
+        // console.log('dams: ', data);
         this.dams = data;
       });
     },
@@ -661,7 +683,7 @@ parasails.registerPage('litters-home', {
       console.log('RESSS:', res);
       // this.litters.images.push({imageSrc : URL.createObjectURL(file.raw)});
       this.ruleForm.fileList.push(res);
-      console.log('this.ruleForm.fileList YYY: ', this.ruleForm.fileList );
+      console.log('this.ruleForm.fileList YYY: ', this.ruleForm.fileList);
     },
 
 
@@ -670,17 +692,32 @@ parasails.registerPage('litters-home', {
       // this.litters.images.push({imageSrc : URL.createObjectURL(file.raw)});
 
       this.ruleForm.fileListPuppies.push(res);
-      console.log('this.ruleForm.fileListPuppies YYY: ', this.ruleForm.fileListPuppies );
+      console.log('this.ruleForm.fileListPuppies YYY: ', this.ruleForm.fileListPuppies);
     },
-
+    // Выбираем все буквы помётов
+    async letterList() {
+      await io.socket.get(`/api/v1/litters/list-letter`, function gotResponse(body, response) {
+        console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-letter', (data) => {
+        console.log('letter: ', data);
+        this.letters = data;
+      });
+    },
+    fixLetter() {
+      // console.log('this.letters: ', this.letters);
+      return (_.find(this.letters, letter => letter.letter === this.ruleForm.letter.toUpperCase())) ? this.mesError(text = 'Такой помёт уже существует. Измените букву помёта.') :
+        this.ruleForm.letter;
+    },
     async addLitter() {
       // this.$refs.upload.submit();
-      console.log('this.ruleForm.fileList: ****||| ', this.ruleForm.fileList);
+      // console.log('this.ruleForm.fileList: ****||| ', this.ruleForm.fileList);
       this.openFullScreen();
       let data = {
         fileList: this.ruleForm.fileList,
         puppies: this.ruleForm.fileListPuppies,
-        letter: this.ruleForm.letter,
+        letter: this.fixLetter(),
         dam: this.getDamArr(),
         sire: this.getSireArr(),
         born: JSON.stringify(this.ruleForm.born),
@@ -733,14 +770,6 @@ parasails.registerPage('litters-home', {
       arr.push(this.ruleForm.dam);
       return arr;
     },
-
-
-    // handleProgress(ev, rawFile) {
-    //   /* let file = this.getFile(rawFile);
-    //    this.onProgress(ev, file, this.uploadFiles);
-    //    file.status = 'uploading';
-    //    file.percentage = ev.percent || 0;*/
-    // },
 
 
     mesSuccess(text = '') {
@@ -807,20 +836,20 @@ parasails.registerPage('litters-home', {
       //   loading.close();
       // }, 2000);
     },
-    showSlider(litterId,indexPhoto){
-      this.dialogTableVisible= true;
+    showSlider(litterId, indexPhoto) {
+      this.dialogTableVisible = true;
       this.litterId = litterId;
-      this.indexSlide=indexPhoto;
+      this.indexSlide = indexPhoto;
       this.handlerSetActiveSlider();
-      console.log('this.litterId: ',this.litterId);
-      console.log('this.indexPhoto: ',this.indexPhoto);
+      console.log('this.litterId: ', this.litterId);
+      console.log('this.indexPhoto: ', this.indexPhoto);
     },
 
-    handlerCloseDialogSlider(){
-      this.indexPhoto=0;
-      this.autoplay=false;
+    handlerCloseDialogSlider() {
+      this.indexPhoto = 0;
+      this.autoplay = false;
     },
-    handlerSetActiveSlider(){
+    handlerSetActiveSlider() {
       return this.indexPhoto;
     }
   }
