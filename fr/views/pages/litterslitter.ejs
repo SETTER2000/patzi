@@ -47,61 +47,29 @@
     <!--<el-button type="primary" @click="dialogTableVisible = false" ><%= __('Close') %></el-button>-->
     <!--</span>-->
   </el-dialog>
-  <% /* Диалоговое окно Слайдер картинок */ %>
-  <!--  <el-dialog
-    title="<%= __('Parents') %>"
-    :visible.sync="dialogTableVisible"
-    width="60%"
-    center>
-    <div class="d-flex justify-content-end">
-      <el-switch
-        style="display: block"
-        v-model="autoplay"
-        active-color="#13ce66"
-        inactive-color="#ff4949"
-        active-text="Autoplay"
-        inactive-text="Disable ">
-      </el-switch>
-    </div>
-    &lt;!&ndash;<span>It should be noted that the content will not be aligned in center by default</span>&ndash;&gt;
-    <div class="block">
-      &lt;!&ndash;<span class="demonstration">Switch when indicator is clicked</span>&ndash;&gt;
-      <el-carousel :autoplay="autoplay" trigger="click" height="80vh">
-        <el-carousel-item v-for="(item, key, index) in photos" :key="index">
-          <h3 class="small text-center">{{ item.label }}</h3>
-          <div class="my-flex-cont">
-            <div class="my-flex-box">
-              <img :src="item.imageSrc" class="gallery" alt="">
-            </div>
-          </div>
-        </el-carousel-item>
-      </el-carousel>
-    </div>
-    &lt;!&ndash;<span slot="footer" class="dialog-footer">&ndash;&gt;
-    &lt;!&ndash;<el-button type="primary" @click="dialogTableVisible = false" ><%= __('Close') %></el-button>&ndash;&gt;
-    &lt;!&ndash;</span>&ndash;&gt;
-  </el-dialog>-->
+  <% /* Диалоговое окно Редактор */ %>
+  <el-dialog  width="30%" :visible.sync="dialogFormVisible">
+    <el-form :label-position="'top'"
+      :model="ruleForm" :rules="rules" ref="ruleForm"
+      label-width="120px" class="demo-ruleForm">
+      <el-form-item label="<%= __('Name photoshoot puppies') %>" prop="sessionName">
+        <el-input  maxlength="60" autofocus="true" show-word-limit v-model="ruleForm.sessionName" ></el-input>
+      </el-form-item>
+      <!--<el-form-item label="Zones" :label-width="formLabelWidth">-->
+        <!--<el-select v-model="form.region" placeholder="Please select a zone">-->
+          <!--<el-option label="Zone No.1" value="shanghai"></el-option>-->
+          <!--<el-option label="Zone No.2" value="beijing"></el-option>-->
+        <!--</el-select>-->
+      <!--</el-form-item>-->
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false"><%= __('Cancel') %></el-button>
+    <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Save') %></el-button>
+  </span>
+  </el-dialog>
 
 
-  <!--  <el-dialog title="<%= __('Portfolio') %>" :visible.sync="dialogTableVisible">
-    <template>
-      <el-carousel indicator-position="outside" height="65vh">
-        <el-carousel-item v-for="(item, index) of items" :key="index">
 
-          <div class="d-flex justify-content-center align-items-center">
-
-              <img :src="item.src" class="img-fluid height"
-                   alt="A generic square placeholder image with rounded corners in a figure.">
-
-
-          </div>
-
-          &lt;!&ndash;<el-image :src="item.src" class="img-fluid" :fit="fits"></el-image>&ndash;&gt;
-
-        </el-carousel-item>
-      </el-carousel>
-    </template>
-  </el-dialog>-->
 
   <% /* start banner Area */ %>
   <section class="banner-area relative">
@@ -130,14 +98,16 @@
           </div>
           <div class="col-md-6">
             <div class="text-right">
-            <el-button-group v-for="(lett, index) in letters" :key="lett.id">
+              <el-button-group v-for="(lett, index) in letters" :key="lett.id">
 
-              <el-button v-if="lett.letter === litter.letter" @click="goTo(lett.link)" type="warning" size="mini" >
-                {{lett.letter}}</el-button>
-              <el-button v-else @click="goTo(lett.letter)"  size="mini" >
-                {{lett.letter}}</el-button>
-            </el-button-group>
-          </div>
+                <el-button v-if="lett.letter === litter.letter" @click="goTo(lett.link)" type="warning" size="mini">
+                  {{lett.letter}}
+                </el-button>
+                <el-button v-else @click="goTo(lett.letter)" size="mini">
+                  {{lett.letter}}
+                </el-button>
+              </el-button-group>
+            </div>
           </div>
         </div>
         <div class="row">
@@ -205,7 +175,25 @@
       <el-divider content-position="left"><%= __('Puppies this litter') %>.
         <span v-if="litter.puppies">{{litter.bornNt}}</span>
         <span v-else><%= __('It has not happened yet. We wait...') %></span></el-divider>
-      <em class="text-center"></em>
+      <el-row :gutter="20">
+        <el-col :span="10" :offset="7"><h5 class="text-center"> {{litter.sessionName}}</h5></el-col>
+        <el-col :span="1" :offset="6">
+          <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
+            <el-dropdown @command="handleCommand">
+                <span class="el-dropdown-link">
+                  <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
+                </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item icon="el-icon-camera" command="a">
+                  <%= __('Change photo session name') %>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+        </el-col>
+      </el-row>
+
+
       <div class="card-body">
         <!--<h4 class="card-title"> {{litter.bornNt}}</h4>-->
         <div class="card-text"><p>{{litter.subtitle}}</p></div>
