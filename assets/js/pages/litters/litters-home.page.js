@@ -722,6 +722,7 @@ parasails.registerPage('litters-home', {
         sire: this.getSireArr(),
         born: JSON.stringify(this.ruleForm.born),
         description: this.ruleForm.description,
+        sessionName: this.ruleForm.sessionName,
       };
 
       io.socket.post('/api/v1/litters/create-litter', data, (data, jwRes) => {

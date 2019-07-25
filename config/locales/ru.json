@@ -15,6 +15,7 @@
 	"Choose": "Выберите",
 	"Affectionate name": "Ласковое имя",
 	"Type": "Тип",
+	"Change photo session name": "Изменить название фотосессии",
 	"DoB": "ДР",
 	"Nickname": "Кличка",
 	"How do you call the house, a nickname, affectionate name": "Как называете дома, прозвище, ласковое имя",
@@ -504,5 +505,7 @@
 	"dam": "dam",
 	"litters": "litters",
 	"litter": "litter",
-	"home": "home"
+	"home": "home",
+	"Name photoshoot puppies": "Name photoshoot puppies",
+	"Photo shoot title": "Photo shoot title"
 }

@@ -6,8 +6,50 @@ parasails.registerPage('litter', {
     dialogTableVisible: false,
     autoplay: true,
     isAfterDate: false,
+    dialogFormVisible: false,
+    ruleForm: {
+      sire: '',
+      dam: '',
+      label: '',
+      data: [],
+      fileList: [],
+      fileListPuppies: [],
+      file: []
+    },
+    rules: {
+      // born: [
+      //   {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
+      // ],
+      // kennel: [
+      //   {required: true, message: 'Please select kennel name', trigger: 'change'}
+      // ],
+      sessionName: [
+        {required: true, message: 'Please enter the name of the photo session', trigger: 'blur'},
+        {min: 1, max: 60, message: 'Length should be 1 to 60', trigger: 'blur'}
+      ],
+      // growth: [
+      //   {required: true, message: 'Please input height dog', trigger: 'change'},
+      //   // {min: 20, max: 40, message: 'Height should be 20 to 40 cm', trigger: 'change'}
+      // ],
+      // gender: [
+      //   {required: true, message: 'Please select a dog gender.', trigger: 'change'}
+      // ],
+    },
+    form: {
+      name: '',
+      region: '',
+      date1: '',
+      date2: '',
+      delivery: false,
+      type: [],
+      resource: '',
+      desc: ''
+    },
+    formLabelWidth: '120px',
     url: null,
+    activeIndex: '1',
     fit: 'cover',
+    tabPosition: 'right',
     indexPhoto: 0,
     letters: [],
     dic: [
@@ -15,10 +57,10 @@ parasails.registerPage('litter', {
         warnNoDogs: `There is no possibility to create a litter, while at least one pair of dogs is missing.`,
         warnNoKennel: `At the moment there is no nursery in the database.
          You should create at least one kennel to start with to add a dog.`,
-        text400Err: 'Error. Could not create! ',
-        text500Err: 'Server Error! Unable to create. ',
+        text400Err: 'Error. Could not update! ',
+        text500Err: 'Server Error! Unable to update. ',
         text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
-        success: 'Congratulations! Object successfully created. ',
+        success: 'Congratulations! Object successfully updated. ',
         selectGender: 'Please select a dog gender.',
         limitExceededText: `The limit is: `,
         limitExceededText2: `you selected `,
@@ -228,5 +270,114 @@ parasails.registerPage('litter', {
     handlerSetActiveSlider() {
       return this.indexPhoto;
     },
+
+
+    /* Открывает диалоговое окно редактирования*/
+    handleCommand(command) {
+      switch (command) {
+        case 'a':
+          this.dialogFormVisible = true;
+          break;
+      }
+      // this.$message('Нажат элемент: ' + command);
+    },
+
+
+    async submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.updateLitter();
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+
+    async updateLitter() {
+      // this.$refs.upload.submit();
+      // console.log('this.ruleForm.fileList: ****||| ', this.ruleForm.fileList);
+      // this.openFullScreen();
+      let data = {
+        // fileList: this.ruleForm.sessionName,
+        // puppies: this.ruleForm.fileListPuppies,
+        // letter: this.fixLetter(),
+        // dam: this.getDamArr(),
+        // sire: this.getSireArr(),
+        // born: JSON.stringify(this.ruleForm.born),
+        // description: this.ruleForm.description,
+        id: this.litter.id,
+        sessionName: this.ruleForm.sessionName,
+      };
+      console.log('DAEEE: ', data);
+      io.socket.post('/api/v1/litters/update-session-name', data, (dataRes, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+
+        this.centerDialogAdded = false;
+        // this.loading.close();
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          this.litter.sessionName = data.sessionName;
+          // this.ruleForm.fileList = [];
+          //           // this.ruleForm.list = [];
+          //           // this.ruleForm.imageUrl = '';
+          // this.getList();
+        }
+      });
+    },
+
+
+    mesError(text = '') {
+      this.$notify.error({
+        title: 'Error',
+        message: text,
+        offset: 100,
+      });
+    },
+
+    mesSuccess(text = '') {
+      this.$notify({
+        title: 'Success',
+        message: text,
+        offset: 100,
+        type: 'success'
+      });
+    },
+
+
+    mesWarning(text = '') {
+      this.$notify({
+        title: 'Warning',
+        message: text,
+        offset: 100,
+        type: 'warning'
+      });
+    },
+
+
+    mesInfo(text = '') {
+      this.$notify.info({
+        title: 'Info',
+        message: text,
+        offset: 100,
+      });
+    },
+
+    resetForm(formName) {
+      // this.$refs.upload.clearFiles();
+      this.dialogFormVisible = false;
+      this.$refs[formName].resetFields();
+      this.ruleForm.fileList = [];
+      this.ruleForm.fileListPuppies = [];
+      this.ruleForm.list = [];
+      this.ruleForm.imageUrl = '';
+
+    },
+
+
   },
 });

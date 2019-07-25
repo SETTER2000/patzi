@@ -36,7 +36,13 @@ module.exports = {
       type: 'string',
       example: 'Прекрасный звёздный помёт!',
       description: 'Описание помёта.'
+    },
 
+
+    sessionName: {
+      type: 'string',
+      example: 'Два дня от роду',
+      description: 'Название фотосессии для щенков.'
     },
 
 
@@ -128,6 +134,7 @@ module.exports = {
       born: moment.tz(born, 'Europe/Moscow').format(),
       owner: this.req.me.id,
       description: inputs.description,
+      sessionName: inputs.sessionName.slice(0,60),
     }).fetch();
 
 

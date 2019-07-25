@@ -44,6 +44,13 @@ module.exports = {
     },
 
 
+
+    sessionName: {
+      type: 'string',
+      example: 'Два дня от роду',
+      description: 'Название фотосессии для щенков.'
+    },
+
     cover: {
       type: 'number',
       defaultsTo: 0,

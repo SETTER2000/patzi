@@ -112,6 +112,7 @@ module.exports.routes = {
   'GET     /api/v1/litters/list': {action: 'litters/list'},
   'PUT     /api/v1/litters/update-cover-album': { action: 'litters/update-cover-album', csrf: false },
   'GET     /api/v1/litters/list-letter': { action: 'litters/list-letter'},
+  'POST   /api/v1/litters/update-session-name': { action: 'litters/update-session-name', csrf: false },
 
 
 
