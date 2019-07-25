@@ -274,6 +274,21 @@
             </el-form-item>
           </template>
 
+
+
+          <% /* Название фотосессии щенков NEW */ %>
+          <template>
+            <el-form-item label="<%= __('Name photoshoot puppies') %>" prop="sessionName">
+              <el-input
+                placeholder="<%= __('Photo shoot title') %>"
+                v-model="ruleForm.sessionName"
+                maxlength="60"
+                show-word-limit
+              >
+              </el-input>
+            </el-form-item>
+          </template>
+
           <% /* Кнопки управления */ %>
           <div class="my-3 pt-4">
             <el-form-item>
