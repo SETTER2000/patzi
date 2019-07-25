@@ -501,11 +501,7 @@
 	"Stamp": "Клеймо",
 	"Stamp Dog number in the registry.": "Клеймо. Номер собаки в реестре.",
 	"Color": "Цвет",
-	"sire": "sire",
-	"dam": "dam",
-	"litters": "litters",
-	"litter": "litter",
-	"home": "home",
-	"Name photoshoot puppies": "Name photoshoot puppies",
-	"Photo shoot title": "Photo shoot title"
+	"Name photos": "Название фотосессии",
+	"Photo shoot title": "Photo shoot title",
+	"Name photoshoot puppies": "Name photoshoot puppies"
 }

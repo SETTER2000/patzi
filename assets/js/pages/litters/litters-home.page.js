@@ -32,6 +32,7 @@ parasails.registerPage('litters-home', {
     ruleForm: {
       sire: '',
       dam: '',
+      sessionName:'',
       label: '',
       data: [],
       fileList: [],
@@ -41,6 +42,18 @@ parasails.registerPage('litters-home', {
     rules: {
       born: [
         {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
+      ],
+      sessionName: [
+        {required: true, message: 'Please enter the name of the photo session', trigger: 'blur'},
+        {min: 1, max: 60, message: 'Length should be 1 to 60', trigger: 'blur'}
+      ],
+      dam: [
+        {required: true, message: 'Please enter the name of the dam dog', trigger: 'blur'},
+        {min: 2, max: 60, message: 'Length should be 1 to 60', trigger: 'blur'}
+      ],
+      sire: [
+        {required: true, message: 'Please enter the name of the sire dog', trigger: 'blur'},
+        {min: 2, max: 60, message: 'Length should be 1 to 60', trigger: 'blur'}
       ],
       // kennel: [
       //   {required: true, message: 'Please select kennel name', trigger: 'change'}
