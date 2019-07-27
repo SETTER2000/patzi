@@ -363,7 +363,7 @@
               <li v-for="(im ,index, key) in litter.images" :key="index + '-lst'">
                 <keep-alive>
                 <div v-if="im.imageSrc">
-                  <a :href="im.detail">
+                  <a :href="im.detail" title="<%= __('More about litter') %>">
                     <el-image :src="im.imageSrc" v-if="index===litter.cover" :lazy="true">
                       <div slot="placeholder" class="image-slot" style="height:500px;">
                         Loading<span class="dot">...</span>
