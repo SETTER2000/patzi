@@ -158,7 +158,7 @@
                 action="/api/v1/files/upload"
                 list-type="picture-card"
                 multiple
-                ref="upload"
+                ref="uploadPuppies"
                 :on-preview="handlePictureCardPreview"
                 :before-upload="beforeUpload"
                 :limit="limit"
@@ -402,12 +402,23 @@
 
           <% /* Кнопки: Отец, Мать*/ %>
           <div class="flex-container buttons wrap  mt-3">
-            <el-link class="mr-lg-3" type="danger" icon="el-icon-female" @click="goTo(`/dogs/dog/${litter.dam[0]}`)" >
+            <el-tooltip class="item" effect="dark" content="<%= __('Dam') %>" placement="top">
+            <el-link v-if="litter.dam[1]" class="mr-lg-3" type="danger" icon="el-icon-female" @click="goTo(`/dogs/dog/${litter.dam[0]}`)" >
               {{litter.dam[1]}}
-            </el-link>&nbsp;
-             <el-link class="mr-lg-3" type="danger" icon="el-icon-male" @click="goTo(`/dogs/dog/${litter.sire[0]}`)" >
+            </el-link>
+            <el-link v-else disabled  class="mr-lg-3" type="danger" icon="el-icon-female" >
+             {{noBase}}
+            </el-link>
+            </el-tooltip>
+            &nbsp;
+            <el-tooltip class="item" effect="dark" content="<%= __('Sire') %>" placement="top">
+             <el-link v-if="litter.sire[1]" class="mr-lg-3" type="danger" icon="el-icon-male" @click="goTo(`/dogs/dog/${litter.sire[0]}`)" >
               {{litter.sire[1]}}
             </el-link>
+            <el-link v-else disabled  class="mr-lg-3" type="danger" icon="el-icon-male"  >
+              {{noBase}}
+            </el-link>
+            </el-tooltip>
             <!--<i class="ti-heart mx-2" style="font-size: 1.2rem; color: red"></i>-->
 
             <!--<i class="el-icon-female" style="font-size: 1.2rem; color: red"></i>-->
