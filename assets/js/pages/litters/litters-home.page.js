@@ -6,6 +6,7 @@ parasails.registerPage('litters-home', {
     litters: [],
     letters: [],
     dams: [],
+    noBase:'нет в базе',
     dialogTableVisible: false,
     autoplay: true,
     sires: [],
@@ -23,7 +24,7 @@ parasails.registerPage('litters-home', {
     dialogVisible: false,
     selectedLitter: undefined,
     imageUrl: '',
-    sire: '',
+    // sire: '',
     dam: '',
     sizeLess: 500,
     innerVisible: false,
@@ -47,14 +48,15 @@ parasails.registerPage('litters-home', {
         {required: true, message: 'Please enter the name of the photo session', trigger: 'blur'},
         {min: 1, max: 60, message: 'Length should be 1 to 60', trigger: 'blur'}
       ],
-      dam: [
-        {required: true, message: 'Please enter the name of the dam dog', trigger: 'blur'},
-        {min: 2, max: 60, message: 'Length should be 1 to 60', trigger: 'blur'}
-      ],
-      sire: [
-        {required: true, message: 'Please enter the name of the sire dog', trigger: 'blur'},
-        {min: 2, max: 60, message: 'Length should be 1 to 60', trigger: 'blur'}
-      ],
+      // Родители не обязательны к заполнению, потому что их может не быть в базе.
+      // dam: [
+      //   {required: true, message: 'Please enter the name of the dam dog', trigger: 'blur'},
+      //   {min: 2, max: 60, message: 'Length should be 1 to 60', trigger: 'blur'}
+      // ],
+      // sire: [
+      //   {required: true, message: 'Please enter the name of the sire dog', trigger: 'blur'},
+      //   {min: 2, max: 60, message: 'Length should be 1 to 60', trigger: 'blur'}
+      // ],
       // kennel: [
       //   {required: true, message: 'Please select kennel name', trigger: 'change'}
       // ],
@@ -750,8 +752,8 @@ parasails.registerPage('litters-home', {
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           // this.ruleForm.fileList = [];
-          //           // this.ruleForm.list = [];
-          //           // this.ruleForm.imageUrl = '';
+                    // this.ruleForm.list = [];
+                    // this.ruleForm.imageUrl = '';
           this.getList();
         }
       });
@@ -826,6 +828,7 @@ parasails.registerPage('litters-home', {
 
     resetForm(formName) {
       this.$refs.upload.clearFiles();
+      this.$refs.uploadPuppies.clearFiles();
       this.$refs[formName].resetFields();
       this.ruleForm.fileList = [];
       this.ruleForm.fileListPuppies = [];
