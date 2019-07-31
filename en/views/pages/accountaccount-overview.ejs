@@ -1,7 +1,31 @@
 <div id="account-overview" class="content" v-cloak>
   <div class="container">
-    <h1><%= __('My account') %></h1>
+    <div class="row">
+      <div class="col">    <h1><%= __('My account') %>
+          <!--<small v-if="group" class="text-success">(status: {{group}})</small>-->
+          <!--<small v-else class="text-success">(status: {{group}})</small>-->
+        </h1></div>
+      <div class="col-sm-2 ">
+        <div v-if="group" class="alert  text-center" :class="[group === 'user'  ? 'alert-secondary' : group === 'breeder' ? 'alert-success' : group === 'owner' ? 'alert-warning' : '']" role="alert">
+          <h4 :class="[group === 'user'  ? 'text-secondary' : group === 'breeder' ? 'text-success' : group === 'owner' ? 'text-warning' : group === 'admin' ? 'text-warning' : '']">status: {{group}}</h4>
+        </div>
+        <div v-else class="alertalert-light text-center" role="alert">
+          status: {{group}}
+        </div>
+      </div>
+    </div>
+
     <hr/>
+    <!--<div class="row">-->
+      <!--<div class="col-sm-4 offset-sm-4">-->
+        <!--<div v-if="group" class="alert  text-center" :class="[group === 'user'  ? 'alert-secondary' : group === 'breeder' ? 'alert-success' : group === 'owner' ? 'alert-warning' : '']" role="alert">-->
+         <!--<h4 :class="[group === 'user'  ? 'text-secondary' : group === 'breeder' ? 'text-success' : group === 'owner' ? 'text-warning' : '']">status: {{group}}</h4>-->
+        <!--</div>-->
+        <!--<div v-else class="alertalert-light text-center" role="alert">-->
+          <!--status: {{group}}-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
     <div class="row mb-3">
       <div class="col-sm-6">
         <h4>Personal information</h4>
