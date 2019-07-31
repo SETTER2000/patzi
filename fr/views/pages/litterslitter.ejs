@@ -136,7 +136,7 @@
                 <el-rate
                   v-model="ratio"
                   :colors="colors"
-                  @change="changeRatio()"
+                  @change="changeRatio(litter.letter.toUpperCase())"
                   show-score
                   text-color="#ff9900"
                   score-template=" <%= __('points') %> {value} "
