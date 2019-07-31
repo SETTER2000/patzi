@@ -85,16 +85,25 @@ parasails.registerPage('litter', {
       }]
     ],
     fits: 'cover',
-    items: [
-      {label: 'Poale Ell Adam', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
-      {label: 'Poale Ell Bell', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
-      {label: 'Poale Ell Bazhen', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Adam-10m.jpg'},
-      {label: 'Poale Ell Barthalamew', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018.jpg'},
-    ],
+    // items: [
+    //   {label: 'Poale Ell Adam', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
+    //   {label: 'Poale Ell Bell', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
+    //   {label: 'Poale Ell Bazhen', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Adam-10m.jpg'},
+    //   {label: 'Poale Ell Barthalamew', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018.jpg'},
+    // ],
     litters: [],
     ratio: null,
     ratios: [],
-    colors: ['#99A9BF', '#F7BA2A', '#FF9900'] // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+    colors: ['#99A9BF', '#F7BA2A', '#FF9900'], // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+    // ratioMeTestArr:[
+    //   {litter:2, letter:'A'},
+    //   {litter:4, letter:'A'},
+    //   {litter:4, letter:'A'},
+    //   {litter:5, letter:'A'},
+    //   {litter:5, letter:'B'},
+    //   {litter:2, letter:'B'},
+    //   {litter:1, letter:'B'}
+    // ]
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -104,7 +113,14 @@ parasails.registerPage('litter', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     this.isAfter();
-    this.ratio = _.last(_.pluck(this.me.ratio, 'litter'));
+    // this.ratio = _.last(_.pluck(this.me.ratio, 'litter'));
+   // console.log('ratioTest: ', this.ratioMeTestArr.filter(rat=>rat.letter === this.litter.letter));
+   // console.log('LAST:', _.last( this.ratioMeTestArr.filter(rat=>rat.letter === this.litter.letter)));
+    // Выбираем значение рейтинга для этого помёта
+    // this.ratio = _.last( this.ratioMeTestArr.filter(rat=>rat.letter === this.litter.letter)).litter;
+    this.ratio = _.last( _.pluck(this.me.ratio.filter(rat=>rat.letter === this.litter.letter),'litter'));
+    // console.log('this.ratio: ', this.ratio);
+    // this.ratio = 1;
     // Кобели
     this.letterList();
 
@@ -171,20 +187,25 @@ parasails.registerPage('litter', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
 
-    changeRatio: function () {
+    changeRatio: function (letter) {
+
+      // console.log('LAST: ', _.last(_.pluck(this.me.ratio, 'letter')));
       /**
        * Выбираем все объекты со свойством litter,
        * т.е. по сути все объекты с оценками принадлежащие к данному помёту и данной коллекции.
        */
-      let ratio = this.me.ratio.filter(rat => {
-        return !_.isNull(rat.litter);
-      });
-
-      // Выбираем всё остальное не касающиеся данной коллекции,
-      // для формирования нового массива всех оценок.
-      let ratioNew = this.me.ratio.filter(rat => {
-        !_.isElement(rat.litter);
-      });
+      // let ratArr = _.isObject(this.me.ratio) ? [this.me.ratio] : this.me.ratio;
+      // let ratio = ratArr.filter(rat => {
+      //   // return !_.isNull(rat.litter);
+      //   return letter === rat.letter
+      // });
+      // console.log('RATIO: ', ratio);
+      // // Выбираем всё остальное не касающиеся данной коллекции,
+      // // для формирования нового массива всех оценок.
+      // let ratioNew = ratArr.filter(rat => {
+      //   // !_.isElement(rat.litter);
+      //   return letter !== rat.letter
+      // });
 
       /**
        * Если длинна массива больше 5 то убираем старую запись
@@ -192,37 +213,58 @@ parasails.registerPage('litter', {
        * последним пяти оценкам. Это скорее для статистики нежели для представления.
        * @type {Array}
        */
-      ratio = (!_.isArray(ratio)) ? [] : ratio.length > 6 ? ratio.slice(1) : ratio;
+      // ratio = (!_.isArray(ratio)) ? [] : ratio.length > 6 ? ratio.slice(1) : ratio;
+      // console.log('ratio x: ', ratio);
       // Добавляем новую оценку в формирующийся массив оценок данной коллекции
-      ratio.push({litter: this.ratio});
+      // ratio.push({litter: this.ratio, letter: letter});
+      // console.log('ratio PUSH: ', ratio);
       // Объединяем новый массив оценок данной коллекции с другими оценками по другим коллекциям
-      ratioNew.push(ratio);
+      // ratioNew.push(ratio);
+      // console.log('ratioNew:' , ratioNew);
       // Обнуляем данные пользователя по всем рейтингам
-      this.ratios = '';
+      // this.ratios = '';
       // Вносим новые, обновлённые данные по рейтингам
-      this.ratios = ratioNew[0];
+      // this.ratios = ratioNew[1];
+
       // Отправляем на сервер для обновления свойства ratio у текущего пользователя
       // Все оценки поставленные пользователем, хранятся в коллекции User.ratio
+      // let arr = this.me.ratio;
+      // console.log('this.me.ratio: ', this.me.ratio);
+       this.me.ratio.push({litter: this.ratio, letter: letter});
+      // let ratArr = _.isObject(this.me.ratio) ? [this.me.ratio] : this.me.ratio;
+      // this.ratios = ratArr;
+      //   console.log('RATIO NEW: ', this.ratios);
       this.updateRatioList();
       //  Выводим благодарность на монитор
-      this.$message({
-        message: 'Спасибо за оценку. Ваш голос был учтён!',
-        type: 'success'
-      });
+
     },
 
     // Обновляем рейтинг
     async updateRatioList() {
       let data = {
-        ratios: this.ratios
+        ratios:  this.me.ratio
       };
+      let sel = this;
+      console.log('Данные отправляемые на сервер: ', data);
       await io.socket.post(`/api/v1/users/update-ratio`, data, function gotResponse(body, response) {
         console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
+       if(response.statusCode === 200){
+         sel.$message({
+           message: 'Спасибо за оценку. Ваш голос был учтён!',
+           type: 'success'
+         });
+       } else{
+         sel.$message({
+           message: `Произошла ошибка ${response.statusCode}! Рейтинг не засчитан.`,
+           type: 'error'
+         });
+       }
+
       });
       // Принимаем данные по событию list-*
       await io.socket.on('user-ratio', (data) => {
         console.log('server return ratios: ', data);
-        this.ratios = data;
+       // this.ratios = data;
         console.log('this.ratio: ', this.ratio);
       });
     },

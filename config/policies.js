@@ -18,8 +18,10 @@ module.exports.policies = {
   // Bypass the `is-logged-in` policy for:
   'groups/*':'is-super-admin',
   'users/*':'is-super-admin',
+  'users/update-ratio':'isUserOrisOwnerOrisBreeder',
   'kennels/*':'isAdminOrIsSuperAdmin',
   // 'kennels/*':['is-super-admin','is-admin'],
+  'users/list-status':true,
   'entrance/*': true,
   'account/logout': true,
   'message/message-mailgun': true,

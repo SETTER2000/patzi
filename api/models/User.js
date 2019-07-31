@@ -260,8 +260,8 @@ It just means they have a customer entry in Stripe, which might or might not hav
 
     ratio: {
       type: 'ref',
-      defaultsTo:[],
-      example:[{litter:[1,2,5]},{dog:[4,3,5]}],
+      defaultsTo:[{litter:0, letter:'A'}],
+      // example:[{litter:0, letter:'A'}],
       description: 'Массив голосований'
     },
 

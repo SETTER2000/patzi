@@ -141,6 +141,7 @@ module.exports.routes = {
   'GET    /api/v1/users/:id': {action: 'users/download-photo'},
   'DELETE /users/destroy-user-group': {action: 'users/destroy-user-group', csrf: false},
   'POST   /api/v1/users/update-ratio': { action: 'users/update-ratio', csrf: false },
+  'GET    /api/v1/users/status': { action: 'users/list-status'},
 
 
 

@@ -1,19 +1,16 @@
 module.exports = {
 
 
-  friendlyName: 'Update ratio',
+  friendlyName: 'Status',
 
 
-  description: 'Массив содержит все голосования пользователя.',
+  description: 'Status users.',
 
 
   inputs: {
-    ratios: {
-      type: 'ref',
-      example: [{litter: [1, 2, 5]}, {dog: [4, 3, 5]}],
-      description: 'Массив голосований'
-    },
+
   },
+
 
   exits: {
     success: {
@@ -36,33 +33,34 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const req = this.req;
-
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
     }
 
+
+    // // Бибилиотека Node.js
+    // const url = require('url');
+    // const moment = require('moment');
+    // // Устанавливаем для пользователя его локаль. Для соответствующего отображения даты.
+    // moment.locale(this.req.me.preferredLocale);
+
+    // Have the socket which made the request join the "user" room.
+    // Подключить сокет, который сделал запрос, к комнате «user».
     await sails.sockets.join(req, 'user');
-    console.log('inputs.ratios:', inputs.ratios);
-
-    //
-    // let ratio = inputs.ratios.filter(rat => {
-    //   // return !_.isNull(rat.litter);
-    //   return letter === rat.letter
-    // });
 
 
-    data = {ratio: inputs.ratios};
-
-    await User.updateOne({id: req.me.id}).set(data);
+    let foundUser = await User.findOne(req.me).populate('groups');
 
 
-    let user = await User.findOne({id: req.me.id});
+   let  status = _.last(_.pluck(foundUser.groups, 'label'));
 
-    console.log('USER return ratio update: ', user.ratio);
+   console.log('STATUS: ', status);
 
-    await sails.sockets.broadcast('user', 'user-ratio', user.ratio);
-
+    await sails.sockets.broadcast('user', 'list-status', status);
+    // Respond with view.
     return exits.success();
   }
+
+
 };
