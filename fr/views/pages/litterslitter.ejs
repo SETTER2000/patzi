@@ -47,19 +47,21 @@
     <!--<el-button type="primary" @click="dialogTableVisible = false" ><%= __('Close') %></el-button>-->
     <!--</span>-->
   </el-dialog>
-  <% /* Диалоговое окно Редактор */ %>
-  <el-dialog  width="30%" :visible.sync="dialogFormVisible">
+  <% /* Диалоговое окно Редактор названия фотосессии*/ %>
+  <el-dialog title="<%= __('Photo Shoot Editor') %>" width="30%" :visible.sync="dialogFormVisible">
     <el-form :label-position="'top'"
-      :model="ruleForm" :rules="rules" ref="ruleForm"
-      label-width="120px" class="demo-ruleForm">
+             :model="ruleForm" :rules="rules" ref="ruleForm"
+             label-width="120px" class="demo-ruleForm">
+      <% /*Название фотосессии*/ %>
       <el-form-item label="<%= __('Name photoshoot puppies') %>" prop="sessionName">
-        <el-input  maxlength="60" autofocus="true" show-word-limit v-model="ruleForm.sessionName" ></el-input>
+        <el-input maxlength="60" autofocus="true" show-word-limit v-model="ruleForm.sessionName"></el-input>
       </el-form-item>
+
       <!--<el-form-item label="Zones" :label-width="formLabelWidth">-->
-        <!--<el-select v-model="form.region" placeholder="Please select a zone">-->
-          <!--<el-option label="Zone No.1" value="shanghai"></el-option>-->
-          <!--<el-option label="Zone No.2" value="beijing"></el-option>-->
-        <!--</el-select>-->
+      <!--<el-select v-model="form.region" placeholder="Please select a zone">-->
+      <!--<el-option label="Zone No.1" value="shanghai"></el-option>-->
+      <!--<el-option label="Zone No.2" value="beijing"></el-option>-->
+      <!--</el-select>-->
       <!--</el-form-item>-->
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -68,8 +70,52 @@
   </span>
   </el-dialog>
 
+  <% /* Диалоговое окно Редактор описания фотосессии*/ %>
+  <el-dialog title="<%= __('Photo Shoot Editor') %>" width="30%" :visible.sync="dialogDescriptionPhotoSession">
+    <el-form :label-position="'top'"
+             :model="ruleForm" :rules="rules" ref="ruleForm"
+             label-width="120px" class="demo-ruleForm">
+      <% /*Описание фотосессии*/ %>
+      <el-form-item label="<%= __('Description of the photo shoot') %>" prop="descriptionPhotoSession">
+        <el-input maxlength="300" show-word-limit type="textarea" v-model="ruleForm.descriptionPhotoSession"></el-input>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false"><%= __('Cancel') %></el-button>
+    <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Save') %></el-button>
+  </span>
+  </el-dialog>
 
+  <% /* Диалоговое окно Редактор помёта*/ %>
+  <el-dialog title="<%= __('Litter Editor') %>" width="30%" :visible.sync="dialogEditor">
+    <el-form :label-position="'top'"
+             :model="ruleForm" :rules="rules" ref="ruleForm"
+             label-width="120px" class="demo-ruleForm">
+      <!--<el-form-item label="<%= __('Description') %>" prop="description">-->
+      <!--<el-input maxlength="60" show-word-limit v-model="ruleForm.description"></el-input>-->
+      <!--</el-form-item>-->
+      <% /*Краткое Описание Помёта*/ %>
+      <el-form-item label="<%= __('Short Litter Description') %>" prop="subtitle">
+        <el-input maxlength="100" show-word-limit type="textarea" v-model="ruleForm.subtitle"></el-input>
+      </el-form-item>
 
+      <% /*Описание Помёта*/ %>
+      <el-form-item label="<%= __('Description') %>" prop="description">
+        <el-input maxlength="500" show-word-limit type="textarea" v-model="ruleForm.description"></el-input>
+      </el-form-item>
+
+      <!--<el-form-item label="Zones" :label-width="formLabelWidth">-->
+      <!--<el-select v-model="form.region" placeholder="Please select a zone">-->
+      <!--<el-option label="Zone No.1" value="shanghai"></el-option>-->
+      <!--<el-option label="Zone No.2" value="beijing"></el-option>-->
+      <!--</el-select>-->
+      <!--</el-form-item>-->
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogEditor = false"><%= __('Cancel') %></el-button>
+    <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Save') %></el-button>
+  </span>
+  </el-dialog>
 
   <% /* start banner Area */ %>
   <section class="banner-area relative">
@@ -86,7 +132,8 @@
   <% /* Portfolio Details Area */ %>
   <section class="portfolio_details_area section-gap">
     <div class="container">
-      <div class="portfolio_details_inner">
+
+      <div class="portfolio_details_inner ">
         <div class="row">
           <div class="col-md-6">
             <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -129,8 +176,28 @@
           </div>
 
           <div class="offset-md-1 col-md-5">
-            <div class="portfolio_right_text mt-30">
-              <h4><%= __('Litter') %> {{litter.letter.toUpperCase()}}</h4>
+            <div class="portfolio_right_text ">
+              <el-row :gutter="20">
+                <el-col :span="10"><h4><%= __('Litter') %> {{litter.letter.toUpperCase()}}</h4></el-col>
+                <el-col :span="1" :offset="12">
+                  <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
+                    <el-dropdown @command="handleCommand">
+                <span class="el-dropdown-link">
+                  <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
+                </span>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-edit" command="e">
+                          <%= __('Change description') %>
+                        </el-dropdown-item>
+
+                        <el-dropdown-item icon="el-icon-star-off" command="link">
+                          <%= __('Change album art') %>
+                        </el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </div>
+                </el-col>
+              </el-row>
               <p v-if="litter.subtitle">{{litter.subtitle}}</p>
               <div class="block mb-5">
                 <el-rate
@@ -143,7 +210,6 @@
                 >
                 </el-rate>
               </div>
-
               <ul class="list">
                 <li><span><%= __('Dob') %>
                     <el-tooltip v-if="isAfterDate" class="item" effect="dark"
@@ -167,14 +233,28 @@
                 </li>
 
               </ul>
+              <el-row :gutter="20">
+                <el-col :span="2">
+                  <el-button class="mt-4" @click="goTo('/pedigree')" type="primary" round>Pedigree</el-button>
+                </el-col>
+              </el-row>
             </div>
           </div>
         </div>
-        {{litter.description}}
+        <div class="row ">
+          <div class="col ">
+            {{litter.description}}
+          </div>
+        </div>
+
       </div>
+
+
       <el-divider content-position="left"><%= __('Puppies this litter') %>.
         <span v-if="litter.puppies">{{litter.bornNt}}</span>
         <span v-else><%= __('It has not happened yet. We wait...') %></span></el-divider>
+
+
       <el-row :gutter="20">
         <el-col :span="10" :offset="7"><h5 class="text-center"> {{litter.sessionName}}</h5></el-col>
         <el-col :span="1" :offset="6">
@@ -187,6 +267,9 @@
                 <el-dropdown-item icon="el-icon-camera" command="a">
                   <%= __('Change photo session name') %>
                 </el-dropdown-item>
+                <el-dropdown-item icon="el-icon-camera" command="b">
+                  <%= __('Change photo session description') %>
+                </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -196,8 +279,9 @@
 
       <div class="card-body">
         <!--<h4 class="card-title"> {{litter.bornNt}}</h4>-->
-        <div class="card-text"><p>{{litter.subtitle}}</p></div>
-        <div class="card-text">
+        <% /*Описание фотосессии.*/ %>
+        <div class="card-text"><p>{{litter.descriptionPhotoSession}}</p></div>
+        <div class="card-text mt-sm-4">
 
           <% /*Маленькие фото. Превью.*/ %>
           <ul class="flex-container wrap" v-if="litter.puppies">
