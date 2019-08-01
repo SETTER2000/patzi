@@ -7,7 +7,7 @@
         </h1></div>
       <div class="col-sm-2 ">
         <div v-if="group" class="alert  text-center" :class="[group === 'user'  ? 'alert-secondary' : group === 'breeder' ? 'alert-success' : group === 'owner' ? 'alert-warning' : '']" role="alert">
-          <h4 :class="[group === 'user'  ? 'text-secondary' : group === 'breeder' ? 'text-success' : group === 'owner' ? 'text-warning' : group === 'admin' ? 'text-warning' : '']">status: {{group}}</h4>
+          <h4 :class="[group === 'user'  ? 'text-secondary' : group === 'breeder' ? 'text-success' : group === 'owner' ? 'text-warning' : group === 'admin' ? 'text-warning' : '']"><%= __('Status') %>: {{group}}</h4>
         </div>
         <div v-else class="alertalert-light text-center" role="alert">
           status: {{group}}
