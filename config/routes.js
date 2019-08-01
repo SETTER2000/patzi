@@ -59,6 +59,8 @@ module.exports.routes = {
 
   'GET /kennels/:virtualPageSlug?': {action: 'kennels/view-kennels-home', locals: {currentSection: 'kennels'}},
 
+  'GET /pedigree/:virtualPageSlug?': { action: 'pedigree/view-pedigree-home' },
+
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
@@ -113,7 +115,7 @@ module.exports.routes = {
   'PUT     /api/v1/litters/update-cover-album': { action: 'litters/update-cover-album', csrf: false },
   'GET     /api/v1/litters/list-letter': { action: 'litters/list-letter'},
   'POST   /api/v1/litters/update-session-name': { action: 'litters/update-session-name', csrf: false },
-
+  'POST   /api/v1/litters/update-litter': { action: 'litters/update-litter', csrf: false },
 
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},

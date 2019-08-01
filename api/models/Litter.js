@@ -39,10 +39,26 @@ module.exports = {
 
     subtitle: {
       type: 'string',
+      maxLength:100,
+      example: 'Ожидается звёздный помёт. Прекрасные родословные, чистокровные производители.',
+      description: 'Краткое Описание помёта. Какая то интересная информация.'
+    },
+
+
+    description: {
+      type: 'string',
+      maxLength:500,
       example: 'Ожидается звёздный помёт. Прекрасные родословные, чистокровные производители.',
       description: 'Описание помёта. Какая то интересная информация.'
     },
 
+
+    descriptionPhotoSession: {
+      type: 'string',
+      maxLength:300,
+      example: 'Прекрасным тёплым утром. Крошечные комочки после завтрака.',
+      description: 'Описание фотосессии. Рассказ про то как и где снимали.'
+    },
 
 
     sessionName: {
@@ -50,6 +66,7 @@ module.exports = {
       example: 'Два дня от роду',
       description: 'Название фотосессии для щенков.'
     },
+
 
     cover: {
       type: 'number',
@@ -59,12 +76,14 @@ module.exports = {
                     Обложка альбома.`
     },
 
+
     sire: {
       type: 'ref',
       description: 'Кобель учавствующий в помёте, т.е. отец.',
       defaultsTo: [],
       example: ['5d1f1b04fbe834262cb22c53','Poale Ell Adam']
     },
+
 
     dam: {
       type: 'ref',
@@ -73,45 +92,22 @@ module.exports = {
       example: ['5d1f1b04fbe834262cbb8c53','Sasquehanna Ella']
     },
 
+
     images: {
       type: 'ref',
       defaultsTo: [],
       example: ['5d1f1b04fbe834262cbb8c53','5d1f1b04fbe834262cbb8c54'],
       description: `FD загруженных фотографий родителей`
     },
+
+
     puppies: {
       type: 'ref',
       defaultsTo: [],
       example: ['5d1f1b04fbe834262cbb8c53','5d1f1b04fbe834262cbb8c54'],
       description: `FD загруженных фотографий щенков`
     },
-    // dogs: {
-    //   type: 'ref',
-    //   description: 'Собаки учавствующие в помёте, т.е. родители.',
-    //   defaultsTo: [],
-    //   example: [{id:'5d1f1b04fbe834262cbb8c53',label:'Poale Ell Adam'},{id:'5d1f1b04fbe834262cb22c53',label:'Sasquehanna Ella'}]
-    // },
-    // filename: {
-    //   type: 'string',
-    //   example: 'my-file.jpg',
-    //   description: 'Название файла, который загружается.'
-    // },
-    // imageUploadFD:{
-    //   type:'string',
-    //   description:'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',
-    //   required:true
-    // },
-    // imageUploadMime:{
-    //   type:'string',
-    //   description:'Тип MIME для загруженного изображения.',
-    //   required:true
-    // },
-    // gender:{
-    //   type:'string',
-    //   description:'Половая пренадлежность щенка.',
-    //   example:'dam, sire'
-    //   // required:true
-    // },
+
 
     ourPreliminaryPrice: {
       type: 'number',

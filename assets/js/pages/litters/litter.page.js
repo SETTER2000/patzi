@@ -7,6 +7,8 @@ parasails.registerPage('litter', {
     autoplay: true,
     isAfterDate: false,
     dialogFormVisible: false,
+    dialogDescriptionPhotoSession: false,
+    dialogEditor: false,
     ruleForm: {
       sire: '',
       dam: '',
@@ -114,11 +116,11 @@ parasails.registerPage('litter', {
     _.extend(this, SAILS_LOCALS);
     this.isAfter();
     // this.ratio = _.last(_.pluck(this.me.ratio, 'litter'));
-   // console.log('ratioTest: ', this.ratioMeTestArr.filter(rat=>rat.letter === this.litter.letter));
-   // console.log('LAST:', _.last( this.ratioMeTestArr.filter(rat=>rat.letter === this.litter.letter)));
+    // console.log('ratioTest: ', this.ratioMeTestArr.filter(rat=>rat.letter === this.litter.letter));
+    // console.log('LAST:', _.last( this.ratioMeTestArr.filter(rat=>rat.letter === this.litter.letter)));
     // Выбираем значение рейтинга для этого помёта
     // this.ratio = _.last( this.ratioMeTestArr.filter(rat=>rat.letter === this.litter.letter)).litter;
-    this.ratio = _.last( _.pluck(this.me.ratio.filter(rat=>rat.letter === this.litter.letter),'litter'));
+    this.ratio = _.last(_.pluck(this.me.ratio.filter(rat => rat.letter === this.litter.letter), 'litter'));
     // console.log('this.ratio: ', this.ratio);
     // this.ratio = 1;
     // Кобели
@@ -230,7 +232,7 @@ parasails.registerPage('litter', {
       // Все оценки поставленные пользователем, хранятся в коллекции User.ratio
       // let arr = this.me.ratio;
       // console.log('this.me.ratio: ', this.me.ratio);
-       this.me.ratio.push({litter: this.ratio, letter: letter});
+      this.me.ratio.push({litter: this.ratio, letter: letter});
       // let ratArr = _.isObject(this.me.ratio) ? [this.me.ratio] : this.me.ratio;
       // this.ratios = ratArr;
       //   console.log('RATIO NEW: ', this.ratios);
@@ -242,29 +244,29 @@ parasails.registerPage('litter', {
     // Обновляем рейтинг
     async updateRatioList() {
       let data = {
-        ratios:  this.me.ratio
+        ratios: this.me.ratio
       };
       let sel = this;
       console.log('Данные отправляемые на сервер: ', data);
       await io.socket.post(`/api/v1/users/update-ratio`, data, function gotResponse(body, response) {
         console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
-       if(response.statusCode === 200){
-         sel.$message({
-           message: 'Спасибо за оценку. Ваш голос был учтён!',
-           type: 'success'
-         });
-       } else{
-         sel.$message({
-           message: `Произошла ошибка ${response.statusCode}! Рейтинг не засчитан.`,
-           type: 'error'
-         });
-       }
+        if (response.statusCode === 200) {
+          sel.$message({
+            message: 'Спасибо за оценку. Ваш голос был учтён!',
+            type: 'success'
+          });
+        } else {
+          sel.$message({
+            message: `Произошла ошибка ${response.statusCode}! Рейтинг не засчитан.`,
+            type: 'error'
+          });
+        }
 
       });
       // Принимаем данные по событию list-*
       await io.socket.on('user-ratio', (data) => {
         console.log('server return ratios: ', data);
-       // this.ratios = data;
+        // this.ratios = data;
         console.log('this.ratio: ', this.ratio);
       });
     },
@@ -320,6 +322,17 @@ parasails.registerPage('litter', {
         case 'a':
           this.dialogFormVisible = true;
           break;
+        case 'b':
+          this.dialogDescriptionPhotoSession = true;
+          // this.ruleForm.description =  this.litter.description;
+          break;
+        case 'e':
+          this.dialogEditor = true;
+          // this.ruleForm.description =  this.litter.description;
+          break;
+        case 'link':
+          window.location = '/litters';
+          break;
       }
       // this.$message('Нажат элемент: ' + command);
     },
@@ -340,6 +353,7 @@ parasails.registerPage('litter', {
       // this.$refs.upload.submit();
       // console.log('this.ruleForm.fileList: ****||| ', this.ruleForm.fileList);
       // this.openFullScreen();
+      this.ruleForm.description > 500 ? this.mesError('Много текста!') : '';
       let data = {
         // fileList: this.ruleForm.sessionName,
         // puppies: this.ruleForm.fileListPuppies,
@@ -347,12 +361,14 @@ parasails.registerPage('litter', {
         // dam: this.getDamArr(),
         // sire: this.getSireArr(),
         // born: JSON.stringify(this.ruleForm.born),
-        // description: this.ruleForm.description,
         id: this.litter.id,
+        description: this.ruleForm.description,
+        subtitle: this.ruleForm.subtitle,
         sessionName: this.ruleForm.sessionName,
+        descriptionPhotoSession: this.ruleForm.descriptionPhotoSession,
       };
       console.log('DAEEE: ', data);
-      io.socket.post('/api/v1/litters/update-session-name', data, (dataRes, jwRes) => {
+      io.socket.post('/api/v1/litters/update-litter', data, (dataRes, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
@@ -363,7 +379,11 @@ parasails.registerPage('litter', {
         // this.loading.close();
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          this.litter.sessionName = data.sessionName;
+          console.log('this.litter.sessionName: ', this.litter.sessionName);
+          this.litter.sessionName = data.sessionName ? data.sessionName : this.litter.sessionName;
+          this.litter.description = data.description ? data.description : this.litter.description;
+          this.litter.subtitle = data.subtitle ? data.subtitle : this.litter.subtitle;
+          this.litter.descriptionPhotoSession = data.descriptionPhotoSession ? data.descriptionPhotoSession : this.litter.descriptionPhotoSession;
           // this.ruleForm.fileList = [];
           //           // this.ruleForm.list = [];
           //           // this.ruleForm.imageUrl = '';
@@ -412,6 +432,8 @@ parasails.registerPage('litter', {
     resetForm(formName) {
       // this.$refs.upload.clearFiles();
       this.dialogFormVisible = false;
+      this.dialogDescriptionPhotoSession = false;
+      this.dialogEditor = false;
       this.$refs[formName].resetFields();
       this.ruleForm.fileList = [];
       this.ruleForm.fileListPuppies = [];
