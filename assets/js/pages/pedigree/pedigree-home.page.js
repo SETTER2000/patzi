@@ -3,48 +3,103 @@ parasails.registerPage('pedigree-home', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-    search:''
+    timeout:  null,
+    resultSearch:'',
+    ruleForm: {
+      search: ''
+    },
+    rules: {
+      // search: [
+      //   {required: true, message: 'Please input name dog', trigger: 'blur'},
+      //   {min: 1, max: 5, message: 'Length should be 1 to 5', trigger: 'blur'}
+      // ]
+    },
+    dogs: [],
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function() {
+  beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
   },
-  mounted: async function() {
-    this.links = this.loadAll();
-  },
+
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    querySearch(queryString, cb) {
-      let links = this.links;
-      let results = queryString ? links.filter(this.createFilter(queryString)) : links;
-      // call callback function to return suggestions
-      cb(results);
+    // querySearch(queryString, cb) {
+    //   let links = this.links;
+    //   let results = queryString ? links.filter(this.createFilter(queryString)) : links;
+    //   // вызвать функцию обратного вызова для возврата предложений
+    //   cb(results);
+    // },
+
+    /**
+     * Выбираем всех собак соответствующих запросу.
+     * Поиск соответствующей подстроки в полном имени собаки.
+     */
+    async dogsList(queryString) {
+      let data = {queryString:queryString};
+      await io.socket.post(`/api/v1/dogs/search-dog`, data, function gotResponse(body, response) {
+        // console.log('Сервис Dogs dam ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию search-*
+      await io.socket.on('search-dog', (data) => {
+        console.log('dams: ', data);
+        this.dogs = data;
+      });
     },
-    createFilter(queryString) {
-      return (link) => {
-        return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-      };
+
+
+    async querySearchAsync(queryString, cb) {
+       queryString ? await this.dogsList(queryString) : this.dogs;
+      clearTimeout(this.timeout);
+      // cb(this.dogs);
+      this.timeout = setTimeout(() => {
+        cb(this.dogs);
+      }, 1000 * Math.random());
     },
-    loadAll() {
-      return [
-        { "value": "Poale Ell Adam",  },
-        { "value": "Poale Ell Bazhen",  },
-        { "value": "Poale Ell Bell", },
-        { "value": "Poale Ell Barthalamew",  },
-        { "value": "Alfa Laval De Lux Supernova",},
-        { "value": "Ins Lucky Star Juliet Poale Ell", },
-        { "value": "Sasquehanna Ella" , "link": "http://localhost:1337/dogs/Sasquehanna Ella"  }
-      ];
+
+
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert('submit!');
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+
     },
+
+
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+
+
     handleSelect(item) {
-      console.log(item);
+      console.log('Получено значение ввода: ', item);
+      this.resultSearch = item;
+
+    },
+
+    focus(item) {
+      // console.log('focus:: ', item);
+    },
+
+    change(item) {
+      // console.log('change:: ', item);
+    },
+
+    blur(item) {
+      // console.log('blur:: ', item);
     }
+
+
   }
 });

@@ -23,6 +23,15 @@ module.exports = {
       maxLength: 50
     },
 
+    // fullName: {
+    //   type: 'string',
+    //   description: `Полное имя собаки.`,
+    //   example: 'Poale Ell Adam',
+    //   required: true,
+    //   minLength: 2,
+    //   maxLength: 50
+    // },
+
     gender: {
       type: 'string',
       description: `Пол собак. В смысле не пол собаки, а конец есть или нет.`,

@@ -80,14 +80,12 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
-
     // Бибилиотека Node.js
     const req = this.req;
     const moment = require('moment');
     const tz = require('moment-timezone');
     moment.locale('en');
-
+    let fileList, puppies = '';
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
@@ -98,43 +96,40 @@ module.exports = {
     await sails.sockets.join(req, 'litter');
 
 
-    // console.log('inputs.fileList::', inputs.fileList);
-    // // list = _.pluck(inputs.fileList, 'response');
-    // console.log('list-1:: ', inputs.fileList);
-    // let iterator = list.keys();
     if (inputs.fileList) {
-      _.each(inputs.fileList, img => {
+      fileList = inputs.fileList.filter(o => !_.isNull(o));
+      _.each(fileList, img => {
         delete img.filename;
         delete img.status;
         delete img.field;
       });
     }
 
-    console.log('inputs.puppies: ', inputs.puppies);
+
     if (inputs.puppies) {
-      _.each(inputs.puppies, img => {
+      puppies = inputs.fileList.filter(o => !_.isNull(o));
+      _.each(puppies, img => {
         delete img.filename;
         delete img.status;
         delete img.field;
       });
     }
 
-    // console.log('list-2:: ', inputs.fileList);
-    //
-    // console.log('CREATE-LITTER inputs.born:: ', inputs.born);
 
     let born = inputs.born.replace(/"([^"]+(?="))"/g, '$1');
+
+
     // Создать помёт
     let litter = await Litter.create({
       letter: _.trim(inputs.letter).toUpperCase(),
       sire: inputs.sire,
-      images: inputs.fileList,
-      puppies: inputs.puppies,
+      images: fileList,
+      puppies: puppies,
       dam: inputs.dam,
       born: moment.tz(born, 'Europe/Moscow').format(),
       owner: this.req.me.id,
       description: inputs.description,
-      sessionName: inputs.sessionName.slice(0,60),
+      sessionName: inputs.sessionName.slice(0, 60),
     }).fetch();
 
 
@@ -142,25 +137,6 @@ module.exports = {
     if (!litter) {
       throw 'badRequest';
     }
-
-
-    // Добавить помёт в коллекцию «Litter»
-    // Первый аргумент Идентификатор помёта
-    // Второй аргумент - это свойство модели по которому будет создана связь. Оно прописано во второй модели.
-    // Третий аргумент Идентификаторы собак в массиве
-    // Добавить собаку inputs.sire к помёту litter.id
-    // await Litter.addToCollection(litter.id, 'dogs', inputs.sire);
-    // await Litter.addToCollection(litter.id, 'dogs', inputs.dam);
-    // await Litter.addToCollection(litter.id, 'dogs', [inputs.sire, inputs.dam]);
-
-    // Если масиив с фотографиями не пустой, то добавляем его в коллекцию Image
-    // if (!_.isEmpty(list)) {
-    //   // Записываем фото на помёт
-    //   let image = await Image.create({
-    //     img: list,
-    //     litter: litter.id
-    //   }).fetch();
-    // }
 
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
