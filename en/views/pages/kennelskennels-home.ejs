@@ -141,8 +141,7 @@
           </el-form-item>
 
 
-
-         <template>
+          <template>
             <el-form-item label="<%= __('Continent') %>" prop="continent">
               <el-select @change="changeSelectContinent()" v-model="ruleForm.continent"
                          placeholder="<%= __('Where is the nursery registered?') %>"
@@ -162,20 +161,18 @@
                 <el-button @click="innerVisible=true" size="mini" round icon="el-icon-question"></el-button>
               </el-tooltip>
             </el-form-item>
-
-
           </template>
 
 
           <template v-if="ruleForm.continent">
-          <!--<template >-->
+            <!--<template >-->
             <el-form-item label="<%= __('Country') %>" prop="country">
               <el-select v-model="ruleForm.country"
                          placeholder="<%= __('Where is the kennel registered?') %>"
                          style="width: 58%;"
                          :clearable="true"
                          @visible-change="changeSelectCountry"
-                        >
+              >
                 <el-option v-for="item in getPullCountry()"
                            :key="item.id"
                            :label="item.label"
@@ -188,7 +185,7 @@
           </template>
 
           <template v-if="ruleForm.country">
-          <!--<template >-->
+            <!--<template >-->
             <el-form-item label="<%= __('Region') %>" prop="region">
               <el-select v-model="ruleForm.region"
                          placeholder="<%= __('Where is the kennel registered?') %>"
@@ -227,7 +224,7 @@
                 </template>
               </el-autocomplete>
               <!--<el-tooltip effect="dark" content="<%= __('English search') %>" placement="top-start">-->
-                <!--<div size="mini" round class="el-icon-question ml-3"></div>-->
+              <!--<div size="mini" round class="el-icon-question ml-3"></div>-->
               <!--</el-tooltip>-->
             </el-form-item>
           </template>
@@ -276,8 +273,6 @@
 
             </el-col>
           </el-form-item>
-
-
 
 
           <el-form-item label="<%= __('Name on') %>:" prop="rightName">
@@ -383,7 +378,6 @@
   <section class="about-area ">
     <div class="container">
 
-
       <% /*ФИЛЬТР ПИТОМНИКОВ*/ %>
       <!--<span class="demonstration">Display all tags (default)</span>-->
       <div v-if="kennels" class="pb-5">
@@ -424,16 +418,17 @@
               <img :src="item.imageSrc">
 
 
-              <% /* КНОПКИ Удаления питомника */%>
               <div class="flx">
+                <% /* КНОПКА Редактирования питомника */ %>
+                <!--<div class="fixButton">-->
+                  <!--<a class="p-button" href="#"-->
+                     <!--@click="clickEditKennel(item.id)">-->
+                    <!--<i class="el-icon-edit"></i>-->
+                  <!--</a>-->
+                <!--</div>-->
+                <% /* КНОПКА Удаления питомника */ %>
                 <div class="fixButton">
                   <a class="p-button" href="#"
-                     @click="clickEditKennel(item.id)">
-                    <i class="el-icon-edit"></i>
-                  </a>
-                </div>
-                <div class="fixButton">
-                  <a class="p-button"  href="#"
                      @click="clickDeleteObject(item.id)">
                     <i class="el-icon-delete"></i>
                   </a>
@@ -442,8 +437,8 @@
             </div>
           </transition>
           <div class="product-info">
-            <h5><%= __('Kennel') %>: {{item.label}}</h5>
-            <h6><%= __('Country') %>: {{item.country.label}}</h6>
+            <h5 v-if="item.label"><%= __('Kennel') %>: {{item.label}}</h5>
+            <h6 v-if="item.country"><%= __('Country') %>: {{item.country.label}}</h6>
           </div>
         </div>
         <!-- more products -->
