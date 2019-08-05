@@ -4,6 +4,9 @@ parasails.registerPage('litter', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     dialogTableVisible: false,
+    dialogPedigreeVisible: true,
+    virtualPageSlug: '',
+    letter: '',
     autoplay: true,
     isAfterDate: false,
     dialogFormVisible: false,
@@ -107,7 +110,9 @@ parasails.registerPage('litter', {
     //   {litter:1, letter:'B'}
     // ]
   },
-
+  virtualPages: true,
+  html5HistoryMode: 'history',
+  virtualPagesRegExp: /^\/litter\/?[A-C]+?\/?([^\/]+)?/,
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
@@ -290,13 +295,10 @@ parasails.registerPage('litter', {
     },
 
     goTo(path) {
-      window.location = `${path}`;
+      this.goto(`${path}`);
+      // window.location = `${path}`;
     },
 
-    // handlerCloseDialogSlider(){
-    //   this.indexPhoto=0;
-    //   this.autoplay=false;
-    // },
 
     showSlider(litterId, indexPhoto) {
       this.dialogTableVisible = true;
@@ -307,9 +309,20 @@ parasails.registerPage('litter', {
       console.log('this.indexPhoto: ', this.indexPhoto);
     },
 
+    clickPedigree() {
+      // this.dialogPedigreeVisible = true;
+      this.goto(`/litter/${this.litter.letter}/pedigree`);
+      // this.litterId = litterId;
+      // this.indexSlide = indexPhoto;
+      // this.handlerSetActiveSlider();
+      // console.log('this.litterId: ', this.litterId);
+      // console.log('this.indexPhoto: ', this.indexPhoto);
+    },
+
     handlerCloseDialogSlider() {
-      this.indexPhoto = 0;
-      this.autoplay = false;
+      this.goto(`/litter/${this.litter.letter}`);
+      // this.indexPhoto = 0;
+      // this.autoplay = false;
     },
     handlerSetActiveSlider() {
       return this.indexPhoto;
@@ -348,6 +361,40 @@ parasails.registerPage('litter', {
         }
       });
     },
+
+
+    _clearAddFriendsModal: function() {
+      this.goto(`/litter/${this.litter.letter}`);
+      // Reset form data.
+      // this.addFriendsFormData = {
+      //   friends: [
+      //     {
+      //       fullName: '',
+      //       emailAddress: ''
+      //     },
+      //     {
+      //       fullName: '',
+      //       emailAddress: ''
+      //     },
+      //     {
+      //       fullName: '',
+      //       emailAddress: ''
+      //     }
+      //   ]
+      // };
+      this.formErrors = {};
+      this.cloudError = '';
+    },
+
+
+    closeAddFriendsModal: function() {
+      this._clearAddFriendsModal();
+    },
+
+    closeModal: function() {
+      this._clearAddFriendsModal();
+    },
+
 
     async updateLitter() {
       // this.$refs.upload.submit();

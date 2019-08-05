@@ -107,7 +107,7 @@ module.exports = {
 
 
     if (inputs.puppies) {
-      puppies = inputs.fileList.filter(o => !_.isNull(o));
+      puppies = inputs.puppies.filter(o => !_.isNull(o));
       _.each(puppies, img => {
         delete img.filename;
         delete img.status;
