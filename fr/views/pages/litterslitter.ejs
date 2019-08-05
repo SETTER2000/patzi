@@ -1,4 +1,89 @@
 <div id="litter" class="content" v-cloak>
+
+  <% /* Диалоговое окно родословная (PEDIGREE)*/ %>
+  <el-dialog
+    title="<%= __('Pedigree') %>"
+    :visible.sync="dialogPedigreeVisible"
+    :fullscreen="true"
+    top="1vh"
+    center
+    :before-close="handlerCloseDialogSlider"
+    v-if="virtualPageSlug==='pedigree'"
+  >
+    <div class="d-flex justify-content-end">
+      <!--<el-switch-->
+        <!--style="display: block"-->
+        <!--v-model="autoplay"-->
+        <!--active-color="#13ce66"-->
+        <!--inactive-color="#ff4949"-->
+        <!--active-text="Autoplay"-->
+        <!--inactive-text="Disable ">-->
+      <!--</el-switch>-->
+    </div>
+    <!--<span>It should be noted that the content will not be aligned in center by default</span>-->
+    <div class="block">
+      <!--<span class="demonstration">Switch when indicator is clicked</span>-->
+     <!-- <el-carousel
+        :autoplay="autoplay"
+        trigger="click"
+        height="80vh"
+        :initial-index="indexSlide"
+        :next="handlerSetActiveSlider(indexPhoto)"
+      >
+        <el-carousel-item v-for="(item, key, index) in photos" :key="index">
+          <h3 class="small text-center">{{ item.label }}</h3>
+          <div class="my-flex-cont">
+            &lt;!&ndash;<div class="my-flex-box">&ndash;&gt;
+            <el-image
+              :src="item.imageSrc"
+              :fit="fit"></el-image>
+            &lt;!&ndash;<div class="my-flex-cont">&ndash;&gt;
+            &lt;!&ndash;<div class="my-flex-box">&ndash;&gt;
+            &lt;!&ndash;<img :src="item.imageSrc" class="gallery" alt="">&ndash;&gt;
+            &lt;!&ndash;</div>&ndash;&gt;
+          </div>
+          &lt;!&ndash;</div>&ndash;&gt;
+        </el-carousel-item>
+      </el-carousel>-->
+    </div>
+    <!--<span slot="footer" class="dialog-footer">-->
+    <!--<el-button type="primary" @click="handlerCloseDialogSlider()" ><%= __('Close') %></el-button>-->
+    <!--</span>-->
+  </el-dialog>
+  <% /* Модальное окно родословная (PEDIGREE)*/ %>
+  <!--<modal v-if="virtualPageSlug==='pedigree'" v-cloak key="new" @close="closeAddFriendsModal()">-->
+    <!--<div class="modal-header">-->
+      <!--<h5 class="modal-title">Invite friends</h5>-->
+      <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+        <!--<span>&times;</span>-->
+      <!--</button>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;<ajax-form action="addFriends" :syncing.sync="syncing" :cloud-error.sync="cloudError" :handle-parsing="handleParsingAddFriendsForm" @submitted="submittedAddFriendsForm()">&ndash;&gt;-->
+      <!--&lt;!&ndash;<div class="modal-body">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="form-group" v-for="(friend, index) in addFriendsFormData.friends">&ndash;&gt;-->
+          <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="col">&ndash;&gt;-->
+              <!--&lt;!&ndash;<label v-if="index === 0">Name</label>&ndash;&gt;-->
+              <!--&lt;!&ndash;<input class="form-control" type="text" v-model="addFriendsFormData.friends[index].fullName" :placeholder="index === 0 ? 'Ralph' : index === 1 ? 'Donny' : index === 2 ? 'Leo' : 'Full name'">&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="col">&ndash;&gt;-->
+              <!--&lt;!&ndash;<label v-if="index === 0">Email Address</label>&ndash;&gt;-->
+              <!--&lt;!&ndash;<input class="form-control" type="email" v-model="addFriendsFormData.friends[index].emailAddress" :placeholder="index === 0 ? 'raphael@example.com' : index === 1 ? 'donatello@example.com' : index === 2 ? 'leonardo@example.com' : 'Email address'">&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+          <!--&lt;!&ndash;<span class="add-more-button" @click="clickAddMoreButton()"><span class="fa fa-plus text-info mr-1"></span> Add more</span>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;<p class="text-danger" v-if="formErrors.friends"><small>Please make sure all your invitees have a name and an email address.</small></p>&ndash;&gt;-->
+        <!--&lt;!&ndash;<p class="text-danger" v-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/contact">contact support</a> if the error persists.</small></p>&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+      <!--&lt;!&ndash;<div class="modal-footer flex-row-reverse justify-content-start">&ndash;&gt;-->
+        <!--&lt;!&ndash;<ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1">Add</ajax-button>&ndash;&gt;-->
+        <!--&lt;!&ndash;<button data-dismiss="modal" class="btn btn-outline-secondary mr-1">Cancel</button>&ndash;&gt;-->
+      <!--&lt;!&ndash;</div>&ndash;&gt;-->
+    <!--&lt;!&ndash;</ajax-form>&ndash;&gt;-->
+  <!--</modal>-->
   <% /* Диалоговое окно Слайдер картинок NEW*/ %>
   <el-dialog
     title="<%= __('Parents') %>"
@@ -235,7 +320,8 @@
               </ul>
               <el-row :gutter="20">
                 <el-col :span="2">
-                  <el-button class="mt-4" @click="goTo('/pedigree')" type="primary" round>Pedigree</el-button>
+                  <%/*@click="goTo('/pedigree')" */%>
+                  <el-button class="mt-4" @click="clickPedigree()" type="primary" round>Pedigree</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -373,6 +459,6 @@
   </section>
 
   <!-- End Portfolio Details Area -->
-
+  <router-view></router-view>
 </div>
 <%- /* Exposez server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
