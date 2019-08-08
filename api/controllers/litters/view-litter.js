@@ -55,11 +55,17 @@ module.exports = {
       delete image.fd;
       return image;
     }) : '';
-    litter.puppies = (!_.isEmpty(litter.puppies)) ? await litter.puppies.map((image, i) => {
-      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litter.id}/puppies/${i}`) : '';
+
+    // Подготовка объекта фотоссессии
+    litter.puppies = (!_.isEmpty(litter.puppies)) ? await litter.puppies.map((photoSet, i) => {
+
+      photoSet.photos.map((image,y)=>{
+        image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litter.id}/puppies/${y}/${i}`) : '';
+        delete image.fd;
+      });
       // image.detail = `/litters/litter/${litterId}`;
-      delete image.fd;
-      return image;
+
+      return photoSet;
     }) : '';
 
 

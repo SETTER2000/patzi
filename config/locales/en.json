@@ -455,5 +455,10 @@
 	"Pedigree": "Pedigree",
 	"Status": "Status",
 	"Please input dog name": "Please input dog name",
-	"PEDIGREE": "PEDIGREE"
+	"PEDIGREE": "PEDIGREE",
+	"Add photo session": "Add photo session",
+	"Add photo shoot": "Add photo shoot",
+	"Delete photo shoot": "Delete photo shoot",
+	"Delete photo session": "Delete photo session",
+	"Confirm": "Confirm"
 }

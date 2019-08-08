@@ -39,7 +39,7 @@ module.exports = {
 
     subtitle: {
       type: 'string',
-      maxLength:100,
+      maxLength: 100,
       example: 'Ожидается звёздный помёт. Прекрасные родословные, чистокровные производители.',
       description: 'Краткое Описание помёта. Какая то интересная информация.'
     },
@@ -47,7 +47,7 @@ module.exports = {
 
     description: {
       type: 'string',
-      maxLength:500,
+      maxLength: 500,
       example: 'Ожидается звёздный помёт. Прекрасные родословные, чистокровные производители.',
       description: 'Описание помёта. Какая то интересная информация.'
     },
@@ -55,7 +55,7 @@ module.exports = {
 
     descriptionPhotoSession: {
       type: 'string',
-      maxLength:300,
+      maxLength: 300,
       example: 'Прекрасным тёплым утром. Крошечные комочки после завтрака.',
       description: 'Описание фотосессии. Рассказ про то как и где снимали.'
     },
@@ -81,7 +81,7 @@ module.exports = {
       type: 'ref',
       description: 'Кобель учавствующий в помёте, т.е. отец.',
       defaultsTo: [],
-      example: ['5d1f1b04fbe834262cb22c53','Poale Ell Adam']
+      example: ['5d1f1b04fbe834262cb22c53', 'Poale Ell Adam']
     },
 
 
@@ -89,14 +89,14 @@ module.exports = {
       type: 'ref',
       description: 'Сука учавствующий в помёте, т.е. мать.',
       defaultsTo: [],
-      example: ['5d1f1b04fbe834262cbb8c53','Sasquehanna Ella']
+      example: ['5d1f1b04fbe834262cbb8c53', 'Sasquehanna Ella']
     },
 
 
     images: {
       type: 'ref',
       defaultsTo: [],
-      example: ['5d1f1b04fbe834262cbb8c53','5d1f1b04fbe834262cbb8c54'],
+      example: ['5d1f1b04fbe834262cbb8c53', '5d1f1b04fbe834262cbb8c54'],
       description: `FD загруженных фотографий родителей`
     },
 
@@ -104,7 +104,19 @@ module.exports = {
     puppies: {
       type: 'ref',
       defaultsTo: [],
-      example: ['5d1f1b04fbe834262cbb8c53','5d1f1b04fbe834262cbb8c54'],
+      example: [
+        {
+          sessionName:'30 дней.',
+          descriptionPhotoSession:'Мои забавные щенки после еды.',
+          photos:[{
+            fd:
+              'D:\\__PROJECTS\\Sails\\patzi\\.tmp\\uploads\\d8820acf-1521-465c-908e-68659adab4e0.JPG',
+            size: 56357,
+            type: 'image/jpeg',
+            name: 'IMG_5763.JPG'
+          }]
+        },
+      ],
       description: `FD загруженных фотографий щенков`
     },
 

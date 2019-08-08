@@ -296,7 +296,7 @@ parasails.registerPage('litters-home', {
 
 
     // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
-    // Это кнопка вызывает модальное окно <modal> с <ajax-form>
+    // Это кнопка вызывает модальное окно <modal> с <ajax-form> для удаления помёта
     clickDeleteLitter: function (litterId) {
       this.confirmDeleteLitterModalOpen = true;
       this.selectedLitter = _.find(this.litters, {id: litterId});
@@ -324,8 +324,7 @@ parasails.registerPage('litters-home', {
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
       this.warning = this.i19p.warnNoDogs;
-      (this.sires.length > 0 && this.dams.length > 0) ? this.centerDialogAdded = true :
-        this.centerDialogVisibleWarnings = true;
+      return (this.sires.length > 0 && this.dams.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
     },
 
 

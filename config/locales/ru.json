@@ -233,7 +233,6 @@
 	"Change photo session description": "Изменить описание фотосессии",
 	"Select kennel": "Выбрать питомник",
 	"Nevermind": "Отмена",
-
 	"Photo Shoot Editor": "Редактор фотосессии",
 	"Short Litter Description": "Краткое описание помёта",
 	"Description of the photo shoot": "Описание фотосессии",
@@ -513,6 +512,9 @@
 	"More about litter": "Подробнее о помёте",
 	"Stamp Dog number in the registry.": "Клеймо. Номер собаки в реестре.",
 	"Color": "Цвет",
+	"Add photo shoot": "Добавить фотосессию",
+	"Delete photo session": "Удалить фотосессию",
+	"Delete photo shoot": "Удалить фотосессию",
 	"Status": "Статус",
 	"Name photos": "Название фотосессии",
 	"Photo shoot title": "Название фотосессии",

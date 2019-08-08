@@ -12,10 +12,13 @@ module.exports = {
       type: 'ref',
       description: 'Массив с fd ссылками на фото родителей.'
     },
+
+
     puppies: {
       type: 'ref',
       description: 'Массив с fd ссылками на фото щенков.'
     },
+
 
     letter: {
       type: 'string',
@@ -23,6 +26,7 @@ module.exports = {
       description: 'Буква помёта.',
       example: 'A'
     },
+
 
     born: {
       type: 'string',
@@ -84,6 +88,7 @@ module.exports = {
     const req = this.req;
     const moment = require('moment');
     const tz = require('moment-timezone');
+    let newPuppies = [];
     moment.locale('en');
     let fileList, puppies = '';
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
@@ -105,6 +110,11 @@ module.exports = {
       });
     }
 
+    newPuppies.push({
+      sessionName: '30 дней.',
+      descriptionPhotoSession: 'Мои забавные щенки после еды.',
+      photos: ''
+    });
 
     if (inputs.puppies) {
       puppies = inputs.puppies.filter(o => !_.isNull(o));
@@ -115,6 +125,7 @@ module.exports = {
       });
     }
 
+    _.each(newPuppies, np => np.photos = puppies);
 
     let born = inputs.born.replace(/"([^"]+(?="))"/g, '$1');
 
@@ -124,7 +135,7 @@ module.exports = {
       letter: _.trim(inputs.letter).toUpperCase(),
       sire: inputs.sire,
       images: fileList,
-      puppies: puppies,
+      puppies: newPuppies,
       dam: inputs.dam,
       born: moment.tz(born, 'Europe/Moscow').format(),
       owner: this.req.me.id,

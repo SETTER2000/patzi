@@ -13,7 +13,9 @@ module.exports = {
       required: true,
       description: 'Наименование коллекции.'
     },
-    folder:{
+
+
+    folder: {
       type: 'string',
       required: true,
       description: 'Наименование альбома.'
@@ -29,6 +31,12 @@ module.exports = {
       description: 'Ключ картинки в массиве картинок данного альбома.',
       type: 'number',
       required: true
+    },
+
+    photoSet: {
+      description: 'Ключ фотосессии в массиве фотосессий данного альбома.',
+      type: 'number',
+      example: 0
     },
 
   },
@@ -53,7 +61,7 @@ module.exports = {
 
     let collection = _.capitalize(inputs.collection);
     let collectionObject = '';
-
+    inputs.photoSet = inputs.photoSet ? inputs.photoSet : 0;
     // Если название альбома существует, то выводим его | images
     let folder = inputs.folder ? inputs.folder : 'images';
 
@@ -81,11 +89,23 @@ module.exports = {
       throw 'notFound';
     }
 
+    if (_.isArray(collectionObject[folder][inputs.photoSet]['photos'])) {
+      console.log('ARRRAY!', collectionObject[folder][inputs.photoSet]['photos']);
+    }
+    else {
+      console.log('NE ARRAY!', collectionObject[folder][inputs.photoSet]['photos']);
+    }
 
-    let arr = await collectionObject[folder].filter((image, index) => inputs.key === index);
+
+    let arr = _.isArray(collectionObject[folder][inputs.photoSet]['photos']) ?
+      await collectionObject[folder][inputs.photoSet]['photos'].filter((image, index) => inputs.key === index) :
+      await collectionObject[folder].filter((image, index) => inputs.key === index);
     if (!arr) {
       throw 'notFound';
     }
+
+    console.log('Выходной массив arr:', arr);
+
 
     /**
      * ПЕРЕВЕРНУЛИ: === -> !== , || -> &&,  _.any -> !_.any

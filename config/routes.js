@@ -53,13 +53,13 @@ module.exports.routes = {
   'GET /message/message-home': {action: 'message/view-message-home', locals: {currentSection: 'message'}},
   'GET /users/:virtualPageSlug?': {action: 'users/view-users-home', locals: {currentSection: 'users'}},
 
-  'GET /dogs/dog/:id': { action: 'dogs/view-dog' },
+  'GET /dogs/dog/:id': {action: 'dogs/view-dog'},
   'GET /dogs/:virtualPageSlug?': {action: 'dogs/view-dogs-home', locals: {currentSection: 'dogs'}},
 
 
   'GET /kennels/:virtualPageSlug?': {action: 'kennels/view-kennels-home', locals: {currentSection: 'kennels'}},
 
-  'GET /pedigree/:virtualPageSlug?': { action: 'pedigree/view-pedigree-home' },
+  'GET /pedigree/:virtualPageSlug?': {action: 'pedigree/view-pedigree-home'},
 
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
@@ -112,11 +112,12 @@ module.exports.routes = {
   'POST    /litters/files': {action: 'litters/upload-files', csrf: false},
   'POST    /api/v1/litters/create-litter': {action: 'litters/create-litter', csrf: false},
   'GET     /api/v1/litters/list': {action: 'litters/list'},
-  'PUT     /api/v1/litters/update-cover-album': { action: 'litters/update-cover-album', csrf: false },
-  'GET     /api/v1/litters/list-letter': { action: 'litters/list-letter'},
-  'POST   /api/v1/litters/update-session-name': { action: 'litters/update-session-name', csrf: false },
-  'POST   /api/v1/litters/update-litter': { action: 'litters/update-litter', csrf: false },
-
+  'PUT     /api/v1/litters/update-cover-album': {action: 'litters/update-cover-album', csrf: false},
+  'GET     /api/v1/litters/list-letter': {action: 'litters/list-letter'},
+  'POST    /api/v1/litters/update-session-name': {action: 'litters/update-session-name', csrf: false},
+  'POST    /api/v1/litters/update-litter': {action: 'litters/update-litter', csrf: false},
+  'POST    /api/v1/litters/add-session-photo': {action: 'litters/add-session-photo', csrf: false},
+  'DELETE  /api/v1/litters/destroy-session-photo': { action: 'litters/destroy-session-photo', csrf: false },
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},
   'GET     /api/v1/things/:id': {action: 'things/download-photo'},
@@ -142,9 +143,8 @@ module.exports.routes = {
   'DELETE /sockets/user/destroy-one-user': {action: 'users/destroy-one-user', csrf: false},
   'GET    /api/v1/users/:id': {action: 'users/download-photo'},
   'DELETE /users/destroy-user-group': {action: 'users/destroy-user-group', csrf: false},
-  'POST   /api/v1/users/update-ratio': { action: 'users/update-ratio', csrf: false },
-  'GET    /api/v1/users/status': { action: 'users/list-status'},
-
+  'POST   /api/v1/users/update-ratio': {action: 'users/update-ratio', csrf: false},
+  'GET    /api/v1/users/status': {action: 'users/list-status'},
 
 
   'GET    /api/v1/continents/list': {action: 'continents/list'},
@@ -161,8 +161,8 @@ module.exports.routes = {
   'GET    /api/v1/dogs/list': {action: 'dogs/list'},
   'GET    /api/v1/dogs/list-sire': {action: 'dogs/list-sire'},
   'GET    /api/v1/dogs/list-dam': {action: 'dogs/list-dam'},
-  'POST    /api/v1/dogs/search-dog': { action: 'dogs/search-dog', csrf: false},
-  'DELETE /api/v1/dogs/destroy-one-dog': { action: 'dogs/destroy-one-dog', csrf: false },
+  'POST    /api/v1/dogs/search-dog': {action: 'dogs/search-dog', csrf: false},
+  'DELETE /api/v1/dogs/destroy-one-dog': {action: 'dogs/destroy-one-dog', csrf: false},
 
   'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},
   // 'POST   /api/v1/files/set-album-cover': { action: 'files/set-album-cover', csrf: false },
@@ -171,7 +171,7 @@ module.exports.routes = {
 
   'GET    /api/v1/country/list': {action: 'country/list'},
 
-  'GET    /api/v1/files/download/:collection/:id/:folder/:key': {action: 'files/download'},
+  'GET    /api/v1/files/download/:collection/:id/:folder/:key/:photoSet?': {action: 'files/download'},
 
 
   'GET    /undefined': {action: 'files/undefined'},
@@ -180,7 +180,7 @@ module.exports.routes = {
   'POST   /api/v1/region/create-region': {action: 'region/create-region'},
   'GET    /api/v1/region/list': {action: 'region/list'},
 
-  'GET    /api/v1/colors/list': { action: 'colors/list' },
+  'GET    /api/v1/colors/list': {action: 'colors/list'},
 
-  'GET    /native': { action: 'litters/list-native' },
+  'GET    /native': {action: 'litters/list-native'},
 };

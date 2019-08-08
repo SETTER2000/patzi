@@ -12,6 +12,8 @@ module.exports = {
       description: `Идентификатор помёта.`,
       required: true
     },
+
+
     sessionName: {
       type: 'string',
       example: 'Два дня от роду',
@@ -39,8 +41,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    console.log('COVER INPUTS:: ',inputs.id);
-    console.log('COVER sessionName:: ',inputs.sessionName);
+
 
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)

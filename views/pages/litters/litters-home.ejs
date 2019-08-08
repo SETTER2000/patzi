@@ -49,6 +49,7 @@
   </el-dialog>
 
   <% /* Диалоговое окно. Предупреждение | Warning. */ %>
+  <div v-if="centerDialogVisibleWarnings">
   <el-dialog
     title="<%= __('Warning') %>"
     :visible.sync="centerDialogVisibleWarnings"
@@ -63,8 +64,10 @@
       <el-button type="success" @click="goTo('dogs')"><%= __('Add dog') %></el-button>
   </span>
   </el-dialog>
+  </div>
 
   <% /* Диалоговое окно. Добавить Помёт NEW. */ %>
+  <div v-if="centerDialogAdded">
   <el-dialog
     title="<%= __('Add your Litter') %>"
     :visible.sync="centerDialogAdded"
@@ -307,6 +310,7 @@
     <span slot="footer" class="dialog-footer">
   </span>
   </el-dialog>
+  </div>
 
 
   <!-- start banner Area -->
@@ -384,20 +388,22 @@
             </ul>
 
             <% /* Кнопка "Удалить помёт"*/ %>
-            <div v-if="me.isSuperAdmin || me.isAdmin" class="flx">
-              <div class="fixButton">
-                <a class="p-button" v-if="me.isSuperAdmin" href="#"
+            <div class="flex-container buttons wrap  ">
+            <div v-if="me.isSuperAdmin || me.isAdmin" class="fixButton mt-3">
+
+                <a class="p-button " v-if="me.isSuperAdmin || me.isAdmin" href="#"
                    @click="clickDeleteLitter(litter.id)">
                   <i class="el-icon-delete"></i>
                 </a>
-              </div>
-              <div class="fixButton">
-                <a class="p-button" href="#"
-                   @click="clickEdit(litter.id)">
-                  <i class="el-icon-edit"></i>
-                </a>
-              </div>
+
+
+                <!--<a class="p-button pl-2" href="#"-->
+                   <!--@click="clickEdit(litter.id)">-->
+                  <!--<i class="el-icon-edit"></i>-->
+                <!--</a>-->
+
             </div>
+          </div>
           </div>
 
           <% /* Кнопки: Отец, Мать*/ %>
@@ -406,13 +412,13 @@
             <el-link v-if="litter.dam[1]" class="mr-lg-3" type="danger" icon="el-icon-female" @click="goTo(`/dogs/dog/${litter.dam[0]}`)" >
               {{litter.dam[1]}}
             </el-link>
-            <el-link v-else disabled  class="mr-lg-3" type="danger" icon="el-icon-female" >
+            <el-link v-else disabled  class="mr-lg-3 px-1" type="danger" icon="el-icon-female" >
              {{noBase}}
             </el-link>
             </el-tooltip>
             &nbsp;
             <el-tooltip class="item" effect="dark" content="<%= __('Sire') %>" placement="top">
-             <el-link v-if="litter.sire[1]" class="mr-lg-3" type="danger" icon="el-icon-male" @click="goTo(`/dogs/dog/${litter.sire[0]}`)" >
+             <el-link v-if="litter.sire[1]" class="mr-lg-3 px-1" type="danger" icon="el-icon-male" @click="goTo(`/dogs/dog/${litter.sire[0]}`)" >
               {{litter.sire[1]}}
             </el-link>
             <el-link v-else disabled  class="mr-lg-3" type="danger" icon="el-icon-male"  >

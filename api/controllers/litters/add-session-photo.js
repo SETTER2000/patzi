@@ -1,43 +1,46 @@
 module.exports = {
 
 
-  friendlyName: 'Update litter',
+  friendlyName: 'Add session photo',
 
 
-  description: 'Обновляем данные помёта',
+  description: '',
+
 
   inputs: {
+
     id: {
       type: 'string',
       description: `Идентификатор помёта.`,
       required: true
     },
+
+
     sessionName: {
       type: 'string',
       example: 'Два дня от роду',
       description: 'Название фотосессии для щенков.'
     },
 
-    description: {
-      type: 'string',
-      maxLength:500,
-      example: 'Ожидается звёздный помёт. Прекрасные родословные, чистокровные производители.',
-      description: 'Описание помёта. Какая то интересная информация.'
-    },
 
-    subtitle: {
-      type: 'string',
-      maxLength:100,
-      example: 'Ожидается звёздный помёт. Прекрасные родословные, чистокровные производители.',
-      description: 'Краткое  Описание помёта. Какая то интересная информация.'
+    fileList: {
+      type: 'ref',
+      description: 'Массив с fd ссылками на фото родителей.'
     },
 
 
     descriptionPhotoSession: {
       type: 'string',
-      maxLength:300,
+      maxLength: 300,
       example: 'Ожидается звёздный помёт. Прекрасные родословные, чистокровные производители.',
       description: 'Описание фотосессии. Какая то интересная информация.'
+    },
+
+
+    letter: {
+      type: 'string',
+      description: 'Буква помёта.',
+      example: 'A'
     },
   },
 
@@ -53,31 +56,30 @@ module.exports = {
       },
     },
     badRequest: {
-      description: 'No image upload was provided.',
+      description: 'The object was not created.',
       responseType: 'badRequest'
     }
   },
 
 
   fn: async function (inputs, exits) {
-    console.log('COVER INPUTS:: ', inputs.id);
-    console.log('COVER sessionName:: ', inputs.sessionName);
 
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
     }
-console.log('inputs.descriptionPhotoSession: ',inputs.descriptionPhotoSession);
+// console.log('inputs.id:: ', inputs.id);
 
-    // let info = await Image.findOne(q);
+    let litter = await Litter.findOne(inputs.id);
+    if (!litter) throw 'badRequest';
+
+
     // Update the record for the logged-in user.
     await Litter.updateOne({id: inputs.id})
       .set({
         sessionName: inputs.sessionName,
-        subtitle: inputs.subtitle,
-        description: inputs.description,
-        descriptionPhotoSession: _.isEmpty(inputs.descriptionPhotoSession) ? '' : inputs.descriptionPhotoSession
+        descriptionPhotoSession: inputs.descriptionPhotoSession,
       });
 
 
@@ -85,6 +87,7 @@ console.log('inputs.descriptionPhotoSession: ',inputs.descriptionPhotoSession);
 
     // All done.
     return exits.success();
+
 
   }
 
