@@ -187,7 +187,7 @@
       <el-col :span="1"></el-col>
       <el-col :span="23">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
-                 label-width="120px" class="demo-ruleForm">
+                 label-width="165px" class="demo-ruleForm">
 
           <% /* Дата помёта NEW */ %>
           <el-form-item label="<%= __('Date of litter') %>" prop="born">
@@ -264,20 +264,6 @@
           </template>
 
 
-          <% /* Название фотосессии щенков NEW */ %>
-          <template>
-            <el-form-item label="<%= __('Name photos') %>" prop="sessionName">
-              <el-input
-                placeholder="<%= __('Photo shoot title') %>"
-                v-model="ruleForm.sessionName"
-                maxlength="60"
-                show-word-limit
-              >
-              </el-input>
-            </el-form-item>
-          </template>
-
-
           <% /* Описание помёта NEW */ %>
           <template>
             <el-form-item label="<%= __('Description') %>" prop="description">
@@ -294,6 +280,32 @@
 
 
 
+          <% /* Название фотосессии щенков NEW */ %>
+          <template>
+            <el-form-item label="<%= __('Name photos') %>" prop="sessionName">
+              <el-input
+                placeholder="<%= __('Photo shoot title') %>"
+                v-model="ruleForm.sessionName"
+                maxlength="60"
+                show-word-limit
+              >
+              </el-input>
+            </el-form-item>
+          </template>
+
+
+          <% /* Описание фотосессии щенков */ %>
+          <template>
+            <el-form-item label="<%= __('Description of the photo shoot') %>" prop="descriptionPhotoSession">
+              <el-input
+                placeholder="<%= __('Photo shoot title') %>"
+                v-model="ruleForm.descriptionPhotoSession"
+                maxlength="300"
+                show-word-limit
+              >
+              </el-input>
+            </el-form-item>
+          </template>
 
 
           <% /* Кнопки управления */ %>
@@ -391,7 +403,7 @@
             <div class="flex-container buttons wrap  ">
             <div v-if="me.isSuperAdmin || me.isAdmin" class="fixButton mt-3">
 
-                <a class="p-button " v-if="me.isSuperAdmin || me.isAdmin" href="#"
+                <a class="p-button mr-lg-3" v-if="me.isSuperAdmin || me.isAdmin" href="#"
                    @click="clickDeleteLitter(litter.id)">
                   <i class="el-icon-delete"></i>
                 </a>
