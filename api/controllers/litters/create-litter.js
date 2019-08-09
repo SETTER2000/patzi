@@ -98,8 +98,9 @@ module.exports = {
     const req = this.req;
     const moment = require('moment');
     const tz = require('moment-timezone');
-    let newPuppies = [];
     moment.locale('en');
+    let newPuppies = [];
+
     let fileList, puppies = '';
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {

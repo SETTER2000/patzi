@@ -64,7 +64,9 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
+    const moment = require('moment');
+    const tz = require('moment-timezone');
+    moment.locale('en');
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
@@ -89,6 +91,7 @@ module.exports = {
     litter.puppies.push({
       sessionName: inputs.sessionName.slice(0, 60),
       descriptionPhotoSession: inputs.descriptionPhotoSession ? inputs.descriptionPhotoSession : '',
+      createAt: moment.tz(moment(), 'Europe/Moscow').format(),
       photos: puppies
     });
 

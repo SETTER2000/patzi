@@ -8,6 +8,8 @@ parasails.registerPage('litter', {
     virtualPageSlug: '',
     dialogImageUrl: '',
     indexPhotoSet: 0,
+    nameSessionPhoto:'',
+    count: 0,
     dialogVisible: false,
     limit: 50,
     letter: '',
@@ -142,6 +144,13 @@ parasails.registerPage('litter', {
 
 
   },
+  filters: {
+    getCreate: function (value, l) {
+      if (!value) return '';
+      moment.locale(l);
+      return (moment.parseZone(value).format('LLL')) ? moment.parseZone(value).format('LLL') : value;
+    }
+  },
   mounted: async function () {
     //…
   },
@@ -200,7 +209,9 @@ parasails.registerPage('litter', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-
+    load() {
+      this.count += 2;
+    },
     changeRatio: function (letter) {
 
       // console.log('LAST: ', _.last(_.pluck(this.me.ratio, 'letter')));
@@ -361,6 +372,9 @@ parasails.registerPage('litter', {
       // this.ruleForm.fileList = fileList;
     },
 
+    setActiveItem(){
+      return this.indexSlide;
+    },
 
     showSliderImages(indexPhoto) {
       this.dialogTableVisible = true;
@@ -372,12 +386,21 @@ parasails.registerPage('litter', {
       console.log('this.indexPhoto: ', this.indexPhoto);
     },
 
-    async showSlider(indexPhoto) {
+    async showSlider(indexPhoto, indexPhotoSet) {
+      this.indexSlide = indexPhoto;
+      this.indexPhotoSet = indexPhotoSet;
+      console.log('indexPhoto:: ', indexPhoto);
+      console.log('indexPhotoSet:: ', this.indexPhotoSet);
       this.dialogTableVisible = true;
-      this.photos = _.pluck(this.litter.puppies, 'photos')[0];
+      // this.photos = _.pluck(this.litter.puppies[this.indexPhotoSet], 'photos')[0];
+      let photoSession = this.litter.puppies.filter((phSes, i) => i === this.indexPhotoSet);
+      // console.log('photoSession:: ', photoSession);
+
+      this.photos = photoSession[0].photos;
+      // console.log('this.photos:: ', this.photos);
 
       this.litterId = this.litter.id;
-      this.indexSlide = indexPhoto;
+
       this.handlerSetActiveSlider();
       console.log('this.photos: ', this.photos);
       console.log('this.litterId: ', this.litterId);
@@ -405,7 +428,8 @@ parasails.registerPage('litter', {
     //   return this.indexPhoto;
     // },
 
-    handlerSetActiveSlider() {
+    handlerSetActiveSlider(i) {
+      console.log('Нажали по слайду: ', i);
       // this.photos = _.pluck(this.litter.puppies, 'photos');
       return this.indexPhoto;
     },
@@ -440,6 +464,7 @@ parasails.registerPage('litter', {
         case 'd':
           this.setIndexPhotoSet(command);
           this.dialogDeletePhotoSession = true;
+          this.nameSessionPhoto = command.name;
           // this.ruleForm.description =  this.litter.description;
           break;
         case 'e':
@@ -478,6 +503,9 @@ parasails.registerPage('litter', {
       });
     },
 
+    async getNameSession(indexPhotoSet){
+      return  this.litter.puppies[0].hasOwnProperty('sessionName') ? this.litter.puppies[0].sessionName : '';
+    },
     async deleteForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -551,15 +579,23 @@ parasails.registerPage('litter', {
         // this.loading.close();
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          this.litter.puppies.push(data);
+          console.log('this.litter.puppies:::', this.litter.puppies);
+          _.isArray(this.litter.puppies)? this.litter.puppies.push(data) : this.litter.puppies = [data];
+          setTimeout(()=>{
+            window.location = `/litter/${this.litter.letter}`;
+          }, 1500);
+
+
         }
       });
     },
+    // async getCreate(photoSet){
+    //   return moment.parseZone(photoSet.createAt).format('LL')
+    // },
     async deletePhotoSet() {
 
       let data = {
         id: this.litter.id,
-        sessionName: this.sessionName,
         indexPhotoSet: this.indexPhotoSet
       };
 
@@ -573,6 +609,9 @@ parasails.registerPage('litter', {
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           this.litter.puppies.splice(data.indexPhotoSet, 1);
+          setTimeout(()=>{
+            window.location = `/litter/${this.litter.letter}`;
+          }, 1500);
         }
       });
     },

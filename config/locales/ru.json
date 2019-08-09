@@ -516,10 +516,13 @@
 	"Delete photo session": "Удалить фотосессию",
 	"Delete photo shoot": "Удалить фотосессию",
 	"Status": "Статус",
+	"Date publication": "Дата публикации",
 	"Name photos": "Название фотосессии",
 	"Photo shoot title": "Название фотосессии",
 	"Name photoshoot puppies": "Название фотосессии щенков",
 	"litter": "помёт",
 	"Please input dog name": "Пожалуйста, введите имя собаки",
-	"Pedigree": "Родословная"
+	"Pedigree": "Родословная",
+	"Confirm": "Confirm",
+	"Add photo session": "Add photo session"
 }
