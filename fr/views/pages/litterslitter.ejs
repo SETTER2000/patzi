@@ -51,7 +51,7 @@
     <!--</span>-->
   </el-dialog>
   <% /* Диалоговое окно добавить фотосессию */ %>
-  <el-dialog title="<%= __('Add photo shoot') %>" width="30%"
+  <el-dialog title="<%= __('Add photo shoot') %>"
              :visible.sync="dialogAddedPhotoSession">
     <el-form :label-position="'top'"
              :model="ruleForm" :rules="rules" ref="ruleForm"
@@ -67,6 +67,34 @@
         <el-input maxlength="300" show-word-limit type="textarea"
                   v-model="ruleForm.descriptionPhotoSession"></el-input>
       </el-form-item>
+      <el-divider content-position="left"><%= __('Puppies this litter') %></el-divider>
+      <div class="photo-uploader">
+        <div class="row">
+          <div class="col-md-12 ">
+            <% /*Загрузка фото щенков*/ %>
+            <el-upload
+              action="/api/v1/files/upload"
+              list-type="picture-card"
+              multiple
+              ref="uploadPuppies"
+              :on-preview="handlePictureCardPreview"
+              :before-upload="beforeUpload"
+              :limit="limit"
+              :on-success="handleSuccessPuppies"
+              :on-exceed="handleExceedPuppies"
+              :on-remove="handleRemovePuppies">
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
+
+
+
+            <!------------------------------------------------------------------------------->
+          </div>
+        </div>
+      </div>
       <!--<el-form-item label="Zones" :label-width="formLabelWidth">-->
       <!--<el-select v-model="form.region" placeholder="Please select a zone">-->
       <!--<el-option label="Zone No.1" value="shanghai"></el-option>-->
@@ -80,7 +108,7 @@
   </span>
   </el-dialog>
   <% /* Диалоговое окно удалить фотосессию */ %>
-  <el-dialog title="<%= __('Delete photo shoot') %>" width="30%"
+  <el-dialog title="<%= __('Delete photo shoot') %>"
              :visible.sync="dialogDeletePhotoSession" center>
     <el-form :label-position="'top'"
              :model="ruleForm" :rules="rules" ref="ruleForm"
@@ -110,9 +138,7 @@
         inactive-text="Disable ">
       </el-switch>
     </div>
-    <!--<span>It should be noted that the content will not be aligned in center by default</span>-->
     <div class="block">
-      <!--<span class="demonstration">Switch when indicator is clicked</span>-->
       <el-carousel
         :autoplay="autoplay"
         trigger="click"
@@ -123,26 +149,16 @@
         <el-carousel-item v-for="(item, key, index) in photos" :key="index">
           <h3 class="small text-center">{{ item.label }}</h3>
           <div class="my-flex-cont">
-           
-            <!--<div class="my-flex-box">-->
             <el-image
               :src="item.imageSrc"
               :fit="fit"></el-image>
-            <!--<div class="my-flex-cont">-->
-            <!--<div class="my-flex-box">-->
-            <!--<img :src="item.imageSrc" class="gallery" alt="">-->
-            <!--</div>-->
           </div>
-          <!--</div>-->
         </el-carousel-item>
       </el-carousel>
     </div>
-    <!--<span slot="footer" class="dialog-footer">-->
-    <!--<el-button type="primary" @click="dialogTableVisible = false" ><%= __('Close') %></el-button>-->
-    <!--</span>-->
   </el-dialog>
   <% /* Диалоговое окно Редактор названия фотосессии*/ %>
-  <el-dialog title="<%= __('Photo Shoot Editor') %>" width="30%" :visible.sync="dialogFormVisible">
+  <el-dialog title="<%= __('Photo Shoot Editor') %>"  :visible.sync="dialogFormVisible">
     <el-form :label-position="'top'"
              :model="ruleForm" :rules="rules" ref="ruleForm"
              label-width="120px" class="demo-ruleForm">
@@ -150,21 +166,14 @@
       <el-form-item label="<%= __('Name photoshoot puppies') %>" prop="sessionName">
         <el-input maxlength="60" autofocus="true" show-word-limit v-model="ruleForm.sessionName"></el-input>
       </el-form-item>
-
-      <!--<el-form-item label="Zones" :label-width="formLabelWidth">-->
-      <!--<el-select v-model="form.region" placeholder="Please select a zone">-->
-      <!--<el-option label="Zone No.1" value="shanghai"></el-option>-->
-      <!--<el-option label="Zone No.2" value="beijing"></el-option>-->
-      <!--</el-select>-->
-      <!--</el-form-item>-->
     </el-form>
     <span slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisible = false"><%= __('Cancel') %></el-button>
-    <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Save') %></el-button>
+    <el-button type="primary" @click="updatePhotoSetName('ruleForm')"><%= __('Save') %></el-button>
   </span>
   </el-dialog>
   <% /* Диалоговое окно Редактор описания фотосессии*/ %>
-  <el-dialog title="<%= __('Photo Shoot Editor') %>" width="30%"
+  <el-dialog title="<%= __('Photo Shoot Editor') %>"
              :visible.sync="dialogDescriptionPhotoSession">
     <el-form :label-position="'top'"
              :model="ruleForm" :rules="rules" ref="ruleForm"
@@ -176,11 +185,11 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
     <el-button @click="dialogDescriptionPhotoSession = false"><%= __('Cancel') %></el-button>
-    <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Save') %></el-button>
+    <el-button type="primary" @click="updatePhotoSetDescription('ruleForm')"><%= __('Save') %></el-button>
   </span>
   </el-dialog>
   <% /* Диалоговое окно Редактор помёта*/ %>
-  <el-dialog title="<%= __('Litter Editor') %>" width="30%" :visible.sync="dialogEditor">
+  <el-dialog title="<%= __('Litter Editor') %>" :visible.sync="dialogEditor">
     <el-form :label-position="'top'"
              :model="ruleForm" :rules="rules" ref="ruleForm"
              label-width="120px" class="demo-ruleForm">
@@ -284,11 +293,11 @@
                   <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
                 </span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-edit" command="e">
+                        <el-dropdown-item icon="el-icon-edit" :command="{com:'e'}">
                           <%= __('Change description') %>
                         </el-dropdown-item>
 
-                        <el-dropdown-item icon="el-icon-star-off" command="link">
+                        <el-dropdown-item icon="el-icon-star-off" :command="{com:'link'}">
                           <%= __('Change album art') %>
                         </el-dropdown-item>
                       </el-dropdown-menu>
@@ -360,8 +369,9 @@
         <span v-else><%= __('It has not happened yet. We wait...') %></span>
       </el-divider>
 
-      <div  v-if="litter.puppies">
-        <div  v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
+      <div  class="mb-lg-5"  v-if="litter.puppies">
+        <% /* ФОТОСЕССИИ */ %>
+        <div class="mb-lg-3" v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
           <el-row :gutter="20">
             <% /* Имя фотосессии */ %>
             <el-col :span="10" :offset="7">
@@ -375,16 +385,16 @@
                   <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
                 </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item icon="el-icon-camera-solid" command="c">
+                    <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
                       <%= __('Add photo session') %>
                     </el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-camera" command="a">
+                    <el-dropdown-item icon="el-icon-camera" :command="{com:'a',i:index}">
                       <%= __('Change photo session name') %>
                     </el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-camera" command="b">
+                    <el-dropdown-item icon="el-icon-camera" :command="{com:'b',i:index}">
                       <%= __('Change photo session description') %>
                     </el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-delete-solid" command="d">
+                    <el-dropdown-item icon="el-icon-delete-solid" :command="{com:'d',i:index}">
                       <%= __('Delete photo session') %>
                     </el-dropdown-item>
 
@@ -394,13 +404,12 @@
             </el-col>
           </el-row>
 
-          <% /* ФОТОСЕССИИ */ %>
+          <% /*  */ %>
           <div class="card-body" >
-
-
             <!--<h4 class="card-title"> {{litter.bornNt}}</h4>-->
             <% /*Описание фотосессии.*/ %>
-            <div class="card-text"><p>{{photoSet.descriptionPhotoSession}}</p></div>
+            <div class="card-text"><p>
+                {{photoSet.descriptionPhotoSession}}</p></div>
             <div class="card-text mt-sm-4">
               <% /*Маленькие фото. Превью.*/ %>
               <ul class="flex-container wrap" v-if="photoSet.photos">
@@ -431,6 +440,7 @@
 
 
           </div>
+          <el-divider ><i class="el-icon-star-on"></i></el-divider>
         </div>
       </div>
     </div>
