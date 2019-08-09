@@ -461,5 +461,7 @@
 	"Delete photo shoot": "Delete photo shoot",
 	"Delete photo session": "Delete photo session",
 	"Confirm": "Confirm",
-	"Date publication": "Date publication"
+	"Date publication": "Date publication",
+	"Photo session name": "Photo session name",
+	"Photo session description": "Photo session description"
 }
