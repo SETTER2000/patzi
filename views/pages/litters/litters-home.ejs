@@ -421,7 +421,7 @@
           <% /* Кнопки: Отец, Мать*/ %>
           <div class="flex-container buttons wrap  mt-3">
             <el-tooltip class="item" effect="dark" content="<%= __('Dam') %>" placement="top">
-            <el-link v-if="litter.dam[1]" class="mr-lg-3" type="danger" icon="el-icon-female" @click="goTo(`/dogs/dog/${litter.dam[0]}`)" >
+            <el-link disabled v-if="litter.dam[1]" class="mr-lg-3" type="danger" icon="el-icon-female" @click="goTo(`/dogs/dog/${litter.dam[0]}`)" >
               {{litter.dam[1]}}
             </el-link>
             <el-link v-else disabled  class="mr-lg-3 px-1" type="danger" icon="el-icon-female" >
@@ -429,8 +429,8 @@
             </el-link>
             </el-tooltip>
             &nbsp;
-            <el-tooltip class="item" effect="dark" content="<%= __('Sire') %>" placement="top">
-             <el-link v-if="litter.sire[1]" class="mr-lg-3 px-1" type="danger" icon="el-icon-male" @click="goTo(`/dogs/dog/${litter.sire[0]}`)" >
+            <el-tooltip  class="item" effect="dark" content="<%= __('Sire') %>" placement="top">
+             <el-link disabled v-if="litter.sire[1]" class="mr-lg-3 px-1" type="danger" icon="el-icon-male" @click="goTo(`/dogs/dog/${litter.sire[0]}`)" >
               {{litter.sire[1]}}
             </el-link>
             <el-link v-else disabled  class="mr-lg-3" type="danger" icon="el-icon-male"  >
