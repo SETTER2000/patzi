@@ -111,9 +111,9 @@
   <el-dialog title="<%= __('Delete photo shoot') %>"
              :visible.sync="dialogDeletePhotoSession" center>
     <el-form :label-position="'top'"
-             :model="ruleForm" :rules="rules" ref="ruleForm"
+             :model="ruleForm"  ref="ruleForm"
              label-width="120px" class="demo-ruleForm text-center">
-      {{litter.sessionName}}
+      {{nameSessionPhoto}}
     </el-form>
     <span slot="footer" class="dialog-footer">
     <el-button @click="dialogDeletePhotoSession = false"><%= __('Cancel') %></el-button>
@@ -143,8 +143,9 @@
         :autoplay="autoplay"
         trigger="click"
         height="80vh"
+        setActiveItem
         :initial-index="indexSlide"
-        :next="handlerSetActiveSlider(indexPhoto)"
+        :next="handlerSetActiveSlider(indexSlide)"
       >
         <el-carousel-item v-for="(item, key, index) in photos" :key="index">
           <h3 class="small text-center">{{ item.label }}</h3>
@@ -293,6 +294,11 @@
                   <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
                 </span>
                       <el-dropdown-menu slot="dropdown">
+
+                        <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
+                          <%= __('Add photo session') %>
+                        </el-dropdown-item>
+
                         <el-dropdown-item icon="el-icon-edit" :command="{com:'e'}">
                           <%= __('Change description') %>
                         </el-dropdown-item>
@@ -369,6 +375,12 @@
         <span v-else><%= __('It has not happened yet. We wait...') %></span>
       </el-divider>
 
+      <!--<template>-->
+        <!--<ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">-->
+          <!--<li v-for="i in count" class="infinite-list-item">{{ i }}</li>-->
+        <!--</ul>-->
+      <!--</template>-->
+
       <div  class="mb-lg-5"  v-if="litter.puppies">
         <% /* ФОТОСЕССИИ */ %>
         <div class="mb-lg-3" v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
@@ -394,8 +406,13 @@
                     <el-dropdown-item icon="el-icon-camera" :command="{com:'b',i:index}">
                       <%= __('Change photo session description') %>
                     </el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-delete-solid" :command="{com:'d',i:index}">
+
+                    <el-dropdown-item icon="el-icon-delete-solid" :command="{com:'d',i:index, name:photoSet.sessionName}">
                       <%= __('Delete photo session') %>
+                    </el-dropdown-item>
+
+                    <el-dropdown-item disabled v-if="photoSet.createAt" icon="el-icon-date" command="">
+                      <%= __('Date publication') %> : {{photoSet.createAt | getCreate(me.preferredLocale)}}
                     </el-dropdown-item>
 
                   </el-dropdown-menu>
@@ -413,8 +430,8 @@
             <div class="card-text mt-sm-4">
               <% /*Маленькие фото. Превью.*/ %>
               <ul class="flex-container wrap" v-if="photoSet.photos">
-                <li class="flex-item" v-for="(img, index, key) in photoSet.photos"
-                    :key="index +  '-label'">
+                <li class="flex-item" v-for="(img, idx, key) in photoSet.photos"
+                    :key="idx +  '-label'">
                   <template v-if="me.isSuperAdmin">
                     <div class="ell-relation" v-if="litter.cover === index">
                       <!--<el-button type="warning" size="mini" title="<%= __("Album's cover") %>"-->
@@ -429,7 +446,7 @@
 
                   </template>
                   <div class="ell-image-flex">
-                    <a href="#" @click="showSlider(index)">
+                    <a href="#" @click="showSlider(idx, index)">
                       <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
                     </a>
                   </div>
