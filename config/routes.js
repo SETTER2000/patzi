@@ -115,9 +115,10 @@ module.exports.routes = {
   'PUT     /api/v1/litters/update-cover-album': {action: 'litters/update-cover-album', csrf: false},
   'GET     /api/v1/litters/list-letter': {action: 'litters/list-letter'},
   'POST    /api/v1/litters/update-session-name': {action: 'litters/update-session-name', csrf: false},
+  'POST    /api/v1/litters/update-session-description': { action: 'litters/update-session-description', csrf: false },
   'POST    /api/v1/litters/update-litter': {action: 'litters/update-litter', csrf: false},
   'POST    /api/v1/litters/add-session-photo': {action: 'litters/add-session-photo', csrf: false},
-  'DELETE  /api/v1/litters/destroy-session-photo': { action: 'litters/destroy-session-photo', csrf: false },
+  'POST    /api/v1/litters/destroy-session-photo': { action: 'litters/destroy-session-photo', csrf: false },
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},
   'GET     /api/v1/things/:id': {action: 'things/download-photo'},

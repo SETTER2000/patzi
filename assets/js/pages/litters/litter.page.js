@@ -6,6 +6,10 @@ parasails.registerPage('litter', {
     dialogTableVisible: false,
     dialogPedigreeVisible: true,
     virtualPageSlug: '',
+    dialogImageUrl: '',
+    indexPhotoSet: 0,
+    dialogVisible: false,
+    limit: 50,
     letter: '',
     autoplay: true,
     isAfterDate: false,
@@ -14,7 +18,7 @@ parasails.registerPage('litter', {
     dialogEditor: false,
     dialogAddedPhotoSession: false,
     dialogDeletePhotoSession: false,
-    photos:[],
+    photos: '',
     ruleForm: {
       sire: '',
       dam: '',
@@ -115,7 +119,7 @@ parasails.registerPage('litter', {
   },
   virtualPages: true,
   html5HistoryMode: 'history',
-  virtualPagesRegExp: /^\/litter\/?[A-C]+?\/?([^\/]+)?/,
+  virtualPagesRegExp: /^\/litter\/?[A-Z]+?\/?([^\/]+)?/,
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
@@ -279,6 +283,33 @@ parasails.registerPage('litter', {
       });
     },
 
+
+    beforeUpload(file) {
+      // Проверка размера входящего файла картинки не более (MB)
+      let size = 1;
+      const isJPG = file.type === 'image/jpeg';
+      const isLt2M = file.size / 1024 / 1024 < size;
+
+      if (!isJPG) {
+        this.$message.error('Picture must be JPG format!');
+      }
+
+      if (!isLt2M) {
+        this.$message.error(`Picture size can not exceed ${size}MB!`);
+      }
+
+      // else{
+      //   this.$message.info(this.i19p.successUploadFiles);
+      // }
+      // // setTimeout(()=>{  }, 3000);
+
+      // console.log('xxx file xxx: ', file);
+      // console.log('xxx fileList xxx: ', fileList);
+
+      return isJPG && isLt2M;
+
+    },
+
     // Выбираем все буквы помётов
     async letterList() {
       await io.socket.get(`/api/v1/litters/list-letter`, function gotResponse(body, response) {
@@ -302,6 +333,34 @@ parasails.registerPage('litter', {
       // window.location = `${path}`;
     },
 
+    handleSuccessPuppies(res, file) {
+      console.log('Uploads Puppies:', res);
+      // this.litters.images.push({imageSrc : URL.createObjectURL(file.raw)});
+
+      this.ruleForm.fileListPuppies.push(res);
+      console.log('this.ruleForm.fileListPuppies YYY: ', this.ruleForm.fileListPuppies);
+    },
+
+    handleExceedPuppies(files, fileList) {
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      ${files.length + fileList.length} ${this.i19p.files}`);
+    },
+
+    handleRemovePuppies(file, fileList) {
+      // console.log('file:: ** :');
+      // console.log(file);
+      // console.log('fileList:: ** :');
+      // console.log(fileList);
+      this.ruleForm.fileListPuppies = [];
+      this.ruleForm.fileListPuppies = _.pluck(fileList, 'response');
+      // this.ruleForm.fileList = _.remove(this.ruleForm.fileList, file);
+      console.log(' Remove this.ruleForm.fileListPuppies: ', this.ruleForm.fileListPuppies);
+
+      // this.ruleForm.fileList.push(fileList);
+      // this.ruleForm.fileList = fileList;
+    },
+
 
     showSliderImages(indexPhoto) {
       this.dialogTableVisible = true;
@@ -313,9 +372,9 @@ parasails.registerPage('litter', {
       console.log('this.indexPhoto: ', this.indexPhoto);
     },
 
-   async showSlider(indexPhoto) {
+    async showSlider(indexPhoto) {
       this.dialogTableVisible = true;
-     this.photos = _.pluck(this.litter.puppies, 'photos');
+      this.photos = _.pluck(this.litter.puppies, 'photos')[0];
 
       this.litterId = this.litter.id;
       this.indexSlide = indexPhoto;
@@ -351,33 +410,48 @@ parasails.registerPage('litter', {
       return this.indexPhoto;
     },
 
+    // Установить инбекс фотосессии
+    setIndexPhotoSet: function (command) {
+      // console.log('command: ', command);
+      this.indexPhotoSet = command.i;
+
+    },
+
+
+    // Открыть диалоговое окно "Добавить фотосессию"
+    setAddedPhotoSet: function (command) {
+      this.dialogAddedPhotoSession = true;
+    },
 
     /* Открывает диалоговое окно редактирования*/
     handleCommand(command) {
-      switch (command) {
+      switch (command.com) {
         case 'a':
+          this.setIndexPhotoSet(command);
           this.dialogFormVisible = true;
           break;
         case 'b':
+          this.setIndexPhotoSet(command);
           this.dialogDescriptionPhotoSession = true;
+          break;
+        case 'c':
+          this.setAddedPhotoSet(command);
+          break;
+        case 'd':
+          this.setIndexPhotoSet(command);
+          this.dialogDeletePhotoSession = true;
           // this.ruleForm.description =  this.litter.description;
           break;
         case 'e':
           this.dialogEditor = true;
           // this.ruleForm.description =  this.litter.description;
           break;
-        case 'c':
-          this.dialogAddedPhotoSession = true;
-          // this.ruleForm.description =  this.litter.description;
-          break;
-        case 'd':
-          this.dialogDeletePhotoSession = true;
-          // this.ruleForm.description =  this.litter.description;
-          break;
         case 'link':
           window.location = '/litters';
           break;
+        //default:  this.setIndexPhotoSet(command);
       }
+      // }
       // this.$message('Нажат элемент: ' + command);
     },
 
@@ -456,7 +530,7 @@ parasails.registerPage('litter', {
       this.fixDescription();
       let data = {
         // fileList: this.ruleForm.sessionName,
-        // puppies: this.ruleForm.fileListPuppies,
+        puppies: this.ruleForm.fileListPuppies,
         // letter: this.fixLetter(),
         // dam: this.getDamArr(),
         // sire: this.getSireArr(),
@@ -477,9 +551,7 @@ parasails.registerPage('litter', {
         // this.loading.close();
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          console.log('this.litter.sessionName: ', this.litter.sessionName);
-          this.litter.sessionName = data.sessionName ? data.sessionName : this.litter.sessionName;
-          this.litter.descriptionPhotoSession = data.descriptionPhotoSession ? data.descriptionPhotoSession : '';
+          this.litter.puppies.push(data);
         }
       });
     },
@@ -487,27 +559,29 @@ parasails.registerPage('litter', {
 
       let data = {
         id: this.litter.id,
-        sessionName:this.sessionName
+        sessionName: this.sessionName,
+        indexPhotoSet: this.indexPhotoSet
       };
 
-      io.socket.delete('/api/v1/litters/destroy-session-photo', data, (dataRes, jwRes) => {
+      io.socket.post('/api/v1/litters/destroy-session-photo', data, (dataRes, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-
-        this.dialogAddedPhotoSession = false;
-        // this.loading.close();
+        this.dialogDeletePhotoSession = false;
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          console.log('this.litter.sessionName: ', this.litter.sessionName);
-          this.litter.sessionName = data.sessionName ? data.sessionName : this.litter.sessionName;
-          this.litter.descriptionPhotoSession = data.descriptionPhotoSession ? data.descriptionPhotoSession : '';
+          this.litter.puppies.splice(data.indexPhotoSet, 1);
         }
       });
     },
 
+
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
 
     async updateLitter() {
       this.fixDescription();
@@ -540,6 +614,51 @@ parasails.registerPage('litter', {
           //           // this.ruleForm.list = [];
           //           // this.ruleForm.imageUrl = '';
           // this.getList();
+        }
+      });
+    },
+
+
+    async updatePhotoSetName() {
+      // this.fixDescription();
+      let data = {
+        id: this.litter.id,
+        indexPhotoSet: this.indexPhotoSet,
+        sessionName: this.ruleForm.sessionName,
+      };
+      io.socket.post('/api/v1/litters/update-session-name', data, (dataRes, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+        this.dialogFormVisible = false;
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          this.litter.puppies[data.indexPhotoSet].sessionName = data.sessionName ? data.sessionName : '';
+        }
+      });
+    },
+
+    async updatePhotoSetDescription() {
+      this.fixDescription();
+      let data = {
+        id: this.litter.id,
+        indexPhotoSet: this.indexPhotoSet,
+        sessionName: this.ruleForm.sessionName,
+        descriptionPhotoSession: this.ruleForm.descriptionPhotoSession
+      };
+      io.socket.post('/api/v1/litters/update-session-description', data, (dataRes, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+
+        this.dialogDescriptionPhotoSession = false;
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          this.litter.puppies[data.indexPhotoSet].descriptionPhotoSession = data.descriptionPhotoSession ? data.descriptionPhotoSession : '';
         }
       });
     },

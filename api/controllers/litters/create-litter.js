@@ -50,6 +50,16 @@ module.exports = {
     },
 
 
+
+    descriptionPhotoSession: {
+      type: 'string',
+      maxLength: 300,
+      example: 'Ожидается звёздный помёт. Прекрасные родословные, чистокровные производители.',
+      description: 'Описание фотосессии. Какая то интересная информация.'
+    },
+
+
+
     dam: {
       type: 'ref',
       example: 'Sasquehanna (FCI) Ella',
@@ -111,8 +121,8 @@ module.exports = {
     }
 
     newPuppies.push({
-      sessionName: '30 дней.',
-      descriptionPhotoSession: 'Мои забавные щенки после еды.',
+      sessionName: inputs.sessionName.slice(0, 60),
+      descriptionPhotoSession: inputs.descriptionPhotoSession ? inputs.descriptionPhotoSession : '',
       photos: ''
     });
 
@@ -140,12 +150,14 @@ module.exports = {
       born: moment.tz(born, 'Europe/Moscow').format(),
       owner: this.req.me.id,
       description: inputs.description,
-      sessionName: inputs.sessionName.slice(0, 60),
+      subtitle:inputs.description.slice(0, 100),
+      // sessionName: inputs.sessionName.slice(0, 60),
     }).fetch();
 
 
     // Если не создан возвращаем ошибку.
     if (!litter) {
+
       throw 'badRequest';
     }
 

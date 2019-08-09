@@ -15,12 +15,12 @@ module.exports = {
     },
 
 
-    sessionName: {
-      type: 'string',
-      example: 'Два дня от роду',
-      description: 'Название фотосессии для щенков.'
-    },
 
+    indexPhotoSet: {
+      type: 'number',
+      description: `Индекс объекта данной фотосессии в массиве фотосессий.`,
+      required: true
+    },
 
   },
 
@@ -37,27 +37,28 @@ module.exports = {
   },
 
 
+
   fn: async function (inputs, exits) {
+
+
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
     }
 
-    // let litter = await Litter.findOne(inputs.id)
-    //   .sort('born DESC')
-    //   .populate('owner');
-    //
-    // let burnedBook = await Litter.updateOne(inputs.id)
-    //   .set({
-    //     sessionName: inputs.sessionName,
-    //     descriptionPhotoSession: inputs.descriptionPhotoSession,
-    //   });
-    // if (burnedBook) {
-    //   sails.log('Deleted book with `id: 4`.');
-    // } else {
-    //   sails.log('The database does not have a book with `id: 4`.');
-    // }
+
+    let litter = await Litter.findOne(inputs.id);
+    if (!litter) {
+      throw 'badRequest';
+    }
+    litter.puppies.splice(inputs.indexPhotoSet, 1);
+
+
+    let u= await Litter.updateOne(inputs.id)
+      .set({
+        puppies: litter.puppies
+      });
 
 
     // All done.

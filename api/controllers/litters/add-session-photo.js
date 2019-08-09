@@ -16,6 +16,13 @@ module.exports = {
     },
 
 
+    // indexPhotoSet: {
+    //   type: 'number',
+    //   description: `Индекс объекта данной фотосессии в массиве фотосессий.`,
+    //   required: true
+    // },
+
+
     sessionName: {
       type: 'string',
       example: 'Два дня от роду',
@@ -23,9 +30,9 @@ module.exports = {
     },
 
 
-    fileList: {
+    puppies: {
       type: 'ref',
-      description: 'Массив с fd ссылками на фото родителей.'
+      description: 'Массив с fd ссылками на фото щенков.'
     },
 
 
@@ -36,12 +43,6 @@ module.exports = {
       description: 'Описание фотосессии. Какая то интересная информация.'
     },
 
-
-    letter: {
-      type: 'string',
-      description: 'Буква помёта.',
-      example: 'A'
-    },
   },
 
 
@@ -69,17 +70,33 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-// console.log('inputs.id:: ', inputs.id);
+
 
     let litter = await Litter.findOne(inputs.id);
     if (!litter) throw 'badRequest';
 
 
+    if (inputs.puppies) {
+      puppies = inputs.puppies.filter(o => !_.isNull(o));
+      _.each(puppies, img => {
+        delete img.filename;
+        delete img.status;
+        delete img.field;
+      });
+    }
+
+    // _.each(newPuppies, np => np.photos = puppies);
+    litter.puppies.push({
+      sessionName: inputs.sessionName.slice(0, 60),
+      descriptionPhotoSession: inputs.descriptionPhotoSession ? inputs.descriptionPhotoSession : '',
+      photos: puppies
+    });
+
+
     // Update the record for the logged-in user.
-    await Litter.updateOne({id: inputs.id})
+    await Litter.updateOne(inputs.id)
       .set({
-        sessionName: inputs.sessionName,
-        descriptionPhotoSession: inputs.descriptionPhotoSession,
+        puppies:litter.puppies,
       });
 
 

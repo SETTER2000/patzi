@@ -52,20 +52,20 @@ module.exports = {
       description: 'Описание помёта. Какая то интересная информация.'
     },
 
+    //
+    // descriptionPhotoSession: {
+    //   type: 'string',
+    //   maxLength: 300,
+    //   example: 'Прекрасным тёплым утром. Крошечные комочки после завтрака.',
+    //   description: 'Описание фотосессии. Рассказ про то как и где снимали.'
+    // },
 
-    descriptionPhotoSession: {
-      type: 'string',
-      maxLength: 300,
-      example: 'Прекрасным тёплым утром. Крошечные комочки после завтрака.',
-      description: 'Описание фотосессии. Рассказ про то как и где снимали.'
-    },
-
-
-    sessionName: {
-      type: 'string',
-      example: 'Два дня от роду',
-      description: 'Название фотосессии для щенков.'
-    },
+    //
+    // sessionName: {
+    //   type: 'string',
+    //   example: 'Два дня от роду',
+    //   description: 'Название фотосессии для щенков.'
+    // },
 
 
     cover: {

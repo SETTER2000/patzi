@@ -1,10 +1,16 @@
 module.exports = {
 
 
-  friendlyName: 'Update litter session name',
+  friendlyName: 'Update session description',
 
 
-  description: 'Обновляем название фото сессии',
+  description: 'Обновляем описание фотосессии',
+  /*
+  * id: this.litter.id,
+          indexPhotoSet:this.indexPhotoSet,
+          sessionName: this.ruleForm.sessionName,
+          descriptionPhotoSession: this.ruleForm.descriptionPhotoSession
+  * */
 
   inputs: {
     id: {
@@ -14,20 +20,25 @@ module.exports = {
     },
 
 
-
     indexPhotoSet: {
       type: 'number',
       description: `Индекс объекта данной фотосессии в массиве фотосессий.`,
       required: true
     },
 
+    //
+    // sessionName: {
+    //   type: 'string',
+    //   example: 'Два дня от роду',
+    //   description: 'Название фотосессии для щенков.'
+    // },
 
-    sessionName: {
+
+    descriptionPhotoSession: {
       type: 'string',
-      example: 'Два дня от роду',
-      description: 'Название фотосессии для щенков.'
+      example: 'Прекрасным тёплым утром. Крошечные комочки после завтрака.',
+      description: 'Описание фотосессии. Рассказ про то как и где снимали.'
     },
-
   },
 
 
@@ -58,28 +69,25 @@ module.exports = {
     }
 
 
-    let litter = await Litter.findOne(inputs.id);
+    let litter = await Litter.findOne({id: inputs.id});
     if (!litter) {
       throw 'badRequest';
     }
 
     await _.each(litter.puppies, async (pup, i) => {
-      pup.sessionName = (i === inputs.indexPhotoSet) ? inputs.sessionName : pup.sessionName;
+      pup.descriptionPhotoSession = (i === inputs.indexPhotoSet) ? inputs.descriptionPhotoSession : pup.descriptionPhotoSession;
     });
 
-    let u= await Litter.updateOne(inputs.id)
+   let u= await Litter.updateOne({id: inputs.id})
       .set({
         puppies: litter.puppies
       });
 
-
-    // console.log('бновили: ', u);
-
+// console.log('бновили: ', u);
     // await sails.sockets.broadcast(inputs.collection, `list-${inputs.collection}`);
 
     // All done.
     return exits.success();
-
   }
 
 

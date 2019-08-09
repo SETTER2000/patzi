@@ -708,6 +708,8 @@ parasails.registerPage('litters-home', {
       this.ruleForm.fileListPuppies.push(res);
       console.log('this.ruleForm.fileListPuppies YYY: ', this.ruleForm.fileListPuppies);
     },
+
+
     // Выбираем все буквы помётов
     async letterList() {
       await io.socket.get(`/api/v1/litters/list-letter`, function gotResponse(body, response) {
@@ -737,6 +739,7 @@ parasails.registerPage('litters-home', {
         born: JSON.stringify(this.ruleForm.born),
         description: this.ruleForm.description,
         sessionName: this.ruleForm.sessionName,
+        descriptionPhotoSession: this.ruleForm.descriptionPhotoSession,
       };
 
       io.socket.post('/api/v1/litters/create-litter', data, (data, jwRes) => {
