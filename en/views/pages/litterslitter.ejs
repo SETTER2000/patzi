@@ -400,11 +400,11 @@
                     <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
                       <%= __('Add photo session') %>
                     </el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-camera" :command="{com:'a',i:index}">
-                      <%= __('Change photo session name') %>
+                    <el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:index}">
+                      <%= __('Photo session name') %>
                     </el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-camera" :command="{com:'b',i:index}">
-                      <%= __('Change photo session description') %>
+                    <el-dropdown-item icon="el-icon-edit" :command="{com:'b',i:index}">
+                      <%= __('Photo session description') %>
                     </el-dropdown-item>
 
                     <el-dropdown-item icon="el-icon-delete-solid" :command="{com:'d',i:index, name:photoSet.sessionName}">
