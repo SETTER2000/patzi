@@ -18,12 +18,22 @@ module.exports = {
       description: 'Название фотосессии для щенков.'
     },
 
+
+    born: {
+      type: 'string',
+      required: true,
+      description: 'Дата появления на свет помёта.',
+      //required: true
+    },
+
+
     description: {
       type: 'string',
       maxLength:500,
       example: 'Ожидается звёздный помёт. Прекрасные родословные, чистокровные производители.',
       description: 'Описание помёта. Какая то интересная информация.'
     },
+
 
     subtitle: {
       type: 'string',
@@ -60,22 +70,23 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    console.log('COVER INPUTS:: ', inputs.id);
-    console.log('COVER sessionName:: ', inputs.sessionName);
-
+    const moment = require('moment');
+    const tz = require('moment-timezone');
+    moment.locale('en');
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
     }
-console.log('inputs.descriptionPhotoSession: ',inputs.descriptionPhotoSession);
 
+    let born = inputs.born.replace(/"([^"]+(?="))"/g, '$1');
     // let info = await Image.findOne(q);
     // Update the record for the logged-in user.
     await Litter.updateOne({id: inputs.id})
       .set({
         sessionName: inputs.sessionName,
         subtitle: inputs.subtitle,
+        born: moment.tz(born, 'Europe/Moscow').format(),
         description: inputs.description,
         descriptionPhotoSession: _.isEmpty(inputs.descriptionPhotoSession) ? '' : inputs.descriptionPhotoSession
       });

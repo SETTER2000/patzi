@@ -43,7 +43,7 @@ module.exports.routes = {
 
   // 'GET /litters/litter/:id': {action: 'litters/view-litter'},
   'GET /litter/:letter/:virtualPageSlug?': {action: 'litters/view-litter'},
-  'GET /litters': {action: 'litters/view-litters-home'},
+  'GET /litters/:virtualPageSlug?': {action: 'litters/view-litters-home'},
 
   'GET /contact': {action: 'view-contact', locals: {currentSection: 'contact'}},
   'GET /about': {action: 'view-about', locals: {currentSection: 'about'}},

@@ -463,5 +463,10 @@
 	"Confirm": "Confirm",
 	"Date publication": "Date publication",
 	"Photo session name": "Photo session name",
-	"Photo session description": "Photo session description"
+	"Photo session description": "Photo session description",
+	"title": "title",
+	"Photo": "Photo",
+	"Video": "Video",
+	"you have not uploaded any videos yet": "you have not uploaded any videos yet",
+	"not found": "not found"
 }

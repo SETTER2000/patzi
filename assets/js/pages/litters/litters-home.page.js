@@ -5,6 +5,8 @@ parasails.registerPage('litters-home', {
   data: {
     litters: [],
     letters: [],
+    // Виртуальная часть URL
+    virtualPageSlug: '',
     dams: [],
     noBase:'нет в базе',
     dialogTableVisible: false,
@@ -18,7 +20,7 @@ parasails.registerPage('litters-home', {
     // fileList: [],
     warning: '',
     dialogImageUrl: '',
-    centerDialogAdded: false,
+    centerDialogAdded: true,
     confirmDeleteModalOpen: false,
     centerDialogVisibleWarnings: false,
     dialogVisible: false,
@@ -72,8 +74,7 @@ parasails.registerPage('litters-home', {
       //   {required: true, message: 'Please select a dog gender.', trigger: 'change'}
       // ],
     },
-    // Виртуальная часть URL
-    virtualPageSlug: '',
+
 
     showLitterModalOpen: false,
     value2: '',
@@ -150,6 +151,8 @@ parasails.registerPage('litters-home', {
         limitExceededText3: `Total: `,
         files: `files`,
         successUploadFiles: `Files uploaded successfully!`,
+        getFormatDateLocale: `yyyy-MM-dd`,
+        getFormatDateTimeLocale: `yyyy-MM-dd HH:mm:ss`,
       }],
       ['ru', {
         warnNoDogs: `Нет возможности создать помёт, пока отсутствует хотя бы одна пара собак.`,
@@ -165,6 +168,8 @@ parasails.registerPage('litters-home', {
         limitExceededText3: `Всего`,
         files: `файлов`,
         successUploadFiles: `Файлы успешно загружены!`,
+        getFormatDateLocale: `dd.MM.yyyy`,
+        getFormatDateTimeLocale: `dd.MM.yyyy HH:mm:ss`,
       }]
     ],
   },
@@ -175,7 +180,7 @@ parasails.registerPage('litters-home', {
   html5HistoryMode: 'history',
 
   virtualPagesRegExp: /^\/litters\/?([^\/]+)?/,
-
+  // virtualPagesRegExp: /^\/litter\/?[A-Z]+?\/?([^\/]+)?/,
 
   filters: {
     capitalize: function (value) {
@@ -209,7 +214,7 @@ parasails.registerPage('litters-home', {
     this.damList();
 
     // Буквы помётов
-    this.letterList()
+    this.letterList();
   },
 
   mounted: async function () {
@@ -324,10 +329,18 @@ parasails.registerPage('litters-home', {
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
       this.warning = this.i19p.warnNoDogs;
-      return (this.sires.length > 0 && this.dams.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
+      // this.centerDialogAdded=true;
+       (this.sires.length > 0 && this.dams.length > 0) ? this.goto(`/litters/new`) : this.centerDialogVisibleWarnings = true;
+
+      // return (this.sires.length > 0 && this.dams.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
     },
 
-
+    handlerCloseDialogLitterAdd() {
+      // this.photos = [];
+      this.goto(`/litters`);
+      // this.indexPhoto = 0;
+      // this.autoplay = false;
+    },
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "ShowPhoto <modal>" с <ajax-form> для загрузки фото
     clickShowPhoto: function () {
@@ -749,13 +762,12 @@ parasails.registerPage('litters-home', {
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
-        this.centerDialogAdded = false;
+        // this.centerDialogAdded = false;
+        this.goto('/litters');
         this.loading.close();
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          // this.ruleForm.fileList = [];
-                    // this.ruleForm.list = [];
-                    // this.ruleForm.imageUrl = '';
+
           this.getList();
         }
       });

@@ -490,8 +490,8 @@
 	"Growth (cm)": "Рост (cм)",
 	"Region": "Область, край",
 	"Dog registration number": "Регистрационный номер собаки",
-	"Add your Litter": "Добавьте свой питомник",
 	"Yes": "Да",
+	"not found": "не найдена",
 	"Fashionable, haircut. The washing up. Cleaning the ears, claws, hair removal. Use of professional cosmetics.": "Модная, пародная стрижка. Мытьё. Чистка ушей, когтей, эпиляция. Использование профессиональной косметики.",
 	"Dog Grooming": "Стрижка собак",
 	"Go to dashboard": "Перейти к приборной панели",
@@ -514,6 +514,7 @@
 	"More about litter": "Подробнее о помёте",
 	"Stamp Dog number in the registry.": "Клеймо. Номер собаки в реестре.",
 	"Color": "Цвет",
+	"Puppies": "Щенки",
 	"Add photo shoot": "Добавить фотосессию",
 	"Delete photo session": "Удалить фотосессию",
 	"Delete photo shoot": "Удалить фотосессию",
@@ -526,5 +527,9 @@
 	"Please input dog name": "Пожалуйста, введите имя собаки",
 	"Pedigree": "Родословная",
 	"Confirm": "Подтвердить",
-	"Add photo session": "Добавить фотосессию"
+	"Add photo session": "Добавить фотосессию",
+	"you have not uploaded any videos yet": "вы пока не добавили не одного видео",
+	"Photo": "Фото",
+	"Video": "Видео",
+	"title": "title"
 }
