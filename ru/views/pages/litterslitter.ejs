@@ -90,7 +90,6 @@
             </el-dialog>
 
 
-
             <!------------------------------------------------------------------------------->
           </div>
         </div>
@@ -111,7 +110,7 @@
   <el-dialog title="<%= __('Delete photo shoot') %>"
              :visible.sync="dialogDeletePhotoSession" center>
     <el-form :label-position="'top'"
-             :model="ruleForm"  ref="ruleForm"
+             :model="ruleForm" ref="ruleForm"
              label-width="120px" class="demo-ruleForm text-center">
       {{nameSessionPhoto}}
     </el-form>
@@ -122,7 +121,7 @@
   </el-dialog>
   <% /* Диалоговое окно Слайдер картинок NEW*/ %>
   <el-dialog
-    title="<%= __('Parents') %>"
+    :title="<%= __(`title`) %>"
     :visible.sync="dialogTableVisible"
     :fullscreen="true"
     top="1vh"
@@ -147,19 +146,24 @@
         :initial-index="indexSlide"
         :next="handlerSetActiveSlider(indexSlide)"
       >
-        <el-carousel-item v-for="(item, key, index) in photos" :key="index">
+        <el-carousel-item v-for="(item, key, index) in photos"
+                          :key="index">
           <h3 class="small text-center">{{ item.label }}</h3>
           <div class="my-flex-cont">
             <el-image
               :src="item.imageSrc"
-              :fit="fit"></el-image>
+              :fit="fit">
+              <!--<div slot="placeholder" class="image-slot" style="height:500px;">-->
+              <!--Loading<span class="dot">...</span>-->
+              <!--</div>-->
+            </el-image>
           </div>
         </el-carousel-item>
       </el-carousel>
     </div>
   </el-dialog>
   <% /* Диалоговое окно Редактор названия фотосессии*/ %>
-  <el-dialog title="<%= __('Photo Shoot Editor') %>"  :visible.sync="dialogFormVisible">
+  <el-dialog title="<%= __('Photo Shoot Editor') %>" :visible.sync="dialogFormVisible">
     <el-form :label-position="'top'"
              :model="ruleForm" :rules="rules" ref="ruleForm"
              label-width="120px" class="demo-ruleForm">
@@ -207,6 +211,16 @@
         <el-input maxlength="500" show-word-limit type="textarea" v-model="ruleForm.description"></el-input>
       </el-form-item>
 
+      <% /* Дата помёта NEW */ %>
+      <el-form-item label="<%= __('Date of litter') %>" prop="born">
+        <el-date-picker
+          v-model="ruleForm.born"
+          type="date"
+          :format="i19p.getFormatDateLocale"
+          placeholder="<%= __('Select date and time') %>"
+         >
+        </el-date-picker>
+      </el-form-item>
       <!--<el-form-item label="Zones" :label-width="formLabelWidth">-->
       <!--<el-select v-model="form.region" placeholder="Please select a zone">-->
       <!--<el-option label="Zone No.1" value="shanghai"></el-option>-->
@@ -219,6 +233,38 @@
     <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Save') %></el-button>
   </span>
   </el-dialog>
+  <% /* Modal "Confirm Delete Litter"  */ %>
+  <modal v-if="confirmDeleteLitterModalOpen && selectedLitter" v-cloak key="delete"
+         @close="closeDeleteLitterModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Remove this') %>?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="destroyOneLitter" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingDeleteLitterForm"
+               @submitted="submittedDeleteLitterForm()">
+      <div class="modal-body">
+        <p><%= __('Are you sure you want to remove this') %> {{selectedLitter.label || 'item'}}?</p>
+        <p class="text-muted"
+           v-if="selectedLitter.borrowedBy"><%= __('We will no longer be able to assist with the return of this item, so you will need to contact') %>
+          {{selectedLitter.borrowedBy.fullName}} <%= __('directly to coordinate') %>.</p>
+        <p v-else><%= __('This item will no longer be available to share with friends') %>.</p>
+        <p class="text-danger" v-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a
+              href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal"><%= __('Nevermind') %></button>
+        <button type="submit" class="btn btn-danger ml-1"><%= __('Remove') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+
 
   <% /* Шапка страницы */ %>
   <section class="banner-area relative">
@@ -269,10 +315,12 @@
               <ul v-if="litter.images.length">
                 <li v-for="(img ,index, key) in litter.images" :key="index + '-lst'">
                   <a href="#" @click="showSliderImages()">
-                    <!--<img class="img-fluid" :src="litter.images[0].imageSrc" alt="">-->
                     <el-image :src="img.imageSrc" v-if="index===litter.cover" :lazy="true">
                       <div slot="placeholder" class="image-slot" style="height:500px;">
                         Loading<span class="dot">...</span>
+                      </div>
+                      <div slot="error" class="image-slot">
+                        <i class="el-icon-picture-outline"></i> <%= __('not found') %>
                       </div>
                     </el-image>
                   </a>
@@ -286,15 +334,20 @@
               <el-row :gutter="20">
                 <% /* Буква помёта */ %>
                 <el-col :span="10"><h4><%= __('Litter') %> {{litter.letter.toUpperCase()}}</h4></el-col>
+
+
                 <% /* Кнопки редактирования помёта (dropdown) */ %>
                 <el-col :span="1" :offset="12">
                   <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
                     <el-dropdown @command="handleCommand">
-                <span class="el-dropdown-link">
-                  <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
-                </span>
+                      <span class="el-dropdown-link">
+                        <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
+                      </span>
                       <el-dropdown-menu slot="dropdown">
 
+                        <el-dropdown-item icon="el-icon-circle-plus" :command="{com:'f'}">
+                          <%= __('Add litter') %>
+                        </el-dropdown-item>
                         <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
                           <%= __('Add photo session') %>
                         </el-dropdown-item>
@@ -305,6 +358,15 @@
 
                         <el-dropdown-item icon="el-icon-star-off" :command="{com:'link'}">
                           <%= __('Change album art') %>
+                        </el-dropdown-item>
+
+                        <el-dropdown-item icon="el-icon-delete-solid"
+                                          :command="{com:'dl'}">
+                          <%= __('Delete') %> <%= __('litter') %>
+                         </el-dropdown-item>
+
+                        <el-dropdown-item :divided="true" disabled v-if="litter.createdAt" icon="el-icon-date" command="">
+                          <%= __('Date publication') %> : <br>{{litter.createdAt | getCreate(me.preferredLocale)}}
                         </el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
@@ -328,6 +390,8 @@
               </div>
               <% /* Описание и данные о помёте */ %>
               <ul class="list">
+
+                <% /* Дата помёте */ %>
                 <li><span><%= __('Dob') %>
                     <el-tooltip v-if="isAfterDate" class="item" effect="dark"
                                 content="<%= __("Date of litter. If the date has not yet arrived, then the mating has taken place and the birth is expected on that date.") %>"
@@ -376,90 +440,123 @@
       </el-divider>
 
       <!--<template>-->
-        <!--<ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">-->
-          <!--<li v-for="i in count" class="infinite-list-item">{{ i }}</li>-->
-        <!--</ul>-->
+      <!--<ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">-->
+      <!--<li v-for="i in count" class="infinite-list-item">{{ i }}</li>-->
+      <!--</ul>-->
       <!--</template>-->
-
-      <div  class="mb-lg-5"  v-if="litter.puppies">
-        <% /* ФОТОСЕССИИ */ %>
-        <div class="mb-lg-3" v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
-          <el-row :gutter="20">
-            <% /* Имя фотосессии */ %>
-            <el-col :span="10" :offset="7">
-              <h5 class="text-center"> {{photoSet.sessionName}}</h5>
-            </el-col>
-            <% /* Кнопки управления фотосессией */ %>
-            <el-col :span="1" :offset="6">
-              <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
-                <el-dropdown @command="handleCommand">
+      <template>
+        <!--<el-tabs v-model="activeName" @tab-click="handleClick">-->
+        <el-tabs :tab-position="tabPosition">
+          <!--<el-tabs type="card" @tab-click="handleClick">-->
+          <el-tab-pane label="<%= __('Photo') %>">
+            <transition name="el-fade-in-linear">
+              <div class="mb-lg-5" v-if="litter.puppies">
+                <% /* ФОТОСЕССИИ */ %>
+                <div class="mb-lg-3" v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
+                  <el-row :gutter="20">
+                    <% /* Имя фотосессии */ %>
+                    <el-col :span="10" :offset="7">
+                      <h5 class="text-center"> {{photoSet.sessionName}}</h5>
+                    </el-col>
+                    <% /* Кнопки управления фотосессией */ %>
+                    <el-col :span="1" :offset="6">
+                      <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
+                        <el-dropdown @command="handleCommand">
                 <span class="el-dropdown-link">
                   <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
                 </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
-                      <%= __('Add photo session') %>
-                    </el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:index}">
-                      <%= __('Photo session name') %>
-                    </el-dropdown-item>
-                    <el-dropdown-item icon="el-icon-edit" :command="{com:'b',i:index}">
-                      <%= __('Photo session description') %>
-                    </el-dropdown-item>
+                          <el-dropdown-menu slot="dropdown" >
+                            <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
+                              <%= __('Add photo session') %>
+                            </el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:index}">
+                              <%= __('Photo session name') %>
+                            </el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-edit" :command="{com:'b',i:index}">
+                              <%= __('Photo session description') %>
+                            </el-dropdown-item>
 
-                    <el-dropdown-item icon="el-icon-delete-solid" :command="{com:'d',i:index, name:photoSet.sessionName}">
-                      <%= __('Delete photo session') %>
-                    </el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-delete-solid"
+                                              :command="{com:'d',i:index, name:photoSet.sessionName}">
+                              <%= __('Delete photo session') %>
+                            </el-dropdown-item>
 
-                    <el-dropdown-item disabled v-if="photoSet.createAt" icon="el-icon-date" command="">
-                      <%= __('Date publication') %> : {{photoSet.createAt | getCreate(me.preferredLocale)}}
-                    </el-dropdown-item>
+                            <el-dropdown-item :divided="true" disabled v-if="photoSet.createAt" icon="el-icon-date" command="">
+                              <%= __('Date publication') %> : <br>{{photoSet.createAt | getCreate(me.preferredLocale)}}
+                            </el-dropdown-item>
 
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </div>
-            </el-col>
-          </el-row>
+                          </el-dropdown-menu>
+                        </el-dropdown>
+                      </div>
+                    </el-col>
+                  </el-row>
 
-          <% /*  */ %>
-          <div class="card-body" >
-            <!--<h4 class="card-title"> {{litter.bornNt}}</h4>-->
-            <% /*Описание фотосессии.*/ %>
-            <div class="card-text"><p>
-                {{photoSet.descriptionPhotoSession}}</p></div>
-            <div class="card-text mt-sm-4">
-              <% /*Маленькие фото. Превью.*/ %>
-              <ul class="flex-container wrap" v-if="photoSet.photos">
-                <li class="flex-item" v-for="(img, idx, key) in photoSet.photos"
-                    :key="idx +  '-label'">
-                  <template v-if="me.isSuperAdmin">
-                    <div class="ell-relation" v-if="litter.cover === index">
-                      <!--<el-button type="warning" size="mini" title="<%= __("Album's cover") %>"-->
-                      <!--class="ell-position-button check" icon="el-icon-star-off"-->
-                      <!--circle/>-->
+                  <% /*  */ %>
+                  <div class="card-body">
+                    <!--<h4 class="card-title"> {{litter.bornNt}}</h4>-->
+                    <% /*Описание фотосессии.*/ %>
+                    <div class="card-text"><p>
+                        {{photoSet.descriptionPhotoSession}}</p></div>
+                    <div class="card-text mt-sm-4">
+                      <% /*Маленькие фото. Превью.*/ %>
+                      <ul class="flex-container wrap" v-if="photoSet.photos">
+                        <li class="flex-item" v-for="(img, idx, key) in photoSet.photos"
+                            :key="idx +  '-label'">
+                          <template v-if="me.isSuperAdmin">
+                            <div class="ell-relation" v-if="litter.cover === index">
+                              <!--<el-button type="warning" size="mini" title="<%= __("Album's cover") %>"-->
+                              <!--class="ell-position-button check" icon="el-icon-star-off"-->
+                              <!--circle/>-->
+                            </div>
+                            <div class="ell-relation" v-else>
+                              <!--<el-button size="mini" title="<%= __('Make an album cover') %>"-->
+                              <!--class="ell-position-button" @click="coverPhoto(litter.id,index)"-->
+                              <!--icon="el-icon-document" circle></el-button>-->
+                            </div>
+
+                          </template>
+                          <div class="ell-image-flex">
+                            <a v-loading.fullscreen.lock="fullscreenLoading" href="#" @click="showSlider(idx, index)">
+                              <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
+                            </a>
+                          </div>
+
+                        </li>
+                      </ul>
                     </div>
-                    <div class="ell-relation" v-else>
-                      <!--<el-button size="mini" title="<%= __('Make an album cover') %>"-->
-                      <!--class="ell-position-button" @click="coverPhoto(litter.id,index)"-->
-                      <!--icon="el-icon-document" circle></el-button>-->
-                    </div>
 
-                  </template>
-                  <div class="ell-image-flex">
-                    <a href="#" @click="showSlider(idx, index)">
-                      <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
-                    </a>
+
                   </div>
+                  <el-divider><i class="el-icon-star-on"></i></el-divider>
+                </div>
+              </div>
+            </transition>
+          </el-tab-pane>
+          <el-tab-pane label="<%= __('Video') %>" name="second">
+            <template v-if="!countVideo">
+              <%= __('you have not uploaded any videos yet') %>
+            </template>
+            <template v-else>
+              <div class="infinite-list-wrapper">
+                <ul
+                  class="list"
+                  v-infinite-scroll="load"
+                  infinite-scroll-disabled="disabled">
+                  <li v-for="i in countVideo" class="list-item">
+                    <iframe  width="100%" height="200vh" src="https://www.youtube.com/embed/Z5SmaOld7lM?start=4" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                  </li>
+                </ul>
+                <p v-if="loadingVideo">Loading...</p>
+                <p v-if="noMore">No more</p>
+              </div>
+            </template>
+          </el-tab-pane>
 
-                </li>
-              </ul>
-            </div>
+        </el-tabs>
+      </template>
 
-
-          </div>
-          <el-divider ><i class="el-icon-star-on"></i></el-divider>
-        </div>
-      </div>
     </div>
   </section>
 
