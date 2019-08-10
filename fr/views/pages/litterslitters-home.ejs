@@ -67,13 +67,15 @@
   </div>
 
   <% /* Диалоговое окно. Добавить Помёт NEW. */ %>
-  <div v-if="centerDialogAdded">
+  <!--<div v-if="centerDialogAdded">-->
     <el-dialog
-      title="<%= __('Add your Litter') %>"
+      title="<%= __('Add litter') %>"
       :visible.sync="centerDialogAdded"
       custom-class="dialog-kennel-add"
       :fullscreen="false"
-      center>
+      :before-close="handlerCloseDialogLitterAdd"
+      center
+      v-if="virtualPageSlug==='new'">
 
       <el-dialog
         width="80%"
@@ -103,30 +105,6 @@
           <div class="photo-uploader">
             <div class="row">
               <div class="col-md-12 ">
-                <% /*Загрузка фото родителей*/ %>
-                <!--<el-upload
-                action="/api/v1/files/upload"
-                drag
-                ref="upload"
-                multiple
-                :limit=limit
-                :show-file-list="false"
-                list-type="picture-card"
-                :on-exceed="handleExceed"
-                :file-list="ruleForm.file"
-                :on-success="handleSuccess"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :thumbnail-mode="true"
-                :before-upload="beforeUpload" >
-                <i class="el-icon-plus"></i>
-                <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
-                  {{sizeLess}}<%= __('Kb') %></div>
-              </el-upload>-->
-
-                <!--<el-dialog :visible.sync="dialogVisible">-->
-                <!--<img width="100%" :src="dialogImageUrl" alt="">-->
-                <!--</el-dialog>-->
                 <!---------------------------------------------------------------------------------------->
                 <% /*Загрузка фото NEW*/ %>
                 <el-upload
@@ -145,8 +123,6 @@
                 <el-dialog :visible.sync="dialogVisible">
                   <img width="100%" :src="dialogImageUrl" alt="">
                 </el-dialog>
-
-
                 <!------------------------------------------------------------------------------->
               </div>
             </div>
@@ -185,7 +161,7 @@
         <el-col :span="1"></el-col>
         <el-col :span="23">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
-                   label-width="165px" class="demo-ruleForm">
+                   label-width="175px" class="demo-ruleForm">
 
             <% /* Дата помёта NEW */ %>
             <el-form-item label="<%= __('Date of litter') %>" prop="born">
@@ -193,7 +169,8 @@
                 v-model="ruleForm.born"
                 type="date"
                 placeholder="<%= __('Select date and time') %>"
-                default-time="12:00:00">
+                :format="i19p.getFormatDateLocale"
+              >
               </el-date-picker>
             </el-form-item>
 
@@ -205,22 +182,6 @@
                 v-model="ruleForm.letter">
               </el-input>
             </el-form-item>
-
-
-            <!--<div class="form-group">-->
-            <!--<label><%= __('Litter letter') %></label>-->
-            <!--<input class="form-control"-->
-            <!--:class="(formErrors.label && !uploadFormData.label) ? 'is-invalid' : ''"-->
-            <!--type="text"-->
-            <!--id="validationServerUsername"-->
-            <!--aria-describedby="inputGroupPrepend3"-->
-            <!--v-model.trim="uploadFormData.label"-->
-            <!--placeholder="A">-->
-            <!--<small v-if="formErrors.label && !uploadFormData.label" class="text-danger ">-->
-            <!--<%= __('Please indicate the litter letter.') %>-->
-            <!--</small>-->
-            <!--</div>-->
-
             <% /* Кобель Sire NEW */ %>
             <template v-if="sires">
               <el-form-item label="<%= __('Sire') %>" prop="sire">
@@ -236,7 +197,6 @@
 
                   <template slot-scope="{ item }">
                     <span class="value">{{ item.value }}</span>
-                    <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
                   </template>
                 </el-autocomplete>
               </el-form-item>
@@ -255,7 +215,6 @@
                 ><i slot="prefix" class="el-autocomplete__icon el-icon-female"></i>
                   <template slot-scope="{ item }">
                     <span class="value">{{ item.value }}</span>
-                    <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
                   </template>
                 </el-autocomplete>
               </el-form-item>
@@ -315,7 +274,7 @@
       <span slot="footer" class="dialog-footer">
   </span>
     </el-dialog>
-  </div>
+  <!--</div>-->
 
 
   <!-- start banner Area -->
@@ -340,7 +299,7 @@
             <h3><%= __('Born in') %> Poale Ell</h3>
             <h2><span><%= __('Check Our Work') %></span></h2>
             <div v-if="me.isSuperAdmin || me.isAdmin" class="mt-5">
-              <button class="btn btn-outline-info" @click="clickAddButton()"><%= __('Add litter') %></button>
+              <el-button icon="el-icon-circle-plus-outline" class="btn btn-outline-info" @click="clickAddButton()"><%= __('Add litter') %></el-button>
             </div>
           </div>
         </div>
