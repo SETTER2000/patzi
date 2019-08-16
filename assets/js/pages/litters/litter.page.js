@@ -16,7 +16,6 @@ parasails.registerPage('litter', {
     subtitleLength: 100,
     descriptionLitterLength: 500,
     presentationUrlLength: 280,
-    presentUrlMinLength: 15,
     // Состояние ошибки сервера
     cloudError: '',
     selectedLitter: undefined,
@@ -67,9 +66,9 @@ parasails.registerPage('litter', {
       presentationUrl: [
         {required: true, message: 'Please enter the URL', trigger: 'blur'},
         {
-          min: this.presentUrlMinLength,
+          min:15,
           max: this.presentationUrlLength,
-          message: `Length should be ${this.presentUrlMinLength} to ${this.presentationUrlLength}`,
+          message: `Length should be 15 to ${this.presentationUrlLength}`,
           trigger: 'blur'
         }
       ],
