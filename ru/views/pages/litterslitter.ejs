@@ -58,13 +58,13 @@
              label-width="120px" class="demo-ruleForm">
       <% /*Название фотосессии*/ %>
       <el-form-item label="<%= __('Name photoshoot puppies') %>" prop="sessionName">
-        <el-input maxlength="60" autofocus="true" show-word-limit
+        <el-input clearable :maxlength="photoSetNameLength" autofocus="true" show-word-limit
                   v-model="ruleForm.sessionName"></el-input>
       </el-form-item>
       <% /*Описание фотосессии*/ %>
       <el-form-item label="<%= __('Description of the photo shoot') %>"
                     prop="descriptionPhotoSession">
-        <el-input maxlength="300" show-word-limit type="textarea"
+        <el-input clearable :maxlength="photoSetDescriptionLength" show-word-limit type="textarea"
                   v-model="ruleForm.descriptionPhotoSession"></el-input>
       </el-form-item>
       <el-divider content-position="left"><%= __('Puppies this litter') %></el-divider>
@@ -102,8 +102,40 @@
       <!--</el-form-item>-->
     </el-form>
     <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogFormVisible = false"><%= __('Cancel') %></el-button>
+    <!--<el-button @click="dialogFormVisible = false"><%= __('Cancel') %></el-button>-->
     <el-button type="primary" @click="updateForm('ruleForm')"><%= __('Save') %></el-button>
+  </span>
+  </el-dialog>
+  <% /* Диалоговое окно добавить презентацию */ %>
+  <el-dialog title="<%= __('Add presentation') %>"
+             :visible.sync="dialogAddedPresentation">
+    <el-form :label-position="'top'"
+             :model="ruleForm" :rules="rules" ref="ruleForm"
+             label-width="120px" class="demo-ruleForm">
+      <% /*URL на PDF файл презентации*/ %>
+      <el-form-item label="<%= __('URL') %> (<%= __('add a link to the pdf file of your presentation') %>)" prop="presentationUrl">
+        <el-input :minlength="presentationUrlMinLength" :maxlength="presentationUrlLength"
+                  clearable
+                  autofocus="true"
+                  show-word-limit
+                  placeholder="https://drive.google.com/open?id=1tnZHWrsak3sy_gzz2wt8I7tZb44FC0cW"
+                  v-model="ruleForm.presentationUrl"></el-input>
+      </el-form-item>
+      <% /*Наименование презентации*/ %>
+      <el-form-item label="<%= __('Presentation Name') %>" prop="presentationName">
+        <el-input clearable :maxlength="photoSetNameLength" autofocus="true" show-word-limit
+                  v-model="ruleForm.presentationName"></el-input>
+      </el-form-item>
+      <% /*Описание презентации*/ %>
+      <el-form-item label="<%= __('Presentation description') %>"
+                    prop="descriptionPresentation">
+        <el-input clearable :maxlength="photoSetDescriptionLength" show-word-limit type="textarea"
+                  v-model="ruleForm.descriptionPresentation"></el-input>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogAddedPresentation = false"><%= __('Cancel') %></el-button>
+    <el-button type="primary" @click="addedPresentForm('ruleForm')"><%= __('Save') %></el-button>
   </span>
   </el-dialog>
   <% /* Диалоговое окно удалить фотосессию */ %>
@@ -169,7 +201,7 @@
              label-width="120px" class="demo-ruleForm">
       <% /*Название фотосессии*/ %>
       <el-form-item label="<%= __('Name photoshoot puppies') %>" prop="sessionName">
-        <el-input maxlength="60" autofocus="true" show-word-limit v-model="ruleForm.sessionName"></el-input>
+        <el-input :maxlength="photoSetNameLength" autofocus="true" show-word-limit v-model="ruleForm.sessionName"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -185,7 +217,7 @@
              label-width="120px" class="demo-ruleForm">
       <% /*Описание фотосессии*/ %>
       <el-form-item label="<%= __('Description of the photo shoot') %>" prop="descriptionPhotoSession">
-        <el-input maxlength="300" show-word-limit type="textarea" v-model="ruleForm.descriptionPhotoSession"></el-input>
+        <el-input :maxlength="photoSetDescriptionLength" show-word-limit type="textarea" v-model="ruleForm.descriptionPhotoSession"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -203,12 +235,12 @@
       <!--</el-form-item>-->
       <% /*Краткое Описание Помёта*/ %>
       <el-form-item label="<%= __('Short Litter Description') %>" prop="subtitle">
-        <el-input maxlength="100" show-word-limit type="textarea" v-model="ruleForm.subtitle"></el-input>
+        <el-input :maxlength="subtitleLength" show-word-limit type="textarea" v-model="ruleForm.subtitle"></el-input>
       </el-form-item>
 
       <% /*Описание Помёта*/ %>
       <el-form-item label="<%= __('Description') %>" prop="description">
-        <el-input maxlength="500" show-word-limit type="textarea" v-model="ruleForm.description"></el-input>
+        <el-input :maxlength="descriptionLitterLength" show-word-limit type="textarea" v-model="ruleForm.description"></el-input>
       </el-form-item>
 
       <% /* Дата помёта NEW */ %>
@@ -233,6 +265,39 @@
     <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Save') %></el-button>
   </span>
   </el-dialog>
+  <% /* Modal "Подтвердить удаление презентации" */ %>
+  <modal v-if="confirmDeletePresentationModalOpen && selectedLitter" v-cloak key="delete"
+         @close="closeDeletePresentationModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Remove this') %>?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="destroyOnePresentation"
+               :syncing.sync="syncing"
+               :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingDeletePresentationForm"
+               @submitted="submittedDeletePresentationForm()">
+      <div class="modal-body">
+        <p><%= __('Are you sure you want to remove this') %> {{selectedLitter.label || 'item'}}?</p>
+        <p class="text-muted"
+           v-if="selectedLitter.borrowedBy"><%= __('We will no longer be able to assist with the return of this item, so you will need to contact') %>
+          {{selectedLitter.borrowedBy.fullName}} <%= __('directly to coordinate') %>.</p>
+        <p v-else><%= __('This item will no longer be available to share with friends') %>.</p>
+        <p class="text-danger" v-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a
+              href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal"><%= __('Nevermind') %></button>
+        <button type="submit" class="btn btn-danger ml-1"><%= __('Remove') %></button>
+      </div>
+    </ajax-form>
+  </modal>
   <% /* Modal "Confirm Delete Litter"  */ %>
   <modal v-if="confirmDeleteLitterModalOpen && selectedLitter" v-cloak key="delete"
          @close="closeDeleteLitterModal()">
@@ -351,6 +416,9 @@
                         <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
                           <%= __('Add photo session') %>
                         </el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-present" :command="{com:'g'}">
+                          <%= __('Add presentation') %>
+                        </el-dropdown-item>
 
                         <el-dropdown-item icon="el-icon-edit" :command="{com:'e'}">
                           <%= __('Change description') %>
@@ -446,9 +514,13 @@
       <!--</template>-->
       <template>
         <!--<el-tabs v-model="activeName" @tab-click="handleClick">-->
-        <el-tabs :tab-position="tabPosition">
+        <el-tabs
+          :tab-position="tabPosition"
+          v-model="virtualPageSlug"
+          @tab-click="clickTabName"
+        >
           <!--<el-tabs type="card" @tab-click="handleClick">-->
-          <el-tab-pane label="<%= __('Photo') %>">
+          <el-tab-pane label="<%= __('Photo') %>"  name="photo">
             <transition name="el-fade-in-linear">
               <div class="mb-lg-5" v-if="litter.puppies">
                 <% /* ФОТОСЕССИИ */ %>
@@ -468,6 +540,9 @@
                           <el-dropdown-menu slot="dropdown" >
                             <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
                               <%= __('Add photo session') %>
+                            </el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-present" :command="{com:'g'}">
+                              <%= __('Add presentation') %>
                             </el-dropdown-item>
                             <el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:index}">
                               <%= __('Photo session name') %>
@@ -532,24 +607,66 @@
               </div>
             </transition>
           </el-tab-pane>
-          <el-tab-pane label="<%= __('Video') %>" name="second">
+          <el-tab-pane label="<%= __('Video') %>" name="video">
             <template v-if="!countVideo">
               <%= __('you have not uploaded any videos yet') %>
             </template>
             <template v-else>
-              <div class="infinite-list-wrapper">
-                <ul
-                  class="list"
-                  v-infinite-scroll="load"
-                  infinite-scroll-disabled="disabled">
-                  <li v-for="i in countVideo" class="list-item">
-                    <iframe  width="100%" height="200vh" src="https://www.youtube.com/embed/Z5SmaOld7lM?start=4" frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                  </li>
-                </ul>
-                <p v-if="loadingVideo">Loading...</p>
-                <p v-if="noMore">No more</p>
+              <!--<div class="infinite-list-wrapper">-->
+                <!--<ul-->
+                  <!--class="list"-->
+                  <!--v-infinite-scroll="load"-->
+                  <!--infinite-scroll-disabled="disabled">-->
+                  <!--<li v-for="i in countVideo" class="list-item">-->
+                    <!--&lt;!&ndash;<iframe  width="100%" height="200vh" src="https://www.youtube.com/embed/Z5SmaOld7lM?start=4" frameborder="0"-->
+                            <!--allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"-->
+                            <!--allowfullscreen></iframe>&ndash;&gt;-->
+                  <!--</li>-->
+                <!--</ul>-->
+                <!--<p v-if="loadingVideo">Loading...</p>-->
+                <!--<p v-if="noMore">No more</p>-->
+              <!--</div>-->
+            </template>
+          </el-tab-pane>
+
+          <el-tab-pane label="<%= __('Presentation') %>" name="presentation">
+            <template v-if="!litter.presentation">
+              <%= __('you have not uploaded any presentation yet') %>
+            </template>
+            <template v-else>
+              <div >
+                <el-row :gutter="12">
+                  <el-col :span="8"  v-for="(present,index) in litter.presentation" :key="index + '-present'">
+
+
+                      <el-card shadow="hover">
+                        <div slot="header" class="clearfix">
+                          <span>{{present.presentationName}}</span>
+                          <!--<el-button style="float: right; padding: 3px 0" type="text">Operation button</el-button>-->
+                          <el-button @click="clickDeletePresentation(index)" style="float: right; padding: 6px" icon="el-icon-close" circle></el-button>
+                        </div>
+
+                    <p>Description:   {{present.descriptionPresentation}}</p>
+
+                        <a target="_blank" :href="present.presentationUrl"><img src="https://d3a1wbnh2r1l7y.cloudfront.net/pdf.jpg" height="150" alt=""></a>
+                    </el-card>
+
+                  </el-col>
+                <el-col :span="8" >
+                    <el-card shadow="hover">
+                     <p class="text-center">
+                       <el-button round @click="setAddedPresentation"><%= __('Add presentation') %></el-button>
+                       <!--<el-button type="success" icon="el-icon-present" circle><%= __('Add presentation') %></el-button>-->
+                       <!--<el-link icon="el-icon-present"> <%= __('Add presentation') %></el-link>-->
+                     </p>
+                    </el-card>
+                  </el-col>
+                  <!--  <el-col :span="8">
+                    <el-card shadow="never">
+                      Never
+                    </el-card>
+                  </el-col>-->
+                </el-row>
               </div>
             </template>
           </el-tab-pane>
