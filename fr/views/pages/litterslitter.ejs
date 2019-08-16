@@ -114,7 +114,7 @@
              label-width="120px" class="demo-ruleForm">
       <% /*URL на PDF файл презентации*/ %>
       <el-form-item label="<%= __('URL') %> (<%= __('add a link to the pdf file of your presentation') %>)" prop="presentationUrl">
-        <el-input :minlength="presentUrlMinLength" :maxlength="presentationUrlLength"
+        <el-input  :maxlength="presentationUrlLength"
                   clearable
                   autofocus="true"
                   show-word-limit
