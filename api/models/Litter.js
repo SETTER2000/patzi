@@ -52,6 +52,14 @@ module.exports = {
       description: 'Описание помёта. Какая то интересная информация.'
     },
 
+
+    presentation: {
+      type: 'ref',
+      defaultsTo:[],
+      description: `Массив объектов на файлы презентации.`
+    },
+
+
     //
     // descriptionPhotoSession: {
     //   type: 'string',

@@ -85,15 +85,15 @@ module.exports = {
     }
 
     if (!collectionObject) {
-      console.log('Не найдено!' + collectionObject);
+      // console.log('Не найдено!' + collectionObject);
       throw 'notFound';
     }
 
     if (_.isArray(collectionObject[folder][inputs.photoSet]['photos'])) {
-      console.log('ARRRAY!', collectionObject[folder][inputs.photoSet]['photos']);
+      // console.log('ARRRAY!', collectionObject[folder][inputs.photoSet]['photos']);
     }
     else {
-      console.log('NE ARRAY!', collectionObject[folder][inputs.photoSet]['photos']);
+      // console.log('NE ARRAY!', collectionObject[folder][inputs.photoSet]['photos']);
     }
 
 
@@ -104,7 +104,7 @@ module.exports = {
       throw 'notFound';
     }
 
-    console.log('Выходной массив arr:', arr);
+    // console.log('Выходной массив arr:', arr);
 
 
     /**

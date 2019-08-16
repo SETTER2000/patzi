@@ -119,6 +119,9 @@ module.exports.routes = {
   'POST    /api/v1/litters/update-litter': {action: 'litters/update-litter', csrf: false},
   'POST    /api/v1/litters/add-session-photo': {action: 'litters/add-session-photo', csrf: false},
   'POST    /api/v1/litters/destroy-session-photo': { action: 'litters/destroy-session-photo', csrf: false },
+  'POST    /api/v1/litters/add-presentation': { action: 'litters/add-presentation', csrf: false},
+  'POST    /api/v1/litters/destroy-one-presentation': { action: 'litters/destroy-one-presentation' , csrf: false},
+
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},
   'GET     /api/v1/things/:id': {action: 'things/download-photo'},

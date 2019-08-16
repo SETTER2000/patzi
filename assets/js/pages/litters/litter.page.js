@@ -6,11 +6,20 @@ parasails.registerPage('litter', {
     dialogTableVisible: false,
     dialogPedigreeVisible: true,
     confirmDeleteLitterModalOpen: false,
+    confirmDeletePresentationModalOpen: false,
+    editableTabsValue: 'photo',
     virtualPageSlug: '',
+    deletePresentationIndex: '',
     activeName: 'first',
+    photoSetDescriptionLength: 300,
+    photoSetNameLength: 60,
+    subtitleLength: 100,
+    descriptionLitterLength: 500,
+    presentationUrlLength: 280,
+    presentationUrlMinLength: 15,
     // Состояние ошибки сервера
     cloudError: '',
-    selectedLitter:undefined,
+    selectedLitter: undefined,
     // Состояние загрузки
     syncing: false,
     title: '',
@@ -32,6 +41,8 @@ parasails.registerPage('litter', {
     dialogEditor: false,
     dialogAddedPhotoSession: false,
     dialogDeletePhotoSession: false,
+    dialogAddedPresentation: false,
+    dialogDeletePresentation: false,
     photos: '',
     ruleForm: {
       sire: '',
@@ -52,6 +63,15 @@ parasails.registerPage('litter', {
       sessionName: [
         {required: true, message: 'Please enter the name of the photo session', trigger: 'blur'},
         {min: 1, max: 60, message: 'Length should be 1 to 60', trigger: 'blur'}
+      ],
+      presentation: [
+        {required: true, message: 'Please enter the URL', trigger: 'blur'},
+        {
+          min: this.presentationUrlMinLength,
+          max: this.presentationUrlLength,
+          message: `Length should be ${this.presentationUrlMinLength} to ${this.presentationUrlLength}`,
+          trigger: 'blur'
+        }
       ],
       // growth: [
       //   {required: true, message: 'Please input height dog', trigger: 'change'},
@@ -92,6 +112,7 @@ parasails.registerPage('litter', {
         limitExceededText2: `you selected `,
         limitExceededText3: `Total: `,
         files: `files`,
+        textUrlErr: 'Invalid URL field. Data transfer protocol not specified. For example: http:// or https:// ',
         successUploadFiles: `Files uploaded successfully!`,
         titlePuppies: `Puppies`,
         titleParents: `Parents`,
@@ -111,6 +132,7 @@ parasails.registerPage('litter', {
         limitExceededText2: `вы выбрали`,
         limitExceededText3: `Всего`,
         files: `файлов`,
+        textUrlErr: 'Не верно заполнено поле УРЛ. Не указан протокол передачи данных. Например:  http:// or https:// ',
         successUploadFiles: `Файлы успешно загружены!`,
         titlePuppies: `Щенки`,
         titleParents: `Родители`,
@@ -142,13 +164,15 @@ parasails.registerPage('litter', {
   virtualPages: true,
   html5HistoryMode: 'history',
   virtualPagesRegExp: /^\/litter\/?[A-Z]+?\/?([^\/]+)?/,
+
+
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
-    console.log('THIS::', this.litter.createdAt );
+    // console.log('THIS::', this.litter.createdAt );
     this.isAfter();
     // this.ratio = _.last(_.pluck(this.me.ratio, 'litter'));
     // console.log('ratioTest: ', this.ratioMeTestArr.filter(rat=>rat.letter === this.litter.letter));
@@ -460,7 +484,7 @@ parasails.registerPage('litter', {
     handlerCloseDialogSlider() {
       this.photos = [];
       this.fullscreenLoading = false;
-      this.goto(`/litter/${this.litter.letter}`);
+      this.goto(`/litter/${this.litter.letter}/photo`);
       // this.indexSlide = 0;
       // this.autoplay = false;
     },
@@ -475,6 +499,12 @@ parasails.registerPage('litter', {
       return this.indexPhoto;
     },
 
+    handlerSetActivePresentation(i) {
+      console.log('Нажали по презентации: ', i);
+      // this.photos = _.pluck(this.litter.puppies, 'photos');
+      return this.deletePresentationIndex;
+    },
+
     // Установить инбекс фотосессии
     setIndexPhotoSet: function (command) {
       // console.log('command: ', command);
@@ -487,6 +517,17 @@ parasails.registerPage('litter', {
     setAddedPhotoSet: function (command) {
       this.dialogAddedPhotoSession = true;
     },
+
+    // Открыть диалоговое окно "Добавить фотосессию"
+    setAddedPresentation: function (command) {
+      this.dialogAddedPresentation = true;
+    },
+
+    // Открыть диалоговое окно "Подтвердить удаление презентации"
+    // deletePresentation: function (present) {
+    //   _.remove(this.litter.presentation,present);
+    //   this.$forceUpdate();
+    // },
 
     /* Открывает диалоговое окно редактирования*/
     handleCommand(command) {
@@ -514,6 +555,9 @@ parasails.registerPage('litter', {
           break;
         case 'f':
           window.location = '/litters/new';
+          break;
+        case 'g':
+          this.setAddedPresentation(command);
           break;
         case 'dl':
           this.clickDeleteLitter();
@@ -550,6 +594,17 @@ parasails.registerPage('litter', {
       });
     },
 
+    async addedPresentForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.addedPresent();
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+
     async getNameSession(indexPhotoSet) {
       return this.litter.puppies[0].hasOwnProperty('sessionName') ? this.litter.puppies[0].sessionName : '';
     },
@@ -566,7 +621,7 @@ parasails.registerPage('litter', {
 
 
     _clearAddFriendsModal: function () {
-      this.goto(`/litter/${this.litter.letter}`);
+      this.goto(`/litter/${this.litter.letter}/photo`);
       // Reset form data.
       // this.addFriendsFormData = {
       //   friends: [
@@ -597,8 +652,8 @@ parasails.registerPage('litter', {
       this._clearAddFriendsModal();
     },
 
-    fixDescription() {
-      this.ruleForm.description > 500 ? this.mesError('Много текста!') : '';
+    fixDescription(i) {
+      this.ruleForm.description > i ? this.mesError('Много текста!') : '';
     },
 
     async addPhotoSet() {
@@ -629,16 +684,51 @@ parasails.registerPage('litter', {
           console.log('this.litter.puppies:::', this.litter.puppies);
           _.isArray(this.litter.puppies) ? this.litter.puppies.push(data) : this.litter.puppies = [data];
           setTimeout(() => {
-            window.location = `/litter/${this.litter.letter}`;
+            window.location = `/litter/${this.litter.letter}/photo`;
           }, 1500);
 
 
         }
       });
     },
-    // async getCreate(photoSet){
-    //   return moment.parseZone(photoSet.createAt).format('LL')
-    // },
+
+    async addedPresent() {
+      this.fixDescription(this.presentationUrlLength);
+      if (_.isNull(this.ruleForm.presentationUrl.match(/^http:\/\/|^https:\/\//))) {
+        this.mesError(this.i19p.textUrlErr);
+        return false;
+      }
+
+      let data = {
+        id: this.litter.id,
+        presentationName: this.ruleForm.presentationName,
+        presentationUrl: this.ruleForm.presentationUrl,
+        descriptionPresentation: this.ruleForm.descriptionPresentation,
+        // born: JSON.stringify(this.ruleForm.born),
+      };
+
+      io.socket.post('/api/v1/litters/add-presentation', data, (dataRes, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+
+        this.dialogAddedPresentation = false;
+
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          console.log('this.litter.presentation:::', this.litter.presentation);
+          _.isArray(this.litter.presentation) ? this.litter.presentation.push(data) : this.litter.presentation = [data];
+          this.goto(`/litter/${this.litter.letter}/presentation`);
+          // setTimeout(() => {
+          //   window.location = `/litter/${this.litter.letter}`;
+          // }, 1500);
+        }
+      });
+    },
+
+
     async deletePhotoSet() {
 
       let data = {
@@ -657,7 +747,7 @@ parasails.registerPage('litter', {
           this.resetForm('ruleForm');
           this.litter.puppies.splice(data.indexPhotoSet, 1);
           setTimeout(() => {
-            window.location = `/litter/${this.litter.letter}`;
+            window.location = `/litter/${this.litter.letter}/photo`;
           }, 1500);
         }
       });
@@ -670,7 +760,7 @@ parasails.registerPage('litter', {
     },
 
     async updateLitter() {
-      this.fixDescription();
+      this.fixDescription(this.descriptionLitterLength);
       let data = {
         id: this.litter.id,
         description: this.ruleForm.description,
@@ -724,7 +814,7 @@ parasails.registerPage('litter', {
     },
 
     async updatePhotoSetDescription() {
-      this.fixDescription();
+      this.fixDescription(this.photoSetDescriptionLength);
       let data = {
         id: this.litter.id,
         indexPhotoSet: this.indexPhotoSet,
@@ -798,7 +888,7 @@ parasails.registerPage('litter', {
     load() {
       this.loadingVideo = true;
       setTimeout(() => {
-        this.countVideo += 2;
+        // this.countVideo += 2;
         this.loadingVideo = false;
       }, 2000);
     },
@@ -807,16 +897,35 @@ parasails.registerPage('litter', {
       this.confirmDeleteLitterModalOpen = true;
       this.selectedLitter = this.litter;
     },
+    // Это кнопка вызывает модальное окно <modal> с <ajax-form> для удаления презентации
+    clickDeletePresentation(i) {
+      this.confirmDeletePresentationModalOpen = true;
+      this.selectedLitter = this.litter;
+      this.deletePresentationIndex = i;
+    },
 
     closeDeleteLitterModal: function () {
       this.selectedLitter = undefined;
       this.confirmDeleteLitterModalOpen = false;
     },
+    closeDeletePresentationModal: function () {
+      this.selectedLitter = undefined;
+      this.confirmDeletePresentationModalOpen = false;
+    },
+
     handleParsingDeleteLitterForm: function () {
       return {
         id: this.selectedLitter.id
       };
     },
+    handleParsingDeletePresentationForm: function () {
+      return {
+        id: this.selectedLitter.id,
+        // obj: this.deletePresentationIndex,
+        index: this.deletePresentationIndex,
+      };
+    },
+
     submittedDeleteLitterForm: function () {
       // _.remove(this.litters, {id: this.selectedLitter.id});
       this.fullscreenLoading = true;
@@ -829,5 +938,26 @@ parasails.registerPage('litter', {
         this.goto('/litters');
       }, 1500);
     },
+
+    submittedDeletePresentationForm: function () {
+      // _.remove(this.litter.presentation,present);
+
+      this.fullscreenLoading = true;
+
+      this.$forceUpdate();
+      this.confirmDeletePresentationModalOpen = false;
+      this.selectedLitter = undefined;
+      this.handlerSetActiveSlider();
+      setTimeout(() => {
+        this.goto(`http://localhost:1337/litter/${this.litter.letter}/presentation`);
+      }, 1000);
+    },
+
+    clickTabName() {
+      let activeName = this.virtualPageSlug;
+      this.goto(`/litter/${this.litter.letter}/${activeName}`);
+    },
+
+
   },
 });

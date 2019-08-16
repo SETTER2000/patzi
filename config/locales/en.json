@@ -468,5 +468,12 @@
 	"Photo": "Photo",
 	"Video": "Video",
 	"you have not uploaded any videos yet": "you have not uploaded any videos yet",
-	"not found": "not found"
+	"not found": "not found",
+	"Presentation": "Presentation",
+	"you have not uploaded any presentation yet": "you have not uploaded any presentation yet",
+	"Add presentation": "Add presentation",
+	"URL": "URL",
+	"add a link to the pdf file of your presentation": "add a link to the pdf file of your presentation",
+	"Presentation Name": "Presentation Name",
+	"Presentation description": "Presentation description"
 }
