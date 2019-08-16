@@ -67,8 +67,8 @@ parasails.registerPage('litter', {
         {required: true, message: 'Please enter the URL', trigger: 'blur'},
         {
           min:15,
-          max: this.presentationUrlLength,
-          message: `Length should be 15 to ${this.presentationUrlLength}`,
+          max: 280,
+          message: `Length should be 15 to 280`,
           trigger: 'blur'
         }
       ],
