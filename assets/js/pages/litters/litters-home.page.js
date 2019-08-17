@@ -734,6 +734,9 @@ parasails.registerPage('litters-home', {
         this.letters = data;
       });
     },
+
+
+
     fixLetter() {
       // console.log('this.letters: ', this.letters);
       return (_.find(this.letters, letter => letter.letter === this.ruleForm.letter.toUpperCase())) ? this.mesError(text = 'Такой помёт уже существует. Измените букву помёта.') :

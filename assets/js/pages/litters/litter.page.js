@@ -5,6 +5,21 @@ parasails.registerPage('litter', {
   data: {
     dialogTableVisible: false,
     dialogPedigreeVisible: true,
+    show: false,
+    comment: '',
+    commentsLength:0,
+    activeNames: ['1'],
+    likeLength:0,
+    commentsLengthNew:0,
+    comments: [],
+    dateFrom: moment(),
+    // litterComments: [
+    //   {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа', data: moment().format('LLL')},
+    //   {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа 22aZ', data: moment().format('LLL')},
+    //   {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа 3', data: moment().format('LLL')},
+    //   {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа 4', data: moment().format('LLL')},
+    //
+    // ],
     confirmDeleteLitterModalOpen: false,
     confirmDeletePresentationModalOpen: false,
     editableTabsValue: 'photo',
@@ -31,6 +46,7 @@ parasails.registerPage('litter', {
     nameSessionPhoto: '',
     count: 0,
     dialogVisible: false,
+    circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
     limit: 50,
     letter: '',
     autoplay: true,
@@ -43,7 +59,11 @@ parasails.registerPage('litter', {
     dialogAddedPresentation: false,
     dialogDeletePresentation: false,
     photos: '',
+    commentForm: {
+      comment: '',
+    },
     ruleForm: {
+      show: undefined,
       sire: '',
       dam: '',
       label: '',
@@ -66,7 +86,7 @@ parasails.registerPage('litter', {
       presentationUrl: [
         {required: true, message: 'Please enter the URL', trigger: 'blur'},
         {
-          min:15,
+          min: 15,
           max: 280,
           message: `Length should be 15 to 280`,
           trigger: 'blur'
@@ -184,15 +204,16 @@ parasails.registerPage('litter', {
     // Кобели
     this.letterList();
 
-    // Ratio Рейтинги
-
+    // Выбираем все комментарии
+    this.commentList();
 
   },
   filters: {
-    getCreate: function (value, l) {
+    getCreate: function (value, l, format) {
       if (!value) return '';
       moment.locale(l);
-      return (moment.parseZone(value).format('LLL')) ? moment.parseZone(value).format('LLL') : value;
+      let formatNew = (!format) ? 'LLL' : format;
+      return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     }
   },
   mounted: async function () {
@@ -957,6 +978,68 @@ parasails.registerPage('litter', {
       this.goto(`/litter/${this.litter.letter}/${activeName}`);
     },
 
+    onSubmit() {
+      // if (event) event.preventDefault();
+      // alert('Хующки!!');
+      // event.preventDefault();
+      // console.log('event::', event);
+      console.log('FOP::', this.commentForm);
+      //
+    },
+
+
+    // addCommit: function () {
+    //   let arr = this.comments;
+    //   if (_.isEmpty(this.comment)) return false;
+    //
+    //   this.updateComment();
+    //
+    // },
+
+
+    // Выбираем все комментарии
+    async commentList() {
+      await io.socket.get(`/api/v1/litters/list-comment/${this.litter.id}`, function gotResponse(body, response) {
+        console.log('Сервис Comment List ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-comment', (data) => {
+        console.log('comment: ', data);
+        this.commentsLength=data.length;
+        this.comments = data;
+      });
+    },
+
+    // Обновляем массив комментариев
+    async updateComment() {
+      if (_.isEmpty(this.comment)) return false;
+      let data = {
+        id: this.litter.id,
+        comment: this.comment,
+        userName:this.me.fullName
+      };
+      io.socket.post('/api/v1/litters/add-comment', data, (dataRes, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+
+
+        if (jwRes.statusCode === 200) {
+          this.comment = '';
+          // this.comments.push(data);
+        }
+      });
+    },
+    handleChange(val) {
+      console.log(val);
+    }
+
+
+
+
 
   },
 });
+//

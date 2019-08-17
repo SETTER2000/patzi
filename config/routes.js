@@ -114,6 +114,7 @@ module.exports.routes = {
   'GET     /api/v1/litters/list': {action: 'litters/list'},
   'PUT     /api/v1/litters/update-cover-album': {action: 'litters/update-cover-album', csrf: false},
   'GET     /api/v1/litters/list-letter': {action: 'litters/list-letter'},
+  'GET     /api/v1/litters/list-comment/:id': { action: 'litters/list-comment' },
   'POST    /api/v1/litters/update-session-name': {action: 'litters/update-session-name', csrf: false},
   'POST    /api/v1/litters/update-session-description': { action: 'litters/update-session-description', csrf: false },
   'POST    /api/v1/litters/update-litter': {action: 'litters/update-litter', csrf: false},
@@ -121,6 +122,9 @@ module.exports.routes = {
   'POST    /api/v1/litters/destroy-session-photo': { action: 'litters/destroy-session-photo', csrf: false },
   'POST    /api/v1/litters/add-presentation': { action: 'litters/add-presentation', csrf: false},
   'POST    /api/v1/litters/destroy-one-presentation': { action: 'litters/destroy-one-presentation' , csrf: false},
+  'POST    /api/v1/litters/add-comment': { action: 'litters/add-comment', csrf: false },
+
+
 
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},

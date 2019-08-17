@@ -84,7 +84,7 @@ module.exports.bootstrap = async function () {
     emailAddress: 'administrator.f@mail.ru',
     fullName: 'Poale Ell Adam',
     isAdmin: false,
-    // preferredLocale: 'en',
+    preferredLocale: 'en',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
     gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
   }).fetch();
@@ -94,7 +94,7 @@ module.exports.bootstrap = async function () {
     fullName: 'Bob Scott',
     isAdmin: false,
     isSuperAdmin: true,
-    // preferredLocale: 'en',
+    preferredLocale: 'en',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
     gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
   }).fetch();

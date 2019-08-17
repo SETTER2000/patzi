@@ -60,6 +60,22 @@ module.exports = {
     },
 
 
+
+    comments: {
+      type: 'ref',
+      defaultsTo:[],
+      description: `Массив объектов. Комментарии к помёту.`,
+      example:`
+       litterComments: [
+      {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа',      dateCreate: moment().unix()},
+      {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа 22aZ', dateCreate: moment().unix()},
+      {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа 3',    dateCreate: moment().unix()},
+      {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа 4',    dateCreate: moment().unix()},
+    ],
+      `
+    },
+
+
     //
     // descriptionPhotoSession: {
     //   type: 'string',

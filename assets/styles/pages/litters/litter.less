@@ -1,10 +1,82 @@
 #litter {
-  .el-dialog--center .el-dialog__body{
+  .share {
+    position: relative;
+    display: inline-block;
+    height: 13px;
+    width: 25px;
+  }
+
+  .share::after {
+    content: '';
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("../../images/share.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  .el-select .el-input {
+    width: 50px;
+  }
+  .input-with-select .el-input-group__prepend {
+    background-color: #fff;
+  }
+  .el-input-group__prepend {
+    background-color: #fff;
+    padding: 2px 6px 0;
+    border: none;
+
+  }
+  a.user-comment{
+    font-weight: bold;
+    color: #385898;
+  }
+  li.comm > span > a.user-comment:hover{
+    text-decoration: underline !important;
+  }
+  ul.hr {
+    margin-bottom: 20px; /* Обнуляем значение отступов */
+    padding: 0; /* Значение полей */
+  }
+  ul.hr li {
+   // display: inline; /* Отображать как строчный элемент */
+  }
+  ul.hr li.avat{
+    position: relative;
+    .avat{
+      position: absolute;
+      top:1px;
+    }
+  }
+  li.comm{
+    margin-left:41px;
+  }
+
+.comment{
+  background-color: #F2F3F5;
+  padding: 10px 10px;
+
+  border-radius: 20px;
+  color: #1c1e21;
+  display: inline-block;
+  line-height: 16px;
+  white-space: normal;
+  word-break: break-word;
+  font-size: 13px;
+}
+  .el-input__inner {
+    border-radius: 30px;
+  }
+  .el-dialog--center .el-dialog__body {
     padding-top: 0;
   }
-  .infinite-list-wrapper{
+  .infinite-list-wrapper {
     height: 50vh;
-    overflow:auto;
+    overflow: auto;
   }
   .transition-box {
     margin-bottom: 10px;
@@ -120,7 +192,7 @@
       font-weight: bold;
       font-size: 2em;
       text-align: center;
-      .el-button{
+      .el-button {
         margin: 2px;
       }
     }
@@ -137,14 +209,22 @@
     background: deepskyblue;
   }
 
-
-  .el-switch{
+  .el-switch {
     height: 40px;
   }
 
   /* start CSS SLIDER DIALOG */
-  .el-carousel__item{
+  .el-carousel__item {
     padding-right: 5px;
+  }
+  .button-like {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+    align-items: center;
+    //el-button {
+    //  flex: 0 1 auto;
+    //}
   }
   .my-flex-cont {
     display: flex;
@@ -162,7 +242,6 @@
     padding: 0;
   }
   /* end CSS SLIDER DIALOG */
-
 
   //.my-flex-cont {
   //  display: flex;
@@ -185,7 +264,7 @@
 
   img.gallery {
     &:hover {
-      +.flx {
+      + .flx {
         opacity: .8;
       }
       opacity: .9;
@@ -218,14 +297,14 @@
         align-items: center;
         align-content: center;
         height: 32px;
-        &:hover{
+        &:hover {
 
           background-color: orangered;
           color: white;
 
           border-radius: 50%;
         }
-        .el-icon-* {
+        .el-icon- * {
           flex: 0 1 auto;
         }
       }
@@ -233,10 +312,10 @@
 
   }
   .el-rate__icon {
-  font-size: 1.6rem;
+    font-size: 1.6rem;
   }
   @media (max-width: 900px) {
-    .el-dialog{
+    .el-dialog {
       width: 90%;
     }
   }
