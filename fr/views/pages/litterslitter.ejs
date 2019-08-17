@@ -113,8 +113,9 @@
              :model="ruleForm" :rules="rules" ref="ruleForm"
              label-width="120px" class="demo-ruleForm">
       <% /*URL на PDF файл презентации*/ %>
-      <el-form-item label="<%= __('URL') %> (<%= __('add a link to the pdf file of your presentation') %>)" prop="presentationUrl">
-        <el-input  :maxlength="presentationUrlLength"
+      <el-form-item label="<%= __('URL') %> (<%= __('add a link to the pdf file of your presentation') %>)"
+                    prop="presentationUrl">
+        <el-input :maxlength="presentationUrlLength"
                   clearable
                   autofocus="true"
                   show-word-limit
@@ -201,7 +202,8 @@
              label-width="120px" class="demo-ruleForm">
       <% /*Название фотосессии*/ %>
       <el-form-item label="<%= __('Name photoshoot puppies') %>" prop="sessionName">
-        <el-input :maxlength="photoSetNameLength" autofocus="true" show-word-limit v-model="ruleForm.sessionName"></el-input>
+        <el-input :maxlength="photoSetNameLength" autofocus="true" show-word-limit
+                  v-model="ruleForm.sessionName"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -217,7 +219,8 @@
              label-width="120px" class="demo-ruleForm">
       <% /*Описание фотосессии*/ %>
       <el-form-item label="<%= __('Description of the photo shoot') %>" prop="descriptionPhotoSession">
-        <el-input :maxlength="photoSetDescriptionLength" show-word-limit type="textarea" v-model="ruleForm.descriptionPhotoSession"></el-input>
+        <el-input :maxlength="photoSetDescriptionLength" show-word-limit type="textarea"
+                  v-model="ruleForm.descriptionPhotoSession"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -240,7 +243,8 @@
 
       <% /*Описание Помёта*/ %>
       <el-form-item label="<%= __('Description') %>" prop="description">
-        <el-input :maxlength="descriptionLitterLength" show-word-limit type="textarea" v-model="ruleForm.description"></el-input>
+        <el-input :maxlength="descriptionLitterLength" show-word-limit type="textarea"
+                  v-model="ruleForm.description"></el-input>
       </el-form-item>
 
       <% /* Дата помёта NEW */ %>
@@ -250,7 +254,7 @@
           type="date"
           :format="i19p.getFormatDateLocale"
           placeholder="<%= __('Select date and time') %>"
-         >
+        >
         </el-date-picker>
       </el-form-item>
       <!--<el-form-item label="Zones" :label-width="formLabelWidth">-->
@@ -330,7 +334,6 @@
     </ajax-form>
   </modal>
 
-
   <% /* Шапка страницы */ %>
   <section class="banner-area relative">
     <div class="container">
@@ -400,7 +403,6 @@
                 <% /* Буква помёта */ %>
                 <el-col :span="10"><h4><%= __('Litter') %> {{litter.letter.toUpperCase()}}</h4></el-col>
 
-
                 <% /* Кнопки редактирования помёта (dropdown) */ %>
                 <el-col :span="1" :offset="12">
                   <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
@@ -431,9 +433,10 @@
                         <el-dropdown-item icon="el-icon-delete-solid"
                                           :command="{com:'dl'}">
                           <%= __('Delete') %> <%= __('litter') %>
-                         </el-dropdown-item>
+                        </el-dropdown-item>
 
-                        <el-dropdown-item :divided="true" disabled v-if="litter.createdAt" icon="el-icon-date" command="">
+                        <el-dropdown-item :divided="true" disabled v-if="litter.createdAt" icon="el-icon-date"
+                                          command="">
                           <%= __('Date publication') %> : <br>{{litter.createdAt | getCreate(me.preferredLocale)}}
                         </el-dropdown-item>
                       </el-dropdown-menu>
@@ -520,14 +523,16 @@
           @tab-click="clickTabName"
         >
           <!--<el-tabs type="card" @tab-click="handleClick">-->
-          <el-tab-pane label="<%= __('Photo') %>"  name="photo">
+          <el-tab-pane label="<%= __('Photo') %>" name="photo">
             <transition name="el-fade-in-linear">
               <div class="mb-lg-5" v-if="litter.puppies">
                 <% /* ФОТОСЕССИИ */ %>
-                <div class="mb-lg-3" v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
+                <div class="mb-lg-3 " v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
                   <el-row :gutter="20">
+                    <el-divider v-if="index>0"><i class="el-icon-star-on"></i></el-divider>
                     <% /* Имя фотосессии */ %>
                     <el-col :span="10" :offset="7">
+
                       <h5 class="text-center"> {{photoSet.sessionName}}</h5>
                     </el-col>
                     <% /* Кнопки управления фотосессией */ %>
@@ -537,7 +542,7 @@
                 <span class="el-dropdown-link">
                   <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
                 </span>
-                          <el-dropdown-menu slot="dropdown" >
+                          <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
                               <%= __('Add photo session') %>
                             </el-dropdown-item>
@@ -556,7 +561,8 @@
                               <%= __('Delete photo session') %>
                             </el-dropdown-item>
 
-                            <el-dropdown-item :divided="true" disabled v-if="photoSet.createAt" icon="el-icon-date" command="">
+                            <el-dropdown-item :divided="true" disabled v-if="photoSet.createAt" icon="el-icon-date"
+                                              command="">
                               <%= __('Date publication') %> : <br>{{photoSet.createAt | getCreate(me.preferredLocale)}}
                             </el-dropdown-item>
 
@@ -599,10 +605,82 @@
                         </li>
                       </ul>
                     </div>
+                    <el-divider></el-divider>
+                    <template>
+                      <div>
+                        <el-row class="button-like">
 
+                          <el-button size="medium"><i class="ti-thumb-up"></i>&nbsp; <%= __('Like') %>
+                            ({{likeLength}})
+                          </el-button>
+
+                          <el-badge :value="commentsLengthNew" :max="99" >
+                            <el-button @click="ruleForm.show = index" icon="el-icon-chat-square"
+                                     size="medium"><%= __('Comment') %> ({{commentsLength}})
+                            </el-button>
+                          </el-badge>
+                          <el-button size="medium"><span class="share"></span><%= __('Share') %></el-button>
+                        </el-row>
+                        <transition name="el-fade-in-linear">
+                          <div v-if="ruleForm.show === index">
+                            <div class="row justify-content-center my-4">
+                              <div class="col-sm-8">
+                                <div class="row">
+                                  <div class="col">
+                                    <el-collapse v-model="activeNames" @change="handleChange">
+                                      <el-collapse-item title="Consistency" name="1">
+                                        <div>Consistent with real life: in line with the process and logic of real life, and comply with languages and habits that the users are used to;</div>
+                                        <div>Consistent within interface: all elements should be consistent, such as: design style, icons and texts, position of elements, etc.</div>
+                                        <ul class="hr" v-for="(com,index) in comments">
+                                          <li class="avat">
+                                            <div class="avat">
+                                              <el-avatar :size="35" :src="com.avatarUrl"></el-avatar>
+                                            </div>
+                                          </li>
+                                          <li class="comm">
+                                            <span class="comment"><a href="#" class="user-comment">{{com.user}} </a>{{com.comment}}</a></span>
+                                            <br>
+                                            <small>
+                                              <el-tooltip class="item" effect="dark"
+                                                          :content="com.date | getCreate(me.preferredLocale,'LLLL')"
+                                                          placement="top-start">
+                                                <el-link type="info" class="mt-0">
+                                                  <small>{{dateFrom.from(com.date)}}</small>
+                                                </el-link>
+                                              </el-tooltip>
+                                            </small>
+                                          </li>
+                                        </ul>
+
+                                        <el-form @submit.native.prevent>
+                                          <el-form-item>
+                                            <el-input @keyup.enter.native="updateComment"
+                                                      class="mt-2"
+                                                      @blur="updateComment"
+                                                      clearable placeholder="<%= __('Write a comment') %>"
+                                                      v-model="comment">
+                                              <i slot="prefix" class="el-input__icon el-icon-chat-line-round"></i>
+                                              <template slot="prepend">
+                                                <el-avatar :size="35" :src="me.gravatar"></el-avatar>
+                                              </template>
+                                            </el-input>
+                                          </el-form-item>
+                                        </el-form>
+                                      </el-collapse-item>
+                                    </el-collapse>
+
+
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                        </transition>
+                      </div>
+                    </template>
 
                   </div>
-                  <el-divider><i class="el-icon-star-on"></i></el-divider>
                 </div>
               </div>
             </transition>
@@ -613,18 +691,18 @@
             </template>
             <template v-else>
               <!--<div class="infinite-list-wrapper">-->
-                <!--<ul-->
-                  <!--class="list"-->
-                  <!--v-infinite-scroll="load"-->
-                  <!--infinite-scroll-disabled="disabled">-->
-                  <!--<li v-for="i in countVideo" class="list-item">-->
-                    <!--&lt;!&ndash;<iframe  width="100%" height="200vh" src="https://www.youtube.com/embed/Z5SmaOld7lM?start=4" frameborder="0"-->
-                            <!--allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"-->
-                            <!--allowfullscreen></iframe>&ndash;&gt;-->
-                  <!--</li>-->
-                <!--</ul>-->
-                <!--<p v-if="loadingVideo">Loading...</p>-->
-                <!--<p v-if="noMore">No more</p>-->
+              <!--<ul-->
+              <!--class="list"-->
+              <!--v-infinite-scroll="load"-->
+              <!--infinite-scroll-disabled="disabled">-->
+              <!--<li v-for="i in countVideo" class="list-item">-->
+              <!--&lt;!&ndash;<iframe  width="100%" height="200vh" src="https://www.youtube.com/embed/Z5SmaOld7lM?start=4" frameborder="0"-->
+              <!--allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"-->
+              <!--allowfullscreen></iframe>&ndash;&gt;-->
+              <!--</li>-->
+              <!--</ul>-->
+              <!--<p v-if="loadingVideo">Loading...</p>-->
+              <!--<p v-if="noMore">No more</p>-->
               <!--</div>-->
             </template>
           </el-tab-pane>
@@ -634,31 +712,33 @@
               <%= __('you have not uploaded any presentation yet') %>
             </template>
             <template v-else>
-              <div >
+              <div>
                 <el-row :gutter="12">
-                  <el-col :span="8"  v-for="(present,index) in litter.presentation" :key="index + '-present'">
+                  <el-col :span="8" v-for="(present,index) in litter.presentation" :key="index + '-present'">
 
 
-                      <el-card shadow="hover">
-                        <div slot="header" class="clearfix">
-                          <span>{{present.presentationName}}</span>
-                          <!--<el-button style="float: right; padding: 3px 0" type="text">Operation button</el-button>-->
-                          <el-button @click="clickDeletePresentation(index)" style="float: right; padding: 6px" icon="el-icon-close" circle></el-button>
-                        </div>
+                    <el-card shadow="hover">
+                      <div slot="header" class="clearfix">
+                        <strong>{{present.presentationName}}</strong>
+                        <!--<el-button style="float: right; padding: 3px 0" type="text">Operation button</el-button>-->
+                        <el-button @click="clickDeletePresentation(index)" style="float: right; padding: 6px"
+                                   icon="el-icon-close" circle></el-button>
+                      </div>
 
-                    <p>Description:   {{present.descriptionPresentation}}</p>
+                      <p> {{present.descriptionPresentation}}</p>
 
-                        <a target="_blank" :href="present.presentationUrl"><img src="https://d3a1wbnh2r1l7y.cloudfront.net/pdf.jpg" height="150" alt=""></a>
+                      <a target="_blank" :href="present.presentationUrl"><img
+                          src="https://d3a1wbnh2r1l7y.cloudfront.net/pdf.jpg" height="150" alt=""></a>
                     </el-card>
 
                   </el-col>
-                <el-col :span="8" >
+                  <el-col :span="8">
                     <el-card shadow="hover">
-                     <p class="text-center">
-                       <el-button round @click="setAddedPresentation"><%= __('Add presentation') %></el-button>
-                       <!--<el-button type="success" icon="el-icon-present" circle><%= __('Add presentation') %></el-button>-->
-                       <!--<el-link icon="el-icon-present"> <%= __('Add presentation') %></el-link>-->
-                     </p>
+                      <p class="text-center">
+                        <el-button round @click="setAddedPresentation"><%= __('Add presentation') %></el-button>
+                        <!--<el-button type="success" icon="el-icon-present" circle><%= __('Add presentation') %></el-button>-->
+                        <!--<el-link icon="el-icon-present"> <%= __('Add presentation') %></el-link>-->
+                      </p>
                     </el-card>
                   </el-col>
                   <!--  <el-col :span="8">
@@ -668,6 +748,14 @@
                   </el-col>-->
                 </el-row>
               </div>
+            </template>
+          </el-tab-pane>
+
+          <el-tab-pane label="<%= __('Comment') %>" name="comment">
+            <template v-if="!litter.comment">
+              <%= __('you have not uploaded any presentation yet') %>
+            </template>
+            <template v-else>
             </template>
           </el-tab-pane>
 
