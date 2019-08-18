@@ -487,9 +487,14 @@
               </ul>
               <% /* Кнопки PEDIGREE */ %>
               <el-row :gutter="20">
-                <el-col :span="2">
+                <el-col :span="6">
                   <% /*@click="goTo('/pedigree')" */ %>
                   <el-button class="mt-4" @click="clickPedigree()" type="primary" round>Pedigree</el-button>
+
+                </el-col>
+                <el-col :span="8">
+                  <el-button class="mt-4" @click="clickPuppiesSale()" type="success" round><%= __('Puppies for sale') %></el-button>
+
                 </el-col>
               </el-row>
             </div>
