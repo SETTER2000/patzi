@@ -491,6 +491,7 @@ parasails.registerPage('litter', {
       }, 2000);
     },
 
+
     clickPedigree() {
       // this.dialogPedigreeVisible = true;
       this.goto(`/litter/${this.litter.letter}/pedigree`);
@@ -500,6 +501,17 @@ parasails.registerPage('litter', {
       // console.log('this.litterId: ', this.litterId);
       // console.log('this.indexPhoto: ', this.indexPhoto);
     },
+
+    clickPuppiesSale() {
+      // this.dialogPedigreeVisible = true;
+      this.goto(`/dogs`);
+      // this.litterId = litterId;
+      // this.indexSlide = indexPhoto;
+      // this.handlerSetActiveSlider();
+      // console.log('this.litterId: ', this.litterId);
+      // console.log('this.indexPhoto: ', this.indexPhoto);
+    },
+
 
     handlerCloseDialogSlider() {
       this.photos = [];
