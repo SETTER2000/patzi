@@ -493,7 +493,7 @@
 
                 </el-col>
 
-                <el-col :xs="6"   :sm="8"  :md="6"  :lg="2">
+                <el-col :xs="6" :sm="8" :md="6" :lg="2">
                   <el-button class="mt-4" @click="clickPuppiesSale()" type="success" round><%= __('Puppies for sale') %></el-button>
 
                 </el-col>
@@ -534,20 +534,20 @@
               <div class="mb-lg-5" v-if="litter.puppies">
                 <% /* ФОТОСЕССИИ */ %>
                 <div class="mb-lg-3 " v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
-                  <el-row :gutter="20">
+                  <el-row type="flex" class="row-bg" justify="end">
                     <el-divider v-if="index>0"><i class="el-icon-star-on"></i></el-divider>
                     <% /* Имя фотосессии */ %>
-                    <el-col :span="10" :offset="7">
-
+                    <el-col :span="21">
                       <h5 class="text-center"> {{photoSet.sessionName}}</h5>
                     </el-col>
+
                     <% /* Кнопки управления фотосессией */ %>
-                    <el-col :span="1" :offset="6">
+                    <el-col :span="1">
                       <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
                         <el-dropdown @command="handleCommand">
-                <span class="el-dropdown-link">
-                  <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
-                </span>
+                            <span class="el-dropdown-link">
+                              <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
+                            </span>
                           <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
                               <%= __('Add photo session') %>
@@ -576,6 +576,7 @@
                         </el-dropdown>
                       </div>
                     </el-col>
+
                   </el-row>
 
                   <% /*  */ %>
@@ -621,9 +622,9 @@
                           </el-button>
 
                           <!--<el-badge :value="commentsLengthNew" :max="99" >-->
-                            <el-button @click="ruleForm.show = index" icon="el-icon-chat-square"
+                          <el-button @click="ruleForm.show = index" icon="el-icon-chat-square"
                                      size="medium"><%= __('Comment') %> ({{commentsLength}})
-                            </el-button>
+                          </el-button>
                           <!--</el-badge>-->
                           <el-button size="medium"><span class="share"></span><%= __('Share') %></el-button>
                         </el-row>
@@ -633,8 +634,8 @@
                               <div class="col-sm-8">
                                 <div class="row">
                                   <div class="col">
-                                    <el-collapse v-model="activeNames"  @change="handleChange">
-                                      <el-collapse-item  title="<%= __('Write your review') %>" name="1">
+                                    <el-collapse v-model="activeNames" @change="handleChange">
+                                      <el-collapse-item title="<%= __('Write your review') %>" name="1">
                                         <div><%= __('Your opinion is important and necessary for us. Leave your comment regarding this litter.') %></div>
                                         <div><%= __('Perhaps you have questions that you would like to receive answers from the nursery. Write to us, we will be happy to answer you.') %></div>
                                         <ul class="hr" v-for="(com,index) in comments">
@@ -644,7 +645,8 @@
                                             </div>
                                           </li>
                                           <li class="comm">
-                                            <span class="comment"><a href="#" class="user-comment">{{com.userName}} </a>{{com.comment}}</span>
+                                            <span class="comment"><a href="#"
+                                                                     class="user-comment">{{com.userName}} </a>{{com.comment}}</span>
                                             <br>
                                             <small>
                                               <el-tooltip class="item" effect="dark"
