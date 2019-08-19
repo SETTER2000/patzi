@@ -486,13 +486,14 @@
 
               </ul>
               <% /* Кнопки PEDIGREE */ %>
-              <el-row :gutter="20">
-                <el-col :span="6">
+              <el-row :gutter="10">
+                <el-col :xs="9" :sm="10" :md="8" :lg="6">
                   <% /*@click="goTo('/pedigree')" */ %>
                   <el-button class="mt-4" @click="clickPedigree()" type="primary" round>Pedigree</el-button>
 
                 </el-col>
-                <el-col :span="8">
+
+                <el-col :xs="6"   :sm="8"  :md="6"  :lg="2">
                   <el-button class="mt-4" @click="clickPuppiesSale()" type="success" round><%= __('Puppies for sale') %></el-button>
 
                 </el-col>
@@ -619,11 +620,11 @@
                             ({{likeLength}})
                           </el-button>
 
-                          <el-badge :value="commentsLengthNew" :max="99" >
+                          <!--<el-badge :value="commentsLengthNew" :max="99" >-->
                             <el-button @click="ruleForm.show = index" icon="el-icon-chat-square"
                                      size="medium"><%= __('Comment') %> ({{commentsLength}})
                             </el-button>
-                          </el-badge>
+                          <!--</el-badge>-->
                           <el-button size="medium"><span class="share"></span><%= __('Share') %></el-button>
                         </el-row>
                         <transition name="el-fade-in-linear">
@@ -720,8 +721,6 @@
               <div>
                 <el-row :gutter="12">
                   <el-col :span="8" v-for="(present,index) in litter.presentation" :key="index + '-present'">
-
-
                     <el-card shadow="hover">
                       <div slot="header" class="clearfix">
                         <strong>{{present.presentationName}}</strong>
@@ -737,7 +736,7 @@
                     </el-card>
 
                   </el-col>
-                  <el-col :span="8" v-if="me.isAdmin || me.isSuperAdmin">
+                  <el-col :span="24" v-if="me.isAdmin || me.isSuperAdmin">
                     <el-card shadow="hover">
                       <p class="text-center">
                         <el-button round @click="setAddedPresentation"><%= __('Add presentation') %></el-button>
@@ -765,6 +764,7 @@
           </el-tab-pane>
 
         </el-tabs>
+
       </template>
 
     </div>
