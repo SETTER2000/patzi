@@ -13,6 +13,7 @@
 	"matO": "имее",
 	"It has not happened yet. We wait...": "Ещё не свершилось. Ждём...",
 	"Gender": "Пол",
+
 	"Write a comment": "Напишите комментарий",
 	"Like": "Нравится",
 	"Choose": "Выберите",
@@ -60,6 +61,7 @@
 	"meaning": "значение",
 	"Our preliminary price": "Наша предварительная цена",
 	"Language": "Язык",
+	"Presentation": "Презентация",
 	"Change language": "Изменить язык",
 	"Change password": "Изменить пароль",
 	"Save changes": "Сохранить изменения",
@@ -544,8 +546,7 @@
 	"Photo": "Фото",
 	"Video": "Видео",
 	"URL": "URL",
-	"title": "title",
-	"Presentation": "Presentation",
-	"you have not uploaded any presentation yet": "you have not uploaded any presentation yet",
-	"Born In Poale Ell": "Born In Poale Ell"
+	"title": "заголовок",
+	"you have not uploaded any presentation yet": "Вы еще не загрузили ни одной презентации",
+	"Born In Poale Ell": "Рожденные в Poale Ell"
 }
