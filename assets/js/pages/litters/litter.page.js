@@ -950,7 +950,7 @@ parasails.registerPage('litter', {
         if (jwRes.statusCode === 200) {
           this.comment = '';
           data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
-          this.litter.puppies[this.ruleForm.show].comments.push(data);
+         _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
         }
       });
     },
