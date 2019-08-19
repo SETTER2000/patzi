@@ -73,9 +73,12 @@ module.exports = {
       throw 'badRequest';
     }
 
+    let puppies = [];
 
     let litter = await Litter.findOne(inputs.id);
-    if (!litter) throw 'badRequest';
+    if (!litter) {
+      throw 'badRequest';
+    }
 
 
     if (inputs.puppies) {
@@ -91,7 +94,7 @@ module.exports = {
     litter.puppies.push({
       sessionName: inputs.sessionName.slice(0, 60),
       descriptionPhotoSession: inputs.descriptionPhotoSession ? inputs.descriptionPhotoSession : '',
-      createAt: moment.tz(moment(), 'Europe/Moscow').format(),
+      createdAt:moment().format(),
       photos: puppies
     });
 
@@ -99,7 +102,7 @@ module.exports = {
     // Update the record for the logged-in user.
     await Litter.updateOne(inputs.id)
       .set({
-        puppies:litter.puppies,
+        puppies: litter.puppies,
       });
 
 

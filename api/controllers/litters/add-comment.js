@@ -71,7 +71,7 @@ module.exports = {
     litter.puppies[inputs.indexPhotoSet].comments = _.isArray(litter.puppies[inputs.indexPhotoSet].comments) ? litter.puppies[inputs.indexPhotoSet].comments : [];
     litter.puppies[inputs.indexPhotoSet].comments.push({
       comment: inputs.comment,
-      dateCreate: moment().unix(),
+      dateCreate: moment().format(),
       indexPhotoSet: inputs.indexPhotoSet,
       // born: moment.tz(born, 'Europe/Moscow').format(),
       userName: inputs.userName,
@@ -84,7 +84,7 @@ module.exports = {
     let litterUpdate = await Litter.updateOne(inputs.id).set({puppies: litter.puppies});
 
     if (!litterUpdate) throw 'badRequest';
-    
+
     console.log('litterUpdate::: ' , litterUpdate);
 
 

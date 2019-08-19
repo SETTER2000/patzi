@@ -574,9 +574,9 @@
                               <%= __('Delete photo session') %>
                             </el-dropdown-item>
 
-                            <el-dropdown-item :divided="true" disabled v-if="photoSet.createAt" icon="el-icon-date"
+                            <el-dropdown-item :divided="true" disabled v-if="photoSet.createdAt" icon="el-icon-date"
                                               command="">
-                              <%= __('Date publication') %> : <br>{{photoSet.createAt | getCreate(me.preferredLocale)}}
+                              <%= __('Date publication') %> : <br>{{photoSet.createdAt | getCreate(me.preferredLocale)}}
                             </el-dropdown-item>
 
                           </el-dropdown-menu>
