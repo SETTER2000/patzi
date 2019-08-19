@@ -5,10 +5,10 @@ parasails.registerPage('litter', {
   data: {
     dialogTableVisible: false,
     dialogPedigreeVisible: true,
-    show: false,
+    // show: false,
     comment: '',
     commentsLength:0,
-    activeNames: ['1'],
+    activeNames: '1',
     likeLength:0,
     commentsLengthNew:0,
     comments: [],
@@ -40,7 +40,7 @@ parasails.registerPage('litter', {
     loading: true,
     loadingVideo: false,
     fullscreenLoading: false,
-    countVideo: 10,
+    countVideo: 0,
     dialogImageUrl: '',
     indexPhotoSet: 0,
     nameSessionPhoto: '',
@@ -64,6 +64,7 @@ parasails.registerPage('litter', {
     },
     ruleForm: {
       show: undefined,
+      // indexPhotoSet:undefined,
       sire: '',
       dam: '',
       label: '',
@@ -839,11 +840,11 @@ parasails.registerPage('litter', {
 
     },
     load() {
-      this.loadingVideo = true;
-      setTimeout(() => {
-        // this.countVideo += 2;
-        this.loadingVideo = false;
-      }, 2000);
+      // this.loadingVideo = true;
+      // setTimeout(() => {
+      //   // this.countVideo += 2;
+      //   this.loadingVideo = false;
+      // }, 2000);
     },
     // Это кнопка вызывает модальное окно <modal> с <ajax-form> для удаления помёта
     clickDeleteLitter: function () {
@@ -923,9 +924,10 @@ parasails.registerPage('litter', {
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-comment', (data) => {
-        console.log('comment: ', data);
-        this.commentsLength=data.length;
-        this.comments = data;
+        console.log('list-comment: ', data);
+        // this.commentsLength=0;
+
+        // this.litter.puppies = data;
       });
     },
 
@@ -935,10 +937,11 @@ parasails.registerPage('litter', {
       let data = {
         id: this.litter.id,
         comment: this.comment,
-        userName:this.me.fullName
+        userName:this.me.fullName,
+        indexPhotoSet:this.ruleForm.show
       };
       io.socket.post('/api/v1/litters/add-comment', data, (dataRes, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+        // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
@@ -946,11 +949,13 @@ parasails.registerPage('litter', {
 
         if (jwRes.statusCode === 200) {
           this.comment = '';
+          data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+          this.litter.puppies[this.ruleForm.show].comments.push(data);
         }
       });
     },
     handleChange(val) {
-      // console.log(val);
+      console.log(val);
     }
 
   },

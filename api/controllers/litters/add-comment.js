@@ -16,6 +16,12 @@ module.exports = {
     },
 
 
+    indexPhotoSet: {
+      type: 'number',
+      description: 'Индекс в массиве фотосессий.',
+      required: true
+    },
+
     comment: {
       type: 'string',
       maxLength: 1000,
@@ -60,21 +66,30 @@ module.exports = {
     let litter = await Litter.findOne(inputs.id);
     if (!litter) throw 'badRequest';
 
-    litter.comments = _.isArray(litter.comments) ? litter.comments : [];
-    litter.comments.push({
+
+
+    litter.puppies[inputs.indexPhotoSet].comments = _.isArray(litter.puppies[inputs.indexPhotoSet].comments) ? litter.puppies[inputs.indexPhotoSet].comments : [];
+    litter.puppies[inputs.indexPhotoSet].comments.push({
       comment: inputs.comment,
       dateCreate: moment().unix(),
+      indexPhotoSet: inputs.indexPhotoSet,
       // born: moment.tz(born, 'Europe/Moscow').format(),
       userName: inputs.userName,
       userId: req.me.id,
     });
 
-    let litterUpdate = await Litter.updateOne(inputs.id).set({comments: litter.comments});
+    // console.log('DASSSS2:: ',  litter.puppies[inputs.indexPhotoSet].comments);
+
+
+    let litterUpdate = await Litter.updateOne(inputs.id).set({puppies: litter.puppies});
 
     if (!litterUpdate) throw 'badRequest';
+    
+    console.log('litterUpdate::: ' , litterUpdate);
+
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    await sails.sockets.broadcast('litter', 'list-comment', litter.comments);
+    await sails.sockets.broadcast('litter', 'list-comment', litter.puppies);
 
     // Respond with view.
     return exits.success();

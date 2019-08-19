@@ -38,6 +38,7 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
+    let photoSets = [];
     // const moment = require('moment');
     //
     // // Устанавливаем соответствующую локаль для даты, установленую пользователем.
@@ -52,23 +53,22 @@ module.exports = {
 
     // Выбираем помёт
     let litter = await Litter.findOne(inputs.id);
-
-    let comments = [];
-
-    let userIds = _.uniq(_.pluck(litter.comments, 'userId'));
+    let userIds = _.uniq(_.pluck(_.pluck(litter.puppies, 'comments')[0], 'userId'));
     let users = await User.find(userIds);
 
-    _.each(litter.comments, async (comment) => {
-      let user = users.filter(us => us.id === comment.userId);
 
-      comment.avatarUrl = (user[0].defaultIcon === 'avatar') ? user[0].avatar : user[0].gravatar;
-      console.log('comment: ', comment);
-      comments.push(comment);
+    await  _.each(litter.puppies, async (photoset) => {
+      await _.each(photoset.comments, async (com) => {
+        let user = users.filter(us => us.id === com.userId);
+        com.avatarUrl = (user[0].defaultIcon === 'avatar') ? user[0].avatar : user[0].gravatar;
+        console.log('com.avatarUrl:: ', com.avatarUrl);
+      });
+      photoSets.push(photoset);
     });
 
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    await sails.sockets.broadcast('litter', 'list-comment', comments);
+    await sails.sockets.broadcast('litter', 'list-comment', photoSets);
 
     // Respond with view.
     return exits.success();

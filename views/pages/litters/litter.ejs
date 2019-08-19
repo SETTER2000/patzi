@@ -170,7 +170,7 @@
         inactive-text="Disable ">
       </el-switch>
     </div>
-    <div class="block">
+    <div class="block" v-if="dialogTableVisible">
       <el-carousel
         :autoplay="autoplay"
         trigger="click"
@@ -528,16 +528,23 @@
           v-model="virtualPageSlug"
           @tab-click="clickTabName"
         >
+
           <!--<el-tabs type="card" @tab-click="handleClick">-->
           <el-tab-pane label="<%= __('Photo') %>" name="photo">
             <transition name="el-fade-in-linear">
               <div class="mb-lg-5" v-if="litter.puppies">
                 <% /* ФОТОСЕССИИ */ %>
                 <div class="mb-lg-3 " v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
+                  <el-row>
+                    <el-col>
+                      <el-divider v-if="index>0"><i class="el-icon-star-on"></i></el-divider>
+                    </el-col>
+                  </el-row>
                   <el-row type="flex" class="row-bg" justify="end">
-                    <el-divider v-if="index>0"><i class="el-icon-star-on"></i></el-divider>
+
                     <% /* Имя фотосессии */ %>
-                    <el-col :span="21">
+                    <el-col :span="22">
+
                       <h5 class="text-center"> {{photoSet.sessionName}}</h5>
                     </el-col>
 
@@ -587,9 +594,10 @@
                         {{photoSet.descriptionPhotoSession}}</p></div>
                     <div class="card-text mt-sm-4">
                       <% /*Маленькие фото. Превью.*/ %>
-                      <ul class="flex-container wrap" v-if="photoSet.photos">
-                        <li class="flex-item" v-for="(img, idx, key) in photoSet.photos"
-                            :key="idx +  '-label'">
+                      <el-row :gutter="4" justify="center">
+                        <el-col :xs="24" :sm="6" :md="4" :lg="3" :xl="3"
+                                v-for="(img, idx, key) in photoSet.photos"
+                                :key="idx +  '-label'">
                           <template v-if="me.isSuperAdmin">
                             <div class="ell-relation" v-if="litter.cover === index">
                               <!--<el-button type="warning" size="mini" title="<%= __("Album's cover") %>"-->
@@ -603,50 +611,50 @@
                             </div>
 
                           </template>
-                          <div class="ell-image-flex">
-                            <a v-loading.fullscreen.lock="fullscreenLoading" href="#" @click="showSlider(idx, index)">
-                              <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
-                            </a>
-                          </div>
-
-                        </li>
-                      </ul>
+                          <a v-loading.fullscreen.lock="fullscreenLoading" href="#" @click="showSlider(idx, index)">
+                            <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
+                          </a>
+                        </el-col>
+                      </el-row>
                     </div>
                     <el-divider></el-divider>
                     <template>
                       <div>
                         <el-row class="button-like">
-
                           <el-button size="medium"><i class="ti-thumb-up"></i>&nbsp; <%= __('Like') %>
                             ({{likeLength}})
                           </el-button>
-
                           <!--<el-badge :value="commentsLengthNew" :max="99" >-->
                           <el-button @click="ruleForm.show = index" icon="el-icon-chat-square"
-                                     size="medium"><%= __('Comment') %> ({{commentsLength}})
+                                     size="medium"><%= __('Comment') %>
+                            ({{photoSet.comments ? photoSet.comments.length : 0}})
                           </el-button>
                           <!--</el-badge>-->
                           <el-button size="medium"><span class="share"></span><%= __('Share') %></el-button>
+
+
                         </el-row>
                         <transition name="el-fade-in-linear">
+
                           <div v-if="ruleForm.show === index">
                             <div class="row justify-content-center my-4">
                               <div class="col-sm-8">
                                 <div class="row">
                                   <div class="col">
-                                    <el-collapse v-model="activeNames" @change="handleChange">
+                                    <el-collapse v-model="activeNames" accordion>
                                       <el-collapse-item title="<%= __('Write your review') %>" name="1">
                                         <div><%= __('Your opinion is important and necessary for us. Leave your comment regarding this litter.') %></div>
                                         <div><%= __('Perhaps you have questions that you would like to receive answers from the nursery. Write to us, we will be happy to answer you.') %></div>
-                                        <ul class="hr" v-for="(com,index) in comments">
+                                        <ul class="hr" v-for="(com,index) in photoSet.comments">
                                           <li class="avat">
                                             <div class="avat">
                                               <el-avatar :size="35" :src="com.avatarUrl"></el-avatar>
                                             </div>
                                           </li>
                                           <li class="comm">
-                                            <span class="comment"><a href="#"
-                                                                     class="user-comment">{{com.userName}} </a>{{com.comment}}</span>
+                                            <span class="comment">
+                                              <a href="#" class="user-comment">{{com.userName}} </a>
+                                              {{com.comment}}</span>
                                             <br>
                                             <small>
                                               <el-tooltip class="item" effect="dark"
@@ -659,13 +667,14 @@
                                             </small>
                                           </li>
                                         </ul>
-
+                                        <% /* Поле ввода комментария */ %>
                                         <el-form @submit.native.prevent>
                                           <el-form-item>
                                             <el-input @keyup.enter.native="updateComment"
                                                       class="mt-2"
                                                       @blur="updateComment"
-                                                      clearable placeholder="<%= __('Write a comment') %>"
+                                                      clearable
+                                                      placeholder="<%= __('Write a comment') %>"
                                                       v-model="comment">
                                               <i slot="prefix" class="el-input__icon el-icon-chat-line-round"></i>
                                               <template slot="prepend">
@@ -675,9 +684,8 @@
                                           </el-form-item>
                                         </el-form>
                                       </el-collapse-item>
+
                                     </el-collapse>
-
-
                                   </div>
                                 </div>
 
@@ -757,13 +765,13 @@
             </template>
           </el-tab-pane>
 
-          <el-tab-pane label="<%= __('Comment') %>" name="comment">
+          <!-- <el-tab-pane label="<%= __('Comment') %>" name="comment">
             <template v-if="!litter.comment">
               <%= __('you have not uploaded any presentation yet') %>
             </template>
             <template v-else>
             </template>
-          </el-tab-pane>
+          </el-tab-pane>-->
 
         </el-tabs>
 
