@@ -114,7 +114,7 @@ parasails.registerPage('litter', {
     url: null,
     activeIndex: '1',
     fit: 'cover',
-    tabPosition: 'right',
+    tabPosition: 'top',
     indexPhoto: 0,
     letters: [],
     dic: [
@@ -191,17 +191,11 @@ parasails.registerPage('litter', {
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
-    // console.log('THIS::', this.litter.createdAt );
+
     this.isAfter();
-    // this.ratio = _.last(_.pluck(this.me.ratio, 'litter'));
-    // console.log('ratioTest: ', this.ratioMeTestArr.filter(rat=>rat.letter === this.litter.letter));
-    // console.log('LAST:', _.last( this.ratioMeTestArr.filter(rat=>rat.letter === this.litter.letter)));
-    // Выбираем значение рейтинга для этого помёта
-    // this.ratio = _.last( this.ratioMeTestArr.filter(rat=>rat.letter === this.litter.letter)).litter;
     this.ratio = _.last(_.pluck(this.me.ratio.filter(rat => rat.letter === this.litter.letter), 'litter'));
-    // console.log('this.ratio: ', this.ratio);
-    // this.ratio = 1;
-    // Кобели
+
+    // Буквы помёта
     this.letterList();
 
     // Выбираем все комментарии
@@ -282,12 +276,7 @@ parasails.registerPage('litter', {
       //  },
 
     }
-    // isPhoto: function () {
-    //   return  this.litters.filter(litter => {
-    //     !_.isUndefined(litter.images);
-    //     console.log('IMAGE: ',litter.images);
-    //   });
-    // }
+
 
   },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -296,55 +285,8 @@ parasails.registerPage('litter', {
   methods: {
 
     changeRatio: function (letter) {
-
-      // console.log('LAST: ', _.last(_.pluck(this.me.ratio, 'letter')));
-      /**
-       * Выбираем все объекты со свойством litter,
-       * т.е. по сути все объекты с оценками принадлежащие к данному помёту и данной коллекции.
-       */
-      // let ratArr = _.isObject(this.me.ratio) ? [this.me.ratio] : this.me.ratio;
-      // let ratio = ratArr.filter(rat => {
-      //   // return !_.isNull(rat.litter);
-      //   return letter === rat.letter
-      // });
-      // console.log('RATIO: ', ratio);
-      // // Выбираем всё остальное не касающиеся данной коллекции,
-      // // для формирования нового массива всех оценок.
-      // let ratioNew = ratArr.filter(rat => {
-      //   // !_.isElement(rat.litter);
-      //   return letter !== rat.letter
-      // });
-
-      /**
-       * Если длинна массива больше 5 то убираем старую запись
-       * Таким образом кол-во отметок поставленных данным пользователем всегда равно
-       * последним пяти оценкам. Это скорее для статистики нежели для представления.
-       * @type {Array}
-       */
-      // ratio = (!_.isArray(ratio)) ? [] : ratio.length > 6 ? ratio.slice(1) : ratio;
-      // console.log('ratio x: ', ratio);
-      // Добавляем новую оценку в формирующийся массив оценок данной коллекции
-      // ratio.push({litter: this.ratio, letter: letter});
-      // console.log('ratio PUSH: ', ratio);
-      // Объединяем новый массив оценок данной коллекции с другими оценками по другим коллекциям
-      // ratioNew.push(ratio);
-      // console.log('ratioNew:' , ratioNew);
-      // Обнуляем данные пользователя по всем рейтингам
-      // this.ratios = '';
-      // Вносим новые, обновлённые данные по рейтингам
-      // this.ratios = ratioNew[1];
-
-      // Отправляем на сервер для обновления свойства ratio у текущего пользователя
-      // Все оценки поставленные пользователем, хранятся в коллекции User.ratio
-      // let arr = this.me.ratio;
-      // console.log('this.me.ratio: ', this.me.ratio);
       this.me.ratio.push({litter: this.ratio, letter: letter});
-      // let ratArr = _.isObject(this.me.ratio) ? [this.me.ratio] : this.me.ratio;
-      // this.ratios = ratArr;
-      //   console.log('RATIO NEW: ', this.ratios);
       this.updateRatioList();
-      //  Выводим благодарность на монитор
-
     },
 
     // Обновляем рейтинг
@@ -423,8 +365,9 @@ parasails.registerPage('litter', {
     },
 
     goTo(path) {
-      this.goto(`${path}`);
-      // window.location = `${path}`;
+      console.log('lett.letter: ' ,path);
+      // this.goto(`/litter/${path}/photo`);
+      window.location = `/litter/${path}/photo`;
     },
 
     handleSuccessPuppies(res, file) {
@@ -654,23 +597,6 @@ parasails.registerPage('litter', {
 
     _clearAddFriendsModal: function () {
       this.goto(`/litter/${this.litter.letter}/photo`);
-      // Reset form data.
-      // this.addFriendsFormData = {
-      //   friends: [
-      //     {
-      //       fullName: '',
-      //       emailAddress: ''
-      //     },
-      //     {
-      //       fullName: '',
-      //       emailAddress: ''
-      //     },
-      //     {
-      //       fullName: '',
-      //       emailAddress: ''
-      //     }
-      //   ]
-      // };
       this.formErrors = {};
       this.cloudError = '';
     },
@@ -713,7 +639,6 @@ parasails.registerPage('litter', {
         // this.loading.close();
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          console.log('this.litter.puppies:::', this.litter.puppies);
           _.isArray(this.litter.puppies) ? this.litter.puppies.push(data) : this.litter.puppies = [data];
           setTimeout(() => {
             window.location = `/litter/${this.litter.letter}/photo`;
@@ -750,7 +675,6 @@ parasails.registerPage('litter', {
 
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          console.log('this.litter.presentation:::', this.litter.presentation);
           _.isArray(this.litter.presentation) ? this.litter.presentation.push(data) : this.litter.presentation = [data];
           this.goto(`/litter/${this.litter.letter}/presentation`);
           // setTimeout(() => {
@@ -813,7 +737,6 @@ parasails.registerPage('litter', {
 
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          console.log('this.litter.sessionName: ', this.litter.sessionName);
           this.litter.sessionName = data.sessionName ? data.sessionName : this.litter.sessionName;
           this.litter.description = data.description ? data.description : this.litter.description;
           this.litter.subtitle = data.subtitle ? data.subtitle : this.litter.subtitle;
@@ -825,7 +748,6 @@ parasails.registerPage('litter', {
 
 
     async updatePhotoSetName() {
-      // this.fixDescription();
       let data = {
         id: this.litter.id,
         indexPhotoSet: this.indexPhotoSet,
@@ -835,7 +757,6 @@ parasails.registerPage('litter', {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
         this.dialogFormVisible = false;
         if (jwRes.statusCode === 200) {
@@ -991,22 +912,8 @@ parasails.registerPage('litter', {
     },
 
     onSubmit() {
-      // if (event) event.preventDefault();
-      // alert('Хующки!!');
-      // event.preventDefault();
-      // console.log('event::', event);
       console.log('FOP::', this.commentForm);
-      //
     },
-
-
-    // addCommit: function () {
-    //   let arr = this.comments;
-    //   if (_.isEmpty(this.comment)) return false;
-    //
-    //   this.updateComment();
-    //
-    // },
 
 
     // Выбираем все комментарии
@@ -1034,23 +941,17 @@ parasails.registerPage('litter', {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
 
         if (jwRes.statusCode === 200) {
           this.comment = '';
-          // this.comments.push(data);
         }
       });
     },
     handleChange(val) {
-      console.log(val);
+      // console.log(val);
     }
-
-
-
-
 
   },
 });
