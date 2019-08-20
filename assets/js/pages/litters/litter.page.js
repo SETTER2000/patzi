@@ -199,7 +199,13 @@ parasails.registerPage('litter', {
 
     // Буквы помёта
     this.letterList();
+    // Принимаем данные по событию list-*
+    io.socket.on('list-comment', (data) => {
+      console.log('list-comment: ', data);
+      // this.commentsLength=0;
 
+      this.litter = data;
+    });
     // Выбираем все комментарии
     // this.commentList();
   },
@@ -227,6 +233,15 @@ parasails.registerPage('litter', {
 
         return this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
     },
+    // litter:{
+    //    get: function(){
+    //      return this.litter;
+    //    } ,
+    //   set:function (i) {
+    //      this.litter = i;
+    //
+    //   }
+    // },
 
     noMore() {
       return this.count >= 20;
@@ -942,13 +957,7 @@ parasails.registerPage('litter', {
             // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
           }
       });
-      // Принимаем данные по событию list-*
-      await io.socket.on('list-comment', (data) => {
-        console.log('list-comment: ', data);
-        // this.commentsLength=0;
 
-        this.litter.puppies = data;
-      });
     },
 
 

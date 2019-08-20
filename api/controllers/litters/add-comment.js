@@ -87,7 +87,7 @@ module.exports = {
 
     console.log('SAWWWWWWWWWWW: ', litter.puppies[inputs.indexPhotoSet].comments);
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    await sails.sockets.broadcast('litter', 'list-comment', litter.puppies);
+    await sails.sockets.broadcast('litter', 'list-comment', litterUpdate);
 
     // Respond with view.
     return exits.success();
