@@ -6,6 +6,7 @@ parasails.registerPage('litter', {
     dialogTableVisible: false,
     dialogPedigreeVisible: true,
     // show: false,
+
     comment: '',
     commentsLength:0,
     activeNames: '1',
@@ -46,7 +47,7 @@ parasails.registerPage('litter', {
     nameSessionPhoto: '',
     count: 0,
     dialogVisible: false,
-    circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+    circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
     limit: 50,
     letter: '',
     autoplay: true,
@@ -200,11 +201,11 @@ parasails.registerPage('litter', {
     this.letterList();
 
     // Выбираем все комментарии
-    this.commentList();
+    // this.commentList();
   },
   filters: {
     getCreate: function (value, l, format) {
-      if (!value) return '';
+      if (!value) {return '';}
       moment.locale(l);
       let formatNew = (!format) ? 'LLL' : format;
       return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
@@ -222,16 +223,11 @@ parasails.registerPage('litter', {
       }
     },
     //
-    // countComments:{
-    //   get: function () {
-    //     // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
-    //     return this.litter.puppies[i].comments ? this.litter.puppies[i].comments.length : 0
-    //   },
-    //   set:function(i){
-    //    return this.litter.puppies[i].comments ? this.litter.puppies[i].comments.length : this.litter.puppies[i].comments=[];
-    //   }
-    //
-    // },
+    srcAvatar(){
+
+        return this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+    },
+
     noMore() {
       return this.count >= 20;
     },
@@ -926,27 +922,36 @@ parasails.registerPage('litter', {
 
     // Обновляем массив комментариев
     async updateComment() {
-      if (_.isEmpty(this.comment)) return false;
+      if (_.isEmpty(this.comment)) {return false;}
       let data = {
         id: this.litter.id,
         comment: this.comment,
         userName:this.me.fullName,
         indexPhotoSet:this.ruleForm.show
       };
-      io.socket.post('/api/v1/litters/add-comment', data, (dataRes, jwRes) => {
+      await io.socket.post('/api/v1/litters/add-comment', data, (dataRes, jwRes) => {
         // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
 
-        if (jwRes.statusCode === 200) {
-          this.comment = '';
-         //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
-         // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
-        }
+          if (jwRes.statusCode === 200) {
+            this.comment = '';
+            //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+            // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
+          }
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-comment', (data) => {
+        console.log('list-comment: ', data);
+        // this.commentsLength=0;
+
+        this.litter.puppies = data;
       });
     },
+
+
     handleChange(val) {
       console.log(val);
     }
