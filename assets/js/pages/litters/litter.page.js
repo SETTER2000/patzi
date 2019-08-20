@@ -201,7 +201,6 @@ parasails.registerPage('litter', {
 
     // Выбираем все комментарии
     this.commentList();
-
   },
   filters: {
     getCreate: function (value, l, format) {
@@ -222,6 +221,17 @@ parasails.registerPage('litter', {
         return new Map(this.dic).get(this.me.preferredLocale);
       }
     },
+    //
+    // countComments:{
+    //   get: function () {
+    //     // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+    //     return this.litter.puppies[i].comments ? this.litter.puppies[i].comments.length : 0
+    //   },
+    //   set:function(i){
+    //    return this.litter.puppies[i].comments ? this.litter.puppies[i].comments.length : this.litter.puppies[i].comments=[];
+    //   }
+    //
+    // },
     noMore() {
       return this.count >= 20;
     },
@@ -447,13 +457,7 @@ parasails.registerPage('litter', {
     },
 
     clickPuppiesSale() {
-      // this.dialogPedigreeVisible = true;
       this.goto(`/dogs`);
-      // this.litterId = litterId;
-      // this.indexSlide = indexPhoto;
-      // this.handlerSetActiveSlider();
-      // console.log('this.litterId: ', this.litterId);
-      // console.log('this.indexPhoto: ', this.indexPhoto);
     },
 
 
@@ -461,13 +465,8 @@ parasails.registerPage('litter', {
       this.photos = [];
       this.fullscreenLoading = false;
       this.goto(`/litter/${this.litter.letter}/photo`);
-      // this.indexSlide = 0;
-      // this.autoplay = false;
     },
-    // handlerSetActiveSliderImages() {
-    //   // this.photos = this.litter.images;
-    //   return this.indexPhoto;
-    // },
+
 
     handlerSetActiveSlider(i) {
       console.log('Нажали по слайду: ', i);
@@ -483,7 +482,6 @@ parasails.registerPage('litter', {
 
     // Установить инбекс фотосессии
     setIndexPhotoSet: function (command) {
-      // console.log('command: ', command);
       this.indexPhotoSet = command.i;
 
     },
@@ -499,11 +497,6 @@ parasails.registerPage('litter', {
       this.dialogAddedPresentation = true;
     },
 
-    // Открыть диалоговое окно "Подтвердить удаление презентации"
-    // deletePresentation: function (present) {
-    //   _.remove(this.litter.presentation,present);
-    //   this.$forceUpdate();
-    // },
 
     /* Открывает диалоговое окно редактирования*/
     handleCommand(command) {
@@ -927,7 +920,7 @@ parasails.registerPage('litter', {
         console.log('list-comment: ', data);
         // this.commentsLength=0;
 
-        // this.litter.puppies = data;
+        this.litter.puppies = data;
       });
     },
 
@@ -949,8 +942,8 @@ parasails.registerPage('litter', {
 
         if (jwRes.statusCode === 200) {
           this.comment = '';
-          data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
-         _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
+         //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+         // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
         }
       });
     },

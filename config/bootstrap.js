@@ -65,6 +65,7 @@ module.exports.bootstrap = async function () {
       emailAddress: sails.config.custom.friendEmailAddress,
       fullName: 'Ryan Dahl',
       isAdmin: false,
+      avatar:sails.config.custom.avatar,
       password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
       preferredLocale: 'en'
     }).fetch();

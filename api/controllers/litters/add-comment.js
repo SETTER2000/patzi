@@ -66,7 +66,8 @@ module.exports = {
     let litter = await Litter.findOne(inputs.id);
     if (!litter) throw 'badRequest';
 
-
+    let user = await User.findOne(req.me.id);
+    if (!user) throw 'badRequest';
 
     litter.puppies[inputs.indexPhotoSet].comments = _.isArray(litter.puppies[inputs.indexPhotoSet].comments) ? litter.puppies[inputs.indexPhotoSet].comments : [];
     litter.puppies[inputs.indexPhotoSet].comments.push({
@@ -74,20 +75,17 @@ module.exports = {
       dateCreate: moment().format(),
       indexPhotoSet: inputs.indexPhotoSet,
       // born: moment.tz(born, 'Europe/Moscow').format(),
+      avatarUrl: (user.defaultIcon === 'avatar') ? user.avatar : user.gravatar,
       userName: inputs.userName,
       userId: req.me.id,
-    });
-
-    // console.log('DASSSS2:: ',  litter.puppies[inputs.indexPhotoSet].comments);
-
+    })
+    ;
 
     let litterUpdate = await Litter.updateOne(inputs.id).set({puppies: litter.puppies});
 
     if (!litterUpdate) throw 'badRequest';
 
-    console.log('litterUpdate::: ' , litterUpdate);
-
-
+    console.log('SAWWWWWWWWWWW: ', litter.puppies[inputs.indexPhotoSet].comments);
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
     await sails.sockets.broadcast('litter', 'list-comment', litter.puppies);
 

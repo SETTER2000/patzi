@@ -33,6 +33,8 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+    // Have the socket which made the request join the "litter" room.
+    // Подключить сокет, который сделал запрос, к комнате «litter».
 
     // Бибилиотека Node.js
     const url = require('url');
@@ -58,8 +60,8 @@ module.exports = {
 
     // Подготовка объекта фотоссессии
     litter.puppies = (!_.isEmpty(litter.puppies)) ? await litter.puppies.map((photoSet, i) => {
-
-      photoSet.photos.map((image,y)=>{
+      photoSet.comments = _.isArray(photoSet.comments) ? photoSet.comments : [];
+      photoSet.photos.map((image, y) => {
         image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litter.id}/puppies/${y}/${i}`) : '';
         delete image.fd;
       });
@@ -81,6 +83,8 @@ module.exports = {
     // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
     delete litter.imageUploadMime;
 
+
+    // Рассылаем данные всем подписанным на событие list-* данной комнаты.
 
     // Respond with view.
     return exits.success({

@@ -55,7 +55,9 @@ module.exports = {
     let litter = await Litter.findOne(inputs.id);
     let userIds = _.uniq(_.pluck(_.pluck(litter.puppies, 'comments')[0], 'userId'));
     let users = await User.find(userIds);
-
+    if (!users) {
+      throw 'badRequest';
+    }
 
     await  _.each(litter.puppies, async (photoset) => {
       await _.each(photoset.comments, async (com) => {

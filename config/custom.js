@@ -69,6 +69,7 @@ module.exports.custom = {
 
 
   friendEmailAddress: 'ins09@mail.ru',
+  avatar:'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
 
   // The sender that all outgoing emails will appear to come from.
   // Отправитель, от которого будут исходить все исходящие письма.

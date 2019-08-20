@@ -205,7 +205,7 @@ It just means they have a customer entry in Stripe, which might or might not hav
       type: 'string',
       description: 'Какая иконка будет показываться по умолчанию на сайте. Два варианта всего avatar|gravatar',
       isIn: ['avatar', 'gravatar'],
-      defaultsTo: 'gravatar'
+      defaultsTo: 'avatar'
     },
 
 
@@ -220,8 +220,10 @@ It just means they have a customer entry in Stripe, which might or might not hav
     avatar: {
       type: 'string',
       description: 'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',
-      moreInfoUrl: 'https://www.npmjs.com/package/skipper'
-    },
+      moreInfoUrl: 'https://www.npmjs.com/package/skipper',
+      defaultsTo:   'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+
+},
 
 
     avatarFD: {
