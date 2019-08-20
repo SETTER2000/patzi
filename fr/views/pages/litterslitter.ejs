@@ -534,6 +534,7 @@
             <transition name="el-fade-in-linear">
               <div class="mb-lg-5" v-if="litter.puppies">
                 <% /* ФОТОСЕССИИ */ %>
+
                 <div class="mb-lg-3 " v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
                   <el-row>
                     <el-col>
@@ -672,7 +673,6 @@
                                           <el-form-item>
                                             <el-input @keyup.enter.native="updateComment"
                                                       class="mt-2"
-                                                      @blur="updateComment"
                                                       clearable
                                                       placeholder="<%= __('Write a comment') %>"
                                                       v-model="comment">
