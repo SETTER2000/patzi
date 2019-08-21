@@ -532,180 +532,204 @@
           <!--<el-tabs type="card" @tab-click="handleClick">-->
           <el-tab-pane label="<%= __('Photo') %>" name="photo">
             <transition name="el-fade-in-linear">
-              <div class="mb-lg-5" v-if="litter.puppies">
-                <% /* ФОТОСЕССИИ */ %>
+              <div>
+                <div class="mb-lg-5" v-if="litter.puppies ">
+                  <% /* ФОТОСЕССИИ */ %>
+                  <div class="mb-lg-3 " v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
+                    <el-row>
+                      <el-col>
+                        <el-divider v-if="index>0"><i class="el-icon-star-on"></i></el-divider>
+                      </el-col>
+                    </el-row>
+                    <el-row type="flex" class="row-bg" justify="end">
 
-                <div class="mb-lg-3 " v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
-                  <el-row>
-                    <el-col>
-                      <el-divider v-if="index>0"><i class="el-icon-star-on"></i></el-divider>
-                    </el-col>
-                  </el-row>
-                  <el-row type="flex" class="row-bg" justify="end">
+                      <% /* Имя фотосессии */ %>
+                      <el-col :span="22">
 
-                    <% /* Имя фотосессии */ %>
-                    <el-col :span="22">
+                        <h5 class="text-center"> {{photoSet.sessionName}}</h5>
+                      </el-col>
 
-                      <h5 class="text-center"> {{photoSet.sessionName}}</h5>
-                    </el-col>
-
-                    <% /* Кнопки управления фотосессией */ %>
-                    <el-col :span="1">
-                      <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
-                        <el-dropdown @command="handleCommand">
+                      <% /* Кнопки управления фотосессией */ %>
+                      <el-col :span="1">
+                        <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
+                          <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
                               <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
                             </span>
-                          <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
-                              <%= __('Add photo session') %>
-                            </el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-present" :command="{com:'g'}">
-                              <%= __('Add presentation') %>
-                            </el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:index}">
-                              <%= __('Photo session name') %>
-                            </el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-edit" :command="{com:'b',i:index}">
-                              <%= __('Photo session description') %>
-                            </el-dropdown-item>
+                            <el-dropdown-menu slot="dropdown">
+                              <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
+                                <%= __('Add photo session') %>
+                              </el-dropdown-item>
+                              <el-dropdown-item icon="el-icon-present" :command="{com:'g'}">
+                                <%= __('Add presentation') %>
+                              </el-dropdown-item>
+                              <el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:index}">
+                                <%= __('Photo session name') %>
+                              </el-dropdown-item>
+                              <el-dropdown-item icon="el-icon-edit" :command="{com:'b',i:index}">
+                                <%= __('Photo session description') %>
+                              </el-dropdown-item>
 
-                            <el-dropdown-item icon="el-icon-delete-solid"
-                                              :command="{com:'d',i:index, name:photoSet.sessionName}">
-                              <%= __('Delete photo session') %>
-                            </el-dropdown-item>
+                              <el-dropdown-item icon="el-icon-delete-solid"
+                                                :command="{com:'d',i:index, name:photoSet.sessionName}">
+                                <%= __('Delete photo session') %>
+                              </el-dropdown-item>
 
-                            <el-dropdown-item :divided="true" disabled v-if="photoSet.createdAt" icon="el-icon-date"
-                                              command="">
-                              <%= __('Date publication') %> : <br>{{photoSet.createdAt | getCreate(me.preferredLocale)}}
-                            </el-dropdown-item>
+                              <el-dropdown-item :divided="true" disabled v-if="photoSet.createdAt" icon="el-icon-date"
+                                                command="">
+                                <%= __('Date publication') %> : <br>{{photoSet.createdAt | getCreate(me.preferredLocale)}}
+                              </el-dropdown-item>
 
-                          </el-dropdown-menu>
-                        </el-dropdown>
-                      </div>
-                    </el-col>
+                            </el-dropdown-menu>
+                          </el-dropdown>
+                        </div>
+                      </el-col>
 
-                  </el-row>
+                    </el-row>
 
-                  <% /*  */ %>
-                  <div class="card-body">
-                    <!--<h4 class="card-title"> {{litter.bornNt}}</h4>-->
-                    <% /*Описание фотосессии.*/ %>
-                    <div class="card-text"><p>
-                        {{photoSet.descriptionPhotoSession}}</p></div>
-                    <div class="card-text mt-sm-4">
-                      <% /*Маленькие фото. Превью.*/ %>
-                      <el-row :gutter="4" justify="center">
-                        <el-col :xs="24" :sm="6" :md="4" :lg="3" :xl="3"
-                                v-for="(img, idx, key) in photoSet.photos"
-                                :key="idx +  '-label'">
-                          <template v-if="me.isSuperAdmin">
-                            <div class="ell-relation" v-if="litter.cover === index">
-                              <!--<el-button type="warning" size="mini" title="<%= __("Album's cover") %>"-->
-                              <!--class="ell-position-button check" icon="el-icon-star-off"-->
-                              <!--circle/>-->
-                            </div>
-                            <div class="ell-relation" v-else>
-                              <!--<el-button size="mini" title="<%= __('Make an album cover') %>"-->
-                              <!--class="ell-position-button" @click="coverPhoto(litter.id,index)"-->
-                              <!--icon="el-icon-document" circle></el-button>-->
-                            </div>
+                    <% /*  */ %>
+                    <div class="card-body">
+                      <!--<h4 class="card-title"> {{litter.bornNt}}</h4>-->
+                      <% /*Описание фотосессии.*/ %>
+                      <div class="card-text"><p>
+                          {{photoSet.descriptionPhotoSession}}</p></div>
+                      <div class="card-text mt-sm-4">
+                        <% /*Маленькие фото. Превью.*/ %>
+                        <el-row :gutter="4" justify="center">
+                          <el-col :xs="24" :sm="6" :md="4" :lg="3" :xl="3"
+                                  v-for="(img, idx, key) in photoSet.photos"
+                                  :key="idx +  '-label'">
+                            <template v-if="me.isSuperAdmin">
+                              <div class="ell-relation" v-if="litter.cover === index">
+                                <!--<el-button type="warning" size="mini" title="<%= __("Album's cover") %>"-->
+                                <!--class="ell-position-button check" icon="el-icon-star-off"-->
+                                <!--circle/>-->
+                              </div>
+                              <div class="ell-relation" v-else>
+                                <!--<el-button size="mini" title="<%= __('Make an album cover') %>"-->
+                                <!--class="ell-position-button" @click="coverPhoto(litter.id,index)"-->
+                                <!--icon="el-icon-document" circle></el-button>-->
+                              </div>
 
-                          </template>
-                          <a v-loading.fullscreen.lock="fullscreenLoading" href="#" @click="showSlider(idx, index)">
-                            <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
-                          </a>
-                        </el-col>
-                      </el-row>
-                    </div>
-                    <el-divider></el-divider>
-                    <template>
-                      <div>
-                        <el-row class="button-like">
-                          <el-button size="medium"><i class="ti-thumb-up"></i>&nbsp; <%= __('Like') %>
-                            ({{likeLength}})
-                          </el-button>
-                          <!--<el-badge :value="commentsLengthNew" :max="99" >-->
-                          <el-button @click="ruleForm.show = index" icon="el-icon-chat-square"
-                                     size="medium"><%= __('Comment') %>
-                            ({{photoSet.comments ? photoSet.comments.length : 0}})
-                          </el-button>
-                          <!--</el-badge>-->
-                          <el-button size="medium"><span class="share"></span><%= __('Share') %></el-button>
-
-
+                            </template>
+                            <a v-loading.fullscreen.lock="fullscreenLoading" href="#" @click="showSlider(idx, index)">
+                              <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
+                            </a>
+                          </el-col>
                         </el-row>
-                        <transition name="el-fade-in-linear">
+                      </div>
+                      <el-divider></el-divider>
+                      <template>
+                        <div>
+                          <el-row class="button-like">
+                            <el-button size="medium"><i class="ti-thumb-up"></i>&nbsp; <%= __('Like') %>
+                              ({{likeLength}})
+                            </el-button>
+                            <el-badge v-if="photoSet.countNewComments>0" :value="photoSet.countNewComments" class="itemFoo" :max="10" >
+                            <!--<el-badge is-dot class="itemFoo">-->
+                            <el-button @click="openCommentsForm(index)" icon="el-icon-chat-square"
+                                       size="medium"><%= __('Comment') %>
+                              ({{photoSet.comments ? photoSet.comments.length : 0}})
+                            </el-button>
+                            <!--</el-badge>-->
+                            </el-badge>
+                            <el-button v-else @click="openCommentsForm(index)" icon="el-icon-chat-square"
+                                       size="medium"><%= __('Comment') %>
+                              ({{photoSet.comments ? photoSet.comments.length : 0}})
+                            </el-button>
 
-                          <div v-if="ruleForm.show === index">
-                            <div class="row justify-content-center my-4">
-                              <div class="col-sm-8">
-                                <div class="row">
-                                  <div class="col">
-                                    <el-collapse v-model="activeNames" accordion>
-                                      <el-collapse-item title="<%= __('Write your review') %>" name="1">
-                                        <div><%= __('Your opinion is important and necessary for us. Leave your comment regarding this litter.') %></div>
-                                        <div><%= __('Perhaps you have questions that you would like to receive answers from the nursery. Write to us, we will be happy to answer you.') %></div>
-                                        <ul class="hr" v-for="(com,index) in photoSet.comments">
-                                          <li class="avat">
-                                            <div class="avat">
-                                              <el-avatar :size="35" :src="com.avatarUrl"></el-avatar>
-                                            </div>
-                                          </li>
-                                          <li class="comm">
-                                            <span class="comment">
-                                              <a href="#" class="user-comment">{{com.userName}} </a>
-                                              {{com.comment}}</span>
-                                            <br>
-                                            <small>
-                                              <el-tooltip class="item" effect="dark"
-                                                          :content="com.date | getCreate(me.preferredLocale,'LLLL')"
-                                                          placement="top-start">
-                                                <el-link type="info" class="mt-0">
-                                                  <small>{{dateFrom.from(com.date)}}</small>
-                                                </el-link>
-                                              </el-tooltip>
-                                            </small>
-                                          </li>
-                                        </ul>
-                                        <% /* Поле ввода комментария */ %>
-                                        <el-form @submit.native.prevent>
-                                          <el-form-item>
-                                            <el-input @keyup.enter.native="updateComment"
-                                                      class="mt-2"
-                                                      clearable
-                                                      placeholder="<%= __('Write a comment') %>"
-                                                      v-model="comment">
-                                              <i slot="prefix" class="el-input__icon el-icon-chat-line-round"></i>
-                                              <template slot="prepend">
-                                                <el-avatar :size="35" :src="srcAvatar"></el-avatar>
-                                              </template>
-                                            </el-input>
-                                          </el-form-item>
-                                        </el-form>
-                                      </el-collapse-item>
 
-                                    </el-collapse>
+                            <el-button size="medium"><span class="share"></span><%= __('Share') %></el-button>
+
+
+                          </el-row>
+                          <transition name="el-fade-in-linear">
+
+                            <div v-if="ruleForm.show === index">
+                              <div class="row justify-content-center my-4">
+                                <div class="col-sm-8">
+                                  <div class="row">
+                                    <div class="col">
+                                      <el-collapse v-model="activeNames" accordion>
+                                        <el-collapse-item title="<%= __('Write your review') %>" name="1">
+                                          <div><%= __('Your opinion is important and necessary for us. Leave your comment regarding this litter.') %></div>
+                                          <div><%= __('Perhaps you have questions that you would like to receive answers from the nursery. Write to us, we will be happy to answer you.') %></div>
+                                          <ul class="hr" v-for="(com,index) in photoSet.comments">
+                                            <li class="avat">
+                                              <div class="avat">
+                                                <el-avatar :size="35" :src="com.avatarUrl"></el-avatar>
+                                              </div>
+                                            </li>
+                                            <li class="comm">
+                                              <div class="comment">
+                                                <a href="#" class="user-comment">{{com.userName}} </a>
+                                                {{com.comment}}
+                                              </div>
+
+                                              <ul >
+                                                <li><%= __('Like') %></li>
+                                                <li><%= __('Replay') %></li>
+                                                <li>
+                                                  <el-tooltip class="item" effect="dark"
+                                                              :content="com.dateCreate | getCreate(me.preferredLocale,'LLLL')"
+                                                              placement="top-start">
+                                                    <el-link type="info" class="mt-0">
+                                                      <span> {{dateFrom(com.dateCreate)}}</span>
+                                                    </el-link>
+                                                  </el-tooltip>
+                                                </li>
+                                              </ul>
+                                            </li>
+                                          </ul>
+                                          <% /* Поле ввода комментария */ %>
+                                          <el-form @submit.native.prevent>
+                                            <el-form-item>
+                                              <el-input @keyup.enter.native="updateComment"
+                                                        class="mt-2"
+                                                        maxLength="1000"
+                                                        clearable
+                                                        placeholder="<%= __('Write a comment') %>"
+                                                        v-model="comment">
+                                                <i slot="prefix" class="el-input__icon el-icon-chat-line-round"></i>
+                                                <template slot="prepend">
+                                                  <el-avatar :size="35" :src="srcAvatar"></el-avatar>
+                                                </template>
+                                              </el-input>
+                                            </el-form-item>
+                                          </el-form>
+                                        </el-collapse-item>
+
+
+                                      </el-collapse>
+                                    </div>
                                   </div>
-                                </div>
 
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </transition>
-                      </div>
-                    </template>
+                          </transition>
+                        </div>
+                      </template>
 
+                    </div>
                   </div>
+                </div>
+                <div v-else class="text-center">
+                  <%= __('No photo session added') %>
+                  <p class="text-center my-5">
+                    <el-button round @click="setAddedPhotoSet"><%= __('Add photo session') %></el-button>
+                    <!--<el-button type="success" icon="el-icon-present" circle><%= __('Add presentation') %></el-button>-->
+                    <!--<el-link icon="el-icon-present"> <%= __('Add presentation') %></el-link>-->
+                  </p>
                 </div>
               </div>
             </transition>
           </el-tab-pane>
           <el-tab-pane label="<%= __('Video') %>" name="video">
-            <template v-if="!countVideo">
-              <%= __('you have not uploaded any videos yet') %>
-            </template>
-            <template v-else>
+            <div v-if="!countVideo" class="text-center">
+              <%= __('No video to view') %>
+            </div>
+            <div v-else>
               <!--<div class="infinite-list-wrapper">-->
               <!--<ul-->
               <!--class="list"-->
@@ -720,7 +744,7 @@
               <!--<p v-if="loadingVideo">Loading...</p>-->
               <!--<p v-if="noMore">No more</p>-->
               <!--</div>-->
-            </template>
+            </div>
           </el-tab-pane>
 
           <el-tab-pane label="<%= __('Presentation') %>" name="presentation">
