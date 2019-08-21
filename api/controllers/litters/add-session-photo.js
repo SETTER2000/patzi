@@ -93,6 +93,7 @@ module.exports = {
     // _.each(newPuppies, np => np.photos = puppies);
     litter.puppies.push({
       sessionName: inputs.sessionName.slice(0, 60),
+      countNewComments:0,
       descriptionPhotoSession: inputs.descriptionPhotoSession ? inputs.descriptionPhotoSession : '',
       createdAt:moment().format(),
       photos: puppies

@@ -123,6 +123,7 @@ module.exports.routes = {
   'POST    /api/v1/litters/add-presentation': { action: 'litters/add-presentation', csrf: false},
   'POST    /api/v1/litters/destroy-one-presentation': { action: 'litters/destroy-one-presentation' , csrf: false},
   'POST    /api/v1/litters/add-comment': { action: 'litters/add-comment', csrf: false },
+  'POST     /api/v1/litters/zero-comment': { action: 'litters/zero-comment' , csrf: false },
 
 
 

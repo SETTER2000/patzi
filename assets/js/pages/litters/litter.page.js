@@ -5,22 +5,13 @@ parasails.registerPage('litter', {
   data: {
     dialogTableVisible: false,
     dialogPedigreeVisible: true,
-    // show: false,
-
     comment: '',
-    commentsLength:0,
+    commentsLength: 0,
     activeNames: '1',
-    likeLength:0,
-    commentsLengthNew:0,
+    likeLength: 0,
+    commentsLengthNew: 0,
     comments: [],
-    dateFrom: moment(),
-    // litterComments: [
-    //   {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа', data: moment().format('LLL')},
-    //   {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа 22aZ', data: moment().format('LLL')},
-    //   {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа 3', data: moment().format('LLL')},
-    //   {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа 4', data: moment().format('LLL')},
-    //
-    // ],
+
     confirmDeleteLitterModalOpen: false,
     confirmDeletePresentationModalOpen: false,
     editableTabsValue: 'photo',
@@ -32,10 +23,8 @@ parasails.registerPage('litter', {
     subtitleLength: 100,
     descriptionLitterLength: 500,
     presentationUrlLength: 280,
-    // Состояние ошибки сервера
     cloudError: '',
     selectedLitter: undefined,
-    // Состояние загрузки
     syncing: false,
     title: '',
     loading: true,
@@ -121,6 +110,8 @@ parasails.registerPage('litter', {
     letters: [],
     dic: [
       ['en', {
+        textOneErr: `An error has occurred`,
+        textTwoErr: `No comment added.`,
         warnNoDogs: `There is no possibility to create a litter, while at least one pair of dogs is missing.`,
         warnNoKennel: `At the moment there is no nursery in the database.
          You should create at least one kennel to start with to add a dog.`,
@@ -141,6 +132,8 @@ parasails.registerPage('litter', {
         getFormatDateTimeLocale: `yyyy-MM-dd HH:mm:ss`,
       }],
       ['ru', {
+        textOneErr: `Произошла ошибка`,
+        textTwoErr: `Комментарий не добавлен.`,
         warnNoDogs: `Нет возможности создать помёт, пока отсутствует хотя бы одна пара собак.`,
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
@@ -162,25 +155,10 @@ parasails.registerPage('litter', {
       }]
     ],
     fits: 'cover',
-    // items: [
-    //   {label: 'Poale Ell Adam', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
-    //   {label: 'Poale Ell Bell', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
-    //   {label: 'Poale Ell Bazhen', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Adam-10m.jpg'},
-    //   {label: 'Poale Ell Barthalamew', imageSrc: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018.jpg'},
-    // ],
     litters: [],
     ratio: null,
     ratios: [],
-    colors: ['#99A9BF', '#F7BA2A', '#FF9900'], // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
-    // ratioMeTestArr:[
-    //   {litter:2, letter:'A'},
-    //   {litter:4, letter:'A'},
-    //   {litter:4, letter:'A'},
-    //   {litter:5, letter:'A'},
-    //   {litter:5, letter:'B'},
-    //   {litter:2, letter:'B'},
-    //   {litter:1, letter:'B'}
-    // ]
+    colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
   },
   virtualPages: true,
   html5HistoryMode: 'history',
@@ -205,13 +183,19 @@ parasails.registerPage('litter', {
       // this.commentsLength=0;
 
       this.litter = data;
+      this.$forceUpdate();
+      console.log('FFFFFFF:: ', this.litter);
+      // this.litter.puppies[this.ruleForm.show].comments = data.puppies[this.ruleForm.show].comments;
     });
     // Выбираем все комментарии
     // this.commentList();
+
   },
   filters: {
     getCreate: function (value, l, format) {
-      if (!value) {return '';}
+      if (!value) {
+        return '';
+      }
       moment.locale(l);
       let formatNew = (!format) ? 'LLL' : format;
       return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
@@ -229,9 +213,9 @@ parasails.registerPage('litter', {
       }
     },
     //
-    srcAvatar(){
+    srcAvatar() {
 
-        return this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+      return this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
     },
     // litter:{
     //    get: function(){
@@ -387,7 +371,7 @@ parasails.registerPage('litter', {
     },
 
     goTo(path) {
-      console.log('lett.letter: ' ,path);
+      console.log('lett.letter: ', path);
       // this.goto(`/litter/${path}/photo`);
       window.location = `/litter/${path}/photo`;
     },
@@ -937,29 +921,73 @@ parasails.registerPage('litter', {
 
     // Обновляем массив комментариев
     async updateComment() {
-      if (_.isEmpty(this.comment)) {return false;}
+      if (_.isEmpty(this.comment)) {
+        return false;
+      }
+      let sel = this;
       let data = {
         id: this.litter.id,
         comment: this.comment,
-        userName:this.me.fullName,
-        indexPhotoSet:this.ruleForm.show
+        letter: this.litter.letter,
+        userName: this.me.fullName,
+        indexPhotoSet: this.ruleForm.show
       };
-      await io.socket.post('/api/v1/litters/add-comment', data, (dataRes, jwRes) => {
+      await io.socket.post('/api/v1/litters/add-comment', data, (dataRes, response) => {
         // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+        (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
+            (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
 
-          if (jwRes.statusCode === 200) {
-            this.comment = '';
-            //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
-            // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
-          }
+        if (response.statusCode === 200) {
+          this.comment = '';
+          //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+          // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
+        } else {
+          sel.$message({
+            message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
+            type: 'error'
+          });
+        }
       });
 
     },
 
+    async openCommentsForm(i) {
+      this.ruleForm.show = i;
+      let data = {
+        id: this.litter.id,
+        comment: this.comment,
+        letter: this.litter.letter,
+        userName: this.me.fullName,
+        indexPhotoSet: this.ruleForm.show
+      };
+      await io.socket.post('/api/v1/litters/zero-comment', data, (dataRes, response) => {
+        // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+        (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
+            (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+
+
+        if (response.statusCode === 200) {
+          this.comment = '';
+          //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+          // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
+        } else {
+          sel.$message({
+            message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
+            type: 'error'
+          });
+        }
+      });
+    },
+
+    dateFrom(t) {
+      let a = moment(t);
+      let b = moment();
+      return a.from(b);
+
+    },
 
     handleChange(val) {
       console.log(val);

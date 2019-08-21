@@ -55,7 +55,7 @@ module.exports = {
 
     presentation: {
       type: 'ref',
-      defaultsTo:[],
+      defaultsTo: [],
       description: `Массив объектов на файлы презентации.`
     },
 
@@ -63,9 +63,9 @@ module.exports = {
 
     comments: {
       type: 'ref',
-      defaultsTo:[],
+      defaultsTo: [],
       description: `Массив объектов. Комментарии к помёту.`,
-      example:`
+      example: `
        litterComments: [
       {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа',      dateCreate: moment().unix()},
       {user:'Александр Петров', comment: 'Трата та, Тра та та, мы ведём с собой котааа 22aZ', dateCreate: moment().unix()},
@@ -130,9 +130,9 @@ module.exports = {
       defaultsTo: [],
       example: [
         {
-          sessionName:'30 дней.',
-          descriptionPhotoSession:'Мои забавные щенки после еды.',
-          photos:[{
+          sessionName: '30 дней.',
+          descriptionPhotoSession: 'Мои забавные щенки после еды.',
+          photos: [{
             fd:
               'D:\\__PROJECTS\\Sails\\patzi\\.tmp\\uploads\\d8820acf-1521-465c-908e-68659adab4e0.JPG',
             size: 56357,

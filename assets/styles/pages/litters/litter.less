@@ -41,15 +41,48 @@
     border: none;
 
   }
+
   a.user-comment {
     font-weight: bold;
     color: #385898;
+    padding-right: 5px;
   }
-  li.comm > span > a.user-comment:hover {
+  .comm {
+    position: relative;
+  }
+  .comm > ul {
+    position: absolute;
+    left: 10px;
+  }
+  .comm > ul li {
+    display: inline; /* Отображать как строчный элемент */
+    font-size: 13px;
+  }
+  .comm > ul li, .comm > ul li a {
+    color: #385898;
+    cursor: pointer;
+  }
+  .itemFoo {
+  //  margin-top: 10px;
+    margin: 0 10px;
+    //margin-left: 50px;
+  }
+  .comm > ul li:not(:first-child):before {
+    content: " \B7 ";
+    padding-right: 5px;
+    padding-left: 3px;
+  }
+  //.comm > ul li:hover{
+  //  cursor: pointer;
+  //}
+  .comment {
+    margin-bottom: 2px;
+  }
+  li.comm > .comment > a.user-comment:hover {
     text-decoration: underline !important;
   }
   ul.hr {
-    margin: 20px 0 20px 5px; /* Обнуляем значение отступов */
+    margin: 20px 0 35px 5px; /* Обнуляем значение отступов */
     padding: 0; /* Значение полей */
   }
   ul.hr li {
@@ -57,6 +90,7 @@
   }
   ul.hr li.avat {
     position: relative;
+
     .avat {
       position: absolute;
       top: 1px;

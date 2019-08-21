@@ -39,6 +39,10 @@ module.exports = {
     }
 
     await Litter.destroy({id: inputs.id});
+
+    // let litters = await Litter.find();
+    // await sails.sockets.broadcast('litter', 'destroy-litter', litters);
+
     return exits.success();
   }
 

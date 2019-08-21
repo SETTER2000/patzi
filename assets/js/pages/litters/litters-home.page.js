@@ -215,6 +215,12 @@ parasails.registerPage('litters-home', {
 
     // Буквы помётов
     this.letterList();
+
+    // Принимаем данные по событию list-*
+     io.socket.on('destroy-litter', (data) => {
+      this.litters = data;
+      // console.log('this.litters: ', this.litters);
+    });
   },
 
   mounted: async function () {
