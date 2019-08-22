@@ -13,7 +13,7 @@ module.exports = async function (req, res, proceed) {
     return res.redirect('/');
   }
 
-  let foundUser = await User.findOne(req.me).populate('groups');
+  let foundUser = await User.findOne(req.me.id).populate('groups');
 
   if (!foundUser) {
     if (req.wantsJSON) {
