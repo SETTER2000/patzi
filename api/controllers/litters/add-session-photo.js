@@ -121,7 +121,6 @@ module.exports = {
       });
 
 
-
     // Добавляется болванка-объект для отслеживания просмотренных комментариев
     var updatedRecords = await User.update({})
       .set({
@@ -129,6 +128,20 @@ module.exports = {
       }).fetch();
 
     console.log('var updatedRecords = ', updatedRecords);
+
+// https://sailsjs.com/documentation/reference/waterline-orm/datastores
+    let collection =  User.getDatastore();
+
+    if (!collection) {
+      throw 'badRequest';
+    }
+console.log('COLLLL::; ', collection);
+
+    let result = await collection.find({}, {
+      preferredLocale: 'en'
+    }).toArray((err, results) => err ? 'badRequest' : results);
+
+    console.log('result', result);
 
     // await sails.sockets.broadcast(inputs.collection, `list-${inputs.collection}`);
 
