@@ -67,6 +67,19 @@
         <el-input clearable :maxlength="photoSetDescriptionLength" show-word-limit type="textarea"
                   v-model="ruleForm.descriptionPhotoSession"></el-input>
       </el-form-item>
+      <% /* Дата съёмки фотосессии*/ %>
+      <el-form-item label="<%= __('Date taken') %>"
+                    prop="dateShooting">
+        <el-date-picker
+          v-model="ruleForm.dateShooting"
+          type="date"
+          placeholder="<%= __('Pick a day') %>">
+        </el-date-picker>
+      </el-form-item>
+      <% /* Показывать или нет дату съёмки*/ %>
+      <el-form-item label="<%= __('Show shooting date') %>">
+        <el-switch v-model="ruleForm.showShootingDate"></el-switch>
+      </el-form-item>
       <el-divider content-position="left"><%= __('Puppies this litter') %></el-divider>
       <div class="photo-uploader">
         <div class="row">
@@ -215,17 +228,29 @@
   <el-dialog title="<%= __('Photo Shoot Editor') %>"
              :visible.sync="dialogDescriptionPhotoSession">
     <el-form :label-position="'top'"
-             :model="ruleForm" :rules="rules" ref="ruleForm"
+             :model="ruleFormEdit" :rules="rules" ref="ruleFormEdit"
              label-width="120px" class="demo-ruleForm">
       <% /*Описание фотосессии*/ %>
       <el-form-item label="<%= __('Description of the photo shoot') %>" prop="descriptionPhotoSession">
         <el-input :maxlength="photoSetDescriptionLength" show-word-limit type="textarea"
-                  v-model="ruleForm.descriptionPhotoSession"></el-input>
+                  v-model="ruleFormEdit.descriptionPhotoSession"></el-input>
+      </el-form-item>
+      <% /* Дата съёмки фотосессии*/ %>
+      <el-form-item label="<%= __('Date taken') %>" prop="dateShooting">
+        <el-date-picker
+          v-model="ruleFormEdit.dateShooting"
+          type="date"
+          placeholder="<%= __('Pick a day') %>">
+        </el-date-picker>
+      </el-form-item>
+      <% /* Показывать или нет дату съёмки*/ %>
+      <el-form-item label="<%= __('Show shooting date') %>">
+        <el-switch v-model="ruleFormEdit.showShootingDate"></el-switch>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
     <el-button @click="dialogDescriptionPhotoSession = false"><%= __('Cancel') %></el-button>
-    <el-button type="primary" @click="updatePhotoSetDescription('ruleForm')"><%= __('Save') %></el-button>
+    <el-button type="primary" @click="updatePhotoSetDescription('ruleFormEdit')"><%= __('Save') %></el-button>
   </span>
   </el-dialog>
   <% /* Диалоговое окно Редактор помёта*/ %>
@@ -591,8 +616,10 @@
                     <div class="card-body">
                       <!--<h4 class="card-title"> {{litter.bornNt}}</h4>-->
                       <% /*Описание фотосессии.*/ %>
-                      <div class="card-text"><p>
-                          {{photoSet.descriptionPhotoSession}}</p></div>
+                      <div class="card-text">
+                        <p> <el-link type="warning" disabled  class="dateShooting" v-if="photoSet.dateShooting && photoSet.showShootingDate"><i class="el-icon-date"></i> <%= __('Date taken') %>: <strong>{{photoSet.dateShooting | getCreate(me.preferredLocale, 'LL')}}</strong> </el-link> <em v-if="photoSet.descriptionPhotoSession">{{photoSet.descriptionPhotoSession}}</em></p>
+
+                      </div>
                       <div class="card-text mt-sm-4">
                         <% /*Маленькие фото. Превью.*/ %>
                         <el-row :gutter="4" justify="center">
