@@ -154,7 +154,7 @@ module.exports.routes = {
   'DELETE /users/destroy-user-group': {action: 'users/destroy-user-group', csrf: false},
   'POST   /api/v1/users/update-ratio': {action: 'users/update-ratio', csrf: false},
   'GET    /api/v1/users/status': {action: 'users/list-status'},
-
+  'POST   /api/v1/users/looked-comment': { action: 'users/looked-comment', csrf: false },
 
   'GET    /api/v1/continents/list': {action: 'continents/list'},
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},

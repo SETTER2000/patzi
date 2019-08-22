@@ -1,14 +1,18 @@
 module.exports = {
 
 
-  friendlyName: 'Add comment',
+  friendlyName: 'Looked comment',
 
 
-  description: 'Добавить комментарий',
+  description: `Счётчик. Подсчёт просмотренных комментариев. Применяется в бейджах при показе 
+  новых не просмотренных комментариев. Идея в том, чтобы считать сколько раз пользователь кликнул
+  по комменту. Эта сумма кликов вычитается из общего кол-ва комментариев в данной теме. 
+  Например: в каждой фотосессии одного помёта есть свой массив объектов комментариев, следовательно когда 
+  пользователь кликает на коммент данный счётчик фиксирует +1 и эта сумма вычитается из суммы всех 
+  комментариев фотосессии. Остаток показывается как не просмотренные комментарии.`,
 
 
   inputs: {
-
     id: {
       type: 'string',
       description: `Идентификатор помёта.`,
@@ -28,17 +32,6 @@ module.exports = {
       required: true
     },
 
-    comment: {
-      type: 'string',
-      maxLength: 1000,
-      description: 'Комментарий пользователя.'
-    },
-
-    userName: {
-      type: 'string',
-      maxLength: 50,
-      description: 'Имя пользователя.'
-    },
   },
 
 
@@ -60,9 +53,6 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    const moment = require('moment');
-    const tz = require('moment-timezone');
-    moment.locale('en');
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
@@ -74,35 +64,26 @@ module.exports = {
         letter: inputs.letter,
         preferredLocale: this.req.me.preferredLocale
       });
+
+
     if (!litter) throw 'badRequest';
 
-    let user = await User.findOne(req.me.id);
-    if (!user) throw 'badRequest';
 
-    litter.puppies[inputs.indexPhotoSet].comments = _.isArray(litter.puppies[inputs.indexPhotoSet].comments) ? litter.puppies[inputs.indexPhotoSet].comments : [];
+    litter.puppies[inputs.indexPhotoSet].countNewComments = 0;
 
-    // Добавляем новый комментарий
-    litter.puppies[inputs.indexPhotoSet].comments.push({
-      comment: inputs.comment,
-      dateCreate: moment().format(),
-      indexPhotoSet: inputs.indexPhotoSet,
-      // born: moment.tz(born, 'Europe/Moscow').format(),
-      avatarUrl: (user.defaultIcon === 'avatar') ? user.avatar : user.gravatar,
-      userName: inputs.userName,
-      userId: req.me.id,
-    });
 
-    litter.puppies[inputs.indexPhotoSet].countNewComments =  _.isNumber(litter.puppies[inputs.indexPhotoSet].countNewComments) ? litter.puppies[inputs.indexPhotoSet].countNewComments + 1  : 1;
     let litterUpdate = await Litter.updateOne(inputs.id).set({puppies: litter.puppies});
     if (!litterUpdate) throw 'badRequest';
 
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    await sails.sockets.broadcast('litter', 'list-comment', litter );
+    await sails.sockets.broadcast('litter', 'list-comment', litter);
 
 
     // Respond with view.
     return exits.success();
 
   }
+
+
 };

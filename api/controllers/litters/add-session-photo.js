@@ -43,6 +43,18 @@ module.exports = {
       description: 'Описание фотосессии. Какая то интересная информация.'
     },
 
+
+    dateShooting: {
+      type: 'string',
+      description: 'Дата съёмки. День когда производилась данная фотосессия или видео.'
+    },
+
+
+    showShootingDate: {
+      type: 'boolean',
+      description: 'Показывать ли в открытом доступе дату съёмки?.'
+    },
+
   },
 
 
@@ -93,9 +105,11 @@ module.exports = {
     // _.each(newPuppies, np => np.photos = puppies);
     litter.puppies.push({
       sessionName: inputs.sessionName.slice(0, 60),
-      countNewComments:0,
+      // countNewComments:0,
+      dateShooting: inputs.dateShooting,
+      showShootingDate: inputs.showShootingDate,
       descriptionPhotoSession: inputs.descriptionPhotoSession ? inputs.descriptionPhotoSession : '',
-      createdAt:moment().format(),
+      createdAt: moment().format(),
       photos: puppies
     });
 
@@ -106,6 +120,15 @@ module.exports = {
         puppies: litter.puppies,
       });
 
+
+
+    // Добавляется болванка-объект для отслеживания просмотренных комментариев
+    var updatedRecords = await User.update({})
+      .set({
+        comments: {module: 'litter', id: inputs.id, images: [{look: 0}], puppies: [{look: 0}]},
+      }).fetch();
+
+    console.log('var updatedRecords = ', updatedRecords);
 
     // await sails.sockets.broadcast(inputs.collection, `list-${inputs.collection}`);
 

@@ -11,7 +11,7 @@ parasails.registerPage('litter', {
     likeLength: 0,
     commentsLengthNew: 0,
     comments: [],
-
+    indexPhotoSet: 0,
     confirmDeleteLitterModalOpen: false,
     confirmDeletePresentationModalOpen: false,
     editableTabsValue: 'photo',
@@ -32,11 +32,10 @@ parasails.registerPage('litter', {
     fullscreenLoading: false,
     countVideo: 0,
     dialogImageUrl: '',
-    indexPhotoSet: 0,
     nameSessionPhoto: '',
     count: 0,
     dialogVisible: false,
-    circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+    circleUrl: 'https://d3a1wbnh2r1l7y.cloudfront.net/ava.png',
     limit: 50,
     letter: '',
     autoplay: true,
@@ -48,6 +47,7 @@ parasails.registerPage('litter', {
     dialogDeletePhotoSession: false,
     dialogAddedPresentation: false,
     dialogDeletePresentation: false,
+
     photos: '',
     commentForm: {
       comment: '',
@@ -55,13 +55,20 @@ parasails.registerPage('litter', {
     ruleForm: {
       show: undefined,
       // indexPhotoSet:undefined,
+      dateShooting: '',
       sire: '',
       dam: '',
       label: '',
+      showShootingDate: true,
       data: [],
       fileList: [],
       fileListPuppies: [],
       file: []
+    },
+    ruleFormEdit: {
+      showShootingDate: false,
+      descriptionPhotoSession: '',
+      dateShooting: ''
     },
     rules: {
       // born: [
@@ -482,6 +489,16 @@ parasails.registerPage('litter', {
     },
 
 
+    // Установить переменных для редактирования
+    setValueEditPhotoSet: function (command) {
+      this.setIndexPhotoSet(command);
+      this.ruleFormEdit.showShootingDate = this.litter.puppies[this.indexPhotoSet].showShootingDate;
+      this.ruleFormEdit.dateShooting = this.litter.puppies[this.indexPhotoSet].dateShooting;
+      this.ruleFormEdit.descriptionPhotoSession = this.litter.puppies[this.indexPhotoSet].descriptionPhotoSession;
+      this.dialogDescriptionPhotoSession = true;
+    },
+
+
     // Открыть диалоговое окно "Добавить фотосессию"
     setAddedPhotoSet: function (command) {
       this.dialogAddedPhotoSession = true;
@@ -501,8 +518,7 @@ parasails.registerPage('litter', {
           this.dialogFormVisible = true;
           break;
         case 'b':
-          this.setIndexPhotoSet(command);
-          this.dialogDescriptionPhotoSession = true;
+          this.setValueEditPhotoSet(command);
           break;
         case 'c':
           this.setAddedPhotoSet(command);
@@ -615,6 +631,8 @@ parasails.registerPage('litter', {
         id: this.litter.id,
         sessionName: this.ruleForm.sessionName,
         descriptionPhotoSession: this.ruleForm.descriptionPhotoSession,
+        dateShooting: this.ruleForm.dateShooting,
+        showShootingDate: this.ruleForm.showShootingDate
       };
 
       io.socket.post('/api/v1/litters/add-session-photo', data, (dataRes, jwRes) => {
@@ -757,12 +775,16 @@ parasails.registerPage('litter', {
 
     async updatePhotoSetDescription() {
       this.fixDescription(this.photoSetDescriptionLength);
+
       let data = {
         id: this.litter.id,
         indexPhotoSet: this.indexPhotoSet,
-        sessionName: this.ruleForm.sessionName,
-        descriptionPhotoSession: this.ruleForm.descriptionPhotoSession
+        sessionName: this.ruleFormEdit.sessionName,
+        descriptionPhotoSession: this.ruleFormEdit.descriptionPhotoSession,
+        dateShooting: _.isNull(this.ruleFormEdit.dateShooting) ? '' : this.ruleFormEdit.dateShooting,
+        showShootingDate: this.ruleFormEdit.showShootingDate
       };
+      console.log('QWWW', data);
       io.socket.post('/api/v1/litters/update-session-description', data, (dataRes, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -772,8 +794,17 @@ parasails.registerPage('litter', {
 
         this.dialogDescriptionPhotoSession = false;
         if (jwRes.statusCode === 200) {
-          this.resetForm('ruleForm');
+          console.log('data.showShootingDate:: ', data.showShootingDate);
+          this.resetForm('ruleFormEdit');
+          this.ruleFormEdit.sessionName = '';
+          this.ruleFormEdit.descriptionPhotoSession = '';
+          // this.ruleFormEdit.dateShooting = '';
+          // this.ruleFormEdit.showShootingDate = false;
           this.litter.puppies[data.indexPhotoSet].descriptionPhotoSession = data.descriptionPhotoSession ? data.descriptionPhotoSession : '';
+          this.litter.puppies[data.indexPhotoSet].dateShooting = data.dateShooting ? data.dateShooting : '';
+          this.litter.puppies[data.indexPhotoSet].showShootingDate = data.showShootingDate ? data.showShootingDate : false;
+          // this.$forceUpdate();
+          console.log('AS::D', this.litter.puppies[this.indexPhotoSet].dateShooting);
         }
       });
     },
@@ -955,6 +986,7 @@ parasails.registerPage('litter', {
 
     async openCommentsForm(i) {
       this.ruleForm.show = i;
+      let sel = this;
       let data = {
         id: this.litter.id,
         comment: this.comment,

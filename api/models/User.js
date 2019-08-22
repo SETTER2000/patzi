@@ -221,9 +221,9 @@ It just means they have a customer entry in Stripe, which might or might not hav
       type: 'string',
       description: 'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',
       moreInfoUrl: 'https://www.npmjs.com/package/skipper',
-      defaultsTo:   'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+      defaultsTo: 'https://d3a1wbnh2r1l7y.cloudfront.net/ava.png'
 
-},
+    },
 
 
     avatarFD: {
@@ -260,11 +260,39 @@ It just means they have a customer entry in Stripe, which might or might not hav
       description: 'Номера телефонов для связи'
     },
 
+
     ratio: {
       type: 'ref',
-      defaultsTo:[{litter:0, letter:'A'}],
+      defaultsTo: [{litter: 0, letter: 'A'}],
       // example:[{litter:0, letter:'A'}],
       description: 'Массив голосований'
+    },
+
+
+    comments: {
+      type: 'ref',
+      defaultsTo: [],
+      example:[{module:'litter', id :'5d5d10e7b48a2107b8f2ce71', images:[{look:2}], puppies:[{look:12},{look:8}]}],
+      description: `Массив просмотренных комментариев в разных модулях системы. 
+      В примере показан пример с использованием модуля litter (модель Litter). В данном случаи в этом 
+      модули используется две коллекции для сбора комментариев, это images (Массив содержит объекты фотографий
+      для пары собак чей помёт представлен. В данный момент этот массив не используется для сбора отзывов.) и 
+      puppies. 
+      Puppies - содержит коллекцию фотосессий щенков данного помёта. 
+      В каждой фотосессии есть коллекция comments, которая содержит объекты комментариев пользователей. 
+      Именно сумма комментов в этой коллекции и является определяющим фактором показа бейджа с числом
+      новых, не просмотренных комментариев (отзывов) за вычитом значения look в конкретной фотосессии 
+      для кокретного пользователя. 
+      Пример: puppies[indexPhotoSet].comments.length - puppies[indexPhotoSet].look
+      Как это работает: 
+      При создании фотосессии - в конкретном модуле, например litter, ко всем подтвердившим
+      свой email пользователям, а следовательно получившим статус user, добавляется в свойство comments
+      модели User, новый объект типа того что в примере. Только все луки (look) обнулены. 
+      При обновление - т.е. при клики пользователя на один из комментариев, соответствующий look увеличивается на 
+      один (+1)
+      При удалении фотосессии - из коллекции, например puppies, удаляется объект с 
+      соответствующим индексом (indexPhotoSet)
+      При добавлении комментария - данное свойство не изменно!`
     },
 
 

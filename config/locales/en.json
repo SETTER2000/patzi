@@ -489,5 +489,8 @@
 	"You have not uploaded any videos yet": "You have not uploaded any videos yet",
 	"Response": "Response",
 	"Replay": "Replay",
-	"No video to view": "No video to view"
+	"No video to view": "No video to view",
+	"Date taken": "Date taken",
+	"Pick a day": "Pick a day",
+	"Show shooting date": "Show shooting date"
 }

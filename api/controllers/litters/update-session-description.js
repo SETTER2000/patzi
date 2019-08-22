@@ -39,6 +39,18 @@ module.exports = {
       example: 'Прекрасным тёплым утром. Крошечные комочки после завтрака.',
       description: 'Описание фотосессии. Рассказ про то как и где снимали.'
     },
+
+
+    dateShooting: {
+      type: 'string',
+      description: 'Дата съёмки. День когда производилась данная фотосессия или видео.'
+    },
+
+
+    showShootingDate: {
+      type: 'boolean',
+      description: 'Показывать ли в открытом доступе дату съёмки?.'
+    },
   },
 
 
@@ -60,8 +72,6 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-
-
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
@@ -73,9 +83,11 @@ module.exports = {
     if (!litter) {
       throw 'badRequest';
     }
-
+console.log('inputs.dateShooting: ' , inputs.dateShooting);
     await _.each(litter.puppies, async (pup, i) => {
       pup.descriptionPhotoSession = (i === inputs.indexPhotoSet) ? inputs.descriptionPhotoSession : pup.descriptionPhotoSession;
+      pup.dateShooting = (i === inputs.indexPhotoSet) ? inputs.dateShooting : '';
+      pup.showShootingDate = (i === inputs.indexPhotoSet) ? inputs.showShootingDate : pup.showShootingDate;
     });
 
    let u= await Litter.updateOne({id: inputs.id})
@@ -83,7 +95,7 @@ module.exports = {
         puppies: litter.puppies
       });
 
-// console.log('бновили: ', u);
+console.log('бновили: ', u);
     // await sails.sockets.broadcast(inputs.collection, `list-${inputs.collection}`);
 
     // All done.
