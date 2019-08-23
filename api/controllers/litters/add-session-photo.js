@@ -76,6 +76,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+    const ObjectId = require('mongodb').ObjectId;
     const moment = require('moment');
     const tz = require('moment-timezone');
     moment.locale('en');
@@ -84,7 +85,10 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-
+    let db = User.getDatastore().manager;
+    if (!db) {throw 'badRequest';}
+    let rawLitter = db.collection('litter');
+    let rawUser = db.collection('user');
     let puppies = [];
 
     let litter = await Litter.findOne(inputs.id);
@@ -122,26 +126,57 @@ module.exports = {
 
 
     // Добавляется болванка-объект для отслеживания просмотренных комментариев
-    var updatedRecords = await User.update({})
-      .set({
-        comments: {module: 'litter', id: inputs.id, images: [{look: 0}], puppies: [{look: 0}]},
-      }).fetch();
+    let updatedRecords = await rawUser.updateMany({},{$set:{
+      comments: {module: 'litter', id: inputs.id, images: [{look: 0}], puppies: [{look: 0}]},
+    }});
+    if(!updatedRecords) {console.log('Ошибка обновления');  throw 'badRequest';}
 
-    console.log('var updatedRecords = ', updatedRecords);
+    // console.log('var updatedRecords = ', updatedRecords);
 
-// https://sailsjs.com/documentation/reference/waterline-orm/datastores
-    let collection =  User.getDatastore();
+    // https://sailsjs.com/documentation/reference/waterline-orm/datastores
 
-    if (!collection) {
-      throw 'badRequest';
-    }
-console.log('COLLLL::; ', collection);
+    let u = await  rawLitter.aggregate([{$group : {_id : "$letter", num_tutorial : {$sum : 1}}}]).toArray();
+    // let u = await  rawLitter.find({'_id' : ObjectId(inputs.id)}).toArray();
+    // console.log('DDDDDD:' , u);
+    // db.collection('litter').find({}).then((data) => {console.log('RESULT: ',  data.toArray());});
+    // async function getResults() {
+    //   return db.collection('litter').find({});
+    // }
+    //
+    // var results = await getResults();
+    // results = results.then((data) => {
+    //   // Here you can do something with your data
+    //
+    //   console.log('RESULT: ',  data.toArray());
+    // });
 
-    let result = await collection.find({}, {
-      preferredLocale: 'en'
-    }).toArray((err, results) => err ? 'badRequest' : results);
+    // console.log('COLLLL::; ',db.litter.find({}));
 
-    console.log('result', result);
+    // var inventory = await sails.getDatastore()
+    //   .leaseConnection(async (db)=> {
+    //     var location = await Litter.findOne({ id: inputs.id })
+    //       .usingConnection(db);
+    //     if (!location) {
+    //       let err = new Error('Cannot find location with that id (`'+inputs.id+'`)');
+    //       err.code = 'E_NO_SUCH_LOCATION';
+    //       throw err;
+    //     }
+
+    // Get all products at the location
+    // var productOfferings = await ProductOffering.find({ location: inputs.id })
+    //   .populate('productType')
+    //   .usingConnection(db);
+    //
+    // return productOfferings;
+    //   return location;
+    // })
+    // .intercept('E_NO_SUCH_LOCATION', 'notFound');
+
+    // let result = await collection.find({}, {
+    //   preferredLocale: 'en'
+    // }).toArray((err, results) => err ? 'badRequest' : results);
+    //
+    // console.log('result', result);
 
     // await sails.sockets.broadcast(inputs.collection, `list-${inputs.collection}`);
 

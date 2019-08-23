@@ -89,12 +89,12 @@ module.exports = {
       throw 'notFound';
     }
 
-    if (_.isArray(collectionObject[folder][inputs.photoSet]['photos'])) {
-      // console.log('ARRRAY!', collectionObject[folder][inputs.photoSet]['photos']);
-    }
-    else {
-      // console.log('NE ARRAY!', collectionObject[folder][inputs.photoSet]['photos']);
-    }
+    // if (_.isArray(collectionObject[folder][inputs.photoSet]['photos'])) {
+    //   // console.log('ARRRAY!', collectionObject[folder][inputs.photoSet]['photos']);
+    // }
+    // else {
+    //   // console.log('NE ARRAY!', collectionObject[folder][inputs.photoSet]['photos']);
+    // }
 
 
     let arr = _.isArray(collectionObject[folder][inputs.photoSet]['photos']) ?
