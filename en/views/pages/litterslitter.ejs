@@ -560,7 +560,7 @@
               <div>
                 <div class="mb-lg-5" v-if="litter.puppies ">
                   <% /* ФОТОСЕССИИ */ %>
-                  <div class="mb-lg-3 " v-for="(photoSet, index, key) in litter.puppies" :key="index +  '-photoSet'">
+                  <div class="mb-lg-3 " v-for="(photoSet, index, key) in litter.puppies" :key="photoSet.indexPhotoSet">
                     <el-row>
                       <el-col>
                         <el-divider v-if="index>0"><i class="el-icon-star-on"></i></el-divider>
@@ -654,13 +654,13 @@
                             </el-button>
                             <el-badge v-if="photoSet.countNewComments>0" :value="photoSet.countNewComments" class="itemFoo" :max="10" >
                             <!--<el-badge is-dot class="itemFoo">-->
-                            <el-button @click="openCommentsForm(index)" icon="el-icon-chat-square"
+                            <el-button @click="openCommentsForm(photoSet.indexPhotoSet)" icon="el-icon-chat-square"
                                        size="medium"><%= __('Comment') %>
                               ({{photoSet.comments ? photoSet.comments.length : 0}})
                             </el-button>
                             <!--</el-badge>-->
                             </el-badge>
-                            <el-button v-else @click="openCommentsForm(index)" icon="el-icon-chat-square"
+                            <el-button v-else @click="openCommentsForm(photoSet.indexPhotoSet)" icon="el-icon-chat-square"
                                        size="medium"><%= __('Comment') %>
                               ({{photoSet.comments ? photoSet.comments.length : 0}})
                             </el-button>
@@ -672,7 +672,7 @@
                           </el-row>
                           <transition name="el-fade-in-linear">
 
-                            <div v-if="ruleForm.show === index">
+                            <div v-if="ruleForm.show === photoSet.indexPhotoSet">
                               <div class="row justify-content-center my-4">
                                 <div class="col-sm-8">
                                   <div class="row">
@@ -711,7 +711,7 @@
                                           <% /* Поле ввода комментария */ %>
                                           <el-form @submit.native.prevent>
                                             <el-form-item>
-                                              <el-input @keyup.enter.native="updateComment"
+                                              <el-input @keyup.enter.native="insertComment('puppies')"
                                                         class="mt-2"
                                                         maxLength="1000"
                                                         clearable
