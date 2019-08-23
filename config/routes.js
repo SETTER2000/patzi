@@ -114,18 +114,19 @@ module.exports.routes = {
   'GET     /api/v1/litters/list': {action: 'litters/list'},
   'PUT     /api/v1/litters/update-cover-album': {action: 'litters/update-cover-album', csrf: false},
   'GET     /api/v1/litters/list-letter': {action: 'litters/list-letter'},
-  'GET     /api/v1/litters/list-comment/:id': { action: 'litters/list-comment' },
+  // 'GET     /api/v1/litters/list-comment/:id': {action: 'litters/list-comment'},
   'POST    /api/v1/litters/update-session-name': {action: 'litters/update-session-name', csrf: false},
-  'POST    /api/v1/litters/update-session-description': { action: 'litters/update-session-description', csrf: false },
+  'POST    /api/v1/litters/update-session-description': {action: 'litters/update-session-description', csrf: false},
   'POST    /api/v1/litters/update-litter': {action: 'litters/update-litter', csrf: false},
   'POST    /api/v1/litters/add-session-photo': {action: 'litters/add-session-photo', csrf: false},
-  'POST    /api/v1/litters/destroy-session-photo': { action: 'litters/destroy-session-photo', csrf: false },
-  'POST    /api/v1/litters/add-presentation': { action: 'litters/add-presentation', csrf: false},
-  'POST    /api/v1/litters/destroy-one-presentation': { action: 'litters/destroy-one-presentation' , csrf: false},
-  'POST    /api/v1/litters/add-comment': { action: 'litters/add-comment', csrf: false },
-  'POST     /api/v1/litters/zero-comment': { action: 'litters/zero-comment' , csrf: false },
+  'POST    /api/v1/litters/destroy-session-photo': {action: 'litters/destroy-session-photo', csrf: false},
+  'POST    /api/v1/litters/add-presentation': {action: 'litters/add-presentation', csrf: false},
+  'POST    /api/v1/litters/destroy-one-presentation': {action: 'litters/destroy-one-presentation', csrf: false},
+  // 'POST    /api/v1/litters/add-comment': {action: 'litters/add-comment', csrf: false},
+  'POST    /api/v1/litters/zero-comment': {action: 'litters/zero-comment', csrf: false},
 
-
+  'POST    /api/v1/comments/add-comment': {action: 'comments/add-comment', csrf: false},
+  'GET    /api/v1/comments/list-comment/:instanceModuleId': { action: 'comments/list-comment'},
 
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},
@@ -154,7 +155,7 @@ module.exports.routes = {
   'DELETE /users/destroy-user-group': {action: 'users/destroy-user-group', csrf: false},
   'POST   /api/v1/users/update-ratio': {action: 'users/update-ratio', csrf: false},
   'GET    /api/v1/users/status': {action: 'users/list-status'},
-  'POST   /api/v1/users/looked-comment': { action: 'users/looked-comment', csrf: false },
+  'POST   /api/v1/users/looked-comment': {action: 'users/looked-comment', csrf: false},
 
   'GET    /api/v1/continents/list': {action: 'continents/list'},
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},

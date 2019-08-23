@@ -19,7 +19,7 @@ module.exports.policies = {
   'groups/*':'is-super-admin',
   'users/*':'is-super-admin',
   'users/update-ratio':'is-all-group',
-  'litters/add-comment':'is-all-group',
+  'comments/add-comment':'is-all-group',
   'kennels/*':'isAdminOrIsSuperAdmin',
   // 'kennels/*':['is-super-admin','is-admin'],
   'users/list-status':true,

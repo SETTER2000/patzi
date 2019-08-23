@@ -8,7 +8,6 @@ module.exports = {
 
 
   inputs: {
-
     label: {
       type: 'string',
       required: true,
@@ -146,6 +145,7 @@ console.log('inputs.fileList DOG-create: ', inputs.fileList);
       kennel: inputs.kennel,
       label: inputs.label
     });
+
     if (conflictingDog) {
       throw (req.me.preferredLocale === 'ru') ? 'dogAlreadyInUseRU' : 'dogAlreadyInUse';
     }

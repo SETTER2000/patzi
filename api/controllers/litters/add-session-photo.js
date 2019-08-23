@@ -76,6 +76,11 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+    const TokenGenerator = require( 'token-generator' )({
+      salt: 'and feet in his mouth so that he wouldn’t do anything',
+      timestampMap: 'abcdefghij', // 10 chars array for obfuscation proposes
+    });
+    let token = TokenGenerator.generate();
     const ObjectId = require('mongodb').ObjectId;
     const moment = require('moment');
     const tz = require('moment-timezone');
@@ -86,7 +91,9 @@ module.exports = {
       throw 'badRequest';
     }
     let db = User.getDatastore().manager;
-    if (!db) {throw 'badRequest';}
+    if (!db) {
+      throw 'badRequest';
+    }
     let rawLitter = db.collection('litter');
     let rawUser = db.collection('user');
     let puppies = [];
@@ -110,6 +117,7 @@ module.exports = {
     litter.puppies.push({
       sessionName: inputs.sessionName.slice(0, 60),
       // countNewComments:0,
+      indexPhotoSet:token,
       dateShooting: inputs.dateShooting,
       showShootingDate: inputs.showShootingDate,
       descriptionPhotoSession: inputs.descriptionPhotoSession ? inputs.descriptionPhotoSession : '',
@@ -124,18 +132,46 @@ module.exports = {
         puppies: litter.puppies,
       });
 
+    // await User.find().populate('group');
 
     // Добавляется болванка-объект для отслеживания просмотренных комментариев
-    let updatedRecords = await rawUser.updateMany({},{$set:{
-      comments: {module: 'litter', id: inputs.id, images: [{look: 0}], puppies: [{look: 0}]},
-    }});
-    if(!updatedRecords) {console.log('Ошибка обновления');  throw 'badRequest';}
+    let updatedRecords = await rawUser.updateMany(
+      {emailStatus: "confirmed"},
+      // {"_id": ObjectId(req.me.id)},
+      {
+        $addToSet: {
+          comments: {
+            $each: [
+              {
+                module: 'litter',
+                id: inputs.id,
+                images: [{look: 0}],
+                puppies: [{look: 1}]
+              },
+              {
+                module: 'litter',
+                id: inputs.id,
+                images: [{look: 0}],
+                puppies: [{look: 0}]
+              }
+            ]
+          }
+        }
+      },
+      // {upsert: true}
+    );
+
+
+    if (!updatedRecords) {
+      console.log('Ошибка обновления');
+      throw 'badRequest';
+    }
 
     // console.log('var updatedRecords = ', updatedRecords);
 
     // https://sailsjs.com/documentation/reference/waterline-orm/datastores
 
-    let u = await  rawLitter.aggregate([{$group : {_id : "$letter", num_tutorial : {$sum : 1}}}]).toArray();
+    let u = await  rawLitter.aggregate([{$group: {_id: "$letter", num_tutorial: {$sum: 1}}}]).toArray();
     // let u = await  rawLitter.find({'_id' : ObjectId(inputs.id)}).toArray();
     // console.log('DDDDDD:' , u);
     // db.collection('litter').find({}).then((data) => {console.log('RESULT: ',  data.toArray());});

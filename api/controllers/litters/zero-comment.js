@@ -22,8 +22,8 @@ module.exports = {
     },
 
     indexPhotoSet: {
-      type: 'number',
-      description: 'Индекс в массиве фотосессий.',
+      type: 'string',
+      description: 'Хэш-код в массиве фотосессий.',
       required: true
     },
 
@@ -64,14 +64,14 @@ module.exports = {
     if (!litter) throw 'badRequest';
 
 
-    litter.puppies[inputs.indexPhotoSet].countNewComments = 0;
-
-
-    let litterUpdate = await Litter.updateOne(inputs.id).set({puppies: litter.puppies});
-    if (!litterUpdate) throw 'badRequest';
-
-
-    // Рассылаем данные всем подписанным на событие list-* данной комнаты.
+    // litter.puppies[inputs.indexPhotoSet].countNewComments = 0;
+    //
+    //
+    // let litterUpdate = await Litter.updateOne(inputs.id).set({puppies: litter.puppies});
+    // if (!litterUpdate) throw 'badRequest';
+    //
+    //
+    // // Рассылаем данные всем подписанным на событие list-* данной комнаты.
     await sails.sockets.broadcast('litter', 'list-comment', litter);
 
 

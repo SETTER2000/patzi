@@ -43,13 +43,6 @@ module.exports = {
     }
 
     await sails.sockets.join(req, 'user');
-    console.log('inputs.ratios:', inputs.ratios);
-
-    //
-    // let ratio = inputs.ratios.filter(rat => {
-    //   // return !_.isNull(rat.litter);
-    //   return letter === rat.letter
-    // });
 
 
     data = {ratio: inputs.ratios};

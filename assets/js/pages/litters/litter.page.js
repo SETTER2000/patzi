@@ -178,24 +178,25 @@ parasails.registerPage('litter', {
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
-
+    moment().locale(this.me.preferredLocale);
     this.isAfter();
     this.ratio = _.last(_.pluck(this.me.ratio.filter(rat => rat.letter === this.litter.letter), 'litter'));
 
     // Буквы помёта
     this.letterList();
+    this.commentList();
     // Принимаем данные по событию list-*
-    io.socket.on('list-comment', (data) => {
-      console.log('list-comment: ', data);
-      // this.commentsLength=0;
 
-      this.litter = data;
+    io.socket.on('list-comment', (data) => {
+      if( this.litter[data.field]){
+        this.litter[data.field].map(photoSet=>{
+          photoSet.indexPhotoSet === data.indexPhotoSet ? photoSet.comments.push(data) : '';
+        });
+      }
+
       this.$forceUpdate();
-      console.log('FFFFFFF:: ', this.litter);
       // this.litter.puppies[this.ruleForm.show].comments = data.puppies[this.ruleForm.show].comments;
     });
-    // Выбираем все комментарии
-    // this.commentList();
 
   },
   filters: {
@@ -371,6 +372,7 @@ parasails.registerPage('litter', {
       });
     },
 
+
     isAfter() {
       // Проверка даты
       // Вернёт true, если this.litter.born  пока в будущем (не прошла)
@@ -482,7 +484,7 @@ parasails.registerPage('litter', {
       return this.deletePresentationIndex;
     },
 
-    // Установить инбекс фотосессии
+    // Установить инбокс фотосессии
     setIndexPhotoSet: function (command) {
       this.indexPhotoSet = command.i;
 
@@ -938,20 +940,57 @@ parasails.registerPage('litter', {
 
     // Выбираем все комментарии
     async commentList() {
-      await io.socket.get(`/api/v1/litters/list-comment/${this.litter.id}`, function gotResponse(body, response) {
+      await io.socket.get(`/api/v1/comments/list-comment/${this.litter.id}`, function gotResponse(body, response) {
         console.log('Сервис Comment List ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-      // Принимаем данные по событию list-*
-      await io.socket.on('list-comment', (data) => {
-        console.log('list-comment: ', data);
-        // this.commentsLength=0;
 
-        this.litter.puppies = data;
-      });
+
+
+      // Принимаем данные по событию list-*
+      // await io.socket.on('list-comment', (data) => {
+      //   console.log('list-comment: ', data);
+      //   // this.commentsLength=0;
+      //
+      //   this.litter.puppies = data;
+      // });
     },
 
-    // Обновляем массив комментариев
-    async updateComment() {
+    // Добавляем комментарий
+    async insertComment(field) {
+      if (_.isEmpty(this.comment)) {
+        return false;
+      }
+      let sel = this;
+      let data = {
+        instanceModuleId: this.litter.id,
+        comment: this.comment,
+        nameModule: 'Litter',
+        userName: this.me.fullName,
+        field: field,
+        letter:this.litter.letter,
+        indexPhotoSet: this.ruleForm.show
+      };
+      await io.socket.post('/api/v1/comments/add-comment', data, (dataRes, response) => {
+        // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+        (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
+            (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+
+
+        if (response.statusCode === 200) {
+          this.comment = '';
+          //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+          // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
+        } else {
+          sel.$message({
+            message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
+            type: 'error'
+          });
+        }
+      });
+
+    },
+ /*   async updateComment() {
       if (_.isEmpty(this.comment)) {
         return false;
       }
@@ -982,19 +1021,19 @@ parasails.registerPage('litter', {
         }
       });
 
-    },
+    },*/
 
-    async openCommentsForm(i) {
-      this.ruleForm.show = i;
+    async openCommentsForm(indexPhotoSet) {
+      this.ruleForm.show = indexPhotoSet;
       let sel = this;
       let data = {
         id: this.litter.id,
         comment: this.comment,
         letter: this.litter.letter,
         userName: this.me.fullName,
-        indexPhotoSet: this.ruleForm.show
+        indexPhotoSet: indexPhotoSet
       };
-      await io.socket.post('/api/v1/litters/zero-comment', data, (dataRes, response) => {
+  /*    await io.socket.post('/api/v1/litters/zero-comment', data, (dataRes, response) => {
         // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
         (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
           (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
@@ -1011,7 +1050,7 @@ parasails.registerPage('litter', {
             type: 'error'
           });
         }
-      });
+      });*/
     },
 
     dateFrom(t) {

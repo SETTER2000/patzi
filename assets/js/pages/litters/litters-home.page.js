@@ -173,12 +173,8 @@ parasails.registerPage('litters-home', {
       }]
     ],
   },
-
-
   virtualPages: true,
-
   html5HistoryMode: 'history',
-
   virtualPagesRegExp: /^\/litters\/?([^\/]+)?/,
   // virtualPagesRegExp: /^\/litter\/?[A-Z]+?\/?([^\/]+)?/,
 

@@ -151,7 +151,7 @@ module.exports = {
       born: moment.tz(born, 'Europe/Moscow').format(),
       owner: this.req.me.id,
       description: inputs.description,
-      subtitle:inputs.description.slice(0, 100),
+      subtitle: inputs.description ? inputs.description.slice(0, 100) : '',
       // sessionName: inputs.sessionName.slice(0, 60),
     }).fetch();
 
