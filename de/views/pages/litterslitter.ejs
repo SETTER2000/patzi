@@ -98,9 +98,9 @@
               :on-remove="handleRemovePuppies">
               <i class="el-icon-plus"></i>
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
+            <!--<el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
+            </el-dialog>-->
 
 
             <!------------------------------------------------------------------------------->
@@ -116,6 +116,7 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
     <!--<el-button @click="dialogFormVisible = false"><%= __('Cancel') %></el-button>-->
+    <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
     <el-button type="primary" @click="updateForm('ruleForm')"><%= __('Save') %></el-button>
   </span>
   </el-dialog>
@@ -558,7 +559,7 @@
           <el-tab-pane label="<%= __('Photo') %>" name="photo">
             <transition name="el-fade-in-linear">
               <div>
-                <div class="mb-lg-5" v-if="litter.puppies ">
+                <div class="mb-lg-5" v-if="(litter.puppies.length>0)">
                   <% /* ФОТОСЕССИИ */ %>
                   <div class="mb-lg-3 " v-for="(photoSet, index, key) in litter.puppies" :key="photoSet.indexPhotoSet">
                     <el-row>
@@ -588,15 +589,15 @@
                               <el-dropdown-item icon="el-icon-present" :command="{com:'g'}">
                                 <%= __('Add presentation') %>
                               </el-dropdown-item>
-                              <el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:index}">
+                              <el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:photoSet.indexPhotoSet}">
                                 <%= __('Photo session name') %>
                               </el-dropdown-item>
-                              <el-dropdown-item icon="el-icon-edit" :command="{com:'b',i:index}">
+                              <el-dropdown-item icon="el-icon-edit" :command="{com:'b',i:photoSet.indexPhotoSet}">
                                 <%= __('Photo session description') %>
                               </el-dropdown-item>
 
                               <el-dropdown-item icon="el-icon-delete-solid"
-                                                :command="{com:'d',i:index, name:photoSet.sessionName}">
+                                                :command="{com:'d',i:photoSet.indexPhotoSet, name:photoSet.sessionName}">
                                 <%= __('Delete photo session') %>
                               </el-dropdown-item>
 
@@ -652,7 +653,7 @@
                             <el-button size="medium"><i class="ti-thumb-up"></i>&nbsp; <%= __('Like') %>
                               ({{likeLength}})
                             </el-button>
-                            <el-badge v-if="photoSet.countNewComments>0" :value="photoSet.countNewComments" class="itemFoo" :max="10" >
+                            <el-badge v-if="photoSet.comments.length>0" :value="photoSet.comments.length" class="itemFoo" :max="10" >
                             <!--<el-badge is-dot class="itemFoo">-->
                             <el-button @click="openCommentsForm(photoSet.indexPhotoSet)" icon="el-icon-chat-square"
                                        size="medium"><%= __('Comment') %>
@@ -743,7 +744,7 @@
                 </div>
                 <div v-else class="text-center">
                   <%= __('No photo session added') %>
-                  <p class="text-center my-5">
+                  <p class="text-center my-5" v-if="me.isAdmin || me.isSuperAdmin">
                     <el-button round @click="setAddedPhotoSet"><%= __('Add photo session') %></el-button>
                     <!--<el-button type="success" icon="el-icon-present" circle><%= __('Add presentation') %></el-button>-->
                     <!--<el-link icon="el-icon-present"> <%= __('Add presentation') %></el-link>-->
@@ -775,10 +776,7 @@
           </el-tab-pane>
 
           <el-tab-pane label="<%= __('Presentation') %>" name="presentation">
-            <template v-if="!litter.presentation">
-              <%= __('you have not uploaded any presentation yet') %>
-            </template>
-            <template v-else>
+            <template>
               <div>
                 <el-row :gutter="12">
                   <el-col :span="8" v-for="(present,index) in litter.presentation" :key="index + '-present'">
@@ -797,14 +795,14 @@
                     </el-card>
 
                   </el-col>
-                  <el-col :span="24" v-if="me.isAdmin || me.isSuperAdmin">
-                    <el-card shadow="hover">
-                      <p class="text-center">
-                        <el-button round @click="setAddedPresentation"><%= __('Add presentation') %></el-button>
-                        <!--<el-button type="success" icon="el-icon-present" circle><%= __('Add presentation') %></el-button>-->
-                        <!--<el-link icon="el-icon-present"> <%= __('Add presentation') %></el-link>-->
+                  <el-col :span="24">
+                    <div class="text-center">
+                     <span v-if="litter.presentation.length<1"> <%= __('Presentation not added') %> </span>
+                      <p class="text-center my-5">
+
+                        <el-button  v-if="me.isAdmin || me.isSuperAdmin" round @click="setAddedPresentation"><%= __('Add presentation') %></el-button>
                       </p>
-                    </el-card>
+                    </div>
                   </el-col>
                   <!--  <el-col :span="8">
                     <el-card shadow="never">
