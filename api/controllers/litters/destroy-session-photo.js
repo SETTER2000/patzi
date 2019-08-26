@@ -15,9 +15,8 @@ module.exports = {
     },
 
 
-
     indexPhotoSet: {
-      type: 'number',
+      type: 'string',
       description: `Индекс объекта данной фотосессии в массиве фотосессий.`,
       required: true
     },
@@ -26,16 +25,15 @@ module.exports = {
 
 
   exits: {
-    notFound:{
+    notFound: {
       description: 'Не существует такой вещи с таким ID.',
-      responseType:'notFound' // как раньше res.notFound(), сейчас это встроеная функция sails
+      responseType: 'notFound' // как раньше res.notFound(), сейчас это встроеная функция sails
     },
     forbidden: {
       description: 'Пользователь делающий данный запрос не имеет право на удаление этого помёта.',
       responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
     }
   },
-
 
 
   fn: async function (inputs, exits) {
@@ -52,15 +50,20 @@ module.exports = {
     if (!litter) {
       throw 'badRequest';
     }
-    litter.puppies.splice(inputs.indexPhotoSet, 1);
 
+    litter.puppies = litter.puppies.filter(puppy => puppy.indexPhotoSet !== inputs.indexPhotoSet);
+    // litter.puppies.map(inputs.indexPhotoSet, 1);
+// _.each(litter.puppies, puppy=>{
+//   puppy.indexPhotoSet === inputs.indexPhotoSet ? delete puppy : puppy;
+// });
 
-    let u= await Litter.updateOne(inputs.id)
+    let u = await Litter.updateOne(inputs.id)
       .set({
         puppies: litter.puppies
       });
 
-
+    // Рассылаем данные всем подписанным на событие list-* данной комнаты.
+    await sails.sockets.broadcast('litter', 'delete-PhotoSet', inputs.indexPhotoSet);
     // All done.
     return exits.success();
   }

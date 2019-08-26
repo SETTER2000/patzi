@@ -9,6 +9,7 @@ module.exports = {
 
   exits: {
 
+
     success: {
       viewTemplatePath: 'pages/litters/litters-home'
     }
@@ -61,6 +62,7 @@ module.exports = {
       // litter.born = moment(litter.born,"dd.MM.YYYY").format('LL');
       // Устанавливаем url к странице просмотра помёта
       // Первый аргумент, базовый url
+
       litter.detail =  `/litters/litter/${litter.id}`;
       // litter.born =  moment(litter.born).format('L');
     });

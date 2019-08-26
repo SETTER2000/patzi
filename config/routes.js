@@ -42,7 +42,7 @@ module.exports.routes = {
 
 
   // 'GET /litters/litter/:id': {action: 'litters/view-litter'},
-  'GET /litter/:letter/:virtualPageSlug?': {action: 'litters/view-litter'},
+  'GET /litter/:letter/:year/:virtualPageSlug?': {action: 'litters/view-litter'},
   'GET /litters/:virtualPageSlug?': {action: 'litters/view-litters-home'},
 
   'GET /contact': {action: 'view-contact', locals: {currentSection: 'contact'}},
@@ -126,7 +126,7 @@ module.exports.routes = {
   'POST    /api/v1/litters/zero-comment': {action: 'litters/zero-comment', csrf: false},
 
   'POST    /api/v1/comments/add-comment': {action: 'comments/add-comment', csrf: false},
-  'GET    /api/v1/comments/list-comment/:instanceModuleId': { action: 'comments/list-comment'},
+  'GET    /api/v1/comments/list-comment/:instanceModuleId/:field': { action: 'comments/list-comment'},
 
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},

@@ -27,7 +27,7 @@ module.exports = {
     indexPhotoSet: {
       type: 'string',
       example: '2911bfggfhahdd',
-      // required: true,
+       required: true,
       description: `Хэш-код объекта массива.`
     },
 
@@ -35,7 +35,7 @@ module.exports = {
     userName: {
       type: 'string',
       example: 'Alex Fox',
-      // required: true,
+      required: true,
       description: `Полное имя пользователя.`
     },
 
@@ -43,7 +43,7 @@ module.exports = {
     instanceModuleId: {
       type: 'string',
       example: '5d5fc8aac1717d2778adbfae',
-      // required: true,
+      required: true,
       description: `Идентификатор экземпляра модуля в котором оставлен комментарий. Например в модуле Litter
       (помёты) их может быть несколько, следовательно кажый помёт имеет свой ID, он и записывается здесь.`
     },
@@ -52,7 +52,7 @@ module.exports = {
     field: {
       type: 'string',
       example: 'puppies',
-      // required: true,
+      required: true,
       description: `Наименование поля в объекте экземпляра модуля в котором содержится контент к 
       которому относится комментарий.`
     },
@@ -117,14 +117,20 @@ module.exports = {
       field: inputs.field,
       userName: inputs.userName,
       indexPhotoSet: inputs.indexPhotoSet,
+      // avatarUrl: (user.defaultIcon === 'avatar') ? user.avatar : user.gravatar,
       owner: req.me.id
     }).fetch();
 
     if(!newComment) {throw 'badRequest';}
-    console.log('NEW-COMMENT: ' , newComment);
+
+
+    let module = await sails.helpers.listComments.with({
+      instanceModuleId: inputs.instanceModuleId,
+      field: inputs.field
+    });
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    await sails.sockets.broadcast('litter', 'list-comment', newComment );
+    await sails.sockets.broadcast('litter', 'list-comment', module );
 
     return exits.success();
 

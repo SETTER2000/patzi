@@ -26,7 +26,15 @@ module.exports = {
       type: 'string',
       required: true,
       example: 'A',
-      description: 'Буква помёта. Должна быть уникальна.',
+      description: 'Буква помёта.',
+    },
+
+
+    year: {
+      type: 'string',
+      required: true,
+      example: '2019',
+      description: 'Год помёта.',
     },
 
 

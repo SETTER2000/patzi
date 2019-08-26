@@ -7,11 +7,12 @@ module.exports = {
   description: 'Display "Litter" page.',
 
   inputs: {
-    id: {
-      description: 'Идентификатор помёта.',
+    year: {
+      description: 'Год помёта.',
       type: 'string',
-      // required: true
+      required: true
     },
+
     letter: {
       description: 'Идентификатор помёта.',
       type: 'string',
@@ -54,6 +55,7 @@ module.exports = {
     let litter = await sails.helpers.srcImagePreparation.with(
       {
         letter: inputs.letter,
+        year:inputs.year,
         preferredLocale: this.req.me.preferredLocale
       });
 

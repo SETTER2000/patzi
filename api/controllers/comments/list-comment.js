@@ -15,6 +15,15 @@ module.exports = {
       (помёты) их может быть несколько, следовательно кажый помёт имеет свой ID, он и 
       записывается здесь (Litter.id).`
     },
+
+
+    field: {
+      type: 'string',
+      example: 'puppies',
+      required: true,
+      description: `Наименование поля в объекте экземпляра модуля в котором содержится контент к 
+      которому относится комментарий.`
+    },
   },
 
 
@@ -38,11 +47,12 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const req = this.req;
+
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
     }
-    let photoSets = [];
+
     // const moment = require('moment');
     //
     // // Устанавливаем соответствующую локаль для даты, установленую пользователем.
@@ -51,30 +61,16 @@ module.exports = {
     // let format = 'LL HH:mm';
 
     // Have the socket which made the request join the "litter" room.
-    // Подключить сокет, который сделал запрос, к комнате «litter».
+    // Подключить сокет, который сделал запрос, к комнате «comment».
     await sails.sockets.join(req, 'comment');
-
-
-    // Выбираем помёт
-    let litter = await Commentary.find({instanceModuleId:inputs.instanceModuleId});
-    let userIds = _.uniq(_.pluck(_.pluck(litter.puppies, 'comments')[0], 'userId'));
-    let users = await User.find(userIds);
-    if (!users) {
-      throw 'badRequest';
-    }
-
-    await  _.each(litter.puppies, async (photoset) => {
-      await _.each(photoset.comments, async (com) => {
-        let user = users.filter(us => us.id === com.userId);
-        com.avatarUrl = (user[0].defaultIcon === 'avatar') ? user[0].avatar : user[0].gravatar;
-        console.log('com.avatarUrl:: ', com.avatarUrl);
-      });
-      photoSets.push(photoset);
+    let module = await sails.helpers.listComments.with({
+      instanceModuleId: inputs.instanceModuleId,
+      field: inputs.field
     });
 
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    await sails.sockets.broadcast('litter', 'list-comment', photoSets);
+    await sails.sockets.broadcast('litter', 'list-comment', module);
 
     // Respond with view.
     return exits.success();

@@ -169,7 +169,7 @@ parasails.registerPage('litter', {
   },
   virtualPages: true,
   html5HistoryMode: 'history',
-  virtualPagesRegExp: /^\/litter\/?[A-Z]+?\/?([^\/]+)?/,
+  virtualPagesRegExp: /^\/litter\/?[A-Z]+?\/[1|2][0-9]{3}\/?([^\/]+)?/,
 
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -184,20 +184,25 @@ parasails.registerPage('litter', {
 
     // Буквы помёта
     this.letterList();
-    this.commentList();
+    this.commentList('puppies');
     // Принимаем данные по событию list-*
 
-    io.socket.on('list-comment', (data) => {
-      if( this.litter[data.field]){
-        this.litter[data.field].map(photoSet=>{
-          photoSet.indexPhotoSet === data.indexPhotoSet ? photoSet.comments.push(data) : '';
-        });
-      }
 
+    // Принимаем данные по событию list-*
+    io.socket.on('delete-PhotoSet', (response) => {
+      this.litter.puppies = this.litter.puppies.filter(puppy => puppy.indexPhotoSet !== response);
       this.$forceUpdate();
-      // this.litter.puppies[this.ruleForm.show].comments = data.puppies[this.ruleForm.show].comments;
     });
 
+
+    // Принимаем данные по событию list-*
+    io.socket.on('add-PhotoSet', (response) => {
+      console.log('response::: ' , response);
+      this.ruleForm.fileListPuppies = [];
+      this.uploadPuppies=[];
+      this.litter.puppies = response;
+      this.$forceUpdate();
+    });
   },
   filters: {
     getCreate: function (value, l, format) {
@@ -311,7 +316,7 @@ parasails.registerPage('litter', {
       let sel = this;
       console.log('Данные отправляемые на сервер: ', data);
       await io.socket.post(`/api/v1/users/update-ratio`, data, function gotResponse(body, response) {
-        console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
         if (response.statusCode === 200) {
           sel.$message({
             message: 'Спасибо за оценку. Ваш голос был учтён!',
@@ -360,18 +365,6 @@ parasails.registerPage('litter', {
 
     },
 
-    // Выбираем все буквы помётов
-    async letterList() {
-      await io.socket.get(`/api/v1/litters/list-letter`, function gotResponse(body, response) {
-        console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
-      });
-      // Принимаем данные по событию list-*
-      await io.socket.on('list-letter', (data) => {
-        console.log('letter: ', data);
-        this.letters = data;
-      });
-    },
-
 
     isAfter() {
       // Проверка даты
@@ -382,7 +375,7 @@ parasails.registerPage('litter', {
     goTo(path) {
       console.log('lett.letter: ', path);
       // this.goto(`/litter/${path}/photo`);
-      window.location = `/litter/${path}/photo`;
+      window.location = `/litter/${path}/${this.litter.year}/photo`;
     },
 
     handleSuccessPuppies(res, file) {
@@ -394,6 +387,7 @@ parasails.registerPage('litter', {
     },
 
     handleExceedPuppies(files, fileList) {
+      console.log('handleExceedPuppies:: ' ,fileList );
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
       ${files.length + fileList.length} ${this.i19p.files}`);
@@ -452,7 +446,7 @@ parasails.registerPage('litter', {
 
     clickPedigree() {
       // this.dialogPedigreeVisible = true;
-      this.goto(`/litter/${this.litter.letter}/pedigree`);
+      this.goto(`/litter/${this.litter.letter}/${this.litter.year}/pedigree`);
       // this.litterId = litterId;
       // this.indexSlide = indexPhoto;
       // this.handlerSetActiveSlider();
@@ -468,7 +462,7 @@ parasails.registerPage('litter', {
     handlerCloseDialogSlider() {
       this.photos = [];
       this.fullscreenLoading = false;
-      this.goto(`/litter/${this.litter.letter}/photo`);
+      this.goto(`/litter/${this.litter.letter}/${this.litter.year}/photo`);
     },
 
 
@@ -603,7 +597,7 @@ parasails.registerPage('litter', {
 
 
     _clearAddFriendsModal: function () {
-      this.goto(`/litter/${this.litter.letter}/photo`);
+      this.goto(`/litter/${this.litter.letter}/${this.litter.year}/photo`);
       this.formErrors = {};
       this.cloudError = '';
     },
@@ -626,7 +620,8 @@ parasails.registerPage('litter', {
       let data = {
         // fileList: this.ruleForm.sessionName,
         puppies: this.ruleForm.fileListPuppies,
-        // letter: this.fixLetter(),
+        letter: this.litter.letter,
+        year: this.litter.year,
         // dam: this.getDamArr(),
         // sire: this.getSireArr(),
         // born: JSON.stringify(this.ruleForm.born),
@@ -636,7 +631,7 @@ parasails.registerPage('litter', {
         dateShooting: this.ruleForm.dateShooting,
         showShootingDate: this.ruleForm.showShootingDate
       };
-
+      this.dialogAddedPhotoSession = false;
       io.socket.post('/api/v1/litters/add-session-photo', data, (dataRes, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -644,14 +639,19 @@ parasails.registerPage('litter', {
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
-        this.dialogAddedPhotoSession = false;
+
         // this.loading.close();
+
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          _.isArray(this.litter.puppies) ? this.litter.puppies.push(data) : this.litter.puppies = [data];
-          setTimeout(() => {
-            window.location = `/litter/${this.litter.letter}/photo`;
-          }, 1500);
+          this.ruleForm.fileListPuppies=[];
+          data.puppies=[];
+          this.uploadPuppies=[];
+          this.$forceUpdate();
+          // _.isArray(this.litter.puppies) ? this.litter.puppies.push(data) : this.litter.puppies = [data];
+          // setTimeout(() => {
+          //   window.location = `/litter/${this.litter.letter}/photo`;
+          // }, 1500);
 
 
         }
@@ -685,7 +685,7 @@ parasails.registerPage('litter', {
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           _.isArray(this.litter.presentation) ? this.litter.presentation.push(data) : this.litter.presentation = [data];
-          this.goto(`/litter/${this.litter.letter}/presentation`);
+          this.goto(`/litter/${this.litter.letter}/${this.litter.year}/presentation`);
           // setTimeout(() => {
           //   window.location = `/litter/${this.litter.letter}`;
           // }, 1500);
@@ -695,7 +695,6 @@ parasails.registerPage('litter', {
 
 
     async deletePhotoSet() {
-
       let data = {
         id: this.litter.id,
         indexPhotoSet: this.indexPhotoSet
@@ -710,12 +709,15 @@ parasails.registerPage('litter', {
         this.dialogDeletePhotoSession = false;
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          this.litter.puppies.splice(data.indexPhotoSet, 1);
-          setTimeout(() => {
-            window.location = `/litter/${this.litter.letter}/photo`;
-          }, 1500);
+          this.$forceUpdate();
+          // this.litter.puppies.splice(data.indexPhotoSet, 1);
+          // setTimeout(() => {
+          //   window.location = `/litter/${this.litter.letter}/photo`;
+          // }, 1500);
         }
       });
+
+
     },
 
 
@@ -786,7 +788,7 @@ parasails.registerPage('litter', {
         dateShooting: _.isNull(this.ruleFormEdit.dateShooting) ? '' : this.ruleFormEdit.dateShooting,
         showShootingDate: this.ruleFormEdit.showShootingDate
       };
-      console.log('QWWW', data);
+
       io.socket.post('/api/v1/litters/update-session-description', data, (dataRes, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -849,7 +851,8 @@ parasails.registerPage('litter', {
     },
 
     resetForm(formName) {
-      // this.$refs.upload.clearFiles();
+      this.$refs.uploadPuppies ?   this.$refs.uploadPuppies.clearFiles() : '';
+      // this.$refs.uploadPuppies.resetFields();
       this.dialogFormVisible = false;
       this.dialogDescriptionPhotoSession = false;
       this.dialogEditor = false;
@@ -924,13 +927,13 @@ parasails.registerPage('litter', {
       this.selectedLitter = undefined;
       this.handlerSetActiveSlider();
       setTimeout(() => {
-        this.goto(`http://localhost:1337/litter/${this.litter.letter}/presentation`);
+        this.goto(`http://localhost:1337/litter/${this.litter.letter}/${this.litter.year}/presentation`);
       }, 1000);
     },
 
     clickTabName() {
       let activeName = this.virtualPageSlug;
-      this.goto(`/litter/${this.litter.letter}/${activeName}`);
+      this.goto(`/litter/${this.litter.letter}/${this.litter.year}/${activeName}`);
     },
 
     onSubmit() {
@@ -938,22 +941,47 @@ parasails.registerPage('litter', {
     },
 
 
+    // Выбираем все буквы помётов
+    async letterList() {
+      await io.socket.get(`/api/v1/litters/list-letter`, function gotResponse(body, response) {
+        // console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-letter', (data) => {
+        this.letters = data;
+      });
+    },
+
+
     // Выбираем все комментарии
-    async commentList() {
-      await io.socket.get(`/api/v1/comments/list-comment/${this.litter.id}`, function gotResponse(body, response) {
-        console.log('Сервис Comment List ответил кодом ' + response.statusCode + ' и данными: ', body);
+    async commentList(field) {
+      await io.socket.get(`/api/v1/comments/list-comment/${this.litter.id}/${field}`, function gotResponse(body, response) {
+        // console.log('Сервис Comment List ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
 
 
-
       // Принимаем данные по событию list-*
-      // await io.socket.on('list-comment', (data) => {
-      //   console.log('list-comment: ', data);
-      //   // this.commentsLength=0;
-      //
-      //   this.litter.puppies = data;
-      // });
+      io.socket.on('list-comment', (data) => {
+
+        // console.log(`Лист комментариев для поля ${field}`, data);
+        if (data.length > 0 && _.isArray(this.litter[field])) {
+          this.litter[field].map(puppyPhotoSet => {
+            puppyPhotoSet.comments = _.isArray(puppyPhotoSet.comments) ? puppyPhotoSet.comments : [];
+            puppyPhotoSet.comments = data.filter(comment=>comment.indexPhotoSet === puppyPhotoSet.indexPhotoSet)
+            // (puppyPhotoSet.indexPhotoSet === data[0].indexPhotoSet && _.isArray(data)) ? puppyPhotoSet.comments = data :
+            //   (puppyPhotoSet.indexPhotoSet === data.indexPhotoSet && _.isArray(!data)) ? puppyPhotoSet.comments.push(data) : '';
+          });
+
+          // data.map(comment => {
+          //   this.litter[field][]
+          // });
+        }
+        // this.litter[field].comments = data;
+        this.$forceUpdate();
+        // this.litter.puppies[this.ruleForm.show].comments = data.puppies[this.ruleForm.show].comments;
+      });
     },
+
 
     // Добавляем комментарий
     async insertComment(field) {
@@ -967,7 +995,7 @@ parasails.registerPage('litter', {
         nameModule: 'Litter',
         userName: this.me.fullName,
         field: field,
-        letter:this.litter.letter,
+        letter: this.litter.letter,
         indexPhotoSet: this.ruleForm.show
       };
       await io.socket.post('/api/v1/comments/add-comment', data, (dataRes, response) => {
@@ -990,40 +1018,41 @@ parasails.registerPage('litter', {
       });
 
     },
- /*   async updateComment() {
-      if (_.isEmpty(this.comment)) {
-        return false;
-      }
-      let sel = this;
-      let data = {
-        id: this.litter.id,
-        comment: this.comment,
-        letter: this.litter.letter,
-        userName: this.me.fullName,
-        indexPhotoSet: this.ruleForm.show
-      };
-      await io.socket.post('/api/v1/litters/add-comment', data, (dataRes, response) => {
-        // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-        (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-          (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
-            (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+    /*   async updateComment() {
+         if (_.isEmpty(this.comment)) {
+           return false;
+         }
+         let sel = this;
+         let data = {
+           id: this.litter.id,
+           comment: this.comment,
+           letter: this.litter.letter,
+           userName: this.me.fullName,
+           indexPhotoSet: this.ruleForm.show
+         };
+         await io.socket.post('/api/v1/litters/add-comment', data, (dataRes, response) => {
+           // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+           (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+             (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
+               (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
 
-        if (response.statusCode === 200) {
-          this.comment = '';
-          //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
-          // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
-        } else {
-          sel.$message({
-            message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
-            type: 'error'
-          });
-        }
-      });
+           if (response.statusCode === 200) {
+             this.comment = '';
+             //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+             // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
+           } else {
+             sel.$message({
+               message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
+               type: 'error'
+             });
+           }
+         });
 
-    },*/
+       },*/
 
     async openCommentsForm(indexPhotoSet) {
+      console.log('Текущий индекс indexPhotoSet::: ' , indexPhotoSet);
       this.ruleForm.show = indexPhotoSet;
       let sel = this;
       let data = {
@@ -1033,24 +1062,24 @@ parasails.registerPage('litter', {
         userName: this.me.fullName,
         indexPhotoSet: indexPhotoSet
       };
-  /*    await io.socket.post('/api/v1/litters/zero-comment', data, (dataRes, response) => {
-        // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-        (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-          (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
-            (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+      /*    await io.socket.post('/api/v1/litters/zero-comment', data, (dataRes, response) => {
+            // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+            (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+              (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
+                (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
 
-        if (response.statusCode === 200) {
-          this.comment = '';
-          //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
-          // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
-        } else {
-          sel.$message({
-            message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
-            type: 'error'
-          });
-        }
-      });*/
+            if (response.statusCode === 200) {
+              this.comment = '';
+              //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+              // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
+            } else {
+              sel.$message({
+                message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
+                type: 'error'
+              });
+            }
+          });*/
     },
 
     dateFrom(t) {

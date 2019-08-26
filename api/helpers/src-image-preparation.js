@@ -8,6 +8,13 @@ module.exports = {
 
 
   inputs: {
+    year: {
+      description: 'Год помёта.',
+      type: 'string',
+      maxLength:4,
+      required: true
+    },
+
     letter: {
       type: 'string',
       description: 'Передаётся буква помёта',
@@ -53,7 +60,7 @@ module.exports = {
     moment.locale(inputs.preferredLocale);
 
     // Получаем объект конкретного помёта
-    let litter = await Litter.findOne({letter: inputs.letter}).populate('owner');
+    let litter = await Litter.findOne({letter: inputs.letter, year:inputs.year}).populate('owner');
 
     if (!litter) {
       console.log('Ошибка! Объект litter не создан.');
@@ -61,6 +68,7 @@ module.exports = {
 
     litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((image, i) => {
       image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litter.id}/images/${i}`) : '';
+      delete image.fd;
       return image;
     }) : '';
 
@@ -70,7 +78,7 @@ module.exports = {
       photoSet.comments = _.isArray(photoSet.comments) ? photoSet.comments : [];
       photoSet.photos.map((image, y) => {
         image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litter.id}/puppies/${y}/${i}`) : '';
-        // delete image.fd;
+        delete image.fd;
       });
       return photoSet;
     }) : '';

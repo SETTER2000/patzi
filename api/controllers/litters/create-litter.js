@@ -124,7 +124,8 @@ module.exports = {
     newPuppies.push({
       sessionName: inputs.sessionName.slice(0, 60),
       descriptionPhotoSession: inputs.descriptionPhotoSession ? inputs.descriptionPhotoSession : '',
-      photos: ''
+      photos: '',
+      indexPhotoSet: await sails.helpers.getToken()
     });
 
     if (inputs.puppies) {
@@ -148,6 +149,7 @@ module.exports = {
       images: fileList,
       puppies: newPuppies,
       dam: inputs.dam,
+      year: moment(born).year(),
       born: moment.tz(born, 'Europe/Moscow').format(),
       owner: this.req.me.id,
       description: inputs.description,
