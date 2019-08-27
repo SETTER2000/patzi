@@ -690,8 +690,10 @@
                                             </li>
                                             <li class="comm">
                                               <div class="comment">
-                                                <a href="#" class="user-comment">{{com.userName}} </a>
-                                                {{com.comment}}
+                                                <el-tooltip class="item" effect="light" :content="`Kennel: ${com.kennel}`" placement="bottom-start">
+                                                <span  class="user-comment">{{com.userName}} </span>
+                                                </el-tooltip>
+                                                <span class="comment-text" @click="viewed(com.id)" :class="[notViewed ? boldClass : '', lightClass]"> {{com.comment}}</span>
                                               </div>
 
                                               <ul >
@@ -699,7 +701,7 @@
                                                 <li><%= __('Replay') %></li>
                                                 <li>
                                                   <el-tooltip class="item" effect="dark"
-                                                              :content="com.dateCreate | getCreate(me.preferredLocale,'LLLL')"
+                                                              :content="com.createdAt | getCreate(me.preferredLocale,'LLLL')"
                                                               placement="top-start">
                                                     <el-link type="info" class="mt-0">
                                                       <span> {{dateFrom(com.dateCreate)}}</span>
