@@ -703,14 +703,16 @@ parasails.registerPage('litter', {
 
     async viewed(id) {
       console.log('IDD Comment: ', id);
-      let o={};
+      localStorage.clear();
+      let o = {};
       let y;
       let options = JSON.parse(localStorage.getItem('__c'));
+      options = _.isArray(options) ? options : [];
       // console.log('this.indexPhotoSet::: ' , this.ruleForm.show);
       // (_.isArray(y = _.pluck(JSON.parse(ob), this.ruleForm.show))&& y.length>0) ? options.push(o[this.ruleForm.show]=[id]) : options.map(com=>com[this.ruleForm.show].push(id));
-      o[this.ruleForm.show]=[id];
+      o[this.ruleForm.show] = [id];
       // console.log('OOOO:: ' , o);
-      console.log('options-options:: ' , options.push(o));
+      console.log('options-options:: ', options.push(o));
       // console.log('options-options22:: ' , _.pluck(JSON.parse(ob), this.ruleForm.show));
       localStorage.setItem('__c', JSON.stringify(options));
 
