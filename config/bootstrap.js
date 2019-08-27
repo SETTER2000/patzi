@@ -80,6 +80,17 @@ module.exports.bootstrap = async function () {
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
     gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
   }).fetch();
+
+  let star = await User.create({
+    emailAddress: 'vasef@mail.ru',
+    fullName: 'Ольга Петрова',
+    isAdmin: true,
+    // getFullName: function(){return  `${this.fullName} ${this.emailAddress}`;},
+    isSuperAdmin: false,
+    preferredLocale: 'en',
+    password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
+    gravatar: await sails.helpers.gravatar.getAvatarUrl('vasef@mail.ru')
+  }).fetch();
   // console.log('alexFox::: ID' , alexFox);
   let adam = await User.create({
     emailAddress: 'administrator.f@mail.ru',
@@ -1727,6 +1738,7 @@ module.exports.bootstrap = async function () {
       dateCreate: '2017-11-02T21:00:00.000Z',
       registerNumber: '000000',
       whoCreate: alexFox.id,
+      yourKennel:star.id,
       continent: 1,
       country: 1,
       region: 5468685,
@@ -1810,7 +1822,11 @@ module.exports.bootstrap = async function () {
   let createdDogs = await Dog.createEach(dogsArr).fetch();
   sails.log(`Created ${createdDogs.length} dog${createdDogs.length === 1 ? '' : 's'}.`);
 
-
+  let poaleEll = await Kennel.findOne({label:'Poale Ell'});
+  let userKennels =  await User.addToCollection(star.id, 'kennels', poaleEll.id);
+  // let kennelUsers =  await Kennel.addToCollection(poaleEll.id, 'users', star.id);
+  sails.log(`Created  ${userKennels} userKennels${userKennels === 1 ? '' : 's'}.`);
+  // sails.log(`Created  ${kennelUsers} kennelUsers${kennelUsers === 1 ? '' : 's'}.`);
   // Нужно создать индекс по полям предков в DB, чтобы включить быстрый поиск по узлам предков:
   // db.categories.createIndex( { ancestors: 1 } )
   // let categories = await  Category.createEach( [{ name: "MongoDB", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },

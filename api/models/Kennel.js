@@ -145,7 +145,7 @@ module.exports = {
     users: {
       collection: 'user',
       via: 'kennels',
-      description: 'Владельцы питомника. Их может быть несколько, а так же один.'
+      description: `Многие ко Многим (Many-to-Many). Владельцы питомника. Их может быть несколько.`
     },
 
 

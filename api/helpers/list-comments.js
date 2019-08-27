@@ -44,8 +44,8 @@ module.exports = {
       field: inputs.field
     })
       .populate('owner');
-    console.log('FFF:: ', `${inputs.instanceModuleId}/${inputs.field}`);
-    console.log('module:: ',module);
+    // console.log('FFF:: ', `${inputs.instanceModuleId}/${inputs.field}`);
+    // console.log('module-1:: ',module);
     // let userIds = _.uniq(_.pluck(module[inputs.field], 'comments')[0], 'userId');
     // let users = await User.find(userIds);
     // if (!users) {
@@ -53,13 +53,15 @@ module.exports = {
     // }
 
     // let litter = await Litter.findOne({id: inputs.instanceModuleId});
-    await  _.each(module, async (comment) => {
+      _.each(module, async (comment) => {
       comment.avatarUrl = (comment.owner.defaultIcon === 'avatar') ? comment.owner.avatar : comment.owner.gravatar;
+      // comment.kennelObj = await sails.helpers.getKennelUser.with({id:comment.owner.id});
+
       delete comment.owner;
       // console.log('com.avatarUrl:: ', comment.avatarUrl);
     });
 
-    console.log('helper listComments - MODULE::', module);
+    // console.log('MODULE на выходе::', module);
     return module;
   }
 

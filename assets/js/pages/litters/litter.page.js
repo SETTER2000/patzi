@@ -9,6 +9,9 @@ parasails.registerPage('litter', {
     commentsLength: 0,
     activeNames: '1',
     likeLength: 0,
+    lightClass: 'font-weight-light',
+    boldClass: 'font-weight-bold',
+    notViewed: true,
     commentsLengthNew: 0,
     comments: [],
     indexPhotoSet: 0,
@@ -197,9 +200,9 @@ parasails.registerPage('litter', {
 
     // Принимаем данные по событию list-*
     io.socket.on('add-PhotoSet', (response) => {
-      console.log('response::: ' , response);
+      console.log('response::: ', response);
       this.ruleForm.fileListPuppies = [];
-      this.uploadPuppies=[];
+      this.uploadPuppies = [];
       this.litter.puppies = response;
       this.$forceUpdate();
     });
@@ -387,7 +390,7 @@ parasails.registerPage('litter', {
     },
 
     handleExceedPuppies(files, fileList) {
-      console.log('handleExceedPuppies:: ' ,fileList );
+      console.log('handleExceedPuppies:: ', fileList);
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
       ${files.length + fileList.length} ${this.i19p.files}`);
@@ -644,9 +647,9 @@ parasails.registerPage('litter', {
 
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          this.ruleForm.fileListPuppies=[];
-          data.puppies=[];
-          this.uploadPuppies=[];
+          this.ruleForm.fileListPuppies = [];
+          data.puppies = [];
+          this.uploadPuppies = [];
           this.$forceUpdate();
           // _.isArray(this.litter.puppies) ? this.litter.puppies.push(data) : this.litter.puppies = [data];
           // setTimeout(() => {
@@ -674,6 +677,61 @@ parasails.registerPage('litter', {
       };
 
       io.socket.post('/api/v1/litters/add-presentation', data, (dataRes, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+
+        this.dialogAddedPresentation = false;
+
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          _.isArray(this.litter.presentation) ? this.litter.presentation.push(data) : this.litter.presentation = [data];
+          this.goto(`/litter/${this.litter.letter}/${this.litter.year}/presentation`);
+          // setTimeout(() => {
+          //   window.location = `/litter/${this.litter.letter}`;
+          // }, 1500);
+        }
+      });
+    },
+
+    // options=[
+    //   {this.ruleForm.show:[id,id,...]},
+    //   {this.ruleForm.show:[id,id,...]},
+    // ];
+
+    async viewed(id) {
+      console.log('IDD Comment: ', id);
+      let o={};
+      let y;
+      let options = JSON.parse(localStorage.getItem('__c'));
+      // console.log('this.indexPhotoSet::: ' , this.ruleForm.show);
+      // (_.isArray(y = _.pluck(JSON.parse(ob), this.ruleForm.show))&& y.length>0) ? options.push(o[this.ruleForm.show]=[id]) : options.map(com=>com[this.ruleForm.show].push(id));
+      o[this.ruleForm.show]=[id];
+      // console.log('OOOO:: ' , o);
+      console.log('options-options:: ' , options.push(o));
+      // console.log('options-options22:: ' , _.pluck(JSON.parse(ob), this.ruleForm.show));
+      localStorage.setItem('__c', JSON.stringify(options));
+
+      console.log('Это то что записано в localStorage: ', JSON.parse(localStorage.getItem('__c')));
+      this.notViewed = false;
+      return false;
+      this.fixDescription(this.presentationUrlLength);
+      if (_.isNull(this.ruleForm.presentationUrl.match(/^http:\/\/|^https:\/\//))) {
+        this.mesError(this.i19p.textUrlErr);
+        return false;
+      }
+
+      let data = {
+        id: this.litter.id,
+        presentationName: this.ruleForm.presentationName,
+        presentationUrl: this.ruleForm.presentationUrl,
+        descriptionPresentation: this.ruleForm.descriptionPresentation,
+        // born: JSON.stringify(this.ruleForm.born),
+      };
+
+      io.socket.post('/api/v1/litters/viewed-comment', data, (dataRes, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
@@ -851,7 +909,7 @@ parasails.registerPage('litter', {
     },
 
     resetForm(formName) {
-      this.$refs.uploadPuppies ?   this.$refs.uploadPuppies.clearFiles() : '';
+      this.$refs.uploadPuppies ? this.$refs.uploadPuppies.clearFiles() : '';
       // this.$refs.uploadPuppies.resetFields();
       this.dialogFormVisible = false;
       this.dialogDescriptionPhotoSession = false;
@@ -967,7 +1025,7 @@ parasails.registerPage('litter', {
         if (data.length > 0 && _.isArray(this.litter[field])) {
           this.litter[field].map(puppyPhotoSet => {
             puppyPhotoSet.comments = _.isArray(puppyPhotoSet.comments) ? puppyPhotoSet.comments : [];
-            puppyPhotoSet.comments = data.filter(comment=>comment.indexPhotoSet === puppyPhotoSet.indexPhotoSet)
+            puppyPhotoSet.comments = data.filter(comment => comment.indexPhotoSet === puppyPhotoSet.indexPhotoSet)
             // (puppyPhotoSet.indexPhotoSet === data[0].indexPhotoSet && _.isArray(data)) ? puppyPhotoSet.comments = data :
             //   (puppyPhotoSet.indexPhotoSet === data.indexPhotoSet && _.isArray(!data)) ? puppyPhotoSet.comments.push(data) : '';
           });
@@ -1052,7 +1110,7 @@ parasails.registerPage('litter', {
        },*/
 
     async openCommentsForm(indexPhotoSet) {
-      console.log('Текущий индекс indexPhotoSet::: ' , indexPhotoSet);
+      console.log('Текущий индекс indexPhotoSet::: ', indexPhotoSet);
       this.ruleForm.show = indexPhotoSet;
       let sel = this;
       let data = {
