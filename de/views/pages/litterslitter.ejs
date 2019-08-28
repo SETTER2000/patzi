@@ -653,7 +653,7 @@
                             <el-button size="medium"><i class="ti-thumb-up"></i>&nbsp; <%= __('Like') %>
                               ({{likeLength}})
                             </el-button>
-                            <el-badge v-if="countComment[photoSet.indexPhotoSet]>0" :value="countComment[photoSet.indexPhotoSet]" class="itemFoo" :max="10" >
+                            <el-badge v-if="photoSet.countComment>0" :value="photoSet.countComment" class="itemFoo" :max="10" >
                             <!--<el-badge is-dot class="itemFoo">-->
                             <el-button @click="openCommentsForm(photoSet)" icon="el-icon-chat-square"
                                        size="medium"><%= __('Comment') %>
@@ -685,9 +685,10 @@
                                             </li>
                                             <li class="comm">
                                               <div class="comment">
-                                                <el-tooltip class="item" effect="light" :content="`Kennel: ${com.kennel}`" placement="bottom-start">
+                                                <el-tooltip v-if="!_.isEmpty(com.kennels)" class="item" effect="light" :content="`<%= __('Kennel') %>: ${com.kennels.name} (${com.kennels.countryName})`" placement="bottom-start">
                                                 <span  class="user-comment">{{com.userName}} </span>
                                                 </el-tooltip>
+                                                <span  class="user-comment non" v-else>{{com.userName}} </span>
                                                 <span class="comment-text" @click="viewed(com.id)" :class="[notViewed ? boldClass : '', lightClass]"> {{com.comment}}</span>
                                               </div>
                                               <ul>
