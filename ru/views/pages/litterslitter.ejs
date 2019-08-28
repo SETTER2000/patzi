@@ -653,26 +653,21 @@
                             <el-button size="medium"><i class="ti-thumb-up"></i>&nbsp; <%= __('Like') %>
                               ({{likeLength}})
                             </el-button>
-                            <el-badge v-if="photoSet.comments.length>0" :value="photoSet.comments.length" class="itemFoo" :max="10" >
+                            <el-badge v-if="countComment[photoSet.indexPhotoSet]>0" :value="countComment[photoSet.indexPhotoSet]" class="itemFoo" :max="10" >
                             <!--<el-badge is-dot class="itemFoo">-->
-                            <el-button @click="openCommentsForm(photoSet.indexPhotoSet)" icon="el-icon-chat-square"
+                            <el-button @click="openCommentsForm(photoSet)" icon="el-icon-chat-square"
                                        size="medium"><%= __('Comment') %>
                               ({{photoSet.comments ? photoSet.comments.length : 0}})
                             </el-button>
                             <!--</el-badge>-->
                             </el-badge>
-                            <el-button v-else @click="openCommentsForm(photoSet.indexPhotoSet)" icon="el-icon-chat-square"
+                            <el-button v-else @click="openCommentsForm(photoSet)" icon="el-icon-chat-square"
                                        size="medium"><%= __('Comment') %>
                               ({{photoSet.comments ? photoSet.comments.length : 0}})
                             </el-button>
-
-
                             <el-button size="medium"><span class="share"></span><%= __('Share') %></el-button>
-
-
                           </el-row>
                           <transition name="el-fade-in-linear">
-
                             <div v-if="ruleForm.show === photoSet.indexPhotoSet">
                               <div class="row justify-content-center my-4">
                                 <div class="col-sm-8">
@@ -695,8 +690,7 @@
                                                 </el-tooltip>
                                                 <span class="comment-text" @click="viewed(com.id)" :class="[notViewed ? boldClass : '', lightClass]"> {{com.comment}}</span>
                                               </div>
-
-                                              <ul >
+                                              <ul>
                                                 <li><%= __('Like') %></li>
                                                 <li><%= __('Replay') %></li>
                                                 <li>
@@ -728,19 +722,15 @@
                                             </el-form-item>
                                           </el-form>
                                         </el-collapse-item>
-
-
                                       </el-collapse>
                                     </div>
                                   </div>
-
                                 </div>
                               </div>
                             </div>
                           </transition>
                         </div>
                       </template>
-
                     </div>
                   </div>
                 </div>
@@ -789,19 +779,15 @@
                         <el-button @click="clickDeletePresentation(index)" style="float: right; padding: 6px"
                                    icon="el-icon-close" circle></el-button>
                       </div>
-
                       <p> {{present.descriptionPresentation}}</p>
-
                       <a target="_blank" :href="present.presentationUrl"><img
                           src="https://d3a1wbnh2r1l7y.cloudfront.net/pdf.jpg" height="150" alt=""></a>
                     </el-card>
-
                   </el-col>
                   <el-col :span="24">
                     <div class="text-center">
                      <span v-if="litter.presentation.length<1"> <%= __('Presentation not added') %> </span>
                       <p class="text-center my-5">
-
                         <el-button  v-if="me.isAdmin || me.isSuperAdmin" round @click="setAddedPresentation"><%= __('Add presentation') %></el-button>
                       </p>
                     </div>
