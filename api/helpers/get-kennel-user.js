@@ -21,18 +21,27 @@ module.exports = {
       outputFriendlyName: 'Kennel user',
     },
 
+    noKennelFound: {
+      description: 'Could not find  kennel.'
+    }
   },
 
 
   fn: async function (inputs) {
-    let kennels = [];
+    let kennel = {};
 // Get kennel user.
     let kennelUser = await User.findOne(inputs.id).populate('kennels');
-    // console.log('kennelUser:: ', kennelUser);
+    if (!kennelUser || kennelUser.kennels.length < 1) return kennel;
+
+
+    console.log('kennelUser:: ', kennelUser);
+    kennel.name = kennelUser.kennels[0].label;
+
     // _.each(kennelUser.kennels, async kennel => {
     //   kennel.country = await sails.helpers.getCountryName.with({id: kennel.country})
     // });
-   kennelUser.kennels.length > 0 ?   kennelUser.kennels[0]['countryName'] =  await sails.helpers.getCountryName.with({id:  kennelUser.kennels[0].country}) : '';
+    let countryName = await sails.helpers.getCountryName.with({id: kennelUser.kennels[0].country});
+    kennel.countryName = countryName ? countryName.label : '';
     // await  _.each(kennelUser.kennels, async kennel => {
     //   kennel.countryName = await sails.helpers.getCountryName.with({id: kennel.country});
     //
@@ -44,7 +53,7 @@ module.exports = {
     // console.log('kennelUser.kennels:: ', kennelUser.kennels[0]);
 
     // Send back the result through the success exit.
-    return  kennelUser.kennels[0];
+    return kennel;
 
   }
 

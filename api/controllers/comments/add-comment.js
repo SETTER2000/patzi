@@ -19,7 +19,7 @@ module.exports = {
     nameModule: {
       type: 'string',
       example: 'Litter',
-      // required: true,
+      required: true,
       description: `Наименование модуля. Например модуль Litter.`
     },
 
@@ -97,17 +97,6 @@ module.exports = {
     // Подключить сокет, который сделал запрос, к комнате «comment».
     await sails.sockets.join(req, 'comment');
 
-    // console.log('inputs Comment-create: ', inputs);
-    // let list  = _.pluck(inputs.fileList, 'response');
-
-
-    // let litter = await sails.helpers.srcImagePreparation.with(
-    //   {
-    //     letter: inputs.letter,
-    //     preferredLocale: this.req.me.preferredLocale
-    //   });
-    // if (!litter){ console.log('EEEEEEEErrror'); throw 'badRequest';}
-
 
     // Записываем комментарий
     let newComment = await Commentary.create({
@@ -125,17 +114,35 @@ module.exports = {
       throw 'badRequest';
     }
 
+    // console.log('newComment::: ', newComment);
+    let module;
+
+    // console.log(`MODULE ::: ${inputs.nameModule}`, inputs.nameModule);
+    switch (inputs.nameModule) {
+      case 'Litter':
+        module = await Litter.findOne({id: inputs.instanceModuleId});
+        _.each(module[inputs.field], ob => {
+          ob.indexPhotoSet === inputs.indexPhotoSet ? ob.countComment++ : '';
+        });
+        await Litter.updateOne({id: inputs.instanceModuleId}).set(module);
+        break;
+    }
+
+
+    let count = module[inputs.field].filter(ob => ob.indexPhotoSet === inputs.indexPhotoSet);
+    count = _.last(_.pluck(count, 'countComment'));
+    // console.log('NEW MOD:: ', module[inputs.field]);
+    // console.log(`count ::::`, count);
+
     /**
      * Добавляет аватар к коментариям и возвращает собранный массив объектов комментариев согласно
      * идентификатору экземпляра модуля и его полю к которому относятся комментарии
      */
-    let module = await sails.helpers.listComments.with({
-      instanceModuleId: inputs.instanceModuleId,
-      field: inputs.field
-    });
+    let comment = await sails.helpers.oneComment(newComment.id);
 
-    // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    await sails.sockets.broadcast('litter', 'list-comment', module);
+    // console.log('Return COMMENT: ', comment);
+    // Рассылаем данные всем подписанным на событие add-* данной комнаты.
+    await sails.sockets.broadcast('litter', 'add-comment', {comments: comment, countComment: count});
 
     return exits.success();
 

@@ -117,7 +117,7 @@ module.exports = {
     // _.each(newPuppies, np => np.photos = puppies);
     litter.puppies.push({
       sessionName: inputs.sessionName.slice(0, 60),
-      // countNewComments:0,
+      countComment:0,
       indexPhotoSet: await sails.helpers.getToken(),
       dateShooting: inputs.dateShooting,
       showShootingDate: inputs.showShootingDate,

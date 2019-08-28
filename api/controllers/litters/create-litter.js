@@ -125,6 +125,7 @@ module.exports = {
       sessionName: inputs.sessionName.slice(0, 60),
       descriptionPhotoSession: inputs.descriptionPhotoSession ? inputs.descriptionPhotoSession : '',
       photos: '',
+      countComment:0,
       indexPhotoSet: await sails.helpers.getToken()
     });
 

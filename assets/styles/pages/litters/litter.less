@@ -63,7 +63,14 @@
     &:hover{
       cursor: pointer;
     }
+    &.non{
+      color: #8d8d8d;
+      &:hover{
+        cursor: auto;
+      }
+    }
   }
+
   .comm {
     position: relative;
   }
@@ -97,6 +104,7 @@
   }
   li.comm > .comment > a.user-comment:hover {
     text-decoration: underline !important;
+
   }
   ul.hr {
     margin: 20px 0 35px 5px; /* Обнуляем значение отступов */

@@ -6,6 +6,7 @@ parasails.registerPage('litter', {
     dialogTableVisible: false,
     dialogPedigreeVisible: true,
     comment: '',
+    field: '',
     commentsLength: 0,
     activeNames: '1',
     likeLength: 0,
@@ -207,7 +208,25 @@ parasails.registerPage('litter', {
       this.litter.puppies = response;
       this.$forceUpdate();
     });
+
+// Принимаем данные по событию add-*
+    io.socket.on('add-comment', (data) => {
+      console.log('Insert data: ', data);
+      console.log('this.field: ', data.field);
+      if (data) {
+        this.litter[data.comments.field].map(puppyPhotoSet => {
+          if (puppyPhotoSet.indexPhotoSet === data.comments.indexPhotoSet) {
+            puppyPhotoSet.comments = _.isArray(puppyPhotoSet.comments) ? puppyPhotoSet.comments : [];
+            puppyPhotoSet.countComment = data.countComment;
+            puppyPhotoSet.comments.push(data.comments);
+          }
+        });
+        this.$forceUpdate();
+      }
+    });
+
   },
+
   filters: {
     getCreate: function (value, l, format) {
       if (!value) {
@@ -704,20 +723,35 @@ parasails.registerPage('litter', {
 
     async viewed(id) {
       console.log('IDD Comment: ', id);
-      localStorage.clear();
-      let o = {};
-      let y;
+      // localStorage.clear();
+      let o={};
+
       let options = JSON.parse(localStorage.getItem('__c'));
-      options = _.isArray(options) ? options : [];
-      // console.log('this.indexPhotoSet::: ' , this.ruleForm.show);
-      // (_.isArray(y = _.pluck(JSON.parse(ob), this.ruleForm.show))&& y.length>0) ? options.push(o[this.ruleForm.show]=[id]) : options.map(com=>com[this.ruleForm.show].push(id));
-      o[this.ruleForm.show] = [id];
+       o = _.zipObject([this.ruleForm.show],[id]);
+
+      // console.log('SSSSSSSS:: ', _.uniq(_.result(_.find(options, `${this.ruleForm.show}`),`${this.ruleForm.show}`)));
+      options = _.isArray(options) ? options.push(o) : [];
+      options.push(o);
+      console.log('OBJECT::: ', o);
+      console.log('OPTIONS::: ', options);
+      // _.some(options,`${this.ruleForm.show}` ) ? _.result(_.find(options, `${this.ruleForm.show}`),`${this.ruleForm.show}`).push(id) :
+      //   _.isArray(o[`${this.ruleForm.show}`]) ? options.push(o[`${this.ruleForm.show}`].push(`${id}`)):
+      //     options.push(_.zipObject([`${this.ruleForm.show}`],[[id]]));
+
+      // console.log('PLUCK^^^ ::', _.pluck(options, `${this.ruleForm.show}`));
       // console.log('OOOO:: ' , o);
-      console.log('options-options:: ', options.push(o));
+      console.log('options-options:: ', options);
+      // console.log('OOOO:: ' , o[`${this.ruleForm.show}`]);
+     //
+     //  _.isEmpty(_.pluck(options, `${this.ruleForm.show}`)) ? options.push(o) : options[0][`${this.ruleForm.show}`].push(id);
+     // let uniq =  _.uniq(_.pluck(options, `${this.ruleForm.show}`));
+
+      // console.log('uniq:: ', uniq);
+      // console.log('options[0][`${this.ruleForm.show}`]:: ', options[0][`${this.ruleForm.show}`]=uniq);
       // console.log('options-options22:: ' , _.pluck(JSON.parse(ob), this.ruleForm.show));
       localStorage.setItem('__c', JSON.stringify(options));
 
-      console.log('Это то что записано в localStorage: ', JSON.parse(localStorage.getItem('__c')));
+      console.log('Это то что записано в localStorage: ', localStorage.getItem('__c'));
       this.notViewed = false;
       return false;
       this.fixDescription(this.presentationUrlLength);
@@ -1023,29 +1057,22 @@ parasails.registerPage('litter', {
 
       // Принимаем данные по событию list-*
       io.socket.on('list-comment', (data) => {
-
-        // console.log(`Лист комментариев для поля ${field}`, data);
         if (data.length > 0 && _.isArray(this.litter[field])) {
           this.litter[field].map(puppyPhotoSet => {
             puppyPhotoSet.comments = _.isArray(puppyPhotoSet.comments) ? puppyPhotoSet.comments : [];
             puppyPhotoSet.comments = data.filter(comment => comment.indexPhotoSet === puppyPhotoSet.indexPhotoSet);
-            // (puppyPhotoSet.indexPhotoSet === data[0].indexPhotoSet && _.isArray(data)) ? puppyPhotoSet.comments = data :
-            //   (puppyPhotoSet.indexPhotoSet === data.indexPhotoSet && _.isArray(!data)) ? puppyPhotoSet.comments.push(data) : '';
           });
-
-          // data.map(comment => {
-          //   this.litter[field][]
-          // });
         }
-        // this.litter[field].comments = data;
         this.$forceUpdate();
-        // this.litter.puppies[this.ruleForm.show].comments = data.puppies[this.ruleForm.show].comments;
       });
+
+
     },
 
 
     // Добавляем комментарий
     async insertComment(field) {
+      this.field = field;
       if (_.isEmpty(this.comment)) {
         return false;
       }
@@ -1068,8 +1095,7 @@ parasails.registerPage('litter', {
 
         if (response.statusCode === 200) {
           this.comment = '';
-          this.countComment[`${data.indexPhotoSet}`] = _.isNumber(this.countComment[`${data.indexPhotoSet}`]) ? this.countComment[`${data.indexPhotoSet}`] + 1 : this.countComment[`${data.indexPhotoSet}`] = 1;
-          console.log('this.countComment[data.indexPhotoSet]:: ' , this.countComment);
+
           //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
           // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
         } else {
@@ -1117,7 +1143,7 @@ parasails.registerPage('litter', {
     async openCommentsForm(photoSet) {
       console.log('Текущий индекс indexPhotoSet::: ', photoSet.indexPhotoSet);
       this.ruleForm.show = photoSet.indexPhotoSet;
-      this.countComment[`${photoSet.indexPhotoSet}`] = 0;
+      photoSet.countComment = 0;
       let sel = this;
       let data = {
         id: this.litter.id,
