@@ -1117,7 +1117,7 @@ parasails.registerPage('litter', {
     async openCommentsForm(photoSet) {
       console.log('Текущий индекс indexPhotoSet::: ', photoSet.indexPhotoSet);
       this.ruleForm.show = photoSet.indexPhotoSet;
-      photoSet.countComment = 0;
+      this.countComment[`${photoSet.indexPhotoSet}`] = 0;
       let sel = this;
       let data = {
         id: this.litter.id,
