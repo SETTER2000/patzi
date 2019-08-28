@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'List comments',
 
 
-  description: '',
+  description: 'Добавляет аватар к коментарию',
 
 
 

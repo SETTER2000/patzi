@@ -27,7 +27,7 @@ module.exports = {
     indexPhotoSet: {
       type: 'string',
       example: '2911bfggfhahdd',
-       required: true,
+      required: true,
       description: `Хэш-код объекта массива.`
     },
 
@@ -121,16 +121,21 @@ module.exports = {
       owner: req.me.id
     }).fetch();
 
-    if(!newComment) {throw 'badRequest';}
+    if (!newComment) {
+      throw 'badRequest';
+    }
 
-
+    /**
+     * Добавляет аватар к коментариям и возвращает собранный массив объектов комментариев согласно
+     * идентификатору экземпляра модуля и его полю к которому относятся комментарии
+     */
     let module = await sails.helpers.listComments.with({
       instanceModuleId: inputs.instanceModuleId,
       field: inputs.field
     });
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    await sails.sockets.broadcast('litter', 'list-comment', module );
+    await sails.sockets.broadcast('litter', 'list-comment', module);
 
     return exits.success();
 

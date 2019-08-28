@@ -34,6 +34,7 @@ parasails.registerPage('litter', {
     loadingVideo: false,
     fullscreenLoading: false,
     countVideo: 0,
+    countComment: {},
     dialogImageUrl: '',
     nameSessionPhoto: '',
     count: 0,
@@ -1014,7 +1015,7 @@ parasails.registerPage('litter', {
 
 
     // Выбираем все комментарии
-    async commentList(field) {
+    commentList: async function (field) {
       await io.socket.get(`/api/v1/comments/list-comment/${this.litter.id}/${field}`, function gotResponse(body, response) {
         // console.log('Сервис Comment List ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
@@ -1027,7 +1028,7 @@ parasails.registerPage('litter', {
         if (data.length > 0 && _.isArray(this.litter[field])) {
           this.litter[field].map(puppyPhotoSet => {
             puppyPhotoSet.comments = _.isArray(puppyPhotoSet.comments) ? puppyPhotoSet.comments : [];
-            puppyPhotoSet.comments = data.filter(comment => comment.indexPhotoSet === puppyPhotoSet.indexPhotoSet)
+            puppyPhotoSet.comments = data.filter(comment => comment.indexPhotoSet === puppyPhotoSet.indexPhotoSet);
             // (puppyPhotoSet.indexPhotoSet === data[0].indexPhotoSet && _.isArray(data)) ? puppyPhotoSet.comments = data :
             //   (puppyPhotoSet.indexPhotoSet === data.indexPhotoSet && _.isArray(!data)) ? puppyPhotoSet.comments.push(data) : '';
           });
@@ -1067,6 +1068,8 @@ parasails.registerPage('litter', {
 
         if (response.statusCode === 200) {
           this.comment = '';
+          this.countComment[`${data.indexPhotoSet}`] = _.isNumber(this.countComment[`${data.indexPhotoSet}`]) ? this.countComment[`${data.indexPhotoSet}`] + 1 : this.countComment[`${data.indexPhotoSet}`] = 1;
+          console.log('this.countComment[data.indexPhotoSet]:: ' , this.countComment);
           //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
           // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
         } else {
@@ -1111,16 +1114,17 @@ parasails.registerPage('litter', {
 
        },*/
 
-    async openCommentsForm(indexPhotoSet) {
-      console.log('Текущий индекс indexPhotoSet::: ', indexPhotoSet);
-      this.ruleForm.show = indexPhotoSet;
+    async openCommentsForm(photoSet) {
+      console.log('Текущий индекс indexPhotoSet::: ', photoSet.indexPhotoSet);
+      this.ruleForm.show = photoSet.indexPhotoSet;
+      photoSet.countComment = 0;
       let sel = this;
       let data = {
         id: this.litter.id,
         comment: this.comment,
         letter: this.litter.letter,
         userName: this.me.fullName,
-        indexPhotoSet: indexPhotoSet
+        indexPhotoSet: photoSet.indexPhotoSet
       };
       /*    await io.socket.post('/api/v1/litters/zero-comment', data, (dataRes, response) => {
             // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
