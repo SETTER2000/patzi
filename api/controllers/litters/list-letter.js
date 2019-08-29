@@ -53,7 +53,8 @@ module.exports = {
     // Определяем расположение названия питомника относительно имя собаки
     // и формируем динамически новое свойство value для элемента select
     _.each(litters, (litter) => {
-      letters.push({link:`/litters/litter/${litter.id}`, letter:litter.letter})
+      // letters.push({link:`/litters/litter/${litter.id}`, letter:litter.letter});
+      letters.push({link:`/litter/${litter.letter}/${litter.year}/photo`, letter:litter.letter});
     });
 
 

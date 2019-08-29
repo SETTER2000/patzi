@@ -361,9 +361,8 @@ parasails.registerPage('litter', {
     },
 
     goTo(path) {
-      console.log('lett.letter: ', path);
-      // this.goto(`/litter/${path}/photo`);
-      window.location = `/litter/${path}/${this.litter.year}/photo`;
+      // console.log('lett.letter: ', path);
+      window.location = path;
     },
 
     handleSuccessPuppies(res, file) {
@@ -1036,6 +1035,8 @@ parasails.registerPage('litter', {
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-letter', (data) => {
+
+        console.log('data letters::' , data);
         this.letters = data;
       });
     },
