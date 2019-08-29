@@ -34,7 +34,7 @@ parasails.registerPage('litter', {
     loading: true,
     loadingVideo: false,
     fullscreenLoading: false,
-    countVideo: 0,
+    countVideo: 10,
     countComment: {},
     dialogImageUrl: '',
     nameSessionPhoto: '',
@@ -951,11 +951,11 @@ parasails.registerPage('litter', {
 
     },
     load() {
-      // this.loadingVideo = true;
-      // setTimeout(() => {
-      //   // this.countVideo += 2;
-      //   this.loadingVideo = false;
-      // }, 2000);
+      this.loadingVideo = true;
+      setTimeout(() => {
+        this.countVideo += 2;
+        this.loadingVideo = false;
+      }, 2000);
     },
     // Это кнопка вызывает модальное окно <modal> с <ajax-form> для удаления помёта
     clickDeleteLitter: function () {
