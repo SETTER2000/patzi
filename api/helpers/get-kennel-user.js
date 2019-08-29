@@ -34,7 +34,7 @@ module.exports = {
     if (!kennelUser || kennelUser.kennels.length < 1) return kennel;
 
 
-    console.log('kennelUser:: ', kennelUser);
+    // console.log('kennelUser:: ', kennelUser);
     kennel.name = kennelUser.kennels[0].label;
 
     // _.each(kennelUser.kennels, async kennel => {

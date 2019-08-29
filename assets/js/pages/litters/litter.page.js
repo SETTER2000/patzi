@@ -211,17 +211,17 @@ parasails.registerPage('litter', {
 
 // Принимаем данные по событию add-*
     io.socket.on('add-comment', (data) => {
-      console.log('Insert data: ', data);
-      console.log('this.field: ', data.field);
       if (data) {
         this.litter[data.comments.field].map(puppyPhotoSet => {
           if (puppyPhotoSet.indexPhotoSet === data.comments.indexPhotoSet) {
             puppyPhotoSet.comments = _.isArray(puppyPhotoSet.comments) ? puppyPhotoSet.comments : [];
             puppyPhotoSet.countComment = data.countComment;
             puppyPhotoSet.comments.push(data.comments);
+
           }
         });
         this.$forceUpdate();
+
       }
     });
 
@@ -248,20 +248,22 @@ parasails.registerPage('litter', {
         return new Map(this.dic).get(this.me.preferredLocale);
       }
     },
+
+    // viewedComment: {
+    //   get: function () {
+    //     // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+    //     return _.isArray(JSON.parse(localStorage.getItem('__c'))) ? _.some(JSON.parse(localStorage.getItem('__c')),).length : 0
+    //   },
+    //   set: function (i) {
+    //     this.indexPhotoSet = i;
+    //     _.isArray(JSON.parse(localStorage.getItem('__c'))) ? _.some(JSON.parse(localStorage.getItem('__c')),).length : 0;
+    //   }
+    // },
     //
     srcAvatar() {
 
       return this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
     },
-    // litter:{
-    //    get: function(){
-    //      return this.litter;
-    //    } ,
-    //   set:function (i) {
-    //      this.litter = i;
-    //
-    //   }
-    // },
 
     noMore() {
       return this.count >= 20;
@@ -279,43 +281,6 @@ parasails.registerPage('litter', {
         // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
         this.indexPhoto = i;
       },
-
-
-      // loading:  {
-      //   // getter
-      //   get: function () {
-      //     return (!_.isArray(this.photos) && this.photos.length > 1);
-      //   },
-      //   // setter
-      //   set: function (newValue) {
-      //     return newValue;
-      //   }
-      //   // `this` points to the vm instance
-      // },
-      // photoCover: function () {
-      //   return this.keyRootPhotoAlbum - 1;
-      // },
-
-      // photos: function () {
-      //   // return _.pickBy(this.litters, function(u) {
-      //   //   return u.active;
-      //   // });
-      //   return  _.pluck(this.litter.puppies, 'photos');
-      //   // return this.litter.puppies;
-      //   // _.each(this.litters, async (litter) => {
-      //   //
-      //   // });
-      //   // console.log('DXXX:', this.litters.filter(litter => litter.images[litter.cover]));
-      // },
-      // photos: {
-      //    get: function () {
-      //      return  _.pluck(this.litter.puppies, 'photos');
-      //    },
-      //    set: function (arr) {
-      //      // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
-      //      this.photos = arr;
-      //    }
-      //  },
 
     }
 
@@ -402,11 +367,7 @@ parasails.registerPage('litter', {
     },
 
     handleSuccessPuppies(res, file) {
-      console.log('Uploads Puppies:', res);
-      // this.litters.images.push({imageSrc : URL.createObjectURL(file.raw)});
-
       this.ruleForm.fileListPuppies.push(res);
-      console.log('this.ruleForm.fileListPuppies YYY: ', this.ruleForm.fileListPuppies);
     },
 
     handleExceedPuppies(files, fileList) {
@@ -560,6 +521,9 @@ parasails.registerPage('litter', {
           break;
         case 'dl':
           this.clickDeleteLitter();
+          break;
+        case 'allView':
+          this.allViewed(command);
           break;
         case 'link':
           window.location = '/litters';
@@ -716,76 +680,106 @@ parasails.registerPage('litter', {
       });
     },
 
-    // options=[
-    //   {this.ruleForm.show:[id,id,...]},
-    //   {this.ruleForm.show:[id,id,...]},
-    // ];
 
-    async viewed(id) {
-      console.log('IDD Comment: ', id);
+    /**
+     * Функция выполняет сверку входящих данных о комментариях данной фотосессии с данными о просмотренных комментариях находящихся в
+     * localStorage. На основе этих данных выводится число не просмотренных комментариев (подсвечены жирным шрифтом).
+     * Кликнув по комментарию он добавляется в хранилище и считает просмотренным.
+     * @param photoSet
+     * @returns {number}
+     */
+    getCountComment(photoSet) {
+      // console.log('PHOTO: ', photoSet);
+      // console.log('REFS: ', this.$refs);
+
+      let viewedCommentId = _.remove(_.uniq(_.pluck(JSON.parse(localStorage.getItem('__c')), photoSet.indexPhotoSet)), n => n !== undefined);
+      // console.log('viewedCommentId: ',viewedCommentId);
+      // let NotViewedCommentId = _.remove(_.uniq(_.pluck(JSON.parse(localStorage.getItem('__c')), photoSet.indexPhotoSet)), n => n === undefined);
+      // console.log('NotViewedCommentId: ',NotViewedCommentId);
+
+      viewedComment = _.isArray(JSON.parse(localStorage.getItem('__c'))) ? viewedCommentId.length : 0;
+
+      // [...document.querySelectorAll(".comment-text")].map(el => {
+      //     console.log('ELLEMENTS:::', el);
+      //     // console.log('CLASS NAME::: ', el.target.className = 'comment-text font-weight-bold');
+      //     return el;
+      //   });
+
+      this.boldComment(photoSet);
+
+      // console.log('MINUS:: ' , photoSet.countComment - viewedComment);
+
+      return photoSet.countComment - viewedComment;
+    },
+
+    /**
+     * Устанавливает жирный шрифт на комментарии, которые не были отмечены как просмотренные
+     * @param photoSet
+     */
+    boldComment: function (photoSet) {
+      let viewedCommentId = _.remove(_.uniq(_.pluck(JSON.parse(localStorage.getItem('__c')), photoSet.indexPhotoSet)), n => n !== undefined);
+      let difference = _.difference(_.pluck(photoSet.comments, 'id'), viewedCommentId);
+      _.each(photoSet.comments, comment => {
+        comment.notViewed = !(_.indexOf(difference, comment.id) < 0);
+      });
+      // [...document.querySelectorAll(".comment-text")].map(el => {
+      //   el.className = 'comment-text font-weight-bold';
+      //   console.log('CLASS NAME::: ', el.className);
+      //   // return el;
+      // });
+      //
+    },
+
+
+    async openCommentsForm(photoSet) {
+      this.ruleForm.show = photoSet.indexPhotoSet;
+      photoSet.countComment = 0;
+      // let sel = this;
+      // let data = {
+      //   id: this.litter.id,
+      //   comment: this.comment,
+      //   letter: this.litter.letter,
+      //   userName: this.me.fullName,
+      //   indexPhotoSet: photoSet.indexPhotoSet
+      // };
+
+      this.boldComment(photoSet);
+      this.$forceUpdate();
+    },
+
+    /**
+     * Функция устанавливает все элементы данной фотосесси просмотренными
+     * @param photoSet
+     */
+    allViewed(command) {
+      let commentsId = _.pluck(command.photoSet.comments, 'id');
+      let options = JSON.parse(localStorage.getItem('__c'));
+      commentsId.map(id => {
+        let o = _.zipObject([command.photoSet.indexPhotoSet], [id]);
+        !_.isArray(options) ? options = [o] :
+          !_.some(options, o) ? options.push(o) : '';
+      });
+      localStorage.setItem('__c', JSON.stringify(options));
+      this.getCountComment(command.photoSet);
+      this.$forceUpdate();
+    },
+
+
+    viewed(id, photoSet, e) {
+      let o = {};
       // localStorage.clear();
-      let o={};
+      e.target.className = e.target.classList.contains("comment-text font-weight-bold") ? "comment-text font-weight-light" :
+        "comment-text font-weight-light";
 
       let options = JSON.parse(localStorage.getItem('__c'));
-       o = _.zipObject([this.ruleForm.show],[id]);
+      o = _.zipObject([this.ruleForm.show], [id]);
 
-      // console.log('SSSSSSSS:: ', _.uniq(_.result(_.find(options, `${this.ruleForm.show}`),`${this.ruleForm.show}`)));
-      options = _.isArray(options) ? options.push(o) : [];
-      options.push(o);
-      console.log('OBJECT::: ', o);
-      console.log('OPTIONS::: ', options);
-      // _.some(options,`${this.ruleForm.show}` ) ? _.result(_.find(options, `${this.ruleForm.show}`),`${this.ruleForm.show}`).push(id) :
-      //   _.isArray(o[`${this.ruleForm.show}`]) ? options.push(o[`${this.ruleForm.show}`].push(`${id}`)):
-      //     options.push(_.zipObject([`${this.ruleForm.show}`],[[id]]));
+      !_.isArray(options) ? options = [o] :
+        !_.some(options, o) ? options.push(o) : '';
 
-      // console.log('PLUCK^^^ ::', _.pluck(options, `${this.ruleForm.show}`));
-      // console.log('OOOO:: ' , o);
-      console.log('options-options:: ', options);
-      // console.log('OOOO:: ' , o[`${this.ruleForm.show}`]);
-     //
-     //  _.isEmpty(_.pluck(options, `${this.ruleForm.show}`)) ? options.push(o) : options[0][`${this.ruleForm.show}`].push(id);
-     // let uniq =  _.uniq(_.pluck(options, `${this.ruleForm.show}`));
-
-      // console.log('uniq:: ', uniq);
-      // console.log('options[0][`${this.ruleForm.show}`]:: ', options[0][`${this.ruleForm.show}`]=uniq);
-      // console.log('options-options22:: ' , _.pluck(JSON.parse(ob), this.ruleForm.show));
       localStorage.setItem('__c', JSON.stringify(options));
-
-      console.log('Это то что записано в localStorage: ', localStorage.getItem('__c'));
-      this.notViewed = false;
-      return false;
-      this.fixDescription(this.presentationUrlLength);
-      if (_.isNull(this.ruleForm.presentationUrl.match(/^http:\/\/|^https:\/\//))) {
-        this.mesError(this.i19p.textUrlErr);
-        return false;
-      }
-
-      let data = {
-        id: this.litter.id,
-        presentationName: this.ruleForm.presentationName,
-        presentationUrl: this.ruleForm.presentationUrl,
-        descriptionPresentation: this.ruleForm.descriptionPresentation,
-        // born: JSON.stringify(this.ruleForm.born),
-      };
-
-      io.socket.post('/api/v1/litters/viewed-comment', data, (dataRes, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-
-        this.dialogAddedPresentation = false;
-
-        if (jwRes.statusCode === 200) {
-          this.resetForm('ruleForm');
-          _.isArray(this.litter.presentation) ? this.litter.presentation.push(data) : this.litter.presentation = [data];
-          this.goto(`/litter/${this.litter.letter}/${this.litter.year}/presentation`);
-          // setTimeout(() => {
-          //   window.location = `/litter/${this.litter.letter}`;
-          // }, 1500);
-        }
-      });
+      this.getCountComment(photoSet);
+      this.$forceUpdate();
     },
 
 
@@ -805,10 +799,6 @@ parasails.registerPage('litter', {
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           this.$forceUpdate();
-          // this.litter.puppies.splice(data.indexPhotoSet, 1);
-          // setTimeout(() => {
-          //   window.location = `/litter/${this.litter.letter}/photo`;
-          // }, 1500);
         }
       });
 
@@ -1140,37 +1130,7 @@ parasails.registerPage('litter', {
 
        },*/
 
-    async openCommentsForm(photoSet) {
-      console.log('Текущий индекс indexPhotoSet::: ', photoSet.indexPhotoSet);
-      this.ruleForm.show = photoSet.indexPhotoSet;
-      photoSet.countComment = 0;
-      let sel = this;
-      let data = {
-        id: this.litter.id,
-        comment: this.comment,
-        letter: this.litter.letter,
-        userName: this.me.fullName,
-        indexPhotoSet: photoSet.indexPhotoSet
-      };
-      /*    await io.socket.post('/api/v1/litters/zero-comment', data, (dataRes, response) => {
-            // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-            (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-              (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
-                (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
-
-            if (response.statusCode === 200) {
-              this.comment = '';
-              //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
-              // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
-            } else {
-              sel.$message({
-                message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
-                type: 'error'
-              });
-            }
-          });*/
-    },
 
     dateFrom(t) {
       let a = moment(t);

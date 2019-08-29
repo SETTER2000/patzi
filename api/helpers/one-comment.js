@@ -55,7 +55,7 @@ module.exports = {
     //   throw 'badRequest';
     // }
 
-    console.log('comment на входе::', comment);
+    // console.log('comment на входе::', comment);
 
     comment.avatarUrl = (comment.owner.defaultIcon === 'avatar') ? comment.owner.avatar : comment.owner.gravatar;
     // comment.kennelObj = await sails.helpers.getKennelUser.with({id:comment.owner.id});
@@ -64,7 +64,7 @@ module.exports = {
     // console.log('com.avatarUrl:: ', comment.avatarUrl);
 
 
-    console.log('comment на выходе::', comment);
+    // console.log('comment на выходе::', comment);
     return comment;
   }
 

@@ -618,7 +618,11 @@
                       <!--<h4 class="card-title"> {{litter.bornNt}}</h4>-->
                       <% /*Описание фотосессии.*/ %>
                       <div class="card-text">
-                        <p> <el-link type="warning" disabled  class="dateShooting" v-if="photoSet.dateShooting && photoSet.showShootingDate"><i class="el-icon-date"></i> <%= __('Date taken') %>: <strong>{{photoSet.dateShooting | getCreate(me.preferredLocale, 'LL')}}</strong> </el-link> <em v-if="photoSet.descriptionPhotoSession">{{photoSet.descriptionPhotoSession}}</em></p>
+                        <p>
+                          <el-link type="warning" disabled class="dateShooting" v-if="photoSet.dateShooting && photoSet.showShootingDate"><i
+                              class="el-icon-date"></i> <%= __('Date taken') %>: <strong>{{photoSet.dateShooting |
+                              getCreate(me.preferredLocale, 'LL')}}</strong></el-link>
+                          <em v-if="photoSet.descriptionPhotoSession">{{photoSet.descriptionPhotoSession}}</em></p>
 
                       </div>
                       <div class="card-text mt-sm-4">
@@ -653,13 +657,19 @@
                             <el-button size="medium"><i class="ti-thumb-up"></i>&nbsp; <%= __('Like') %>
                               ({{likeLength}})
                             </el-button>
-                            <el-badge v-if="photoSet.countComment>0" :value="photoSet.countComment" class="itemFoo" :max="10" >
-                            <!--<el-badge is-dot class="itemFoo">-->
-                            <el-button @click="openCommentsForm(photoSet)" icon="el-icon-chat-square"
-                                       size="medium"><%= __('Comment') %>
-                              ({{photoSet.comments ? photoSet.comments.length : 0}})
-                            </el-button>
-                            <!--</el-badge>-->
+                            <el-badge v-if="getCountComment(photoSet)>0" :value="getCountComment(photoSet)" class="itemFoo" :max="10">
+                             <!-- <el-button @click="openCommentsForm(photoSet)" icon="el-icon-chat-square"
+                                         size="medium"><%= __('Comment') %>
+                                ({{photoSet.comments ? photoSet.comments.length : 0}})
+                              </el-button>-->
+
+                              <el-dropdown @command="handleCommand" split-button trigger="click" @click="openCommentsForm(photoSet)" icon="el-icon-chat-square">
+                                <%= __('Comment') %>
+                                ({{photoSet.comments ? photoSet.comments.length : 0}})
+                                <el-dropdown-menu slot="dropdown">
+                                  <el-dropdown-item :command="{photoSet: photoSet, com:'allView'}"><%= __('Mark Read') %></el-dropdown-item>
+                                </el-dropdown-menu>
+                              </el-dropdown>
                             </el-badge>
                             <el-button v-else @click="openCommentsForm(photoSet)" icon="el-icon-chat-square"
                                        size="medium"><%= __('Comment') %>
@@ -677,35 +687,45 @@
                                         <el-collapse-item title="<%= __('Write your review') %>" name="1">
                                           <div><%= __('Your opinion is important and necessary for us. Leave your comment regarding this litter.') %></div>
                                           <div><%= __('Perhaps you have questions that you would like to receive answers from the nursery. Write to us, we will be happy to answer you.') %></div>
-                                          <ul class="hr" v-for="(com,index) in photoSet.comments">
-                                            <li class="avat">
-                                              <div class="avat">
-                                                <el-avatar :size="35" :src="com.avatarUrl"></el-avatar>
-                                              </div>
-                                            </li>
-                                            <li class="comm">
-                                              <div class="comment">
-                                                <el-tooltip v-if="!_.isEmpty(com.kennels)" class="item" effect="light" :content="`<%= __('Kennel') %>: ${com.kennels.name} (${com.kennels.countryName})`" placement="bottom-start">
-                                                <span  class="user-comment">{{com.userName}} </span>
-                                                </el-tooltip>
-                                                <span  class="user-comment non" v-else>{{com.userName}} </span>
-                                                <span class="comment-text" @click="viewed(com.id)" :class="[notViewed ? boldClass : '', lightClass]"> {{com.comment}}</span>
-                                              </div>
-                                              <ul>
-                                                <li><%= __('Like') %></li>
-                                                <li><%= __('Replay') %></li>
-                                                <li>
-                                                  <el-tooltip class="item" effect="dark"
-                                                              :content="com.createdAt | getCreate(me.preferredLocale,'LLLL')"
-                                                              placement="top-start">
-                                                    <el-link type="info" class="mt-0">
-                                                      <span> {{dateFrom(com.dateCreate)}}</span>
-                                                    </el-link>
+                                          <transition-group name="fade" appear>
+                                            <ul class="hr" v-for="(com,index) in photoSet.comments" :key="com.id">
+                                              <li class="avat">
+                                                <div class="avat">
+                                                  <el-avatar :size="35" :src="com.avatarUrl"></el-avatar>
+                                                </div>
+                                              </li>
+                                              <li class="comm">
+                                                <div class="comment">
+                                                  <el-tooltip v-if="!_.isEmpty(com.kennels)" class="item" effect="light"
+                                                              :content="`<%= __('Kennel') %>: ${com.kennels.name} (${com.kennels.countryName})`"
+                                                              placement="bottom-start">
+                                                    <span class="user-comment">{{com.userName}} </span>
                                                   </el-tooltip>
-                                                </li>
-                                              </ul>
-                                            </li>
-                                          </ul>
+                                                  <span class="user-comment non" v-else>{{com.userName}} </span>
+                                                  <!--<span class="comment-text" @click="viewed(com.id,notViewed=false)"
+                                                        :class="[notViewed ? boldClass : '', lightClass]"> {{com.comment}}</span>-->
+
+                                                  <span class="comment-text" :class="{'font-weight-bold':com.notViewed}"
+                                                        @click="viewed(com.id,photoSet, $event)">
+                                                    {{com.comment}}
+                                                  </span>
+                                                </div>
+                                                <ul>
+                                                  <li><%= __('Like') %></li>
+                                                  <li><%= __('Replay') %></li>
+                                                  <li>
+                                                    <el-tooltip class="item" effect="dark"
+                                                                :content="com.createdAt | getCreate(me.preferredLocale,'LLLL')"
+                                                                placement="top-start">
+                                                      <el-link type="info" class="mt-0">
+                                                        <span> {{dateFrom(com.dateCreate)}}</span>
+                                                      </el-link>
+                                                    </el-tooltip>
+                                                  </li>
+                                                </ul>
+                                              </li>
+                                            </ul>
+                                          </transition-group>
                                           <% /* Поле ввода комментария */ %>
                                           <el-form @submit.native.prevent>
                                             <el-form-item>
@@ -787,9 +807,10 @@
                   </el-col>
                   <el-col :span="24">
                     <div class="text-center">
-                     <span v-if="litter.presentation.length<1"> <%= __('Presentation not added') %> </span>
+                      <span v-if="litter.presentation.length<1"> <%= __('Presentation not added') %> </span>
                       <p class="text-center my-5">
-                        <el-button  v-if="me.isAdmin || me.isSuperAdmin" round @click="setAddedPresentation"><%= __('Add presentation') %></el-button>
+                        <el-button v-if="me.isAdmin || me.isSuperAdmin" round
+                                   @click="setAddedPresentation"><%= __('Add presentation') %></el-button>
                       </p>
                     </div>
                   </el-col>
@@ -802,14 +823,6 @@
               </div>
             </template>
           </el-tab-pane>
-
-          <!-- <el-tab-pane label="<%= __('Comment') %>" name="comment">
-            <template v-if="!litter.comment">
-              <%= __('you have not uploaded any presentation yet') %>
-            </template>
-            <template v-else>
-            </template>
-          </el-tab-pane>-->
 
         </el-tabs>
 
