@@ -56,31 +56,6 @@
     <el-form :label-position="'top'"
              :model="ruleForm" :rules="rules" ref="ruleForm"
              label-width="120px" class="demo-ruleForm">
-      <% /*Название фотосессии*/ %>
-      <el-form-item label="<%= __('Name photoshoot puppies') %>" prop="sessionName">
-        <el-input clearable :maxlength="photoSetNameLength" autofocus="true" show-word-limit
-                  v-model="ruleForm.sessionName"></el-input>
-      </el-form-item>
-      <% /*Описание фотосессии*/ %>
-      <el-form-item label="<%= __('Description of the photo shoot') %>"
-                    prop="descriptionPhotoSession">
-        <el-input clearable :maxlength="photoSetDescriptionLength" show-word-limit type="textarea"
-                  v-model="ruleForm.descriptionPhotoSession"></el-input>
-      </el-form-item>
-      <% /* Дата съёмки фотосессии*/ %>
-      <el-form-item label="<%= __('Date taken') %>"
-                    prop="dateShooting">
-        <el-date-picker
-          v-model="ruleForm.dateShooting"
-          type="date"
-          placeholder="<%= __('Pick a day') %>">
-        </el-date-picker>
-      </el-form-item>
-      <% /* Показывать или нет дату съёмки*/ %>
-      <el-form-item label="<%= __('Show shooting date') %>">
-        <el-switch v-model="ruleForm.showShootingDate"></el-switch>
-      </el-form-item>
-      <el-divider content-position="left"><%= __('Puppies this litter') %></el-divider>
       <div class="photo-uploader">
         <div class="row">
           <div class="col-md-12 ">
@@ -107,6 +82,33 @@
           </div>
         </div>
       </div>
+      <el-divider content-position="left"><%= __('Puppies this litter') %></el-divider>
+      <% /*Название фотосессии*/ %>
+      <el-form-item label="<%= __('Name photoshoot puppies') %>" prop="sessionName">
+        <el-input clearable :maxlength="photoSetNameLength" autofocus="true" show-word-limit
+                  v-model="ruleForm.sessionName"></el-input>
+      </el-form-item>
+      <% /*Описание фотосессии*/ %>
+      <el-form-item label="<%= __('Description of the photo shoot') %>"
+                    prop="descriptionPhotoSession">
+        <el-input clearable :maxlength="photoSetDescriptionLength" show-word-limit type="textarea"
+                  v-model="ruleForm.descriptionPhotoSession"></el-input>
+      </el-form-item>
+      <% /* Дата съёмки фотосессии*/ %>
+      <el-form-item label="<%= __('Date taken') %>"
+                    prop="dateShooting">
+        <el-date-picker
+          v-model="ruleForm.dateShooting"
+          type="date"
+          placeholder="<%= __('Pick a day') %>">
+        </el-date-picker>
+      </el-form-item>
+      <% /* Показывать или нет дату съёмки*/ %>
+      <el-form-item label="<%= __('Show shooting date') %>">
+        <el-switch v-model="ruleForm.showShootingDate"></el-switch>
+      </el-form-item>
+
+
       <!--<el-form-item label="Zones" :label-width="formLabelWidth">-->
       <!--<el-select v-model="form.region" placeholder="Please select a zone">-->
       <!--<el-option label="Zone No.1" value="shanghai"></el-option>-->
@@ -390,12 +392,12 @@
           <% /* Буквы помётов (кнопки переключения помётов) */ %>
           <div class="col-md-6">
             <div class="text-right">
-              <el-button-group v-for="(lett, index) in letters" :key="lett.id">
+              <el-button-group v-for="(lett, index) in letters" :key="index + '-lett'">
 
                 <el-button v-if="lett.letter === litter.letter" @click="goTo(lett.link)" type="warning" size="mini">
                   {{lett.letter}}
                 </el-button>
-                <el-button v-else @click="goTo(lett.letter)" size="mini">
+                <el-button v-else @click="goTo(lett.link)" size="mini">
                   {{lett.letter}}
                 </el-button>
               </el-button-group>
