@@ -773,20 +773,20 @@
               <%= __('No video to view') %>
             </div>
             <div v-else>
-              <!--<div class="infinite-list-wrapper">-->
-              <!--<ul-->
-              <!--class="list"-->
-              <!--v-infinite-scroll="load"-->
-              <!--infinite-scroll-disabled="disabled">-->
-              <!--<li v-for="i in countVideo" class="list-item">-->
-              <!--&lt;!&ndash;<iframe  width="100%" height="200vh" src="https://www.youtube.com/embed/Z5SmaOld7lM?start=4" frameborder="0"-->
-              <!--allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"-->
-              <!--allowfullscreen></iframe>&ndash;&gt;-->
-              <!--</li>-->
-              <!--</ul>-->
-              <!--<p v-if="loadingVideo">Loading...</p>-->
-              <!--<p v-if="noMore">No more</p>-->
-              <!--</div>-->
+              <div class="infinite-list-wrapper">
+              <ul
+              class="list"
+              v-infinite-scroll="load"
+              infinite-scroll-disabled="disabled">
+              <li v-for="i in countVideo" class="list-item">
+              <iframe  width="400px" height="200vh" src="https://www.youtube.com/embed/uLXiV9iocEs?start=4" frameborder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+              </li>
+              </ul>
+              <p v-if="loadingVideo">Loading...</p>
+              <p v-if="noMore">No more</p>
+              </div>
             </div>
           </el-tab-pane>
 
