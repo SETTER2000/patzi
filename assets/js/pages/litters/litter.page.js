@@ -209,7 +209,7 @@ parasails.registerPage('litter', {
       this.$forceUpdate();
     });
 
-// Принимаем данные по событию add-*
+    // Принимаем данные по событию add-*
     io.socket.on('add-comment', (data) => {
       if (data) {
         this.litter[data.comments.field].map(puppyPhotoSet => {
@@ -472,9 +472,10 @@ parasails.registerPage('litter', {
     // Установить переменных для редактирования
     setValueEditPhotoSet: function (command) {
       this.setIndexPhotoSet(command);
-      this.ruleFormEdit.showShootingDate = this.litter.puppies[this.indexPhotoSet].showShootingDate;
-      this.ruleFormEdit.dateShooting = this.litter.puppies[this.indexPhotoSet].dateShooting;
-      this.ruleFormEdit.descriptionPhotoSession = this.litter.puppies[this.indexPhotoSet].descriptionPhotoSession;
+      // console.log('this.indexPhotoSet', _.last(this.litter.puppies.filter(photoSet=>photoSet.indexPhotoSet===this.indexPhotoSet)).showShootingDate);
+      this.ruleFormEdit.showShootingDate = _.last(this.litter.puppies.filter(photoSet=>photoSet.indexPhotoSet===this.indexPhotoSet)).showShootingDate;
+      this.ruleFormEdit.dateShooting = _.last(this.litter.puppies.filter(photoSet=>photoSet.indexPhotoSet===this.indexPhotoSet)).dateShooting;
+      this.ruleFormEdit.descriptionPhotoSession = _.last(this.litter.puppies.filter(photoSet=>photoSet.indexPhotoSet===this.indexPhotoSet)).descriptionPhotoSession;
       this.dialogDescriptionPhotoSession = true;
     },
 
@@ -697,7 +698,7 @@ parasails.registerPage('litter', {
       // let NotViewedCommentId = _.remove(_.uniq(_.pluck(JSON.parse(localStorage.getItem('__c')), photoSet.indexPhotoSet)), n => n === undefined);
       // console.log('NotViewedCommentId: ',NotViewedCommentId);
 
-      viewedComment = _.isArray(JSON.parse(localStorage.getItem('__c'))) ? viewedCommentId.length : 0;
+      let viewedComment = _.isArray(JSON.parse(localStorage.getItem('__c'))) ? viewedCommentId.length : 0;
 
       // [...document.querySelectorAll(".comment-text")].map(el => {
       //     console.log('ELLEMENTS:::', el);
@@ -768,8 +769,8 @@ parasails.registerPage('litter', {
     viewed(id, photoSet, e) {
       let o = {};
       // localStorage.clear();
-      e.target.className = e.target.classList.contains("comment-text font-weight-bold") ? "comment-text font-weight-light" :
-        "comment-text font-weight-light";
+      e.target.className = e.target.classList.contains('comment-text font-weight-bold') ? 'comment-text font-weight-light' :
+        'comment-text font-weight-light';
 
       let options = JSON.parse(localStorage.getItem('__c'));
       o = _.zipObject([this.ruleForm.show], [id]);
@@ -871,9 +872,10 @@ parasails.registerPage('litter', {
         sessionName: this.ruleFormEdit.sessionName,
         descriptionPhotoSession: this.ruleFormEdit.descriptionPhotoSession,
         dateShooting: _.isNull(this.ruleFormEdit.dateShooting) ? '' : this.ruleFormEdit.dateShooting,
+          // JSON.stringify(this.ruleFormEdit.dateShooting),
         showShootingDate: this.ruleFormEdit.showShootingDate
       };
-
+      console.log('OTPRAVKA UPDATE:: ', data);
       io.socket.post('/api/v1/litters/update-session-description', data, (dataRes, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -889,11 +891,12 @@ parasails.registerPage('litter', {
           this.ruleFormEdit.descriptionPhotoSession = '';
           // this.ruleFormEdit.dateShooting = '';
           // this.ruleFormEdit.showShootingDate = false;
-          this.litter.puppies[data.indexPhotoSet].descriptionPhotoSession = data.descriptionPhotoSession ? data.descriptionPhotoSession : '';
-          this.litter.puppies[data.indexPhotoSet].dateShooting = data.dateShooting ? data.dateShooting : '';
-          this.litter.puppies[data.indexPhotoSet].showShootingDate = data.showShootingDate ? data.showShootingDate : false;
+
+          _.last(this.litter.puppies.filter(photoSet=>photoSet.indexPhotoSet===data.indexPhotoSet)).descriptionPhotoSession = data.descriptionPhotoSession ? data.descriptionPhotoSession : '';
+          _.last(this.litter.puppies.filter(photoSet=>photoSet.indexPhotoSet===data.indexPhotoSet)).dateShooting = data.dateShooting ? data.dateShooting : '';
+          _.last(this.litter.puppies.filter(photoSet=>photoSet.indexPhotoSet===data.indexPhotoSet)).showShootingDate = data.showShootingDate ? data.showShootingDate : false;
           // this.$forceUpdate();
-          console.log('AS::D', this.litter.puppies[this.indexPhotoSet].dateShooting);
+          console.log('AS::D', _.last(this.litter.puppies.filter(photoSet=>photoSet.indexPhotoSet===data.indexPhotoSet)).dateShooting);
         }
       });
     },

@@ -21,7 +21,7 @@ module.exports = {
 
 
     indexPhotoSet: {
-      type: 'number',
+      type: 'string',
       description: `Индекс объекта данной фотосессии в массиве фотосессий.`,
       required: true
     },
