@@ -360,6 +360,12 @@ It just means they have a customer entry in Stripe, which might or might not hav
       description: 'У пользователя, может быть много комментраиев. One to Many'
     },
 
+    likes: {
+      collection: 'like',
+      via: 'owner',
+      description: 'У пользователя, может быть много лайков. One to Many'
+    },
+
   },
 
   // methods: {

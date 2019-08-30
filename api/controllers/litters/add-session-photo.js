@@ -118,6 +118,8 @@ module.exports = {
     litter.puppies.push({
       sessionName: inputs.sessionName.slice(0, 60),
       countComment:0,
+      countLike:0,
+      countShared:0,
       indexPhotoSet: await sails.helpers.getToken(),
       dateShooting: inputs.dateShooting,
       showShootingDate: inputs.showShootingDate,

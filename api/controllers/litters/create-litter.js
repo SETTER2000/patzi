@@ -126,6 +126,8 @@ module.exports = {
       descriptionPhotoSession: inputs.descriptionPhotoSession ? inputs.descriptionPhotoSession : '',
       photos: '',
       countComment:0,
+      countLike:0,
+      countShared:0,
       indexPhotoSet: await sails.helpers.getToken()
     });
 

@@ -171,7 +171,7 @@ module.exports.routes = {
   'GET    /api/v1/dogs/list': {action: 'dogs/list'},
   'GET    /api/v1/dogs/list-sire': {action: 'dogs/list-sire'},
   'GET    /api/v1/dogs/list-dam': {action: 'dogs/list-dam'},
-  'POST    /api/v1/dogs/search-dog': {action: 'dogs/search-dog', csrf: false},
+  'POST   /api/v1/dogs/search-dog': {action: 'dogs/search-dog', csrf: false},
   'DELETE /api/v1/dogs/destroy-one-dog': {action: 'dogs/destroy-one-dog', csrf: false},
 
   'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},
@@ -182,6 +182,10 @@ module.exports.routes = {
   'GET    /api/v1/country/list': {action: 'country/list'},
 
   'GET    /api/v1/files/download/:collection/:id/:folder/:key/:photoSet?': {action: 'files/download'},
+
+  'POST   /api/v1/likes/add-like': { action: 'likes/add-like', csrf: false },
+  'GET    /api/v1/likes/list-like/:instanceModuleId/:field': { action: 'likes/list-like' },
+  'DELETE /api/v1/likes/destroy-one-like': { action: 'likes/destroy-one-like', csrf: false },
 
 
   'GET    /undefined': {action: 'files/undefined'},
