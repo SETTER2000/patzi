@@ -652,20 +652,146 @@
                           </el-col>
                         </el-row>
                       </div>
+
+                      <el-row :gutter="10">
+                        <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="2">
+
+                       <!--// like SVG-->
+                          <span v-show="countLike > 0" class="container-icon">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                 width="537.584px" height="443.04px" viewBox="0 0 537.584 443.04" enable-background="new 0 0 537.584 443.04"
+                                 xml:space="preserve" data-llp-composed="true" id="like" class="lazy-line-painter">
+                            <g id="Layer_1" display="none">
+                            	<path display="inline" fill="#FFFFFF" stroke-miterlimit="10"
+                                    d="M15.094,59.777&#10;&#9;&#9;c83.753-118.244,227.586-29.655,257.242,9.655c26.896-37.242,209.655-116.548,258.621-1.379&#10;&#9;&#9;c53.002,124.661-254.482,315.859-282.069,373.793C222.681,383.23-66.975,175.644,15.094,59.777z"
+                                    data-llp-id="like-0" data-llp-duration="770" data-llp-delay="0" fill-opacity="0" style=""/>
+                            </g>
+                            <g id="Layer_2" display="none">
+                            	<circle display="inline" fill="#FFFFFF" stroke-miterlimit="10" cx="268.792" cy="221.521" r="219.31"
+                                      data-llp-id="like-1" data-llp-duration="770" data-llp-delay="770" fill-opacity="0" style=""/>
+
+                            		<ellipse display="inline" fill="none" stroke-miterlimit="10" cx="268.793" cy="336.102" rx="64.339"
+                                         ry="78.244" data-llp-id="like-2" data-llp-duration="770" data-llp-delay="1540" fill-opacity="0"
+                                         style=""/>
+                            	<path display="inline" fill="none" stroke-miterlimit="10"
+                                    d="M119.011,107.926c0,0,71.612-95.109,111.894-35.806&#10;&#9;&#9;" data-llp-id="like-3"
+                                    data-llp-duration="770" data-llp-delay="2310" fill-opacity="0" style=""/>
+                            	<path display="inline" fill="none" stroke-miterlimit="10" d="M413.29,115.758c0,0-73.851-97.347-114.131-38.043"
+                                    data-llp-id="like-4" data-llp-duration="770" data-llp-delay="3080" fill-opacity="0" style=""/>
+
+                            		<ellipse display="inline" fill="none" stroke-miterlimit="10" cx="187.265" cy="147.647" rx="40.281"
+                                         ry="44.198" data-llp-id="like-5" data-llp-duration="770" data-llp-delay="3850" fill-opacity="0"
+                                         style=""/>
+
+                            		<ellipse display="inline" fill="none" stroke-miterlimit="10" cx="342.796" cy="151.564" rx="40.281"
+                                         ry="44.198" data-llp-id="like-6" data-llp-duration="770" data-llp-delay="4620" fill-opacity="0"
+                                         style=""/>
+
+                            		<ellipse display="inline" fill="none" stroke-miterlimit="10" cx="190.623" cy="143.73" rx="22.379"
+                                         ry="25.734" data-llp-id="like-7" data-llp-duration="770" data-llp-delay="5390" fill-opacity="0"
+                                         style=""/>
+                            	<path display="inline" fill="none" stroke-miterlimit="10"
+                                    d="M360.699,143.729&#10;&#9;&#9;c0,14.214-10.017,25.735-22.379,25.735c-12.358,0-22.378-11.521-22.378-25.735c0-14.212,10.02-25.734,22.378-25.734&#10;&#9;&#9;C350.682,117.995,360.699,129.517,360.699,143.729z"
+                                    data-llp-id="like-8" data-llp-duration="770" data-llp-delay="6160" fill-opacity="0" style=""/>
+
+                            		<ellipse display="inline" fill="none" stroke-miterlimit="10" cx="265.591" cy="206.95" rx="25.735"
+                                         ry="26.296" data-llp-id="like-9" data-llp-duration="770" data-llp-delay="6930" fill-opacity="0"
+                                         style=""/>
+                            </g>
+                            <g id="Layer_3">
+                            	<path fill="none" stroke-miterlimit="10"
+                                    d="M70.312,255.032l70.316-37.059c0,0,75.067,94.073,79.818,195.746&#10;&#9;&#9;c-33.257,22.806-43.71,26.606-43.71,26.606S131.125,268.336,70.312,255.032z"
+                                    data-llp-id="like-10" data-llp-duration="770" data-llp-delay="7700" fill-opacity="0" style=""/>
+                            	<path fill="none" stroke-miterlimit="10"
+                                    d="M163.433,208.472c0,0,30.407-43.71,57.013-50.361&#10;&#9;&#9;c16.154-26.606,21.855-59.864,26.606-95.022s0.95-51.312,15.203-57.963c33.126-15.458,42.76,48.461,42.76,48.461&#10;&#9;&#9;s10.453,25.656-15.204,86.469c45.612-9.502,68.34-56.026,110.226-29.456c52.842,33.52,100.124,89.064,37.059,179.592&#10;&#9;&#9;c-58.914,84.568-121.628,66.513-152.985,76.017c-31.357,9.503-46.561,36.108-46.561,36.108S227.097,264.534,163.433,208.472z"
+                                    data-llp-id="like-11" data-llp-duration="770" data-llp-delay="8470" fill-opacity="0" style=""/>
+                            </g>
+                            </svg>
+                          </span>
+                          <!--// super SVG -->
+                          <span v-show="countSuper > 0" class="container-icon">
+                            <svg version="1.1" id="Untitled1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 x="0px" y="0px" width="537.584px" height="443.04px" viewBox="0 0 537.584 443.04"
+                                 enable-background="new 0 0 537.584 443.04" xml:space="preserve" data-llp-composed="true"
+                                 class="lazy-line-painter">
+                              <path fill="#FFFFFF" stroke-miterlimit="10"
+                                    d="M15.094,59.777c83.753-118.244,227.586-29.655,257.242,9.655&#10;&#9;c26.896-37.242,209.655-116.548,258.621-1.379c53.002,124.661-254.482,315.859-282.069,373.793&#10;&#9;C222.681,383.23-66.975,175.644,15.094,59.777z"
+                                    data-llp-id="Untitled1-0" data-llp-duration="1490" data-llp-delay="0" fill-opacity="0"
+                                    style="stroke-linecap: butt;" data-llp-stroke-join="" data-llp-stroke-cap="butt"/>
+                            </svg>
+                          </span>
+                          <!--// wow SVG-->
+                          <span v-show="countWow > 0" class="container-icon">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                 width="537.584px" height="443.04px" viewBox="0 0 537.584 443.04" enable-background="new 0 0 537.584 443.04"
+                                 xml:space="preserve" data-llp-composed="true" id="wow" class="lazy-line-painter">
+                              <g id="Layer_1" display="none">
+                              	<path display="inline" fill="#FFFFFF" stroke-miterlimit="10"
+                                      d="M15.094,59.777&#10;&#9;&#9;c83.753-118.244,227.586-29.655,257.242,9.655c26.896-37.242,209.655-116.548,258.621-1.379&#10;&#9;&#9;c53.002,124.661-254.482,315.859-282.069,373.793C222.681,383.23-66.975,175.644,15.094,59.777z"
+                                      data-llp-id="wow-0" data-llp-duration="500" data-llp-delay="0" fill-opacity="0" style=""/>
+                              </g>
+                              <g id="Layer_2">
+                                <circle fill="#FFFFFF" stroke-miterlimit="10" cx="268.792" cy="221.521" r="219.31" data-llp-id="wow-1"
+                                        data-llp-duration="500"
+                                        data-llp-delay="500" fill-opacity="0" style=""/>
+                                <ellipse fill="none" stroke-miterlimit="10" cx="268.793" cy="336.102" rx="64.339" ry="78.244"
+                                         data-llp-id="wow-2" data-llp-duration="500"
+                                         data-llp-delay="1000" fill-opacity="0" style=""/>
+                                <path fill="none" stroke-miterlimit="10" d="M119.011,107.926c0,0,71.612-95.109,111.894-35.806"
+                                      data-llp-id="wow-3" data-llp-duration="500"
+                                      data-llp-delay="1500" fill-opacity="0" style=""/>
+                                <path fill="none" stroke-miterlimit="10" d="M413.29,115.758c0,0-73.851-97.347-114.131-38.043"
+                                      data-llp-id="wow-4" data-llp-duration="500"
+                                      data-llp-delay="2000" fill-opacity="0" style=""/>
+                                <ellipse fill="none" stroke-miterlimit="10" cx="187.265" cy="147.647" rx="40.281" ry="44.198"
+                                         data-llp-id="wow-5" data-llp-duration="500"
+                                         data-llp-delay="2500" fill-opacity="0" style=""/>
+                                <ellipse fill="none" stroke-miterlimit="10" cx="342.796" cy="151.564" rx="40.281" ry="44.198"
+                                         data-llp-id="wow-6" data-llp-duration="500"
+                                         data-llp-delay="3000" fill-opacity="0" style=""/>
+                                <ellipse fill="none" stroke-miterlimit="10" cx="190.623" cy="143.73" rx="22.379" ry="25.734"
+                                         data-llp-id="wow-7" data-llp-duration="500"
+                                         data-llp-delay="3500" fill-opacity="0" style=""/>
+                                <path fill="none" stroke-miterlimit="10"
+                                      d="M360.699,143.729c0,14.214-10.017,25.735-22.379,25.735&#10;&#9;&#9;c-12.358,0-22.378-11.521-22.378-25.735c0-14.212,10.02-25.734,22.378-25.734C350.682,117.995,360.699,129.517,360.699,143.729z"
+                                      data-llp-id="wow-8" data-llp-duration="500" data-llp-delay="4000" fill-opacity="0" style=""/>
+                                <ellipse fill="none" stroke-miterlimit="10" cx="265.591" cy="206.95" rx="25.735" ry="26.296"
+                                         data-llp-id="wow-9" data-llp-duration="500"
+                                         data-llp-delay="4500" fill-opacity="0" style=""/>
+                              </g>
+                            </svg>
+                          </span>
+                          <!--// countLike-->
+                          {{photoSet.countLike ? photoSet.countLike : 0}}
+                        </el-col>
+                        <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="16">
+                          <div class="grid-content bg-purple-light"></div>
+                        </el-col>
+                        <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="3">
+                          <div class="grid-content bg-purple"><%= __('Comments') %>: {{photoSet.comments ? photoSet.comments.length : 0}}
+                          </div>
+                        </el-col>
+                        <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="3">
+                          <div class="grid-content bg-purple-light"><%= __('Shared') %>: {{photoSet.shared ? photoSet.shared.length : 0}}
+                          </div>
+                        </el-col>
+                      </el-row>
                       <el-divider></el-divider>
                       <template>
                         <div>
                           <el-row class="button-like">
-                            <el-button size="medium"><i class="ti-thumb-up"></i>&nbsp; <%= __('Like') %>
+                            <el-button @click="addLike(photoSet,'puppies', 'like')" size="medium">
+                              <i class="ti-thumb-up"></i>&nbsp; <%= __('Like') %>
                               ({{likeLength}})
                             </el-button>
                             <el-badge v-if="getCountComment(photoSet)>0" :value="getCountComment(photoSet)" class="itemFoo" :max="10">
-                             <!-- <el-button @click="openCommentsForm(photoSet)" icon="el-icon-chat-square"
+                              <!-- <el-button @click="openCommentsForm(photoSet)" icon="el-icon-chat-square"
                                          size="medium"><%= __('Comment') %>
                                 ({{photoSet.comments ? photoSet.comments.length : 0}})
                               </el-button>-->
 
-                              <el-dropdown @command="handleCommand" split-button trigger="click" @click="openCommentsForm(photoSet)" icon="el-icon-chat-square">
+                              <el-dropdown @command="handleCommand" split-button trigger="click" @click="openCommentsForm(photoSet)"
+                                           icon="el-icon-chat-square">
                                 <%= __('Comment') %>
                                 ({{photoSet.comments ? photoSet.comments.length : 0}})
                                 <el-dropdown-menu slot="dropdown">
@@ -675,7 +801,7 @@
                             </el-badge>
                             <el-button v-else @click="openCommentsForm(photoSet)" icon="el-icon-chat-square"
                                        size="medium"><%= __('Comment') %>
-                              ({{photoSet.comments ? photoSet.comments.length : 0}})
+                              <!--({{photoSet.comments ? photoSet.comments.length : 0}})-->
                             </el-button>
                             <el-button size="medium"><span class="share"></span><%= __('Share') %></el-button>
                           </el-row>
@@ -731,7 +857,7 @@
                                           <% /* Поле ввода комментария */ %>
                                           <el-form @submit.native.prevent>
                                             <el-form-item>
-                                              <el-input @keyup.enter.native="insertComment('puppies')"
+                                              <el-input @keyup.enter.native="addComment('puppies')"
                                                         class="mt-2"
                                                         maxLength="1000"
                                                         clearable
@@ -772,22 +898,22 @@
             <div v-if="!countVideo" class="text-center">
               <%= __('No video to view') %>
             </div>
-            <div v-else>
-              <div class="infinite-list-wrapper">
-              <ul
-              class="list"
-              v-infinite-scroll="load"
-              infinite-scroll-disabled="disabled">
-              <li v-for="i in countVideo" class="list-item">
-              <iframe  width="400px" height="200vh" src="https://www.youtube.com/embed/uLXiV9iocEs?start=4" frameborder="0"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen></iframe>
-              </li>
-              </ul>
-              <p v-if="loadingVideo">Loading...</p>
-              <p v-if="noMore">No more</p>
-              </div>
-            </div>
+            <!-- <div v-else>
+               <div class="infinite-list-wrapper">
+               <ul
+               class="list"
+               v-infinite-scroll="load"
+               infinite-scroll-disabled="disabled">
+               <li v-for="i in countVideo" class="list-item">
+               <iframe  width="400px" height="200vh" src="https://www.youtube.com/embed/uLXiV9iocEs?start=4" frameborder="0"
+               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+               allowfullscreen></iframe>
+               </li>
+               </ul>
+               <p v-if="loadingVideo">Loading...</p>
+               <p v-if="noMore">No more</p>
+               </div>
+             </div>-->
           </el-tab-pane>
 
           <el-tab-pane label="<%= __('Presentation') %>" name="presentation">
