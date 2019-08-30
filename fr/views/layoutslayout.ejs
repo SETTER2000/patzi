@@ -829,6 +829,7 @@ sur le pipeline des actifs entre les "SCRIPTS" et "SCRIPTS END", ou les deux.
 <script src="/dependencies/jquery.fancybox.min.js"></script>
 <script src="/dependencies/jquery.magnific-popup.min.js"></script>
 <script src="/dependencies/jquery.nice-select.min.js"></script>
+<script src="/dependencies/lazy-line-painter-1.9.6.min.js"></script>
 <script src="/dependencies/mail-script.js"></script>
 <script src="/dependencies/main.js"></script>
 <script src="/dependencies/mn-accordion.js"></script>
@@ -915,6 +916,50 @@ sur le pipeline des actifs entre les "SCRIPTS" et "SCRIPTS END", ou les deux.
 <script src="//unpkg.com/element-ui"></script>
 <script src="//unpkg.com/element-ui/lib/umd/locale/en.js"></script>
 <script src="//unpkg.com/element-ui@2.9.1/lib/umd/locale/ru-RU.js"></script>
+
+
+<script type="text/javascript">
+
+  (function(){
+
+    // document.onreadystatechange = () => {
+    //
+    //   if (document.readyState === 'complete') {
+    //
+    //     /**
+    //      * Setup your Lazy Line element.
+    //      * see README file for more settings
+    //      */
+    //
+    //     // let el = document.querySelector('#Untitled1');
+    //     // let myAnimation = new LazyLinePainter(el, {"ease":"easeInOutSine","strokeWidth":19.0,"strokeOpacity":0.9,"strokeColor":"#E84B3C","strokeCap":"butt"});
+    //     // myAnimation.paint();
+    //
+    //
+    //
+    //     /**
+    //      * Setup your Lazy Line element.
+    //      * see README file for more settings
+    //      */
+    //
+    //     // let wow = document.querySelector('#wow');
+    //     //  let wowAnimation = new LazyLinePainter(wow, {"ease":"easeOutSine","strokeWidth":19,"strokeOpacity":1,"strokeColor":"#ffb007","strokeCap":"square"});
+    //     //  wowAnimation.paint();
+    //
+    //
+    //     /*
+    //     let like = document.querySelector('#like');
+    //      let likeAnimation = new LazyLinePainter(like, {"ease":"easeOutBounce","strokeWidth":19,"strokeOpacity":1,"strokeColor":"#2980B9","strokeCap":"square"});
+    //      likeAnimation.paint();
+    //      */
+    //   }
+    // }
+
+  })();
+
+</script>
+
+
 <script>
 
   let lang = ELEMENT.lang.en
@@ -949,6 +994,7 @@ sur le pipeline des actifs entre les "SCRIPTS" et "SCRIPTS END", ou les deux.
     $('.your-class').slick({});
   });
 </script>
+
 <% /* Display an overlay if the current browser is not supported.
     (Relies on `bowser`, which is loaded inline above.)
     L'affichage de la superposition, si le navigateur n'est pas pris en charge.
