@@ -4,8 +4,8 @@ module.exports = {
   friendlyName: 'List comments',
 
 
-  description: 'Добавляет аватар ко всем коментариям.',
-
+  description: `Добавляет аватар ко всем коментариям. Отдаёт массив объектов коментариев согласно 
+  идентификатору экземпляра модуля и названия поля (например: puppies)`,
 
 
   inputs: {
@@ -53,10 +53,10 @@ module.exports = {
     // }
 
     // let litter = await Litter.findOne({id: inputs.instanceModuleId});
-      _.each(module, async (comment) => {
+    _.each(module, async (comment) => {
       comment.avatarUrl = (comment.owner.defaultIcon === 'avatar') ? comment.owner.avatar : comment.owner.gravatar;
       // comment.kennelObj = await sails.helpers.getKennelUser.with({id:comment.owner.id});
-
+      comment.ownerId = comment.owner.id;
       delete comment.owner;
       // console.log('com.avatarUrl:: ', comment.avatarUrl);
     });

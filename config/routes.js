@@ -123,10 +123,12 @@ module.exports.routes = {
   'POST    /api/v1/litters/add-presentation': {action: 'litters/add-presentation', csrf: false},
   'POST    /api/v1/litters/destroy-one-presentation': {action: 'litters/destroy-one-presentation', csrf: false},
   // 'POST    /api/v1/litters/add-comment': {action: 'litters/add-comment', csrf: false},
-  'POST    /api/v1/litters/zero-comment': {action: 'litters/zero-comment', csrf: false},
+  // 'POST    /api/v1/litters/zero-comment': {action: 'litters/zero-comment', csrf: false},
 
   'POST    /api/v1/comments/add-comment': {action: 'comments/add-comment', csrf: false},
-  'GET    /api/v1/comments/list-comment/:instanceModuleId/:field': { action: 'comments/list-comment'},
+  'GET     /api/v1/comments/list-comment/:instanceModuleId/:field': {action: 'comments/list-comment'},
+  'POST  /api/v1/comments/destroy-one-comment': {action: 'comments/destroy-one-comment', csrf: false},
+  'POST    /api/v1/comments/change-one-comment': {action: 'comments/change-one-comment', csrf: false},
 
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},
@@ -155,7 +157,7 @@ module.exports.routes = {
   'DELETE /users/destroy-user-group': {action: 'users/destroy-user-group', csrf: false},
   'POST   /api/v1/users/update-ratio': {action: 'users/update-ratio', csrf: false},
   'GET    /api/v1/users/status': {action: 'users/list-status'},
-  'POST   /api/v1/users/looked-comment': {action: 'users/looked-comment', csrf: false},
+  // 'POST   /api/v1/users/looked-comment': {action: 'users/looked-comment', csrf: false},
 
   'GET    /api/v1/continents/list': {action: 'continents/list'},
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},
@@ -183,9 +185,9 @@ module.exports.routes = {
 
   'GET    /api/v1/files/download/:collection/:id/:folder/:key/:photoSet?': {action: 'files/download'},
 
-  'POST   /api/v1/likes/add-like': { action: 'likes/add-like', csrf: false },
-  'GET    /api/v1/likes/list-like/:instanceModuleId/:field': { action: 'likes/list-like' },
-  'DELETE /api/v1/likes/destroy-one-like': { action: 'likes/destroy-one-like', csrf: false },
+  'POST   /api/v1/likes/add-like': {action: 'likes/add-like', csrf: false},
+  'GET    /api/v1/likes/list-like/:instanceModuleId/:field': {action: 'likes/list-like'},
+  'DELETE /api/v1/likes/destroy-one-like': {action: 'likes/destroy-one-like', csrf: false},
 
 
   'GET    /undefined': {action: 'files/undefined'},

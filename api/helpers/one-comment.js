@@ -60,6 +60,7 @@ module.exports = {
     comment.avatarUrl = (comment.owner.defaultIcon === 'avatar') ? comment.owner.avatar : comment.owner.gravatar;
     // comment.kennelObj = await sails.helpers.getKennelUser.with({id:comment.owner.id});
     comment.kennels = await sails.helpers.getKennelUser(comment.owner.id);
+    comment.ownerId = comment.owner.id;
     delete comment.owner;
     // console.log('com.avatarUrl:: ', comment.avatarUrl);
 

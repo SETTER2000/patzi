@@ -6,9 +6,37 @@
   .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
     opacity: 0;
   }
+  .super-ico {
+    position: relative;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+  }
+  .super-ico::after {
+    content: '';
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("/images/super.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  .pointer{
+    &:hover{  cursor: pointer;}
+
+  }
+  //.el-dropdown-menu.el-popper li{
+  //  display: inline!important; /* Отображать как строчный элемент */
+  //  margin-right: 5px; /* Отступ слева */
+  //  border: 1px solid #000; /* Рамка вокруг текста */
+  //  padding: 3px; /* Поля вокруг текста */
+  //}
+
   //END ANIMATION
-
-
+/*
   .el-col {
     border-radius: 4px;
   }
@@ -25,7 +53,14 @@
     border-radius: 4px;
     min-height: 36px;
   }
+  */
 
+
+
+
+  .divider-row {
+    border-bottom: 1px solid #454d5630;
+  }
   .active {
     color: green;
   }
@@ -36,11 +71,11 @@
     height: 13px;
     width: 25px;
   }
-  .comment-text{
+  .comment-text {
     color: inherit;
 
-    &.font-weight-bold{
-      &:hover{
+    &.font-weight-bold {
+      &:hover {
         cursor: pointer;
       }
     }
@@ -88,12 +123,12 @@
     font-weight: bold;
     color: #385898;
     padding-right: 5px;
-    &:hover{
+    &:hover {
       cursor: pointer;
     }
-    &.non{
+    &.non {
       color: #8d8d8d;
-      &:hover{
+      &:hover {
         cursor: auto;
       }
     }
@@ -115,11 +150,11 @@
     cursor: pointer;
   }
   .itemFoo {
-  //  margin-top: 10px;
-    margin: 0 10px;
+    //  margin-top: 10px;
+    margin: 0 5px;
     //margin-left: 50px;
   }
-  .comm > ul li:not(:first-child):before, .dateShooting:after{
+  .comm > ul li:not(:first-child):before, .dateShooting:after {
     content: " \B7 ";
     padding-right: 5px;
     padding-left: 3px;
@@ -318,9 +353,17 @@
     flex-flow: wrap;
     justify-content: center;
     align-items: center;
-    //el-button {
-    //  flex: 0 1 auto;
-    //}
+    border-top: 1px solid #454d5630;
+    border-bottom: 1px solid #454d5630;
+    padding: 3px;
+
+    .el-button {
+      border: none;
+      font-weight: bold;
+      color: #898888;
+      padding-left: 7px;
+      padding-right: 7px;
+    }
   }
   .my-flex-cont {
     display: flex;
@@ -425,6 +468,50 @@
 
     img.ell {
       height: 100%;
+    }
+    //#el-collapse-content-4617 > div > span > ul:nth-child(4) > li.comm > ul > li:nth-child(2){
+    //  &:hover{
+    //    text-underline: #1b1e21;
+    //  }
+    //}
+    //.sv {
+    //  font-size: .8em!important;
+    //  &:hover{
+    //    text-underline: #1b1e21;
+    //  }
+    //}
+    .comm> ul.sub-string > li, .comm> ul.sub-string > li .el-link--inner{
+      font-size: .9em;
+    }
+  }
+
+  @media (max-width: 575px) {
+    .sv {
+      font-size: .8em!important;
+    }
+   .comm> ul.sub-string > li, .comm> ul.sub-string > li .el-link--inner{
+      font-size: .7em;
+    }
+    #pane-photo > div > div > div > div.card-body > div.button-like.el-row > div.el-col.el-col-24.el-col-xs-8.el-col-sm-6.el-col-md-6.el-col-lg-3.el-col-xl-3 > div > sup{
+      font-size: .5em !important;
+    }
+    .button-like {
+      display: flex;
+      flex-flow: wrap;
+      justify-content: center;
+      align-items: center;
+      border-top: 1px solid #454d5630;
+      border-bottom: 1px solid #454d5630;
+      padding: 3px;
+
+      .el-button {
+        border: none;
+        font-weight: bold;
+        color: #898888;
+        font-size: .8em;
+        padding-left: 3px;
+        padding-right: 3px;
+      }
     }
 
   }

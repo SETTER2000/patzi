@@ -7,9 +7,16 @@ parasails.registerPage('litter', {
     dialogPedigreeVisible: true,
     comment: '',
     like: '',
-    countSuper:0,
-    countLike:0,
-    countWow:0,
+    nameModule: 'Litter',
+    countSuper: 0,
+    countLike: 0,
+    countWow: 0,
+    countHaha: 0,
+    listWowUserName: [],
+    listLikeUserName: [],
+    listSuperUserName: [],
+    listHahaUserName: [],
+    listAllUsers: [],
     field: '',
     commentsLength: 0,
     activeNames: '1',
@@ -132,6 +139,7 @@ parasails.registerPage('litter', {
         warnNoKennel: `At the moment there is no nursery in the database.
          You should create at least one kennel to start with to add a dog.`,
         text400Err: 'Error. Could not update! ',
+        text404Err: 'Mistake. Perhaps you do not have permission to delete this object!',
         text500Err: 'Server Error! Unable to update. ',
         text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
         success: 'Congratulations! Object successfully updated. ',
@@ -154,6 +162,7 @@ parasails.registerPage('litter', {
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         text400Err: 'Ошибка. Не смог создать!',
+        text404Err: 'Ошибка. Возможно у вас нет прав на удаление данного объекта!',
         text500Err: 'Ошибка сервера! Невозможно создать.',
         text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
         success: 'Поздравляем! Объект успешно создан.',
@@ -190,7 +199,17 @@ parasails.registerPage('litter', {
     moment().locale(this.me.preferredLocale);
     this.isAfter();
     this.ratio = _.last(_.pluck(this.me.ratio.filter(rat => rat.letter === this.litter.letter), 'litter'));
+    // Super SVG animation
+    this.superSvg();
 
+    // Haha SVG animation
+    this.hahaSvg();
+
+    // Wow SVG animation
+    this.wowSvg();
+
+    // Like SVG animation
+    this.likeSvg();
     // Буквы помёта
     this.letterList();
     this.commentList('puppies');
@@ -216,6 +235,7 @@ parasails.registerPage('litter', {
 
     // Принимаем данные по событию add-*
     io.socket.on('add-comment', (data) => {
+      console.log('Пришли обновлённые данные CoMMENT::: ', data);
       if (data) {
         this.litter[data.comments.field].map(puppyPhotoSet => {
           if (puppyPhotoSet.indexPhotoSet === data.comments.indexPhotoSet) {
@@ -238,11 +258,13 @@ parasails.registerPage('litter', {
             puppyPhotoSet.likes = _.isArray(puppyPhotoSet.likes) ? puppyPhotoSet.likes : [];
             puppyPhotoSet.countLike = data.countLike;
             puppyPhotoSet.likes.push(data.likes);
-
+            data.likes.like === 'super' ? (`${this.superSvg()} ${this.$forceUpdate()}`) :
+              data.likes.like === 'like' ? (`${this.likeSvg()} ${this.$forceUpdate()}`) :
+                data.likes.like === 'wow' ? (`${this.wowSvg()} ${this.$forceUpdate()}`) :
+                  data.likes.like === 'haha' ? (`${this.hahaSvg()} ${this.$forceUpdate()}`) : '';
           }
         });
-        this.likeSvg();
-        this.$forceUpdate();
+
 
       }
     });
@@ -264,14 +286,6 @@ parasails.registerPage('litter', {
   mounted: async function () {
 
 
-    // Super SVG animation
-    this.superSvg();
-
-    // Wow SVG animation
-    this.wowSvg();
-
-    // Like SVG animation
-    this.likeSvg();
   },
 
   computed: {
@@ -282,6 +296,15 @@ parasails.registerPage('litter', {
       }
     },
 
+    // listWowUserName: {
+    //   get: function () {
+    //     // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+    //     return _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'wow'}), 'userName'));
+    //   },
+    //   set:function (i) {
+    //
+    //   }
+    // },
 
     srcAvatar() {
 
@@ -352,6 +375,18 @@ parasails.registerPage('litter', {
         "strokeCap": "square"
       });
       wowAnimation.paint();
+    },
+    // Haha SVG animation
+    hahaSvg() {
+      let el = document.querySelector('#haha');
+      let myAnimation = new LazyLinePainter(el, {
+        "ease": "easeInOutBounce",
+        "strokeWidth": 19,
+        "strokeOpacity": .7,
+        "strokeColor": "#9274a6",
+        "strokeCap": "square"
+      });
+      myAnimation.paint();
     },
 
 
@@ -589,8 +624,26 @@ parasails.registerPage('litter', {
         case 'allView':
           this.allViewed(command);
           break;
+        case 'like':
+          this.addLike(command);
+          break;
+        case 'super':
+          this.addLike(command);
+          break;
+        case 'wow':
+          this.addLike(command);
+          break;
+        case 'haha':
+          this.addLike(command);
+          break;
         case 'link':
           window.location = '/litters';
+          break;
+        case 'deleteComment':
+          this.deleteComment(command);
+          break;
+        case 'changeComment':
+          this.changeComment(command);
           break;
         //default:  this.setIndexPhotoSet(command);
       }
@@ -684,12 +737,7 @@ parasails.registerPage('litter', {
       };
       this.dialogAddedPhotoSession = false;
       io.socket.post('/api/v1/litters/add-session-photo', data, (dataRes, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-
+        this.errorMessages(jwRes);
 
         // this.loading.close();
 
@@ -725,11 +773,7 @@ parasails.registerPage('litter', {
       };
 
       io.socket.post('/api/v1/litters/add-presentation', data, (dataRes, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+        this.errorMessages(jwRes);
 
         this.dialogAddedPresentation = false;
 
@@ -825,7 +869,8 @@ parasails.registerPage('litter', {
     async deletePhotoSet() {
       let data = {
         id: this.litter.id,
-        indexPhotoSet: this.indexPhotoSet
+        indexPhotoSet: this.indexPhotoSet,
+        nameModule: this.nameModule
       };
 
       io.socket.post('/api/v1/litters/destroy-session-photo', data, (dataRes, jwRes) => {
@@ -837,6 +882,58 @@ parasails.registerPage('litter', {
         this.dialogDeletePhotoSession = false;
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
+          this.$forceUpdate();
+        }
+      });
+
+
+    },
+
+    errorMessages(jwRes) {
+      (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+        (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+    },
+
+
+    deleteComment: async function (command) {
+      console.log('command::: ', command);
+      let data = {
+        id: command.comment.id,
+        field: command.comment.field,
+        instanceModuleId: this.litter.id,
+        nameModule: this.nameModule,
+        indexPhotoSet: command.comment.indexPhotoSet
+      };
+      console.log('Перед отправкой data: ', data);
+      io.socket.post('/api/v1/comments/destroy-one-comment', data, (dataRes, jwRes) => {
+        this.errorMessages(jwRes);
+        this.dialogDeletePhotoSession = false;
+        if (jwRes.statusCode === 200) {
+          this.$forceUpdate();
+        }
+      });
+
+
+    },
+
+
+    changeComment: async function (command) {
+      console.log('command::: ', command);
+      let data = {
+        id: command.comment.id,
+        field: command.comment.field,
+        instanceModuleId: this.litter.id,
+        // indexPhotoSet: this.indexPhotoSet
+      };
+
+      io.socket.post('/api/v1/comments/change-one-comment', data, (dataRes, jwRes) => {
+        this.errorMessages(jwRes);
+        this.dialogDeletePhotoSession = false;
+        if (jwRes.statusCode === 200) {
           this.$forceUpdate();
         }
       });
@@ -862,11 +959,7 @@ parasails.registerPage('litter', {
       };
 
       io.socket.post('/api/v1/litters/update-litter', data, (dataRes, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+        this.errorMessages(jwRes);
 
         this.centerDialogAdded = false;
 
@@ -889,10 +982,7 @@ parasails.registerPage('litter', {
         sessionName: this.ruleForm.sessionName,
       };
       io.socket.post('/api/v1/litters/update-session-name', data, (dataRes, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+        this.errorMessages(jwRes);
         this.dialogFormVisible = false;
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
@@ -915,11 +1005,7 @@ parasails.registerPage('litter', {
       };
       console.log('OTPRAVKA UPDATE:: ', data);
       io.socket.post('/api/v1/litters/update-session-description', data, (dataRes, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+        this.errorMessages(jwRes);
 
         this.dialogDescriptionPhotoSession = false;
         if (jwRes.statusCode === 200) {
@@ -1081,6 +1167,13 @@ parasails.registerPage('litter', {
     },
 
 
+    deleteViewed(puppyPhotoSet) {
+      localStorage.clear();
+      let all = JSON.parse(localStorage.getItem('__c'));
+      let clearArr = _.isArray(all) ? _.filter(com => puppyPhotoSet.comments.indexOf(com) < 0) : '';
+      console.log('clearArr:: ', clearArr);
+    },
+
     // Выбираем все комментарии
     commentList: async function (field) {
       await io.socket.get(`/api/v1/comments/list-comment/${this.litter.id}/${field}`, function gotResponse(body, response) {
@@ -1092,11 +1185,15 @@ parasails.registerPage('litter', {
       io.socket.on('list-comment', (data) => {
         if (data.length > 0 && _.isArray(this.litter[field])) {
           this.litter[field].map(puppyPhotoSet => {
+            // puppyPhotoSet.countComment= data.length;
             puppyPhotoSet.comments = _.isArray(puppyPhotoSet.comments) ? puppyPhotoSet.comments : [];
             puppyPhotoSet.comments = data.filter(comment => comment.indexPhotoSet === puppyPhotoSet.indexPhotoSet);
+            // this.deleteViewed(puppyPhotoSet);
+            console.log(`Все комменты event list-comment ID-photoset ${puppyPhotoSet.indexPhotoSet}::: `, puppyPhotoSet.comments);
+            this.$forceUpdate();
           });
         }
-        this.$forceUpdate();
+
       });
 
 
@@ -1111,19 +1208,32 @@ parasails.registerPage('litter', {
 
       // Принимаем данные по событию list-*
       io.socket.on('list-like', (data) => {
-        console.log('LIST LIKE::: ' , data);
+        console.log('LIST LIKE::: ', data);
         if (data.length > 0 && _.isArray(this.litter[field])) {
           this.litter[field].map(puppyPhotoSet => {
             puppyPhotoSet.likes = _.isArray(puppyPhotoSet.likes) ? puppyPhotoSet.likes : [];
-            puppyPhotoSet.likes = data.filter(comment => comment.indexPhotoSet === puppyPhotoSet.indexPhotoSet);
-            console.log('FILTER LIKE photoset +::: ',_.pluck(_.filter( puppyPhotoSet.likes,{like:'like'}), 'like'));
-            this.countLike = _.pluck(_.filter( puppyPhotoSet.likes,{like:'like'}), 'like').length;
-            this.countWow = _.pluck(_.filter( puppyPhotoSet.likes,{like:'wow'}), 'like').length;
-            this.countSuper = _.pluck(_.filter( puppyPhotoSet.likes,{like:'super'}), 'like').length;
+            puppyPhotoSet.likes = data.filter(like => like.indexPhotoSet === puppyPhotoSet.indexPhotoSet);
+            // console.log('FILTER LIKE photoset +::: ', _.pluck(_.filter(puppyPhotoSet.likes, {like: 'like'}), 'like'));
+            // console.log('FILTER WOW photoset +::: ', _.pluck(_.filter(puppyPhotoSet.likes, {like: 'wow'}), 'like'));
+            this.countLike = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'like'}), 'like').length;
+            this.listLikeUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'like'}), 'userName'));
+            this.countWow = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'wow'}), 'like').length;
+            this.listWowUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'wow'}), 'userName'));
+            // console.log('listWowUserName::: ', this.listWowUserName);
+            this.listAllUsers =  _.uniq(_.pluck(puppyPhotoSet.likes,'userName'));
+            this.countSuper = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'super'}), 'like').length;
+            this.listSuperUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'super'}), 'userName'));
+            this.countHaha = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'haha'}), 'like').length;
+            this.listHahaUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'haha'}), 'userName'));
+            this.superSvg();
+            this.wowSvg();
+            this.likeSvg();
+            this.hahaSvg();
+            this.$forceUpdate();
           });
         }
 
-        this.$forceUpdate();
+
       });
 
 
@@ -1140,7 +1250,7 @@ parasails.registerPage('litter', {
       let data = {
         instanceModuleId: this.litter.id,
         comment: this.comment,
-        nameModule: 'Litter',
+        nameModule: this.nameModule,
         userName: this.me.fullName,
         field: field,
         letter: this.litter.letter,
@@ -1167,38 +1277,7 @@ parasails.registerPage('litter', {
       });
 
     },
-    /*   async updateComment() {
-         if (_.isEmpty(this.comment)) {
-           return false;
-         }
-         let sel = this;
-         let data = {
-           id: this.litter.id,
-           comment: this.comment,
-           letter: this.litter.letter,
-           userName: this.me.fullName,
-           indexPhotoSet: this.ruleForm.show
-         };
-         await io.socket.post('/api/v1/litters/add-comment', data, (dataRes, response) => {
-           // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-           (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-             (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
-               (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
-
-           if (response.statusCode === 200) {
-             this.comment = '';
-             //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
-             // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
-           } else {
-             sel.$message({
-               message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
-               type: 'error'
-             });
-           }
-         });
-
-       },*/
     /*
     like
     super
@@ -1213,16 +1292,16 @@ parasails.registerPage('litter', {
     сочувствую
     возмутительно*/
     // Добавить Like
-    async addLike(photoSet, field, like) {
-      console.log('photoSet:: ', photoSet);
+    async addLike(command) {
+      console.log('photoSet:: ', command.photoSet);
       let data = {
         instanceModuleId: this.litter.id,
-        like: like,
-        nameModule: 'Litter',
+        like: command.com,
+        nameModule: this.nameModule,
         userName: this.me.fullName,
-        field: field,
+        field: command.field,
         letter: this.litter.letter,
-        indexPhotoSet: photoSet.indexPhotoSet
+        indexPhotoSet: command.photoSet.indexPhotoSet
       };
 
       let sel = this;
