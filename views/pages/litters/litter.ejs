@@ -967,17 +967,17 @@
                                                       @click="viewed(com.id,photoSet, $event)">
                                                     {{com.comment}}
                                                   <!--<template >-->
-                                                    <!--<span class="like-comment" v-for="(lk, index) in  com.likes" :key="index +  '-lkNm'">-->
-                                                     <!--<el-tooltip class="item" effect="dark" content="Top Center prompts info" placement="top">-->
-                                                       <!--<el-row>-->
-                                                         <!--<el-button icon="ti-thumb-up" style="padding: 2px; color: #8d949e;font-size: 11px;">-->
-                                                           <!--{{lk.like | countAll(com.likes)}}-->
-                                                         <!--</el-button>-->
-                                                       <!--</el-row>-->
-                                                     <!--</el-tooltip>-->
-                                                    <!--</span>-->
+                                                  <!--<span class="like-comment" v-for="(lk, index) in  com.likes" :key="index +  '-lkNm'">-->
+                                                  <!--<el-tooltip class="item" effect="dark" content="Top Center prompts info" placement="top">-->
+                                                  <!--<el-row>-->
+                                                  <!--<el-button icon="ti-thumb-up" style="padding: 2px; color: #8d949e;font-size: 11px;">-->
+                                                  <!--{{lk.like | countAll(com.likes)}}-->
+                                                  <!--</el-button>-->
+                                                  <!--</el-row>-->
+                                                  <!--</el-tooltip>-->
+                                                  <!--</span>-->
                                                   <!--</template>-->
-                                                    <!--{{com.comment}} <span >{{getLikes(com.likes)}} <span v-if="com.id ===likeId">{{countCommentAll}}</span></span>-->
+                                                  <!--{{com.comment}} <span >{{getLikes(com.likes)}} <span v-if="com.id ===likeId">{{countCommentAll}}</span></span>-->
                                                   </span>
                                                 <span v-if="viewChangeComment && commentId === com.id"
                                                       class="comment-text">
@@ -1068,17 +1068,21 @@
                                                     </el-dropdown>
                                                   </span>
                                                 </li>
-                                                <li class="likes" v-if="com.likes.length>0">
-                                                  <template >
-                                                    <span class="like-comment" >
-                                                     <el-tooltip  effect="dark" content="Top Center prompts info" placement="top">
+                                                <li class="likes" v-if="_.isArray(com.likes) && com.likes.length>0">
+                                                  <template>
+                                                    <span class="like-comment">
+                                                     <el-tooltip effect="dark" content="Top Center prompts info"
+                                                                 placement="top">
                                                          <div slot="content">
                                                            <ul>
-                                                             <li v-for="(lk, index) in com.likes" :key="index + '-lk'">{{lk.like}}: {{ lk.userName}}</li>
+                                                             <li v-for="(lk, index) in com.likes" :key="index + '-lk'">
+                                                               {{lk.like}}: <span style="color: #a5b2b8;">{{ lk.userName}}</span>
+                                                             </li>
                                                              </ul>
                                                          </div>
                                                        <el-row>
-                                                         <el-button icon="ti-thumb-up" style="padding: 2px; color: #8d949e;font-size: 11px;">
+                                                         <el-button icon="ti-thumb-up"
+                                                                    style="padding: 2px; color: #8d949e;font-size: 11px;">
                                                            <!--{{lk.like | countAll(com.likes)}}--> {{com.likes.length}}
                                                          </el-button>
                                                        </el-row>
@@ -1157,18 +1161,30 @@
           <el-tab-pane label="<%= __('Presentation') %>" name="presentation">
             <template>
               <div>
-                <el-row :gutter="12">
-                  <el-col :span="8" v-for="(present,index) in litter.presentation" :key="index + '-present'">
+                <!--<el-row class="button-like" :gutter="2">-->
+                <!--<el-col >-->
+                <!--<button @click="clearLocalStor()">Clear</button>-->
+                <!--</el-col>-->
+                <!--// Like-->
+                <!--<el-col :xs="8" :sm="8" :md="9" :lg="10" :xl="10" class="text-right">-->
+                <el-row :gutter="3">
+                  <el-col :xs="24" :sm="8" :md="8" class="text-center" v-for="(present,index) in litter.presentation"
+                          :key="index + '-present'">
                     <el-card shadow="hover">
-                      <div slot="header" class="clearfix">
+                      <div slot="header">
                         <strong>{{present.presentationName}}</strong>
                         <!--<el-button style="float: right; padding: 3px 0" type="text">Operation button</el-button>-->
                         <el-button @click="clickDeletePresentation(index)" style="float: right; padding: 6px"
                                    icon="el-icon-close" circle></el-button>
                       </div>
+
                       <p> {{present.descriptionPresentation}}</p>
-                      <a target="_blank" :href="present.presentationUrl"><img
-                          src="https://d3a1wbnh2r1l7y.cloudfront.net/pdf.jpg" height="150" alt=""></a>
+                      <a target="_blank" :href="present.presentationUrl">
+                        <div class="text-center ">
+                          <img class="img-responsive center-block"
+                               src="https://d3a1wbnh2r1l7y.cloudfront.net/pdf.jpg" height="150" alt="">
+                        </div>
+                      </a>
                     </el-card>
                   </el-col>
                   <el-col :span="24">

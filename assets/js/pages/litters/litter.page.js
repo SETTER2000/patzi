@@ -9,6 +9,7 @@ parasails.registerPage('litter', {
     likeId: '',
     instanceModuleId: '',
     like: '',
+    // com:{likes:[]},
     countCommentLike: 0,
     countCommentWow: 0,
     countCommentSuper: 0,
@@ -276,6 +277,7 @@ parasails.registerPage('litter', {
         this.$forceUpdate();
       }
     });
+
     // Принимаем данные по событию add-*
     io.socket.on('add-like', (data) => {
       console.log('Пришли обновлённые данные LIKE::: ', data);
@@ -291,6 +293,25 @@ parasails.registerPage('litter', {
                   data.likes.like === 'haha' ? (`${this.hahaSvg()} ${this.$forceUpdate()}`) : '';
           }
         });
+      }
+    });
+
+    // Принимаем данные по событию comment-like
+    io.socket.on('comment-like', (data) => {
+      console.log('Пришли обновлённые данные comment-like::: ', data);
+      if (data) {
+        this.commentList('puppies');
+        // this.litter[data.likes.field].map(puppyPhotoSet => {
+        //   if (puppyPhotoSet.indexPhotoSet === data.likes.indexPhotoSet) {
+        //     puppyPhotoSet.likes = _.isArray(puppyPhotoSet.likes) ? puppyPhotoSet.likes : [];
+        //     puppyPhotoSet.countLike = data.countLike;
+        //     puppyPhotoSet.likes.push(data.likes);
+        //     data.likes.like === 'super' ? (`${this.superSvg()} ${this.$forceUpdate()}`) :
+        //       data.likes.like === 'like' ? (`${this.likeSvg()} ${this.$forceUpdate()}`) :
+        //         data.likes.like === 'wow' ? (`${this.wowSvg()} ${this.$forceUpdate()}`) :
+        //           data.likes.like === 'haha' ? (`${this.hahaSvg()} ${this.$forceUpdate()}`) : '';
+        //   }
+        // });
       }
     });
 
@@ -1416,7 +1437,7 @@ parasails.registerPage('litter', {
     },
 
 
-    // Добавить лайки к комментариям
+    // Добавить лайк к комментарию
     async commentLike(command) {
       console.log('photoSet:: ', command.photoSet);
       console.log('photoSet:: ', command.commentId);
