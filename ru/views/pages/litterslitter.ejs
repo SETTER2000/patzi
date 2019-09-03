@@ -881,17 +881,15 @@
 
                       <!--// Кнопки управления рейтингами -->
                       <el-row class="button-like" :gutter="2">
-                        <button @click="clearLocalStor()">Clear</button>
+                        <!--<el-col >-->
+                        <!--<button @click="clearLocalStor()">Clear</button>-->
+                        <!--</el-col>-->
                         <!--// Like-->
                         <el-col :xs="8" :sm="8" :md="9" :lg="10" :xl="10" class="text-right">
-                          <!--<el-button @click="addLike(photoSet,'puppies', 'like')">-->
-                          <!--<i class="ti-thumb-up"></i>&nbsp; <%= __('Like') %>-->
-                          <!--</el-button>-->
-
                           <el-dropdown placement="top" @command="handleCommand">
                              <span class="el-dropdown-link pointer">
-                            <i class="ti-thumb-up"></i>&nbsp;        &nbsp; <%= __('Like') %>
-                               <!--<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+                            <i class="ti-thumb-up"></i>
+                               <%= __('Like') %>
                              </span>
                             <el-dropdown-menu slot="dropdown">
                               <el-dropdown-item style="color:#2980B9;"
@@ -964,9 +962,25 @@
                                                   <span class="user-comment">{{com.userName}} </span>
                                                 </el-tooltip>
                                                 <span class="user-comment non" v-else>{{com.userName}} </span>
-                                                <span class="comment-text" :class="{'font-weight-bold':com.notViewed}"
+                                                <span v-if="!viewChangeComment" class="comment-text"
+                                                      :class="{'font-weight-bold':com.notViewed}"
                                                       @click="viewed(com.id,photoSet, $event)">
                                                     {{com.comment}}
+                                                  </span>
+                                                <span v-if="viewChangeComment && commentId === com.id" class="comment-text">
+                                                    <el-form @submit.native.prevent>
+                                                      <el-form-item>
+                                                        <el-input
+                                                          @keyup.enter.native="changeComment()"
+                                                          class="mt-2"
+                                                          maxLength="1000"
+                                                          placeholder="<%= __('The field cannot be empty') %>"
+                                                         clearable
+                                                          v-model="commentUpdate">
+                                                            <i slot="prefix" class="el-input__icon el-icon-chat-line-round"></i>
+                                                        </el-input>
+                                                       </el-form-item>
+                                                    </el-form>
                                                   </span>
                                               </div>
                                               <ul class="sub-string">
@@ -977,7 +991,7 @@
                                                               :content="com.createdAt | getCreate(me.preferredLocale,'LL')"
                                                               placement="top-start">
                                                     <el-link type="info" class="mt-0">
-                                                      <span> {{dateFrom(com.createdAt)}}</span>
+                                                      <span> {{dateFrom(com.updatedAt)}}</span>
                                                     </el-link>
                                                   </el-tooltip>
                                                 </li>
@@ -985,10 +999,12 @@
                                                   <span v-if="me.isAdmin || me.isSuperAdmin || me.id === com.ownerId">
                                                     <el-dropdown @command="handleCommand">
                                                       <span class="el-dropdown-link">
-                                                        <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
+                                                        <el-link :underline="false"> <i
+                                                            class="el-icon-more el-icon--right"></i></el-link>
                                                       </span>
                                                       <el-dropdown-menu slot="dropdown">
-                                                        <el-dropdown-item icon="el-icon-edit-outline" :command="{com:'changeComment',comment:com}">
+                                                        <el-dropdown-item icon="el-icon-edit-outline"
+                                                                          :command="{com:'changeComment',comment:com}">
                                                           <%= __('Change') %> <%= __('comment') %>
                                                         </el-dropdown-item>
                                                         <el-dropdown-item icon="el-icon-delete-solid"
@@ -998,7 +1014,13 @@
                                                         <el-dropdown-item :divided="true" disabled
                                                                           v-if="litter.createdAt" icon="el-icon-date"
                                                                           command="">
-                                                          <%= __('Date publication') %> : <br>{{com.createdAt | getCreate(me.preferredLocale,'LLLL:ss')}}
+                                                          <%= __('Date publication') %> : <br>{{com.createdAt | getCreate(me.preferredLocale,'dddd, D MMMM YYYY, HH:mm:ss')}}
+                                                        </el-dropdown-item>
+
+                                                        <el-dropdown-item v-if="com.updatedAt !== com.createdAt" :divided="true" disabled
+                                                                          v-if="litter.createdAt" icon="el-icon-date"
+                                                                          command="">
+                                                          <%= __('Last update') %> : <br>{{com.updatedAt | getCreate(me.preferredLocale,'dddd, D MMMM YYYY, HH:mm:ss')}}
                                                         </el-dropdown-item>
                                                       </el-dropdown-menu>
                                                     </el-dropdown>
