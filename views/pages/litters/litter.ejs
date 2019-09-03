@@ -881,6 +881,8 @@
 
                       <!--// Кнопки управления рейтингами -->
                       <el-row class="button-like" :gutter="2">
+                        <button @click="clearLocalStor()">Clear</button>
+                        <!--// Like-->
                         <el-col :xs="8" :sm="8" :md="9" :lg="10" :xl="10" class="text-right">
                           <!--<el-button @click="addLike(photoSet,'puppies', 'like')">-->
                           <!--<i class="ti-thumb-up"></i>&nbsp; <%= __('Like') %>-->
@@ -912,6 +914,7 @@
                             </el-dropdown-menu>
                           </el-dropdown>
                         </el-col>
+                        <!--// Comment-->
                         <el-col :xs="8" :sm="8" :md="6" :lg="4" :xl="4" class="text-center">
                           <el-badge v-if="getCountComment(photoSet)>0" :value="getCountComment(photoSet)"
                                     class="itemFoo" :max="10">
@@ -931,6 +934,7 @@
                             <!--({{photoSet.comments ? photoSet.comments.length : 0}})-->
                           </el-button>
                         </el-col>
+                        <!--// Share-->
                         <el-col :xs="8" :sm="8" :md="9" :lg="10" :xl="10">
                           <el-button size="medium"><span class="share"></span><%= __('Share') %></el-button>
                         </el-col>
@@ -999,8 +1003,6 @@
                                                       </el-dropdown-menu>
                                                     </el-dropdown>
                                                   </span>
-
-
                                                 </li>
                                               </ul>
                                             </li>

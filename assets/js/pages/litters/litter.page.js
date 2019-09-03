@@ -220,7 +220,26 @@ parasails.registerPage('litter', {
     // Принимаем данные по событию list-*
     io.socket.on('delete-PhotoSet', (response) => {
       this.litter.puppies = this.litter.puppies.filter(puppy => puppy.indexPhotoSet !== response);
-      this.$forceUpdate();
+      this.clearLocalStorage(response);
+      // let a;
+      // let all = JSON.parse(localStorage.getItem('__c'));
+      // a = _.reject(all, response);
+      // localStorage.clear();
+      // localStorage.setItem('__c', JSON.stringify(a));
+      // // console.log('AAAAAAAAA:::' , a);
+      // this.$forceUpdate();
+    });
+
+
+    // Принимаем данные по событию list-*
+    io.socket.on('delete-comment', (response) => {
+      this.clearLocalStorage(response);
+      // let a;
+      // let all = JSON.parse(localStorage.getItem('__c'));
+      // a = _.reject(all, response);
+      // localStorage.clear();
+      // localStorage.setItem('__c', JSON.stringify(a));
+      // this.$forceUpdate();
     });
 
 
@@ -242,11 +261,9 @@ parasails.registerPage('litter', {
             puppyPhotoSet.comments = _.isArray(puppyPhotoSet.comments) ? puppyPhotoSet.comments : [];
             puppyPhotoSet.countComment = data.countComment;
             puppyPhotoSet.comments.push(data.comments);
-
           }
         });
         this.$forceUpdate();
-
       }
     });
     // Принимаем данные по событию add-*
@@ -264,8 +281,6 @@ parasails.registerPage('litter', {
                   data.likes.like === 'haha' ? (`${this.hahaSvg()} ${this.$forceUpdate()}`) : '';
           }
         });
-
-
       }
     });
 
@@ -284,8 +299,6 @@ parasails.registerPage('litter', {
   },
 
   mounted: async function () {
-
-
   },
 
   computed: {
@@ -340,25 +353,38 @@ parasails.registerPage('litter', {
     likeSvg() {
       let like = document.querySelector('#like');
       let likeAnimation = new LazyLinePainter(like, {
-        "ease": "easeOutBounce",
-        "strokeWidth": 19,
-        "strokeOpacity": 1,
-        "strokeColor": "#2980B9",
-        "strokeCap": "square"
+        'ease': 'easeOutBounce',
+        'strokeWidth': 19,
+        'strokeOpacity': 1,
+        'strokeColor': '#2980B9',
+        'strokeCap': 'square'
       });
       likeAnimation.paint();
     },
 
+    clearLocalStor() {
+      localStorage.clear();
+    },
+    // Очистка localStorage
+    clearLocalStorage(response) {
+      let a;
+      let all = JSON.parse(localStorage.getItem('__c'));
+      a = _.reject(all, response);
+      localStorage.clear();
+      localStorage.setItem('__c', JSON.stringify(a));
+      // console.log('AAAAAAAAA:::' , a);
+      this.$forceUpdate();
+    },
 
     // Super SVG animation
     superSvg() {
       let el = document.querySelector('#Untitled1');
       let myAnimation = new LazyLinePainter(el, {
-        "ease": "easeInOutSine",
-        "strokeWidth": 19.0,
-        "strokeOpacity": 0.9,
-        "strokeColor": "#E84B3C",
-        "strokeCap": "butt"
+        'ease': 'easeInOutSine',
+        'strokeWidth': 19.0,
+        'strokeOpacity': 0.9,
+        'strokeColor': '#E84B3C',
+        'strokeCap': 'butt'
       });
       myAnimation.paint();
     },
@@ -368,11 +394,11 @@ parasails.registerPage('litter', {
     wowSvg() {
       let wow = document.querySelector('#wow');
       let wowAnimation = new LazyLinePainter(wow, {
-        "ease": "easeOutSine",
-        "strokeWidth": 19,
-        "strokeOpacity": 1,
-        "strokeColor": "#ffb007",
-        "strokeCap": "square"
+        'ease': 'easeOutSine',
+        'strokeWidth': 19,
+        'strokeOpacity': 1,
+        'strokeColor': '#ffb007',
+        'strokeCap': 'square'
       });
       wowAnimation.paint();
     },
@@ -380,11 +406,11 @@ parasails.registerPage('litter', {
     hahaSvg() {
       let el = document.querySelector('#haha');
       let myAnimation = new LazyLinePainter(el, {
-        "ease": "easeInOutBounce",
-        "strokeWidth": 19,
-        "strokeOpacity": .7,
-        "strokeColor": "#9274a6",
-        "strokeCap": "square"
+        'ease': 'easeInOutBounce',
+        'strokeWidth': 19,
+        'strokeOpacity': .7,
+        'strokeColor': '#9274a6',
+        'strokeCap': 'square'
       });
       myAnimation.paint();
     },
@@ -800,7 +826,9 @@ parasails.registerPage('litter', {
       let viewedCommentId = _.remove(_.uniq(_.pluck(JSON.parse(localStorage.getItem('__c')), photoSet.indexPhotoSet)), n => n !== undefined);
       let viewedComment = _.isArray(JSON.parse(localStorage.getItem('__c'))) ? viewedCommentId.length : 0;
       this.boldComment(photoSet);
-      return photoSet.countComment - viewedComment;
+      console.log('photoSet.countComment (всего комментов)::: ', photoSet.countComment);
+      console.log('viewedComment (просмотренно)::: ', viewedComment);
+      return photoSet.comments.length - viewedComment;
     },
 
     /**
@@ -900,7 +928,6 @@ parasails.registerPage('litter', {
 
 
     deleteComment: async function (command) {
-      console.log('command::: ', command);
       let data = {
         id: command.comment.id,
         field: command.comment.field,
@@ -1003,7 +1030,7 @@ parasails.registerPage('litter', {
         // JSON.stringify(this.ruleFormEdit.dateShooting),
         showShootingDate: this.ruleFormEdit.showShootingDate
       };
-      console.log('OTPRAVKA UPDATE:: ', data);
+
       io.socket.post('/api/v1/litters/update-session-description', data, (dataRes, jwRes) => {
         this.errorMessages(jwRes);
 
@@ -1020,7 +1047,7 @@ parasails.registerPage('litter', {
           _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === data.indexPhotoSet)).dateShooting = data.dateShooting ? data.dateShooting : '';
           _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === data.indexPhotoSet)).showShootingDate = data.showShootingDate ? data.showShootingDate : false;
           // this.$forceUpdate();
-          console.log('AS::D', _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === data.indexPhotoSet)).dateShooting);
+          // console.log('AS::D', _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === data.indexPhotoSet)).dateShooting);
         }
       });
     },
@@ -1166,12 +1193,37 @@ parasails.registerPage('litter', {
       });
     },
 
-
+    // Очищаем localStorage от удалённых комментариев
     deleteViewed(puppyPhotoSet) {
-      localStorage.clear();
+      // localStorage.clear();
+      let a = [];
       let all = JSON.parse(localStorage.getItem('__c'));
-      let clearArr = _.isArray(all) ? _.filter(com => puppyPhotoSet.comments.indexOf(com) < 0) : '';
-      console.log('clearArr:: ', clearArr);
+      _.isArray(all) ? puppyPhotoSet.comments.map(com => {
+        let o = _.zipObject([[com.indexPhotoSet, com.id]]);
+        // console.log('aaaOOO: ', o);
+        // console.log('FILTER::: ', _.filter(all, o));
+        (_.filter(all, o).length > 0) ? a.push(_.filter(all, o)) : '';
+      }) : '';
+      localStorage.clear();
+      localStorage.setItem('__c', JSON.stringify(_.flatten(a)));
+    },
+    deleteViewed2(puppyPhotoSet) {
+      // localStorage.clear();
+      console.log('puppyPhotoSet.indexPhotoSet::: ', puppyPhotoSet.indexPhotoSet);
+      let a;
+      let all = JSON.parse(localStorage.getItem('__c'));
+      _.isArray(all) ? all.map(com => {
+        console.log('com::: ', com);
+        a = _.zipObject([['id', com[puppyPhotoSet.indexPhotoSet]]]);
+        console.log('DDDDDDDDD::: ', a);
+        console.log('aaaOOO: ', _.reject(puppyPhotoSet.comments, a));
+
+
+      }) : '';
+      // let newLocalStorage = _.difference(a, all);
+      // console.log('newLocalStorage::: ', newLocalStorage);
+      // localStorage.clear();
+      // localStorage.setItem('__c', JSON.stringify(_.flatten(a)));
     },
 
     // Выбираем все комментарии
@@ -1179,8 +1231,6 @@ parasails.registerPage('litter', {
       await io.socket.get(`/api/v1/comments/list-comment/${this.litter.id}/${field}`, function gotResponse(body, response) {
         // console.log('Сервис Comment List ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-
-
       // Принимаем данные по событию list-*
       io.socket.on('list-comment', (data) => {
         if (data.length > 0 && _.isArray(this.litter[field])) {
@@ -1188,16 +1238,14 @@ parasails.registerPage('litter', {
             // puppyPhotoSet.countComment= data.length;
             puppyPhotoSet.comments = _.isArray(puppyPhotoSet.comments) ? puppyPhotoSet.comments : [];
             puppyPhotoSet.comments = data.filter(comment => comment.indexPhotoSet === puppyPhotoSet.indexPhotoSet);
-            // this.deleteViewed(puppyPhotoSet);
+            // this.deleteViewed2(puppyPhotoSet);
             console.log(`Все комменты event list-comment ID-photoset ${puppyPhotoSet.indexPhotoSet}::: `, puppyPhotoSet.comments);
             this.$forceUpdate();
           });
         }
-
       });
-
-
     },
+
 
     // Выбираем все лайки
     listLike: async function (field) {
@@ -1220,7 +1268,7 @@ parasails.registerPage('litter', {
             this.countWow = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'wow'}), 'like').length;
             this.listWowUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'wow'}), 'userName'));
             // console.log('listWowUserName::: ', this.listWowUserName);
-            this.listAllUsers =  _.uniq(_.pluck(puppyPhotoSet.likes,'userName'));
+            this.listAllUsers = _.uniq(_.pluck(puppyPhotoSet.likes, 'userName'));
             this.countSuper = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'super'}), 'like').length;
             this.listSuperUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'super'}), 'userName'));
             this.countHaha = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'haha'}), 'like').length;

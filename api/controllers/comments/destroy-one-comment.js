@@ -92,7 +92,6 @@ module.exports = {
       instanceModuleId: inputs.instanceModuleId,
       field: inputs.field
     });
-console.log('allModule:::: ',allModule);
     let module;
     // console.log(`MODULE ::: ${inputs.nameModule}`, inputs.nameModule);
     switch (inputs.nameModule) {
@@ -105,10 +104,11 @@ console.log('allModule:::: ',allModule);
         break;
     }
 
-
+    console.log('allModule:::: ',allModule);
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
     await sails.sockets.broadcast('litter', 'list-comment', allModule);
+    await sails.sockets.broadcast('litter', 'delete-comment', _.zipObject([[inputs.indexPhotoSet,inputs.id]]));
 
     return exits.success();
   }
