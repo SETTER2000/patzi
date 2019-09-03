@@ -24,10 +24,12 @@
     background-repeat: no-repeat;
     background-size: contain;
   }
-  .pointer{
-    &:hover{  cursor: pointer;}
-
+  .pointer {
+    &:hover {
+      cursor: pointer;
+    }
   }
+
   //.el-dropdown-menu.el-popper li{
   //  display: inline!important; /* Отображать как строчный элемент */
   //  margin-right: 5px; /* Отступ слева */
@@ -36,27 +38,28 @@
   //}
 
   //END ANIMATION
-/*
-  .el-col {
-    border-radius: 4px;
-  }
-  .bg-purple-dark {
-    background: #99a9bf;
-  }
-  .bg-purple {
-    background: #d3dce6;
-  }
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
-  */
 
 
 
+
+  /*
+    .el-col {
+      border-radius: 4px;
+    }
+    .bg-purple-dark {
+      background: #99a9bf;
+    }
+    .bg-purple {
+      background: #d3dce6;
+    }
+    .bg-purple-light {
+      background: #e5e9f2;
+    }
+    .grid-content {
+      border-radius: 4px;
+      min-height: 36px;
+    }
+    */
 
   .divider-row {
     border-bottom: 1px solid #454d5630;
@@ -71,9 +74,22 @@
     height: 13px;
     width: 25px;
   }
+  .likes{
+    position: relative;
+    .like-comment {
+      position: absolute;
+      right: -25px;
+      top: -12px;
+      background-color: white;
+      padding: 1px 2px 2px;
+      color: #8d949e;
+      font-size: 11px;
+      border-radius: 20px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .2);
+    }
+  }
   .comment-text {
     color: inherit;
-
     &.font-weight-bold {
       &:hover {
         cursor: pointer;
@@ -469,6 +485,7 @@
     img.ell {
       height: 100%;
     }
+
     //#el-collapse-content-4617 > div > span > ul:nth-child(4) > li.comm > ul > li:nth-child(2){
     //  &:hover{
     //    text-underline: #1b1e21;
@@ -480,21 +497,24 @@
     //    text-underline: #1b1e21;
     //  }
     //}
-    .comm> ul.sub-string > li, .comm> ul.sub-string > li .el-link--inner{
+    .comm > ul.sub-string > li, .comm > ul.sub-string > li .el-link--inner {
       font-size: .9em;
     }
   }
 
   @media (max-width: 575px) {
     .sv {
-      font-size: .8em!important;
+      font-size: .8em !important;
     }
-   .comm> ul.sub-string > li, .comm> ul.sub-string > li .el-link--inner{
+
+    .comm > ul.sub-string > li, .comm > ul.sub-string > li .el-link--inner {
       font-size: .7em;
     }
-    #pane-photo > div > div > div > div.card-body > div.button-like.el-row > div.el-col.el-col-24.el-col-xs-8.el-col-sm-6.el-col-md-6.el-col-lg-3.el-col-xl-3 > div > sup{
+
+    #pane-photo > div > div > div > div.card-body > div.button-like.el-row > div.el-col.el-col-24.el-col-xs-8.el-col-sm-6.el-col-md-6.el-col-lg-3.el-col-xl-3 > div > sup {
       font-size: .5em !important;
     }
+
     .button-like {
       display: flex;
       flex-flow: wrap;

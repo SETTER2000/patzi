@@ -83,6 +83,11 @@ module.exports = {
       description: 'Лайк может принадлежать только одному пользователю. One to Many'
       // columnName: 'id'
     },
+
+    comment: {
+      model: 'commentary',
+      description: 'Like может принадлежать только одному комментарию. One to Many'
+    },
   },
 
 };

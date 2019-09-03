@@ -73,6 +73,10 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const req = this.req;
+    let moment = require('moment');
+    const tz = require('moment-timezone');
+    let dateShooting = inputs.dateShooting.replace(/"([^"]+(?="))"/g, '$1');
+    moment.locale('en');
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
@@ -84,10 +88,10 @@ module.exports = {
       throw 'badRequest';
     }
 
-    await _.each(litter.puppies, async (pup, i) => {
-      pup.descriptionPhotoSession = (i === inputs.indexPhotoSet) ? inputs.descriptionPhotoSession : pup.descriptionPhotoSession;
-      pup.dateShooting = (i === inputs.indexPhotoSet) ? inputs.dateShooting : '';
-      pup.showShootingDate = (i === inputs.indexPhotoSet) ? inputs.showShootingDate : pup.showShootingDate;
+    await _.each(litter.puppies, async (pup) => {
+      pup.descriptionPhotoSession = (pup.indexPhotoSet === inputs.indexPhotoSet) ? inputs.descriptionPhotoSession : pup.descriptionPhotoSession;
+      pup.dateShooting = (pup.indexPhotoSet === inputs.indexPhotoSet) ? moment.tz(dateShooting, 'Europe/Moscow').format() : pup.dateShooting;
+      pup.showShootingDate = (pup.indexPhotoSet === inputs.indexPhotoSet) ? inputs.showShootingDate : pup.showShootingDate;
     });
 
     let u = await Litter.updateOne({id: inputs.id})

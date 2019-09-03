@@ -6,8 +6,14 @@ parasails.registerPage('litter', {
     dialogTableVisible: false,
     viewChangeComment: false,
     dialogPedigreeVisible: true,
-    instanceModuleId:'',
+    likeId: '',
+    instanceModuleId: '',
     like: '',
+    countCommentLike: 0,
+    countCommentWow: 0,
+    countCommentSuper: 0,
+    countCommentHaha: 0,
+    countCommentAll: [],
     nameModule: 'Litter',
     countSuper: 0,
     countLike: 0,
@@ -299,6 +305,30 @@ parasails.registerPage('litter', {
       moment.locale(l);
       let formatNew = (!format) ? 'LLL' : format;
       return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+    },
+
+    countAll: function (value, lakes) {
+      if (!value) {
+        return '';
+      }
+
+      // console.log('value::::', this.countCommentAll.push(value).length);
+      return lakes.length;
+      value === 'like' ? this.countCommentLike++ :
+        value === 'wow' ? this.countCommentWow++ :
+          value === 'haha' ? this.countCommentHaha++ :
+            value === 'super' ? this.countCommentSuper++ : 0;
+
+
+      // this.countCommentLike = _.pluck(likes, 'like').length;
+      // this.countCommentWow = _.pluck(likes, 'wow').length;
+      // this.countCommentSuper = _.pluck(likes, 'super').length;
+      // this.countCommentHaha = _.pluck(likes, 'haha').length;
+      // this.likeId = _.last(_.uniq(_.pluck(likes, 'comment')));
+      // console.log(' this.likeId:::', this.likeId);
+      // this.countCommentAll = likes.length;
+      // return (likes.length > 0);
+
     }
   },
 
@@ -376,7 +406,6 @@ parasails.registerPage('litter', {
       a = _.reject(all, response);
       localStorage.clear();
       localStorage.setItem('__c', JSON.stringify(a));
-      // console.log('AAAAAAAAA:::' , a);
       this.$forceUpdate();
     },
 
@@ -579,7 +608,7 @@ parasails.registerPage('litter', {
 
 
     handlerSetActiveSlider(i) {
-      console.log('Нажали по слайду: ', i);
+      // console.log('Нажали по слайду: ', i);
       // this.photos = _.pluck(this.litter.puppies, 'photos');
       return this.indexPhoto;
     },
@@ -665,6 +694,18 @@ parasails.registerPage('litter', {
           break;
         case 'haha':
           this.addLike(command);
+          break;
+        case 'commentLike':
+          this.commentLike(command);
+          break;
+        case 'commentSuper':
+          this.commentLike(command);
+          break;
+        case 'commentWow':
+          this.commentLike(command);
+          break;
+        case 'commentHaha':
+          this.commentLike(command);
           break;
         case 'link':
           window.location = '/litters';
@@ -950,7 +991,9 @@ parasails.registerPage('litter', {
 
 
     },
-
+    changeCloseComment(command) {
+      this.viewChangeComment = false;
+    },
 
     changeOpenComment(command) {
       this.viewChangeComment = true;
@@ -968,13 +1011,13 @@ parasails.registerPage('litter', {
         return false;
       }
       let data = {
-        id:this.commentId,
+        id: this.commentId,
         comment: this.commentUpdate,
-        instanceModuleId:this.instanceModuleId,
-        field:this.field,
+        instanceModuleId: this.instanceModuleId,
+        field: this.field,
 
       };
-console.log('data::: ' , data);
+      console.log('data::: ', data);
       io.socket.post('/api/v1/comments/update-one-comment', data, (dataRes, jwRes) => {
         this.errorMessages(jwRes);
         this.viewChangeComment = false;
@@ -1036,7 +1079,7 @@ console.log('data::: ' , data);
 
     async updatePhotoSetDescription() {
       this.fixDescription(this.photoSetDescriptionLength);
-
+      console.log('this.ruleFormEdit:::', this.ruleFormEdit.dateShooting);
       let data = {
         id: this.litter.id,
         indexPhotoSet: this.indexPhotoSet,
@@ -1199,52 +1242,29 @@ console.log('data::: ' , data);
     // Выбираем все буквы помётов
     async letterList() {
       await
-      io.socket.get(`/api/v1/litters/list-letter`, function gotResponse(body, response) {
-        // console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
-      });
+        io.socket.get(`/api/v1/litters/list-letter`, function gotResponse(body, response) {
+          // console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
+        });
       // Принимаем данные по событию list-*
       await
-      io.socket.on('list-letter', (data) => {
+        io.socket.on('list-letter', (data) => {
 
-        // console.log('data letters::', data);
-        this.letters = data;
-      });
+          // console.log('data letters::', data);
+          this.letters = data;
+        });
     },
+    getLikes: function (likes) {
+      console.log('likes::: ', likes.length);
+      this.countCommentLike = _.pluck(likes, 'like').length;
+      this.countCommentWow = _.pluck(likes, 'wow').length;
+      this.countCommentSuper = _.pluck(likes, 'super').length;
+      this.countCommentHaha = _.pluck(likes, 'haha').length;
+      this.likeId = _.last(_.uniq(_.pluck(likes, 'comment')));
+      console.log(' this.likeId:::', this.likeId);
+      this.countCommentAll = likes.length;
+      return (likes.length > 0);
 
-    // Очищаем localStorage от удалённых комментариев
-/*
-    deleteViewed(puppyPhotoSet) {
-      // localStorage.clear();
-      let a = [];
-      let all = JSON.parse(localStorage.getItem('__c'));
-      _.isArray(all) ? puppyPhotoSet.comments.map(com => {
-        let o = _.zipObject([[com.indexPhotoSet, com.id]]);
-        // console.log('aaaOOO: ', o);
-        // console.log('FILTER::: ', _.filter(all, o));
-        (_.filter(all, o).length > 0) ? a.push(_.filter(all, o)) : '';
-      }) : '';
-      localStorage.clear();
-      localStorage.setItem('__c', JSON.stringify(_.flatten(a)));
     },
-    deleteViewed2(puppyPhotoSet) {
-      // localStorage.clear();
-      console.log('puppyPhotoSet.indexPhotoSet::: ', puppyPhotoSet.indexPhotoSet);
-      let a;
-      let all = JSON.parse(localStorage.getItem('__c'));
-      _.isArray(all) ? all.map(com => {
-        console.log('com::: ', com);
-        a = _.zipObject([['id', com[puppyPhotoSet.indexPhotoSet]]]);
-        console.log('DDDDDDDDD::: ', a);
-        console.log('aaaOOO: ', _.reject(puppyPhotoSet.comments, a));
-
-
-      }) : '';
-      // let newLocalStorage = _.difference(a, all);
-      // console.log('newLocalStorage::: ', newLocalStorage);
-      // localStorage.clear();
-      // localStorage.setItem('__c', JSON.stringify(_.flatten(a)));
-    },
-*/
 
     // Выбираем все комментарии
     commentList: async function (field) {
@@ -1325,7 +1345,7 @@ console.log('data::: ' , data);
         indexPhotoSet: this.ruleForm.show
       };
       await
-      io.socket.post('/api/v1/comments/add-comment', data, (dataRes, response) => {
+        io.socket.post('/api/v1/comments/add-comment', data, (dataRes, response) => {
           // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
@@ -1343,7 +1363,7 @@ console.log('data::: ' , data);
               type: 'error'
             });
           }
-      });
+        });
 
     },
 
@@ -1374,25 +1394,62 @@ console.log('data::: ' , data);
       };
 
       let sel = this;
-      await
-      io.socket.post('/api/v1/likes/add-like', data, (dataRes, response) => {
-          // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-          (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-            (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
-              (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+      await io.socket.post('/api/v1/likes/add-like', data, (dataRes, response) => {
+        // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+        (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
+            (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
 
-          if (response.statusCode === 200) {
-            this.comment = '';
+        if (response.statusCode === 200) {
+          this.comment = '';
 
-            //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
-            // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
-          } else {
-            sel.$message({
-              message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
-              type: 'error'
-            });
-          }
+          //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+          // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
+        } else {
+          sel.$message({
+            message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
+            type: 'error'
+          });
+        }
+      });
+    },
+
+
+    // Добавить лайки к комментариям
+    async commentLike(command) {
+      console.log('photoSet:: ', command.photoSet);
+      console.log('photoSet:: ', command.commentId);
+      let data = {
+        instanceModuleId: this.litter.id,
+        like: command.like,
+        commentId: command.commentId,
+        nameModule: this.nameModule,
+        userName: this.me.fullName,
+        field: command.field,
+        letter: this.litter.letter,
+        indexPhotoSet: command.photoSet.indexPhotoSet
+      };
+
+      let sel = this;
+      await io.socket.post('/api/v1/likes/comment-like', data, (dataRes, response) => {
+        // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+        (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
+            (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+
+
+        if (response.statusCode === 200) {
+          this.comment = '';
+
+          //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+          // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
+        } else {
+          sel.$message({
+            message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
+            type: 'error'
+          });
+        }
       });
     },
 

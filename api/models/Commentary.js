@@ -73,10 +73,14 @@ module.exports = {
     owner: {
       model: 'user',
       description: 'Комментарий может принадлежать только одному пользователю. One to Many'
-     // columnName: 'id'
     },
 
 
+    likes: {
+      collection: 'like',
+      via: 'comment',
+      description: 'У комментария, может быть много лайков. One to Many'
+    },
 
   },
 

@@ -77,6 +77,7 @@
     "Region": true,
     "Color": true,
     "Commentary": true,
+    "Like": true,
     "Image": true
 
     // …and any others.
