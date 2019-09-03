@@ -83,24 +83,19 @@ module.exports = {
     if (!litter) {
       throw 'badRequest';
     }
-console.log('inputs.dateShooting: ' , inputs.dateShooting);
+
     await _.each(litter.puppies, async (pup, i) => {
       pup.descriptionPhotoSession = (i === inputs.indexPhotoSet) ? inputs.descriptionPhotoSession : pup.descriptionPhotoSession;
       pup.dateShooting = (i === inputs.indexPhotoSet) ? inputs.dateShooting : '';
       pup.showShootingDate = (i === inputs.indexPhotoSet) ? inputs.showShootingDate : pup.showShootingDate;
     });
 
-   let u= await Litter.updateOne({id: inputs.id})
+    let u = await Litter.updateOne({id: inputs.id})
       .set({
         puppies: litter.puppies
       });
 
-console.log('бновили: ', u);
-    // await sails.sockets.broadcast(inputs.collection, `list-${inputs.collection}`);
 
-    // All done.
     return exits.success();
   }
-
-
 };

@@ -106,7 +106,6 @@ module.exports = {
       field: inputs.field,
       userName: inputs.userName,
       indexPhotoSet: inputs.indexPhotoSet,
-      // avatarUrl: (user.defaultIcon === 'avatar') ? user.avatar : user.gravatar,
       owner: req.me.id
     }).fetch();
 

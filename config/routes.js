@@ -128,7 +128,7 @@ module.exports.routes = {
   'POST    /api/v1/comments/add-comment': {action: 'comments/add-comment', csrf: false},
   'GET     /api/v1/comments/list-comment/:instanceModuleId/:field': {action: 'comments/list-comment'},
   'POST  /api/v1/comments/destroy-one-comment': {action: 'comments/destroy-one-comment', csrf: false},
-  'POST    /api/v1/comments/change-one-comment': {action: 'comments/change-one-comment', csrf: false},
+  'POST    /api/v1/comments/update-one-comment': {action: 'comments/update-one-comment', csrf: false},
 
 
   'POST    /api/v1/things/upload-thing': {action: 'things/upload-thing'},

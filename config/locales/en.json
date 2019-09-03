@@ -502,5 +502,7 @@
 	"Wow": "Wow",
 	"Ha-Ha": "Ha-Ha",
 	"Change": "Change",
-	"comment": "comment"
+	"comment": "comment",
+	"The field cannot be empty": "The field cannot be empty",
+	"Last update": "Last update"
 }
