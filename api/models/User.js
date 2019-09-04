@@ -344,7 +344,8 @@ It just means they have a customer entry in Stripe, which might or might not hav
       groups - читаем как: пользователь принадлежит к группе доступа, users - ключ для 
       объединяющей таблицы.`
     },
-
+    // Добавить пользователя alexFox.id в группу 'admin'
+    // await User.addToCollection(alexFox.id, 'groups', group.id);
 
     kennels: {
       collection: 'kennel',

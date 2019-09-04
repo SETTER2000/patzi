@@ -504,5 +504,6 @@
 	"Change": "Change",
 	"comment": "comment",
 	"The field cannot be empty": "The field cannot be empty",
-	"Last update": "Last update"
+	"Last update": "Last update",
+	"answered": "answered"
 }

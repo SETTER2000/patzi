@@ -274,10 +274,6 @@ parasails.registerPage('litters-home', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     async getList() {
-      /*   await io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
-           console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-         });*/
-
       await io.socket.get(`/api/v1/litters/list`, function gotResponse(body, response) {
         // console.log('Сервер litters/list ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
@@ -285,7 +281,6 @@ parasails.registerPage('litters-home', {
       // Принимаем данные по событию list-*
       await io.socket.on('list-litter', (data) => {
         this.litters = data;
-        // console.log('this.litters: ', this.litters);
       });
 
 
@@ -331,30 +326,21 @@ parasails.registerPage('litters-home', {
     // Это кнопка вызывает модальное окно "Upload <modal>" с <ajax-form> для загрузки фото
     clickAddButton: function () {
       this.warning = this.i19p.warnNoDogs;
-      // this.centerDialogAdded=true;
        (this.sires.length > 0 && this.dams.length > 0) ? this.goto(`/litters/new`) : this.centerDialogVisibleWarnings = true;
-
-      // return (this.sires.length > 0 && this.dams.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
     },
 
     handlerCloseDialogLitterAdd() {
-      // this.photos = [];
       this.goto(`/litters`);
-      // this.indexPhoto = 0;
-      // this.autoplay = false;
     },
     // Обработчик события нажатия на кнопку|иконку "Add an item"|вертлюжок на странице
     // Это кнопка вызывает модальное окно "ShowPhoto <modal>" с <ajax-form> для загрузки фото
     clickShowPhoto: function () {
       this.showLitterModalOpen = true;
-      // this.selectedLitter = _.find(this.litters, {id: litterId});
     },
 
     // Обнуляет данные формы загрузки объекта, очищает поля формы
     _clearUploadLitterModal: function () {
-      // Close modal
       this.goto('/litters');
-      // Reset form data
       this.uploadFormData = {
         photo: undefined,
         previewImageSrc: '',
@@ -368,30 +354,24 @@ parasails.registerPage('litters-home', {
         ourPreliminaryPrice: undefined,
         currency: undefined,
       };
-      // Clear error states
       this.formErrors = {};
       this.cloudError = '';
     },
 
     _clearBorrowLitterModal: function () {
-      // Close modal
       this.borrowLitterModalOpen = false;
-      // Reset form data
       this.borrowFormData = {
         expectedReturnAt: undefined,
         preliminaryPrice: undefined,
         ourPreliminaryPrice: undefined
       };
       this.selectedLitter = undefined;
-      // Clear error states
       this.formErrors = {};
       this.cloudError = '';
     },
 
     closeUploadLitterModal: function () {
       this._clearUploadLitterModal();
-      /*this.selectedLitter = undefined;
-      this.uploadLitterModalOpen = false;*/
     },
 
     handleParsingUploadLitterForm: function () {
@@ -408,12 +388,7 @@ parasails.registerPage('litters-home', {
       if (!argins.label) {
         this.formErrors.label = true;
       }
-      /*if (!argins.gender) {
-        this.formErrors.gender = true;
-      }*/
-      /* if (!argins.type) {
-         this.formErrors.type = true;
-       }*/
+
 
 
       // If there were any issues, they've already now been communicated to the user,
@@ -433,38 +408,6 @@ parasails.registerPage('litters-home', {
       return _.omit(argins, ['previewImageSrc']);
     },
 
-
-    /**
-     * Обрабатывает success от сервера, при загрузки файла без ошибок.
-     * Т.е. как только форма загрузки файла на сервере отработала без ошибок
-     * эта функция получает результат и должна вставить новые данные на страницу.
-     */
-    // submittedUploadLitterForm: function (result) {
-    //   console.log('this.uploadFormData.born:', this.uploadFormData.born);
-    //   // Добавлем новые данные в уже имеющийся массив litters
-    //   console.log(this.uploadFormData);
-    //   this.litters.push({
-    //     label: this.uploadFormData.label,
-    //     gender: this.uploadFormData.gender,
-    //     type: this.uploadFormData.type,
-    //     detail: result.detail,
-    //     preliminaryPrice: this.uploadFormData.preliminaryPrice,
-    //     ourPreliminaryPrice: this.uploadFormData.ourPreliminaryPrice,
-    //     currency: this.uploadFormData.currency,
-    //     id: result.id,
-    //     imageSrc: result.imageSrc,
-    //     title: this.uploadFormData.title,
-    //     sire: this.uploadFormData.sire,
-    //     dam: this.uploadFormData.dam,
-    //     subtitle: this.uploadFormData.subtitle,
-    //     born: moment(this.uploadFormData.born).locale(this.me.preferredLocale).format('LL'),
-    //     owner: {
-    //       id: this.me.id,
-    //       fullName: this.me.fullName,
-    //     },
-    //   });
-    //   this._clearUploadLitterModal();
-    // },
 
     changeFileInput: function (files) {
       if (files.length !== 1 && !this.uploadFormData.photo) {
@@ -501,13 +444,6 @@ parasails.registerPage('litters-home', {
     },
 
 
-    // clickBorrow: function (litterId) {
-    //   this.selectedLitter = _.find(this.litters, {id: litterId});
-    //
-    //   // Open the modal.
-    //   this.borrowLitterModalOpen = true;
-    // },
-
     closeBorrowLitterModal: function () {
       this._clearBorrowLitterModal();
     },
@@ -530,8 +466,6 @@ parasails.registerPage('litters-home', {
       }
 
 
-      // argins.expectedReturnAt = this.$refs.datepickerref.doParseDate().getTime();
-
       // If there were any issues, they've already now been communicated to the user,
       // so simply return undefined.  (This signifies that the submission should be
       // cancelled.)
@@ -546,45 +480,16 @@ parasails.registerPage('litters-home', {
       return argins;
     },
 
-    // submittedBorrowLitterForm: function () {
-    //
-    //   // Show success message.
-    //   // Показать сообщение об успехе.
-    //   this.borrowFormSuccess = true;
-    //
-    //   // Update the borrowed item in the UI.
-    //   // Обновление элемента в пользовательском интерфейсе.
-    //   var borrowedItem = _.find(this.litters, {id: this.selectedLitter.id});
-    //   borrowedItem.borrowedBy = this.me;
-    // },
-
 
     handleRemove(file, fileList) {
-      // console.log('file:: ** :');
-      // console.log(file);
-      // console.log('fileList:: ** :');
-      // console.log(fileList);
       this.ruleForm.fileList = [];
       this.ruleForm.fileList = _.pluck(fileList, 'response');
-      // this.ruleForm.fileList = _.remove(this.ruleForm.fileList, file);
-      // console.log(' Remove this.ruleForm.fileList:: ',  this.ruleForm.fileList);
-
-      // this.ruleForm.fileList.push(fileList);
-      // this.ruleForm.fileList = fileList;
     },
 
     handleRemovePuppies(file, fileList) {
-      // console.log('file:: ** :');
-      // console.log(file);
-      // console.log('fileList:: ** :');
-      // console.log(fileList);
       this.ruleForm.fileListPuppies = [];
       this.ruleForm.fileListPuppies = _.pluck(fileList, 'response');
-      // this.ruleForm.fileList = _.remove(this.ruleForm.fileList, file);
       console.log(' Remove this.ruleForm.fileListPuppies: ', this.ruleForm.fileListPuppies);
-
-      // this.ruleForm.fileList.push(fileList);
-      // this.ruleForm.fileList = fileList;
     },
 
     handlePreview(file) {
@@ -624,7 +529,6 @@ parasails.registerPage('litters-home', {
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-sire', (data) => {
-        // console.log('sires: ', data);
         this.sires = data;
       });
     },
@@ -636,7 +540,6 @@ parasails.registerPage('litters-home', {
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-dam', (data) => {
-        // console.log('dams: ', data);
         this.dams = data;
       });
     },
@@ -652,7 +555,6 @@ parasails.registerPage('litters-home', {
     /* Авто поиск по собакам. Суки. */
     querySearchDams(queryString, cb) {
       let links = this.dams;
-      // console.log('LINKS querySearchDams: ', links);
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
       cb(results);
     },
@@ -695,44 +597,26 @@ parasails.registerPage('litters-home', {
         this.$message.error(`Picture size can not exceed ${size}MB!`);
       }
 
-      // else{
-      //   this.$message.info(this.i19p.successUploadFiles);
-      // }
-      // // setTimeout(()=>{  }, 3000);
-
-      // console.log('xxx file xxx: ', file);
-      // console.log('xxx fileList xxx: ', fileList);
-
       return isJPG && isLt2M;
-
     },
 
 
     handleSuccess(res, file) {
-      console.log('RESSS:', res);
-      // this.litters.images.push({imageSrc : URL.createObjectURL(file.raw)});
       this.ruleForm.fileList.push(res);
-      console.log('this.ruleForm.fileList YYY: ', this.ruleForm.fileList);
     },
 
 
     handleSuccessPuppies(res, file) {
-      console.log('Uploads Puppies:', res);
-      // this.litters.images.push({imageSrc : URL.createObjectURL(file.raw)});
-
       this.ruleForm.fileListPuppies.push(res);
-      console.log('this.ruleForm.fileListPuppies YYY: ', this.ruleForm.fileListPuppies);
     },
 
 
     // Выбираем все буквы помётов
     async letterList() {
       await io.socket.get(`/api/v1/litters/list-letter`, function gotResponse(body, response) {
-        console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-letter', (data) => {
-        console.log('letter: ', data);
         this.letters = data;
       });
     },
@@ -740,13 +624,10 @@ parasails.registerPage('litters-home', {
 
 
     fixLetter() {
-      // console.log('this.letters: ', this.letters);
       return (_.find(this.letters, letter => letter.letter === this.ruleForm.letter.toUpperCase())) ? this.mesError(text = 'Такой помёт уже существует. Измените букву помёта.') :
         this.ruleForm.letter;
     },
     async addLitter() {
-      // this.$refs.upload.submit();
-      // console.log('this.ruleForm.fileList: ****||| ', this.ruleForm.fileList);
       this.openFullScreen();
       let data = {
         fileList: this.ruleForm.fileList,
@@ -767,7 +648,6 @@ parasails.registerPage('litters-home', {
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
-        // this.centerDialogAdded = false;
         this.goto('/litters');
         this.loading.close();
         if (jwRes.statusCode === 200) {

@@ -82,6 +82,20 @@ module.exports = {
       description: 'У комментария, может быть много лайков. One to Many'
     },
 
+    parent: {
+      model: 'commentary'
+    },
+
+    child: {
+      collection: 'commentary',
+      via: 'parent',
+      description: 'Комментарий может принадлежать только одному родительскому комментарию. One to Many'
+    },
+    // Добавить новый комментарий newComment.id в группу 'admin'
+    // await Commentary.addToCollection(newComment.id, 'child', parent.id);
+
+    // Добавить пользователя alexFox.id в группу 'admin'
+    // await User.addToCollection(alexFox.id, 'groups', group.id);
   },
 
 };

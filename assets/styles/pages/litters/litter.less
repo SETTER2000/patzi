@@ -61,6 +61,10 @@
     }
     */
 
+  .replay-open{
+    display: block;
+  }
+
   .divider-row {
     border-bottom: 1px solid #454d5630;
   }
@@ -157,10 +161,11 @@
   }
 
   .comm {
+
     position: relative;
   }
   .comm > ul {
-    position: absolute;
+    //position: absolute;
     left: 10px;
   }
   .comm > ul li {
@@ -187,13 +192,20 @@
   .comment {
     margin-bottom: 2px;
   }
+  .comment.wid{
+      width: 100%;
+  }
   li.comm > .comment > a.user-comment:hover {
     text-decoration: underline !important;
 
   }
   ul.hr {
+    width: 100%;
     margin: 20px 0 35px 5px; /* Обнуляем значение отступов */
     padding: 0; /* Значение полей */
+  }
+  ul.hr.child{
+    margin-left: 50px;
   }
   ul.hr li {
     // display: inline; /* Отображать как строчный элемент */

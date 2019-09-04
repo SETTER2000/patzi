@@ -24,6 +24,13 @@ module.exports = {
     },
 
 
+    parent: {
+      type: 'string',
+      example: '5d5fc8aac1717d2778adbfae',
+      description: `Идентификатор родительского комментария.`
+    },
+
+
     indexPhotoSet: {
       type: 'string',
       example: '2911bfggfhahdd',
@@ -96,7 +103,7 @@ module.exports = {
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «comment».
     await sails.sockets.join(req, 'comment');
-
+    let module;
 
     // Записываем комментарий
     let newComment = await Commentary.create({
@@ -113,8 +120,10 @@ module.exports = {
       throw 'badRequest';
     }
 
-    // console.log('newComment::: ', newComment);
-    let module;
+    // Добавить новый комментарий newComment.id в группу 'admin'
+    let newCommentary = inputs.parent ?  await Commentary.addToCollection(inputs.parent, 'child', newComment.id) : '';
+    console.log('newCommentary::: ', newCommentary);
+
 
     // console.log(`MODULE ::: ${inputs.nameModule}`, inputs.nameModule);
     switch (inputs.nameModule) {

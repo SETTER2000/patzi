@@ -7,8 +7,11 @@ parasails.registerPage('litter', {
     viewChangeComment: false,
     dialogPedigreeVisible: true,
     likeId: '',
+    newCom: false,
+    comId:'',
     instanceModuleId: '',
     like: '',
+    openReplay: false,
     // com:{likes:[]},
     countCommentLike: 0,
     countCommentWow: 0,
@@ -35,6 +38,7 @@ parasails.registerPage('litter', {
     commentsLengthNew: 0,
     comments: [],
     comment: '',
+    commentChild: '',
     commentUpdate: '',
     commentId: '',
     indexPhotoSet: 0,
@@ -78,6 +82,7 @@ parasails.registerPage('litter', {
     photos: '',
     commentForm: {
       comment: '',
+      commentChild: ''
     },
     ruleForm: {
       show: undefined,
@@ -162,7 +167,7 @@ parasails.registerPage('litter', {
         textUrlErr: 'Invalid URL field. Data transfer protocol not specified. For example: http:// or https:// ',
         successUploadFiles: `Files uploaded successfully!`,
         titlePuppies: `Puppies`,
-        titleParents: `Parents`,
+        titlechilds: `childs`,
         getFormatDateLocale: `yyyy-MM-dd`,
         getFormatDateTimeLocale: `yyyy-MM-dd HH:mm:ss`,
       }],
@@ -185,7 +190,7 @@ parasails.registerPage('litter', {
         textUrlErr: 'Не верно заполнено поле УРЛ. Не указан протокол передачи данных. Например:  http:// or https:// ',
         successUploadFiles: `Файлы успешно загружены!`,
         titlePuppies: `Щенки`,
-        titleParents: `Родители`,
+        titlechilds: `Родители`,
         getFormatDateLocale: `dd.MM.yyyy`,
         getFormatDateTimeLocale: `dd.MM.yyyy HH:mm:ss`,
       }]
@@ -274,7 +279,8 @@ parasails.registerPage('litter', {
             puppyPhotoSet.comments.push(data.comments);
           }
         });
-        this.$forceUpdate();
+        this.commentList('puppies');
+        // this.$forceUpdate();
       }
     });
 
@@ -404,6 +410,12 @@ parasails.registerPage('litter', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+
+    openReplayFun(commentId) {
+      this.openReplay = true;
+      this.commentId = commentId;
+    },
+
     // Like SVG animation
     likeSvg() {
       let like = document.querySelector('#like');
@@ -578,7 +590,7 @@ parasails.registerPage('litter', {
       this.dialogTableVisible = true;
       this.litterId = this.litter.id;
       this.photos = this.litter.images;
-      this.title = this.i19p.titleParents;
+      this.title = this.i19p.titlechilds;
       this.indexSlide = indexPhoto;
       this.handlerSetActiveSlider();
       setTimeout(() => {
@@ -1001,7 +1013,7 @@ parasails.registerPage('litter', {
         nameModule: this.nameModule,
         indexPhotoSet: command.comment.indexPhotoSet
       };
-      console.log('Перед отправкой data: ', data);
+      // console.log('Перед отправкой data: ', data);
       io.socket.post('/api/v1/comments/destroy-one-comment', data, (dataRes, jwRes) => {
         this.errorMessages(jwRes);
         this.dialogDeletePhotoSession = false;
@@ -1350,41 +1362,44 @@ parasails.registerPage('litter', {
 
 
     // Добавить комментарий
-    async addComment(field) {
+    async addComment(field, parentId) {
       this.field = field;
-      if (_.isEmpty(this.comment)) {
+      if (_.isEmpty(this.comment) && _.isEmpty(this.commentChild)) {
         return false;
       }
       let sel = this;
       let data = {
         instanceModuleId: this.litter.id,
-        comment: this.comment,
+        comment: this.comment ? this.comment : this.commentChild,
         nameModule: this.nameModule,
         userName: this.me.fullName,
         field: field,
         letter: this.litter.letter,
-        indexPhotoSet: this.ruleForm.show
+        indexPhotoSet: this.ruleForm.show,
+        parent: parentId
       };
-      await
-        io.socket.post('/api/v1/comments/add-comment', data, (dataRes, response) => {
-          // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-          (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-            (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
-              (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+      console.log('Перед отправкой data: ', data);
+      await io.socket.post('/api/v1/comments/add-comment', data, (dataRes, response) => {
+        // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+        (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
+            (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
 
-          if (response.statusCode === 200) {
-            this.comment = '';
+        if (response.statusCode === 200) {
+          this.comment = '';
+          this.commentChild = '';
+          this.openReplay = false;
 
-            //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
-            // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
-          } else {
-            sel.$message({
-              message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
-              type: 'error'
-            });
-          }
-        });
+          //  data.avatarUrl = this.me.defaultIcon === 'gravatar' ? this.me.gravatar : this.me.avatar;
+          // _.isArray(this.litter.puppies[this.ruleForm.show].comments) ? this.litter.puppies[this.ruleForm.show].comments.push(data) : this.litter.puppies[this.ruleForm.show].comments = [data];
+        } else {
+          sel.$message({
+            message: `${this.i19p.textOneErr} ${response.statusCode}! ${this.i19p.textTwoErr}`,
+            type: 'error'
+          });
+        }
+      });
 
     },
 
@@ -1483,8 +1498,11 @@ parasails.registerPage('litter', {
 
     handleChange(val) {
       console.log(val);
+    },
+    newComOpen(id) {
+      this.newCom = !this.newCom;
+      this.comId = id;
     }
-
   },
 });
 

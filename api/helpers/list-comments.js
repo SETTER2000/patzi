@@ -43,6 +43,7 @@ module.exports = {
       instanceModuleId: inputs.instanceModuleId,
       field: inputs.field
     })
+      .populate('child')
       .populate('likes')
       .populate('owner');
     // console.log('FFF:: ', `${inputs.instanceModuleId}/${inputs.field}`);
