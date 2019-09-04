@@ -948,14 +948,16 @@
                                         <div><%= __('Your opinion is important and necessary for us. Leave your comment regarding this litter.') %></div>
                                         <div><%= __('Perhaps you have questions that you would like to receive answers from the nursery. Write to us, we will be happy to answer you.') %></div>
                                         <transition-group name="fade" appear>
-                                          <ul class="hr" v-for="(com,index) in photoSet.comments" :key="com.id">
+                                          <ul class="hr" v-if="_.isNull(com.parent)"
+                                              v-for="(com,index) in photoSet.comments" :key="com.id">
                                             <li class="avat">
                                               <div class="avat">
                                                 <el-avatar :size="35" :src="com.avatarUrl"></el-avatar>
                                               </div>
                                             </li>
                                             <li class="comm">
-                                              <div class="comment">
+                                              <div class="comment"
+                                                   :class="{'wid': (viewChangeComment && commentId === com.id)}">
                                                 <el-tooltip v-if="!_.isEmpty(com.kennels)" class="item" effect="light"
                                                             :content="`<%= __('Kennel') %>: ${com.kennels.name} (${com.kennels.countryName})`"
                                                             placement="bottom-start">
@@ -966,24 +968,15 @@
                                                       :class="{'font-weight-bold':com.notViewed}"
                                                       @click="viewed(com.id,photoSet, $event)">
                                                     {{com.comment}}
-                                                  <!--<template >-->
-                                                  <!--<span class="like-comment" v-for="(lk, index) in  com.likes" :key="index +  '-lkNm'">-->
-                                                  <!--<el-tooltip class="item" effect="dark" content="Top Center prompts info" placement="top">-->
-                                                  <!--<el-row>-->
-                                                  <!--<el-button icon="ti-thumb-up" style="padding: 2px; color: #8d949e;font-size: 11px;">-->
-                                                  <!--{{lk.like | countAll(com.likes)}}-->
-                                                  <!--</el-button>-->
-                                                  <!--</el-row>-->
-                                                  <!--</el-tooltip>-->
-                                                  <!--</span>-->
-                                                  <!--</template>-->
-                                                  <!--{{com.comment}} <span >{{getLikes(com.likes)}} <span v-if="com.id ===likeId">{{countCommentAll}}</span></span>-->
-                                                  </span>
+                                                     </span>
                                                 <span v-if="viewChangeComment && commentId === com.id"
                                                       class="comment-text">
                                                     <el-form @submit.native.prevent>
                                                       <el-form-item>
                                                         <el-input
+                                                          type="textarea"
+                                                          :rows="2"
+                                                          style="width: 100%"
                                                           @keyup.enter.native="changeComment()"
                                                           @blur="changeCloseComment()"
                                                           autofocus="true"
@@ -998,8 +991,9 @@
                                                        </el-form-item>
                                                     </el-form>
                                                   </span>
+
                                               </div>
-                                              <ul class="sub-string">
+                                              <ul class="sub-string ">
                                                 <li>
                                                   <el-dropdown placement="top" @command="handleCommand">
                                                     <span class="el-dropdown-link pointer" style="color:#385898;">
@@ -1026,7 +1020,8 @@
                                                     </el-dropdown-menu>
                                                   </el-dropdown>
                                                 </li>
-                                                <li><%= __('Replay') %></li>
+                                                <li @click="openReplayFun(com.id)"><%= __('Replay') %> </li>
+
                                                 <li>
                                                   <el-tooltip class="item" effect="dark"
                                                               :content="com.createdAt | getCreate(me.preferredLocale,'LL')"
@@ -1091,9 +1086,212 @@
                                                   </template>
                                                 </li>
                                               </ul>
+                                              <ul v-if="openReplay && commentId === com.id">
+                                                <li class="replay-open">
+                                                  <% /* Поле ввода Replay комментария */ %>
+                                                  <el-form @submit.native.prevent>
+                                                    <el-form-item>
+                                                      <el-input @keyup.enter.native="addComment('puppies', com.id)"
+                                                                style="width: 90%;"
+                                                                class="mt-2"
+                                                                maxLength="1000"
+                                                                clearable
+                                                                placeholder="<%= __('Write a comment') %>"
+                                                                v-model="commentChild">
+                                                        <i slot="prefix"
+                                                           class="el-input__icon el-icon-chat-line-round"></i>
+                                                        <template slot="prepend">
+                                                          <el-avatar :size="35" :src="srcAvatar"></el-avatar>
+                                                        </template>
+                                                      </el-input>
+                                                    </el-form-item>
+                                                  </el-form>
+                                                </li>
+                                              </ul>
                                             </li>
-                                          </ul>
 
+
+                                            <template v-if="com.child">
+
+                                              <el-link style="color: rgb(56, 88, 152); margin-left: 50px" :underline="false" v-if="_.isArray(com.child) && com.child.length>0" icon="el-icon-caret-right" @click="newComOpen(com.id)" type="primary">
+                                                {{ com.child[0].userName}} <%= __('answered') %></el-link>
+
+                                                <ul  class="hr child" v-for="(cm,index) in com.child"
+                                                    :key="cm.id + '-child1'">
+
+                                                  <div v-if="newCom && (comId === cm.parent)">
+                                                  <li class="avat">
+                                                    <div class="avat">
+                                                      <el-avatar :size="35" :src="cm.avatarUrl"></el-avatar>
+                                                    </div>
+                                                  </li>
+                                                  <li class="comm">
+                                                    <div class="comment"
+                                                         :class="{'wid': (viewChangeComment && commentId === cm.id)}">
+                                                      <el-tooltip v-if="!_.isEmpty(cm.kennels)" class="item"
+                                                                  effect="light"
+                                                                  :content="`<%= __('Kennel') %>: ${cm.kennels.name} (${cm.kennels.countryName})`"
+                                                                  placement="bottom-start">
+                                                        <span class="user-comment">{{cm.userName}} </span>
+                                                      </el-tooltip>
+                                                      <span class="user-comment non" v-else>{{cm.userName}} </span>
+                                                      <span v-if="!viewChangeComment" class="comment-text"
+                                                            :class="{'font-weight-bold':cm.notViewed}"
+                                                            @click="viewed(cm.id,photoSet, $event)">
+                                                    {{cm.comment}}
+                                                     </span>
+                                                      <span v-if="viewChangeComment && commentId === cm.id"
+                                                            class="comment-text">
+                                                    <el-form @submit.native.prevent>
+                                                      <el-form-item>
+                                                        <el-input
+                                                          type="textarea"
+                                                          :rows="2"
+                                                          style="width: 100%"
+                                                          @keyup.enter.native="changeComment()"
+                                                          @blur="changeCloseComment()"
+                                                          autofocus="true"
+                                                          class="mt-2"
+                                                          maxLength="1000"
+                                                          placeholder="<%= __('The field cannot be empty') %>"
+                                                          clearable
+                                                          v-model="commentUpdate">
+                                                            <i slot="prefix"
+                                                               class="el-input__icon el-icon-chat-line-round"></i>
+                                                        </el-input>
+                                                       </el-form-item>
+                                                    </el-form>
+                                                  </span>
+
+                                                    </div>
+                                                    <ul class="sub-string ">
+                                                      <!--//sub Like-->
+                                                      <!--<li>
+                                                    <el-dropdown placement="top" @command="handleCommand">
+                                                    <span class="el-dropdown-link pointer" style="color:#385898;">
+                                                      &lt;!&ndash;<i class="ti-thumb-up"></i>&ndash;&gt;
+                                                      <%= __('Like') %>
+                                                    </span>
+                                                      <el-dropdown-menu slot="dropdown">
+                                                        <el-dropdown-item style="color:#2980B9;"
+                                                                          :command="{com:'commentLike', like:'like', commentId:com.id, photoSet:photoSet,field:'puppies'}"
+                                                                          icon="ti-thumb-up"><%= __('Like') %>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item style="color:#E84B3C;"
+                                                                          :command="{com:'commentSuper', like:'super', commentId:com.id, photoSet:photoSet,field:'puppies'}"
+                                                                          icon="ti-heart"> <%= __('Super') %>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item style="color:#ffb007;"
+                                                                          :command="{com:'commentWow', like:'wow', commentId:com.id, photoSet:photoSet,field:'puppies'}"
+                                                                          icon="el-icon-loading"><%= __('Wow') %>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item style="color:#9274a6;"
+                                                                          :command="{com:'commentHaha', like:'haha', commentId:com.id, photoSet:photoSet,field:'puppies'}"
+                                                                          icon="ti-face-smile"><%= __('Ha-Ha') %>
+                                                        </el-dropdown-item>
+                                                      </el-dropdown-menu>
+                                                    </el-dropdown>
+                                                  </li>-->
+                                                      <!--<li @click="openReplayFun(com.id)"><%= __('Replay') %> </li>-->
+
+                                                      <li>
+                                                        <el-tooltip class="item" effect="dark"
+                                                                    :content="cm.createdAt | getCreate(me.preferredLocale,'LL')"
+                                                                    placement="top-start">
+                                                          <el-link type="info" class="mt-0">
+                                                            <span> {{dateFrom(cm.updatedAt)}}</span>
+                                                          </el-link>
+                                                        </el-tooltip>
+                                                      </li>
+                                                      <li>
+                                                  <span v-if="me.isAdmin || me.isSuperAdmin || me.id === cm.ownerId">
+                                                    <el-dropdown @command="handleCommand">
+                                                      <span class="el-dropdown-link">
+                                                        <el-link :underline="false"> <i
+                                                            class="el-icon-more el-icon--right"></i></el-link>
+                                                      </span>
+                                                      <el-dropdown-menu slot="dropdown">
+                                                        <el-dropdown-item icon="el-icon-edit-outline"
+                                                                          :command="{com:'changeComment',comment:cm}">
+                                                          <%= __('Change') %> <%= __('comment') %>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item icon="el-icon-delete-solid"
+                                                                          :command="{com:'deleteComment',comment:cm}">
+                                                          <%= __('Delete') %> <%= __('comment') %>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item :divided="true" disabled
+                                                                          v-if="litter.createdAt" icon="el-icon-date"
+                                                                          command="">
+                                                          <%= __('Date publication') %> : <br>{{cm.createdAt | getCreate(me.preferredLocale,'dddd, D MMMM YYYY, HH:mm:ss')}}
+                                                        </el-dropdown-item>
+
+                                                        <el-dropdown-item v-if="cm.updatedAt !== cm.createdAt"
+                                                                          :divided="true" disabled
+                                                                          v-if="litter.createdAt" icon="el-icon-date"
+                                                                          command="">
+                                                          <%= __('Last update') %> : <br>{{cm.updatedAt | getCreate(me.preferredLocale,'dddd, D MMMM YYYY, HH:mm:ss')}}
+                                                        </el-dropdown-item>
+                                                      </el-dropdown-menu>
+                                                    </el-dropdown>
+                                                  </span>
+                                                      </li>
+                                                      <li class="likes"
+                                                          v-if="_.isArray(cm.likes) && cm.likes.length>0">
+                                                        <template>
+                                                    <span class="like-comment">
+                                                     <el-tooltip effect="dark" content="Top Center prompts info"
+                                                                 placement="top">
+                                                         <div slot="content">
+                                                           <ul>
+                                                             <li v-for="(lk, index) in cm.likes" :key="index + '-lk'">
+                                                               {{lk.like}}: <span style="color: #a5b2b8;">{{ lk.userName}}</span>
+                                                             </li>
+                                                             </ul>
+                                                         </div>
+                                                       <el-row>
+                                                         <el-button icon="ti-thumb-up"
+                                                                    style="padding: 2px; color: #8d949e;font-size: 11px;">
+                                                           <!--{{lk.like | countAll(com.likes)}}--> {{cm.likes.length}}
+                                                         </el-button>
+                                                       </el-row>
+                                                     </el-tooltip>
+                                                    </span>
+                                                        </template>
+                                                      </li>
+                                                    </ul>
+
+
+
+
+                                                    <ul v-if="openReplay && commentId === com.id">
+                                                      <li class="replay-open">
+                                                        <% /* Поле ввода Replay комментария */ %>
+                                                        <!--  <el-form @submit.native.prevent>
+                                                      <el-form-item>
+                                                        <el-input @keyup.enter.native="addComment('puppies', com.id)"
+                                                                  style="width: 90%;"
+                                                                  class="mt-2"
+                                                                  maxLength="1000"
+                                                                  clearable
+                                                                  placeholder="<%= __('Write a comment') %>"
+                                                                  v-model="commentChild">
+                                                          <i slot="prefix"
+                                                             class="el-input__icon el-icon-chat-line-round"></i>
+                                                          <template slot="prepend">
+                                                            <el-avatar :size="35" :src="srcAvatar"></el-avatar>
+                                                          </template>
+                                                        </el-input>
+                                                      </el-form-item>
+                                                    </el-form>-->
+                                                      </li>
+                                                    </ul>
+                                                  </li>
+                                                  </div>
+                                                </ul>
+
+                                            </template>
+
+                                          </ul>
                                         </transition-group>
                                         <% /* Поле ввода комментария */ %>
                                         <el-form @submit.native.prevent>
