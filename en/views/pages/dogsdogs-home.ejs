@@ -635,6 +635,7 @@
         <!--<button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add dog') %></button>-->
         <el-button @click="clickAddButton()" class="btn btn-outline-info"
                    icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
+
       </div>
       <div class="mt-5 section-title text-center" v-else>
         <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"
@@ -668,7 +669,15 @@
 
             <el-col class="flex-item" v-for="(dog, index) in dogs" :key="dog.id"
                     :xs="24" :sm="24" :md="24" :lg="10" :xl="11">
-              <div class="ell-image-flex" v-if="!_.isEmpty(dog.imagesArrUrl)">
+              <div    @mouseover="showMenu(dog.id)"  @mouseout="showOut()" style="  position: relative;" class="ell-image-flex" v-if="!_.isEmpty(dog.imagesArrUrl)">
+
+                <transition  name="el-zoom-in-top">
+                  <div v-show="show2 && (showDog === dog.id)"  class="transition-box">
+                    <!--<el-button icon="el-icon-more" circle plain type="warning"></el-button>-->
+                    <el-link :href="dog.detail" :underline="false" icon="el-icon-more" type="warning"></el-link>
+                  </div>
+                </transition>
+
                 <el-image
                   :src="dog.cover"
                   :key="dog.id"
