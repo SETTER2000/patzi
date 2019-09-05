@@ -125,14 +125,22 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-
+    let fileList;
 
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
 
-console.log('inputs.fileList DOG-create: ', inputs.fileList);
-    let list  = _.pluck(inputs.fileList, 'response');
+// console.log('inputs.fileList DOG-create: ', inputs.fileList);
+    if (inputs.fileList) {
+      fileList = inputs.fileList.filter(o => !_.isNull(o));
+      _.each(fileList, img => {
+        img.id =_.first(_.last(img.fd.split('\\')).split('.'));
+        delete img.filename;
+        delete img.status;
+        delete img.field;
+      });
+    }
 
 
     // Удаляем название питомника из имени собаки
@@ -161,17 +169,23 @@ console.log('inputs.fileList DOG-create: ', inputs.fileList);
       weight: inputs.weight,
       growth: inputs.growth,
       type:   inputs.type,
+      images: fileList,
       color:  inputs.color,
       stamp:  inputs.stamp,
     }).fetch();
 
     // Если масиив с фотографиями не пустой, то добавляем его в коллекцию Image
-    if (!_.isEmpty(list)) {
-      // Записываем фото на собаку
-      let image = await Image.create({
-        img: list,
-        dog: newDog.id
-      }).fetch();
+    // if (!_.isEmpty(list)) {
+    //   // Записываем фото на собаку
+    //   let image = await Image.create({
+    //     img: list,
+    //     dog: newDog.id
+    //   }).fetch();
+    // }
+    // Если не создан возвращаем ошибку.
+    if (!newDog) {
+
+      throw 'badRequest';
     }
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.

@@ -34,7 +34,7 @@ module.exports = {
     const url = require('url');
     const moment = require('moment');
 
-    let dogs = await Dog.find().populate('images');
+    let dogs = await Dog.find();
 
     if (!dogs) {
       throw 'notFound';

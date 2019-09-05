@@ -132,3 +132,4 @@ lib-cov
 *.docx
 config/local.js
 t1.txt
+assets/images/test

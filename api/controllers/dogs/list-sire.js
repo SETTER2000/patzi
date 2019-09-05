@@ -45,7 +45,7 @@ module.exports = {
 
 
     // Выбираем всех собак согласно гендорному признаку
-    let sires = await Dog.find({gender: 'sire'}).populate('kennel').populate('images');
+    let sires = await Dog.find({gender: 'sire'}).populate('kennel');
 
     // Определяем расположение названия питомника относительно имя собаки
     // и формируем динамически новое свойство value для элемента select

@@ -88,6 +88,14 @@ module.exports = {
       description: 'Клеймо. Номер собаки в реестре.',
       // example:'hairless, powderpuff',
     },
+
+    images: {
+      type: 'ref',
+      defaultsTo: [],
+      example: ['5d1f1b04fbe834262cbb8c53', '5d1f1b04fbe834262cbb8c54'],
+      description: `FD загруженных фотографий родителей`
+    },
+
     // weight: this.ruleForm.weight,
     // growth: this.ruleForm.growth,
     // type: this.ruleForm.type,
@@ -109,11 +117,11 @@ module.exports = {
       description: 'Собака может принадлежать только одному питомнику. One to Many'
     },
 
-    images: {
-      collection: 'image',
-      via: 'dog',
-      description: `У собаки, может быть много фотографий. One to Many.`
-    },
+    // images: {
+    //   collection: 'image',
+    //   via: 'dog',
+    //   description: `У собаки, может быть много фотографий. One to Many.`
+    // },
 
 
     // litters: {

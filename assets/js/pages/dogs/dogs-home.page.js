@@ -6,6 +6,7 @@ parasails.registerPage('dogs-home', {
     dogs: [],
     kennels: [],
     dams: [],
+    limit: 50,
     dialog:{},
     loading:{},
     fullscreenLoading: false,
@@ -14,12 +15,11 @@ parasails.registerPage('dogs-home', {
     warning: '',
     titleDialog: '',
     value: 0,
-
     valueColor: '',
     // Состояние загрузки
     syncing: false,
     // Ограничение размера одного файла картинки при загрузки
-    sizeLess: 500,
+    sizeLess: 1, // MB
     // Состояние ошибки сервера
     cloudError: '',
     subtitle:'',
@@ -90,13 +90,14 @@ parasails.registerPage('dogs-home', {
       registerNumber: ''
     }],
     ruleForm: {
-      file: undefined,
+      file: [],
       federations: [{
         key: 1,
         value: 'FCI',
         registerNumber: ''
       }],
       sire: '',
+      fileList: [],
       color:'',
       dam: '',
       gender: '',
@@ -232,10 +233,6 @@ parasails.registerPage('dogs-home', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     async getList() {
-      /*   await io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
-           console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-         });*/
-
       await io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
@@ -243,12 +240,11 @@ parasails.registerPage('dogs-home', {
       // Принимаем данные по событию list-*
       await io.socket.on('list-dog', (data) => {
         this.dogs = data;
-        // console.log('this.dogs: ', this.dogs);
+        console.log('this.dogs: ', this.dogs);
       });
       // Принимаем данные по событию list-*
       await  io.socket.on('list-continent', (data) => {
         this.continents = data;
-        // this.count = _.get(data, 'count') ?  data.count : this.count;
       });
 
     },
@@ -292,11 +288,6 @@ parasails.registerPage('dogs-home', {
     },
 
 
-    // handlePreview(file) {
-    //   console.log('function handlePreview: ', file);
-    // },
-
-
     // Срабатывает перед удалением одного файла
     handleRemove(file, fileList) {
       this.fileList = fileList;
@@ -305,7 +296,7 @@ parasails.registerPage('dogs-home', {
 
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.fileList = [];
+      this.ruleForm.fileList = [];
       this.ruleForm.imageUrl = '';
       this.ruleForm.federations = this.resetFederation;
     },
@@ -324,10 +315,9 @@ parasails.registerPage('dogs-home', {
 
 
     async addDog() {
-
       this.openFullScreen();
       let data = {
-        fileList: this.fileList,
+        fileList: this.ruleForm.fileList,
         label: this.ruleForm.label,
         dateBirth: JSON.stringify(this.ruleForm.dateBirth),
         gender: this.ruleForm.gender,
@@ -339,8 +329,6 @@ parasails.registerPage('dogs-home', {
         type: this.ruleForm.type,
         color: this.ruleForm.color,
         stamp: this.ruleForm.stamp,
-
-
         registerNumber: this.ruleForm.registerNumber,
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
@@ -357,7 +345,8 @@ parasails.registerPage('dogs-home', {
         this.loading.close();
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          this.ruleForm.file = [];
+          this.ruleForm.fileList=[];
+          // this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
           this.ruleForm.federations = this.resetFederation;
           this.getList();
@@ -419,11 +408,6 @@ parasails.registerPage('dogs-home', {
 
     getPullKennel() {
       return this.kennels;
-      // let t = this.continents.filter(continent => {
-      //   return continent.id === this.ruleForm.continent;
-      // });
-      // let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
-      // return _.sortBy(t[0].kennels, field);
     },
 
     showDialog(string) {
@@ -554,6 +538,35 @@ parasails.registerPage('dogs-home', {
 
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'value';
       return _.sortBy(this.colors, field);
+    },
+
+
+    beforeUpload(file) {
+      // Проверка размера входящего файла картинки не более (MB)
+
+      const isJPG = file.type === 'image/jpeg';
+      const isLt2M = file.size / 1024 / 1024 < this.sizeLess;
+
+      if (!isJPG) {
+        this.$message.error('Picture must be JPG format!');
+      }
+
+      if (!isLt2M) {
+        this.$message.error(`Picture size can not exceed ${this.sizeLess}MB!`);
+      }
+
+      return isJPG && isLt2M;
+    },
+
+    handleSuccess(res, file) {
+      this.ruleForm.fileList.push(res);
+    },
+
+    // функция перехвата при превышении лимита
+    handleExceed(files, fileList) {
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      ${files.length + fileList.length} ${this.i19p.files}`);
     },
 
   }

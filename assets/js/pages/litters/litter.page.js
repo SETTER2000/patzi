@@ -826,13 +826,9 @@ parasails.registerPage('litter', {
     async addPhotoSet() {
       this.fixDescription();
       let data = {
-        // fileList: this.ruleForm.sessionName,
         puppies: this.ruleForm.fileListPuppies,
         letter: this.litter.letter,
         year: this.litter.year,
-        // dam: this.getDamArr(),
-        // sire: this.getSireArr(),
-        // born: JSON.stringify(this.ruleForm.born),
         id: this.litter.id,
         sessionName: this.ruleForm.sessionName,
         descriptionPhotoSession: this.ruleForm.descriptionPhotoSession,
@@ -842,9 +838,6 @@ parasails.registerPage('litter', {
       this.dialogAddedPhotoSession = false;
       io.socket.post('/api/v1/litters/add-session-photo', data, (dataRes, jwRes) => {
         this.errorMessages(jwRes);
-
-        // this.loading.close();
-
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           this.ruleForm.fileListPuppies = [];

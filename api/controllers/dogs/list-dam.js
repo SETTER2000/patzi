@@ -45,7 +45,7 @@ module.exports = {
     await sails.sockets.join(req, 'dog');
 
     // Выбираем всех собак согласно гендорному признаку
-    let dams = await Dog.find({gender: 'dam'}).populate('kennel').populate('images');
+    let dams = await Dog.find({gender: 'dam'}).populate('kennel');
     // Определяем расположение названия питомника относительно имя собаки
     // и формируем динамически новое свойство value для элемента select
     _.each(dams, (dam) => {

@@ -1,10 +1,10 @@
 module.exports = {
 
 
-  friendlyName: 'View kennel',
+  friendlyName: 'View litter home',
 
 
-  description: 'Показать страницу "Kennel".',
+  description: 'Показать страницу "Помёта".',
 
 
   exits: {
