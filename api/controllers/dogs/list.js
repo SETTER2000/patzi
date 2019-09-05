@@ -87,8 +87,11 @@ module.exports = {
       // console.log('dog.kennel:: ' , dog.kennel);
       // dog.kennelName = dog.kennel ? await sails.helpers.fullNameKennel(dog.kennel.id) : '';
       dog.kennelName = dog.kennel.label;
+      dog.fullName = dog.kennel.right ? `${dog.label} ${dog.kennel.label}` : `${dog.kennel.label} ${dog.label}`;
+      dog.detail =  dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
       return dog;
     });
+    // /chinese-crested/:dogName
     await sails.sockets.broadcast('dog', 'list-dog', dogs);
 
     // Respond with view.

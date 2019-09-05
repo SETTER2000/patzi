@@ -4,11 +4,14 @@ parasails.registerPage('dogs-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     dogs: [],
+
     kennels: [],
     dams: [],
+    show2: false,
     limit: 50,
-    dialog:{},
-    loading:{},
+    dialog: {},
+    showDog: undefined,
+    loading: {},
     fullscreenLoading: false,
     sires: [],
     colors: [],
@@ -22,7 +25,7 @@ parasails.registerPage('dogs-home', {
     sizeLess: 1, // MB
     // Состояние ошибки сервера
     cloudError: '',
-    subtitle:'',
+    subtitle: '',
     dialogFormVisible: false,
     // form: {
     //   name: '',
@@ -98,7 +101,7 @@ parasails.registerPage('dogs-home', {
       }],
       sire: '',
       fileList: [],
-      color:'',
+      color: '',
       dam: '',
       gender: '',
       label: '',
@@ -127,7 +130,7 @@ parasails.registerPage('dogs-home', {
     ],
     litters: [],
     ratio: null,
-   // colors: ['#99A9BF', '#F7BA2A', '#FF9900'], // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+    // colors: ['#99A9BF', '#F7BA2A', '#FF9900'], // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
 
     dic: [
       ['en', {
@@ -140,8 +143,8 @@ parasails.registerPage('dogs-home', {
         selectGender: 'Please select a dog gender.',
         growth: 'How to measure a dog\'s height?',
         hairless: 'What is a down or naked dog?',
-        infoColor:'Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of dogs by color, but rather an attempt to provide more information on the appearance of the dog. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding dogs.',
-        whyColor:'Why determine the color.',
+        infoColor: 'Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of dogs by color, but rather an attempt to provide more information on the appearance of the dog. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding dogs.',
+        whyColor: 'Why determine the color.',
       }],
       ['ru', {
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
@@ -153,16 +156,16 @@ parasails.registerPage('dogs-home', {
         selectGender: 'Пожалуйста выберите пол собаки.',
         growth: 'Как измерить рост собаки?',
         hairless: 'Что такое пуховая или голая собака?',
-        infoColor:'Китайская хохлатая может иметь любое сочетание цветов, как предписано в стандарте FCI 288. <br>Данный пункт не относится к классификации собаки по по цветовому признаку, это скорее попытка дать больше информации по внешнему виду собаки. Люди в своей жизни всегда имеют приоритеты, это касается и цвета, предпочтение того или иного цвета часто становится определяющим при покупке или вязки собак.',
-        whyColor:'Зачем определять цвет.',
+        infoColor: 'Китайская хохлатая может иметь любое сочетание цветов, как предписано в стандарте FCI 288. <br>Данный пункт не относится к классификации собаки по по цветовому признаку, это скорее попытка дать больше информации по внешнему виду собаки. Люди в своей жизни всегда имеют приоритеты, это касается и цвета, предпочтение того или иного цвета часто становится определяющим при покупке или вязки собак.',
+        whyColor: 'Зачем определять цвет.',
       }]
     ],
-    map:[
-      ['growth',{
-        src:'https://d3a1wbnh2r1l7y.cloudfront.net/Izmerit_holku.svg',
+    map: [
+      ['growth', {
+        src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Izmerit_holku.svg',
       }],
-      ['hairless',{
-        src:'https://d3a1wbnh2r1l7y.cloudfront.net/Hairless_OR_Powderpuff.jpg',
+      ['hairless', {
+        src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Hairless_OR_Powderpuff.jpg',
       }]],
   },
 
@@ -187,11 +190,15 @@ parasails.registerPage('dogs-home', {
     });
 
     // Принимаем данные по событию list-*
-    io.socket.on('list-kennel', data => { this.kennels = data; });
+    io.socket.on('list-kennel', data => {
+      this.kennels = data;
+    });
 
 
     // Получаем данные для селектов в форме
-    io.socket.on('list-color', (data) => {this.colors = data.colors;});
+    io.socket.on('list-color', (data) => {
+      this.colors = data.colors;
+    });
 
 
     /* Весь список*/
@@ -345,7 +352,7 @@ parasails.registerPage('dogs-home', {
         this.loading.close();
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
-          this.ruleForm.fileList=[];
+          this.ruleForm.fileList = [];
           // this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
           this.ruleForm.federations = this.resetFederation;
@@ -412,7 +419,7 @@ parasails.registerPage('dogs-home', {
 
     showDialog(string) {
       this.innerVisible = true;
-      this.dialog =  new Map(this.map).get(string);
+      this.dialog = new Map(this.map).get(string);
       this.dialog.header = this.i19p[string];
 
 
@@ -568,6 +575,15 @@ parasails.registerPage('dogs-home', {
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
+    showMenu(id) {
+      this.show2 = !this.show2;
+      this.showDog = id;
+    },
+
+    showOut() {
+      this.show2 = !this.show2;
+      this.showDog = undefined;
+    }
 
   }
 });

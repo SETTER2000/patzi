@@ -131,7 +131,7 @@ module.exports = {
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
 
-// console.log('inputs.fileList DOG-create: ', inputs.fileList);
+    // console.log('inputs.fileList DOG-create: ', inputs.fileList);
     if (inputs.fileList) {
       fileList = inputs.fileList.filter(o => !_.isNull(o));
       _.each(fileList, img => {
@@ -157,10 +157,12 @@ module.exports = {
     if (conflictingDog) {
       throw (req.me.preferredLocale === 'ru') ? 'dogAlreadyInUseRU' : 'dogAlreadyInUse';
     }
-
+    let label = _.startCase(inputs.label.toString().toLowerCase());
+    let rightFullName = _.startCase(label +' ' + kennel.label);
+    let leftFullName = _.startCase( kennel.label +' ' +label);
     // Создаём собаку
     let newDog = await Dog.create({
-      label:  _.startCase(inputs.label.toString().toLowerCase()).replace(/Fci\b/g, '(FCI)'),
+      label:  label,
       kennel: inputs.kennel,
       gender: inputs.gender,
       dateBirth: inputs.dateBirth,
@@ -172,6 +174,7 @@ module.exports = {
       images: fileList,
       color:  inputs.color,
       stamp:  inputs.stamp,
+      fullName:  kennel.right ? `${rightFullName}` : `${leftFullName}`
     }).fetch();
 
     // Если масиив с фотографиями не пустой, то добавляем его в коллекцию Image

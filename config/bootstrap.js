@@ -1816,7 +1816,10 @@ module.exports.bootstrap = async function () {
   ];
 
   dogsArr.map(dog => {
+    dog.fullName=  `${dog.kennel} ${dog.label}`;
     dog.kennel = createdKennels.find(kennel => kennel.label === dog.kennel).id;
+    let label = _.startCase(dog.label.toString().toLowerCase()).replace(/Fci\b/g, '(FCI)');
+
   });
 
   let createdDogs = await Dog.createEach(dogsArr).fetch();
