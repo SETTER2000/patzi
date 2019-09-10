@@ -4,11 +4,13 @@ parasails.registerPage('dogs-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     dogs: [],
-
+    isCollapse: true,
     kennels: [],
     dams: [],
-    show2: false,
+    show: false,
     limit: 50,
+    removeDog: undefined,
+    dogId: undefined,
     dialog: {},
     showDog: undefined,
     loading: {},
@@ -19,6 +21,7 @@ parasails.registerPage('dogs-home', {
     titleDialog: '',
     value: 0,
     valueColor: '',
+
     // Состояние загрузки
     syncing: false,
     // Ограничение размера одного файла картинки при загрузки
@@ -136,10 +139,15 @@ parasails.registerPage('dogs-home', {
       ['en', {
         warnNoKennel: `At the moment there is no nursery in the database.
          You should create at least one kennel to start with to add a dog.`,
+        warnRemove: 'This will permanently delete the object. Continue?',
+        warning: 'Warning',
+        delCancel: 'Delete canceled',
+        cancel: 'Cancel',
         text400Err: 'Error. Could not create! ',
         text500Err: 'Server Error! Unable to create. ',
         text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
         success: 'Congratulations! Object successfully created. ',
+        successDelete: 'Object deleted successfully. ',
         selectGender: 'Please select a dog gender.',
         growth: 'How to measure a dog\'s height?',
         hairless: 'What is a down or naked dog?',
@@ -149,10 +157,15 @@ parasails.registerPage('dogs-home', {
       ['ru', {
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
+        warnRemove: 'Это навсегда удалит объект. Продолжить?',
+        warning: 'Внимание',
+        delCancel: 'Удаление отменено',
+        cancel: 'Отменить',
         text400Err: 'Ошибка. Не смог создать!',
         text500Err: 'Ошибка сервера! Невозможно создать.',
         text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
         success: 'Поздравляем! Объект успешно создан.',
+        successDelete: 'Объект успешно удалён.',
         selectGender: 'Пожалуйста выберите пол собаки.',
         growth: 'Как измерить рост собаки?',
         hairless: 'Что такое пуховая или голая собака?',
@@ -219,6 +232,40 @@ parasails.registerPage('dogs-home', {
     // io.socket.on('list-kennel', data => {this.kennels = data});
   },
 
+  filters: {
+    getCreate: function (value, l, format) {
+      if (!value) {
+        return '';
+      }
+      moment.locale(l);
+      let formatNew = (!format) ? 'LLL' : format;
+      return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+    },
+
+    // countAll: function (value, lakes) {
+    //   if (!value) {
+    //     return '';
+    //   }
+    //
+    //   // console.log('value::::', this.countCommentAll.push(value).length);
+    //   return lakes.length;
+    //   value === 'like' ? this.countCommentLike++ :
+    //     value === 'wow' ? this.countCommentWow++ :
+    //       value === 'haha' ? this.countCommentHaha++ :
+    //         value === 'super' ? this.countCommentSuper++ : 0;
+    //
+    //
+    //   // this.countCommentLike = _.pluck(likes, 'like').length;
+    //   // this.countCommentWow = _.pluck(likes, 'wow').length;
+    //   // this.countCommentSuper = _.pluck(likes, 'super').length;
+    //   // this.countCommentHaha = _.pluck(likes, 'haha').length;
+    //   // this.likeId = _.last(_.uniq(_.pluck(likes, 'comment')));
+    //   // console.log(' this.likeId:::', this.likeId);
+    //   // this.countCommentAll = likes.length;
+    //   // return (likes.length > 0);
+    //
+    // }
+  },
 
   mounted: async function () {
     //…
@@ -302,6 +349,7 @@ parasails.registerPage('dogs-home', {
 
 
     resetForm(formName) {
+      this.$refs.upload.clearFiles();
       this.$refs[formName].resetFields();
       this.ruleForm.fileList = [];
       this.ruleForm.imageUrl = '';
@@ -483,7 +531,9 @@ parasails.registerPage('dogs-home', {
     goTo(path) {
       window.location = `/${path}`;
     },
-
+    goTo2(path) {
+      this.goto(path);
+    },
     feedback(e) {
       console.log('CLICK^ ', e);
       this.dialogFormVisible = true;
@@ -575,15 +625,145 @@ parasails.registerPage('dogs-home', {
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
-    showMenu(id) {
-      this.show2 = !this.show2;
+    showMenu(id, e) {
+      this.dogId = id;
+      this.show = true;
       this.showDog = id;
     },
 
     showOut() {
-      this.show2 = !this.show2;
-      this.showDog = undefined;
-    }
+      this.show = false;
+    },
+    /* Открывает диалоговое окно редактирования*/
+    handleCommand(command) {
+      switch (command.com) {
+        case 'a':
+          this.setIndexPhotoSet(command);
+          this.dialogFormVisible = true;
+          break;
+        case 'b':
+          this.setValueEditPhotoSet(command);
+          break;
+        case 'c':
+          this.setAddedPhotoSet(command);
+          break;
+        case 'd':
+          this.setIndexPhotoSet(command);
+          this.dialogDeletePhotoSession = true;
+          this.nameSessionPhoto = command.name;
+          // this.ruleForm.description =  this.litter.description;
+          break;
+        case 'e':
+          this.dialogEditor = true;
+          // this.ruleForm.description =  this.litter.description;
+          break;
+        case 'f':
+          window.location = '/litters/new';
+          break;
+        case 'g':
+          this.setAddedPresentation(command);
+          break;
+        case 'dl':
+          this.clickDeleteLitter();
+          break;
+        case 'allView':
+          this.allViewed(command);
+          break;
+        case 'like':
+          this.addLike(command);
+          break;
+        case 'super':
+          this.addLike(command);
+          break;
+        case 'wow':
+          this.addLike(command);
+          break;
+        case 'haha':
+          this.addLike(command);
+          break;
+        case 'commentLike':
+          this.commentLike(command);
+          break;
+        case 'commentSuper':
+          this.commentLike(command);
+          break;
+        case 'commentWow':
+          this.commentLike(command);
+          break;
+        case 'commentHaha':
+          this.commentLike(command);
+          break;
+        case 'link':
+          window.location = '/litters';
+          break;
+        case 'deleteComment':
+          this.deleteComment(command);
+          break;
+        case 'changeComment':
+          this.changeOpenComment(command);
+          break;
+        //default:  this.setIndexPhotoSet(command);
+      }
+      // }
+      // this.$message('Нажат элемент: ' + command);
+    },
 
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+
+
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    },
+
+
+    errorMessages(jwRes, successText) {
+      (jwRes.statusCode === 200) ? (this.mesSuccess(successText)) :
+        (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+    },
+
+
+    deleteDog: async function () {
+      let data = {
+        id: this.removeDog,
+      };
+      // console.log('Перед отправкой data: ', data);
+      io.socket.post('/api/v1/dogs/destroy-one-dog', data, (dataRes, jwRes) => {
+        this.errorMessages(jwRes,this.i19p.successDelete);
+        this.dialogDeletePhotoSession = false;
+        if (jwRes.statusCode === 200) {
+          // this.$message({
+          //   type: 'success',
+          //   message: this.i19p.success
+          // });
+          this.getList();
+          this.$forceUpdate();
+        }
+      });
+
+
+    },
+
+    openRemoveDialog(id) {
+      this.removeDog = id;
+      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
+        confirmButtonText: 'OK',
+        cancelButtonText: this.i19p.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.deleteDog();
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.i19p.delCancel
+        });
+      });
+    },
   }
 });

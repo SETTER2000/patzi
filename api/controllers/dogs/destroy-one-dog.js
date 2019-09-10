@@ -20,24 +20,25 @@ module.exports = {
     notFound: {
       description: 'Не существует такого объекта с таким ID.',
       responseType: 'notFound' // как раньше res.notFound(), сейчас это встроеная функция sails
-    },
-    forbidden: {
-      description: 'The user making this request does\'t have the permissions to delete this kennel.',
-      responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
-    },
-    forbiddenDog: {
-      description: 'Cannot be deleted! You have associated files: dog.',
-      responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
-    },
-    forbiddenLitter: {
-      description: 'Cannot be deleted! You have associated files: litter.',
-      responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
-    },
-
-    badRequestDog: {
-      description: 'Cannot be deleted! You have associated files: cattery. You should remove all dogs associated with this kennel.',
-      responseType: 'badRequest'
     }
+
+    // forbidden: {
+    //   description: 'The user making this request does\'t have the permissions to delete this kennel.',
+    //   responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
+    // },
+    // forbiddenDog: {
+    //   description: 'Cannot be deleted! You have associated files: dog.',
+    //   responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
+    // },
+    // forbiddenLitter: {
+    //   description: 'Cannot be deleted! You have associated files: litter.',
+    //   responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
+    // },
+    //
+    // badRequestDog: {
+    //   description: 'Cannot be deleted! You have associated files: cattery. You should remove all dogs associated with this kennel.',
+    //   responseType: 'badRequest'
+    // }
   },
 
 
