@@ -182,17 +182,12 @@
              :visible.sync="centerDialogAdded"
              custom-class="dialog-kennel-add"
              center>
-
     <el-dialog
       width="80%"
       :title="dialog.header"
       :visible.sync="innerVisible"
       append-to-body>
-
-
       <div class="text-center"><p>{{dialog.description}}</p></div>
-
-
       <el-image :src="dialog.src" style="width: 100%">
         <div slot="placeholder" class="image-slot">
           Loading<span class="dot">...</span>
@@ -242,7 +237,6 @@
           :on-success="handleSuccess"
           :on-exceed="handleExceed"
           :on-remove="handleRemove"
-
         >
           <i class="el-icon-plus"></i>
           <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
@@ -255,13 +249,10 @@
       </el-col>
     </el-row>
     <el-row type="flex" class="row-bg" justify="center">
-
       <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
         <!--//  label-width="150px"-->
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
                  class="demo-ruleForm">
-
-
           <el-form-item label="<%= __('Kennel') %>" prop="kennel">
             <el-select v-model="ruleForm.kennel" placeholder="<%= __('Choose your cattery') %>"
                        class="form-width"
@@ -329,15 +320,15 @@
 
           <el-form-item label="<%= __('Gender') %>" prop="gender">
             <el-col :xs="8" :sm="10" :md="10" :lg="16" :xl="16">
-            <el-radio-group v-model="ruleForm.gender">
-              <el-radio label="sire"><%= __('Sire') %></el-radio>
-              <el-radio label="dam"><%= __('Dam') %></el-radio>
-            </el-radio-group>
-            <!--<el-col :span="12">-->
-            <!--<el-radio-group v-model="ruleForm.gender">-->
-            <!--<el-radio label="sire" border size="medium"><%= __('Sire') %></el-radio>-->
-            <!--<el-radio label="dam" border size="medium"><%= __('Dam') %></el-radio>-->
-            <!--</el-radio-group>-->
+              <el-radio-group v-model="ruleForm.gender">
+                <el-radio label="sire"><%= __('Sire') %></el-radio>
+                <el-radio label="dam"><%= __('Dam') %></el-radio>
+              </el-radio-group>
+              <!--<el-col :span="12">-->
+              <!--<el-radio-group v-model="ruleForm.gender">-->
+              <!--<el-radio label="sire" border size="medium"><%= __('Sire') %></el-radio>-->
+              <!--<el-radio label="dam" border size="medium"><%= __('Dam') %></el-radio>-->
+              <!--</el-radio-group>-->
             </el-col>
           </el-form-item>
 
@@ -349,24 +340,24 @@
             :prop="'federations.' + index + '.registerNumber'"
             :rules="{required: true, message: 'Federation can not be null', trigger: 'blur'}">
             <el-col :xs="14" :sm="18" :md="18" :lg="17" :xl="16">
-            <el-input placeholder="<%= __("Dog's registration number") %>" v-model="federation.registerNumber"
-                      class="input-with-select">
+              <el-input placeholder="<%= __("Dog's registration number") %>" v-model="federation.registerNumber"
+                        class="input-with-select">
 
-              <el-select v-model="federation.value" slot="prepend" class="wds" placeholder="Select">
-                <el-option label="FCI" value="1"></el-option>
-                <el-option label="RKF" value="2"></el-option>
-                <el-option label="BCU" value="3"></el-option>
-                <el-option label="UKU" value="4"></el-option>
-                <el-option label="IKC" value="5"></el-option>
-                <el-option label="VDH" value="6"></el-option>
-                <el-option label="KCG" value="7"></el-option>
-              </el-select>
-              <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
-              <!--</el-form-item>-->
-              <!--<el-button slot="prepend" disabled>{{ruleForm.federation}}</el-button>-->
-              <el-button slot="append" @click="copyElement" icon="el-icon-copy-document"></el-button>
-              <el-button slot="append" @click.prevent="removeElement(federation)" icon="el-icon-delete"></el-button>
-            </el-input>
+                <el-select v-model="federation.value" slot="prepend" class="wds" placeholder="Select">
+                  <el-option label="FCI" value="1"></el-option>
+                  <el-option label="RKF" value="2"></el-option>
+                  <el-option label="BCU" value="3"></el-option>
+                  <el-option label="UKU" value="4"></el-option>
+                  <el-option label="IKC" value="5"></el-option>
+                  <el-option label="VDH" value="6"></el-option>
+                  <el-option label="KCG" value="7"></el-option>
+                </el-select>
+                <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
+                <!--</el-form-item>-->
+                <!--<el-button slot="prepend" disabled>{{ruleForm.federation}}</el-button>-->
+                <el-button slot="append" @click="copyElement" icon="el-icon-copy-document"></el-button>
+                <el-button slot="append" @click.prevent="removeElement(federation)" icon="el-icon-delete"></el-button>
+              </el-input>
             </el-col>
           </el-form-item>
 
@@ -374,7 +365,7 @@
           <template>
             <el-form-item label="<%= __('Nickname') %>" prop="nickname">
               <el-col :xs="14" :sm="14" :md="14" :lg="12" :xl="12">
-                <el-input  minlength="3" maxlength="20" show-word-limit
+                <el-input minlength="3" maxlength="20" show-word-limit
                           placeholder="<%= __('Affectionate name') %>"
                           v-model="ruleForm.nickname"></el-input>
 
@@ -393,7 +384,7 @@
           <template>
             <el-form-item label="<%= __('Stamp') %>" prop="stamp">
               <el-col :xs="14" :sm="18" :md="18" :lg="17" :xl="16">
-                <el-input  minlength="3" maxlength="20" show-word-limit
+                <el-input minlength="3" maxlength="20" show-word-limit
                           placeholder="<%= __('Stamp Dog number in the registry.') %>"
                           v-model="ruleForm.stamp"></el-input>
                 <!-- <el-tooltip effect="dark"
@@ -549,19 +540,19 @@
           <template v-if="sires">
             <el-form-item label="<%= __('Sire') %>" prop="sire">
               <el-col :xs="21" :sm="21" :md="16" :lg="18" :xl="18">
-              <el-autocomplete
-                popper-class="my-autocomplete"
-                v-model="ruleForm.sire"
-                :fetch-suggestions="querySearchSires"
-                placeholder="<%= __("Start typing the dog's name") %>"
-                :trigger-on-focus="false"
-                @select="handleSelect"
-              ><i slot="prefix" class="el-autocomplete__icon el-icon-male"></i>
-                <template slot-scope="{ item }">
-                  <span class="value">{{ item.value }}</span>
-                  <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
-                </template>
-              </el-autocomplete>
+                <el-autocomplete
+                  popper-class="my-autocomplete"
+                  v-model="ruleForm.sire"
+                  :fetch-suggestions="querySearchSires"
+                  placeholder="<%= __("Start typing the dog's name") %>"
+                  :trigger-on-focus="false"
+                  @select="handleSelect"
+                ><i slot="prefix" class="el-autocomplete__icon el-icon-male"></i>
+                  <template slot-scope="{ item }">
+                    <span class="value">{{ item.value }}</span>
+                    <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
+                  </template>
+                </el-autocomplete>
               </el-col>
             </el-form-item>
           </template>
@@ -570,20 +561,20 @@
           <template v-if="dams">
             <el-form-item label="<%= __('Dam') %>" prop="dam">
               <el-col :xs="20" :sm="20" :md="16" :lg="18" :xl="18">
-              <el-autocomplete
-                popper-class="my-autocomplete"
-                v-model="ruleForm.dam"
-                :fetch-suggestions="querySearchDams"
-                placeholder="<%= __("Start typing the dog's name") %>"
-                :trigger-on-focus="false"
-                @select="handleSelect"
-                style="width: 58%;">
-                <i slot="prefix" class="el-autocomplete__icon el-icon-female"></i>
-                <template slot-scope="{ item }">
-                  <span class="value">{{ item.value }}</span>
-                  <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
-                </template>
-              </el-autocomplete>
+                <el-autocomplete
+                  popper-class="my-autocomplete"
+                  v-model="ruleForm.dam"
+                  :fetch-suggestions="querySearchDams"
+                  placeholder="<%= __("Start typing the dog's name") %>"
+                  :trigger-on-focus="false"
+                  @select="handleSelect"
+                  style="width: 58%;">
+                  <i slot="prefix" class="el-autocomplete__icon el-icon-female"></i>
+                  <template slot-scope="{ item }">
+                    <span class="value">{{ item.value }}</span>
+                    <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
+                  </template>
+                </el-autocomplete>
               </el-col>
             </el-form-item>
           </template>
@@ -661,38 +652,119 @@
   <!--</div>-->
   <!--</div>-->
   <section class="work-area">
-    <div class="container">
-      <% /*Превью.*/ %>
-      <div class="scrollbar" id="style-1">
-        <div class="force-overflow">
-          <el-row :gutter="1" class="flex-container wrap">
 
-            <el-col class="flex-item" v-for="(dog, index) in dogs" :key="dog.id"
-                    :xs="24" :sm="24" :md="24" :lg="10" :xl="11">
-              <div    @mouseover="showMenu(dog.id)"  @mouseout="showOut()" style="  position: relative;" class="ell-image-flex" v-if="!_.isEmpty(dog.imagesArrUrl)">
+    <% /*Превью.*/ %>
+    <div class="scrollbar" id="style-1">
+      <div class="force-overflow">
+        <el-row :gutter="1" class="flex-container wrap">
 
-                <transition  name="el-zoom-in-top">
-                  <div v-show="show2 && (showDog === dog.id)"  class="transition-box">
-                    <!--<el-button icon="el-icon-more" circle plain type="warning"></el-button>-->
-                    <el-link :href="dog.detail" :underline="false" icon="el-icon-more" type="warning"></el-link>
-                  </div>
-                </transition>
+          <el-col class="flex-item" v-for="(dog, index) in dogs" :key="dog.id"
+                  :xs="24" :sm="24" :md="24" :lg="10" :xl="5">
+            <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
+                 style="position: relative;" class="ell-image-flex"
+                 v-if="!_.isEmpty(dog.imagesArrUrl)">
 
-                <el-image
-                  :src="dog.cover"
-                  :key="dog.id"
-                  :fit="'cover'"
-                  :scroll-container="'#style-1'"
-                  lazy
-                  :preview-src-list="dog.imagesArrUrl">
-                </el-image>
-              </div>
-            </el-col>
+              <transition-group appear name="el-zoom-in-top">
+                <div v-show="show && (showDog === dog.id)" class="transition-box" :key="dog.id">
+                  <% /* Кнопки управления собакой */ %>
+                  <ul class="menu-ell">
+                    <li><span> {{dog.fullName}}</span></li>
+                    <li ><el-link  class="mt-1" @click="goTo2(dog.detail)" :underline="false" title="<%= __('More') %>"
+                                  icon="el-icon-more"></el-link></li>
+                    <li ><el-link  class="mt-1" @click="openRemoveDialog(dog.id)"  :underline="false" title="<%= __('Remove') %>"
+                                  icon="el-icon-close"></el-link></li>
+                    <!--<li> <el-button type="text" @click="openRemoveDialog"  title="<%= __('Remove') %>" -->
+                                    <!--icon="el-icon-close"></el-button>-->
+                    <!--</li>-->
+                  </ul>
 
-          </el-row>
+                 <!-- <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+                    <el-submenu index="1">
+                      <template slot="title">
+                        <i class="el-icon-location"></i>
+                        <span slot="title">Navigator One</span>
+                      </template>
+                      <el-menu-item-group>
+                        <span slot="title">Group One</span>
+                        <el-menu-item index="1-1">item one</el-menu-item>
+                        <el-menu-item index="1-2">item two</el-menu-item>
+                      </el-menu-item-group>
+                      <el-menu-item-group title="Group Two">
+                        <el-menu-item index="1-3">item three</el-menu-item>
+                      </el-menu-item-group>
+                      <el-submenu index="1-4">
+                        <span slot="title">item four</span>
+                        <el-menu-item index="1-4-1">item one</el-menu-item>
+                      </el-submenu>
+                    </el-submenu>
+                    <el-menu-item index="2">
+                      <i class="el-icon-menu"></i>
+                      <span slot="title">Navigator Two</span>
+                    </el-menu-item>
+                    <el-menu-item index="3" disabled>
+                      <i class="el-icon-document"></i>
+                      <span slot="title">Navigator Three</span>
+                    </el-menu-item>
+                    <el-menu-item index="4">
+                      <i class="el-icon-setting"></i>
+                      <span slot="title">Navigator Four</span>
+                    </el-menu-item>
+                  </el-menu>
+
+-->
+                  <!--   <el-col :span="1">
+                      <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
+                        <el-dropdown @command="handleCommand">
+                            <span class="el-dropdown-link">
+                              <el-link :underline="false"> <i class="el-icon-more el-icon&#45;&#45;right"></i></el-link>
+                            </span>
+                          <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
+                              <%= __('Add photo session') %>
+                            </el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-present" :command="{com:'g'}">
+                              <%= __('Add presentation') %>
+                            </el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-edit" :command="{com:'a'}">
+                              <%= __('Photo session name') %>
+                            </el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-edit" :command="{com:'b'}">
+                              <%= __('Photo session description') %>
+                            </el-dropdown-item>
+
+                            <el-dropdown-item icon="el-icon-delete-solid"
+                                              :command="{com:'d'}">
+                              <%= __('Delete photo session') %>
+                            </el-dropdown-item>
+
+                            <el-dropdown-item :divided="true" disabled v-if="dog.createdAt" icon="el-icon-date"
+                                              command="">
+                              <%= __('Date publication') %> : <br>{{dog.createdAt |
+                              getCreate(me.preferredLocale)}}
+                            </el-dropdown-item>
+
+                          </el-dropdown-menu>
+                        </el-dropdown>
+                      </div>
+                    </el-col>-->
+                </div>
+              </transition-group>
+
+              <el-image
+                :src="dog.cover"
+                :key="dog.id"
+                :fit="'cover'"
+                :scroll-container="'#style-1'"
+                lazy
+                :preview-src-list="dog.imagesArrUrl">
+              </el-image>
+            </div>
+          </el-col>
+
+        </el-row>
 
 
-          <!-- <ul class="flex-container wrap">
+        <!-- <ul class="flex-container wrap">
         <li class="flex-item" v-for="(img, index) in im" :key="index +  '-sl'">
           &lt;!&ndash;<template>&ndash;&gt;
           &lt;!&ndash;<div class="ell-relation" v-if="dogs.cover === index">&ndash;&gt;
@@ -723,9 +795,9 @@
         </li>
       </ul>-->
 
-        </div>
       </div>
     </div>
+
 
   </section>
 </div>
