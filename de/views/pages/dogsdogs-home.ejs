@@ -19,136 +19,206 @@
       </div>
     </ajax-form>
   </modal>
-  <!-- <el-dialog title="" :visible.sync="dialogFormVisible" class="text">
-     <textarea class="form-control text" id="exampleFormControlTextarea1" rows="10"></textarea>
-     <span slot="footer" class="dialog-footer">
-     <el-button @click="dialogFormVisible = false">Cancel</el-button>
-     <el-button type="primary" @click="dialogFormVisible = false">Send feedback</el-button>
-   </span>
-   </el-dialog>-->
-  <% /* Диалоговое окно. Тарифы. */ %>
+  <% /* Диалоговое окно "В ПРОДАЖЕ" (SALE)*/ %>
+
   <el-dialog
-    :visible.sync="centerDialogVisible"
-    width="70%"
-    style="margin-top: 1vh"
-    center>
-
-
-    <!-- Start Pricing Area -->
-    <section class="">
+    title="<%= __('Buy puppy chinese crested') %>"
+    :visible.sync="dialogPedigreeVisible"
+    :fullscreen="true"
+    top="1vh"
+    center
+    custom-class="sale-dogs"
+    :before-close="handlerCloseDialogSlider"
+    v-if="virtualPageSlug==='sale'"
+  >
+    <section>
+      <h2 class="text-center">Lorem ipsum dolor 3.</h2>
       <div class="container">
         <div class="row">
-          <div class="col-lg-12">
-            <div class="section-title text-center">
-              <h3><%= __('Annual subscription') %></h3>
-              <h2 class="mt-5"><span><%= __('Tariff Plans') %></span></h2>
-              <p>
-              <ul>
-                <li><span class="ti-close cross mx-2 text-danger"></span><%= __('Not included in the price') %></li>
-              </ul>
-              </p>
-            </div>
+          <div class="col-md-12 col-lg-6">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
+            <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
+              tenetur voluptas.</p>
+            <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
+              unde!</p>
+            <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
+            <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
+              culpa,
+              provident.</p>
           </div>
-        </div>
-        <div class="row">
-          <el-alert
-            title="<%= __('You have not linked a payment source to your account. In order to access paid features, you\'ll need to provide your credit card information. (Don\'t worry: you will only be charged when you\'ve reached the limit of your free plan.)') %>"
-            type="warning">
-          </el-alert>
-        </div>
-        <div class="row">
-          <div class="col-md-4">
-            <div class="pricing_item">
-              <h3 class="p_title"><%= __('User') %></h3>
-              <p class="p_criteria"><%= __('What is included in the price') %>.</p>
-              <h1 class="p_price">&euro;0</h1>
-              <div class="p_list">
-                <ul>
-
-                  <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
-                  <li><span class="ti-check"></span> <%= __('Write comments') %></li>
-                  <li><span class="ti-close cross"></span><%= __('Add dogs') %> </li>
-                  <li><span class="ti-close cross"></span> <%= __('Edit dogs') %></li>
-                  <li><span class="ti-close cross"></span> <%= __('Add kennel') %></li>
-                  <li><span class="ti-close cross"></span> <%= __('Edit kennel') %></li>
-                </ul>
-                <!--<a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">-->
-                <!--<span>D</span>-->
-                <!--<span>e</span>-->
-                <!--<span>t</span>-->
-                <!--<span>a</span>-->
-                <!--<span>i</span>-->
-                <!--<span>l</span>-->
-                <!--<span>e</span>-->
-                <!--<span>d</span>-->
-                <!--</a>-->
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="pricing_item">
-              <h3 class="p_title"><%= __('Owner') %></h3>
-              <p class="p_criteria"><%= __('What is included in the price') %>.</p>
-              <h1 class="p_price">&euro;5</h1>
-              <div class="p_list">
-                <ul>
-                  <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
-                  <li><span class="ti-check"></span> <%= __('Write comments') %></li>
-                  <li><span class="ti-check"></span> <%= __('Add 3 dogs') %></li>
-                  <li><span class="ti-check"></span> <%= __('Edit 3 dogs') %></li>
-                  <li><span class="ti-close cross"></span> <%= __('Add kennel') %></li>
-                  <li><span class="ti-close cross"></span> <%= __('Edit kennel') %></li>
-
-                </ul>
-                <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
-                  <span>D</span>
-                  <span>e</span>
-                  <span>t</span>
-                  <span>a</span>
-                  <span>i</span>
-                  <span>l</span>
-                  <span>e</span>
-                  <span>d</span>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="pricing_item">
-              <h3 class="p_title"><%= __('Breeder') %></h3>
-              <p class="p_criteria"><%= __('What is included in the price') %>.</p>
-              <h1 class="p_price">&euro;8</h1>
-              <div class="p_list">
-                <ul>
-                  <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
-                  <li><span class="ti-check"></span> <%= __('Write comments') %></li>
-                  <li><span class="ti-check"></span> <%= __('Add dogs') %></li>
-                  <li><span class="ti-check"></span> <%= __('Edit dogs') %></li>
-                  <li><span class="ti-check"></span> <%= __('Add kennel') %></li>
-                  <li><span class="ti-check"></span> <%= __('Edit kennel') %></li>
-                </ul>
-                <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
-                  <span>D</span>
-                  <span>e</span>
-                  <span>t</span>
-                  <span>a</span>
-                  <span>i</span>
-                  <span>l</span>
-                  <span>e</span>
-                  <span>d</span>
-                </a>
-              </div>
-            </div>
+          <div class="col-md-12 col-lg-6">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
+            <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
+              tenetur voluptas.</p>
+            <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
+              unde!</p>
+            <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
+            <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
+              culpa,
+              provident.</p>
           </div>
         </div>
       </div>
     </section>
+    <section class="bg fixed">
+      <h2>Lorem ipsum soso.</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad autem inventore laborum quia? Alias aperiam autem
+        consequuntur culpa cum delectus deserunt dicta distinctio dolore doloremque ea est et, excepturi fugiat
+        inventore .</p>
+      <div class="scroll-down"></div>
+    </section>
+    <section>
+      <h2 class="text-center">Some Content 2.</h2>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 col-lg-6">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
+            <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
+              tenetur voluptas.</p>
+            <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
+              unde!</p>
+            <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
+            <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
+              culpa,
+              provident.</p>
+          </div>
+          <div class="col-md-12 col-lg-6">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
+            <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
+              tenetur voluptas.</p>
+            <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
+              unde!</p>
+            <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
+            <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
+              culpa,
+              provident.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </el-dialog>
+  <% /* Диалоговое окно. Тарифы. */ %>
+  <el-dialog
+    :visible.sync="centerDialogVisible"
+    custom-class="dialog-kennel-add"
+    center>
+
+
+    <!-- Start Pricing Area -->
+    <section>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3><%= __('Annual subscription') %></h3>
+            <h2 class="mt-5"><span><%= __('Tariff Plans') %></span></h2>
+            <p>
+            <ul>
+              <li><span class="ti-close cross mx-2 text-danger"></span><%= __('Not included in the price') %></li>
+            </ul>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <el-alert
+          title="<%= __('You have not linked a payment source to your account. In order to access paid features, you\'ll need to provide your credit card information. (Don\'t worry: you will only be charged when you\'ve reached the limit of your free plan.)') %>"
+          type="warning">
+        </el-alert>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="pricing_item">
+            <h3 class="p_title"><%= __('User') %></h3>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+            <h1 class="p_price">&euro;0</h1>
+            <div class="p_list">
+              <ul>
+
+                <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
+                <li><span class="ti-check"></span> <%= __('Write comments') %></li>
+                <li><span class="ti-close cross"></span><%= __('Add dogs') %> </li>
+                <li><span class="ti-close cross"></span> <%= __('Edit dogs') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Add kennel') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Edit kennel') %></li>
+              </ul>
+              <!--<a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">-->
+              <!--<span>D</span>-->
+              <!--<span>e</span>-->
+              <!--<span>t</span>-->
+              <!--<span>a</span>-->
+              <!--<span>i</span>-->
+              <!--<span>l</span>-->
+              <!--<span>e</span>-->
+              <!--<span>d</span>-->
+              <!--</a>-->
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="pricing_item">
+            <h3 class="p_title"><%= __('Owner') %></h3>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+            <h1 class="p_price">&euro;5</h1>
+            <div class="p_list">
+              <ul>
+                <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
+                <li><span class="ti-check"></span> <%= __('Write comments') %></li>
+                <li><span class="ti-check"></span> <%= __('Add 3 dogs') %></li>
+                <li><span class="ti-check"></span> <%= __('Edit 3 dogs') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Add kennel') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Edit kennel') %></li>
+
+              </ul>
+              <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
+                <span>D</span>
+                <span>e</span>
+                <span>t</span>
+                <span>a</span>
+                <span>i</span>
+                <span>l</span>
+                <span>e</span>
+                <span>d</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="pricing_item">
+            <h3 class="p_title"><%= __('Breeder') %></h3>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+            <h1 class="p_price">&euro;8</h1>
+            <div class="p_list">
+              <ul>
+                <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
+                <li><span class="ti-check"></span> <%= __('Write comments') %></li>
+                <li><span class="ti-check"></span> <%= __('Add dogs') %></li>
+                <li><span class="ti-check"></span> <%= __('Edit dogs') %></li>
+                <li><span class="ti-check"></span> <%= __('Add kennel') %></li>
+                <li><span class="ti-check"></span> <%= __('Edit kennel') %></li>
+              </ul>
+              <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
+                <span>D</span>
+                <span>e</span>
+                <span>t</span>
+                <span>a</span>
+                <span>i</span>
+                <span>l</span>
+                <span>e</span>
+                <span>d</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
     <div slot="footer" class="dialog-footer mb-3 pb-5">
 
       <el-button @click="centerDialogVisible = false"><%= __('Close') %></el-button>
-      <el-button type="success" @click="goTo('account')" size="large"><%= __('Add card') %></el-button>
+      <el-button type="info" @click="goTo('account')" size="large"><%= __('Add card') %></el-button>
     </div>
   </el-dialog>
   <% /* Диалоговое окно. Предупреждение | Warning. */ %>
@@ -193,34 +263,17 @@
           Loading<span class="dot">...</span>
         </div>
       </el-image>
-
-      <!--<div class="justify-content-center">-->
-      <!--<el-image-->
-      <!--style="width: inherit; height: auto; "-->
-      <!--:src="dialog.src"-->
-      <!--:fit="fit"></el-image>-->
-      <!--<div class="demo-image__lazy">-->
-      <!--<el-image v-for="url in dialog.src" :key="url" :src="url" lazy></el-image>-->
-      <!--</div>-->
-      <!--</div>-->
     </el-dialog>
-
     <div v-if="ruleForm.imageUrl">
       <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
     </div>
-    <!--<img src="https://d3a1wbnh2r1l7y.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" class="img-fluid" alt="Responsive image">-->
-
     <h5><%= __('Multiple upload photos') %></h5>
     <label v-if="!ruleForm.imageUrl">
       <%= __('Make albums, dividing by event or by time group of photos. Describe events, tell about the photo, thereby structuring your memories and events.') %>
     </label>
-
-
     <div class="my-2">
       <el-divider content-position="left"><%= __('Add photo') %></el-divider>
     </div>
-
-    <!--<div class="photo-uploader">-->
     <el-row type="flex" class="row-bg" justify="center">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <!---------------------------------------------------------------------------------------->
@@ -514,6 +567,13 @@
             </el-form-item>
           </template>
 
+          <% /* ПРОДАЁТСЯ */ %>
+          <template>
+            <el-form-item label="<%= __('Sale') %>" prop="sale">
+              <el-checkbox v-model="ruleForm.sale"></el-checkbox>
+            </el-form-item>
+          </template>
+
           <% /* ОПИСАНИЕ */ %>
           <template>
             <el-form-item label="<%= __('Description') %>" prop="subtitle">
@@ -632,6 +692,7 @@
         <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"
                    class="btn btn-outline-info"><%= __('Add dog') %></el-button>
       </div>
+
     </div>
   </section>
   <!-- End Sample Area -->
@@ -652,154 +713,76 @@
   <!--</div>-->
   <!--</div>-->
   <section class="work-area">
+    <% /* Фильтры. */ %>
+    <div class="menu-center mb-5">
+      <el-link type="success" class="px-3" :underline="false" @click="goDogSale" icon="el-icon-money">
+        <%= __('For Sale') %>
+      </el-link>
+      <!--<el-link type="success" class="px-3" :underline="false"  @click="centerDialogVisible = true" icon="el-icon-money">-->
+      <!--<%= __('For Sale') %>-->
+      <!--</el-link>-->
+      <!--<el-link type="success" class="px-3"  :underline="false" @click="centerDialogVisible = true" icon="el-icon-money">-->
+      <!--<%= __('For Sale') %>-->
+      <!--</el-link>-->
+
+    </div>
 
     <% /*Превью.*/ %>
     <div class="scrollbar" id="style-1">
-      <div class="force-overflow">
-        <el-row :gutter="1" class="flex-container wrap">
-
-          <el-col class="flex-item" v-for="(dog, index) in dogs" :key="dog.id"
-                  :xs="24" :sm="24" :md="24" :lg="10" :xl="5">
-            <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
-                 style="position: relative;" class="ell-image-flex"
-                 v-if="!_.isEmpty(dog.imagesArrUrl)">
-
-              <transition-group appear name="el-zoom-in-top">
-                <div v-show="show && (showDog === dog.id)" class="transition-box" :key="dog.id">
-                  <% /* Кнопки управления собакой */ %>
-                  <ul class="menu-ell">
-                    <li><span> {{dog.fullName}}</span></li>
-                    <li ><el-link  class="mt-1" @click="goTo2(dog.detail)" :underline="false" title="<%= __('More') %>"
-                                  icon="el-icon-more"></el-link></li>
-                    <li ><el-link  class="mt-1" @click="openRemoveDialog(dog.id)"  :underline="false" title="<%= __('Remove') %>"
-                                  icon="el-icon-close"></el-link></li>
-                    <!--<li> <el-button type="text" @click="openRemoveDialog"  title="<%= __('Remove') %>" -->
-                                    <!--icon="el-icon-close"></el-button>-->
-                    <!--</li>-->
-                  </ul>
-
-                 <!-- <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
-                    <el-submenu index="1">
-                      <template slot="title">
-                        <i class="el-icon-location"></i>
-                        <span slot="title">Navigator One</span>
-                      </template>
-                      <el-menu-item-group>
-                        <span slot="title">Group One</span>
-                        <el-menu-item index="1-1">item one</el-menu-item>
-                        <el-menu-item index="1-2">item two</el-menu-item>
-                      </el-menu-item-group>
-                      <el-menu-item-group title="Group Two">
-                        <el-menu-item index="1-3">item three</el-menu-item>
-                      </el-menu-item-group>
-                      <el-submenu index="1-4">
-                        <span slot="title">item four</span>
-                        <el-menu-item index="1-4-1">item one</el-menu-item>
-                      </el-submenu>
-                    </el-submenu>
-                    <el-menu-item index="2">
-                      <i class="el-icon-menu"></i>
-                      <span slot="title">Navigator Two</span>
-                    </el-menu-item>
-                    <el-menu-item index="3" disabled>
-                      <i class="el-icon-document"></i>
-                      <span slot="title">Navigator Three</span>
-                    </el-menu-item>
-                    <el-menu-item index="4">
-                      <i class="el-icon-setting"></i>
-                      <span slot="title">Navigator Four</span>
-                    </el-menu-item>
-                  </el-menu>
-
--->
-                  <!--   <el-col :span="1">
-                      <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
-                        <el-dropdown @command="handleCommand">
-                            <span class="el-dropdown-link">
-                              <el-link :underline="false"> <i class="el-icon-more el-icon&#45;&#45;right"></i></el-link>
-                            </span>
-                          <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
-                              <%= __('Add photo session') %>
-                            </el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-present" :command="{com:'g'}">
-                              <%= __('Add presentation') %>
-                            </el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-edit" :command="{com:'a'}">
-                              <%= __('Photo session name') %>
-                            </el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-edit" :command="{com:'b'}">
-                              <%= __('Photo session description') %>
-                            </el-dropdown-item>
-
-                            <el-dropdown-item icon="el-icon-delete-solid"
-                                              :command="{com:'d'}">
-                              <%= __('Delete photo session') %>
-                            </el-dropdown-item>
-
-                            <el-dropdown-item :divided="true" disabled v-if="dog.createdAt" icon="el-icon-date"
-                                              command="">
-                              <%= __('Date publication') %> : <br>{{dog.createdAt |
-                              getCreate(me.preferredLocale)}}
-                            </el-dropdown-item>
-
-                          </el-dropdown-menu>
-                        </el-dropdown>
-                      </div>
-                    </el-col>-->
+      <el-row :gutter="1" class="flex-container wrap">
+        <el-col class="flex-item" v-for="(dog, index) in dogs" :key="dog.id"
+                :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
+          <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
+               style="position: relative;" class="ell-image-flex"
+               v-if="!_.isEmpty(dog.imagesArrUrl)">
+            <transition-group appear name="el-zoom-in-top">
+              <div v-show="show && (showDog === dog.id)" class="transition-box" :key="dog.id">
+                <% /* Кнопки управления собакой */ %>
+                <div class="menu-right mt-1">
+                  <el-link type="danger" class="px-2" @click="goTo2(dog.detail)" :underline="false"
+                           title="<%= __('More') %>">
+                    {{dog.fullName}}
+                  </el-link>
+                  <el-link type="danger" class="px-2" @click="openRemoveDialog(dog.id)" :underline="false"
+                           title="<%= __('Remove') %>"
+                           icon="el-icon-close"></el-link>
                 </div>
-              </transition-group>
-
-              <el-image
-                :src="dog.cover"
-                :key="dog.id"
-                :fit="'cover'"
-                :scroll-container="'#style-1'"
-                lazy
-                :preview-src-list="dog.imagesArrUrl">
-              </el-image>
-            </div>
-          </el-col>
-
-        </el-row>
-
-
-        <!-- <ul class="flex-container wrap">
-        <li class="flex-item" v-for="(img, index) in im" :key="index +  '-sl'">
-          &lt;!&ndash;<template>&ndash;&gt;
-          &lt;!&ndash;<div class="ell-relation" v-if="dogs.cover === index">&ndash;&gt;
-          &lt;!&ndash;<el-button type="warning" size="mini" title="<%= __("Album's cover") %>"&ndash;&gt;
-          &lt;!&ndash;class="ell-position-button check" icon="el-icon-star-off"&ndash;&gt;
-          &lt;!&ndash;circle></el-button>&ndash;&gt;
-          &lt;!&ndash;</div>&ndash;&gt;
-          &lt;!&ndash;<div class="ell-relation" v-else>&ndash;&gt;
-          &lt;!&ndash;<el-button size="mini" title="<%= __('Make an album cover') %>"&ndash;&gt;
-          &lt;!&ndash;class="ell-position-button" @click="coverPhoto(dogs.id,index)"&ndash;&gt;
-          &lt;!&ndash;icon="el-icon-document" circle></el-button>&ndash;&gt;
-          &lt;!&ndash;</div>&ndash;&gt;
-          &lt;!&ndash;</template>&ndash;&gt;
-          <div class="ell-image-flex">
-
-            &lt;!&ndash;<img :src="img.imageSrc" class="ell object-fit_cover" alt="">&ndash;&gt;
-            <div class="demo-image__preview">
-              <el-image
-                :src="img.imageSrc"
-                :fit="'cover'"
-                :lazy="true"
-                :preview-src-list="img.srcList">
-              </el-image>
-            </div>
-            &lt;!&ndash;(p>{id:$,imageSrc:'/images/test/Chen-Chester_edit-$.jpg'})*14 &ndash;&gt;
+                <!--<ul class="menu-ell">-->
+                <!--<li>-->
+                <!--<el-link class="mt-1"  @click="goTo2(dog.detail)" :underline="false" title="<%= __('More') %>">-->
+                <!--{{dog.fullName}}-->
+                <!--</el-link>-->
+                <!--</li>-->
+                <!--&lt;!&ndash;<li ><el-link  class="mt-1" @click="goTo2(dog.detail)" :underline="false" title="<%= __('More') %>"&ndash;&gt;-->
+                <!--&lt;!&ndash;icon="el-icon-more"></el-link></li>&ndash;&gt;-->
+                <!--<li>-->
+                <!--<el-link class="mt-1" @click="openRemoveDialog(dog.id)" :underline="false"-->
+                <!--title="<%= __('Remove') %>"-->
+                <!--icon="el-icon-close"></el-link>-->
+                <!--</li>-->
+                <!--&lt;!&ndash;<li> <el-button type="text" @click="openRemoveDialog"  title="<%= __('Remove') %>" &ndash;&gt;-->
+                <!--&lt;!&ndash;icon="el-icon-close"></el-button>&ndash;&gt;-->
+                <!--&lt;!&ndash;</li>&ndash;&gt;-->
+                <!--</ul>-->
+              </div>
+            </transition-group>
+            <el-image
+              :src="dog.cover"
+              :key="dog.id"
+              :fit="'cover'"
+              :scroll-container="'#style-1'"
+              lazy
+              :preview-src-list="dog.imagesArrUrl">
+            </el-image>
           </div>
-
-        </li>
-      </ul>-->
-
-      </div>
+        </el-col>
+      </el-row>
     </div>
-
-
   </section>
+
+
+  <!-- End Portfolio Details Area -->
+  <router-view></router-view>
 </div>
 
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
