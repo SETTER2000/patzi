@@ -22,7 +22,6 @@
   <% /* Диалоговое окно "В ПРОДАЖЕ" (SALE)*/ %>
 
   <el-dialog
-    title="<%= __('Buy puppy chinese crested') %>"
     :visible.sync="dialogPedigreeVisible"
     :fullscreen="true"
     top="1vh"
@@ -31,6 +30,9 @@
     :before-close="handlerCloseDialogSlider"
     v-if="virtualPageSlug==='sale'"
   >
+    <section class="bg">
+      <h1><%= __('Buy puppy chinese crested') %></h1>
+    </section>
     <section>
       <h2 class="text-center">Lorem ipsum dolor 3.</h2>
       <div class="container">
@@ -65,7 +67,7 @@
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad autem inventore laborum quia? Alias aperiam autem
         consequuntur culpa cum delectus deserunt dicta distinctio dolore doloremque ea est et, excepturi fugiat
         inventore .</p>
-      <div class="scroll-down"></div>
+
     </section>
     <section>
       <h2 class="text-center">Some Content 2.</h2>
