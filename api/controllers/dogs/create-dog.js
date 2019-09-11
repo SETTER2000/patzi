@@ -30,6 +30,12 @@ module.exports = {
     },
 
 
+    sale: {
+      type:'boolean',
+      defaultsTo:false,
+      description:`Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
+    },
+
     kennel: {
       type: 'string',
       description: 'Идентификатор питомника'
@@ -171,6 +177,7 @@ module.exports = {
       weight: inputs.weight,
       growth: inputs.growth,
       type:   inputs.type,
+      sale:   inputs.sale,
       images: fileList,
       color:  inputs.color,
       stamp:  inputs.stamp,

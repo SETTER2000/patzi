@@ -1780,36 +1780,42 @@ module.exports.bootstrap = async function () {
     {
       label: `Adam`,
       gender: 'sire',
+      sale:false,
       dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Poale Ell'
     },
     {
       label: `Bell`,
       gender: 'dam',
+      sale:false,
       dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Poale Ell'
     },
     {
       label: `(FCI) Ella`,
       gender: 'dam',
+      sale:false,
       dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Sasquehanna'
     },
     {
       label: `De Lux Supernova`,
       gender: 'sire',
+      sale:false,
       dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Alfa Laval'
     },
     {
       label: `Naruto`,
       gender: 'sire',
+      sale:false,
       dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Olegro Katrin'
     },
     {
       label: `Neron`,
       gender: 'sire',
+      sale:false,
       dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Zlato Dinastii'
     },

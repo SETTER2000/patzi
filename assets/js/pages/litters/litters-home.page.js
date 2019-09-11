@@ -740,7 +740,10 @@ parasails.registerPage('litters-home', {
     goTo(path) {
       window.location = `${path}`;
     },
-
+    goDog(dogName) {
+      let dog = `/chinese-crested/${dogName.split(" ").join('-')}`;
+      this.goto(dog);
+    },
     openFullScreen() {
       this.loading = this.$loading({
         lock: true,

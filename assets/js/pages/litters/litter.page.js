@@ -7,8 +7,11 @@ parasails.registerPage('litter', {
     viewChangeComment: false,
     dialogPedigreeVisible: true,
     likeId: '',
+    pathDogSale: '/dogs/chinese-crested/sale',
+    pathDogs: '/dogs/chinese-crested',
+    pathDog: '/chinese-crested',
     newCom: false,
-    comId:'',
+    comId: '',
     instanceModuleId: '',
     like: '',
     openReplay: false,
@@ -551,10 +554,6 @@ parasails.registerPage('litter', {
       this.isAfterDate = moment(new Date()).isSameOrBefore(moment(this.litter.born, 'LL'));
     },
 
-    goTo(path) {
-      // console.log('lett.letter: ', path);
-      window.location = path;
-    },
 
     handleSuccessPuppies(res, file) {
       this.ruleForm.fileListPuppies.push(res);
@@ -626,10 +625,6 @@ parasails.registerPage('litter', {
       // this.handlerSetActiveSlider();
       // console.log('this.litterId: ', this.litterId);
       // console.log('this.indexPhoto: ', this.indexPhoto);
-    },
-
-    clickPuppiesSale() {
-      this.goto(`/dogs`);
     },
 
 
@@ -1495,7 +1490,23 @@ parasails.registerPage('litter', {
     newComOpen(id) {
       this.newCom = !this.newCom;
       this.comId = id;
-    }
+    },
+
+    goTo(path) {
+      window.location = path;
+    },
+
+    goTo2(path) {
+      this.goto(path);
+    },
+    goDog(dogName) {
+      let dog = `${this.pathDog}/${dogName.split(" ").join('-')}`;
+      this.goTo2(dog);
+    },
+    goDogsSale() {
+      this.goTo2(this.pathDogSale);
+    },
+
   },
 });
 

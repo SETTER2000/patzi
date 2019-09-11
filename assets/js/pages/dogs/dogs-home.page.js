@@ -6,6 +6,9 @@ parasails.registerPage('dogs-home', {
     dogs: [],
     isCollapse: true,
     kennels: [],
+    dialogPedigreeVisible: true,
+    pathDogSale: '/dogs/chinese-crested/sale',
+    pathDogs: '/dogs/chinese-crested',
     dams: [],
     show: false,
     limit: 50,
@@ -96,6 +99,7 @@ parasails.registerPage('dogs-home', {
       registerNumber: ''
     }],
     ruleForm: {
+      sale: false,
       file: [],
       federations: [{
         key: 1,
@@ -181,7 +185,11 @@ parasails.registerPage('dogs-home', {
         src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Hairless_OR_Powderpuff.jpg',
       }]],
   },
-
+  virtualPages: true,
+  html5HistoryMode: 'history',
+  virtualPagesRegExp: /^\/dogs\/[a-z-]+\/?([^/]+)?/,
+  // `/^/foo/bar/?([^/]+)?/`
+  // virtualPagesRegExp: /^\/dogs\/?[A-Z]+?\/[1|2][0-9]{3}\/?([^\/]+)?/,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
@@ -382,6 +390,7 @@ parasails.registerPage('dogs-home', {
         weight: this.ruleForm.weight,
         growth: this.ruleForm.growth,
         type: this.ruleForm.type,
+        sale: this.ruleForm.sale,
         color: this.ruleForm.color,
         stamp: this.ruleForm.stamp,
         registerNumber: this.ruleForm.registerNumber,
@@ -522,6 +531,12 @@ parasails.registerPage('dogs-home', {
       };
     },
 
+    handlerCloseDialogSlider() {
+      // this.photos = [];
+      this.fullscreenLoading = false;
+      this.goto(this.pathDogs);
+    },
+
     // Если массив kennel пустой, выводим сообщение.
     clickAddButton() {
       this.warning = this.i19p.warnNoKennel;
@@ -534,41 +549,52 @@ parasails.registerPage('dogs-home', {
     goTo2(path) {
       this.goto(path);
     },
+    goDogSale() {
+      this.goTo2(this.pathDogSale);
+    },
+
+
     feedback(e) {
       console.log('CLICK^ ', e);
       this.dialogFormVisible = true;
-    },
+    }
+    ,
 
     open() {
       this.$alert(`<p>${this.i19p.infoColor}</p>`, this.i19p.whyColor, {
         dangerouslyUseHTMLString: true
       });
-    },
+    }
+    ,
 
-    // Закрывает модальное окно для удаления объекта
+// Закрывает модальное окно для удаления объекта
     closeDeleteThingModal: function () {
       this.selectedThing = undefined;
       this.confirmDeleteThingModalOpen = false;
-    },
+    }
+    ,
 
     handleParsingDeleteThingForm: function () {
       return {
         id: this.selectedThing.id
       };
-    },
+    }
+    ,
 
     submittedDeleteThingForm: function () {
       _.remove(this.things, {id: this.selectedThing.id});
       this.$forceUpdate();
       this.confirmDeleteThingModalOpen = false;
       this.selectedThing = undefined;
-    },
+    }
+    ,
     copyElement() {
       this.ruleForm.federations.push({
         key: Date.now(),
         value: ''
       });
-    },
+    }
+    ,
 
 
     removeElement(item) {
@@ -576,7 +602,8 @@ parasails.registerPage('dogs-home', {
       if (index !== -1) {
         this.ruleForm.federations.splice(index, 1);
       }
-    },
+    }
+    ,
 
     openFullScreen() {
       this.loading = this.$loading({
@@ -588,14 +615,16 @@ parasails.registerPage('dogs-home', {
       // setTimeout(() => {
       //   loading.close();
       // }, 2000);
-    },
+    }
+    ,
 
 
     getPullColor() {
 
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'value';
       return _.sortBy(this.colors, field);
-    },
+    }
+    ,
 
 
     beforeUpload(file) {
@@ -613,27 +642,32 @@ parasails.registerPage('dogs-home', {
       }
 
       return isJPG && isLt2M;
-    },
+    }
+    ,
 
     handleSuccess(res, file) {
       this.ruleForm.fileList.push(res);
-    },
+    }
+    ,
 
-    // функция перехвата при превышении лимита
+// функция перехвата при превышении лимита
     handleExceed(files, fileList) {
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
       ${files.length + fileList.length} ${this.i19p.files}`);
-    },
+    }
+    ,
     showMenu(id, e) {
       this.dogId = id;
       this.show = true;
       this.showDog = id;
-    },
+    }
+    ,
 
     showOut() {
       this.show = false;
-    },
+    }
+    ,
     /* Открывает диалоговое окно редактирования*/
     handleCommand(command) {
       switch (command.com) {
@@ -706,16 +740,19 @@ parasails.registerPage('dogs-home', {
       }
       // }
       // this.$message('Нажат элемент: ' + command);
-    },
+    }
+    ,
 
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
-    },
+    }
+    ,
 
 
     handleClose(key, keyPath) {
       console.log(key, keyPath);
-    },
+    }
+    ,
 
 
     errorMessages(jwRes, successText) {
@@ -725,7 +762,8 @@ parasails.registerPage('dogs-home', {
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-    },
+    }
+    ,
 
 
     deleteDog: async function () {
@@ -734,7 +772,7 @@ parasails.registerPage('dogs-home', {
       };
       // console.log('Перед отправкой data: ', data);
       io.socket.post('/api/v1/dogs/destroy-one-dog', data, (dataRes, jwRes) => {
-        this.errorMessages(jwRes,this.i19p.successDelete);
+        this.errorMessages(jwRes, this.i19p.successDelete);
         this.dialogDeletePhotoSession = false;
         if (jwRes.statusCode === 200) {
           // this.$message({
@@ -747,7 +785,8 @@ parasails.registerPage('dogs-home', {
       });
 
 
-    },
+    }
+    ,
 
     openRemoveDialog(id) {
       this.removeDog = id;
@@ -764,6 +803,8 @@ parasails.registerPage('dogs-home', {
           message: this.i19p.delCancel
         });
       });
-    },
+    }
+    ,
   }
-});
+})
+;

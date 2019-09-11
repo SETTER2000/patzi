@@ -507,9 +507,11 @@
                    </el-tooltip>
                   </span>: {{litter.letter.toUpperCase()}}...
                 </li>
-                <li><span><%= __('Sire') %></span>: <a @click="goTo(`/dogs/${litter.sire[0]}`)"> {{litter.sire[1]}}</a>
+                <li><span class="title-description"><%= __('Sire') %></span>:
+                  <el-link :underline="false"  type="danger" @click="goDog(litter.sire[1])"> {{litter.sire[1]}}</el-link>
                 </li>
-                <li><span><%= __('Dam') %></span>: <a @click="goTo(`/dogs/${litter.dam[0]}`)"> {{litter.dam[1]}}</a>
+                <li><span><%= __('Dam') %></span>:
+                  <el-link :underline="false"  type="danger" @click="goDog(litter.dam[1])"> {{litter.dam[1]}}</el-link
                 </li>
 
               </ul>
@@ -522,7 +524,7 @@
                 </el-col>
 
                 <el-col :xs="6" :sm="8" :md="6" :lg="2">
-                  <el-button class="mt-4" @click="clickPuppiesSale()" type="success"
+                  <el-button class="mt-4" @click="goDogsSale" type="success"
                              round><%= __('Puppies for sale') %></el-button>
 
                 </el-col>

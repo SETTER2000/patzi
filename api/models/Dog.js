@@ -42,6 +42,11 @@ module.exports = {
       maxLength: 4
     },
 
+    sale: {
+      type:'boolean',
+      defaultsTo:false,
+      description:`Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
+    },
 
     dateBirth: {
       type: 'string',
@@ -59,21 +64,21 @@ module.exports = {
     weight: {
       type: 'number',
       description: 'Вес. В граммах.',
-      example:4500
+      example: 4500
     },
 
 
     growth: {
       type: 'number',
       description: 'Рост. В сантиметрах.',
-      example:30
+      example: 30
     },
 
 
     type: {
       type: 'string',
       description: 'Тип. Возможны два варианта.',
-      example:'hairless, powderpuff',
+      example: 'hairless, powderpuff',
       isIn: ['hairless', 'powderpuff'],
     },
 

@@ -45,6 +45,11 @@ module.exports.routes = {
   'GET /litter/:letter/:year/:virtualPageSlug?': {action: 'litters/view-litter'},
   'GET /litters/:virtualPageSlug?': {action: 'litters/view-litters-home'},
 
+  // 'GET /dogs/dog/:id': {action: 'dogs/view-dog'},
+  'GET /dogs/:breed/:virtualPageSlug?': {action: 'dogs/view-dogs-home', locals: {currentSection: 'dogs'}},
+  'GET /chinese-crested/:fullName': { action: 'dogs/view-dog' },
+
+
   'GET /contact': {action: 'view-contact', locals: {currentSection: 'contact'}},
   'GET /about': {action: 'view-about', locals: {currentSection: 'about'}},
   'GET /pricing': {action: 'view-pricing', locals: {currentSection: 'pricing'}},
@@ -53,9 +58,7 @@ module.exports.routes = {
   'GET /message/message-home': {action: 'message/view-message-home', locals: {currentSection: 'message'}},
   'GET /users/:virtualPageSlug?': {action: 'users/view-users-home', locals: {currentSection: 'users'}},
 
-  'GET /dogs/dog/:id': {action: 'dogs/view-dog'},
-  'GET /dogs/:virtualPageSlug?': {action: 'dogs/view-dogs-home', locals: {currentSection: 'dogs'}},
-  'GET /chinese-crested/:fullName': { action: 'dogs/view-dog' },
+
 
   'GET /kennels/:virtualPageSlug?': {action: 'kennels/view-kennels-home', locals: {currentSection: 'kennels'}},
 

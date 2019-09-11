@@ -197,7 +197,7 @@ a:hover {
 
 /* line 216, /Applications/MAMP/htdocs/naim/color-lib/144 Proshoot Photography/scss/bootstrap/_reboot.scss */
 a:not([href]):not([tabindex]) {
-  color: inherit;
+  /*color: inherit;*/
   text-decoration: none;
 }
 
