@@ -1,19 +1,21 @@
 #dogs-home {
-  @PoiretOne-font: 'Poiret One', cursive;
-  @Italianno-font: 'Italianno', cursive;
-  @AlexBrush-font: 'Alex Brush', cursive;
-  @MeriendaOne-font: 'Merienda One', cursive;
-  @MrDeHaviland-font: 'Mr De Haviland', cursive;
-  @Amita-font: 'Amita', cursive;
-  @Pompiere-font: 'Pompiere', cursive;
-  @Unkempt-font: 'Unkempt', cursive;
-  @RougeScript-font: 'Rouge Script', cursive;
-  @Qwigley-font: 'Qwigley', cursive;
-  @Kurale-font: 'Kurale', serif;
-  @Fondamento-font: 'Fondamento', cursive;
-  //@SpicyRice-font: 'Spicy Rice', cursive;
-  @WireOne-font: 'Wire One', sans-serif;
-  @MedulaOne-font: 'Medula One', cursive;
+  //@PoiretOne-font: 'Poiret One', cursive;
+  //@Italianno-font: 'Italianno', cursive;
+  //@AlexBrush-font: 'Alex Brush', cursive;
+  //@MeriendaOne-font: 'Merienda One', cursive;
+  //@MrDeHaviland-font: 'Mr De Haviland', cursive;
+  //@Amita-font: 'Amita', cursive;
+  //@Pompiere-font: 'Pompiere', cursive;
+  //@Unkempt-font: 'Unkempt', cursive;
+  //@RougeScript-font: 'Rouge Script', cursive;
+  //@Qwigley-font: 'Qwigley', cursive;
+  //@Kurale-font: 'Kurale', serif;
+  //@Fondamento-font: 'Fondamento', cursive;
+  ////@SpicyRice-font: 'Spicy Rice', cursive;
+  //@WireOne-font: 'Wire One', sans-serif;
+  //@MedulaOne-font: 'Medula One', cursive;
+  @OpenSansCondensed-font: 'Open Sans Condensed', sans-serif;
+  @Gabriela-font: 'Gabriela', serif;
 
   @color-text: #afb1b7;
   /*************/
@@ -47,6 +49,9 @@
 
   .flex {
     display: flex;
+  }
+  .flex-wrap {
+    .flex;
     flex-wrap: wrap;
     flex-direction: row;
   }
@@ -55,20 +60,20 @@
   }
 
   .menu-right {
-    .flex;
+    .flex-wrap;
     justify-content: flex-end;
-    width: 100vw;
+    width: 100%;
   }
   .menu-left {
-    .flex;
+    .flex-wrap;
     justify-content: flex-start;
   }
   .menu-center {
-    .flex;
+    .flex-wrap;
     justify-content: center;
   }
   .menu-center-2 {
-    .flex;
+    .flex-wrap;
     justify-content: space-around;
   }
 
@@ -94,21 +99,42 @@
     .pointer;
     color: #85ce61;
   }
+
+  .showcase {
+    .menu-center;
+    align-content: space-evenly;
+    justify-content: space-evenly;
+    //  width: 100%;
+
+  }
+
   .sale-dogs {
+    .showcase {
+      .el-card {
+        width: 32vw;
+        min-width: 320px;
+        //  margin-top: 4vw;
+      }
+    }
     //background-color: white;
     //background-image: url("/images/rq.jpg") ;
-    color: white;
+    .el-dialog__headerbtn .el-dialog__close {
+      color: @color-text;
+
+    }
+    color: red;
     .el-dialog__header, .el-dialog__body {
       padding: 0;
     }
     h1 {
       .fadeIn;
-      font-size: 6vw;
+      font-size: 2vw;
       color: @color-text;
       display: inherit;
-      padding: 5vh 0;
-      line-height: 6rem;
-      font-family: @WireOne-font;
+      padding-bottom: 2vh;
+      line-height: 6vh;
+      //font-family: @WireOne-font;
+      font-family: @OpenSansCondensed-font;
     }
     h2 {
       font-size: 2rem;
@@ -117,7 +143,7 @@
   }
   section {
     display: block;
-    padding: 30px 0;
+    padding: 100px 0 70px;
   }
   .focus-in-contract-bck {
     -webkit-animation: focus-in-contract-bck 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
@@ -183,13 +209,14 @@
   }
 
   .bg {
-    height: 100vh;
+    //height: 100vh;
+    min-height: 100vh;
     //background: url('/images/rq.jpg') no-repeat #66e8ed;
     background: linear-gradient(45deg, #283048, #859398);
     background-size: 200% 200%;
     text-align: center;
-    padding-left: 10%;
-    padding-right: 10%;
+    //padding-left: 10%;
+    //padding-right: 10%;
     color: @color-text;
     h1, h2, h3, h4 {
       color: @color-text;
@@ -330,7 +357,7 @@
     background-color: white;
     //float: left;
     height: 838px;
-    margin-bottom: 5rem;
+    margin-bottom: 5vh;
     //margin-left: 22px;
     //margin-top: 40px;
     //width: 65px;
@@ -371,10 +398,11 @@
 
       //background: tomato;
       //    background: #e4e4e4;
-      padding: 0;
+
       // width: 296px;
       //height: 290px;
-      margin: .5px;
+      //margin-bottom: 20px;
+      padding: 0;
 
       // line-height: 100px;
       color: white;
@@ -385,10 +413,6 @@
         margin: 2px;
       }
     }
-  }
-
-  .wrap li {
-    //background: #e4e4e4;
   }
 
   .wrap-reverse {
@@ -413,11 +437,11 @@
   .object-fit_scale-down {
     object-fit: scale-down
   }
-  img.ell {
-    height: 118px;
-    background-color: #444;
-    width: 100%;
-  }
+  //img.ell {
+  //  height: 118px;
+  //  background-color: #444;
+  //  width: 100%;
+  //}
 
   .ell-image-flex {
     //  float: left;
@@ -460,6 +484,7 @@
   }
 
   .flex-container {
+    //flex-wrap: nowrap;
     padding: 0;
     margin: 0;
     list-style: none;
@@ -836,6 +861,9 @@
     //.container {
     //  max-width: 1400px;
     //}
+    //.showcase{
+    //  width:90vw;
+    //}
     .item {
       height: 350px;
     }
@@ -856,6 +884,15 @@
   }
 
   @media (max-width: 1200px) {
+
+    .sale-dogs {
+      .showcase {
+        .el-card {
+          width: 48vw;
+        }
+      }
+    }
+
     .item {
       height: 350px;
     }
@@ -900,7 +937,18 @@
 
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 769px) {
+    .sale-dogs {
+      h1 {
+        font-size: 6vw;
+      }
+      .showcase {
+        .el-card {
+          //width: 100vw;
+        }
+      }
+    }
+
     .item {
       height: 100vh;
     }
@@ -947,9 +995,13 @@
       width: 100%;
       //height: 100vh;
     }
-
-
-
+    .sale-dogs {
+      .showcase {
+        .el-card {
+          width: 48vw;
+        }
+      }
+    }
     .form-width {
       width: 50%;
     }
@@ -958,10 +1010,7 @@
       width: 100%;
     }
 
-    .el-dialog__body {
-      //font-size: .8rem;
-      //width: 80%;
-    }
+
 
     .el-dialog.el-dialog--center {
       margin: 0 !important;

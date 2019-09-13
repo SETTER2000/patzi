@@ -23,7 +23,6 @@ module.exports = {
   fn: async function (inputs) {
     // Hash the new password.
     // let hashed = await sails.helpers.passwords.hashPassword(inputs.language);
-
     // Update the record for the logged-in user.
     await User.updateOne({id: this.req.me.id})
       .set({

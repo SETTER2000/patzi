@@ -66,8 +66,7 @@ module.exports = {
         return img;
       }) : '';
 
-      dog.imagesArrUrl= _.pluck( dog.images, 'imageSrc');
-      dog.cover =  dog.imagesArrUrl[0];
+
       // _.each(dogs, (dog) => {
     //   // Устанавливаем свойство источника изображения
     //   // Первый аргумент, базовый url
@@ -89,8 +88,12 @@ module.exports = {
       dog.kennelName = dog.kennel.label;
       dog.fullName = dog.kennel.right ? `${dog.label} ${dog.kennel.label}` : `${dog.kennel.label} ${dog.label}`;
       dog.detail =  dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
+      dog.imagesArrUrl= _.pluck( dog.images, 'imageSrc');
+      dog.cover =  dog.imagesArrUrl[0];
       return dog;
     });
+
+    // console.log('ETTT: ' , dogs);
     // /chinese-crested/:dogName
     await sails.sockets.broadcast('dog', 'list-dog', dogs);
 

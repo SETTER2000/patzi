@@ -1,6 +1,7 @@
 @footer-height: 40px;
 @container-md-max-width: 1100px;
-@import url('https://fonts.googleapis.com/css?family=Alex+Brush|Amita|Fondamento|Italianno|Kurale|Medula+One|Merienda+One|Mr+De+Haviland|Poiret+One|Pompiere|Qwigley|Rouge+Script|Spicy+Rice|Unkempt|Wire+One&display=swap');
+//@import url('https://fonts.googleapis.com/css?family=Alex+Brush|Amita|Fondamento|Italianno|Kurale|Medula+One|Merienda+One|Mr+De+Haviland|Poiret+One|Pompiere|Qwigley|Rouge+Script|Spicy+Rice|Unkempt|Wire+One&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Gabriela|Open+Sans+Condensed:300&display=swap');
 [v-cloak] {
   display: none;
 }
@@ -27,7 +28,8 @@ header {
   .main-menu {
     padding-top: 10px;
   }
-  .logo, .share {
+
+  .logo, .share{
     position: relative;
     display: inline-block;
     height: 26px;
@@ -56,6 +58,30 @@ header {
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
+  }
+
+  .ru,.en{
+    position: relative;
+    display: inline-block;
+    height: 20px;
+    width: 95px;
+  }
+  .ru::after {
+    content: '';
+    width: 100%;
+    background-image: url("https://d3a1wbnh2r1l7y.cloudfront.net/Flag_of_Russia.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  .en::after {
+    content: '';
+    width: 100%;
+    background-image: url("https://d3a1wbnh2r1l7y.cloudfront.net/Engl-flag.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+
   }
   a:not(.btn) {
     cursor: pointer;
@@ -110,7 +136,7 @@ body {
     height: 20px;
     padding: 0 1px;
     margin-right: 22px;
-    #Untitled1,  #wow, #like, #haha {
+    #Untitled1, #wow, #like, #haha {
       bottom: 0;
       width: inherit;
       height: inherit;
@@ -229,7 +255,7 @@ footer {
   position: relative;
   padding-bottom: @footer-height;
 
-  .poaleell-ico{
+  .poaleell-ico {
     position: relative;
     display: inline-block;
     height: 16px;
@@ -247,7 +273,6 @@ footer {
     background-repeat: no-repeat;
     background-size: contain;
   }
-
 
   // App-wide styles for our ajax buttons
   .ajax-button {

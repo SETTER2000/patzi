@@ -112,6 +112,8 @@ parasails.registerPage('dogs-home', {
       dam: '',
       gender: '',
       label: '',
+      nickname: '',
+      stamp: '',
       federation: '1',
       imageUrl: '',
       previewImageSrc: '',
@@ -126,7 +128,7 @@ parasails.registerPage('dogs-home', {
       growth: 20,
       type: '',
     },
-    fits: 'cover',
+  //  fits: 'cover',
     select: '',
     labelPosition: 'top',
     items: [
@@ -679,7 +681,7 @@ parasails.registerPage('dogs-home', {
           this.setValueEditPhotoSet(command);
           break;
         case 'c':
-          this.setAddedPhotoSet(command);
+          this.goDogSale();
           break;
         case 'd':
           this.setIndexPhotoSet(command);

@@ -127,6 +127,9 @@ module.exports = {
   fn: async function (inputs, exits) {
     // Бибилиотека Node.js
     const req = this.req;
+    const moment = require('moment');
+    const tz = require('moment-timezone');
+    moment.locale('en');
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
@@ -166,12 +169,14 @@ module.exports = {
     let label = _.startCase(inputs.label.toString().toLowerCase());
     let rightFullName = _.startCase(label +' ' + kennel.label);
     let leftFullName = _.startCase( kennel.label +' ' +label);
+    let dateBirth = inputs.dateBirth.replace(/"([^"]+(?="))"/g, '$1');
     // Создаём собаку
     let newDog = await Dog.create({
       label:  label,
       kennel: inputs.kennel,
       gender: inputs.gender,
       dateBirth: inputs.dateBirth,
+      born: moment.tz(dateBirth, 'Europe/Moscow').format(),
       nickname: inputs.nickname,
       subtitle: inputs.subtitle,
       weight: inputs.weight,
