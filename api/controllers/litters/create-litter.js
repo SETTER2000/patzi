@@ -62,7 +62,7 @@ module.exports = {
 
     dam: {
       type: 'ref',
-      example: 'Sasquehanna (FCI) Ella',
+      example: 'Sasquehanna FCI Ella',
       description: 'Сука.'
     },
 

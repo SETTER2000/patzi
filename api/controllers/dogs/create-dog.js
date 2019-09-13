@@ -30,11 +30,39 @@ module.exports = {
     },
 
 
+
+    saleDescription: {
+      type: 'string',
+      description: `Рекомендации к продаже. Сопроводительный текст, который будет виден на странице
+       продаж для данной собаки.`,
+      maxLength:700
+    },
+
+
     sale: {
       type:'boolean',
       defaultsTo:false,
       description:`Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
     },
+
+
+    currency: {
+      type: 'string',
+      description: `Валюта продажи. Валюта за катоую можно купить собаку.`,
+      example: 'dollar, рубль, euro',
+      isIn: ['dollar', 'рубль', 'euro'],
+      // required: true,
+      minLength: 4,
+      maxLength: 6
+    },
+
+
+    price: {
+      type: 'number',
+      // required: true,
+      description: 'Цена продажи собаки.'
+    },
+
 
     kennel: {
       type: 'string',
@@ -170,11 +198,15 @@ module.exports = {
     let rightFullName = _.startCase(label +' ' + kennel.label);
     let leftFullName = _.startCase( kennel.label +' ' +label);
     let dateBirth = inputs.dateBirth.replace(/"([^"]+(?="))"/g, '$1');
+
     // Создаём собаку
     let newDog = await Dog.create({
       label:  label,
       kennel: inputs.kennel,
       gender: inputs.gender,
+      currency: inputs.currency,
+      price: inputs.price,
+      saleDescription: inputs.saleDescription,
       dateBirth: inputs.dateBirth,
       born: moment.tz(dateBirth, 'Europe/Moscow').format(),
       nickname: inputs.nickname,

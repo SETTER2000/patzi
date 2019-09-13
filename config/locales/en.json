@@ -512,5 +512,11 @@
 	"Sale": "Sale",
 	"For Sale": "For Sale",
 	"Buy puppy chinese crested": "Buy puppy chinese crested",
-	"Born": "Born"
+	"Born": "Born",
+	"Price": "Price",
+	"Is it obligatory to set a price now?": "Is it obligatory to set a price now?",
+	"Sale currency": "Sale currency",
+	"please select your currency": "please select your currency",
+	"Recommendations": "Recommendations",
+	"{{i19p.recommendationsSale}}": "{{i19p.recommendationsSale}}"
 }

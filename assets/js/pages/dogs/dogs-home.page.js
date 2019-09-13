@@ -100,6 +100,9 @@ parasails.registerPage('dogs-home', {
     }],
     ruleForm: {
       sale: false,
+      currency:'',
+      price:0,
+      saleDescription:'',
       file: [],
       federations: [{
         key: 1,
@@ -159,6 +162,9 @@ parasails.registerPage('dogs-home', {
         hairless: 'What is a down or naked dog?',
         infoColor: 'Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of dogs by color, but rather an attempt to provide more information on the appearance of the dog. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding dogs.',
         whyColor: 'Why determine the color.',
+        priceTitle: 'Selling price.',
+        priceText: 'You can set the price at any time, but until the price is set, the dog will not appear on the sales page. Remember to set the selling currency.',
+        recommendationsSale: 'Recommendations for the sale of dogs. Describe the main advantages and benefits of the dog. This information will be posted on the dog’s card on the sales page.',
       }],
       ['ru', {
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
@@ -177,6 +183,9 @@ parasails.registerPage('dogs-home', {
         hairless: 'Что такое пуховая или голая собака?',
         infoColor: 'Китайская хохлатая может иметь любое сочетание цветов, как предписано в стандарте FCI 288. <br>Данный пункт не относится к классификации собаки по по цветовому признаку, это скорее попытка дать больше информации по внешнему виду собаки. Люди в своей жизни всегда имеют приоритеты, это касается и цвета, предпочтение того или иного цвета часто становится определяющим при покупке или вязки собак.',
         whyColor: 'Зачем определять цвет.',
+        priceTitle: 'Цена продажи.',
+        priceText: 'Установить цену подажи можно в любое время, но пока не установена цена собака не появится на странице продаж. Не забудьте установить валюту продажи.',
+        recommendationsSale: 'Рекомендации для продажи собаки. Опишите главные достоинства и преимущества собаки. Эта информация будет размещена в карточке собаки на странице продаж.',
       }]
     ],
     map: [
@@ -393,6 +402,9 @@ parasails.registerPage('dogs-home', {
         growth: this.ruleForm.growth,
         type: this.ruleForm.type,
         sale: this.ruleForm.sale,
+        price: +this.ruleForm.price,
+        saleDescription: this.ruleForm.saleDescription,
+        currency: this.ruleForm.currency,
         color: this.ruleForm.color,
         stamp: this.ruleForm.stamp,
         registerNumber: this.ruleForm.registerNumber,
@@ -562,12 +574,11 @@ parasails.registerPage('dogs-home', {
     }
     ,
 
-    open() {
-      this.$alert(`<p>${this.i19p.infoColor}</p>`, this.i19p.whyColor, {
+    open(text, title) {
+      this.$alert(`<p>${text}</p>`, title, {
         dangerouslyUseHTMLString: true
       });
-    }
-    ,
+    },
 
 // Закрывает модальное окно для удаления объекта
     closeDeleteThingModal: function () {

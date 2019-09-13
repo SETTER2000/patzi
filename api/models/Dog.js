@@ -42,17 +42,48 @@ module.exports = {
       maxLength: 4
     },
 
+
+    currency: {
+      type: 'string',
+      description: `Валюта продажи. Валюта за катоую можно купить собаку.`,
+      example: 'dollar, рубль, euro',
+      isIn: ['dollar', 'рубль', 'euro'],
+      // required: true,
+      minLength: 4,
+      maxLength: 6
+    },
+
+
+    price: {
+      type: 'number',
+      // required: true,
+      description: 'Цена продажи собаки.'
+    },
+
+
     sale: {
       type:'boolean',
       defaultsTo:false,
       description:`Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
     },
 
+
+
+    saleDescription: {
+      type: 'string',
+      description: `Рекомендации к продаже. Сопроводительный текст, который будет виден на странице
+       продаж для данной собаки.`,
+      maxLength:700
+    },
+
+
     dateBirth: {
       type: 'string',
       required: true,
       description: 'Дата рождения.'
     },
+
+
 
 
     nickname: {

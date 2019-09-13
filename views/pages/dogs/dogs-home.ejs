@@ -29,6 +29,8 @@
     :before-close="handlerCloseDialogSlider"
     v-if="virtualPageSlug==='sale'"
   >
+
+
     <section class="bg">
       <h1><%= __('Buy puppy chinese crested') %></h1>
       <!--<el-row :gutter="50" class="wrap">-->
@@ -36,7 +38,8 @@
       <!--:xs="24" :sm="24" :md="24" :lg="8" :xl="6">-->
       <div class="showcase">
         <el-card shadow="hover" v-for="(o, index) in dogs" :key="o.id" class="my-2 "
-                 v-if="o.sale && _.isString(o.cover)" :body-style="{ padding: '0px' }">
+                 v-if="o.sale && _.isString(o.cover) && o.price > 0 && !_.isEmpty(o.currency)"
+                 :body-style="{ padding: '0px' }">
           <!--<img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">-->
           <!--<div class="scrollbar-2" id="style-0">-->
           <el-image
@@ -54,8 +57,13 @@
               <time class="time">{{ o.born | getCreate(me.preferredLocale,'L') }}</time>
               <el-button type="text" class="button" icon="el-icon-right"></el-button>
             </div>
+            <div class="bottom clearfix text-green" style="font-size: 2vh;">
+              <span v-if="o.currency === 'рубль'"> {{o.price}} &#8381; </span>
+              <span v-else> {{o.currency === 'euro' ? '€' : '$'}} {{o.price}} </span>
+            </div>
           </div>
           <el-divider><i class="el-icon-star-on"></i></el-divider>
+          <div class="px-2">{{o.saleDescription}}</div>
         </el-card>
       </div>
       <!--</el-col>-->
@@ -480,7 +488,7 @@
           </template>
 
           <% /* ТИП */ %>
-          <el-form-item label="<%= __('Gender') %>" prop="type">
+          <el-form-item label="<%= __('Type') %>" prop="type">
             <el-col :xs="9" :sm="9" :md="7" :lg="7" :xl="7">
               <el-radio-group v-model="ruleForm.type">
                 <el-radio label="hairless"><%= __('Hairless') %></el-radio>
@@ -590,7 +598,8 @@
                 <el-tooltip class="ml-3" effect="dark"
                             content="<%= __("Does the standard dictate the definition of color?") %>"
                             placement="top-start">
-                  <el-button @click="open" size="mini" round icon="el-icon-question"></el-button>
+                  <el-button @click="open(i19p.infoColor,i19p.whyColor)" size="mini" round
+                             icon="el-icon-question"></el-button>
                 </el-tooltip>
               </el-col>
             </el-form-item>
@@ -600,6 +609,70 @@
           <template>
             <el-form-item label="<%= __('Sale') %>" prop="sale">
               <el-checkbox v-model="ruleForm.sale"></el-checkbox>
+            </el-form-item>
+          </template>
+
+          <% /* ЦЕНА ПРОДАЖИ */ %>
+          <template v-if="ruleForm.sale">
+            <el-row :gutter="2">
+              <el-form-item label="<%= __('Price') %>" prop="price">
+                <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                  <el-slider
+                    class="hidden-xs-only"
+                    v-model="ruleForm.price"
+                    :min="20"
+                    :max="100000"
+                    show-input>
+                  </el-slider>
+                  <el-input-number :min="20" class="text-center hidden-sm-and-up"
+                                   :max="100000" size="mini" v-model="ruleForm.price"></el-input-number>
+                </el-col>
+                <el-col :xs="4" :sm="3" :md="3" :lg="3" :xl="2">
+                  <el-tooltip effect="dark" content="<%= __("Is it obligatory to set a price now?") %>"
+                              placement="top-start">
+                    <el-button @click="open(i19p.priceText,i19p.priceTitle)" size="mini" round
+                               icon="el-icon-question"></el-button>
+                  </el-tooltip>
+                </el-col>
+                <!--<el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3" class="">-->
+                <!--<el-button size="mini" round icon="el-icon-document-copy"></el-button>-->
+                <!--</el-col>-->
+              </el-form-item>
+            </el-row>
+          </template>
+
+          <% /* ВАЛЮТА ПРОДАЖИ */ %>
+          <template v-if="ruleForm.sale">
+            <el-form-item label="<%= __('Sale currency') %>">
+              <el-select v-model="ruleForm.currency" placeholder="<%= __('please select your currency') %>">
+                <el-option label="dollar ($)" value="dollar"></el-option>
+                <el-option label="euro (€)" value="euro"></el-option>
+                <el-option label="рубль (&#8381;)" value="рубль"></el-option>
+              </el-select>
+            </el-form-item>
+          </template>
+
+          <% /* РЕКОМЕНДАЦИИ К ПРОДАЖЕ */ %>
+          <template>
+            <el-form-item label="<%= __('Recommendations') %>" prop="saleDescription">
+              <el-col :xs="14" :sm="14" :md="14" :lg="12" :xl="12">
+                <el-input
+                  type="textarea"
+                  :rows="2"
+                  autosize
+                  placeholder="Please input"
+                  v-model="ruleForm.saleDescription"
+                  maxlength="700"
+                  show-word-limit>
+                </el-input>
+              </el-col>
+              <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                <el-tooltip effect="dark"
+                            placement="top-start">
+                    <div slot="content">{{i19p.recommendationsSale}}</div>
+                  <div size="mini" round class="el-icon-question "></div>
+                </el-tooltip>
+              </el-col>
             </el-form-item>
           </template>
 
@@ -758,7 +831,7 @@
 
       <% /* Кнопки управления, фильтры */ %>
       <div class="menu-right mb-1" v-if="_.pluck(dogs, 'cover').length > 0">
-        <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
+        <div class="grid-content bg-purple">
           <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
                               <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
