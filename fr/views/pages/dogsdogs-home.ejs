@@ -20,7 +20,6 @@
     </ajax-form>
   </modal>
   <% /* Диалоговое окно "В ПРОДАЖЕ" (SALE)*/ %>
-
   <el-dialog
     :visible.sync="dialogPedigreeVisible"
     :fullscreen="true"
@@ -32,72 +31,101 @@
   >
     <section class="bg">
       <h1><%= __('Buy puppy chinese crested') %></h1>
-    </section>
-    <section>
-      <h2 class="text-center">Lorem ipsum dolor 3.</h2>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 col-lg-6">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
-            <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
-              tenetur voluptas.</p>
-            <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
-              unde!</p>
-            <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
-            <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
-              culpa,
-              provident.</p>
+      <!--<el-row :gutter="50" class="wrap">-->
+      <!--<el-col   v-for="(o, index) in dogs" :key="o.id"-->
+      <!--:xs="24" :sm="24" :md="24" :lg="8" :xl="6">-->
+      <div class="showcase">
+        <el-card shadow="hover" v-for="(o, index) in dogs" :key="o.id" class="my-2 "
+                 v-if="o.sale && _.isString(o.cover)" :body-style="{ padding: '0px' }">
+          <!--<img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">-->
+          <!--<div class="scrollbar-2" id="style-0">-->
+          <el-image
+            :src="o.cover"
+            :key="o.id"
+            :fit="'cover'"
+            lazy
+            :preview-src-list="o.imagesArrUrl">
+          </el-image>
+          <!--</div>-->
+          <div style="padding: 14px;">
+            <span>{{o.fullName}}</span>
+            <div class="bottom clearfix">
+              <em><strong><i class="el-icon-present"></i> <%= __('Dob') %>:</strong></em>
+              <time class="time">{{ o.born | getCreate(me.preferredLocale,'L') }}</time>
+              <el-button type="text" class="button" icon="el-icon-right"></el-button>
+            </div>
           </div>
-          <div class="col-md-12 col-lg-6">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
-            <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
-              tenetur voluptas.</p>
-            <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
-              unde!</p>
-            <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
-            <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
-              culpa,
-              provident.</p>
-          </div>
-        </div>
+          <el-divider><i class="el-icon-star-on"></i></el-divider>
+        </el-card>
       </div>
+      <!--</el-col>-->
+      <!--</el-row>-->
     </section>
-    <section class="bg fixed">
-      <h2>Lorem ipsum soso.</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad autem inventore laborum quia? Alias aperiam autem
-        consequuntur culpa cum delectus deserunt dicta distinctio dolore doloremque ea est et, excepturi fugiat
-        inventore .</p>
+    <!--   <section>
+         <h2 class="text-center">Lorem ipsum dolor 3.</h2>
+         <div class="container">
+           <div class="row">
+             <div class="col-md-12 col-lg-6">
+               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
+               <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
+                 tenetur voluptas.</p>
+               <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
+                 unde!</p>
+               <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
+               <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
+                 culpa,
+                 provident.</p>
+             </div>
+             <div class="col-md-12 col-lg-6">
+               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
+               <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
+                 tenetur voluptas.</p>
+               <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
+                 unde!</p>
+               <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
+               <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
+                 culpa,
+                 provident.</p>
+             </div>
+           </div>
+         </div>
+       </section>
+       <section class="bg fixed">
+         <h2>Lorem ipsum soso.</h2>
+         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad autem inventore laborum quia? Alias aperiam autem
+           consequuntur culpa cum delectus deserunt dicta distinctio dolore doloremque ea est et, excepturi fugiat
+           inventore .</p>
 
-    </section>
-    <section>
-      <h2 class="text-center">Some Content 2.</h2>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 col-lg-6">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
-            <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
-              tenetur voluptas.</p>
-            <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
-              unde!</p>
-            <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
-            <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
-              culpa,
-              provident.</p>
-          </div>
-          <div class="col-md-12 col-lg-6">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
-            <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
-              tenetur voluptas.</p>
-            <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
-              unde!</p>
-            <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
-            <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
-              culpa,
-              provident.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+       </section>
+       <section>
+         <h2 class="text-center">Some Content 2.</h2>
+         <div class="container">
+           <div class="row">
+             <div class="col-md-12 col-lg-6">
+               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
+               <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
+                 tenetur voluptas.</p>
+               <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
+                 unde!</p>
+               <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
+               <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
+                 culpa,
+                 provident.</p>
+             </div>
+             <div class="col-md-12 col-lg-6">
+               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
+               <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
+                 tenetur voluptas.</p>
+               <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
+                 unde!</p>
+               <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
+               <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
+                 culpa,
+                 provident.</p>
+             </div>
+           </div>
+         </div>
+       </section>-->
   </el-dialog>
   <% /* Диалоговое окно. Тарифы. */ %>
   <el-dialog
@@ -329,7 +357,7 @@
                         content="<%= __("If you have not found your cattery, go to the \"Kennels\" section and create it.") %>"
                         placement="top-start">
 
-              <div size="mini" round class="el-icon-question ml-3"></div>
+              <div size="mini" round class="el-icon-question "></div>
             </el-tooltip>
 
           </el-form-item>
@@ -484,7 +512,7 @@
 
             <el-row :gutter="2">
               <el-form-item label="<%= __('Growth (cm)') %>" prop="growth">
-                <el-col :xs="9" :sm="15" :md="14" :lg="13" :xl="12">
+                <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
                   <el-slider
                     class="hidden-xs-only"
                     v-model="ruleForm.growth"
@@ -494,17 +522,16 @@
                   </el-slider>
                   <el-input-number :min="20" class="text-center hidden-sm-and-up"
                                    :max="40" size="mini" v-model="ruleForm.growth"></el-input-number>
-
                 </el-col>
                 <el-col :xs="4" :sm="3" :md="3" :lg="3" :xl="2">
-                  <el-tooltip class="ml-3" effect="dark" content="<%= __("How to measure a dog's height?") %>"
+                  <el-tooltip effect="dark" content="<%= __("How to measure a dog's height?") %>"
                               placement="top-start">
                     <el-button @click="showDialog('growth')" size="mini" round icon="el-icon-question"></el-button>
                   </el-tooltip>
                 </el-col>
-                <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3" class="">
-                  <el-button size="mini" round icon="el-icon-document-copy"></el-button>
-                </el-col>
+                <!--<el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3" class="">-->
+                <!--<el-button size="mini" round icon="el-icon-document-copy"></el-button>-->
+                <!--</el-col>-->
               </el-form-item>
             </el-row>
 
@@ -601,7 +628,7 @@
 
           <template v-if="sires">
             <el-form-item label="<%= __('Sire') %>" prop="sire">
-              <el-col :xs="21" :sm="21" :md="16" :lg="18" :xl="18">
+              <el-col :xs="18" :sm="21" :md="16" :lg="18" :xl="18">
                 <el-autocomplete
                   popper-class="my-autocomplete"
                   v-model="ruleForm.sire"
@@ -684,13 +711,13 @@
       <p class="sample-text">
         <%= __('The page presents dogs of the Chinese Crested Dog. This is a database of dogs of this breed can not claim to be complete information, like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on known dogs grows and improves, this database will collect, maintain and update the actual information that appears in open access to other sites in automatic mode. Generating a complete list of dogs of the world in the Chinese Crested Dog breed.') %>
       </p>
-      <div v-if="me.hasBillingCard || me.isSuperAdmin || me.isAdmin" class="mt-5 section-title text-center">
+      <div v-if="me.hasBillingCard || me.isSuperAdmin || me.isAdmin" class="mt-5  text-center">
         <!--<button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add dog') %></button>-->
         <el-button @click="clickAddButton()" class="btn btn-outline-info"
                    icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
 
       </div>
-      <div class="mt-5 section-title text-center" v-else>
+      <div class="mt-5  text-center" v-else>
         <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"
                    class="btn btn-outline-info"><%= __('Add dog') %></el-button>
       </div>
@@ -715,70 +742,109 @@
   <!--</div>-->
   <!--</div>-->
   <section class="work-area">
-    <% /* Фильтры. */ %>
-    <div class="menu-center mb-5">
-      <el-link type="success" class="px-3" :underline="false" @click="goDogSale" icon="el-icon-money">
-        <%= __('For Sale') %>
-      </el-link>
-      <!--<el-link type="success" class="px-3" :underline="false"  @click="centerDialogVisible = true" icon="el-icon-money">-->
+    <div class="container">
+      <% /* Фильтры. */ %>
+      <!--<div class="menu-left mb-2">-->
+      <!--<el-link class="pr-3" :underline="false" @click="goDogSale" icon="el-icon-money">-->
       <!--<%= __('For Sale') %>-->
       <!--</el-link>-->
-      <!--<el-link type="success" class="px-3"  :underline="false" @click="centerDialogVisible = true" icon="el-icon-money">-->
-      <!--<%= __('For Sale') %>-->
-      <!--</el-link>-->
+      <!--&lt;!&ndash;<el-link type="success" class="px-3" :underline="false"  @click="centerDialogVisible = true" icon="el-icon-money">&ndash;&gt;-->
+      <!--&lt;!&ndash;<%= __('For Sale') %>&ndash;&gt;-->
+      <!--&lt;!&ndash;</el-link>&ndash;&gt;-->
+      <!--&lt;!&ndash;<el-link type="success" class="pl-3"  :underline="false" @click="centerDialogVisible = true" icon="el-icon-money">&ndash;&gt;-->
+      <!--&lt;!&ndash;<%= __('For Sale') %>&ndash;&gt;-->
+      <!--&lt;!&ndash;</el-link>&ndash;&gt;-->
+      <!--</div>-->
 
-    </div>
+      <% /* Кнопки управления, фильтры */ %>
+      <div class="menu-right mb-1" v-if="_.pluck(dogs, 'cover').length > 0">
+        <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
+          <el-dropdown @command="handleCommand">
+                            <span class="el-dropdown-link">
+                              <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
+                            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-money" :command="{com:'c'}">
+                <%= __('For Sale') %>
+              </el-dropdown-item>
 
-    <% /*Превью.*/ %>
-    <div class="scrollbar" id="style-1">
-      <el-row :gutter="1" class="flex-container wrap">
-        <el-col class="flex-item" v-for="(dog, index) in dogs" :key="dog.id"
-                :xs="24" :sm="24" :md="24" :lg="5" :xl="5">
-          <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
-               style="position: relative;" class="ell-image-flex"
-               v-if="!_.isEmpty(dog.imagesArrUrl)">
-            <transition-group appear name="el-zoom-in-top">
-              <div v-show="show && (showDog === dog.id)" class="transition-box" :key="dog.id">
-                <% /* Кнопки управления собакой */ %>
-                <div class="menu-right mt-1">
-                  <el-link type="danger" class="px-2" @click="goTo2(dog.detail)" :underline="false"
-                           title="<%= __('More') %>">
-                    {{dog.fullName}}
-                  </el-link>
-                  <el-link type="danger" class="px-2" @click="openRemoveDialog(dog.id)" :underline="false"
-                           title="<%= __('Remove') %>"
-                           icon="el-icon-close"></el-link>
+              <!--<el-dropdown-item icon="el-icon-present" :command="{com:'g'}">-->
+              <!--<%= __('Add presentation') %>-->
+              <!--</el-dropdown-item>-->
+              <!--<el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:photoSet.indexPhotoSet}">-->
+              <!--<%= __('Photo session name') %>-->
+              <!--</el-dropdown-item>-->
+              <!--<el-dropdown-item icon="el-icon-edit" :command="{com:'b',i:photoSet.indexPhotoSet}">-->
+              <!--<%= __('Photo session description') %>-->
+              <!--</el-dropdown-item>-->
+
+              <!--<el-dropdown-item icon="el-icon-delete-solid"-->
+              <!--:command="{com:'d',i:photoSet.indexPhotoSet, name:photoSet.sessionName}">-->
+              <!--<%= __('Delete photo session') %>-->
+              <!--</el-dropdown-item>-->
+
+              <!--<el-dropdown-item :divided="true" disabled v-if="photoSet.createdAt" icon="el-icon-date"-->
+              <!--command="">-->
+              <!--<%= __('Date publication') %> : <br>{{photoSet.createdAt |-->
+              <!--getCreate(me.preferredLocale)}}-->
+              <!--</el-dropdown-item>-->
+
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </div>
+
+      <% /*Превью.*/ %>
+      <div class="scrollbar" id="style-1" v-if="_.pluck(dogs, 'cover').length > 0">
+        <el-row :gutter="2" class="flex-container wrap">
+          <el-col class="flex-item" v-for="(dog, index) in dogs" :key="dog.id"
+                  :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
+            <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
+                 style="position: relative;" class="ell-image-flex"
+                 v-if="!_.isEmpty(dog.imagesArrUrl)">
+              <transition-group appear name="el-zoom-in-top">
+                <div v-show="show && (showDog === dog.id)" class="transition-box" :key="dog.id">
+                  <% /* Кнопки управления собакой */ %>
+                  <div class="menu-right mt-1">
+                    <el-link type="danger" class="px-2" @click="goTo2(dog.detail)" :underline="false"
+                             title="<%= __('More') %>">
+                      {{dog.fullName}}
+                    </el-link>
+                    <el-link type="danger" class="px-2" @click="openRemoveDialog(dog.id)" :underline="false"
+                             title="<%= __('Remove') %>"
+                             icon="el-icon-close"></el-link>
+                  </div>
+                  <!--<ul class="menu-ell">-->
+                  <!--<li>-->
+                  <!--<el-link class="mt-1"  @click="goTo2(dog.detail)" :underline="false" title="<%= __('More') %>">-->
+                  <!--{{dog.fullName}}-->
+                  <!--</el-link>-->
+                  <!--</li>-->
+                  <!--&lt;!&ndash;<li ><el-link  class="mt-1" @click="goTo2(dog.detail)" :underline="false" title="<%= __('More') %>"&ndash;&gt;-->
+                  <!--&lt;!&ndash;icon="el-icon-more"></el-link></li>&ndash;&gt;-->
+                  <!--<li>-->
+                  <!--<el-link class="mt-1" @click="openRemoveDialog(dog.id)" :underline="false"-->
+                  <!--title="<%= __('Remove') %>"-->
+                  <!--icon="el-icon-close"></el-link>-->
+                  <!--</li>-->
+                  <!--&lt;!&ndash;<li> <el-button type="text" @click="openRemoveDialog"  title="<%= __('Remove') %>" &ndash;&gt;-->
+                  <!--&lt;!&ndash;icon="el-icon-close"></el-button>&ndash;&gt;-->
+                  <!--&lt;!&ndash;</li>&ndash;&gt;-->
+                  <!--</ul>-->
                 </div>
-                <!--<ul class="menu-ell">-->
-                <!--<li>-->
-                <!--<el-link class="mt-1"  @click="goTo2(dog.detail)" :underline="false" title="<%= __('More') %>">-->
-                <!--{{dog.fullName}}-->
-                <!--</el-link>-->
-                <!--</li>-->
-                <!--&lt;!&ndash;<li ><el-link  class="mt-1" @click="goTo2(dog.detail)" :underline="false" title="<%= __('More') %>"&ndash;&gt;-->
-                <!--&lt;!&ndash;icon="el-icon-more"></el-link></li>&ndash;&gt;-->
-                <!--<li>-->
-                <!--<el-link class="mt-1" @click="openRemoveDialog(dog.id)" :underline="false"-->
-                <!--title="<%= __('Remove') %>"-->
-                <!--icon="el-icon-close"></el-link>-->
-                <!--</li>-->
-                <!--&lt;!&ndash;<li> <el-button type="text" @click="openRemoveDialog"  title="<%= __('Remove') %>" &ndash;&gt;-->
-                <!--&lt;!&ndash;icon="el-icon-close"></el-button>&ndash;&gt;-->
-                <!--&lt;!&ndash;</li>&ndash;&gt;-->
-                <!--</ul>-->
-              </div>
-            </transition-group>
-            <el-image
-              :src="dog.cover"
-              :key="dog.id"
-              :fit="'cover'"
-              :scroll-container="'#style-1'"
-              lazy
-              :preview-src-list="dog.imagesArrUrl">
-            </el-image>
-          </div>
-        </el-col>
-      </el-row>
+              </transition-group>
+              <el-image
+                :src="dog.cover"
+                :key="dog.id"
+                :fit="'cover'"
+                :scroll-container="'#style-1'"
+                lazy
+                :preview-src-list="dog.imagesArrUrl">
+              </el-image>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
     </div>
   </section>
 
