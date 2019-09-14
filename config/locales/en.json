@@ -518,5 +518,15 @@
 	"Sale currency": "Sale currency",
 	"please select your currency": "please select your currency",
 	"Recommendations": "Recommendations",
-	"{{i19p.recommendationsSale}}": "{{i19p.recommendationsSale}}"
+	"{{i19p.recommendationsSale}}": "{{i19p.recommendationsSale}}",
+	"Chat": "Chat",
+	"Write a message": "Write a message",
+	"Start negotiations": "Start negotiations",
+	"Dog editor": "Dog editor",
+	"List": "List",
+	"Delete this dog?": "Delete this dog?",
+	"Are you sure you want to remove this dog from the database? This operation is not recoverable.": "Are you sure you want to remove this dog from the database? This operation is not recoverable.",
+	"reset all filters": "reset all filters",
+	"To sell": "To sell",
+	"Update": "Update"
 }

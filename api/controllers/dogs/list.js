@@ -51,7 +51,10 @@ module.exports = {
     // Выбираем весь список объектов данной коллекции.
     let dogs = await Dog.find()
       .sort('createdAt DESC')
-      .populate('kennel');
+      .populate('kennel')
+      .populate('children')
+      .populate('parents')
+    ;
 
 
     // Формируем массив с картинками

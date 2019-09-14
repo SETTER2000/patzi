@@ -47,7 +47,7 @@ module.exports.routes = {
 
   // 'GET /dogs/dog/:id': {action: 'dogs/view-dog'},
   'GET /dogs/:breed/:virtualPageSlug?': {action: 'dogs/view-dogs-home', locals: {currentSection: 'dogs'}},
-  'GET /chinese-crested/:fullName': { action: 'dogs/view-dog' },
+  'GET /chinese-crested/:fullName': {action: 'dogs/view-dog'},
 
 
   'GET /contact': {action: 'view-contact', locals: {currentSection: 'contact'}},
@@ -57,7 +57,6 @@ module.exports.routes = {
   'GET /groups/:virtualPageSlug?': {action: 'groups/view-group-home', locals: {currentSection: 'groups'}},
   'GET /message/message-home': {action: 'message/view-message-home', locals: {currentSection: 'message'}},
   'GET /users/:virtualPageSlug?': {action: 'users/view-users-home', locals: {currentSection: 'users'}},
-
 
 
   'GET /kennels/:virtualPageSlug?': {action: 'kennels/view-kennels-home', locals: {currentSection: 'kennels'}},
@@ -179,6 +178,8 @@ module.exports.routes = {
   'GET    /api/v1/dogs/list-dam': {action: 'dogs/list-dam'},
   'POST   /api/v1/dogs/search-dog': {action: 'dogs/search-dog', csrf: false},
   'POST   /api/v1/dogs/destroy-one-dog': {action: 'dogs/destroy-one-dog', csrf: false},
+  'PUT    /api/v1/dogs/update-dog': {action: 'dogs/update-dog', csrf: false},
+
 
   'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},
   // 'POST   /api/v1/files/set-album-cover': { action: 'files/set-album-cover', csrf: false },
@@ -192,7 +193,7 @@ module.exports.routes = {
   'POST   /api/v1/likes/add-like': {action: 'likes/add-like', csrf: false},
   'GET    /api/v1/likes/list-like/:instanceModuleId/:field': {action: 'likes/list-like'},
   'DELETE /api/v1/likes/destroy-one-like': {action: 'likes/destroy-one-like', csrf: false},
-  'POST   /api/v1/likes/comment-like': { action: 'likes/comment-like', csrf: false},
+  'POST   /api/v1/likes/comment-like': {action: 'likes/comment-like', csrf: false},
 
   'GET    /undefined': {action: 'files/undefined'},
 

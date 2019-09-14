@@ -11,7 +11,11 @@ module.exports = {
 `This action attempts to look up the user record in the database with the
 specified email address.  Then, if such a user exists, it uses
 bcrypt to compare the hashed password from the database with the provided
-password attempt.`,
+password attempt.
+Это действие пытается найти запись пользователя в базе данных с
+указанный адрес электронной почты. Затем, если такой пользователь существует, он использует
+bcrypt сравнить хешированный пароль из базы данных с предоставленным
+попытка пароля.`,
 
 
   inputs: {
@@ -50,7 +54,14 @@ it includes a cookie (like a web browser), Sails will automatically make this
 user id available as req.session.userId in the corresponding action.  (Also note
 that, thanks to the included "custom" hook, when a relevant request is received
 from a logged-in user, that user's entire record from the database will be fetched
-and exposed as \`req.me\`.)`
+and exposed as \`req.me\`.)
+Под крышками хранится идентификатор пользователя, вошедшего в систему в сеансе.
+в качестве ключа \`userId\`. В следующий раз, когда этот пользовательский агент отправит запрос, предполагая,
+он включает в себя куки (например, веб-браузер), Sails автоматически сделает это
+Идентификатор пользователя доступен как req.session.userId в соответствующем действии. (Также обратите внимание
+что благодаря включенному «пользовательскому» хуку, когда соответствующий запрос получен
+от вошедшего в систему пользователя, вся запись этого пользователя из базы данных будет получена
+и отображается как \`req.me\`.)`
     },
 
     badCombo: {

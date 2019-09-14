@@ -62,18 +62,17 @@ module.exports = {
 
 
     sale: {
-      type:'boolean',
-      defaultsTo:false,
-      description:`Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
+      type: 'boolean',
+      defaultsTo: false,
+      description: `Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
     },
-
 
 
     saleDescription: {
       type: 'string',
       description: `Рекомендации к продаже. Сопроводительный текст, который будет виден на странице
        продаж для данной собаки.`,
-      maxLength:700
+      maxLength: 700
     },
 
 
@@ -82,8 +81,6 @@ module.exports = {
       required: true,
       description: 'Дата рождения.'
     },
-
-
 
 
     nickname: {
@@ -153,18 +150,55 @@ module.exports = {
       description: 'Собака может принадлежать только одному питомнику. One to Many'
     },
 
-    // images: {
-    //   collection: 'image',
-    //   via: 'dog',
-    //   description: `У собаки, может быть много фотографий. One to Many.`
+    // sire: {
+    //   model: 'dog',
+    //   description: ` У собаки может быть только один отец. `
+    // },
+    //
+    // dam:{
+    //   model: 'dog',
+    //   description: `  Однако также возможно иметь связь между двумя атрибутами в одной и той же модели.
+    //   Это называется рефлексивной ассоциацией .
+    //   Добавить пользователя № 12 в качестве родителя пользователя № 23
+    //   await User.addToCollection(23, 'parents', 12);
+    //   Найти пользователя № 12 и заполнить его детей
+    //   var userTwelve = await User.findOne(12).populate('children');
+    //   `
     // },
 
 
-    // litters: {
-    //   collection: 'litter',
-    //   via: 'dogs',
-    //   description:' У собаки может быть много помётов. Many to Many (Многие-ко-многим)'
+    // Добавить единственную рефлексивную ассоциацию
+    // bestFriend: {
+    //   model: 'dog',
     // },
+    // Добавьте еще одну множественную рефлексивную ассоциацию, эту сквозную
+    // bookmarkedUsers: {
+    //   collection: 'dog'
+    // }
+    // Добавьте одну сторону множественной рефлексивной ассоциации
+    parents: {
+      collection: 'dog',
+      via: 'children',
+      description: `  Однако также возможно иметь связь между двумя атрибутами в одной и той же модели. 
+                      Это называется рефлексивной ассоциацией.
+                      
+                      Добавить пользователя № 12 в качестве родителя пользователя № 23
+                      await User.addToCollection(23, 'parents', 12);
+                      Найти пользователя № 12 и заполнить его детей
+                      var userTwelve = await User.findOne(12).populate('children');
+                      parents и children атрибуты могут быть изменены с помощью 
+                      .addToCollection(), .removeFromCollection()и .replaceCollection()
+                    `
+    },
+
+    // Добавьте другую сторону множественной рефлексивной ассоциации
+    children: {
+      collection: 'dog',
+      via: 'parents'
+    },
+
+
+
 
   },
 

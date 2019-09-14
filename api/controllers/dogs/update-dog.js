@@ -1,13 +1,16 @@
 module.exports = {
 
 
-  friendlyName: 'Create dog',
-
-
-  description: 'Создаём, добавляем новую собаку.',
+  friendlyName: 'Update dog',
 
 
   inputs: {
+    id: {
+      type: 'string',
+      required: true,
+      description: 'Идентификатор собаки'
+    },
+
     label: {
       type: 'string',
       required: true,
@@ -16,6 +19,20 @@ module.exports = {
       с названием питомника может однозначно установить уникальность собаки в базе.`
     },
 
+
+    gender: {
+      type: 'string',
+      required: true,
+      example: 'sire, dam',
+      description: 'Пол собак. В смысле не пол собаки, а конец есть или нет.'
+    },
+
+
+    dateBirth: {
+      type: 'string',
+      required: true,
+      description: 'Дата рождения.'
+    },
 
     fileList: {
       type: 'ref',
@@ -26,7 +43,7 @@ module.exports = {
     subtitle: {
       type: 'string',
       description: 'Дополнительная информация. Описание питомника.',
-      maxLength:700
+      maxLength: 700
     },
 
 
@@ -48,14 +65,14 @@ module.exports = {
       type: 'string',
       description: `Рекомендации к продаже. Сопроводительный текст, который будет виден на странице
        продаж для данной собаки.`,
-      maxLength:700
+      maxLength: 700
     },
 
 
     sale: {
-      type:'boolean',
-      defaultsTo:false,
-      description:`Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
+      type: 'boolean',
+      defaultsTo: false,
+      description: `Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
     },
 
 
@@ -83,21 +100,6 @@ module.exports = {
     },
 
 
-    gender: {
-      type: 'string',
-      required: true,
-      example:'sire, dam',
-      description: 'Пол собак. В смысле не пол собаки, а конец есть или нет.'
-    },
-
-
-    dateBirth: {
-      type: 'string',
-      required: true,
-      description: 'Дата рождения.'
-    },
-
-
     nickname: {
       type: 'string',
       description: 'Кличка, ласковое имя.'
@@ -107,21 +109,21 @@ module.exports = {
     weight: {
       type: 'number',
       description: 'Вес. В граммах.',
-      example:4500
+      example: 4500
     },
 
 
     growth: {
       type: 'number',
       description: 'Рост. В сантиметрах.',
-      example:30
+      example: 30
     },
 
 
     type: {
       type: 'string',
       description: 'Тип. Возможны два варианта.',
-      example:'hairless, powderpuff',
+      example: 'hairless, powderpuff',
     },
 
     color: {
@@ -185,7 +187,7 @@ module.exports = {
     if (inputs.fileList) {
       fileList = inputs.fileList.filter(o => !_.isNull(o));
       _.each(fileList, img => {
-        img.id =_.first(_.last(img.fd.split('\\')).split('.'));
+        img.id = _.first(_.last(img.fd.split('\\')).split('.'));
         delete img.filename;
         delete img.status;
         delete img.field;
@@ -198,7 +200,7 @@ module.exports = {
     inputs.label = inputs.label.replace(kennel.label, '');
 
 
-    // Проверка существования такой же собаки.
+    /*// Проверка существования такой же собаки.
     let conflictingDog = await Dog.findOne({
       kennel: inputs.kennel,
       label: inputs.label
@@ -206,38 +208,37 @@ module.exports = {
 
     if (conflictingDog) {
       throw (req.me.preferredLocale === 'ru') ? 'dogAlreadyInUseRU' : 'dogAlreadyInUse';
-    }
+    }*/
+
+
     let label = _.startCase(inputs.label.toString().toLowerCase());
-    let rightFullName = _.startCase(label +' ' + kennel.label);
-    let leftFullName = _.startCase( kennel.label +' ' +label);
+    let rightFullName = _.startCase(label + ' ' + kennel.label);
+    let leftFullName = _.startCase(kennel.label + ' ' + label);
     let dateBirth = inputs.dateBirth.replace(/"([^"]+(?="))"/g, '$1');
 
     // Создаём собаку
-    let newDog = await Dog.create({
-      label:  label,
-      kennel: inputs.kennel,
-      gender: inputs.gender,
-      currency: inputs.currency,
-      price: inputs.price,
-      saleDescription: inputs.saleDescription,
-      dateBirth: inputs.dateBirth,
-      born: moment.tz(dateBirth, 'Europe/Moscow').format(),
-      nickname: inputs.nickname,
-      subtitle: inputs.subtitle,
-      weight: inputs.weight,
-      growth: inputs.growth,
-      type:   inputs.type,
-      sale:   inputs.sale,
-      images: fileList,
-      color:  inputs.color,
-      stamp:  inputs.stamp,
-      fullName:  kennel.right ? `${rightFullName}` : `${leftFullName}`
-    }).fetch();
-    // Если не создан возвращаем ошибку.
-    if (!newDog) {
+    let updateDog = await Dog.updateOne({id: inputs.id})
+      .set({
+        label: label,
+        kennel: inputs.kennel,
+        gender: inputs.gender,
+        currency: inputs.currency,
+        price: inputs.price,
+        saleDescription: inputs.saleDescription,
+        dateBirth: inputs.dateBirth,
+        born: moment.tz(dateBirth, 'Europe/Moscow').format(),
+        nickname: inputs.nickname,
+        subtitle: inputs.subtitle,
+        weight: inputs.weight,
+        growth: inputs.growth,
+        type: inputs.type,
+        sale: inputs.sale,
+        images: fileList,
+        color: inputs.color,
+        stamp: inputs.stamp,
+        fullName: kennel.right ? `${rightFullName}` : `${leftFullName}`
+      });
 
-      throw 'badRequest';
-    }
 
     /**
      * Для собаки с id 23 добавить родителя с  id 12
@@ -253,14 +254,19 @@ module.exports = {
     inputs.sire ? parents.push(inputs.sire) : '';
     let parentFind = await Dog.find({fullName: parents});
     parents = _.pluck(parentFind, 'id');
-    parents.length > 0 ? await Dog.addToCollection(newDog.id, 'parents').members(parents) : '';
+    parents.length > 0 ? await Dog.replaceCollection(updateDog.id, 'parents').members(parents) : '';
 
 
+    // Если не создан возвращаем ошибку.
+    if (!updateDog) {
+      throw 'badRequest';
+    }
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    await sails.sockets.broadcast('dog', 'list-dog');
+    // await sails.sockets.broadcast('dog', 'list-dog');
 
     return exits.success();
   }
+
 
 };
