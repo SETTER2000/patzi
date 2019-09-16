@@ -53,8 +53,7 @@ module.exports = {
       .sort('createdAt DESC')
       .populate('kennel')
       .populate('children')
-      .populate('parents')
-    ;
+      .populate('parents');
 
 
     // Формируем массив с картинками
@@ -91,8 +90,11 @@ module.exports = {
       dog.kennelName = dog.kennel.label;
       dog.fullName = dog.kennel.right ? `${dog.label} ${dog.kennel.label}` : `${dog.kennel.label} ${dog.label}`;
       dog.detail =  dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
-      dog.imagesArrUrl= _.pluck( dog.images, 'imageSrc');
-      dog.cover =  dog.imagesArrUrl[0];
+      dog.imagesArrUrl= _.pluck( dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
+      dog.cover =  dog.imagesArrUrl[0]; // Обложка альбома
+      // dog.born = JSON.stringify(moment(dog.born));
+      // console.log('DATE born isObject?: ', `${dog.fullName}: ${dog.born} ${_.isObject(dog.born)}`);
+      // console.log('DATE dateBirth isObject?: ', `${dog.fullName}: ${dog.dateBirth} ${_.isObject(dog.dateBirth)}`);
       return dog;
     });
 

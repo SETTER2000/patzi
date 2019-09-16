@@ -83,6 +83,11 @@ module.exports = {
     },
 
 
+    dateDeath: {
+      type: 'string',
+      description: 'Дата смерти.'
+    },
+
     nickname: {
       type: 'string',
       description: 'Кличка, ласковое имя.'

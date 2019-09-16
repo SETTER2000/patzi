@@ -34,6 +34,12 @@ module.exports = {
       description: 'Дата рождения.'
     },
 
+
+    dateDeath: {
+      type: 'string',
+      description: 'Дата смерти.'
+    },
+
     fileList: {
       type: 'ref',
       description: 'Массив с файлами данных о загруженных файлах.'
@@ -170,33 +176,23 @@ module.exports = {
   fn: async function (inputs, exits) {
     // Бибилиотека Node.js
     const req = this.req;
-    const moment = require('moment');
-    const tz = require('moment-timezone');
-    moment.locale('en');
+    // const moment = require('moment');
+    // const tz = require('moment-timezone');
+    // moment.locale('en');
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
     }
-    let fileList;
-
+    let dog = await Dog.findOne(inputs.id);
+    let images = dog.images;
+    let imagesNew;
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
 
-    // console.log('inputs.fileList DOG-create: ', inputs.fileList);
-    if (inputs.fileList) {
-      fileList = inputs.fileList.filter(o => !_.isNull(o));
-      _.each(fileList, img => {
-        img.id = _.first(_.last(img.fd.split('\\')).split('.'));
-        delete img.filename;
-        delete img.status;
-        delete img.field;
-      });
-    }
-
 
     // Удаляем название питомника из имени собаки
-    let kennel = await Kennel.findOne({id: inputs.kennel});
+    let kennel = await Kennel.find({id: inputs.kennel}).limit(1);
     inputs.label = inputs.label.replace(kennel.label, '');
 
 
@@ -214,30 +210,59 @@ module.exports = {
     let label = _.startCase(inputs.label.toString().toLowerCase());
     let rightFullName = _.startCase(label + ' ' + kennel.label);
     let leftFullName = _.startCase(kennel.label + ' ' + label);
-    let dateBirth = inputs.dateBirth.replace(/"([^"]+(?="))"/g, '$1');
+    // let dateBirth = inputs.dateBirth.replace(/"([^"]+(?="))"/g, '$1');
+    // let dateDeath = inputs.dateDeath.replace(/"([^"]+(?="))"/g, '$1');
 
+    //
+    // console.log('inputs.dateDeath}: ${_.isEmpty(inputs.dateDeath)}::: ',
+    //   `${inputs.dateDeath}: ${_.isEmpty(inputs.dateDeath)}`);
+    //
+    // dateDeath = !_.isEmpty(dateDeath) ? moment.tz(dateDeath, 'Europe/Moscow').format() : '';
+
+
+    let updateObj = {
+      label: label,
+      kennel: inputs.kennel,
+      gender: inputs.gender,
+      currency: inputs.currency,
+      price: inputs.price,
+      saleDescription: inputs.saleDescription,
+      // dateBirth: inputs.dateBirth,
+      // dateDeath: inputs.dateDeath,
+      // born: moment.tz(dateBirth, 'Europe/Moscow').format(),
+      dateBirth: await sails.helpers.dateFix(inputs.dateBirth),
+      dateDeath: await sails.helpers.dateFix(inputs.dateDeath),
+      // dateBirth: moment.tz(dateBirth, 'Europe/Moscow').format(),
+      nickname: inputs.nickname,
+      subtitle: inputs.subtitle,
+      weight: inputs.weight,
+      growth: inputs.growth,
+      type: inputs.type,
+      sale: inputs.sale,
+      color: inputs.color,
+      stamp: inputs.stamp,
+      fullName: kennel.right ? `${rightFullName}` : `${leftFullName}`
+    };
+
+
+    console.log('inputs.fileList DOG-update: ', inputs.fileList);
+    if (inputs.fileList) {
+      imagesNew = inputs.fileList.filter(o => !_.isNull(o));
+      _.each(imagesNew, img => {
+        img.id = _.isArray(img.fd) ? _.first(_.last(img.fd.split('\\')).split('.')) : '';
+        delete img.filename;
+        delete img.status;
+        delete img.field;
+      });
+    }
+    console.log('ListPhoto fileList: ', imagesNew);
+    // console.log('ListPhoto fileList isEmpty?: ', _.isEmpty(fileList));
+
+    !_.isEmpty(images) ? updateObj.images = [...images, ...imagesNew] : '';
+    // console.log('После обработки List photo:: ' ,   updateObj.images);
     // Создаём собаку
     let updateDog = await Dog.updateOne({id: inputs.id})
-      .set({
-        label: label,
-        kennel: inputs.kennel,
-        gender: inputs.gender,
-        currency: inputs.currency,
-        price: inputs.price,
-        saleDescription: inputs.saleDescription,
-        dateBirth: inputs.dateBirth,
-        born: moment.tz(dateBirth, 'Europe/Moscow').format(),
-        nickname: inputs.nickname,
-        subtitle: inputs.subtitle,
-        weight: inputs.weight,
-        growth: inputs.growth,
-        type: inputs.type,
-        sale: inputs.sale,
-        images: fileList,
-        color: inputs.color,
-        stamp: inputs.stamp,
-        fullName: kennel.right ? `${rightFullName}` : `${leftFullName}`
-      });
+      .set(updateObj);
 
 
     /**

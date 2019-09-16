@@ -52,6 +52,18 @@ module.exports = {
     },
 
 
+
+    dateBirth: {
+      type: 'string',
+      required: true,
+      description: 'Дата рождения.'
+    },
+
+    dateDeath: {
+      type: 'string',
+      description: 'Дата смерти.'
+    },
+
     sale: {
       type:'boolean',
       defaultsTo:false,
@@ -88,13 +100,6 @@ module.exports = {
       required: true,
       example:'sire, dam',
       description: 'Пол собак. В смысле не пол собаки, а конец есть или нет.'
-    },
-
-
-    dateBirth: {
-      type: 'string',
-      required: true,
-      description: 'Дата рождения.'
     },
 
 
@@ -175,7 +180,7 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-    let fileList;
+    let images;
 
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
@@ -183,15 +188,15 @@ module.exports = {
 
     // console.log('inputs.fileList DOG-create: ', inputs.fileList);
     if (inputs.fileList) {
-      fileList = inputs.fileList.filter(o => !_.isNull(o));
-      _.each(fileList, img => {
+      images = inputs.fileList.filter(o => !_.isNull(o));
+      _.each(images, img => {
         img.id =_.first(_.last(img.fd.split('\\')).split('.'));
         delete img.filename;
         delete img.status;
         delete img.field;
       });
     }
-
+    // console.log('inputs.fileList после обработки: ', inputs.fileList);
 
     // Удаляем название питомника из имени собаки
     let kennel = await Kennel.findOne({id: inputs.kennel});
@@ -210,7 +215,7 @@ module.exports = {
     let label = _.startCase(inputs.label.toString().toLowerCase());
     let rightFullName = _.startCase(label +' ' + kennel.label);
     let leftFullName = _.startCase( kennel.label +' ' +label);
-    let dateBirth = inputs.dateBirth.replace(/"([^"]+(?="))"/g, '$1');
+
 
     // Создаём собаку
     let newDog = await Dog.create({
@@ -220,15 +225,15 @@ module.exports = {
       currency: inputs.currency,
       price: inputs.price,
       saleDescription: inputs.saleDescription,
-      dateBirth: inputs.dateBirth,
-      born: moment.tz(dateBirth, 'Europe/Moscow').format(),
+      dateBirth: await sails.helpers.dateFix(inputs.dateBirth),
+      dateDeath:  await sails.helpers.dateFix(inputs.dateDeath),
       nickname: inputs.nickname,
       subtitle: inputs.subtitle,
       weight: inputs.weight,
       growth: inputs.growth,
       type:   inputs.type,
       sale:   inputs.sale,
-      images: fileList,
+      images: images,
       color:  inputs.color,
       stamp:  inputs.stamp,
       fullName:  kennel.right ? `${rightFullName}` : `${leftFullName}`

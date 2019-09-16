@@ -528,5 +528,10 @@
 	"Are you sure you want to remove this dog from the database? This operation is not recoverable.": "Are you sure you want to remove this dog from the database? This operation is not recoverable.",
 	"reset all filters": "reset all filters",
 	"To sell": "To sell",
-	"Update": "Update"
+	"Update": "Update",
+	"DoD": "DoD",
+	"Image editor": "Image editor",
+	"Check all": "Check all",
+	"Select all": "Select all",
+	"Add": "Add"
 }

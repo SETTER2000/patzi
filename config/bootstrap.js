@@ -13,6 +13,7 @@ module.exports.bootstrap = async function () {
 
   // Import dependencies
   var path = require('path');
+  var moment = require('moment');
 
   // This bootstrap version indicates what version of fake data we're dealing with here.
   var HARD_CODED_DATA_VERSION = 4;
@@ -1781,14 +1782,7 @@ module.exports.bootstrap = async function () {
       label: `Adam`,
       gender: 'sire',
       sale:false,
-      dateBirth: '2017-11-02T21:00:00.000Z',
-      kennel: 'Poale Ell'
-    },
-    {
-      label: `Bell`,
-      gender: 'dam',
-      sale:false,
-      dateBirth: '2017-11-02T21:00:00.000Z',
+      dateBirth: moment('2017-11-02T21:00:00.000Z').format(),
       kennel: 'Poale Ell'
     },
     {

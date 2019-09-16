@@ -9,9 +9,15 @@ parasails.registerPage('dogs-home', {
     innerVisible: false,
     dialogEditorList: false,
     photoVisible: false,
+    centerDialogVisiblePhotos: false,
+    checkAll: false,
+    checkedPhoto: [],
+    // cities: cityOptions,
+    isIndeterminate: true,
     sire: '',
+    photos: {},
+    cheker: false,
     dam: '',
-    dateBirth: '',
     buttonUpdate: false,
     objOne: {},
     kennels: [],
@@ -23,7 +29,8 @@ parasails.registerPage('dogs-home', {
     pathDogs: '/dogs/chinese-crested',
     fullNameDogNegotiations: '',
     dams: [],
-
+    dateBirthUpdate: '',
+    dateDeathUpdate: '',
     search: '',
     nameModule: 'Dog',
     drawer: false,
@@ -81,16 +88,15 @@ parasails.registerPage('dogs-home', {
         {required: true, message: 'Please input dog name', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
       ],
-      // growth: [
-      //   {required: true, message: 'Please input height dog', trigger: 'change'},
-      //   // {min: 20, max: 40, message: 'Height should be 20 to 40 cm', trigger: 'change'}
-      // ],
       gender: [
         {required: true, message: 'Please select a dog gender.', trigger: 'change'}
       ],
       dateBirth: [
-        {type: 'string', required: true, message: 'Please pick a date', trigger: 'change'}
+        {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
       ],
+      // dateBirthUpdate: [
+      //   { type:'string',required: true, message: 'Please pick a date', trigger: 'change'}
+      // ],
       /*  registerNumber: [
          {required: true, message: 'Please input register number', trigger: 'blur'},
          {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
@@ -117,6 +123,10 @@ parasails.registerPage('dogs-home', {
     }],
     ruleForm: {
       sale: false,
+      dateBirth: '',
+      // dateBirthUpdate: '',
+      dateDeath: '',
+      // dateDeathUpdate: '',
       currency: '',
       price: 0,
       saleDescription: '',
@@ -142,7 +152,6 @@ parasails.registerPage('dogs-home', {
       dialogVisible: false,
       kennel: null,
       registerNumber: '',
-      dateBirth: {},
       subtitle: '',
       weight: 10,
       growth: 20,
@@ -173,6 +182,7 @@ parasails.registerPage('dogs-home', {
         text500Err: 'Server Error! Unable to create. ',
         text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
         success: 'Congratulations! Object successfully created. ',
+        successUpdate: 'Object updated successfully.',
         successDelete: 'Object deleted successfully. ',
         selectGender: 'Please select a dog gender.',
         growth: 'How to measure a dog\'s height?',
@@ -194,10 +204,12 @@ parasails.registerPage('dogs-home', {
         delCancel: 'Удаление отменено',
         cancel: 'Отменить',
         text400Err: 'Ошибка. Не смог создать!',
+        text400ErrUpdate: 'Ошибка. Не смог обновить!',
         text500Err: 'Ошибка сервера! Невозможно создать.',
         text500ErrUpdate: 'Ошибка сервера! Невозможно обновить.',
         text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
         success: 'Поздравляем! Объект успешно создан.',
+        successUpdate: 'Объект успешно обновлён.',
         successDelete: 'Объект успешно удалён.',
         selectGender: 'Пожалуйста выберите пол собаки.',
         growth: 'Как измерить рост собаки?',
@@ -336,7 +348,7 @@ parasails.registerPage('dogs-home', {
 
       // Принимаем данные по событию list-*
       await io.socket.on('list-dog', (data) => {
-        this.dogs = data;
+        this.dogs = _.isNull(data) ? [] : data;
         console.log('this.dogs: ', this.dogs);
       });
       // Принимаем данные по событию list-*
@@ -354,21 +366,21 @@ parasails.registerPage('dogs-home', {
     },
 
 
-    submittedUploadForm: function (result) {
-      // Добавлем новые данные в уже имеющийся массив dogs
-      this.dogs.push({
-        label: this.ruleForm.label,
-        id: result.id,
-        imageSrc: result.imageSrc,
-        title: this.ruleForm.title,
-        dateBirth: this.ruleForm.date1,
-        owner: {
-          id: this.me.id,
-          fullName: this.me.fullName,
-        },
-      });
-      this._clearUploadModal();
-    },
+    // submittedUploadForm: function (result) {
+    //   // Добавлем новые данные в уже имеющийся массив dogs
+    //   this.dogs.push({
+    //     label: this.ruleForm.label,
+    //     id: result.id,
+    //     imageSrc: result.imageSrc,
+    //     title: this.ruleForm.title,
+    //     // dateBirth: this.ruleForm.date1,
+    //     owner: {
+    //       id: this.me.id,
+    //       fullName: this.me.fullName,
+    //     },
+    //   });
+    //   this._clearUploadModal();
+    // },
 
 
     beforeAvatarUpload(file) {
@@ -402,8 +414,11 @@ parasails.registerPage('dogs-home', {
 
 
     async submitForm(formName) {
+      console.log('this.buttonUpdate::: ', this.buttonUpdate);
       this.$refs[formName].validate((valid) => {
+        console.log('valid::: ', valid);
         if (valid && !this.buttonUpdate) {
+
           this.addDog();
         } else if (valid && this.buttonUpdate) {
           this.updateDog();
@@ -420,7 +435,8 @@ parasails.registerPage('dogs-home', {
       let data = {
         fileList: this.ruleForm.fileList,
         label: this.ruleForm.label,
-        dateBirth: this.ruleForm.dateBirth,
+        dateBirth: JSON.stringify(this.ruleForm.dateBirth),
+        dateDeath: this.ruleForm.dateDeath,
         gender: this.ruleForm.gender,
         kennel: this.ruleForm.kennel,
         nickname: this.ruleForm.nickname,
@@ -464,11 +480,14 @@ parasails.registerPage('dogs-home', {
 
     async updateDog() {
       this.openFullScreen();
+      console.log('IMG::: ', this.ruleForm.fileList);
+      // console.log('DATE R::; ' , this.dateDeathUpdate);
       let data = {
         id: this.ruleForm.id,
         fileList: this.ruleForm.fileList,
         label: this.ruleForm.label,
-        dateBirth: this.dateBirth,
+        dateBirth: JSON.stringify(this.dateBirthUpdate),
+        dateDeath: JSON.stringify(this.dateDeathUpdate),
         gender: this.ruleForm.gender,
         kennel: this.ruleForm.kennel,
         dam: this.dam,
@@ -491,7 +510,7 @@ parasails.registerPage('dogs-home', {
       console.log('DATA перед отправкой::: ', data);
 
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
@@ -509,6 +528,8 @@ parasails.registerPage('dogs-home', {
         }
       });
     },
+
+
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
@@ -623,7 +644,6 @@ parasails.registerPage('dogs-home', {
     },
 
     handlerCloseDialogSlider() {
-      // this.photos = [];
       this.fullscreenLoading = false;
       this.goto(this.pathDogs);
     },
@@ -865,7 +885,7 @@ parasails.registerPage('dogs-home', {
       let data = {
         id: this.removeDog,
       };
-      // console.log('Перед отправкой data: ', data);
+      console.log('Перед отправкой data DOG: ', data);
       io.socket.post('/api/v1/dogs/destroy-one-dog', data, (dataRes, jwRes) => {
         this.errorMessages(jwRes, this.i19p.successDelete);
         this.dialogDeletePhotoSession = false;
@@ -908,6 +928,48 @@ parasails.registerPage('dogs-home', {
       }).then(() => {
         this.deleteDog();
 
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.i19p.delCancel
+        });
+      });
+    },
+
+    async fixPhotos() {
+      let newArrPhotos = _.difference(this.photos.imagesArrUrl, this.checkedPhoto);
+      let data = this.photos;
+      data['imagesArrUrl'] = newArrPhotos;
+      console.log('this.photos ПЕРЕД ОТПРАВКОЙ:::: ', data);
+      await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        // this.loading.close();
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          // this.ruleForm.file = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+        }
+      });
+      // console.log(' this.ruleForm::: ', this.ruleForm);
+      // console.log('newPhotos::: ' , newPhotos);
+    },
+
+    removePhotos() {
+      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
+        confirmButtonText: 'OK',
+        cancelButtonText: this.i19p.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.fixPhotos();
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -964,10 +1026,18 @@ parasails.registerPage('dogs-home', {
     handleEdit(index, row) {
       this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
       this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
-      this.dateBirth = row.dateBirth;
-      console.log(index, row);
-
       this.ruleForm = row;
+      // console.log('row.dateBirth:::', moment(row.dateBirth));
+
+      console.log('born isObject? :::', _.isObject(row.dateBirth));
+      // this.ruleForm.dateBirthUpdate = _.isObject(row.dateBirth) ? row.dateBirth : JSON.parse(row.dateBirth);
+      this.dateBirthUpdate = row.dateBirth;
+      this.dateDeathUpdate = row.dateDeath;
+      console.log('this.dateDeathUpdate :::', this.dateDeathUpdate);
+      // console.log(index, row);
+      // console.log('this.$refs.upload::: ', this.$refs.upload);
+      // this.ruleForm.fileList = row.imagesArrUrl;
+
       this.ruleForm.kennel = row.kennel.id;
 
       this.dialogEditor = true;
@@ -975,6 +1045,24 @@ parasails.registerPage('dogs-home', {
       this.buttonUpdate = true;
     },
 
+
+    handleEditPhotos(index, row) {
+      // this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
+      // this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
+      // this.ruleForm = row;
+      // this.dateBirth = row.dateBirth;
+      // this.dateDeath = row.dateDeath;
+      this.photos = row;
+      // console.log(index, row);
+      // console.log('row::: ', row);
+      // this.ruleForm.fileList = row.imagesArrUrl;
+      //
+      // this.ruleForm.kennel = row.kennel.id;
+      //
+      this.centerDialogVisiblePhotos = true;
+      // this.centerDialogAdded = true;
+      // this.buttonUpdate = true;
+    },
 
     handleDelete(index, row) {
       this.innerVisible = true;
@@ -993,6 +1081,19 @@ parasails.registerPage('dogs-home', {
       console.log('row:', row);
       this.objOne = row;
     },
+
+
+    handleCheckAllChange(val) {
+      this.checkedPhoto = val ? this.photos.imagesArrUrl : [];
+      this.isIndeterminate = false;
+      console.log('this.checkedPhoto:: ', this.checkedPhoto);
+    },
+    handleCheckedPhotosChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.photos.imagesArrUrl.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.photos.imagesArrUrl.length;
+      console.log('this.checkedPhoto-22:: ', this.checkedPhoto);
+    }
   }
 })
 ;
