@@ -4,6 +4,48 @@
   <!--<div @click="feedback($event)" class="rasp">-->
   <!--<i class="ti-announcement"></i> <%= __('Feedback about this page?') %>-->
   <!--</div>-->
+  <% /* Диалоговое окно. Редактор картинок. */ %>
+  <el-dialog
+    title="Imige editor"
+    :visible.sync="centerDialogVisiblePhotos"
+    width="100vw"
+    custom-class="dialog-images-editor"
+    center>
+    <div class="container">
+      <div class="menu-between">
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
+          <%= __('Select all') %></el-checkbox>
+        <span>
+        <el-link :underline="false" @click="removePhotos" class="mx-3" title="<%= __('Remove') %>"
+                 icon="el-icon-delete"></el-link>
+        <el-link :underline="false" title="<%= __('Add') %>" icon="el-icon-plus"></el-link>
+          </span>
+      </div>
+      <el-checkbox-group v-model="checkedPhoto" @change="handleCheckedPhotosChange">
+        <div class="photo-editor">
+          <el-card shadow="hover" :body-style="{ padding: '0px'}"
+                   v-for="(o, index, key) in photos.imagesArrUrl"
+                   :key="index + '-photo'">
+            <img :src="o" class="image">
+            <div style="padding: 14px;">
+              <span>Yummy hamburger</span>
+              <span>Yummy hamburger</span>
+              <div class="bottom clearfix">
+                <!--<time class="time">{{ currentDate }}</time>-->
+                <el-checkbox :label="o" :key="o"></el-checkbox>
+                <!--<el-button type="text" class="button">Operating</el-button>-->
+              </div>
+            </div>
+          </el-card>
+        </div>
+      </el-checkbox-group>
+    </div>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisiblePhotos = false">Cancel</el-button>
+    <el-button type="primary" @click="centerDialogVisiblePhotos = false">Confirm</el-button>
+  </span>
+  </el-dialog>
+
   <% /* Диалоговое окно. Feedback about this page?. */ %>
   <modal v-if="dialogFormVisible" v-cloak key="delete"
          @close="closeDeleteThingModal()">
@@ -188,7 +230,7 @@
   </el-dialog>
   <% /* Диалоговое окно Редактор собак. Список собак*/ %>
   <el-dialog title="<%= __('Dog editor') %>. <%= __('List') %>." :visible.sync="dialogEditorList">
-   <!-- <el-dialog
+    <!-- <el-dialog
       width="30%"
       title="<%= __('Delete this dog?') %>"
       :visible.sync="innerVisible"
@@ -217,12 +259,12 @@
           width="38">
         </el-table-column>
         <!--<el-table-column-->
-          <!--label="Photo"-->
-          <!--prop="cover">-->
-          <!--<el-avatar :size="60" src="https://empty" @error="errorHandler">-->
-            <!--<img src="cover"/>-->
-          <!--</el-avatar>-->
-          <!--&lt;!&ndash;<el-avatar shape="square" :size="100" :fit="'cover'" :src="cover"></el-avatar>&ndash;&gt;-->
+        <!--label="Photo"-->
+        <!--prop="cover">-->
+        <!--<el-avatar :size="60" src="https://empty" @error="errorHandler">-->
+        <!--<img src="cover"/>-->
+        <!--</el-avatar>-->
+        <!--&lt;!&ndash;<el-avatar shape="square" :size="100" :fit="'cover'" :src="cover"></el-avatar>&ndash;&gt;-->
         <!--</el-table-column>-->
 
         <el-table-column
@@ -237,14 +279,14 @@
           <template slot-scope="scope">
             <div v-if="scope.row.cover">
               <!--<div class="image-wrapper round">-->
-                <!--<a href="#" @click="clickShowPhoto(scope.$index,scope.row)">-->
-                  <!--<img :src="scope.row.cover" class="personPhoto"/>-->
-                <!--</a>-->
-                <a href="#"  @click="clickShowPhoto(scope.$index,scope.row)" class="flex justify-content-center">
-                <el-avatar :size="38" src="https://empty" @error="errorHandler">
+              <!--<a href="#" @click="clickShowPhoto(scope.$index,scope.row)">-->
+              <!--<img :src="scope.row.cover" class="personPhoto"/>-->
+              <!--</a>-->
+              <a href="#" @click="clickShowPhoto(scope.$index,scope.row)" class="flex justify-content-center">
+                <el-avatar :size="38" @error="errorHandler">
                   <img :src="scope.row.cover"/>
                 </el-avatar>
-                </a>
+              </a>
               <!--</div>-->
             </div>
             <div v-else class="photo-preview col">
@@ -253,7 +295,6 @@
             </div>
           </template>
         </el-table-column>
-
 
 
         <el-table-column
@@ -270,6 +311,14 @@
               placeholder="Type to search"/>
           </template>
           <template slot-scope="scope">
+            <el-tooltip content="<%= __('Image editor') %>" placement="left" effect="light">
+              <el-button
+                v-if="scope.row.cover"
+                size="mini"
+                icon="el-icon-picture-outline-round"
+                @click="handleEditPhotos(scope.$index, scope.row)">
+              </el-button>
+            </el-tooltip>
             <el-button
               size="mini"
               @click="handleEdit(scope.$index, scope.row)">
@@ -290,15 +339,15 @@
       <span class="flex justify-content-between">
          <el-button @click="clearFilter"><%= __('reset all filters') %></el-button>
         <span>
-            <el-button @click="dialogEditorList = false"><%= __('Close') %></el-button>
-            <!--<el-button type="primary" @click="submitForm('ruleForm')"><%= __('Save') %></el-button>-->
+            <el-button @click="buttonUpdate = false; dialogEditorList = false"><%= __('Close') %></el-button>
+          <!--<el-button type="primary" @click="submitForm('ruleForm')"><%= __('Save') %></el-button>-->
         </span>
       </span>
     </span>
   </el-dialog>
 
   <% /* Диалоговое окно Редактор собаки */ %>
- <!-- <el-dialog title="<%= __('Dog editor') %>" :visible.sync="dialogEditor">
+  <!-- <el-dialog title="<%= __('Dog editor') %>" :visible.sync="dialogEditor">
     <el-form :label-position="'top'"
              :model="ruleForm" :rules="rules" ref="ruleForm"
              label-width="120px" class="demo-ruleForm">
@@ -500,6 +549,7 @@
         <div slot="placeholder" class="image-slot">
           Loading<span class="dot">...</span>
         </div>
+
       </el-image>
     </el-dialog>
     <h1 v-if="buttonUpdate" class="flex justify-content-center">{{ruleForm.fullName}}</h1>
@@ -549,7 +599,7 @@
             <!--@change="changeKennel"-->
             <el-select v-model="ruleForm.kennel" placeholder="<%= __('Choose your cattery') %>"
                        class="form-width"
-                       >
+            >
               <el-option v-for="item in getPullKennel()"
                          :key="item.id"
                          :label="item.label"
@@ -582,21 +632,57 @@
             </el-form-item>
           </template>
 
+          <!--v-if="!buttonUpdate"-->
+          <!--fox:: {{_.isString(ruleForm.dateBirth)}}-->
 
-
-          <el-form-item label="<%= __('DoB') %>" prop="dateBirth">
+          <el-form-item v-if="!buttonUpdate" label="<%= __('DoB') %>" prop="dateBirth">
+            <!--dateBirth Объект?: {{_.isObject(ruleForm.dateBirth)}}-->
             <el-row :gutter="2">
               <el-col :span="11">
                 <el-date-picker
-                  v-if="!buttonUpdate"
                   v-model="ruleForm.dateBirth"
                   type="datetime"
                   placeholder="<%= __('Select date and time') %>"
                   default-time="12:00:00">
                 </el-date-picker>
+              </el-col>
+            </el-row>
+          </el-form-item>
+
+          <el-form-item v-if="buttonUpdate" label="<%= __('DoB') %>" prop="dateBirthUpdate">
+            <!--dateBirthUpdate {{ruleForm.dateBirthUpdate}} Объект?: {{_.isObject(ruleForm.dateBirthUpdate)}}-->
+          <!--<br>  born {{ruleForm.born}} Объект?: {{_.isObject(ruleForm.born)}}-->
+            <el-row :gutter="2">
+              <el-col :span="11">
                 <el-date-picker
-                  v-else
-                  v-model="dateBirth"
+                  v-model="dateBirthUpdate"
+                  type="datetime"
+                  placeholder="<%= __('Select date and time') %>"
+                  default-time="12:00:00">
+                </el-date-picker>
+              </el-col>
+            </el-row>
+          </el-form-item>
+
+          <el-form-item v-if="!buttonUpdate" label="<%= __('DoD') %>" prop="dateDeath">
+            <!--dateDeath Объект?: {{_.isObject(ruleForm.dateDeath)}}-->
+            <el-row :gutter="2">
+              <el-col :span="11">
+                <el-date-picker
+                  v-model="ruleForm.dateDeath"
+                  type="datetime"
+                  placeholder="<%= __('Select date and time') %>"
+                  default-time="12:00:00">
+                </el-date-picker>
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item v-if="buttonUpdate" label="<%= __('DoD') %>" prop="dateDeathUpdate">
+            <!--dateDeathUpdate Объект?: {{_.isObject(ruleForm.dateDeathUpdate)}}-->
+            <el-row :gutter="2">
+              <el-col :span="11">
+                <el-date-picker
+                  v-model="dateDeathUpdate"
                   type="datetime"
                   placeholder="<%= __('Select date and time') %>"
                   default-time="12:00:00">
@@ -644,7 +730,8 @@
                 <!--</el-form-item>-->
                 <!--<el-button slot="prepend" disabled>{{ruleForm.federation}}</el-button>-->
                 <el-button slot="append" @click="copyElement" icon="el-icon-copy-document"></el-button>
-                <el-button slot="append" @click.prevent="removeElement(federation)" icon="el-icon-delete"></el-button>
+                <el-button slot="append" @click.prevent="removeElement(federation)"
+                           icon="el-icon-delete"></el-button>
               </el-input>
             </el-col>
           </el-form-item>
@@ -731,7 +818,8 @@
                 <el-col :xs="4" :sm="3" :md="3" :lg="3" :xl="2">
                   <el-tooltip effect="dark" content="<%= __("How to measure a dog's height?") %>"
                               placement="top-start">
-                    <el-button @click="showDialog('growth')" size="mini" round icon="el-icon-question"></el-button>
+                    <el-button @click="showDialog('growth')" size="mini" round
+                               icon="el-icon-question"></el-button>
                   </el-tooltip>
                 </el-col>
                 <!--<el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3" class="">-->
@@ -844,13 +932,13 @@
                   </template>
                 </el-autocomplete>
                 <el-autocomplete v-else
-                  popper-class="my-autocomplete"
-                  clearable
-                  v-model="sire"
-                  :fetch-suggestions="querySearchSires"
-                  placeholder="<%= __("Start typing the dog's name") %>"
-                  :trigger-on-focus="false"
-                  @select="handleSelect"
+                                 popper-class="my-autocomplete"
+                                 clearable
+                                 v-model="sire"
+                                 :fetch-suggestions="querySearchSires"
+                                 placeholder="<%= __("Start typing the dog's name") %>"
+                                 :trigger-on-focus="false"
+                                 @select="handleSelect"
                 ><i slot="prefix" class="el-autocomplete__icon el-icon-male"></i>
                   <template slot-scope="{ item }">
                     <span class="value">{{ item.value }}</span>
@@ -982,8 +1070,9 @@
             <el-form-item>
 
               <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
-              <el-button @click="centerDialogAdded = false"><%= __('Cancel') %></el-button>
-              <el-button v-if="!buttonUpdate" type="primary" @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+              <el-button @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
+              <el-button v-if="!buttonUpdate" type="primary"
+                         @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
               <el-button v-else type="primary" @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
 
             </el-form-item>
@@ -991,9 +1080,14 @@
           <div class="text-center hidden-sm-and-up">
             <el-button-group>
               <el-button @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
-              <el-button @click="centerDialogAdded = false" icon="el-icon-close"></el-button>
-              <el-button @click="submitForm('ruleForm')" type="primary" icon="el-icon-check"></el-button>
+              <el-button @click="buttonUpdate = false; centerDialogAdded = false" icon="el-icon-close"></el-button>
+              <!--<el-button @click="submitForm('ruleForm')" type="primary" icon="el-icon-check"></el-button>-->
+              <el-button v-if="!buttonUpdate" type="primary"
+                         @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+              <el-button v-else type="primary" @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+
             </el-button-group>
+
           </div>
         </el-form>
       </el-col>
@@ -1088,14 +1182,15 @@
       <% /* Кнопки управления, фильтры */ %>
       <div class="menu-right mb-1" v-if="_.pluck(dogs, 'label').length >0">
         <div class="grid-content bg-purple">
-          <el-dropdown  @command="handleCommand">
+          <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
                               <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
                             </span>
             <el-dropdown-menu slot="dropdown">
 
 
-              <el-dropdown-item v-if="_.filter(dogs, 'cover', true).length > 0 " icon="el-icon-money" :command="{com:'c'}">
+              <el-dropdown-item v-if="_.filter(dogs, 'cover', true).length > 0 " icon="el-icon-money"
+                                :command="{com:'c'}">
                 <%= __('For Sale') %>
               </el-dropdown-item>
 
@@ -1132,7 +1227,7 @@
       <% /*Превью.*/ %>
       <div class="scrollbar" id="style-1" v-if="_.pluck(dogs, 'cover').length > 0">
         <el-row :gutter="2" class="flex-container wrap">
-          <el-col   v-if="!_.isEmpty(dog.cover)" class="flex-item" v-for="(dog, index) in dogs" :key="dog.id"
+          <el-col v-if="!_.isEmpty(dog.cover)" class="flex-item" v-for="(dog, index) in dogs" :key="dog.id"
                   :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
             <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
                  style="position: relative;" class="ell-image-flex"
