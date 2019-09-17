@@ -20,7 +20,36 @@
         <el-form-item label="<%= __('Decription') %>">
           <el-input type="textarea" v-model="photoDesc.description"></el-input>
         </el-form-item>
+
+        <el-form-item v-if="!photoDescUpdate" label="<%= __('DoB') %>" prop="dateTaken">
+          <!--dateBirth Объект?: {{_.isObject(ruleForm.dateBirth)}}-->
+          <el-row :gutter="2">
+            <el-col :span="11">
+              <el-date-picker
+                v-model="photoDesc.dateTaken"
+                type="datetime"
+                placeholder="<%= __('Select date and time') %>"
+                default-time="12:00:00">
+              </el-date-picker>
+            </el-col>
+          </el-row>
+        </el-form-item>
       </el-form>
+
+      <el-form-item v-if="photoDescUpdate" label="<%= __('DoB') %>" prop="dateTakenUpdate">
+        <!--dateBirthUpdate {{ruleForm.dateBirthUpdate}} Объект?: {{_.isObject(ruleForm.dateBirthUpdate)}}-->
+        <!--<br>  born {{ruleForm.born}} Объект?: {{_.isObject(ruleForm.born)}}-->
+        <el-row :gutter="2">
+          <el-col :span="11">
+            <el-date-picker
+              v-model="dateTakenUpdate"
+              type="datetime"
+              placeholder="<%= __('Select date and time') %>"
+              default-time="12:00:00">
+            </el-date-picker>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <span slot="footer" class="dialog-footer">
     <el-button @click="photoDesc.innerVisiblePhotoDescription = false">Cancel</el-button>
     <el-button type="primary" @click="updateDescriptionPhoto">Save</el-button>
@@ -76,6 +105,16 @@
               </el-row>
 
               <el-row :gutter="2">
+                <el-col :span="12">
+                  <el-link @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.innerVisiblePhotoDescription=true" :underline="false"
+                           type="primary"><%= __('Date taken') %>:
+                  </el-link>
+                </el-col>
+                <el-col :span="12">
+                  <el-link :underline="false" type="danger"> {{img.dateTaken | getCreate(me.preferredLocale, 'lll')}}</el-link>
+                </el-col>
+              </el-row>
+              <el-row :gutter="2">
                 <el-col :span="16">
                   <el-link @click="photoDesc.photoId=img.id; photoDesc.description=img.description; photoDesc.innerVisiblePhotoDescription=true" :underline="false"
                            type="primary"><%= __('Description') %>:
@@ -85,6 +124,9 @@
                   <el-link :underline="false" type="danger"> {{_.trunc(img.description, 10)}}</el-link>
                 </el-col>
               </el-row>
+
+
+
               <div class="bottom clearfix ">
 
                 <!--<el-row>-->
