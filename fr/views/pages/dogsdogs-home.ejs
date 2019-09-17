@@ -16,7 +16,12 @@
         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
           <%= __('Select all') %></el-checkbox>
         <span>
-        <el-link :underline="false" @click="removePhotos" class="mx-3" title="<%= __('Remove') %>"
+          <span class="mx-3">  <%= __('All files') %>:  {{_.isArray(photos.images)? photos.images.length : 0}}</span>
+         <span class="mx-3"> <%= __('Marked') %>:  {{checkedPhoto.length}}</span>
+        <el-link v-if="checkedPhoto.length > 0" type="danger" class="mx-3" :underline="false" @click="removePhotos" class="mx-3"
+                 title="<%= __('Remove') %>"
+                 icon="el-icon-delete"></el-link>
+        <el-link v-else disabled :underline="false" class="mx-3" title="<%= __('Remove') %>"
                  icon="el-icon-delete"></el-link>
         <el-link :underline="false" title="<%= __('Add') %>" icon="el-icon-plus"></el-link>
           </span>
@@ -24,16 +29,51 @@
       <el-checkbox-group v-model="checkedPhoto" @change="handleCheckedPhotosChange">
         <div class="photo-editor">
           <el-card shadow="hover" :body-style="{ padding: '0px'}"
-                   v-for="(o, index, key) in photos.imagesArrUrl"
+                   v-for="(img, index, key) in photos.images"
                    :key="index + '-photo'">
-            <img :src="o" class="image">
+            <img :src="img.imageSrc" class="image">
             <div style="padding: 14px;">
-              <span>Yummy hamburger</span>
-              <span>Yummy hamburger</span>
-              <div class="bottom clearfix">
+
+              <el-row :gutter="2">
+                <el-col :span="16">
+                  <el-link :underline="false" type="primary"><%= __('File') %>:</el-link>
+                </el-col>
+                <el-col :span="8">
+                  <el-link  :title="img.name" :underline="false" type="primary"> {{_.trunc(img.name,10)}}</el-link>
+                </el-col>
+              </el-row>
+              <el-row :gutter="2">
+                <el-col :span="16">
+                  <el-link :underline="false" type="primary"><%= __('Type') %>:</el-link>
+                </el-col>
+                <el-col :span="8">
+                  <el-link :underline="false" type="primary"> {{img.type}}</el-link>
+                </el-col>
+              </el-row>
+              <el-row :gutter="2">
+                <el-col :span="16">
+                  <el-link :underline="false" type="primary"><%= __('Size') %>:</el-link>
+                </el-col>
+                <el-col :span="8">
+                  <el-link :underline="false" type="danger"> {{_.ceil(img.size/1024,2)}} Kb</el-link>
+                </el-col>
+              </el-row>
+              <div class="bottom clearfix ">
+
+                <!--<el-row>-->
+                <!--<el-col> </el-col>-->
+                <!--<el-button round>Round</el-button>-->
+                <!--<el-button type="primary" round>Primary</el-button>-->
+                <!--<el-button type="success" round>Success</el-button>-->
+                <!--<el-button type="info" round>Info</el-button>-->
+                <!--<el-button type="warning" round>Warning</el-button>-->
+                <!--<el-button type="danger" round>Danger</el-button>-->
+                <!--</el-row>-->
                 <!--<time class="time">{{ currentDate }}</time>-->
-                <el-checkbox :label="o" :key="o"></el-checkbox>
-                <!--<el-button type="text" class="button">Operating</el-button>-->
+                <div class="menu-center-2">
+                <el-checkbox :label="img.id" :key="img.id"></el-checkbox>
+                <el-link :href="img.detail" title="<%= __('More') %>" type="success"  :underline="false" ><i class="el-icon-right"></i></el-link>
+              </div>
               </div>
             </div>
           </el-card>
@@ -42,7 +82,7 @@
     </div>
     <span slot="footer" class="dialog-footer">
     <el-button @click="centerDialogVisiblePhotos = false">Cancel</el-button>
-    <el-button type="primary" @click="centerDialogVisiblePhotos = false">Confirm</el-button>
+      <!--<el-button type="primary" @click="centerDialogVisiblePhotos = false">Confirm</el-button>-->
   </span>
   </el-dialog>
 
@@ -229,7 +269,9 @@
        </section>-->
   </el-dialog>
   <% /* Диалоговое окно Редактор собак. Список собак*/ %>
-  <el-dialog title="<%= __('Dog editor') %>. <%= __('List') %>." :visible.sync="dialogEditorList">
+  <el-dialog title="<%= __('Dog editor') %>. <%= __('List') %>."
+             custom-class="dialog-kennel-add"
+             :visible.sync="dialogEditorList">
     <!-- <el-dialog
       width="30%"
       title="<%= __('Delete this dog?') %>"
@@ -298,9 +340,20 @@
 
 
         <el-table-column
-          label="Name"
+          label="<%= __('Name') %>"
           sortableв
           prop="fullName">
+        </el-table-column>
+        <el-table-column
+          label="<%= __('Price') %>"
+          sortableв
+          prop="price">
+          <template slot-scope="scope" v-if="scope.row.price > 0">
+            <span v-if="scope.row.currency === 'рубль'">{{scope.row.price}} &#8381;</span>
+            <span v-else-if="scope.row.currency === 'euro'">€ {{scope.row.price}}</span>
+            <span v-else>$ {{scope.row.price}}</span>
+          </template>
+
         </el-table-column>
         <el-table-column
           align="right">
@@ -651,7 +704,7 @@
 
           <el-form-item v-if="buttonUpdate" label="<%= __('DoB') %>" prop="dateBirthUpdate">
             <!--dateBirthUpdate {{ruleForm.dateBirthUpdate}} Объект?: {{_.isObject(ruleForm.dateBirthUpdate)}}-->
-          <!--<br>  born {{ruleForm.born}} Объект?: {{_.isObject(ruleForm.born)}}-->
+            <!--<br>  born {{ruleForm.born}} Объект?: {{_.isObject(ruleForm.born)}}-->
             <el-row :gutter="2">
               <el-col :span="11">
                 <el-date-picker
@@ -1188,8 +1241,7 @@
                             </span>
             <el-dropdown-menu slot="dropdown">
 
-
-              <el-dropdown-item v-if="_.filter(dogs, 'cover', true).length > 0 " icon="el-icon-money"
+              <el-dropdown-item v-if="_.some(dogs, 'sale', true)" icon="el-icon-money"
                                 :command="{com:'c'}">
                 <%= __('For Sale') %>
               </el-dropdown-item>
