@@ -11,6 +11,21 @@
     width="100vw"
     custom-class="dialog-images-editor"
     center>
+    <el-dialog
+      width="30%"
+      title="<%= __('Photo Description') %>"
+      :visible.sync="photoDesc.innerVisiblePhotoDescription"
+      append-to-body>
+      <el-form ref="photoDesc" :model="photoDesc" label-width="120px">
+        <el-form-item label="<%= __('Decription') %>">
+          <el-input type="textarea" v-model="photoDesc.description"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="photoDesc.innerVisiblePhotoDescription = false">Cancel</el-button>
+    <el-button type="primary" @click="updateDescriptionPhoto">Save</el-button>
+  </span>
+    </el-dialog>
     <div class="container">
       <div class="menu-between">
         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
@@ -18,7 +33,8 @@
         <span>
           <span class="mx-3">  <%= __('All files') %>:  {{_.isArray(photos.images)? photos.images.length : 0}}</span>
          <span class="mx-3"> <%= __('Marked') %>:  {{checkedPhoto.length}}</span>
-        <el-link v-if="checkedPhoto.length > 0" type="danger" class="mx-3" :underline="false" @click="removePhotos" class="mx-3"
+        <el-link v-if="checkedPhoto.length > 0" type="danger" class="mx-3" :underline="false" @click="removePhotos"
+                 class="mx-3"
                  title="<%= __('Remove') %>"
                  icon="el-icon-delete"></el-link>
         <el-link v-else disabled :underline="false" class="mx-3" title="<%= __('Remove') %>"
@@ -39,7 +55,7 @@
                   <el-link :underline="false" type="primary"><%= __('File') %>:</el-link>
                 </el-col>
                 <el-col :span="8">
-                  <el-link  :title="img.name" :underline="false" type="primary"> {{_.trunc(img.name,10)}}</el-link>
+                  <el-link :title="img.name" :underline="false" type="primary"> {{_.trunc(img.name,10)}}</el-link>
                 </el-col>
               </el-row>
               <el-row :gutter="2">
@@ -58,6 +74,17 @@
                   <el-link :underline="false" type="danger"> {{_.ceil(img.size/1024,2)}} Kb</el-link>
                 </el-col>
               </el-row>
+
+              <el-row :gutter="2">
+                <el-col :span="16">
+                  <el-link @click="photoDesc.photoId=img.id; photoDesc.description=img.description; photoDesc.innerVisiblePhotoDescription=true" :underline="false"
+                           type="primary"><%= __('Description') %>:
+                  </el-link>
+                </el-col>
+                <el-col :span="8">
+                  <el-link :underline="false" type="danger"> {{_.trunc(img.description, 10)}}</el-link>
+                </el-col>
+              </el-row>
               <div class="bottom clearfix ">
 
                 <!--<el-row>-->
@@ -71,9 +98,10 @@
                 <!--</el-row>-->
                 <!--<time class="time">{{ currentDate }}</time>-->
                 <div class="menu-center-2">
-                <el-checkbox :label="img.id" :key="img.id"></el-checkbox>
-                <el-link :href="img.detail" title="<%= __('More') %>" type="success"  :underline="false" ><i class="el-icon-right"></i></el-link>
-              </div>
+                  <el-checkbox :label="img.id" :key="img.id"></el-checkbox>
+                  <el-link :href="img.detail" title="<%= __('More') %>" type="success" :underline="false"><i
+                      class="el-icon-right"></i></el-link>
+                </div>
               </div>
             </div>
           </el-card>
