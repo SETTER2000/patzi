@@ -21,6 +21,10 @@ module.exports = {
       maxLength: 300,
       description: `Описание файла картинки.`
     },
+    dateTaken: {
+      type: 'string',
+      description: `Время съёмки.`
+    },
 
   },
 
@@ -61,7 +65,7 @@ module.exports = {
     console.log('inputs.photoId: ' ,inputs.photoId);
     let dog = await Dog.findOne(inputs.id);
     _.each(dog.images, img => {
-      img.id === inputs.photoId ? img.description = inputs.description : '';
+      if(img.id === inputs.photoId) {img.description = inputs.description; img.dateTaken = inputs.dateTaken;}
     });
     // console.log('IN:: ', inputs.removeImage);
     // let removeImage = _.remove(dog.images, img => _.indexOf(inputs.removeImage, img.id) > -1);

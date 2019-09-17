@@ -260,6 +260,7 @@ module.exports = {
       _.each(imagesNew, img => {
         img.id = _.isString(img.fd) ? _.first(_.last(img.fd.split('\\')).split('.')) : '';
         img.description = '';
+        img.dateTaken = '';
         delete img.filename;
         delete img.status;
         delete img.field;

@@ -6,10 +6,12 @@ parasails.registerPage('dogs-home', {
     dogs: [],
     isCollapse: true,
     dialogEditor: false,
+    photoDescUpdate: false,
     photoDesc: {
       innerVisiblePhotoDescription: false,
       photoId: '',
-      description: ''
+      description: '',
+      dateTaken:''
     },
 
     innerVisible: false,
@@ -35,6 +37,7 @@ parasails.registerPage('dogs-home', {
     pathDogs: '/dogs/chinese-crested',
     fullNameDogNegotiations: '',
     dams: [],
+    dateTakenUpdate: '',
     dateBirthUpdate: '',
     dateDeathUpdate: '',
     search: '',
