@@ -6,6 +6,12 @@ parasails.registerPage('dogs-home', {
     dogs: [],
     isCollapse: true,
     dialogEditor: false,
+    photoDesc: {
+      innerVisiblePhotoDescription: false,
+      photoId: '',
+      description: ''
+    },
+
     innerVisible: false,
     dialogEditorList: false,
     photoVisible: false,
@@ -940,7 +946,7 @@ parasails.registerPage('dogs-home', {
       let removeImage = _.remove(this.photos.images, img => _.indexOf(this.checkedPhoto, img.id) > -1);
       console.log('Удалённые картинки: ', removeImage);
       let data = this.photos;
-      data['removeImage'] = _.pluck(removeImage,'id');
+      data['removeImage'] = _.pluck(removeImage, 'id');
 
       io.socket.delete('/api/v1/dogs/destroy-many-img', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
@@ -1125,6 +1131,32 @@ parasails.registerPage('dogs-home', {
       this.checkAll = checkedCount === _.pluck(this.photos.images, 'id').length;
       this.isIndeterminate = checkedCount > 0 && checkedCount < _.pluck(this.photos.images, 'id').length;
       console.log('this.checkedPhoto-22:: ', this.checkedPhoto);
+    },
+
+    async updateDescriptionPhoto() {
+      console.log('photoDesc:::: ', this.photoDesc);
+      console.log('PHOTOSS:::: ', this.photos);
+      this.photoDesc.id = this.photos.id;
+      this.photoDesc.innerVisiblePhotoDescription = false;
+      await io.socket.put('/api/v1/dogs/update-description-img', this.photoDesc, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        // this.loading.close();
+        if (jwRes.statusCode === 200) {
+          // this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          this.checkedPhoto = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+          this.$forceUpdate();
+        }
+      });
     }
   }
 })

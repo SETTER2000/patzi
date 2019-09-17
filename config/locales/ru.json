@@ -281,7 +281,10 @@
 	"Select image": "Выберите изображение",
 	"Tip": "Совет",
 	"DoD": "ДС",
+	"Dog Detail": "Подробно о собаке",
 	"Add": "Добавить",
+	"Details of the dog to date.": "Подробная информация о собаке на сегодняшний день.",
+	"Photo Description": "Описание фотографии",
 	"Check all": "Проверить всё",
 	"Select all": "Выбрать всё",
 	"Marked": "Отмечено",
@@ -599,5 +602,7 @@
 	"WoW": "WoW",
 	"Price": "Цена",
 	"MB": "MB",
-	"Update": "Update"
+	"Update": "Update",
+	"Decription": "Decription",
+	"Size": "Size"
 }

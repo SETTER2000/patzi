@@ -96,7 +96,13 @@ module.exports = {
       description: 'Кличка, ласковое имя.'
     },
 
-
+    cover: {
+      type: 'number',
+      defaultsTo: 0,
+      example: 5,
+      description: `Номер ключа в массиве фотографий, который определяет главную фотографию альбома.
+                    Обложка альбома.`
+    },
     weight: {
       type: 'number',
       description: 'Вес. В граммах.',

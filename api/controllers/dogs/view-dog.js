@@ -33,7 +33,7 @@ module.exports = {
     // Подключить сокет, который сделал запрос, к комнате «dog».
 
     // // Бибилиотека Node.js
-    // const url = require('url');
+    const url = require('url');
     // const moment = require('moment');
     // // Формат отображаемой даты
     // let format = 'LL';
@@ -59,12 +59,12 @@ module.exports = {
 
     // console.log('LITTTER::', dog.puppies[0].photos);
     //
-    // dog.images = (!_.isEmpty(dog.images)) ? await dog.images.map((image, i) => {
-    //   image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/dog/${dog.id}/images/${i}`) : '';
-    //   // image.detail = `/litters/dog/${litterId}`;
-    //   delete image.fd;
-    //   return image;
-    // }) : '';
+    dog.images = (!_.isEmpty(dog.images)) ? await dog.images.map((image, i) => {
+      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/dog/${dog.id}/images/${i}`) : '';
+      // image.detail = `/litters/dog/${litterId}`;
+      delete image.fd;
+      return image;
+    }) : '';
     //
     // // Подготовка объекта фотоссессии
     // dog.puppies = (!_.isEmpty(dog.puppies)) ? await dog.puppies.map((photoSet, i) => {
