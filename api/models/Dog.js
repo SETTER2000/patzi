@@ -43,9 +43,17 @@ module.exports = {
     },
 
 
+
+    sale: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: `Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
+    },
+
     currency: {
       type: 'string',
-      description: `Валюта продажи. Валюта за катоую можно купить собаку.`,
+      description: `Валюта продажи. Валюта за катоую можно купить собаку.
+      Знак рубля:  &#8381;`,
       example: 'dollar, рубль, euro',
       isIn: ['dollar', 'рубль', 'euro'],
       // required: true,
@@ -61,11 +69,6 @@ module.exports = {
     },
 
 
-    sale: {
-      type: 'boolean',
-      defaultsTo: false,
-      description: `Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
-    },
 
 
     saleDescription: {

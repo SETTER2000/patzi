@@ -404,7 +404,7 @@ parasails.registerPage('dogs-home', {
 
 
     resetForm(formName) {
-      this.$refs.upload.clearFiles();
+      this.$refs.upload ? this.$refs.upload.clearFiles() : '';
       this.$refs[formName].resetFields();
       this.ruleForm.fileList = [];
       this.ruleForm.imageUrl = '';
@@ -510,6 +510,7 @@ parasails.registerPage('dogs-home', {
       console.log('DATA перед отправкой::: ', data);
 
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
+        console.log('jwResjwResjwRes::: ', this);
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
@@ -935,12 +936,41 @@ parasails.registerPage('dogs-home', {
         });
       });
     },
-
-    async fixPhotos() {
-      let newArrPhotos = _.difference(this.photos.imagesArrUrl, this.checkedPhoto);
+    async destroyManyPhotos() {
+      let removeImage = _.remove(this.photos.images, img => _.indexOf(this.checkedPhoto, img.id) > -1);
+      console.log('Удалённые картинки: ', removeImage);
       let data = this.photos;
-      data['imagesArrUrl'] = newArrPhotos;
-      console.log('this.photos ПЕРЕД ОТПРАВКОЙ:::: ', data);
+      data['removeImage'] = _.pluck(removeImage,'id');
+
+      io.socket.delete('/api/v1/dogs/destroy-many-img', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        // this.loading.close();
+        if (jwRes.statusCode === 200) {
+          // this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          this.checkedPhoto = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+        }
+      });
+    },
+    async fixPhotos() {
+      // let newArrPhotos = _.difference(this.photos.imagesArrUrl, this.checkedPhoto);
+
+
+      let data = this.photos;
+      // data['removeImage'] = removeImage;
+      // data['imagesArrUrl'] = newArrPhotos;
+      // data['kennel'] = data.kennel.id;
+      data['fileList'] = '';
+      console.log('this.photos ПЕРЕД ОТПРАВКОЙ fixPhotos:::: ', data);
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
@@ -951,9 +981,9 @@ parasails.registerPage('dogs-home', {
         this.centerDialogAdded = false;
         // this.loading.close();
         if (jwRes.statusCode === 200) {
-          this.resetForm('ruleForm');
+          // this.resetForm('ruleForm');
           this.ruleForm.fileList = [];
-          // this.ruleForm.file = [];
+          this.checkedPhoto = [];
           this.ruleForm.imageUrl = '';
           this.ruleForm.federations = this.resetFederation;
           this.getList();
@@ -969,7 +999,7 @@ parasails.registerPage('dogs-home', {
         cancelButtonText: this.i19p.cancel,
         type: 'warning'
       }).then(() => {
-        this.fixPhotos();
+        this.destroyManyPhotos();
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -1084,14 +1114,16 @@ parasails.registerPage('dogs-home', {
 
 
     handleCheckAllChange(val) {
-      this.checkedPhoto = val ? this.photos.imagesArrUrl : [];
+      console.log('VAAAAAAAAA:: ', val);
+      this.checkedPhoto = val ? _.pluck(this.photos.images, 'id') : [];
       this.isIndeterminate = false;
       console.log('this.checkedPhoto:: ', this.checkedPhoto);
     },
     handleCheckedPhotosChange(value) {
+      console.log('VAAAAAAAAA222:: ', value);
       let checkedCount = value.length;
-      this.checkAll = checkedCount === this.photos.imagesArrUrl.length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.photos.imagesArrUrl.length;
+      this.checkAll = checkedCount === _.pluck(this.photos.images, 'id').length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < _.pluck(this.photos.images, 'id').length;
       console.log('this.checkedPhoto-22:: ', this.checkedPhoto);
     }
   }

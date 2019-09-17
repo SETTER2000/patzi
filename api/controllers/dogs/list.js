@@ -62,7 +62,7 @@ module.exports = {
       dogId = dog.id;
       dog.images = (!_.isEmpty(dog.images)) ? await dog.images.map((img, i) => {
         img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/dog/${dogId}/images/${i}`) : '';
-        img.detail = `/dog/${dog.letter}/${dog.year}/photo`;
+        img.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
         // img.detail = `/dog/${dog.letter}/photo`;
         delete img.fd;
         return img;

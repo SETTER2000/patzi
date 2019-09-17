@@ -191,6 +191,7 @@ module.exports = {
       images = inputs.fileList.filter(o => !_.isNull(o));
       _.each(images, img => {
         img.id =_.first(_.last(img.fd.split('\\')).split('.'));
+        img.description = '';
         delete img.filename;
         delete img.status;
         delete img.field;

@@ -28,6 +28,7 @@ module.exports = {
     },
 
 
+
     dateBirth: {
       type: 'string',
       required: true,
@@ -42,7 +43,12 @@ module.exports = {
 
     fileList: {
       type: 'ref',
-      description: 'Массив с файлами данных о загруженных файлах.'
+      description: 'Массив с объектами данных о новых загруженных файлах.'
+    },
+
+    imagesArrUrl: {
+      type: 'ref',
+      description: 'Массив с url ссылками на картинки.'
     },
 
 
@@ -100,10 +106,10 @@ module.exports = {
     },
 
 
-    kennel: {
-      type: 'string',
-      description: 'Идентификатор питомника'
-    },
+    // kennel: {
+    //   type: 'string',
+    //   description: 'Идентификатор питомника'
+    // },
 
 
     nickname: {
@@ -184,16 +190,19 @@ module.exports = {
       throw 'badRequest';
     }
     let dog = await Dog.findOne(inputs.id);
-    let images = dog.images;
-    let imagesNew;
+    let images = inputs.images ? inputs.images : dog.images;
+    let imagesNew=[];
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
 
+    // console.log('sale;;;', inputs.sale);
+    console.log('images;;;', images);
+    // console.log('imagesArrUrl;;;', inputs.imagesArrUrl);
 
     // Удаляем название питомника из имени собаки
-    let kennel = await Kennel.find({id: inputs.kennel}).limit(1);
-    inputs.label = inputs.label.replace(kennel.label, '');
+    // let kennel = await Kennel.find({id: inputs.kennel}).limit(1);
+    // inputs.label = inputs.label.replace(kennel.label, '');
 
 
     /*// Проверка существования такой же собаки.
@@ -208,8 +217,8 @@ module.exports = {
 
 
     let label = _.startCase(inputs.label.toString().toLowerCase());
-    let rightFullName = _.startCase(label + ' ' + kennel.label);
-    let leftFullName = _.startCase(kennel.label + ' ' + label);
+    // let rightFullName = _.startCase(label + ' ' + kennel.label);
+    // let leftFullName = _.startCase(kennel.label + ' ' + label);
     // let dateBirth = inputs.dateBirth.replace(/"([^"]+(?="))"/g, '$1');
     // let dateDeath = inputs.dateDeath.replace(/"([^"]+(?="))"/g, '$1');
 
@@ -222,7 +231,7 @@ module.exports = {
 
     let updateObj = {
       label: label,
-      kennel: inputs.kennel,
+      // kennel: inputs.kennel,
       gender: inputs.gender,
       currency: inputs.currency,
       price: inputs.price,
@@ -241,24 +250,25 @@ module.exports = {
       sale: inputs.sale,
       color: inputs.color,
       stamp: inputs.stamp,
-      fullName: kennel.right ? `${rightFullName}` : `${leftFullName}`
+      // fullName: kennel.right ? `${rightFullName}` : `${leftFullName}`
     };
 
 
-    console.log('inputs.fileList DOG-update: ', inputs.fileList);
+    // console.log('inputs.fileList DOG-update: ', inputs.fileList);
     if (inputs.fileList) {
       imagesNew = inputs.fileList.filter(o => !_.isNull(o));
       _.each(imagesNew, img => {
-        img.id = _.isArray(img.fd) ? _.first(_.last(img.fd.split('\\')).split('.')) : '';
+        img.id = _.isString(img.fd) ? _.first(_.last(img.fd.split('\\')).split('.')) : '';
+        img.description = '';
         delete img.filename;
         delete img.status;
         delete img.field;
       });
     }
-    console.log('ListPhoto fileList: ', imagesNew);
+    console.log('ListPhoto imagesNew: ', imagesNew);
     // console.log('ListPhoto fileList isEmpty?: ', _.isEmpty(fileList));
 
-    !_.isEmpty(images) ? updateObj.images = [...images, ...imagesNew] : '';
+    !_.isEmpty(images) || !_.isEmpty(imagesNew)  ? updateObj.images = [...images, ...imagesNew] : '';
     // console.log('После обработки List photo:: ' ,   updateObj.images);
     // Создаём собаку
     let updateDog = await Dog.updateOne({id: inputs.id})

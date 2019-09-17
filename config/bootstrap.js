@@ -1786,7 +1786,7 @@ module.exports.bootstrap = async function () {
       kennel: 'Poale Ell'
     },
     {
-      label: `FCI Ella`,
+      label: `Ella`,
       gender: 'dam',
       sale:false,
       dateBirth: '2017-11-02T21:00:00.000Z',

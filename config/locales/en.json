@@ -533,5 +533,10 @@
 	"Image editor": "Image editor",
 	"Check all": "Check all",
 	"Select all": "Select all",
-	"Add": "Add"
+	"Add": "Add",
+	"Marked": "Marked",
+	"Type file": "Type file",
+	"Size": "Size",
+	"File": "File",
+	"All files": "All files"
 }
