@@ -77,7 +77,16 @@
                    :key="index + '-photo'">
             <img :src="img.imageSrc" class="image">
             <div style="padding: 14px;">
-
+              <el-row :gutter="2">
+                <el-col :span="11">
+                  <el-link @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.innerVisiblePhotoDescription=true" :underline="false"
+                           type="primary"><%= __('Date taken') %>:
+                  </el-link>
+                </el-col>
+                <el-col :span="13">
+                  <el-link :underline="false" type="danger"> {{img.dateTaken | getCreate(me.preferredLocale, 'lll')}}</el-link>
+                </el-col>
+              </el-row>
               <el-row :gutter="2">
                 <el-col :span="16">
                   <el-link :underline="false" type="primary"><%= __('File') %>:</el-link>
@@ -103,16 +112,7 @@
                 </el-col>
               </el-row>
 
-              <el-row :gutter="2">
-                <el-col :span="12">
-                  <el-link @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.innerVisiblePhotoDescription=true" :underline="false"
-                           type="primary"><%= __('Date taken') %>:
-                  </el-link>
-                </el-col>
-                <el-col :span="12">
-                  <el-link :underline="false" type="danger"> {{img.dateTaken | getCreate(me.preferredLocale, 'lll')}}</el-link>
-                </el-col>
-              </el-row>
+
               <el-row :gutter="2">
                 <el-col :span="16">
                   <el-link @click="photoDesc.photoId=img.id; photoDesc.description=img.description; photoDesc.innerVisiblePhotoDescription=true" :underline="false"
@@ -1364,9 +1364,9 @@
                              title="<%= __('More') %>">
                       {{dog.fullName}}
                     </el-link>
-                    <el-link type="danger" class="px-2" @click="openRemoveDialog(dog.id)" :underline="false"
+                  <!--<el-link type="danger" class="px-2" @click="openRemoveDialog(dog.id)" :underline="false"
                              title="<%= __('Remove') %>"
-                             icon="el-icon-close"></el-link>
+                             icon="el-icon-close"></el-link>-->
                   </div>
                   <!--<ul class="menu-ell">-->
                   <!--<li>-->
