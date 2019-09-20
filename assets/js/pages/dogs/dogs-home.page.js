@@ -306,7 +306,8 @@ parasails.registerPage('dogs-home', {
       }
       moment.locale(l);
       let formatNew = (!format) ? 'LLL' : format;
-      return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+      return (moment(value).format(formatNew)) ? moment(value).format(formatNew) : value;
+      // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
 
     // countAll: function (value, lakes) {
