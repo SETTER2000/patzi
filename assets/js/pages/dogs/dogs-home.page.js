@@ -7,6 +7,7 @@ parasails.registerPage('dogs-home', {
     isCollapse: true,
     dialogEditor: false,
     photoDescUpdate: false,
+    dogFullName:'',
     photoDesc: {
       innerVisiblePhotoDescription: false,
       photoId: '',
@@ -186,6 +187,7 @@ parasails.registerPage('dogs-home', {
         warnRemove: 'This will permanently delete the object. Continue?',
         warning: 'Warning',
         delCancel: 'Delete canceled',
+        photoEditor: 'Photo editor',
         cancel: 'Cancel',
         text400Err: 'Error. Could not create! ',
         text500Err: 'Server Error! Unable to create. ',
@@ -209,6 +211,7 @@ parasails.registerPage('dogs-home', {
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         warnRemove: 'Это навсегда удалит объект. Продолжить?',
+        photoEditor: 'Редактор фотографий',
         warning: 'Внимание',
         delCancel: 'Удаление отменено',
         cancel: 'Отменить',
