@@ -1,12 +1,11 @@
 <div id="dogs-home" class="content" v-cloak>
   <p class="text-danger"
-     v-if="cloudError === 'dogAlreadyInUse'"><%= __('There is already an account using that email address') %>.</p>
-  <!--<div @click="feedback($event)" class="rasp">-->
-  <!--<i class="ti-announcement"></i> <%= __('Feedback about this page?') %>-->
-  <!--</div>-->
+     v-if="cloudError === 'dogAlreadyInUse'"><%= __('There is already an account using that email address') %>.
+  </p>
+
   <% /* Диалоговое окно. Редактор картинок. */ %>
   <el-dialog
-    title="Imige editor"
+    :title="`${i19p.photoEditor} ${photos.fullName}`"
     :visible.sync="centerDialogVisiblePhotos"
     width="100vw"
     custom-class="dialog-images-editor"
@@ -68,7 +67,7 @@
                  icon="el-icon-delete"></el-link>
         <el-link v-else disabled :underline="false" class="mx-3" title="<%= __('Remove') %>"
                  icon="el-icon-delete"></el-link>
-        <el-link :underline="false" title="<%= __('Add') %>" icon="el-icon-plus"></el-link>
+        <!--<el-link :underline="false" disabled title="<%= __('Add') %>" icon="el-icon-plus"></el-link>-->
           </span>
       </div>
       <el-checkbox-group v-model="checkedPhoto" @change="handleCheckedPhotosChange">
@@ -201,8 +200,8 @@
           <% /* Поле ввода комментария */ %>
           <el-form @submit.native.prevent>
             <el-form-item>
-              <el-input @keyup.enter.native="addComment('negotiation')"
-                        class="mt-2"
+              <el-input  @keyup.enter.native="addComment('negotiation')"
+                        class="lb mt-2"
                         maxLength="1000"
                         clearable
                         placeholder="<%= __('Write a message') %>"
@@ -222,6 +221,7 @@
     </el-row>
   </el-drawer>
   <el-dialog
+    title="<%= __('Buy puppy chinese crested') %>"
     :visible.sync="dialogPedigreeVisible"
     :fullscreen="true"
     top="1vh"
@@ -230,8 +230,9 @@
     :before-close="handlerCloseDialogSlider"
     v-if="virtualPageSlug==='sale'"
   >
-    <section class="bg">
-      <h1><%= __('Buy puppy chinese crested') %></h1>
+    <section>
+    <!--<section class="bg">-->
+      <!--<h1><%= __('Buy puppy chinese crested') %></h1>-->
       <!--<el-row :gutter="50" class="wrap">-->
       <!--<el-col   v-for="(o, index) in dogs" :key="o.id"-->
       <!--:xs="24" :sm="24" :md="24" :lg="8" :xl="6">-->
@@ -249,23 +250,23 @@
             :preview-src-list="o.imagesArrUrl">
           </el-image>
           <!--</div>-->
-          <div style="padding: 14px;">
-            <span>{{o.fullName}}</span>
-            <div class="bottom clearfix">
+          <div class="text-center">
+            <div>{{o.fullName}}</div>
+            <div >
               <em><strong><i class="el-icon-present"></i> <%= __('Dob') %>:</strong></em>
-              <time class="time">{{ o.born | getCreate(me.preferredLocale,'L') }}</time>
+              <time class="time"> {{ o.dateBirth | getCreate(me.preferredLocale,'L') }}</time>
               <el-tooltip content="<%= __('Start negotiations') %>" placement="bottom" effect="light">
                 <el-button type="text" @click="openDialogNegotiations(o.fullName)" class="button"
                            icon="el-icon-right"></el-button>
               </el-tooltip>
             </div>
-            <div class="bottom clearfix text-green" style="font-size: 2vh;">
+            <div style="color:green; font-size: 2vh;">
               <span v-if="o.currency === 'рубль'"> {{o.price}} &#8381; </span>
               <span v-else> {{o.currency === 'euro' ? '€' : '$'}} {{o.price}} </span>
             </div>
           </div>
           <el-divider><i class="el-icon-star-on"></i></el-divider>
-          <div class="p-5">{{o.saleDescription}}</div>
+          <div class="px-5 py-4">{{o.saleDescription}}</div>
         </el-card>
       </div>
 
@@ -363,12 +364,12 @@
         ref="filterTable"
         :data="dogs.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))"
         :default-sort="{prop: 'fullName', order: 'descending'}"
-        max-height="550"
+        max-height="650"
         style="width: 100%">
         <el-table-column
           type="index"
           fixed="left"
-          width="38">
+          width="35">
         </el-table-column>
         <!--<el-table-column-->
         <!--label="Photo"-->
@@ -417,7 +418,8 @@
         <el-table-column
           label="<%= __('Price') %>"
           sortableв
-          prop="price">
+          prop="price"
+          width="80">
           <template slot-scope="scope" v-if="scope.row.price > 0">
             <span v-if="scope.row.currency === 'рубль'">{{scope.row.price}} &#8381;</span>
             <span v-else-if="scope.row.currency === 'euro'">€ {{scope.row.price}}</span>
