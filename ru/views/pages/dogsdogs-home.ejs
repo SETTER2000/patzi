@@ -21,7 +21,6 @@
         </el-form-item>
 
         <el-form-item v-if="!photoDescUpdate" label="<%= __('DoB') %>" prop="dateTaken">
-          <!--dateBirth Объект?: {{_.isObject(ruleForm.dateBirth)}}-->
           <el-row :gutter="2">
             <el-col :span="11">
               <el-date-picker
@@ -36,8 +35,6 @@
       </el-form>
 
       <el-form-item v-if="photoDescUpdate" label="<%= __('DoB') %>" prop="dateTakenUpdate">
-        <!--dateBirthUpdate {{ruleForm.dateBirthUpdate}} Объект?: {{_.isObject(ruleForm.dateBirthUpdate)}}-->
-        <!--<br>  born {{ruleForm.born}} Объект?: {{_.isObject(ruleForm.born)}}-->
         <el-row :gutter="2">
           <el-col :span="11">
             <el-date-picker
@@ -67,7 +64,6 @@
                  icon="el-icon-delete"></el-link>
         <el-link v-else disabled :underline="false" class="mx-3" title="<%= __('Remove') %>"
                  icon="el-icon-delete"></el-link>
-        <!--<el-link :underline="false" disabled title="<%= __('Add') %>" icon="el-icon-plus"></el-link>-->
           </span>
       </div>
       <el-checkbox-group v-model="checkedPhoto" @change="handleCheckedPhotosChange">
@@ -127,17 +123,6 @@
 
 
               <div class="bottom clearfix ">
-
-                <!--<el-row>-->
-                <!--<el-col> </el-col>-->
-                <!--<el-button round>Round</el-button>-->
-                <!--<el-button type="primary" round>Primary</el-button>-->
-                <!--<el-button type="success" round>Success</el-button>-->
-                <!--<el-button type="info" round>Info</el-button>-->
-                <!--<el-button type="warning" round>Warning</el-button>-->
-                <!--<el-button type="danger" round>Danger</el-button>-->
-                <!--</el-row>-->
-                <!--<time class="time">{{ currentDate }}</time>-->
                 <div class="menu-center-2">
                   <el-checkbox :label="img.id" :key="img.id"></el-checkbox>
                   <el-link :href="img.detail" title="<%= __('More') %>" type="success" :underline="false"><i
@@ -151,10 +136,8 @@
     </div>
     <span slot="footer" class="dialog-footer">
     <el-button @click="centerDialogVisiblePhotos = false">Cancel</el-button>
-      <!--<el-button type="primary" @click="centerDialogVisiblePhotos = false">Confirm</el-button>-->
   </span>
   </el-dialog>
-
   <% /* Диалоговое окно. Feedback about this page?. */ %>
   <modal v-if="dialogFormVisible" v-cloak key="delete"
          @close="closeDeleteThingModal()">
@@ -231,17 +214,10 @@
     v-if="virtualPageSlug==='sale'"
   >
     <section>
-    <!--<section class="bg">-->
-      <!--<h1><%= __('Buy puppy chinese crested') %></h1>-->
-      <!--<el-row :gutter="50" class="wrap">-->
-      <!--<el-col   v-for="(o, index) in dogs" :key="o.id"-->
-      <!--:xs="24" :sm="24" :md="24" :lg="8" :xl="6">-->
       <div class="showcase">
         <el-card shadow="hover" v-for="(o, index) in dogs" :key="o.id" class="my-2 "
                  v-if="o.sale && _.isString(o.cover) && o.price > 0 && !_.isEmpty(o.currency)"
                  :body-style="{ padding: '0px' }">
-          <!--<img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">-->
-          <!--<div class="scrollbar-2" id="style-0">-->
           <el-image
             :src="o.cover"
             :key="o.id"
@@ -249,7 +225,6 @@
             lazy
             :preview-src-list="o.imagesArrUrl">
           </el-image>
-          <!--</div>-->
           <div class="text-center">
             <div>{{o.fullName}}</div>
             <div >
@@ -269,96 +244,12 @@
           <div class="px-5 py-4">{{o.saleDescription}}</div>
         </el-card>
       </div>
-
-      <!--</el-col>-->
-      <!--</el-row>-->
     </section>
-    <!--   <section>
-         <h2 class="text-center">Lorem ipsum dolor 3.</h2>
-         <div class="container">
-           <div class="row">
-             <div class="col-md-12 col-lg-6">
-               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
-               <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
-                 tenetur voluptas.</p>
-               <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
-                 unde!</p>
-               <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
-               <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
-                 culpa,
-                 provident.</p>
-             </div>
-             <div class="col-md-12 col-lg-6">
-               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
-               <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
-                 tenetur voluptas.</p>
-               <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
-                 unde!</p>
-               <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
-               <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
-                 culpa,
-                 provident.</p>
-             </div>
-           </div>
-         </div>
-       </section>
-       <section class="bg fixed">
-         <h2>Lorem ipsum soso.</h2>
-         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad autem inventore laborum quia? Alias aperiam autem
-           consequuntur culpa cum delectus deserunt dicta distinctio dolore doloremque ea est et, excepturi fugiat
-           inventore .</p>
-
-       </section>
-       <section>
-         <h2 class="text-center">Some Content 2.</h2>
-         <div class="container">
-           <div class="row">
-             <div class="col-md-12 col-lg-6">
-               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
-               <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
-                 tenetur voluptas.</p>
-               <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
-                 unde!</p>
-               <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
-               <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
-                 culpa,
-                 provident.</p>
-             </div>
-             <div class="col-md-12 col-lg-6">
-               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut labore, quam qui quis temporibus totam?</p>
-               <p>Accusamus aspernatur at, beatae, deserunt, dicta dolor labore nulla numquam possimus repudiandae saepe
-                 tenetur voluptas.</p>
-               <p>In porro quod repellat sapiente ut? Aperiam fugiat molestias mollitia pariatur perferendis quaerat sunt
-                 unde!</p>
-               <p>Est eveniet ex in ipsa magnam maxime, nam odio reiciendis sit soluta tenetur unde voluptate!</p>
-               <p>Aut eaque earum enim error nisi! Consequuntur eveniet exercitationem in omnis voluptatem! Assumenda
-                 culpa,
-                 provident.</p>
-             </div>
-           </div>
-         </div>
-       </section>-->
   </el-dialog>
   <% /* Диалоговое окно Редактор собак. Список собак*/ %>
   <el-dialog title="<%= __('Dog editor') %>. <%= __('List') %>."
              custom-class="dialog-kennel-add"
              :visible.sync="dialogEditorList">
-    <!-- <el-dialog
-      width="30%"
-      title="<%= __('Delete this dog?') %>"
-      :visible.sync="innerVisible"
-      append-to-body>
-      <p><%= __('Are you sure you want to remove this dog from the database? This operation is not recoverable.') %></p>
-      <span slot="footer" class="dialog-footer">
-      <span class="flex justify-content-between">
-         <el-button @click="clearFilter"><%= __('reset all filters') %></el-button>
-        <span>
-            <el-button @click="innerVisible = false"><%= __('Cancel') %></el-button>
-            <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Confirm') %></el-button>
-        </span>
-      </span>
-    </span>
-    </el-dialog>-->
     <template>
       <el-table
         ref="filterTable"
@@ -371,14 +262,6 @@
           fixed="left"
           width="35">
         </el-table-column>
-        <!--<el-table-column-->
-        <!--label="Photo"-->
-        <!--prop="cover">-->
-        <!--<el-avatar :size="60" src="https://empty" @error="errorHandler">-->
-        <!--<img src="cover"/>-->
-        <!--</el-avatar>-->
-        <!--&lt;!&ndash;<el-avatar shape="square" :size="100" :fit="'cover'" :src="cover"></el-avatar>&ndash;&gt;-->
-        <!--</el-table-column>-->
 
         <el-table-column
           property="cover"
@@ -391,16 +274,11 @@
           </template>
           <template slot-scope="scope">
             <div v-if="scope.row.cover">
-              <!--<div class="image-wrapper round">-->
-              <!--<a href="#" @click="clickShowPhoto(scope.$index,scope.row)">-->
-              <!--<img :src="scope.row.cover" class="personPhoto"/>-->
-              <!--</a>-->
               <a href="#" @click="clickShowPhoto(scope.$index,scope.row)" class="flex justify-content-center">
                 <el-avatar :size="38" @error="errorHandler">
                   <img :src="scope.row.cover"/>
                 </el-avatar>
               </a>
-              <!--</div>-->
             </div>
             <div v-else class="photo-preview col">
               <div class="image-wrapper round  d-flex align-items-center justify-content-center"><!----> <!----> <span
@@ -425,10 +303,8 @@
             <span v-else-if="scope.row.currency === 'euro'">€ {{scope.row.price}}</span>
             <span v-else>$ {{scope.row.price}}</span>
           </template>
-
         </el-table-column>
-        <el-table-column
-          align="right">
+        <el-table-column align="right">
           <template slot="header" slot-scope="scope">
             <el-input
               v-model="search"
@@ -449,7 +325,6 @@
               @click="handleEdit(scope.$index, scope.row)">
               Edit
             </el-button>
-            <!--@click="handleDelete(scope.$index, scope.row)"-->
             <el-button
               size="mini"
               type="danger"
@@ -465,50 +340,10 @@
          <el-button @click="clearFilter"><%= __('reset all filters') %></el-button>
         <span>
             <el-button @click="buttonUpdate = false; dialogEditorList = false"><%= __('Close') %></el-button>
-          <!--<el-button type="primary" @click="submitForm('ruleForm')"><%= __('Save') %></el-button>-->
         </span>
       </span>
     </span>
   </el-dialog>
-
-  <% /* Диалоговое окно Редактор собаки */ %>
-  <!-- <el-dialog title="<%= __('Dog editor') %>" :visible.sync="dialogEditor">
-    <el-form :label-position="'top'"
-             :model="ruleForm" :rules="rules" ref="ruleForm"
-             label-width="120px" class="demo-ruleForm">
-      <% /*Краткое Описание Помёта*/ %>
-      <el-form-item label="<%= __('Short Litter Description') %>" prop="subtitle">
-        <el-input :maxlength="subtitleLength" show-word-limit type="textarea" v-model="ruleForm.subtitle"></el-input>
-      </el-form-item>
-
-      <% /*Описание Помёта*/ %>
-      <el-form-item label="<%= __('Description') %>" prop="description">
-        <el-input :maxlength="descriptionLitterLength" show-word-limit type="textarea"
-                  v-model="ruleForm.description"></el-input>
-      </el-form-item>
-
-      <% /* Дата помёта NEW */ %>
-      <el-form-item label="<%= __('Date of litter') %>" prop="born">
-        <el-date-picker
-          v-model="ruleForm.born"
-          type="date"
-          :format="i19p.getFormatDateLocale"
-          placeholder="<%= __('Select date and time') %>"
-        >
-        </el-date-picker>
-      </el-form-item>
-      &lt;!&ndash;<el-form-item label="Zones" :label-width="formLabelWidth">&ndash;&gt;
-      &lt;!&ndash;<el-select v-model="form.region" placeholder="Please select a zone">&ndash;&gt;
-      &lt;!&ndash;<el-option label="Zone No.1" value="shanghai"></el-option>&ndash;&gt;
-      &lt;!&ndash;<el-option label="Zone No.2" value="beijing"></el-option>&ndash;&gt;
-      &lt;!&ndash;</el-select>&ndash;&gt;
-      &lt;!&ndash;</el-form-item>&ndash;&gt;
-    </el-form>
-    <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogEditor = false"><%= __('Cancel') %></el-button>
-    <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Save') %></el-button>
-  </span>
-  </el-dialog>-->
   <% /* Диалоговое окно. Тарифы. */ %>
   <el-dialog
     :visible.sync="centerDialogVisible"
@@ -554,16 +389,6 @@
                 <li><span class="ti-close cross"></span> <%= __('Add kennel') %></li>
                 <li><span class="ti-close cross"></span> <%= __('Edit kennel') %></li>
               </ul>
-              <!--<a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">-->
-              <!--<span>D</span>-->
-              <!--<span>e</span>-->
-              <!--<span>t</span>-->
-              <!--<span>a</span>-->
-              <!--<span>i</span>-->
-              <!--<span>l</span>-->
-              <!--<span>e</span>-->
-              <!--<span>d</span>-->
-              <!--</a>-->
             </div>
           </div>
         </div>
@@ -717,11 +542,9 @@
     </el-row>
     <el-row type="flex" class="row-bg" justify="center">
       <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
-        <!--//  label-width="150px"-->
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
                  class="demo-ruleForm">
           <el-form-item v-if="!buttonUpdate" label="<%= __('Kennel') %>" prop="kennel">
-            <!--@change="changeKennel"-->
             <el-select v-model="ruleForm.kennel" placeholder="<%= __('Choose your cattery') %>"
                        class="form-width"
             >
@@ -757,11 +580,8 @@
             </el-form-item>
           </template>
 
-          <!--v-if="!buttonUpdate"-->
-          <!--fox:: {{_.isString(ruleForm.dateBirth)}}-->
 
           <el-form-item v-if="!buttonUpdate" label="<%= __('DoB') %>" prop="dateBirth">
-            <!--dateBirth Объект?: {{_.isObject(ruleForm.dateBirth)}}-->
             <el-row :gutter="2">
               <el-col :span="11">
                 <el-date-picker
@@ -775,9 +595,7 @@
           </el-form-item>
 
           <el-form-item v-if="buttonUpdate" label="<%= __('DoB') %>" prop="dateBirthUpdate">
-            <!--dateBirthUpdate {{ruleForm.dateBirthUpdate}} Объект?: {{_.isObject(ruleForm.dateBirthUpdate)}}-->
-            <!--<br>  born {{ruleForm.born}} Объект?: {{_.isObject(ruleForm.born)}}-->
-            <el-row :gutter="2">
+           <el-row :gutter="2">
               <el-col :span="11">
                 <el-date-picker
                   v-model="dateBirthUpdate"
@@ -790,7 +608,6 @@
           </el-form-item>
 
           <el-form-item v-if="!buttonUpdate" label="<%= __('DoD') %>" prop="dateDeath">
-            <!--dateDeath Объект?: {{_.isObject(ruleForm.dateDeath)}}-->
             <el-row :gutter="2">
               <el-col :span="11">
                 <el-date-picker
@@ -803,7 +620,6 @@
             </el-row>
           </el-form-item>
           <el-form-item v-if="buttonUpdate" label="<%= __('DoD') %>" prop="dateDeathUpdate">
-            <!--dateDeathUpdate Объект?: {{_.isObject(ruleForm.dateDeathUpdate)}}-->
             <el-row :gutter="2">
               <el-col :span="11">
                 <el-date-picker
@@ -823,11 +639,6 @@
                 <el-radio label="sire"><%= __('Sire') %></el-radio>
                 <el-radio label="dam"><%= __('Dam') %></el-radio>
               </el-radio-group>
-              <!--<el-col :span="12">-->
-              <!--<el-radio-group v-model="ruleForm.gender">-->
-              <!--<el-radio label="sire" border size="medium"><%= __('Sire') %></el-radio>-->
-              <!--<el-radio label="dam" border size="medium"><%= __('Dam') %></el-radio>-->
-              <!--</el-radio-group>-->
             </el-col>
           </el-form-item>
 
@@ -851,9 +662,6 @@
                   <el-option label="VDH" value="6"></el-option>
                   <el-option label="KCG" value="7"></el-option>
                 </el-select>
-                <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
-                <!--</el-form-item>-->
-                <!--<el-button slot="prepend" disabled>{{ruleForm.federation}}</el-button>-->
                 <el-button slot="append" @click="copyElement" icon="el-icon-copy-document"></el-button>
                 <el-button slot="append" @click.prevent="removeElement(federation)"
                            icon="el-icon-delete"></el-button>
@@ -887,11 +695,6 @@
                 <el-input minlength="3" maxlength="20" show-word-limit
                           placeholder="<%= __('Stamp Dog number in the registry.') %>"
                           v-model="ruleForm.stamp"></el-input>
-                <!-- <el-tooltip effect="dark"
-    content="<%= __("How do you call the house, a nickname, affectionate name") %>"
-    placement="top-start">
-                  <div size="mini" round class="el-icon-question ml-3"></div>
-                </el-tooltip>-->
               </el-col>
             </el-form-item>
           </template>
@@ -910,18 +713,6 @@
                 <el-button @click="showDialog('hairless')" size="mini" round icon="el-icon-question"></el-button>
               </el-tooltip>
             </el-col>
-
-            <!--<el-form-item label="<%= __('Type') %>" prop="type">-->
-            <!--<el-row :gutter="2">-->
-            <!--<el-col :xs="8" :sm="10" :md="10" :lg="8" :xl="7">-->
-            <!--<el-radio-group v-model="ruleForm.type">-->
-            <!--<el-radio label="hairless" border ><%= __('Hairless') %></el-radio>-->
-            <!--<el-radio label="powderpuff" border ><%= __('Powderpuff') %></el-radio>-->
-            <!--</el-radio-group>-->
-            <!--</el-col>-->
-
-            <!--</el-row>-->
-
           </el-form-item>
 
           <% /* РОСТ */ %>
@@ -947,9 +738,6 @@
                                icon="el-icon-question"></el-button>
                   </el-tooltip>
                 </el-col>
-                <!--<el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3" class="">-->
-                <!--<el-button size="mini" round icon="el-icon-document-copy"></el-button>-->
-                <!--</el-col>-->
               </el-form-item>
             </el-row>
 
@@ -977,10 +765,6 @@
                   </el-input-number>
                 </div>
               </el-col>
-              <!-- <el-tooltip class="ml-3" effect="dark" content="<%= __("How to measure a dog's height?") %>"
-  placement="top-start">
-                <el-button @click="innerVisible=true" size="mini" round icon="el-icon-question"></el-button>
-              </el-tooltip>-->
             </el-form-item>
           </template>
 
@@ -1000,10 +784,6 @@
                   </el-option>
                 </el-select>
               </el-col>
-              <!--<el-tooltip effect="dark" placement="top">-->
-              <!--<div slot="content">{{i19p.infoColor}}</div>-->
-              <!--<div size="mini" round class="el-icon-question ml-3"></div>-->
-              <!--</el-tooltip>-->
               <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
                 <el-tooltip class="ml-3" effect="dark"
                             content="<%= __("Does the standard dictate the definition of color?") %>"
@@ -1053,7 +833,6 @@
                 ><i slot="prefix" class="el-autocomplete__icon el-icon-male"></i>
                   <template slot-scope="{ item }">
                     <span class="value">{{ item.value }}</span>
-                    <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
                   </template>
                 </el-autocomplete>
                 <el-autocomplete v-else
@@ -1067,7 +846,6 @@
                 ><i slot="prefix" class="el-autocomplete__icon el-icon-male"></i>
                   <template slot-scope="{ item }">
                     <span class="value">{{ item.value }}</span>
-                    <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
                   </template>
                 </el-autocomplete>
               </el-col>
@@ -1076,7 +854,6 @@
 
           <% /* МАТЬ */ %>
           <template v-if="dams">
-
             <el-form-item label="<%= __('Dam') %>" prop="dam">
               <el-col :xs="20" :sm="20" :md="16" :lg="18" :xl="18">
                 <el-autocomplete
@@ -1091,7 +868,6 @@
                   <i slot="prefix" class="el-autocomplete__icon el-icon-female"></i>
                   <template slot-scope="{ item }">
                     <span class="value">{{ item.value }}</span>
-                    <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
                   </template>
                 </el-autocomplete>
 
@@ -1107,7 +883,6 @@
                   <i slot="prefix" class="el-autocomplete__icon el-icon-female"></i>
                   <template slot-scope="{ item }">
                     <span class="value">{{ item.value }}</span>
-                    <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
                   </template>
                 </el-autocomplete>
               </el-col>
@@ -1148,9 +923,6 @@
                                icon="el-icon-question"></el-button>
                   </el-tooltip>
                 </el-col>
-                <!--<el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3" class="">-->
-                <!--<el-button size="mini" round icon="el-icon-document-copy"></el-button>-->
-                <!--</el-col>-->
               </el-form-item>
             </el-row>
           </template>
@@ -1206,13 +978,10 @@
             <el-button-group>
               <el-button @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
               <el-button @click="buttonUpdate = false; centerDialogAdded = false" icon="el-icon-close"></el-button>
-              <!--<el-button @click="submitForm('ruleForm')" type="primary" icon="el-icon-check"></el-button>-->
               <el-button v-if="!buttonUpdate" type="primary"
                          @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
               <el-button v-else type="primary" @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
-
             </el-button-group>
-
           </div>
         </el-form>
       </el-col>
@@ -1235,7 +1004,6 @@
       </el-image>
     </div>
     <span slot="footer" class="dialog-footer">
-    <!--<el-button @click="objOne={};photoVisible = false">Cancel</el-button>-->
     <el-button type="primary" @click="objOne={};photoVisible = false"><%= __('Close') %></el-button>
   </span>
   </el-dialog>
@@ -1260,7 +1028,6 @@
         <%= __('The page presents dogs of the Chinese Crested Dog. This is a database of dogs of this breed can not claim to be complete information, like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on known dogs grows and improves, this database will collect, maintain and update the actual information that appears in open access to other sites in automatic mode. Generating a complete list of dogs of the world in the Chinese Crested Dog breed.') %>
       </p>
       <div v-if="me.hasBillingCard || me.isSuperAdmin || me.isAdmin" class="mt-5  text-center">
-        <!--<button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add dog') %></button>-->
         <el-button @click="clickAddButton()" class="btn btn-outline-info"
                    icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
 
@@ -1274,35 +1041,10 @@
   </section>
   <!-- End Sample Area -->
 
-
-  <!--<div class="demo-image__preview">-->
-  <!--<el-image-->
-  <!--style="width: 100px; height: 100px"-->
-  <!--:src="url"-->
-  <!--:preview-src-list="srcList">-->
-  <!--</el-image>-->
-  <!--</div>-->
-
-
-  <!--<div class="photos" v-for="(photo, index) in srcList" :key="index + '-photo'">-->
-  <!--<div>-->
-  <!--<img :src="photo.src" width="250">-->
-  <!--</div>-->
-  <!--</div>-->
   <section class="work-area">
     <div class="container">
       <% /* Фильтры. */ %>
-      <!--<div class="menu-left mb-2">-->
-      <!--<el-link class="pr-3" :underline="false" @click="goDogSale" icon="el-icon-money">-->
-      <!--<%= __('For Sale') %>-->
-      <!--</el-link>-->
-      <!--&lt;!&ndash;<el-link type="success" class="px-3" :underline="false"  @click="centerDialogVisible = true" icon="el-icon-money">&ndash;&gt;-->
-      <!--&lt;!&ndash;<%= __('For Sale') %>&ndash;&gt;-->
-      <!--&lt;!&ndash;</el-link>&ndash;&gt;-->
-      <!--&lt;!&ndash;<el-link type="success" class="pl-3"  :underline="false" @click="centerDialogVisible = true" icon="el-icon-money">&ndash;&gt;-->
-      <!--&lt;!&ndash;<%= __('For Sale') %>&ndash;&gt;-->
-      <!--&lt;!&ndash;</el-link>&ndash;&gt;-->
-      <!--</div>-->
+
 
       <% /* Кнопки управления, фильтры */ %>
       <div class="menu-right mb-1" v-if="_.pluck(dogs, 'label').length >0">
@@ -1368,23 +1110,6 @@
                              title="<%= __('Remove') %>"
                              icon="el-icon-close"></el-link>-->
                   </div>
-                  <!--<ul class="menu-ell">-->
-                  <!--<li>-->
-                  <!--<el-link class="mt-1"  @click="goTo2(dog.detail)" :underline="false" title="<%= __('More') %>">-->
-                  <!--{{dog.fullName}}-->
-                  <!--</el-link>-->
-                  <!--</li>-->
-                  <!--&lt;!&ndash;<li ><el-link  class="mt-1" @click="goTo2(dog.detail)" :underline="false" title="<%= __('More') %>"&ndash;&gt;-->
-                  <!--&lt;!&ndash;icon="el-icon-more"></el-link></li>&ndash;&gt;-->
-                  <!--<li>-->
-                  <!--<el-link class="mt-1" @click="openRemoveDialog(dog.id)" :underline="false"-->
-                  <!--title="<%= __('Remove') %>"-->
-                  <!--icon="el-icon-close"></el-link>-->
-                  <!--</li>-->
-                  <!--&lt;!&ndash;<li> <el-button type="text" @click="openRemoveDialog"  title="<%= __('Remove') %>" &ndash;&gt;-->
-                  <!--&lt;!&ndash;icon="el-icon-close"></el-button>&ndash;&gt;-->
-                  <!--&lt;!&ndash;</li>&ndash;&gt;-->
-                  <!--</ul>-->
                 </div>
               </transition-group>
               <el-image
