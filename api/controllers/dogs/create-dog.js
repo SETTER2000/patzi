@@ -185,11 +185,15 @@ module.exports = {
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
-
+console.log('inputs.fileList:::: ' , inputs.fileList);
     // console.log('inputs.fileList DOG-create: ', inputs.fileList);
     if (inputs.fileList) {
       images = inputs.fileList.filter(o => !_.isNull(o));
+
+      console.log('images:::: ' , images);
+
       _.each(images, img => {
+        console.log('FDDDk:::', img);
         img.id =_.first(_.last(img.fd.split('\\')).split('.'));
         img.description = '';
         img.dateTaken = '';

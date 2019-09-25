@@ -445,6 +445,8 @@ parasails.registerPage('dogs-home', {
 
     async addDog() {
       this.openFullScreen();
+
+      console.log('this.ruleForm.fileList:::: ' , this.ruleForm.fileList);
       let data = {
         fileList: this.ruleForm.fileList,
         label: this.ruleForm.label,
@@ -770,6 +772,7 @@ parasails.registerPage('dogs-home', {
     ,
 
     handleSuccess(res, file) {
+      console.log('RWSPONNN::: ' , res);
       _.isArray(this.ruleForm.fileList) ? this.ruleForm.fileList.push(res) :
         this.ruleForm.fileList = [res];
     },
@@ -1007,6 +1010,7 @@ parasails.registerPage('dogs-home', {
     },
 
     removePhotos() {
+      this.checkAll=false;
       this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
         confirmButtonText: 'OK',
         cancelButtonText: this.i19p.cancel,
@@ -1127,10 +1131,9 @@ parasails.registerPage('dogs-home', {
 
 
     handleCheckAllChange(val) {
-      console.log('VAAAAAAAAA:: ', val);
       this.checkedPhoto = val ? _.pluck(this.photos.images, 'id') : [];
       this.isIndeterminate = false;
-      console.log('this.checkedPhoto:: ', this.checkedPhoto);
+      // console.log('this.checkedPhoto:: ', this.checkedPhoto);
     },
     handleCheckedPhotosChange(value) {
       console.log('VAAAAAAAAA222:: ', value);

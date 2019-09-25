@@ -36,119 +36,82 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const req = this.req;
-// https://github.com/balderdashy/sails/issues/4604
-    var fs = require('fs');
-// let r =  req.allParams();
-// console.log('REQQ: ', r.file);
-    var gm = require('gm').subClass({imageMagick: true});
-    // await sails.sockets.join(req, 'litter');
+    const fs = require('fs');
+    // const gm = require('gm').subClass({imageMagick: true});
+    const gm = require('gm')
+      , resizeX = 1424
+      , resizeY = 800
+      , gravity = 'Center'// NorthWest, North, NorthEast, West, Center, East, SouthWest, South, SouthEast
+      , Q = 40 // Качество изображения (100 - 0) http://www.graphicsmagick.org/GraphicsMagick.html#details-compress
+    ;
 
-    /**
-     * Функция uploadOne возвращает объект UploadedFileMetadata
-     * с данными о загрузке.
-     * UploadedFileMetadata {
-          fd:  // fd - дескриптор файла
-           'D:\\__PROJECTS\\Sails\\patzi\\.tmp\\uploads\\46ca9ce1-f7d5-44c9-8f8a-85dd7f3bcc89.JPG',
-          size: 2951221, // size  - в байтах
-          type: 'image/jpeg',
-          filename: 'IMG_6984.JPG',
-          status: 'finished',
-          field: 'photo',
-          extra: undefined,
-          name: 'IMG_6984.JPG'
-          }
-     * Добавляет более простой интерфейс для работы с выгрузками и загрузками файлов в
-     * приложении Node.js / Sails. Поддерживает async/await (асинхронное/ожидание).
-     * Поддерживает только Node 8 и выше. (https://www.npmjs.com/package/sails-hook-uploads)
-     *
-     * uploadOne - не будет работать без пакета sails-hook-uploads
-     * npm i --save sails-hook-uploads
-     * .uploadOne (upstreamOrReadable) (принимает любой доступный для чтения поток
-     * или входящую загрузку файла Sails из файла 0 или 1; возвращает либо undefined словарь,
-     * либо информацию о загруженных данных файла.)
-     */
-  /*  const {Transform} = require('stream');
-    // var stream = require('stream');
-    const SkipperDiskAdapter = require('skipper-disk');
-    const receiver = SkipperDiskAdapter().receive({/!* opts *!/});
-    const upstream = req.file('file');*/
-    // var intermediateStream = new stream.PassThrough();
-    // var intermediateStream = new stream.PassThrough();
-    /**
-     * В upstream.pipe README написано:
-     * Также имейте в виду, что вы должны сначала перехватить апстрим и прикрепить свойство
-     * fd (дескриптор файла) к каждому входящему потоку файлов. В настоящее время я пытаюсь
-     * выяснить, как на самом деле сделать это, так как я не могу найти примеры для этого :(
-     *
-     */
-    // upstream.setEncoding('utf8');
-  /*  upstream.on('data', (chunk) => {
-      // console.log(chunk);
-      if (!chunk) {
-        console.log('Данные закончились!');//сообщаем, что данные закончились
-        // this.push(null);
+    let info = '';
 
-      } else {
-        // this.push(chunk);
-        console.log('Данные chunk: ', chunk);
-        console.log(`-------------------------------------------------------------------------------`);
-        console.log('Данные chunk._readableState: ', chunk._readableState);
-        console.log(`*******************************************************************************`);
-      }
-      /!**
-       * С помощью chunk._readableState.buffer - можно получить все данные буфера
-       *!/
-      console.log('objectMode: ', chunk._readableState.objectMode);
-      console.log('highWaterMark: ', chunk._readableState.highWaterMark);
-      console.log('buffer: ', chunk._readableState.buffer);//[] - пустой массив
-      console.log('length: ', chunk._readableState.length);//0 - кол-во буфер объектов
-      console.log('flowing: ', chunk._readableState.flowing);//null
-      console.log('encoding: ', chunk._readableState.encoding);//null
-    });
-    const myTransform = new Transform({
-      transform(chunk, encoding, callback) {
-
-        return console.log('DDS: ', chunk);
-        //
-        // gm(chunk).resize('500','500').stream().pipe(chunk);
-        // console.log(chunk);
-
-        // callback();
-      }
-    });
-    upstream.pipe(myTransform).pipe(receiver);*/
+    // console.log("inputs.file::", inputs.file);
+    info = await sails.upload(inputs.file);
+    // console.log('INFO UPLOAD::: ' , info);
 
 
+    let fd = _.pluck(info, 'fd')[0];
+    console.log('FD:', fd);
 
+    gm(fd)
+    // .flip()
+    // .magnify()
+    // .rotate('green', 45)
+    // .blur(7, 3)
+    //   .resizeExact(resizeX,resizeY)
 
-    // gm('/path/to/my/img.jpg')
-    //   .resize('200', '200')
-    //   .stream(function (err, stdout, stderr) {
-    //     var writeStream = fs.createWriteStream('/path/to/my/resized.jpg');
-    //     stdout.pipe(writeStream);
+      .autoOrient()
+      // .noProfile()
+      .resize(null, resizeY)
+      .gravity(gravity) // Какую область оставить в обрезке
+      .crop(1424, 800)
+      .stroke("#FFFFFF")
+      // .drawCircle(10, 10, 20, 10)
+      .font(".tmp/public/fonts/OpenSans-light.ttf", 12)
+      .drawText(50, resizeY - 20, "www.poaleell.com")
+      // .edge(3)
+
+      .compress('JPEG')
+      .quality(Q)
+      // .sampling-factor("2x1")
+      .write(fd, function (err) {
+        if (err) console.log('Error loading images in upload-files::: ', err);
+      });
+    //
+    // gm(fd)
+    //   .resize(1424, 800)
+    //   .autoOrient()
+    //   .noProfile()
+    //   .write(fd, function (err) {
+    //     if (err) console.log('ERROP::: ' ,err);
     //   });
-    // ... build an intermediate transform stream to do what you need, e.g. `MyIntermediateStream`...
 
-    // var readStream = req.file('file');
-    // gm(readStream, '2.jpg')
-    //   .write('.tmp/reformat.png', function (err) {
+    // gm(fd)
+    //   .size({bufferStream: true}, function(err, size) {
+    //     this.resize(size.width / 2, size.height / 2);
+    //     this.write(p+fd.name, function (err) {
+    //       if (err) console.log('ERRO::: ', err);
+    //     });
+    //   });
+    // let readStream = fs.createReadStream(files);
+    // var writeStream = fs.createWriteStream(fd);
+    // gm(p+fd.name)
+    //   .resize('200', '200')
+    //   .stream()
+    //   .pipe(writeStream);
+
+    // var readStream = fs.createReadStream(fd);
+    // gm(readStream, fd.filename)
+    //   .resize(240, 240)
+    //   .noProfile()
+    //   .write(readStream, function (err) {
+    //     if(err) console.log(err);
     //     if (!err) console.log('done');
     //   });
-    //
-    // // console.log("inputs.file::", inputs.file);
-    let info = await sails.upload(inputs.file);
-    // req.file('file').upload(inputs.file, (err, files)=>{
-    //   if(err) {console.log(err);}
-    //   console.log('File is now resized to 100px width and uploaded to ./storedImage.png');
-    //    info = files;
-    // });
-    // console.log('info: ', info);
-    // console.log('inputs.file: ' , inputs.file);
-
-    // let fd = _.pluck(info, 'fd')[0];
-    // // console.log('FD:', fd);
     // gm(fd)
-    //   .resize(353, 257)
+    //   .resize(1424, 800)
     //   .autoOrient()
     //   .write(fd, function (err) {
     //     if (!err) console.log(' Error resizing file! ');
@@ -170,7 +133,7 @@ module.exports = {
     //     }
     //   }
     // });
-    info = info[0];
+
 
     if (!info) {
       throw 'badRequest';
@@ -178,7 +141,7 @@ module.exports = {
     // console.log('FILES/UPLOAD.JS файл картинки загружен в .tmp: ', info);
     // await sails.sockets.broadcast('files', 'list-file', info);
     // All done.
-    return exits.success(info);
+    return exits.success(info[0]);
 
   }
 };
