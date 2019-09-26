@@ -37,6 +37,7 @@ module.exports = {
   fn: async function (inputs, exits) {
     const req = this.req;
     const fs = require('fs');
+    const sharp = require('sharp');
     // const gm = require('gm').subClass({imageMagick: true});
     const gm = require('gm')
       , resizeX = 1424
@@ -47,17 +48,38 @@ module.exports = {
 
     let info = '';
 
-    // console.log("inputs.file::", inputs.file);
+    console.log("inputs.file::", inputs.file);
+    console.log("req.file('file')::",req.file('file'));
+    // console.log("isBuffer::",_.isBuffer(req.file('file')));
+
+
+
+    // const roundedCornerResizer =
+    //   sharp()
+    //     .resize(200, 200)
+    //     .composite([{
+    //       input: req.files('file'),
+    //       blend: 'dest-in'
+    //     }])
+    //     .png();
+    //
+    // req.file('file')
+    //   .pipe(roundedCornerResizer)
+    //   .pipe(inputs.file);
+
+
     info = await sails.upload(inputs.file);
-    // console.log('INFO UPLOAD::: ' , info);
+    console.log('INFO UPLOAD::: ' , info);
 
 
     let fd = _.pluck(info, 'fd')[0];
-    // console.log('FD:', fd);
+    console.log('FD:', fd);
 // console.log("DIRNAME:::: " , __dirname+'/../../../assets/fonts');
 // console.log("DIRNAME2:::: " , fs.readFileSync(__dirname+"/../../../assets/fonts/OpenSans-Light.ttf"));
 // console.log("DIRNAME3:::: " , sails.getBaseurl());
-    gm(fd)
+
+
+   /* gm(fd)
     // .flip()
     // .magnify()
     // .rotate('green', 45)
@@ -86,60 +108,15 @@ module.exports = {
       .write(fd, function (err) {
         if (err) console.log('Error loading images in upload-files::: ', err);
       });
-    //
-    // gm(fd)
-    //   .resize(1424, 800)
-    //   .autoOrient()
-    //   .noProfile()
-    //   .write(fd, function (err) {
-    //     if (err) console.log('ERROP::: ' ,err);
-    //   });
+    */
 
-    // gm(fd)
-    //   .size({bufferStream: true}, function(err, size) {
-    //     this.resize(size.width / 2, size.height / 2);
-    //     this.write(p+fd.name, function (err) {
-    //       if (err) console.log('ERRO::: ', err);
-    //     });
-    //   });
-    // let readStream = fs.createReadStream(files);
-    // var writeStream = fs.createWriteStream(fd);
-    // gm(p+fd.name)
-    //   .resize('200', '200')
-    //   .stream()
-    //   .pipe(writeStream);
 
-    // var readStream = fs.createReadStream(fd);
-    // gm(readStream, fd.filename)
-    //   .resize(240, 240)
-    //   .noProfile()
-    //   .write(readStream, function (err) {
-    //     if(err) console.log(err);
-    //     if (!err) console.log('done');
-    //   });
-    // gm(fd)
-    //   .resize(1424, 800)
-    //   .autoOrient()
-    //   .write(fd, function (err) {
-    //     if (!err) console.log(' Error resizing file! ');
-    //   });
-
-    // fs.readFile(fd, function(err, data){
-    //   if(err){
-    //     console.error(err);
-    //   }else{
-    //     console.log(data);
-    //     gm(data)
-    //       .resize(353, 257)
-    //       .autoOrient()
-    //       .write(data, function (err) {
-    //         if (!err) console.log(' hooray! ');
-    //       });
-    //     if (!info) {
-    //       throw 'badRequest';
-    //     }
-    //   }
-    // });
+    sharp(fd)
+      .resize(320, 240)
+      .toFile(fd, (err, info) => {
+        if(err) console.log('ERROSSS:: ' , err);
+        console.log('INFOO::' , info);
+      });
 
 
     if (!info) {
