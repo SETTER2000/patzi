@@ -53,8 +53,10 @@ module.exports = {
 
 
     let fd = _.pluck(info, 'fd')[0];
-    console.log('FD:', fd);
-console.log("DIRNAME:::: " , __dirname+'/../../../assets/fonts');
+    // console.log('FD:', fd);
+// console.log("DIRNAME:::: " , __dirname+'/../../../assets/fonts');
+// console.log("DIRNAME2:::: " , fs.readFileSync(__dirname+"/../../../assets/fonts/OpenSans-Light.ttf"));
+// console.log("DIRNAME3:::: " , sails.getBaseurl());
     gm(fd)
     // .flip()
     // .magnify()
@@ -72,10 +74,10 @@ console.log("DIRNAME:::: " , __dirname+'/../../../assets/fonts');
       // .gravity(gravity) // Какую область оставить в обрезке
       // .crop(resizeX, resizeY)
       // .edge(3)
-      .stroke("#FFFFFF")
+      // .stroke("#FFFFFF")
       // .drawCircle(10, 10, 20, 10)
-      .font(__dirname+"/../../../assets/fonts/OpenSans-Light.ttf", 12)
-      .drawText(50, resizeY - 20, "www.poaleell.com")
+      // .font( fs.readFileSync(__dirname+"/../../../assets/fonts/OpenSans-Light.ttf"), 12)
+      // .drawText(50, resizeY - 20, "www.poaleell.com")
       .compress('JPEG')
       .quality(Q) // качество сжатия изображения
        // глубина цвета
