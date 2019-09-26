@@ -52,16 +52,38 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
+
+    const skipper = require('skipper-s3')(
+      {
+        key: sails.config.uploads.key,
+        bucket: sails.config.uploads.bucket,
+        region: sails.config.uploads.region,
+        secret: sails.config.uploads.secret
+      }
+    );
+
+
     let dog = await Dog.findOne(inputs.id);
     console.log('IN:: ', inputs.removeImage);
     let removeImage = _.remove(dog.images, img => _.indexOf(inputs.removeImage, img.id) > -1);
-    console.log('removeImage::: ' , removeImage);
-    console.log('dog.images::: ' , dog.images);
+    console.log('Удалённые картинки из dog.images::: ', removeImage);
+    console.log('dog.images::: ', dog.images);
 
     let updateDog = await Dog.updateOne({id: inputs.id})
-      .set({images:dog.images});
+      .set({images: dog.images});
+    // console.log('Обновлённый Dog::: ', updateDog);
+
+
+    skipper.rm(removeImage[0].fd, (err, res) => {
+      if (err) console.log('ERRRS::', err);
+
+      console.log('Response::: ', res);
+    });
+
+
     return exits.success();
   }
 
 
-};
+}
+;

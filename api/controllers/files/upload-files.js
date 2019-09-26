@@ -42,7 +42,7 @@ module.exports = {
       , resizeX = 1424
       , resizeY = 800
       , gravity = 'Center'// NorthWest, North, NorthEast, West, Center, East, SouthWest, South, SouthEast
-      , Q = 40 // Качество изображения (100 - 0) http://www.graphicsmagick.org/GraphicsMagick.html#details-compress
+      , Q = 45 // Качество изображения (100 - 0) http://www.graphicsmagick.org/GraphicsMagick.html#details-compress
     ;
 
     let info = '';
@@ -64,18 +64,23 @@ module.exports = {
 
       .autoOrient()
       // .noProfile()
-      .resize(null, resizeY)
-      .gravity(gravity) // Какую область оставить в обрезке
-      .crop(1424, 800)
+      .bitdepth(16)
+      // Например, чтобы увеличить яркость цвета на 10% и уменьшить насыщенность
+      // цвета на 10% и оставить без изменений оттенок, используйте: -modulate 110,90
+      .modulate(110,90)
+      .resize(resizeX, resizeY)
+      // .gravity(gravity) // Какую область оставить в обрезке
+      // .crop(resizeX, resizeY)
+      // .edge(3)
       .stroke("#FFFFFF")
       // .drawCircle(10, 10, 20, 10)
-      .font(".tmp/public/fonts/OpenSans-light.ttf", 12)
+      .font(".tmp/public/fonts/OpenSans-Light.ttf", 12)
       .drawText(50, resizeY - 20, "www.poaleell.com")
-      // .edge(3)
-
       .compress('JPEG')
-      .quality(Q)
+      .quality(Q) // качество сжатия изображения
+       // глубина цвета
       // .sampling-factor("2x1")
+
       .write(fd, function (err) {
         if (err) console.log('Error loading images in upload-files::: ', err);
       });

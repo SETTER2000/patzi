@@ -406,7 +406,8 @@ module.exports = {
     //--------------------------------------------------------------------------
     //  /\   To avoid checking them in to version control, you might opt to set
     //  ||   sensitive credentials like `s3Secret` using an environment variable.
-    //
+    //   Чтобы не включать их в систему контроля версий, вы можете установить
+    //  || конфиденциальные учетные данные, такие как `s3Secret`, с использованием переменной окружения.
     //  For example:
     //  ```
     //  sails_uploads__key=AB2g1939eaGAdeAdamdaio38103onaDs

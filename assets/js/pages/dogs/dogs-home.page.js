@@ -63,7 +63,7 @@ parasails.registerPage('dogs-home', {
     // Состояние загрузки
     syncing: false,
     // Ограничение размера одного файла картинки при загрузки
-    sizeLess: 1, // MB
+    sizeLess: 20, // MB
     // Состояние ошибки сервера
     cloudError: '',
     subtitle: '',
