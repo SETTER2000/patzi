@@ -38,7 +38,6 @@ module.exports = {
     const req = this.req;
     const fs = require('fs');
     const sharp = require('sharp');
-    // const gm = require('gm').subClass({imageMagick: true});
     const gm = require('gm')
       , resizeX = 1424
       , resizeY = 800
@@ -79,7 +78,7 @@ module.exports = {
 // console.log("DIRNAME3:::: " , sails.getBaseurl());
 
 
-   /* gm(fd)
+    gm(fd)
     // .flip()
     // .magnify()
     // .rotate('green', 45)
@@ -108,15 +107,14 @@ module.exports = {
       .write(fd, function (err) {
         if (err) console.log('Error loading images in upload-files::: ', err);
       });
-    */
 
 
-    sharp(fd)
-      .resize(320, 240)
-      .toFile(fd, (err, info) => {
-        if(err) console.log('ERROSSS:: ' , err);
-        console.log('INFOO::' , info);
-      });
+    // sharp(fd)
+    //   .resize(320, 240)
+    //   .toFile(fd, (err, info) => {
+    //     if(err) console.log('ERROSSS:: ' , err);
+    //     console.log('INFOO::' , info);
+    //   });
 
 
     if (!info) {
