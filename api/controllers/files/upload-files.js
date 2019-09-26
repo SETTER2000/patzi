@@ -54,7 +54,7 @@ module.exports = {
 
     let fd = _.pluck(info, 'fd')[0];
     console.log('FD:', fd);
-
+console.log("DIRNAME:::: " , __dirname+'/../../../assets/fonts');
     gm(fd)
     // .flip()
     // .magnify()
@@ -74,7 +74,7 @@ module.exports = {
       // .edge(3)
       .stroke("#FFFFFF")
       // .drawCircle(10, 10, 20, 10)
-      .font(".tmp/public/fonts/OpenSans-Light.ttf", 12)
+      .font(__dirname+"/../../../assets/fonts/OpenSans-Light.ttf", 12)
       .drawText(50, resizeY - 20, "www.poaleell.com")
       .compress('JPEG')
       .quality(Q) // качество сжатия изображения

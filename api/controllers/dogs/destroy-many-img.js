@@ -73,11 +73,11 @@ module.exports = {
       .set({images: dog.images});
     // console.log('Обновлённый Dog::: ', updateDog);
 
-
-    skipper.rm(removeImage[0].fd, (err, res) => {
-      if (err) console.log('ERRRS::', err);
-
-      console.log('Response::: ', res);
+    _.each(removeImage, img => {
+      skipper.rm(img.fd, (err, res) => {
+        if (err) console.log(`Ошибка при удаление файла ${img.fd}::`, err);
+        console.log('Response::: ', res);
+      });
     });
 
 
