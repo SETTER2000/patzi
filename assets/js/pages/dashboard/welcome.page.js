@@ -4,7 +4,9 @@ parasails.registerPage('welcome', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     modal: '',
-    pageLoadedAt: Date.now()
+    pageLoadedAt: Date.now(),
+    WxH: '800x420',
+
 
   },
 
@@ -19,7 +21,11 @@ parasails.registerPage('welcome', {
   mounted: async function () {
     //…
   },
-
+  computed: {
+    coverModes:function () {
+      return 'cover:smart';
+    }
+  },
   //  ╦  ╦╦╦═╗╔╦╗╦ ╦╔═╗╦    ╔═╗╔═╗╔═╗╔═╗╔═╗
   //  ╚╗╔╝║╠╦╝ ║ ║ ║╠═╣║    ╠═╝╠═╣║ ╦║╣ ╚═╗
   //   ╚╝ ╩╩╚═ ╩ ╚═╝╩ ╩╩═╝  ╩  ╩ ╩╚═╝╚═╝╚═╝
@@ -41,7 +47,9 @@ parasails.registerPage('welcome', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-
+    getSrc(imgName) {
+      return `https://img.imageboss.me/${this.coverModes}/${this.WxH}/https://paltos.s3.amazonaws.com/${imgName}`;
+    },
     clickOpenExampleModalButton: async function () {
       this.goto('/welcome/hello');
       // Or, without deep links, instead do:

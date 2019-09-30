@@ -12,6 +12,7 @@
     "assert": "^2.0.0",
     "async": "^2.6.2",
     "gm": "^1.23.1",
+    "imageboss-js": "^1.0.1",
     "ipware": "^2.0.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.26",
