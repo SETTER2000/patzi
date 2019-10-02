@@ -71,13 +71,15 @@ module.exports = {
     console.log('INFO UPLOAD::: ', info);
 
 
-    // let fd = _.pluck(info, 'fd')[0];
     let fd = _.pluck(info, 'fd')[0];
-    fd = (fd.indexOf(':') > -1) ? fd : `${sails.config.custom.pathPhotoS3}/${fd}`;
-
     console.log('FD:', fd);
+// console.log("DIRNAME:::: " , __dirname+'/../../../assets/fonts');
+// console.log("DIRNAME2:::: " , fs.readFileSync(__dirname+"/../../../assets/fonts/OpenSans-Light.ttf"));
+// console.log("DIRNAME3:::: " , sails.getBaseurl());
+
     Jimp.read(fd)
       .then(resizePhoto => {
+        fd = fd.indexOf(':') > -1 ? fd : `${sails.config.custom.pathPhotoS3}/${fd}`;
         return resizePhoto
         // .resize(Jimp.AUTO, 256) // resize
           .quality(40) // set JPEG quality
