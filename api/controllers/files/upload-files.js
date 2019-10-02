@@ -79,6 +79,7 @@ module.exports = {
 
     Jimp.read(fd)
       .then(resizePhoto => {
+        fd = fd.indexOf(':') > -1 ? fd : `${sails.config.custom.pathPhotoS3}/${fd}`;
         return resizePhoto
         // .resize(Jimp.AUTO, 256) // resize
           .quality(40) // set JPEG quality
