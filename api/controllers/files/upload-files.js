@@ -36,11 +36,35 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const req = this.req;
+    const res = this.res;
     const fs = require('fs');
     const Jimp = require('jimp');
     const mime = require('mime-types');
     const through2 = require('through2');
     const sharp = require('sharp');
+    const split = require('split2');
+    const Readable = require('readable-stream').Readable;
+    // const stream = Readable({objectMode: true});
+
+    const parseCSV = () => {
+      let templateKeys = [];
+      let parseHeadline = true;
+      return through2.obj((data, enc, cb) => {       /* 1 */
+        if (parseHeadline) {
+          templateKeys = data.toString().split(',');
+          parseHeadline = false;
+          return cb(null, null);
+          /* 2 */
+        }
+        const entries = data.toString().split(',');
+        const obj = {};
+        templateKeys.forEach((el, index) => {       /* 3 */
+          obj[el] = entries[index];
+        });
+        return cb(null, obj);
+        /* 4 */
+      });
+    };
     const skp = require('@setter/skp')(
       {
         key: sails.config.uploads.key,
@@ -48,6 +72,7 @@ module.exports = {
         secret: sails.config.uploads.secret
       }
     );
+    var receiving = skp.receive();
     const gm = require('gm')
       , resizeX = 1424
       , resizeY = 800
@@ -56,16 +81,35 @@ module.exports = {
     ;
 
     let info = '';
-    let data = req.file('file');
+    let body = [];
+  /*  req.on('data', (chunk) => {
+      console.log('CHUNK::: ', chunk);
+      body.push(chunk);
+    });*/
+
+    /*req.on('end', () => {
+      try {
+        const data = JSON.parse(body);
+        // Write back something interesting to the user:
+        res.write(typeof data);
+        res.end();
+      } catch (er) {
+        // uh oh! bad json!
+        res.statusCode = 400;
+        return res.end(`error: ${er.message}`);
+      }
+    });*/
+
     // console.log("inputs.file::", inputs.file);
     // console.log("req.file('file')::", data);
     // console.log("isBuffer::",_.isBuffer(req.file('file')));
     const toJSON = () => {
       let objs = [];
-      return through2.obj(function(data, enc, cb) {
-        objs.push(data);                              /* 1 */
+      return through2.obj(function (data, enc, cb) {
+        objs.push(data);
+        /* 1 */
         cb(null, null);
-      }, function(cb) {                               /* 2 */
+      }, function (cb) {                               /* 2 */
         this.push(JSON.stringify(objs));
         cb();
       });
@@ -73,10 +117,11 @@ module.exports = {
     const getX = through2.obj((data, enc, cb) => { /* 4 */
       cb(null, `${data.toString()}\n`);
     });
-    inputs.file
-      // .pipe(getX)
-      .pipe(toJSON())
-      .pipe(process.stdout);
+    /*   inputs.file
+         // .pipe(getX)
+         .pipe(split())
+         .pipe(toJSON())
+         .pipe(process.stdout);*/
     // inputs.file
     //   .on('readable', function (data, done) {
     //     console.log("readable", data);
@@ -127,7 +172,10 @@ module.exports = {
     //   .pipe(inputs.file);
 
 
-    info = await sails.upload(inputs.file);
+    // info = await sails.upload(inputs.file);
+    req.file('file').upload(receiving, function (err, filesUploaded) {
+      console.log('filesUploaded::: ' , filesUploaded);
+    });
     console.log('INFO UPLOAD::: ', info);
 
 

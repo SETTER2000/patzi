@@ -30,6 +30,7 @@
     "sails-mysql": "^1.0.1",
     "sharp": "^0.23.1",
     "skipper-s3": "^0.6.0",
+    "split2": "^3.1.1",
     "through2": "^3.0.1",
     "token-generator": "^1.0.0",
     "url-parse": "^1.4.7",
