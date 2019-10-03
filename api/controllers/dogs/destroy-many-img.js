@@ -53,7 +53,8 @@ module.exports = {
       throw 'badRequest';
     }
 
-    const skipper = require('skipper-s3')(
+    // const skipper = require('skipper-s3')(
+    const skp = require('@setter/skp')(
       {
         key: sails.config.uploads.key,
         bucket: sails.config.uploads.bucket,
@@ -74,7 +75,7 @@ module.exports = {
     // console.log('Обновлённый Dog::: ', updateDog);
 
     _.each(removeImage, img => {
-      skipper.rm(img.fd, (err, res) => {
+      skp.rm(img.fd, (err, res) => {
         if (err) console.log(`Ошибка при удаление файла ${img.fd}::`, err);
         console.log('Response::: ', res);
       });

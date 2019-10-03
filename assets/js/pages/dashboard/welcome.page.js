@@ -6,6 +6,8 @@ parasails.registerPage('welcome', {
     modal: '',
     pageLoadedAt: Date.now(),
     WxH: '800x420',
+    coverMode:'cover',
+    fp:'fp-x:0.5,fp-y:0.5,fp-z:1'
 
 
   },
@@ -22,9 +24,7 @@ parasails.registerPage('welcome', {
     //…
   },
   computed: {
-    coverModes:function () {
-      return 'cover:smart';
-    }
+
   },
   //  ╦  ╦╦╦═╗╔╦╗╦ ╦╔═╗╦    ╔═╗╔═╗╔═╗╔═╗╔═╗
   //  ╚╗╔╝║╠╦╝ ║ ║ ║╠═╣║    ╠═╝╠═╣║ ╦║╣ ╚═╗
@@ -47,8 +47,17 @@ parasails.registerPage('welcome', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    getSrc(imgName) {
-      return `https://img.imageboss.me/${this.coverModes}/${this.WxH}/https://paltos.s3.amazonaws.com/${imgName}`;
+    /**
+     * Функция устанавливает размеры, увелечение и расположение фото
+     * @param imgName (name.jpg)
+     * @param coverMode (cover, cover:smart, cover:attention, cover:entropy, cover:face, cover:northeast )
+     * @param WxH  (450x100)
+     * @param fp  Точка в центре фото, увелечения нет (1)  или от 1 до 10.
+     * @returns {string}
+     */
+    getSrc(imgName, coverMode='', WxH='', fp='') {
+      return `https://img.imageboss.me/${coverMode ? coverMode : this.coverMode}/${WxH ? WxH : this.WxH}/${fp ? fp : this.fp}/https://paltos.s3.amazonaws.com/${imgName}`;
+      // return `https://img.imageboss.me/${this.coverMode}/${this.WxH}/http://patzi.s3-website-us-east-1.amazonaws.com/${imgName}`;
     },
     clickOpenExampleModalButton: async function () {
       this.goto('/welcome/hello');
