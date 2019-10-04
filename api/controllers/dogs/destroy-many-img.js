@@ -57,7 +57,7 @@ module.exports = {
     const skp = require('@setter/skp')(
       {
         key: sails.config.uploads.key,
-        bucket: sails.config.uploads.bucket,
+        bucket: sails.config.uploads.bucket || process.env.S3_BUCKET,
         region: sails.config.uploads.region,
         secret: sails.config.uploads.secret
       }
@@ -67,19 +67,22 @@ module.exports = {
     let dog = await Dog.findOne(inputs.id);
     console.log('IN:: ', inputs.removeImage);
     let removeImage = _.remove(dog.images, img => _.indexOf(inputs.removeImage, img.id) > -1);
-    console.log('Удалённые картинки из dog.images::: ', removeImage);
+    console.log('Картинки для удаления removeImage::: ', removeImage);
     console.log('dog.images::: ', dog.images);
 
     let updateDog = await Dog.updateOne({id: inputs.id})
       .set({images: dog.images});
     // console.log('Обновлённый Dog::: ', updateDog);
 
-    _.each(removeImage, img => {
-      skp.rm(img.fd, (err, res) => {
-        if (err) console.log(`Ошибка при удаление файла ${img.fd}::`, err);
-        console.log('Response::: ', res);
+    if (sails.config.environment === 'production'){
+      _.each(removeImage, img => {
+        skp.rm(img.fd, (err, res) => {
+          if (err) console.log(`Ошибка при удаление файла ${img.fd}::`, err);
+          console.log('Response::: ', res);
+        });
       });
-    });
+    }
+
 
 
     return exits.success();
