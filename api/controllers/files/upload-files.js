@@ -38,41 +38,61 @@ module.exports = {
     const req = this.req;
     const res = this.res;
     const fs = require('fs');
-    const Jimp = require('jimp');
     const mime = require('mime-types');
     const through2 = require('through2');
     const sharp = require('sharp');
     const split = require('split2');
     const Readable = require('readable-stream').Readable;
-    // const stream = Readable({objectMode: true});
+
 
     const parseCSV = () => {
       let templateKeys = [];
       let parseHeadline = true;
-      return through2.obj((data, enc, cb) => {       /* 1 */
+      return through2.obj((data, enc, cb) => {
         if (parseHeadline) {
           templateKeys = data.toString().split(',');
           parseHeadline = false;
           return cb(null, null);
-          /* 2 */
+
         }
         const entries = data.toString().split(',');
         const obj = {};
-        templateKeys.forEach((el, index) => {       /* 3 */
+        templateKeys.forEach((el, index) => {
           obj[el] = entries[index];
         });
         return cb(null, obj);
-        /* 4 */
+
       });
     };
     const skp = require('@setter/skp')(
+    // const skp = require('skipper-s3')(
       {
         key: sails.config.uploads.key,
         region: sails.config.uploads.region,
         secret: sails.config.uploads.secret
       }
     );
-    var receiving = skp.receive();
+    var receiving = skp.receive({
+      bucket:'paltos',
+      Key:'pop',
+      Expires: 60,
+     // ContentType: options.ContentType,
+      ACL: 'public-read',
+      region:'us-east-1'
+    });
+
+    const roundedCornerResizer =
+      sharp()
+        .resize(200, 200)
+        .composite([{
+          input: req.file('file'),
+          blend: 'dest-in'
+        }])
+        .png();
+
+    // readableStream
+    //   .pipe(roundedCornerResizer)
+    //   .pipe(writableStream);
     const gm = require('gm')
       , resizeX = 1424
       , resizeY = 800
@@ -181,24 +201,7 @@ module.exports = {
 
     let fd = _.pluck(info, 'fd')[0];
     console.log('FD:', fd);
-// console.log("DIRNAME:::: " , __dirname+'/../../../assets/fonts');
-// console.log("DIRNAME2:::: " , fs.readFileSync(__dirname+"/../../../assets/fonts/OpenSans-Light.ttf"));
-// console.log("DIRNAME3:::: " , sails.getBaseurl());
 
-    Jimp.read(fd)
-      .then(resizePhoto => {
-        fd = fd.indexOf(':') > -1 ? fd : `${sails.config.custom.pathPhotoS3}/${fd}`;
-        return resizePhoto
-        // .resize(Jimp.AUTO, 256) // resize
-          .quality(40) // set JPEG quality
-          .cover(resizeX, resizeY)
-          .normalize()
-          // .greyscale() // set greyscale
-          .write(fd); // save
-      })
-      .catch(err => {
-        console.error(err);
-      });
     /*
 
         gm(fd)
