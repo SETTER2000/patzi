@@ -61,6 +61,11 @@ module.exports = {
     const btoa = require('btoa');
     let collection = _.capitalize(inputs.collection);
     let collectionObject = '';
+    const resizeX = 1424
+      , resizeY = 800
+      , gravity = 'Center'// NorthWest, North, NorthEast, West, Center, East, SouthWest, South, SouthEast
+      , Q = 45 // Качество изображения (100 - 0) http://www.graphicsmagick.org/GraphicsMagick.html#details-compress
+    ;
     inputs.photoSet = inputs.photoSet ? inputs.photoSet : 0;
     // Если название альбома существует, то выводим его | images
     let folder = inputs.folder ? inputs.folder : 'images';
@@ -138,13 +143,13 @@ module.exports = {
         edits: {
           grayscale: true,
           resize: {
-            width: 200,
-            height: 200
+            width: resizeX,
+            height: resizeY
           }
         }
       });
-      arr[0].fd = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-      console.log('cloudFrontUrl::: ', arr[0].fd);
+      arr[0].cloudFrontUrl = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+      console.log('cloudFrontUrl::: ', arr[0].cloudFrontUrl);
     }
     console.log('arr[0] cloudFront::: ' , arr[0]);
     // let fileUrl = await sails.startDownload(arr[0].fd);

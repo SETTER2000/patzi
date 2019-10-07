@@ -1137,7 +1137,6 @@ parasails.registerPage('dogs-home', {
       // console.log('this.checkedPhoto:: ', this.checkedPhoto);
     },
     handleCheckedPhotosChange(value) {
-      console.log('VAAAAAAAAA222:: ', value);
       let checkedCount = value.length;
       this.checkAll = checkedCount === _.pluck(this.photos.images, 'id').length;
       this.isIndeterminate = checkedCount > 0 && checkedCount < _.pluck(this.photos.images, 'id').length;
