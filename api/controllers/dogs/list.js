@@ -80,7 +80,7 @@ module.exports = {
             }
           });
            img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-          console.log('cloudFrontUrl::: ', arr[0].cloudFrontUrl);
+          // console.log('cloudFrontUrl::: ', arr[0].cloudFrontUrl);
         } else{
           img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/download/dog/${dogId}/images/${i}`) : '';
         }
