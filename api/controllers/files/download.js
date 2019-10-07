@@ -59,14 +59,11 @@ module.exports = {
 
   fn: async function (inputs) {
     const btoa = require('btoa');
-    const skp = require('@setter/skp')(
-      {
-        key: sails.config.uploads.key,
-        region: sails.config.uploads.region,
-        secret: sails.config.uploads.secret,
-        bucket: 'paltos',
-      }
-    );
+    const resizeX = 1424
+      , resizeY = 800
+      , gravity = 'Center'// NorthWest, North, NorthEast, West, Center, East, SouthWest, South, SouthEast
+      , Q = 45 // Качество изображения (100 - 0) http://www.graphicsmagick.org/GraphicsMagick.html#details-compress
+    ;
     let collection = _.capitalize(inputs.collection);
     let collectionObject = '';
     inputs.photoSet = inputs.photoSet ? inputs.photoSet : 0;
@@ -140,19 +137,19 @@ module.exports = {
 
     const imageRequest = JSON.stringify({
       bucket: 'paltos',
-      key: '03242ff5-15e3-42a6-90bb-7f767e35bb51.jpg',
+      key: arr[0].name,
       edits: {
         grayscale: true,
         resize: {
-          width: 200,
-          height: 200
+          width: resizeX,
+          height: resizeY
         }
       }
     });
-    arr[0].fd = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+    // arr[0].fd = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
 
 // console.log('arr[0].cloudFrontUrl:::: ' , arr[0].cloudFrontUrl);
-console.log('arr[0].fd:::: ' , arr[0].fd);
+// console.log('arr[0].fd:::: ' , arr[0].fd);
 
 // console.log('skp.read(arr[0].cloudFrontUrl)::: ' , await sails.startDownload(arr[0].cloudFrontUrl));
 console.log('await sails.startDownload(arr[0].fd)::: ' , await sails.startDownload(arr[0].fd));
