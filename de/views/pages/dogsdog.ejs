@@ -48,6 +48,7 @@
 
             <div class="left_img">
               <ul v-if="dog.cover>=0">
+
                 <li v-for="(img ,index, key) in dog.images" :key="index + '-lst'">
                   <a href="#" @click="showSliderImages()">
                     <el-image :src="img.imageSrc" v-if="index===dog.cover" :lazy="true">
