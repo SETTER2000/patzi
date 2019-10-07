@@ -39,7 +39,7 @@ module.exports = {
     // let format = 'LL';
     // let dog = await Dog.findOne({letter: inputs.letter}).populate('owner');
     let fullName = _.startCase(inputs.fullName);
-    console.log('dogName::: ' , fullName);
+    console.log('dogName::: ', fullName);
     let dog = await Dog.findOne({'fullName': fullName}).populate('kennel');
     //
     if (!dog) {
@@ -59,12 +59,24 @@ module.exports = {
 
     // console.log('LITTTER::', dog.puppies[0].photos);
     //
-    dog.images = (!_.isEmpty(dog.images)) ? await dog.images.map((image, i) => {
-      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/dog/${dog.id}/images/${i}`) : '';
-      // image.detail = `/litters/dog/${litterId}`;
-      delete image.fd;
-      return image;
-    }) : '';
+    dog = await sails.helpers.cloudFrontUrl.with({
+      collection: dog,
+      collectionName: 'dog',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        // grayscale: true,
+        /*    resize: {
+              width: resizeX,
+              height: resizeY
+            }*/
+      }
+    });
+    /* dog.images = (!_.isEmpty(dog.images)) ? await dog.images.map((image, i) => {
+       image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/dog/${dog.id}/images/${i}`) : '';
+       // image.detail = `/litters/dog/${litterId}`;
+       delete image.fd;
+       return image;
+     }) : '';*/
     //
     // // Подготовка объекта фотоссессии
     // dog.puppies = (!_.isEmpty(dog.puppies)) ? await dog.puppies.map((photoSet, i) => {
@@ -89,9 +101,9 @@ module.exports = {
     // ... затем мы удаляем наш файловый дескриптор
     // delete dog.imageUploadFD;
     // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
-    delete dog.imageUploadMime;
 
 
+    console.log('DOGG::: ', dog);
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
 
     // Respond with view.
