@@ -38,6 +38,7 @@ module.exports = {
 
 
   fn: async function (inputs) {
+    const btoa = require('btoa');
     let imageSrc = ''
       , objId = ''
       , resize = {

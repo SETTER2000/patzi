@@ -35,7 +35,7 @@ module.exports = {
     // Бибилиотека Node.js
     const url = require('url');
     const moment = require('moment');
-    const btoa = require('btoa');
+
     const resizeX = 1424
       , resizeY = 800
       , gravity = 'Center'// NorthWest, North, NorthEast, West, Center, East, SouthWest, South, SouthEast
