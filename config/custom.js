@@ -23,7 +23,7 @@ module.exports.custom = {
    *                                                                         *
    **************************************************************************/
   baseUrl: 'http://localhost:1337',
-  cloudFrontUrl: '',
+  cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net',
   pathPhotoS3: '',
   /**************************************************************************
    *                                                                         *

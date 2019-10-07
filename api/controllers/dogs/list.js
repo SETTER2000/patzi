@@ -55,7 +55,21 @@ module.exports = {
       .populate('children')
       .populate('parents');
 
-
+   /* if (sails.config.environment === 'production') {
+      const imageRequest = JSON.stringify({
+        bucket: 'paltos',
+        key: arr[0].name,
+        edits: {
+          grayscale: true,
+          resize: {
+            width: resizeX,
+            height: resizeY
+          }
+        }
+      });
+      arr[0].cloudFrontUrl = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+      console.log('cloudFrontUrl::: ', arr[0].cloudFrontUrl);
+    }*/
     // Формируем массив с картинками
     let dogId;
     await _.each(dogs, async (dog) => {
