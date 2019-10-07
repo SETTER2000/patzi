@@ -6,8 +6,9 @@ parasails.registerPage('welcome', {
     modal: '',
     pageLoadedAt: Date.now(),
     WxH: '800x420',
-    coverMode:'cover',
-    fp:'fp-x:0.5,fp-y:0.5,fp-z:1'
+    coverMode: 'cover',
+    fp: 'fp-x:0.5,fp-y:0.5,fp-z:1',
+    cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net'
 
 
   },
@@ -23,9 +24,7 @@ parasails.registerPage('welcome', {
   mounted: async function () {
     //…
   },
-  computed: {
-
-  },
+  computed: {},
   //  ╦  ╦╦╦═╗╔╦╗╦ ╦╔═╗╦    ╔═╗╔═╗╔═╗╔═╗╔═╗
   //  ╚╗╔╝║╠╦╝ ║ ║ ║╠═╣║    ╠═╝╠═╣║ ╦║╣ ╚═╗
   //   ╚╝ ╩╩╚═ ╩ ╚═╝╩ ╩╩═╝  ╩  ╩ ╩╚═╝╚═╝╚═╝
@@ -55,7 +54,7 @@ parasails.registerPage('welcome', {
      * @param fp  Точка в центре фото, увелечения нет (1)  или от 1 до 10.
      * @returns {string}
      */
-    getSrc(imgName, coverMode='', WxH='', fp='') {
+    getSrc(imgName, coverMode = '', WxH = '', fp = '') {
       return `https://img.imageboss.me/${coverMode ? coverMode : this.coverMode}/${WxH ? WxH : this.WxH}/${fp ? fp : this.fp}/https://paltos.s3.amazonaws.com/${imgName}`;
       // return `https://img.imageboss.me/${this.coverMode}/${this.WxH}/http://patzi.s3-website-us-east-1.amazonaws.com/${imgName}`;
     },
@@ -65,6 +64,21 @@ parasails.registerPage('welcome', {
       // ```
       // this.modal = 'example';
       // ```
+    },
+
+    urlB() {
+      const imageRequest = JSON.stringify({
+        bucket: 'paltos',
+        key: 'banner-img.jpg',
+        edits: {
+          grayscale: true,
+          resize: {
+            // width: 200,
+            // height: 200
+          }
+        }
+      });
+      return `${this.cloudFrontUrl}/${btoa(imageRequest)}`;
     },
 
     closeExampleModal: async function () {

@@ -8,6 +8,7 @@ parasails.registerPage('dogs-home', {
     dialogEditor: false,
     photoDescUpdate: false,
     dogFullName:'',
+    cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net',
     photoDesc: {
       innerVisiblePhotoDescription: false,
       photoId: '',
@@ -63,7 +64,7 @@ parasails.registerPage('dogs-home', {
     // Состояние загрузки
     syncing: false,
     // Ограничение размера одного файла картинки при загрузки
-    sizeLess: 20, // MB
+    sizeLess: 5, // MB
     // Состояние ошибки сервера
     cloudError: '',
     subtitle: '',
@@ -1167,7 +1168,26 @@ parasails.registerPage('dogs-home', {
           this.$forceUpdate();
         }
       });
-    }
+    },
+
+
+    // Resize images
+    urlB(imgName) {
+      const imageRequest = JSON.stringify({
+        bucket: 'paltos',
+        key: imgName,
+        edits: {
+          grayscale: true,
+          resize: {
+            // width: 200,
+            // height: 200
+          }
+        }
+      });
+      return `${this.cloudFrontUrl}/${btoa(imageRequest)}`;
+    },
+
+
   }
 })
 ;

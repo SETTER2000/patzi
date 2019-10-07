@@ -58,7 +58,7 @@ module.exports = {
 
 
   fn: async function (inputs) {
-
+    const btoa = require('btoa');
     let collection = _.capitalize(inputs.collection);
     let collectionObject = '';
     inputs.photoSet = inputs.photoSet ? inputs.photoSet : 0;
@@ -126,8 +126,31 @@ module.exports = {
     if (!arr[0].fd) {
       throw 'notFound';
     }
-    this.res.type(arr[0].type);
 
+    console.log('arr[0]::: ' , arr[0]);
+
+    this.res.type(arr[0].type);
+    // Resize images
+    if (sails.config.environment === 'production') {
+      const imageRequest = JSON.stringify({
+        bucket: 'paltos',
+        key: arr[0].name,
+        edits: {
+          grayscale: true,
+          resize: {
+            width: 200,
+            height: 200
+          }
+        }
+      });
+      arr[0].fd = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+      console.log('cloudFrontUrl::: ', arr[0].fd);
+    }
+    console.log('arr[0] cloudFront::: ' , arr[0]);
+    // let fileUrl = await sails.startDownload(arr[0].fd);
+    // let fileUrl = await sails.startDownload(arr[0].fd);
+
+    // console.log('fileUrl::::: ' , fileUrl);
     /**
      * startDownload - функция от модуля sails-hook-uploads
      * мы будем использовать этот метод для загрузки файла

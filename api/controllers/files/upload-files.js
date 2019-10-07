@@ -56,7 +56,7 @@ module.exports = {
     ;
 
     let info = '';
-    let data = req.file('file');
+    // let data = req.file('file');
     // console.log("inputs.file::", inputs.file);
     // console.log("req.file('file')::", data);
     // console.log("isBuffer::",_.isBuffer(req.file('file')));
@@ -85,9 +85,9 @@ module.exports = {
     //   }).on('end', function () {
     //   console.log("THE END");
     // });
+// console.log('req.file:::::: ', req.file('file'));
 
-
-    /* sharp(inputs.file)
+   /*  sharp(req.file)
        .resize(resizeX, resizeY, {
          fit: sharp.fit.inside,
          withoutEnlargement: true
@@ -111,9 +111,22 @@ module.exports = {
          });
        }).catch(
        function (err) {
-         console.error(err, err.stack);
+         console.error("ERRSSS::::", err);
        });*/
 
+
+ /*   sharp(inputs.file('file'))
+      .resize(200, 200, {
+        fit: sharp.fit.inside,
+        withoutEnlargement: true
+      })
+      .toFormat('jpeg')
+      .toBuffer()
+      .then(function(outputBuffer) {
+        // outputBuffer contains JPEG image data
+        // no wider and no higher than 200 pixels
+        // and no larger than the input image
+      });*/
     // const roundedCornerResizer =
     //   sharp()
     //     .resize(200, 200)
@@ -127,15 +140,28 @@ module.exports = {
     //   .pipe(roundedCornerResizer)
     //   .pipe(inputs.file);
 
+/*
+    sharp(inputs.file('file'))
+      .resize(200, 200, {
+        fit: sharp.fit.inside,
+        withoutEnlargement: true
+      })
+      .toFormat('jpeg')
+      .toBuffer()
+      .then(function(outputBuffer) {
+        info =  sails.upload(outputBuffer);
+        console.log('INFO UPLOAD::: ', info);
+      });*/
+
 
     info = await sails.upload(inputs.file);
     console.log('INFO UPLOAD::: ', info);
 
 
     let fd = _.pluck(info, 'fd')[0];
-    fd = (sails.config.environment === 'production') ? `${sails.config.custom.pathPhotoS3}/${fd}` : fd;
+    // fd = (sails.config.environment === 'production') ? `${sails.config.custom.pathPhotoS3}/${fd}` : fd;
     console.log('FD:', fd);
-    Jimp.read(fd)
+  /*  Jimp.read(fd)
       .then(resizePhoto => {
         return resizePhoto
           .resize(Jimp.AUTO, resizeY) // resize
@@ -147,48 +173,16 @@ module.exports = {
       })
       .catch(err => {
         console.error(err);
-      });
-    /*
-
-        gm(fd)
-        // .flip()
-        // .magnify()
-        // .rotate('green', 45)
-        // .blur(7, 3)
-        //   .resizeExact(resizeX,resizeY)
-
-          .autoOrient()
-          // .noProfile()
-          .bitdepth(16)
-          // Например, чтобы увеличить яркость цвета на 10% и уменьшить насыщенность
-          // цвета на 10% и оставить без изменений оттенок, используйте: -modulate 110,90
-          .modulate(110, 90)
-          .resize(resizeX, resizeY)
-          // .gravity(gravity) // Какую область оставить в обрезке
-          // .crop(resizeX, resizeY)
-          // .edge(3)
-          // .stroke("#FFFFFF")
-          // .drawCircle(10, 10, 20, 10)
-          // .font( fs.readFileSync(__dirname+"/../../../assets/fonts/OpenSans-Light.ttf"), 12)
-          // .drawText(50, resizeY - 20, "www.poaleell.com")
-          .compress('JPEG')
-          .quality(Q) // качество сжатия изображения
-          // глубина цвета
-          // .sampling-factor("2x1")
-
-          .write(fd, function (err) {
-            if (err) console.log('Error loading images in upload-files::: ', err);
-          });
-    */
+      });*/
 
 
+    //
     // sharp(fd)
-    //   .resize(320, 240)
+    //   .resize(resizeX, resizeY)
     //   .toFile(fd, (err, info) => {
     //     if(err) console.log('ERROSSS:: ' , err);
     //     console.log('INFOO::' , info);
     //   });
-
 
     if (!info) {
       throw 'badRequest';

@@ -12,6 +12,7 @@
     "ajv-keywords": "^3.4.0",
     "assert": "^2.0.0",
     "async": "^2.6.2",
+    "btoa": "^1.2.1",
     "gm": "^1.23.1",
     "imageboss-js": "^1.0.1",
     "ipware": "^2.0.0",
