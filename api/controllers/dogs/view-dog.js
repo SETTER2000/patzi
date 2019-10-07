@@ -60,7 +60,7 @@ module.exports = {
     // console.log('LITTTER::', dog.puppies[0].photos);
     //
     dog.images = (!_.isEmpty(dog.images)) ? await dog.images.map((image, i) => {
-      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/dog/${dog.id}/images/${i}`) : '';
+      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/dog/${dog.id}/images/${i}`) : '';
       // image.detail = `/litters/dog/${litterId}`;
       delete image.fd;
       return image;

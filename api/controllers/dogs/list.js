@@ -36,7 +36,12 @@ module.exports = {
     // Бибилиотека Node.js
     const url = require('url');
     const moment = require('moment');
-
+    const btoa = require('btoa');
+        const resizeX = 1424
+          , resizeY = 800
+          , gravity = 'Center'// NorthWest, North, NorthEast, West, Center, East, SouthWest, South, SouthEast
+          , Q = 45 // Качество изображения (100 - 0) http://www.graphicsmagick.org/GraphicsMagick.html#details-compress
+        ;
     // Устанавливаем соответствующую локаль для даты, установленую пользователем.
     moment.locale(this.req.me.preferredLocale);
 
@@ -55,27 +60,31 @@ module.exports = {
       .populate('children')
       .populate('parents');
 
-   /* if (sails.config.environment === 'production') {
-      const imageRequest = JSON.stringify({
-        bucket: 'paltos',
-        key: arr[0].name,
-        edits: {
-          grayscale: true,
-          resize: {
-            width: resizeX,
-            height: resizeY
-          }
-        }
-      });
-      arr[0].cloudFrontUrl = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-      console.log('cloudFrontUrl::: ', arr[0].cloudFrontUrl);
-    }*/
+
     // Формируем массив с картинками
     let dogId;
     await _.each(dogs, async (dog) => {
       dogId = dog.id;
       dog.images = (!_.isEmpty(dog.images)) ? await dog.images.map((img, i) => {
-        img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/dog/${dogId}/images/${i}`) : '';
+
+        if (sails.config.environment === 'production') {
+          const imageRequest = JSON.stringify({
+            bucket: sails.config.uploads.bucket,
+            key: img.name,
+            edits: {
+              // grayscale: true,
+              resize: {
+                width: resizeX,
+                height: resizeY
+              }
+            }
+          });
+           img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+          console.log('cloudFrontUrl::: ', arr[0].cloudFrontUrl);
+        } else{
+          img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/download/dog/${dogId}/images/${i}`) : '';
+        }
+
         img.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
         // img.detail = `/dog/${dog.letter}/photo`;
         delete img.fd;

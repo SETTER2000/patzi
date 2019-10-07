@@ -68,7 +68,7 @@ module.exports = {
     await _.each(litters, async (litter) => {
       litterId = litter.id;
       litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((img, i) => {
-        img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litterId}/images/${i}`) : '';
+        img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litterId}/images/${i}`) : '';
         img.detail = `/litter/${litter.letter}/${litter.year}/photo`;
         // img.detail = `/litter/${litter.letter}/photo`;
         delete img.fd;
@@ -76,7 +76,7 @@ module.exports = {
       }) : '';
 
       litter.puppies = (!_.isEmpty(litter.puppies)) ? await litter.puppies.map((img, i) => {
-        img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litterId}/puppies/${i}`) : '';
+        img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litterId}/puppies/${i}`) : '';
         img.detail = `/litter/${litter.letter}/${litter.year}/photo`;
         delete img.fd;
         return img;

@@ -188,8 +188,8 @@ module.exports.routes = {
   'GET    /api/v1/city/list/:regionId?': {action: 'city/list'},
 
   'GET    /api/v1/country/list': {action: 'country/list'},
-
-  'GET    /api/v1/files/download/:collection/:id/:folder/:key/:photoSet?': {action: 'files/download'},
+// /api/v1/files/download/
+  'GET    /download/:collection/:id/:folder/:key/:photoSet?': {action: 'files/download'},
 
   'POST   /api/v1/likes/add-like': {action: 'likes/add-like', csrf: false},
   'GET    /api/v1/likes/list-like/:instanceModuleId/:field': {action: 'likes/list-like'},

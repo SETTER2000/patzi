@@ -67,7 +67,7 @@ module.exports = {
     }
 
     litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((image, i) => {
-      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litter.id}/images/${i}`) : '';
+      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litter.id}/images/${i}`) : '';
       delete image.fd;
       return image;
     }) : '';
@@ -77,7 +77,7 @@ module.exports = {
     litter.puppies = (!_.isEmpty(litter.puppies)) ? await litter.puppies.map((photoSet, i) => {
       photoSet.comments = _.isArray(photoSet.comments) ? photoSet.comments : [];
       photoSet.photos.map((image, y) => {
-        image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/litter/${litter.id}/puppies/${y}/${i}`) : '';
+        image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litter.id}/puppies/${y}/${i}`) : '';
         delete image.fd;
       });
       return photoSet;
