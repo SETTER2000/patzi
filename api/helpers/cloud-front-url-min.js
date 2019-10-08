@@ -69,13 +69,13 @@ module.exports = {
       if (sails.config.environment === 'production') {
         inputs.collection[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ?  inputs.collection[inputs.field] : '';
         inputs.collection[inputs.createField] = (!_.isEmpty(inputs.collection[inputs.createField])) ? await inputs.collection[inputs.createField].map((image, i) => {
-          const imageRequest = JSON.stringify({
+          let imageRequest = JSON.stringify({
             bucket: sails.config.uploads.bucket,
             key: image.fd,
             edits: inputs.edits
           });
           image.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-          delete image.fd;
+          // delete image.fd;
           return image;
         }) : '';
       } else {
@@ -85,18 +85,15 @@ module.exports = {
           return image;
         }) : '';
       }
-    } else {
+    }
+    else {
       await _.each(inputs.collection, async (obj) => {
         objId = obj.id;
         obj[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ?  obj[inputs.field] : '';
-        // console.log('obj::: ' , obj);
-        // console.log('obj[inputs.field]::: ' ,  (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? 'y':'n');
-        // console.log('inputs.field::: ' , inputs.field);
-        // console.log('!_.isEmpty(obj[inputs.field])::: ' , (!_.isEmpty(obj[inputs.field])&& obj[inputs.field].length>0) ? 'y':'e');
         obj[inputs.createField] = (!_.isEmpty(obj[inputs.createField]) && !_.isUndefined(obj[inputs.createField][0])) ? await obj[inputs.createField].map((img, i) => {
           if (sails.config.environment === 'production') {
             // console.log('Объект img:: ', img);
-            const imageRequest = JSON.stringify({
+            let imageRequest = JSON.stringify({
               bucket: sails.config.uploads.bucket,
               key: img.fd,
               edits: inputs.edits
@@ -107,11 +104,6 @@ module.exports = {
             // console.log('img local::: ' , img);
             img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${objId}/${inputs.field}/${i}`) : '';
           }
-
-          // img.detail = obj.fullName ? `/chinese-crested/${obj.fullName.split(" ").join('-')}` : '';
-          // console.log('img.imageSrc::: ' , img.imageSrc);
-          // console.log('img.detail::: ' , img.detail);
-          // delete img.fd;
           return img;
         }) : '';
       });
