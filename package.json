@@ -1,7 +1,7 @@
 {
   "name": "patzi",
   "private": true,
-  "version": "0.1.76",
+  "version": "0.1.77",
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
