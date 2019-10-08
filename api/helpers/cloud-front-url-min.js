@@ -67,7 +67,8 @@ module.exports = {
     if (!_.isArray(inputs.collection)) {
       console.log('One object');
       if (sails.config.environment === 'production') {
-        inputs.collection[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ?  inputs.collection[inputs.field] : '';
+        let imagesN = inputs.collection[inputs.field];
+        inputs.collection[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ?  imagesN : '';
         inputs.collection[inputs.createField] = (!_.isEmpty(inputs.collection[inputs.createField])) ? await inputs.collection[inputs.createField].map((image, i) => {
           let imageRequest = JSON.stringify({
             bucket: sails.config.uploads.bucket,
@@ -89,7 +90,8 @@ module.exports = {
     else {
       await _.each(inputs.collection, async (obj) => {
         objId = obj.id;
-        obj[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ?  obj[inputs.field] : '';
+        let imagesN = obj[inputs.field];
+        obj[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ?  imagesN : '';
         obj[inputs.createField] = (!_.isEmpty(obj[inputs.createField]) && !_.isUndefined(obj[inputs.createField][0])) ? await obj[inputs.createField].map((img, i) => {
           if (sails.config.environment === 'production') {
             // console.log('Объект img:: ', img);
