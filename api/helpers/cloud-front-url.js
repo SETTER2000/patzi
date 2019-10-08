@@ -50,20 +50,34 @@ module.exports = {
     inputs.edits.resize = inputs.edits.resize ? inputs.edits.resize : resize;
     console.log('inputs.collection::: ', inputs.collection);
     if (!_.isArray(inputs.collection)) {
-
-      inputs.collection.images = (!_.isEmpty(inputs.collection.images)) ? await inputs.collection.images.map((image, i) => {
-        image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${inputs.collection.id}/images/${i}`) : '';
-        delete image.fd;
-        return image;
-      }) : '';
-    } else{
+      console.log('One object');
+      if (sails.config.environment === 'production') {
+        inputs.collection.images = (!_.isEmpty(inputs.collection.images)) ? await inputs.collection.images.map((image, i) => {
+          const imageRequest = JSON.stringify({
+            bucket: sails.config.uploads.bucket,
+            key: image.fd,
+            edits: inputs.edits
+          });
+          image.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+          delete image.fd;
+          return image;
+        }) : '';
+      } else {
+        inputs.collection.images = (!_.isEmpty(inputs.collection.images)) ? await inputs.collection.images.map((image, i) => {
+          image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${inputs.collection.id}/images/${i}`) : '';
+          delete image.fd;
+          return image;
+        }) : '';
+      }
+    } else {
       await _.each(inputs.collection, async (obj) => {
         objId = obj.id;
         obj.images = (!_.isEmpty(obj.images)) ? await obj.images.map((img, i) => {
           if (sails.config.environment === 'production') {
+            console.log('Объект img:: ', img);
             const imageRequest = JSON.stringify({
               bucket: sails.config.uploads.bucket,
-              key: img.name,
+              key: img.fd,
               edits: inputs.edits
             });
             img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
