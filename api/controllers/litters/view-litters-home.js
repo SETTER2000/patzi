@@ -50,9 +50,26 @@ module.exports = {
 
 
 
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    litters = await sails.helpers.cloudFrontUrl.with({
+      collection: litters,
+      collectionName: 'litter',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        // grayscale: true,
+        /*    resize: {
+              width: resizeX,
+              height: resizeY
+            }*/
+      }
+    });
 
     _.each(litters, (litter) => {
-      litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.letter}`);
+      // litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.letter}`);
       // ... затем мы удаляем наш файловый дескриптор
       delete litter.imageUploadFD;
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию

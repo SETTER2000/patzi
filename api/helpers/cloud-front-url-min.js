@@ -67,7 +67,8 @@ module.exports = {
     if (!_.isArray(inputs.collection)) {
       console.log('One object');
       if (sails.config.environment === 'production') {
-        inputs.collection[inputs.createField] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
+        inputs.collection[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ?  inputs.collection[inputs.field] : '';
+        inputs.collection[inputs.createField] = (!_.isEmpty(inputs.collection[inputs.createField])) ? await inputs.collection[inputs.createField].map((image, i) => {
           const imageRequest = JSON.stringify({
             bucket: sails.config.uploads.bucket,
             key: image.fd,
@@ -87,11 +88,12 @@ module.exports = {
     } else {
       await _.each(inputs.collection, async (obj) => {
         objId = obj.id;
+        obj[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ?  obj[inputs.field] : '';
         // console.log('obj::: ' , obj);
         // console.log('obj[inputs.field]::: ' ,  (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? 'y':'n');
         // console.log('inputs.field::: ' , inputs.field);
         // console.log('!_.isEmpty(obj[inputs.field])::: ' , (!_.isEmpty(obj[inputs.field])&& obj[inputs.field].length>0) ? 'y':'e');
-        obj[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? await obj[inputs.field].map((img, i) => {
+        obj[inputs.createField] = (!_.isEmpty(obj[inputs.createField]) && !_.isUndefined(obj[inputs.createField][0])) ? await obj[inputs.createField].map((img, i) => {
           if (sails.config.environment === 'production') {
             // console.log('Объект img:: ', img);
             const imageRequest = JSON.stringify({

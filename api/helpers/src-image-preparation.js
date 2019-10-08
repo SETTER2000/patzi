@@ -65,13 +65,49 @@ module.exports = {
     if (!litter) {
       console.log('Ошибка! Объект litter не создан.');
     }
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    litter = await sails.helpers.cloudFrontUrl.with({
+      collection: litter,
+      collectionName: 'litter',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        // grayscale: true,
+        /*    resize: {
+              width: resizeX,
+              height: resizeY
+            }*/
+      }
+    });
+
 
     litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((image, i) => {
-      image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litter.id}/images/${i}`) : '';
+      // image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litter.id}/images/${i}`) : '';
       delete image.fd;
       return image;
     }) : '';
 
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    /*litter = await sails.helpers.cloudFrontUrl.with({
+      collection: litter,
+      collectionName: 'litter',
+      field:'puppies',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        // grayscale: true,
+        /!*    resize: {
+              width: resizeX,
+              height: resizeY
+            }*!/
+      }
+    });*/
 
     // Подготовка объекта фотоссессии
     litter.puppies = (!_.isEmpty(litter.puppies)) ? await litter.puppies.map((photoSet, i) => {
