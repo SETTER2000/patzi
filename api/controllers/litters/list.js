@@ -115,7 +115,7 @@ module.exports = {
      * Генерирует ссылки с параметрами изображения.
      * https://sharp.pixelplumbing.com/en/stable/api-resize/
      */
-    litters = await sails.helpers.cloudFrontUrlMin.with({
+   let littersNew = await sails.helpers.cloudFrontUrlMin.with({
       collection: litters,
       collectionName: 'litter',
       field:'images',
@@ -134,8 +134,18 @@ module.exports = {
       throw 'badRequest';
     }
 
+// console.log('littersNew:::: ', littersNew);
+// console.log('images:::: ', littersNew[0].images);
+// console.log('imagesMin:::: ', littersNew[0].imagesMin);
 
-    await sails.sockets.broadcast('litter', 'list-litter', litters);
+
+
+
+
+
+
+
+    await sails.sockets.broadcast('litter', 'list-litter', littersNew);
     return exits.success();
   }
 };

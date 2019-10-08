@@ -91,28 +91,35 @@ module.exports = {
       await _.each(inputs.collection, async (obj) => {
         objId = obj.id;
         let imagesN = obj[inputs.field];
+        console.log('OBJ::::' , obj);
         obj[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ?  imagesN : '';
+
+        console.log('obj[inputs.createField]:::: ' ,obj);
+
         obj[inputs.createField] = (!_.isEmpty(obj[inputs.createField]) && !_.isUndefined(obj[inputs.createField][0])) ? await obj[inputs.createField].map((img, i) => {
-          if (sails.config.environment === 'production') {
-            // console.log('Объект img:: ', img);
+            console.log('img.imageSrc входной::::', img.imageSrc);
+          if (sails.config.environment !== 'production') {
+            console.log('inputs.edits:: ', inputs.edits);
+            // 00f21b4c-9f24-45ae-a92e-e3282cf78d25.jpg
+            // 0bec30fa-a61e-4fce-9844-9cc76e3015e4.jpg
             let imageRequest = JSON.stringify({
-              bucket: sails.config.uploads.bucket,
-              key: img.fd,
+              bucket: 'paltos',
+              key: '0bec30fa-a61e-4fce-9844-9cc76e3015e4.jpg',
+              // key: img.fd,
               edits: inputs.edits
             });
             img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-
-          } else {
-            // console.log('img local::: ' , img);
-            img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${objId}/${inputs.field}/${i}`) : '';
+            console.log('img.imageSrc выходной::::', img.imageSrc);
+            return img;
           }
-          return img;
+
         }) : '';
       });
     }
 
 
-
+console.log('Выходная коллекция  images:::::: ', inputs.collection[0]);
+// console.log('Выходная коллекция из Мин  inputs.collection[0].imagesMin:::::: ', inputs.collection[0].imagesMin);
     return inputs.collection;
 
   }
