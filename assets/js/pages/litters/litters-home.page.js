@@ -281,6 +281,7 @@ parasails.registerPage('litters-home', {
       // Принимаем данные по событию list-*
       await io.socket.on('list-litter', (data) => {
         this.litters = data;
+        console.log('LITTERS::: ', this.litters);
       });
 
 

@@ -402,7 +402,7 @@
 
           <% /*Маленькие фото. Превью.*/ %>
           <ul class="flex-container wrap" v-if="litter.images">
-            <li class="flex-item" v-for="(img, index, key) in litter.images" :key="index +  '-label'">
+            <li class="flex-item" v-for="(img, index, key) in litter.imagesMin" :key="index +  '-label'">
               <template v-if="me.isSuperAdmin">
                 <div class="ell-relation" v-if="litter.cover === index">
                   <el-button type="warning" size="mini" title="<%= __("Album's cover") %>"

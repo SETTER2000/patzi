@@ -108,6 +108,28 @@ module.exports = {
       }
     });
 
+    /**
+     * Создаём поле imagesMin с миниатюрами.
+     * Поле создаётся поумолчанию , если не указано другое название в параметре
+     * createField.
+     * Генерирует ссылки с параметрами изображения.
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    litters = await sails.helpers.cloudFrontUrlMin.with({
+      collection: litters,
+      collectionName: 'litter',
+      field:'images',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        // grayscale: true,
+            resize: {
+              fit: 'inside',
+              width: 164,
+              height:160
+            }
+      }
+    });
+
     if (!litters) {
       throw 'badRequest';
     }

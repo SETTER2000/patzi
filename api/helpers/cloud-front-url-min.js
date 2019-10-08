@@ -1,13 +1,20 @@
 module.exports = {
 
 
-  friendlyName: 'Cloud front url',
+  friendlyName: 'Cloud front url min',
 
 
-  description: 'Отдаёт url картинки в зависимости от environment',
+  description: 'Создаёт новую, преобразованную колекцию ссылок на картинки из входящей коллекции картинок.',
 
 
   inputs: {
+    edits: {
+      type: 'ref',
+      description: `Объект преобразования картинки.
+      https://sharp.pixelplumbing.com/en/stable/api-resize/#examples
+      `,
+      required: true
+    },
     collectionName: {
       type: 'string',
       description: 'Название коллекции. Устанавливается в путь к файлу фотографии.',
@@ -18,24 +25,19 @@ module.exports = {
       description: 'Объекты коллекции со всеми данными',
       required: true
     },
-/*
-    create: {
-      type: 'boolean',
-      description: `Если true, то создаётся свойство imagesMin
-       с массивом миниатур картинок из заказанного поля.`,
-      defaultsTo: false
-    },*/
-    edits: {
-      type: 'ref',
-      description: `Объект преобразования картинки.
-      https://sharp.pixelplumbing.com/en/stable/api-resize/#examples
-      `,
-      required: true
-    },
     field:{
       type:'string',
       defaultsTo:'images',
-      description:`Название свойства в объекте коллекции, которое содержит массив фотосессий.`
+      description:`Название свойства в объекте коллекции, из которого 
+      нужно взять картинки и создать миниатюры в createField.`,
+      // required: true
+    },
+    createField:{
+      type:'string',
+      defaultsTo:'imagesMin',
+      description:`Название свойства в объекте коллекции, которое будет создано
+       и заполнено коллекцией картинок.`,
+      // required: true
     }
   },
 
@@ -53,26 +55,26 @@ module.exports = {
     const btoa = require('btoa');
     let imageSrc = ''
       , objId = ''
-      , resize = {
+      /*, resize = {
         fit: 'inside',
         width: 1424,
         height:800
-      }
+      }*/
     ;
 // Если не передан объект resize, то устанавливаем размер по умолчанию.
-    inputs.edits.resize = inputs.edits.resize ? inputs.edits.resize : resize;
+//     inputs.edits.resize = inputs.edits.resize ? inputs.edits.resize : resize;
     // console.log('inputs.collection::: ', inputs.collection);
     if (!_.isArray(inputs.collection)) {
       console.log('One object');
       if (sails.config.environment === 'production') {
-        inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
+        inputs.collection[inputs.createField] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
           const imageRequest = JSON.stringify({
             bucket: sails.config.uploads.bucket,
             key: image.fd,
             edits: inputs.edits
           });
           image.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-          // delete image.fd;
+          delete image.fd;
           return image;
         }) : '';
       } else {
@@ -89,7 +91,7 @@ module.exports = {
         // console.log('obj[inputs.field]::: ' ,  (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? 'y':'n');
         // console.log('inputs.field::: ' , inputs.field);
         // console.log('!_.isEmpty(obj[inputs.field])::: ' , (!_.isEmpty(obj[inputs.field])&& obj[inputs.field].length>0) ? 'y':'e');
-        obj[inputs.field] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? await obj[inputs.field].map((img, i) => {
+        obj[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? await obj[inputs.field].map((img, i) => {
           if (sails.config.environment === 'production') {
             // console.log('Объект img:: ', img);
             const imageRequest = JSON.stringify({
@@ -118,5 +120,7 @@ module.exports = {
     return inputs.collection;
 
   }
+
+
 };
 
