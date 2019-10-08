@@ -11,7 +11,7 @@
     custom-class="dialog-images-editor"
     center>
     <el-dialog
-      width="30%"
+      width="80vw"
       title="<%= __('Photo Description') %>"
       :visible.sync="photoDesc.innerVisiblePhotoDescription"
       append-to-body>
@@ -20,7 +20,7 @@
           <el-input type="textarea" v-model="photoDesc.description"></el-input>
         </el-form-item>
 
-        <el-form-item v-if="!photoDescUpdate" label="<%= __('DoB') %>" prop="dateTaken">
+        <el-form-item v-if="!photoDescUpdate" label="<%= __('Date taken') %>" prop="dateTaken">
           <el-row :gutter="2">
             <el-col :span="11">
               <el-date-picker
@@ -34,7 +34,7 @@
         </el-form-item>
       </el-form>
 
-      <el-form-item v-if="photoDescUpdate" label="<%= __('DoB') %>" prop="dateTakenUpdate">
+      <el-form-item v-if="photoDescUpdate" label="<%= __('Date taken') %>" prop="dateTakenUpdate">
         <el-row :gutter="2">
           <el-col :span="11">
             <el-date-picker
@@ -75,7 +75,7 @@
             <div style="padding: 14px;">
               <el-row :gutter="2">
                 <el-col :span="11">
-                  <el-link @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.innerVisiblePhotoDescription=true" :underline="false"
+                  <el-link @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description;  photoDesc.innerVisiblePhotoDescription=true" :underline="false"
                            type="primary"><%= __('Date taken') %>:
                   </el-link>
                 </el-col>
@@ -111,7 +111,7 @@
 
               <el-row :gutter="2">
                 <el-col :span="16">
-                  <el-link @click="photoDesc.photoId=img.id; photoDesc.description=img.description; photoDesc.innerVisiblePhotoDescription=true" :underline="false"
+                  <el-link @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description; photoDesc.innerVisiblePhotoDescription=true" :underline="false"
                            type="primary"><%= __('Description') %>:
                   </el-link>
                 </el-col>
