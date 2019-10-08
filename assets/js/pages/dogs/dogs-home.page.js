@@ -7,14 +7,37 @@ parasails.registerPage('dogs-home', {
     isCollapse: true,
     dialogEditor: false,
     photoDescUpdate: false,
-    dogFullName:'',
+    dogFullName: '',
     cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net',
     photoDesc: {
       innerVisiblePhotoDescription: false,
       photoId: '',
       description: '',
-      dateTaken:''
+      dateTaken: ''
     },
+
+    bites: [{
+      value: 'перекус',
+      label: 'перекус'
+    }, {
+      value: 'недокус',
+      label: 'недокус'
+    }, {
+      value: 'ножнецеобразный',
+      label: 'ножнецеобразный'
+    }],
+
+    // ABCDEFGHIJKLMNOPQRSTUVWXYZ
+    // letters: [{
+    //   value: 'перекус',
+    //   label: 'перекус'
+    // }, {
+    //   value: 'недокус',
+    //   label: 'недокус'
+    // }, {
+    //   value: 'ножнецеобразный',
+    //   label: 'ножнецеобразный'
+    // }],
 
     innerVisible: false,
     dialogEditorList: false,
@@ -155,6 +178,12 @@ parasails.registerPage('dogs-home', {
       label: '',
       nickname: '',
       stamp: '',
+      /*  canine: '',
+        bite: '',
+        letter: '',
+        dogTests: this.ruleForm.dogTests,
+        teethCountTop: this.ruleForm.teethCountTop,
+        teethCountBottom: this.ruleForm.teethCountBottom,*/
       federation: '1',
       imageUrl: '',
       previewImageSrc: '',
@@ -348,6 +377,15 @@ parasails.registerPage('dogs-home', {
         return new Map(this.dic).get(this.me.preferredLocale);
       }
     },
+    letters: {
+      get: function () {
+        let y = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let alphabet = [...y.split('')];
+        let ar = [];
+        alphabet.map(y => y === y ? ar.push({value: y, label: y}) : '');
+        return ar;
+      }
+    }
   },
 
 
@@ -443,11 +481,10 @@ parasails.registerPage('dogs-home', {
       });
     },
 
-
+    // Create Dog
     async addDog() {
       this.openFullScreen();
-
-      console.log('this.ruleForm.fileList:::: ' , this.ruleForm.fileList);
+      console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
       let data = {
         fileList: this.ruleForm.fileList,
         label: this.ruleForm.label,
@@ -459,6 +496,12 @@ parasails.registerPage('dogs-home', {
         federation: this.ruleForm.federation,
         weight: this.ruleForm.weight,
         growth: this.ruleForm.growth,
+        canine: this.ruleForm.canine,
+        bite: this.ruleForm.bite,
+        letter: this.ruleForm.letter,
+        dogTests: this.ruleForm.dogTests,
+        teethCountTop: this.ruleForm.teethCountTop,
+        teethCountBottom: this.ruleForm.teethCountBottom,
         type: this.ruleForm.type,
         dam: this.ruleForm.dam,
         sire: this.ruleForm.sire,
@@ -519,6 +562,12 @@ parasails.registerPage('dogs-home', {
         currency: this.ruleForm.currency,
         color: this.ruleForm.color,
         stamp: this.ruleForm.stamp,
+        canine: this.ruleForm.canine,
+        bite: this.ruleForm.bite,
+        letter: this.ruleForm.letter,
+        dogTests: this.ruleForm.dogTests,
+        teethCountTop: this.ruleForm.teethCountTop,
+        teethCountBottom: this.ruleForm.teethCountBottom,
         registerNumber: this.ruleForm.registerNumber,
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
@@ -773,7 +822,7 @@ parasails.registerPage('dogs-home', {
     ,
 
     handleSuccess(res, file) {
-      console.log('RWSPONNN::: ' , res);
+      console.log('RWSPONNN::: ', res);
       _.isArray(this.ruleForm.fileList) ? this.ruleForm.fileList.push(res) :
         this.ruleForm.fileList = [res];
     },
@@ -1011,7 +1060,7 @@ parasails.registerPage('dogs-home', {
     },
 
     removePhotos() {
-      this.checkAll=false;
+      this.checkAll = false;
       this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
         confirmButtonText: 'OK',
         cancelButtonText: this.i19p.cancel,

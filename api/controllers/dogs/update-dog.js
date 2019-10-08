@@ -41,6 +41,15 @@ module.exports = {
       description: 'Дата смерти.'
     },
 
+    letter: {
+      type: 'string',
+      description: `Буква помёта к которому пренадлежит собака. 
+      Информация нужна для фиксации кнопки о продаже на странице помёта. 
+      В случаи когда дата рождения щенков одного помёта разная. 
+      (например в 23:00 первый родился и через 2 часа второй. Помёт один, а дата рождения разная.). 
+      Если буква не указана, то автоматически берётся первая буква имени собаки.`,
+    },
+
     fileList: {
       type: 'ref',
       description: 'Массив с объектами данных о новых загруженных файлах.'
@@ -150,6 +159,44 @@ module.exports = {
       // example:'hairless, powderpuff',
     },
 
+
+    canine: {
+      type: 'string',
+      description: 'Клыки. Количество клыков.',
+      example: '4',
+      defaultsTo:'4'
+    },
+
+    teethCountTop: {
+      type: 'string',
+      description: 'Количество зубов вверху.',
+      example: '6',
+      defaultsTo:'6'
+    },
+
+
+    teethCountBottom: {
+      type: 'string',
+      description: 'Количество зубов внизу.',
+      example: '6',
+      defaultsTo:'6'
+    },
+
+
+    bite: {
+      type: 'string',
+      description: 'Прикус.',
+      example: 'ножнецеобразный',
+      isIn: ['перекус', 'недокус', 'ножнецеобразный'],
+      defaultsTo: 'ножнецеобразный'
+    },
+
+
+    dogTests: {
+      type: 'string',
+      description: 'Тесты собаки.'
+    },
+
   },
 
 
@@ -228,6 +275,11 @@ module.exports = {
     //
     // dateDeath = !_.isEmpty(dateDeath) ? moment.tz(dateDeath, 'Europe/Moscow').format() : '';
 
+    console.log('inputs.letter::: ' , inputs.letter);
+    console.log('inputs.bite::: ' , inputs.bite);
+    console.log('inputs.teethCountBottom::: ' , inputs.teethCountBottom);
+    console.log('inputs.teethCountTop::: ' , inputs.teethCountTop);
+    console.log('inputs.canine::: ' , inputs.canine);
 
     let updateObj = {
       label: label,
@@ -250,7 +302,13 @@ module.exports = {
       sale: inputs.sale,
       color: inputs.color,
       stamp: inputs.stamp,
-      // fullName: kennel.right ? `${rightFullName}` : `${leftFullName}`
+      bite: inputs.bite,
+      dogTests: inputs.dogTests,
+      letter: inputs.letter ? inputs.letter : label[0],
+      canine: inputs.canine,
+      teethCountBottom: inputs.teethCountBottom,
+      teethCountTop: inputs.teethCountTop,
+      teethCount:`${inputs.teethCountTop}x${inputs.teethCountBottom}x${inputs.canine}`,
     };
 
 

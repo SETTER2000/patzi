@@ -17,6 +17,17 @@ module.exports = {
     },
 
 
+    letter: {
+      type: 'string',
+      description: `Буква помёта к которому пренадлежит собака. 
+      Информация нужна для фиксации кнопки о продаже на странице помёта. 
+      В случаи когда дата рождения щенков одного помёта разная. 
+      (например в 23:00 первый родился и через 2 часа второй. Помёт один, а дата рождения разная.). 
+      Если буква не указана, то автоматически берётся первая буква имени собаки.`,
+      //required: true,
+    },
+
+
     fileList: {
       type: 'ref',
       description: 'Массив с файлами данных о загруженных файлах.'
@@ -26,7 +37,7 @@ module.exports = {
     subtitle: {
       type: 'string',
       description: 'Дополнительная информация. Описание питомника.',
-      maxLength:700
+      maxLength: 700
     },
 
 
@@ -48,9 +59,8 @@ module.exports = {
       type: 'string',
       description: `Рекомендации к продаже. Сопроводительный текст, который будет виден на странице
        продаж для данной собаки.`,
-      maxLength:700
+      maxLength: 700
     },
-
 
 
     dateBirth: {
@@ -65,9 +75,9 @@ module.exports = {
     },
 
     sale: {
-      type:'boolean',
-      defaultsTo:false,
-      description:`Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
+      type: 'boolean',
+      defaultsTo: false,
+      description: `Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
     },
 
 
@@ -98,7 +108,7 @@ module.exports = {
     gender: {
       type: 'string',
       required: true,
-      example:'sire, dam',
+      example: 'sire, dam',
       description: 'Пол собак. В смысле не пол собаки, а конец есть или нет.'
     },
 
@@ -112,21 +122,21 @@ module.exports = {
     weight: {
       type: 'number',
       description: 'Вес. В граммах.',
-      example:4500
+      example: 4500
     },
 
 
     growth: {
       type: 'number',
       description: 'Рост. В сантиметрах.',
-      example:30
+      example: 30
     },
 
 
     type: {
       type: 'string',
       description: 'Тип. Возможны два варианта.',
-      example:'hairless, powderpuff',
+      example: 'hairless, powderpuff',
     },
 
     color: {
@@ -140,6 +150,45 @@ module.exports = {
       description: 'Клеймо. Номер собаки в реестре.',
       // example:'hairless, powderpuff',
     },
+
+
+    canine: {
+      type: 'string',
+      description: 'Клыки. Количество клыков.',
+      example: '4',
+      defaultsTo:'4'
+    },
+
+    teethCountTop: {
+      type: 'string',
+      description: 'Количество зубов вверху.',
+      example: '6',
+      defaultsTo:'6'
+    },
+
+
+    teethCountBottom: {
+      type: 'string',
+      description: 'Количество зубов внизу.',
+      example: '6',
+      defaultsTo:'6'
+    },
+
+
+    bite: {
+      type: 'string',
+      description: 'Прикус.',
+      example: 'ножнецеобразный',
+      isIn: ['перекус', 'недокус', 'ножнецеобразный'],
+      defaultsTo: 'ножнецеобразный'
+    },
+
+
+    dogTests: {
+      type: 'string',
+      description: 'Тесты собаки.'
+    },
+
 
   },
 
@@ -185,16 +234,16 @@ module.exports = {
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
-console.log('inputs.fileList:::: ' , inputs.fileList);
+    console.log('inputs.fileList:::: ', inputs.fileList);
     // console.log('inputs.fileList DOG-create: ', inputs.fileList);
     if (inputs.fileList) {
       images = inputs.fileList.filter(o => !_.isNull(o));
 
-      console.log('images:::: ' , images);
+      console.log('images:::: ', images);
 
       _.each(images, img => {
         console.log('FDDDk:::', img);
-        img.id =_.first(_.last(img.fd.split('\\')).split('.'));
+        img.id = _.first(_.last(img.fd.split('\\')).split('.'));
         img.description = '';
         img.dateTaken = '';
         delete img.filename;
@@ -219,30 +268,37 @@ console.log('inputs.fileList:::: ' , inputs.fileList);
       throw (req.me.preferredLocale === 'ru') ? 'dogAlreadyInUseRU' : 'dogAlreadyInUse';
     }
     let label = _.startCase(inputs.label.toString().toLowerCase());
-    let rightFullName = _.startCase(label +' ' + kennel.label);
-    let leftFullName = _.startCase( kennel.label +' ' +label);
+    let rightFullName = _.startCase(label + ' ' + kennel.label);
+    let leftFullName = _.startCase(kennel.label + ' ' + label);
 
 
     // Создаём собаку
     let newDog = await Dog.create({
-      label:  label,
+      label: label,
       kennel: inputs.kennel,
       gender: inputs.gender,
       currency: inputs.currency,
       price: inputs.price,
       saleDescription: inputs.saleDescription,
       dateBirth: await sails.helpers.dateFix(inputs.dateBirth),
-      dateDeath:  await sails.helpers.dateFix(inputs.dateDeath),
+      dateDeath: await sails.helpers.dateFix(inputs.dateDeath),
       nickname: inputs.nickname,
       subtitle: inputs.subtitle,
       weight: inputs.weight,
       growth: inputs.growth,
-      type:   inputs.type,
-      sale:   inputs.sale,
+      type: inputs.type,
+      sale: inputs.sale,
       images: images,
-      color:  inputs.color,
-      stamp:  inputs.stamp,
-      fullName:  kennel.right ? `${rightFullName}` : `${leftFullName}`
+      color: inputs.color,
+      stamp: inputs.stamp,
+      bite: inputs.bite,
+      canine: inputs.canine,
+      teethCountBottom: inputs.teethCountBottom,
+      teethCountTop: inputs.teethCountTop,
+      dogTests: inputs.dogTests,
+      letter: inputs.letter ? inputs.letter : label[0],
+      teethCount:`${inputs.teethCountTop}x${inputs.teethCountBottom}x${inputs.canine}`,
+      fullName: kennel.right ? `${rightFullName}` : `${leftFullName}`
     }).fetch();
     // Если не создан возвращаем ошибку.
     if (!newDog) {
@@ -265,7 +321,6 @@ console.log('inputs.fileList:::: ' , inputs.fileList);
     let parentFind = await Dog.find({fullName: parents});
     parents = _.pluck(parentFind, 'id');
     parents.length > 0 ? await Dog.addToCollection(newDog.id, 'parents').members(parents) : '';
-
 
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.

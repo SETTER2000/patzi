@@ -35,13 +35,12 @@ module.exports = {
     gender: {
       type: 'string',
       description: `Пол собак. В смысле не пол собаки, а конец есть или нет.`,
-      example: 'sire, dam',
+      example: 'sire',
       isIn: ['sire', 'dam'],
       required: true,
       minLength: 3,
       maxLength: 4
     },
-
 
 
     sale: {
@@ -54,7 +53,7 @@ module.exports = {
       type: 'string',
       description: `Валюта продажи. Валюта за катоую можно купить собаку.
       Знак рубля:  &#8381;`,
-      example: 'dollar, рубль, euro',
+      example: 'dollar',
       isIn: ['dollar', 'рубль', 'euro'],
       // required: true,
       minLength: 4,
@@ -69,8 +68,6 @@ module.exports = {
     },
 
 
-
-
     saleDescription: {
       type: 'string',
       description: `Рекомендации к продаже. Сопроводительный текст, который будет виден на странице
@@ -83,6 +80,62 @@ module.exports = {
       type: 'string',
       required: true,
       description: 'Дата рождения.'
+    },
+
+    letter: {
+      type: 'string',
+      description: `Буква помёта к которому пренадлежит собака. 
+      Информация нужна для фиксации кнопки о продаже на странице помёта. 
+      В случаи когда дата рождения щенков одного помёта разная. 
+      (например в 23:00 первый родился и через 2 часа второй. Помёт один, а дата рождения разная.). 
+      Если буква не указана, то автоматически берётся первая буква имени собаки.`,
+      required: true,
+    },
+
+
+
+    canine: {
+      type: 'number',
+      description: 'Количество клыков.',
+      example: '4'
+    },
+
+
+
+    teethCountTop: {
+      type: 'number',
+      description: 'Количество зубов сверху.',
+      example: '6'
+    },
+
+
+
+    teethCountBottom: {
+      type: 'number',
+      description: 'Количество зубов снизу.',
+      example: '6'
+    },
+
+
+    teethCount: {
+      type: 'string',
+      description: 'Зубы. Общее кол-во зубов.',
+      example: 'верхние х нижние х клыки, 6x6x4, 6x6x4, 6x6x4 и т.д. '
+    },
+
+
+    bite: {
+      type: 'string',
+      description: 'Прикус.',
+      example: 'ножнецеобразный',
+      isIn: ['перекус', 'недокус', 'ножнецеобразный'],
+      defaultsTo:'ножнецеобразный'
+    },
+
+
+    dogTests: {
+      type: 'string',
+      description: 'Тесты собаки.'
     },
 
 
@@ -103,6 +156,7 @@ module.exports = {
       description: `Номер ключа в массиве фотографий, который определяет главную фотографию альбома.
                     Обложка альбома.`
     },
+
     weight: {
       type: 'number',
       description: 'Вес. В граммах.',
@@ -210,8 +264,6 @@ module.exports = {
       collection: 'dog',
       via: 'parents'
     },
-
-
 
 
   },

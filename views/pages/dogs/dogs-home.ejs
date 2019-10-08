@@ -75,8 +75,10 @@
             <div style="padding: 14px;">
               <el-row :gutter="2">
                 <el-col :span="11">
-                  <el-link @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description;  photoDesc.innerVisiblePhotoDescription=true" :underline="false"
-                           type="primary"><%= __('Date taken') %>:
+                  <el-link
+                    @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description;  photoDesc.innerVisiblePhotoDescription=true"
+                    :underline="false"
+                    type="primary"><%= __('Date taken') %>:
                   </el-link>
                 </el-col>
                 <el-col :span="13">
@@ -111,15 +113,16 @@
 
               <el-row :gutter="2">
                 <el-col :span="16">
-                  <el-link @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description; photoDesc.innerVisiblePhotoDescription=true" :underline="false"
-                           type="primary"><%= __('Description') %>:
+                  <el-link
+                    @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description; photoDesc.innerVisiblePhotoDescription=true"
+                    :underline="false"
+                    type="primary"><%= __('Description') %>:
                   </el-link>
                 </el-col>
                 <el-col :span="8">
                   <el-link :underline="false" type="danger"> {{_.trunc(img.description, 10)}}</el-link>
                 </el-col>
               </el-row>
-
 
 
               <div class="bottom clearfix ">
@@ -183,7 +186,7 @@
           <% /* Поле ввода комментария */ %>
           <el-form @submit.native.prevent>
             <el-form-item>
-              <el-input  @keyup.enter.native="addComment('negotiation')"
+              <el-input @keyup.enter.native="addComment('negotiation')"
                         class="lb mt-2"
                         maxLength="1000"
                         clearable
@@ -227,7 +230,7 @@
           </el-image>
           <div class="text-center">
             <div>{{o.fullName}}</div>
-            <div >
+            <div>
               <em><strong><i class="el-icon-present"></i> <%= __('Dob') %>:</strong></em>
               <time class="time"> {{ o.dateBirth | getCreate(me.preferredLocale,'L') }}</time>
               <el-tooltip content="<%= __('Start negotiations') %>" placement="bottom" effect="light">
@@ -595,7 +598,7 @@
           </el-form-item>
 
           <el-form-item v-if="buttonUpdate" label="<%= __('DoB') %>" prop="dateBirthUpdate">
-           <el-row :gutter="2">
+            <el-row :gutter="2">
               <el-col :span="11">
                 <el-date-picker
                   v-model="dateBirthUpdate"
@@ -795,6 +798,27 @@
             </el-form-item>
           </template>
 
+
+          <% /* БУКВА ПОМЁТА  */ %>
+          <template>
+            <el-row :gutter="2">
+              <el-form-item label="<%= __('Litter letter') %>" prop="letter">
+                <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                  <el-select v-model="ruleForm.letter" placeholder="Select">
+                    <el-option
+                      v-for="item in letters"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-col>
+              </el-form-item>
+            </el-row>
+          </template>
+
+
+
           <% /* ОПИСАНИЕ */ %>
           <template>
             <el-form-item label="<%= __('Description') %>" prop="subtitle">
@@ -812,6 +836,129 @@
             </el-form-item>
           </template>
 
+
+
+          <% /* ТЕСТЫ */ %>
+          <template>
+            <el-form-item label="<%= __('Tests') %>" prop="dogTests">
+              <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+                <el-input
+                  type="textarea"
+                  :rows="3"
+                  autosize
+                  placeholder="Please input"
+                  v-model="ruleForm.dogTests"
+                  maxlength="700"
+                  show-word-limit>
+                </el-input>
+              </el-col>
+            </el-form-item>
+          </template>
+
+
+
+          <div class="my-sm-5">
+            <el-divider content-position="left"><%= __('Teeth') %></el-divider>
+          </div>
+
+          <% /* ПРИКУС */ %>
+          <template>
+            <el-row :gutter="2">
+              <el-form-item label="<%= __('Bite') %>" prop="bite">
+                <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                  <el-select v-model="ruleForm.bite" placeholder="Select">
+                    <el-option
+                      v-for="item in bites"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-col>
+              </el-form-item>
+            </el-row>
+          </template>
+
+          <% /* КЛЫКИ */ %>
+          <template>
+            <el-row :gutter="2">
+              <el-form-item label="<%= __('Canine') %>" prop="canine">
+                <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                  <el-slider
+                    class="hidden-xs-only"
+                    v-model="ruleForm.canine"
+                    :min="0"
+                    :max="4"
+                    show-input>
+                  </el-slider>
+                  <el-input-number class="text-center hidden-sm-and-up"
+                                   :min="0" :max="4" size="mini" v-model="ruleForm.canine"></el-input-number>
+                </el-col>
+                <!--   <el-col :xs="4" :sm="3" :md="3" :lg="3" :xl="2">
+                    <el-tooltip effect="dark" content="<%= __("How to measure a dog's height?") %>"
+                                placement="top-start">
+                      <el-button @click="showDialog('growth')" size="mini" round
+                                 icon="el-icon-question"></el-button>
+                    </el-tooltip>
+                  </el-col>-->
+              </el-form-item>
+            </el-row>
+
+          </template>
+
+          <% /* ЗУБЫ ВЕРХ */ %>
+          <template>
+            <el-row :gutter="2">
+              <el-form-item label="<%= __('Teeth top') %>" prop="teethCountTop">
+                <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                  <el-slider
+                    class="hidden-xs-only"
+                    v-model="ruleForm.teethCountTop"
+                    :min="0"
+                    :max="6"
+                    show-input>
+                  </el-slider>
+                  <el-input-number class="text-center hidden-sm-and-up"
+                                   :min="0" :max="6" size="mini" v-model="ruleForm.teethCountTop"></el-input-number>
+                </el-col>
+                <!--   <el-col :xs="4" :sm="3" :md="3" :lg="3" :xl="2">
+                    <el-tooltip effect="dark" content="<%= __("How to measure a dog's height?") %>"
+                                placement="top-start">
+                      <el-button @click="showDialog('growth')" size="mini" round
+                                 icon="el-icon-question"></el-button>
+                    </el-tooltip>
+                  </el-col>-->
+              </el-form-item>
+            </el-row>
+
+          </template>
+
+          <% /* ЗУБЫ НИЗ */ %>
+          <template>
+            <el-row :gutter="2">
+              <el-form-item label="<%= __('Teeth top') %>" prop="teethCountBottom">
+                <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                  <el-slider
+                    class="hidden-xs-only"
+                    v-model="ruleForm.teethCountBottom"
+                    :min="0"
+                    :max="6"
+                    show-input>
+                  </el-slider>
+                  <el-input-number class="text-center hidden-sm-and-up"
+                                   :min="0" :max="6" size="mini" v-model="ruleForm.teethCountBottom"></el-input-number>
+                </el-col>
+                <!--   <el-col :xs="4" :sm="3" :md="3" :lg="3" :xl="2">
+                    <el-tooltip effect="dark" content="<%= __("How to measure a dog's height?") %>"
+                                placement="top-start">
+                      <el-button @click="showDialog('growth')" size="mini" round
+                                 icon="el-icon-question"></el-button>
+                    </el-tooltip>
+                  </el-col>-->
+              </el-form-item>
+            </el-row>
+
+          </template>
 
           <div class="my-sm-5">
             <el-divider content-position="left"><%= __('Parents') %></el-divider>
@@ -1045,7 +1192,6 @@
     <div class="container">
       <% /* Фильтры. */ %>
 
-
       <% /* Кнопки управления, фильтры */ %>
       <div class="menu-right mb-1" v-if="_.pluck(dogs, 'label').length >0">
         <div class="grid-content bg-purple">
@@ -1106,7 +1252,7 @@
                              title="<%= __('More') %>">
                       {{dog.fullName}}
                     </el-link>
-                  <!--<el-link type="danger" class="px-2" @click="openRemoveDialog(dog.id)" :underline="false"
+                    <!--<el-link type="danger" class="px-2" @click="openRemoveDialog(dog.id)" :underline="false"
                              title="<%= __('Remove') %>"
                              icon="el-icon-close"></el-link>-->
                   </div>

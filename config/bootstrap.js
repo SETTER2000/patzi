@@ -1781,6 +1781,7 @@ module.exports.bootstrap = async function () {
     {
       label: `Adam`,
       gender: 'sire',
+      letter:'A',
       sale:false,
       dateBirth: moment('2017-11-02T21:00:00.000Z').format(),
       kennel: 'Poale Ell'
@@ -1788,6 +1789,7 @@ module.exports.bootstrap = async function () {
     {
       label: `Ella`,
       gender: 'dam',
+      letter:'E',
       sale:false,
       dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Sasquehanna'
@@ -1795,6 +1797,7 @@ module.exports.bootstrap = async function () {
     {
       label: `De Lux Supernova`,
       gender: 'sire',
+      letter:'D',
       sale:false,
       dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Alfa Laval'
@@ -1802,6 +1805,7 @@ module.exports.bootstrap = async function () {
     {
       label: `Naruto`,
       gender: 'sire',
+      letter:'N',
       sale:false,
       dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Olegro Katrin'
@@ -1809,6 +1813,7 @@ module.exports.bootstrap = async function () {
     {
       label: `Neron`,
       gender: 'sire',
+      letter:'N',
       sale:false,
       dateBirth: '2017-11-02T21:00:00.000Z',
       kennel: 'Zlato Dinastii'

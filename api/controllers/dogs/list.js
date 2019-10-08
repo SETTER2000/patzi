@@ -60,16 +60,20 @@ module.exports = {
       .populate('parents');
 
 
-
-    // With named parameters:
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
     dogs = await sails.helpers.cloudFrontUrl.with({
       collection: dogs,
       collectionName:'dog',
       edits: {
         // grayscale: true,
         resize: {
-          width: resizeX,
-          height: resizeY
+          // fit: 'inside',
+          // width: resizeX,
+          // height: resizeY
         }
       }
     });
@@ -83,7 +87,7 @@ module.exports = {
        return dog;
     });
 
-    console.log('ETTT: ', dogs);
+    // console.log('ETTT: ', dogs);
 
     await sails.sockets.broadcast('dog', 'list-dog', dogs);
 

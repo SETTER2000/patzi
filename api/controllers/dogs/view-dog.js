@@ -57,8 +57,11 @@ module.exports = {
     //   });
 
 
-    // console.log('LITTTER::', dog.puppies[0].photos);
-    //
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
     dog = await sails.helpers.cloudFrontUrl.with({
       collection: dog,
       collectionName: 'dog',

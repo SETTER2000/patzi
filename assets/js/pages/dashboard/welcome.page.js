@@ -71,10 +71,11 @@ parasails.registerPage('welcome', {
         bucket: 'paltos',
         key: 'banner-img.jpg',
         edits: {
-          grayscale: true,
+          // grayscale: true,
           resize: {
-            // width: 200,
-            // height: 200
+            fit: 'inside',
+            width: 1424,
+            height:800
           }
         }
       });

@@ -24,6 +24,11 @@ module.exports = {
       https://sharp.pixelplumbing.com/en/stable/api-resize/#examples
       `,
       required: true
+    },
+    field:{
+      type:'string',
+      defaultsTo:'images',
+      description:`Название свойства в объекте коллекции, которое содержит массив фотосессий.`
     }
   },
 
@@ -42,17 +47,18 @@ module.exports = {
     let imageSrc = ''
       , objId = ''
       , resize = {
+        fit: 'inside',
         width: 1424,
-        height: 800
+        height:800
       }
     ;
 // Если не передан объект resize, то устанавливаем размер по умолчанию.
     inputs.edits.resize = inputs.edits.resize ? inputs.edits.resize : resize;
-    console.log('inputs.collection::: ', inputs.collection);
+    // console.log('inputs.collection::: ', inputs.collection);
     if (!_.isArray(inputs.collection)) {
       console.log('One object');
       if (sails.config.environment === 'production') {
-        inputs.collection.images = (!_.isEmpty(inputs.collection.images)) ? await inputs.collection.images.map((image, i) => {
+        inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
           const imageRequest = JSON.stringify({
             bucket: sails.config.uploads.bucket,
             key: image.fd,
@@ -63,8 +69,8 @@ module.exports = {
           return image;
         }) : '';
       } else {
-        inputs.collection.images = (!_.isEmpty(inputs.collection.images)) ? await inputs.collection.images.map((image, i) => {
-          image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${inputs.collection.id}/images/${i}`) : '';
+        inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
+          image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${inputs.collection.id}/${inputs.field}/${i}`) : '';
           delete image.fd;
           return image;
         }) : '';
@@ -72,9 +78,13 @@ module.exports = {
     } else {
       await _.each(inputs.collection, async (obj) => {
         objId = obj.id;
-        obj.images = (!_.isEmpty(obj.images)) ? await obj.images.map((img, i) => {
+        // console.log('obj::: ' , obj);
+        // console.log('obj[inputs.field]::: ' ,  (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? 'y':'n');
+        // console.log('inputs.field::: ' , inputs.field);
+        // console.log('!_.isEmpty(obj[inputs.field])::: ' , (!_.isEmpty(obj[inputs.field])&& obj[inputs.field].length>0) ? 'y':'e');
+        obj[inputs.field] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? await obj[inputs.field].map((img, i) => {
           if (sails.config.environment === 'production') {
-            console.log('Объект img:: ', img);
+            // console.log('Объект img:: ', img);
             const imageRequest = JSON.stringify({
               bucket: sails.config.uploads.bucket,
               key: img.fd,
@@ -82,10 +92,13 @@ module.exports = {
             });
             img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
           } else {
-            img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${objId}/images/${i}`) : '';
+            // console.log('img local::: ' , img);
+            img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${objId}/${inputs.field}/${i}`) : '';
           }
 
-          img.detail = obj.fullName ? `/chinese-crested/${obj.fullName.split(" ").join('-')}` : '';
+          // img.detail = obj.fullName ? `/chinese-crested/${obj.fullName.split(" ").join('-')}` : '';
+          // console.log('img.imageSrc::: ' , img.imageSrc);
+          // console.log('img.detail::: ' , img.detail);
           delete img.fd;
           return img;
         }) : '';
