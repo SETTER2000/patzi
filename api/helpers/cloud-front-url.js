@@ -18,6 +18,10 @@ module.exports = {
       description: 'Объекты коллекции со всеми данными',
       required: true
     },
+    photoSet:{
+      type: 'number',
+      description:`Индекс фотосессии`
+    },
 /*
     create: {
       type: 'boolean',
@@ -76,6 +80,7 @@ module.exports = {
         }) : '';
       } else {
         inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
+          i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${inputs.collection.id}/${inputs.field}/${i}`) : '';
           // delete image.fd;
           return image;
@@ -99,7 +104,7 @@ module.exports = {
             img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
 
           } else {
-            // console.log('img local::: ' , img);
+            i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
             img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${objId}/${inputs.field}/${i}`) : '';
           }
 

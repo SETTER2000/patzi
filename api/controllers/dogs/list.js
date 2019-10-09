@@ -69,12 +69,7 @@ module.exports = {
       collection: dogs,
       collectionName:'dog',
       edits: {
-        // grayscale: true,
-        resize: {
-          // fit: 'inside',
-          // width: resizeX,
-          // height: resizeY
-        }
+        resize: {}
       }
     });
 

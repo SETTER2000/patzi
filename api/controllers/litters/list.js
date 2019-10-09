@@ -52,6 +52,11 @@ module.exports = {
       .sort('born DESC')
       .populate('owner');
 
+    if (!litters) {
+      throw 'badRequest';
+    }
+
+
     await _.each(litters, async (litter) => {
       litter.bornNt = moment.parseZone(litter.born).format(format);
       // litter.bornNt = moment.unix(litter.born).format(format);
@@ -109,19 +114,19 @@ module.exports = {
     });
 
     /**
-     * Создаём поле imagesMin с миниатюрами.
-     * Поле создаётся поумолчанию , если не указано другое название в параметре
-     * createField.
+     * Создаём поле imagesMin.
+     * Поле imagesMin создаётся по умолчанию , если не указано другое название в параметре createField.
+     * Новое свойство imagesMin будет содержать картинки из поля установленного в параметре field,
+     * но уже с изменениями предложенными в свойстве edits.
      * Генерирует ссылки с параметрами изображения.
      * https://sharp.pixelplumbing.com/en/stable/api-resize/
      */
-   let littersNew = await sails.helpers.cloudFrontUrlMin.with({
+    litters = await sails.helpers.cloudFrontUrlMin.with({
       collection: litters,
       collectionName: 'litter',
       field:'images',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
-        // grayscale: true,
             resize: {
               // fit: 'inside',
               width: 420,
@@ -130,22 +135,9 @@ module.exports = {
       }
     });
 
-    if (!litters) {
-      throw 'badRequest';
-    }
-
-// console.log('littersNew:::: ', littersNew);
-// console.log('images:::: ', littersNew[0].images);
-// console.log('imagesMin:::: ', littersNew[0].imagesMin);
 
 
-
-
-
-
-
-
-    await sails.sockets.broadcast('litter', 'list-litter', littersNew);
+    await sails.sockets.broadcast('litter', 'list-litter', litters);
     return exits.success();
   }
 };

@@ -4,7 +4,17 @@ module.exports = {
   friendlyName: 'Cloud front url min',
 
 
-  description: 'Создаёт новую, преобразованную колекцию ссылок на картинки из входящей коллекции картинок.',
+  description: `
+  Хелпер работает только для production.
+  Создаёт новую, преобразованную колекцию ссылок на 
+  картинки из входящей коллекции картинок.
+  Создаём поле imagesMin.
+  Поле imagesMin создаётся по умолчанию , если не указано другое название в параметре createField.
+  Новое свойство imagesMin будет содержать картинки из поля установленного в параметре field, 
+  но уже с изменениями предложенными в свойстве edits.
+  Генерирует ссылки с параметрами изображения.
+  
+  `,
 
 
   inputs: {
@@ -38,7 +48,11 @@ module.exports = {
       description: `Название свойства в объекте коллекции, которое будет создано
        и заполнено коллекцией картинок.`,
       // required: true
-    }
+    },
+    photoSet: {
+      type: 'number',
+      description: `Индекс фотосессии`
+    },
   },
 
 
@@ -72,51 +86,73 @@ module.exports = {
     }
 
     if (!_.isArray(inputs.collection)) {
-      if (sails.config.environment === 'production') {
-        let imagesN = inputs.collection[inputs.field];
-        inputs.collection[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ? imagesN : '';
-        inputs.collection[inputs.createField] = (!_.isEmpty(inputs.collection[inputs.createField])) ? await inputs.collection[inputs.createField].map((image, i) => {
-          let imageRequest = JSON.stringify({
-            bucket: sails.config.uploads.bucket,
-            key: image.fd,
-            edits: inputs.edits
-          });
-          image.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-          return image;
-        }) : '';
+      console.log('Collections One:');
+      /* if (sails.config.environment !== 'production') {
+         let imagesN = inputs.collection[inputs.field];
+         inputs.collection[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ? imagesN : '';
+         inputs.collection[inputs.createField] = (!_.isEmpty(inputs.collection[inputs.createField])) ? await inputs.collection[inputs.createField].map((image, i) => {
+           let imageRequest = JSON.stringify({
+             bucket: sails.config.uploads.bucket,
+             key: image.fd,
+             edits: inputs.edits
+           });
+           image.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+           return image;
+         }) : '';
+       } else {*/
+      if (sails.config.environment !== 'production') {
+        let im = reprocessedObj(inputs.collection[inputs.field], 'fd');
+        (!_.isEmpty(inputs.collection[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ?
+          im.map(img => {
+            let imageRequest = JSON.stringify({
+              bucket: 'paltos',
+              // bucket: sails.config.uploads.bucket,
+              // key: img.fd,
+              key: '1a3cf345-e303-475c-a48b-cc874bf26b42.jpg',
+              edits: inputs.edits
+            });
+            img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+            return img;
+          }) : '';
+        inputs.collection[inputs.createField] = im;
       } else {
         inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
+          i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${inputs.collection.id}/${inputs.field}/${i}`) : '';
           return image;
         }) : '';
       }
     }
     else {
+      console.log('Collections Many:');
+      await _.each(inputs.collection, async (obj) => {
 
-        await _.each(inputs.collection, async (obj) => {
-          if (sails.config.environment === 'production') {
-            let im = reprocessedObj(obj[inputs.field], 'fd');
-            (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ?
-              im.map(img => {
-                let imageRequest = JSON.stringify({
-                  bucket: sails.config.uploads.bucket,
-                  key: img.fd,
-                  // key: '0bec30fa-a61e-4fce-9844-9cc76e3015e4.jpg',
-                  edits: inputs.edits
-                });
-                img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-                return img;
-              }) : '';
-            obj[inputs.createField] = im;
-          }else{
-            obj[inputs.createField] = (!_.isEmpty(obj[inputs.field])) ? await obj[inputs.field].map((image, i) => {
-              image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${obj.id}/${inputs.field}/${i}`) : '';
-              return image;
+        if (sails.config.environment !== 'production') {
+          let im = reprocessedObj(obj[inputs.field], 'fd');
+          (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ?
+            im.map(img => {
+              let imageRequest = JSON.stringify({
+                bucket: 'paltos',
+                // bucket: sails.config.uploads.bucket,
+                // key: img.fd,
+                key: '1a3cf345-e303-475c-a48b-cc874bf26b42.jpg',
+                edits: inputs.edits
+              });
+              img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+              return img;
             }) : '';
-          }
-        });
+          obj[inputs.createField] = im;
+        } else {
+          obj[inputs.createField] = (!_.isEmpty(obj[inputs.field])) ? await obj[inputs.field].map((image, i) => {
+            i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
+            image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${obj.id}/${inputs.field}/${i}`) : '';
+            return image;
+          }) : '';
+        }
+      });
     }
-    console.log('Выходная коллекция:::: ' , inputs.collection[0]);
+    console.log('Выходная коллекция One:::: ', inputs.collection);
+    console.log(`Выходная коллекция Many 1 из ${inputs.collection.length} :::: `, inputs.collection[0]);
     return inputs.collection;
   }
 };

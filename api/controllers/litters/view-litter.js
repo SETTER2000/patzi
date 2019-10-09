@@ -94,7 +94,7 @@ module.exports = {
     // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
     delete litter.imageUploadMime;
 
-
+console.log('LITTER output:::: ' , litter);
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
 
     // Respond with view.
