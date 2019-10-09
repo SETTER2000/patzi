@@ -100,15 +100,14 @@ module.exports = {
            return image;
          }) : '';
        } else {*/
-      if (sails.config.environment !== 'production') {
+      if (sails.config.environment === 'production') {
         let im = reprocessedObj(inputs.collection[inputs.field], 'fd');
         (!_.isEmpty(inputs.collection[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ?
           im.map(img => {
             let imageRequest = JSON.stringify({
-              bucket: 'paltos',
-              // bucket: sails.config.uploads.bucket,
-              // key: img.fd,
-              key: '1a3cf345-e303-475c-a48b-cc874bf26b42.jpg',
+              bucket: sails.config.uploads.bucket,
+              key: img.fd,
+              // key: '1a3cf345-e303-475c-a48b-cc874bf26b42.jpg',
               edits: inputs.edits
             });
             img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
@@ -116,6 +115,15 @@ module.exports = {
           }) : '';
         inputs.collection[inputs.createField] = im;
       } else {
+        /*
+        * photoSet.comments = _.isArray(photoSet.comments) ? photoSet.comments : [];
+      photoSet.photos.map((image, y) => {
+        image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litter.id}/puppies/${y}/${i}`) : '';
+        delete image.fd;
+      });
+      return photoSet;
+        * */
+        console.log('SOOOLLL');
         inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
           i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${inputs.collection.id}/${inputs.field}/${i}`) : '';
@@ -127,15 +135,14 @@ module.exports = {
       console.log('Collections Many:');
       await _.each(inputs.collection, async (obj) => {
 
-        if (sails.config.environment !== 'production') {
+        if (sails.config.environment === 'production') {
           let im = reprocessedObj(obj[inputs.field], 'fd');
           (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ?
             im.map(img => {
               let imageRequest = JSON.stringify({
-                bucket: 'paltos',
-                // bucket: sails.config.uploads.bucket,
-                // key: img.fd,
-                key: '1a3cf345-e303-475c-a48b-cc874bf26b42.jpg',
+                bucket: sails.config.uploads.bucket,
+                key: img.fd,
+                // key: '1a3cf345-e303-475c-a48b-cc874bf26b42.jpg',
                 edits: inputs.edits
               });
               img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
@@ -143,6 +150,7 @@ module.exports = {
             }) : '';
           obj[inputs.createField] = im;
         } else {
+          console.log('DOOOO::::obj');
           obj[inputs.createField] = (!_.isEmpty(obj[inputs.field])) ? await obj[inputs.field].map((image, i) => {
             i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
             image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${obj.id}/${inputs.field}/${i}`) : '';
