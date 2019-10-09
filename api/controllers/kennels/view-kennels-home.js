@@ -19,7 +19,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     // Бибилиотека Node.js
-    const url = require('url');
+    // const url = require('url');
 
     // Выбираем авторизованного пользователя, который сделал этот запрос
     // и всех его друзей по ассоциативному полю friends

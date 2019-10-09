@@ -147,7 +147,7 @@ module.exports = {
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'kennel');
-
+console.log('INPUTS:::: ' , inputs);
 
     inputs.file = (_.get(inputs.file, 'fd')) ? inputs.file : '';
 
@@ -178,6 +178,7 @@ module.exports = {
     // Вызываем помощника сформировать правильно данные для ответа.
     let result = await sails.helpers.formatCollectionKennel(req);
 
+    console.log('RESULT COL::: ' , result);
     // Рассылаем данные всем подписанным на событие list данной комнаты.
     await sails.sockets.broadcast('kennel', 'list-kennel',result.collection);
 

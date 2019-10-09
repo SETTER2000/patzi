@@ -170,7 +170,7 @@ module.exports.routes = {
   'GET    /api/v1/kennels/list': {action: 'kennels/list'},
   'POST   /api/v1/kennels/create-kennel': {action: 'kennels/create-kennel', csrf: false},
   'DELETE /api/v1/kennels/destroy-one-kennel': {action: 'kennels/destroy-one-kennel', csrf: false},
-  'PUT    /api/v1/dogs/update-description-img': { action: 'dogs/update-description-img', csrf: false },
+  'PUT    /api/v1/dogs/update-description-img': {action: 'dogs/update-description-img', csrf: false},
 
 
   'POST   /api/v1/dogs/create-dog': {action: 'dogs/create-dog', csrf: false},
@@ -180,7 +180,7 @@ module.exports.routes = {
   'POST   /api/v1/dogs/search-dog': {action: 'dogs/search-dog', csrf: false},
   'POST   /api/v1/dogs/destroy-one-dog': {action: 'dogs/destroy-one-dog', csrf: false},
   'PUT    /api/v1/dogs/update-dog': {action: 'dogs/update-dog', csrf: false},
-  'DELETE /api/v1/dogs/destroy-many-img': { action: 'dogs/destroy-many-img', csrf: false },
+  'DELETE /api/v1/dogs/destroy-many-img': {action: 'dogs/destroy-many-img', csrf: false},
 
   'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},
   // 'POST   /api/v1/files/set-album-cover': { action: 'files/set-album-cover', csrf: false },
@@ -199,7 +199,7 @@ module.exports.routes = {
   'GET    /undefined': {action: 'files/undefined'},
 
 
-  'POST   /api/v1/region/create-region': {action: 'region/create-region'},
+  'POST   /api/v1/region/create-region': {action: 'region/create-region', csrf: false},
   'GET    /api/v1/region/list': {action: 'region/list'},
 
   'GET    /api/v1/colors/list': {action: 'colors/list'},
