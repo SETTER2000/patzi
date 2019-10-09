@@ -380,7 +380,7 @@ parasails.registerPage('kennels-home', {
         phones: this.ruleForm.phones
       };
 
-
+console.log('KENNEL after added::: ' ,data);
       await io.socket.post('/api/v1/kennels/create-kennel', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
