@@ -164,7 +164,7 @@ module.exports.routes = {
 
   'GET    /api/v1/continents/list': {action: 'continents/list'},
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},
-  'POST   /api/v1/continents/create-continent': {action: 'continents/create-continent'},
+  'POST   /api/v1/continents/create-continent': {action: 'continents/create-continent', csrf: false},
 
   'GET    /api/v1/kennels/:id': {action: 'kennels/download-photo'},
   'GET    /api/v1/kennels/list': {action: 'kennels/list'},
