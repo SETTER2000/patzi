@@ -6,6 +6,7 @@ parasails.registerPage('litter', {
     dialogTableVisible: false,
     viewChangeComment: false,
     dialogPedigreeVisible: true,
+    size:5, // Mb input img
     likeId: '',
     pathDogSale: '/dogs/chinese-crested/sale',
     pathDogs: '/dogs/chinese-crested',
@@ -523,16 +524,15 @@ parasails.registerPage('litter', {
 
     beforeUpload(file) {
       // Проверка размера входящего файла картинки не более (MB)
-      let size = 1;
       const isJPG = file.type === 'image/jpeg';
-      const isLt2M = file.size / 1024 / 1024 < size;
+      const isLt2M = file.size / 1024 / 1024 < this.size;
 
       if (!isJPG) {
         this.$message.error('Picture must be JPG format!');
       }
 
       if (!isLt2M) {
-        this.$message.error(`Picture size can not exceed ${size}MB!`);
+        this.$message.error(`Picture size can not exceed ${this.size}MB!`);
       }
 
       // else{

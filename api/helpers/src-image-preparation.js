@@ -137,6 +137,8 @@ module.exports = {
           collectionName: 'litter',
           field: 'photos',
           photoSet: i,
+          collectionId:litter.id,
+          subfolder:'puppies',
           // Этот объект обязателен, хотя может быть и пустой.
           edits:
             {
