@@ -136,7 +136,7 @@ module.exports = {
           collection: photosession,
           collectionName: 'litter',
           field: 'photos',
-          photoSet: i,
+          photoSet: 0,
           // Этот объект обязателен, хотя может быть и пустой.
           edits:
             {
