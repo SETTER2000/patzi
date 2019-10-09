@@ -38,15 +38,15 @@ module.exports = {
       throw 'forbidden';
     }
 
-    let del = await Litter.destroy({id: inputs.id});
+    await Litter.destroy({id: inputs.id});
 
-    console.log('Delll: ', del);
-    let puppies = (_.isArray(litter.puppies) && !_.isEmpty(litter.puppies)) ? litter.puppies : [];
+
+     // Remove photos
+    let puppies = (_.isArray(litter.puppies[0].photos) && !_.isEmpty(litter.puppies[0].photos)) ? litter.puppies[0].photos : [];
     let removeImage = [...litter.images, ...puppies];
     console.log('Для удаления::: ', removeImage);
     await sails.helpers.removeImgS3(removeImage);
-    // let litters = await Litter.find();
-    // await sails.sockets.broadcast('litter', 'destroy-litter', litters);
+
 
     return exits.success();
   }

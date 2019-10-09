@@ -72,7 +72,6 @@ module.exports = {
     }
 
     if (!_.isArray(inputs.collection)) {
-      console.log('One object');
       if (sails.config.environment === 'production') {
         let imagesN = inputs.collection[inputs.field];
         inputs.collection[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ? imagesN : '';

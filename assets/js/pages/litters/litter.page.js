@@ -7,6 +7,7 @@ parasails.registerPage('litter', {
     viewChangeComment: false,
     dialogPedigreeVisible: true,
     likeId: '',
+    cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net',
     pathDogSale: '/dogs/chinese-crested/sale',
     pathDogs: '/dogs/chinese-crested',
     pathDog: '/chinese-crested',
@@ -1506,6 +1507,10 @@ parasails.registerPage('litter', {
     goDogsSale() {
       this.goTo2(this.pathDogSale);
     },
+
+
+
+
 
   },
 });

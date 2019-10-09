@@ -63,7 +63,6 @@ module.exports = {
     inputs.edits.resize = inputs.edits.resize ? inputs.edits.resize : resize;
     // console.log('inputs.collection::: ', inputs.collection);
     if (!_.isArray(inputs.collection)) {
-      console.log('One object');
       if (sails.config.environment === 'production') {
         inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
           const imageRequest = JSON.stringify({

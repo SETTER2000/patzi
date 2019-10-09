@@ -74,6 +74,13 @@ module.exports = {
     //
     await Dog.destroy({id: inputs.id});
 
+
+    // Remove photos
+    let removeImage = (_.isArray(dog.images) && dog.images.length > 0 ) ? dog.images : [];
+    // let removeImage = [...litter.images, ...puppies];
+    console.log('Для удаления::: ', removeImage);
+    await sails.helpers.removeImgS3(removeImage);
+
     // Вызываем помощника сформировать правильно данные для ответа.
     // let res = await sails.helpers.formatCollectionKennel(req);
 
