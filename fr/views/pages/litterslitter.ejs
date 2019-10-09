@@ -636,7 +636,7 @@
                         <% /*Маленькие фото. Превью.*/ %>
                         <el-row :gutter="4" justify="center">
                           <el-col :xs="24" :sm="6" :md="4" :lg="3" :xl="3"
-                                  v-for="(img, idx, key) in photoSet.photos"
+                                  v-for="(img, idx, key) in photoSet.imagesMin"
                                   :key="idx +  '-label'">
                             <template v-if="me.isSuperAdmin">
                               <div class="ell-relation" v-if="litter.cover === index">
