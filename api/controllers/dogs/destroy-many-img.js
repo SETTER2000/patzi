@@ -53,15 +53,6 @@ module.exports = {
       throw 'badRequest';
     }
 
-    // const skipper = require('skipper-s3')(
-    const skp = require('@setter/skp')(
-      {
-        key: sails.config.uploads.key,
-        bucket: sails.config.uploads.bucket || process.env.S3_BUCKET,
-        region: sails.config.uploads.region,
-        secret: sails.config.uploads.secret
-      }
-    );
 
 
     let dog = await Dog.findOne(inputs.id);
@@ -74,16 +65,9 @@ module.exports = {
       .set({images: dog.images});
     // console.log('Обновлённый Dog::: ', updateDog);
 
-    if (sails.config.environment === 'production'){
-      _.each(removeImage, img => {
-        skp.rm(img.fd, (err, res) => {
-          if (err) console.log(`Ошибка при удаление файла ${img.fd}::`, err);
-          console.log('Response::: ', res);
-        });
-      });
-    }
 
 
+    await sails.helpers.removeImgS3(removeImage);
 
     return exits.success();
   }
