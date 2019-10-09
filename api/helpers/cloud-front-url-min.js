@@ -129,6 +129,7 @@ module.exports = {
         console.log('I:::' , im);
         (!_.isEmpty(inputs.collection[inputs.field])) ? im.map((image, i) => {
           console.log('IIMMM::: ' , image);
+          console.log('inputs.photoSet::: ' , inputs.photoSet);
          let id = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
           console.log('i:::: ' , id);
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${inputs.collection.id}/${inputs.field}/${id}`) : '';
