@@ -50,7 +50,7 @@ module.exports = {
         }
       );
 
-      _.each(removeImage, img => {
+      _.each(inputs.removeImage, img => {
         skp.rm(img.fd, (err, res) => {
           if (err) console.log(`Ошибка при удаление файла ${img.fd}::`, err);
           console.log('Response::: ', res);

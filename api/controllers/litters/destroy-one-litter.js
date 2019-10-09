@@ -16,9 +16,9 @@ module.exports = {
 
 
   exits: {
-    notFound:{
+    notFound: {
       description: 'Не существует такой вещи с таким ID.',
-      responseType:'notFound' // как раньше res.notFound(), сейчас это встроеная функция sails
+      responseType: 'notFound' // как раньше res.notFound(), сейчас это встроеная функция sails
     },
     forbidden: {
       description: 'Пользователь делающий данный запрос не имеет право на удаление этого помёта.',
@@ -38,8 +38,13 @@ module.exports = {
       throw 'forbidden';
     }
 
-    await Litter.destroy({id: inputs.id});
+    let del = await Litter.destroy({id: inputs.id});
 
+    console.log('Delll: ', del);
+    let puppies = (_.isArray(litter.puppies) && !_.isEmpty(litter.puppies)) ? litter.puppies : [];
+    let removeImage = [...litter.images, ...puppies];
+    console.log('Для удаления::: ', removeImage);
+    await sails.helpers.removeImgS3(removeImage);
     // let litters = await Litter.find();
     // await sails.sockets.broadcast('litter', 'destroy-litter', litters);
 
