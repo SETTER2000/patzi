@@ -119,6 +119,39 @@ module.exports = {
       return photoSet;
     }) : '';
 
+
+
+
+
+      /**
+       * Создаём поле imagesMin.
+       * Поле imagesMin создаётся по умолчанию , если не указано другое название в параметре createField.
+       * Новое свойство imagesMin будет содержать картинки из поля установленного в параметре field,
+       * но уже с изменениями предложенными в свойстве edits.
+       * Генерирует ссылки с параметрами изображения.
+       * https://sharp.pixelplumbing.com/en/stable/api-resize/
+       */
+      _.each(litter.puppies, async (photosession,i) => {
+        photosession = await sails.helpers.cloudFrontUrlMin.with({
+          collection: photosession,
+          collectionName: 'litter',
+          field: 'photos',
+          photoSet: i,
+          // Этот объект обязателен, хотя может быть и пустой.
+          edits:
+            {
+              resize: {
+                // fit: 'inside',
+                width: 420
+                // height:160
+              }
+            }
+        });
+
+      });
+
+
+
     litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`);
     litter.bornNt = moment.parseZone(litter.born).format(format);
     return litter;
