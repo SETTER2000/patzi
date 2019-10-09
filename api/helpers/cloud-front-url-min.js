@@ -124,11 +124,16 @@ module.exports = {
       return photoSet;
         * */
         console.log('SOOOLLL');
-        inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
+        console.log('Входящая коллекцияЖЖЖ ', inputs.collection);
+        let im = reprocessedObj(inputs.collection[inputs.field], 'name');
+        console.log('I:::' , im);
+        (!_.isEmpty(inputs.collection[inputs.field])) ? im.map((image, i) => {
+          console.log('IIMMM::: ' , image);
           i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${inputs.collection.id}/${inputs.field}/${i}`) : '';
           return image;
         }) : '';
+        inputs.collection[inputs.createField] = im;
       }
     }
     else {
