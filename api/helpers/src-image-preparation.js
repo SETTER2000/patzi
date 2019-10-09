@@ -143,7 +143,7 @@ module.exports = {
             {
               resize: {
                 // fit: 'inside',
-                width: 420
+                width: 520
                 // height:160
               }
             }
