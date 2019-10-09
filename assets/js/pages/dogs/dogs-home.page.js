@@ -379,9 +379,9 @@ parasails.registerPage('dogs-home', {
     },
     letters: {
       get: function () {
-        let y = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        let alphabet = [...y.split('')];
-        let ar = [];
+        let alphabet = [...new Set('ABCDEFGHIJKLMNOPQRSTUVWXYZ')]
+          , ar = []
+        ;
         alphabet.map(y => y === y ? ar.push({value: y, label: y}) : '');
         return ar;
       }

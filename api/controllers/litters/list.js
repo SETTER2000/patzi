@@ -123,9 +123,9 @@ module.exports = {
       edits: {
         // grayscale: true,
             resize: {
-              fit: 'inside',
-              width: 164,
-              height:160
+              // fit: 'inside',
+              width: 420,
+              // height:160
             }
       }
     });

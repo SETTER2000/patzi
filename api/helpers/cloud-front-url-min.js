@@ -25,17 +25,17 @@ module.exports = {
       description: 'Объекты коллекции со всеми данными',
       required: true
     },
-    field:{
-      type:'string',
-      defaultsTo:'images',
-      description:`Название свойства в объекте коллекции, из которого 
+    field: {
+      type: 'string',
+      defaultsTo: 'images',
+      description: `Название свойства в объекте коллекции, из которого 
       нужно взять картинки и создать миниатюры в createField.`,
       // required: true
     },
-    createField:{
-      type:'string',
-      defaultsTo:'imagesMin',
-      description:`Название свойства в объекте коллекции, которое будет создано
+    createField: {
+      type: 'string',
+      defaultsTo: 'imagesMin',
+      description: `Название свойства в объекте коллекции, которое будет создано
        и заполнено коллекцией картинок.`,
       // required: true
     }
@@ -43,32 +43,39 @@ module.exports = {
 
 
   exits: {
-
     success: {
       description: 'All done.',
     },
-
   },
 
 
   fn: async function (inputs) {
     const btoa = require('btoa');
-    let imageSrc = ''
-      , objId = ''
-      /*, resize = {
+
+    /* resize = {
         fit: 'inside',
         width: 1424,
         height:800
       }*/
-    ;
-// Если не передан объект resize, то устанавливаем размер по умолчанию.
-//     inputs.edits.resize = inputs.edits.resize ? inputs.edits.resize : resize;
-    // console.log('inputs.collection::: ', inputs.collection);
+
+
+    /**
+     * Переработать коллекцию в другую коллекцию
+     * @param object - объект который содержит в одном из свойств коллекцию для переработки
+     * @param fieldName - свойство объекта, в котором содержится коллекция
+     * @returns [{fd: value fieldName, imageSrc: ''},{fd: value fieldName, imageSrc: ''}]
+     */
+    function reprocessedObj(object, fieldName) {
+      let a = [];
+      _.pluck(object, fieldName).map(y => y === y ? a.push({fd: y, imageSrc: ''}) : '');
+      return a;
+    }
+
     if (!_.isArray(inputs.collection)) {
       console.log('One object');
       if (sails.config.environment === 'production') {
         let imagesN = inputs.collection[inputs.field];
-        inputs.collection[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ?  imagesN : '';
+        inputs.collection[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ? imagesN : '';
         inputs.collection[inputs.createField] = (!_.isEmpty(inputs.collection[inputs.createField])) ? await inputs.collection[inputs.createField].map((image, i) => {
           let imageRequest = JSON.stringify({
             bucket: sails.config.uploads.bucket,
@@ -76,54 +83,42 @@ module.exports = {
             edits: inputs.edits
           });
           image.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-          // delete image.fd;
           return image;
         }) : '';
       } else {
         inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${inputs.collection.id}/${inputs.field}/${i}`) : '';
-          // delete image.fd;
           return image;
         }) : '';
       }
     }
     else {
-      await _.each(inputs.collection, async (obj) => {
-        objId = obj.id;
-        let imagesN = obj[inputs.field];
-        console.log('OBJ::::' , obj);
-        obj[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ?  imagesN : '';
 
-        console.log('obj[inputs.createField]:::: ' ,obj);
-
-        obj[inputs.createField] = (!_.isEmpty(obj[inputs.createField]) && !_.isUndefined(obj[inputs.createField][0])) ? await obj[inputs.createField].map((img, i) => {
-            console.log('img.imageSrc входной::::', img.imageSrc);
-          if (sails.config.environment !== 'production') {
-            console.log('inputs.edits:: ', inputs.edits);
-            // 00f21b4c-9f24-45ae-a92e-e3282cf78d25.jpg
-            // 0bec30fa-a61e-4fce-9844-9cc76e3015e4.jpg
-            let imageRequest = JSON.stringify({
-              bucket: 'paltos',
-              key: '0bec30fa-a61e-4fce-9844-9cc76e3015e4.jpg',
-              // key: img.fd,
-              edits: inputs.edits
-            });
-            img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-            console.log('img.imageSrc выходной::::', img.imageSrc);
-            return img;
+        await _.each(inputs.collection, async (obj) => {
+          if (sails.config.environment === 'production') {
+            let im = reprocessedObj(obj[inputs.field], 'fd');
+            (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ?
+              im.map(img => {
+                let imageRequest = JSON.stringify({
+                  bucket: sails.config.uploads.bucket,
+                  key: img.fd,
+                  // key: '0bec30fa-a61e-4fce-9844-9cc76e3015e4.jpg',
+                  edits: inputs.edits
+                });
+                img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+                return img;
+              }) : '';
+            obj[inputs.createField] = im;
+          }else{
+            obj[inputs.createField] = (!_.isEmpty(obj[inputs.field])) ? await obj[inputs.field].map((image, i) => {
+              image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${obj.id}/${inputs.field}/${i}`) : '';
+              return image;
+            }) : '';
           }
-
-        }) : '';
-      });
+        });
     }
-
-
-console.log('Выходная коллекция  images:::::: ', inputs.collection[0]);
-// console.log('Выходная коллекция из Мин  inputs.collection[0].imagesMin:::::: ', inputs.collection[0].imagesMin);
+    console.log('Выходная коллекция:::: ' , inputs.collection[0]);
     return inputs.collection;
-
   }
-
-
 };
 

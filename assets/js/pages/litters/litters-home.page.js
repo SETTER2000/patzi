@@ -5,6 +5,7 @@ parasails.registerPage('litters-home', {
   data: {
     litters: [],
     letters: [],
+    size: 2, // 2 Mb upload picture
     // Виртуальная часть URL
     virtualPageSlug: '',
     dams: [],
@@ -12,7 +13,7 @@ parasails.registerPage('litters-home', {
     dialogTableVisible: false,
     autoplay: true,
     sires: [],
-    limit: 50,
+    limit: 50, // count files uploads one
     litterId: '',
     indexPhoto: 0,
     imageUrl2: '',
@@ -586,16 +587,15 @@ parasails.registerPage('litters-home', {
 
     beforeUpload(file) {
       // Проверка размера входящего файла картинки не более (MB)
-      let size = 1;
       const isJPG = file.type === 'image/jpeg';
-      const isLt2M = file.size / 1024 / 1024 < size;
+      const isLt2M = file.size / 1024 / 1024 < this.size;
 
       if (!isJPG) {
         this.$message.error('Picture must be JPG format!');
       }
 
       if (!isLt2M) {
-        this.$message.error(`Picture size can not exceed ${size}MB!`);
+        this.$message.error(`Picture size can not exceed ${this.size}MB!`);
       }
 
       return isJPG && isLt2M;
