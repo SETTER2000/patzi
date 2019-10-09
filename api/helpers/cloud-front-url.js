@@ -75,14 +75,12 @@ module.exports = {
             edits: inputs.edits
           });
           image.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-          // delete image.fd;
           return image;
         }) : '';
       } else {
         inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
           i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${inputs.collection.id}/${inputs.field}/${i}`) : '';
-          // delete image.fd;
           return image;
         }) : '';
       }

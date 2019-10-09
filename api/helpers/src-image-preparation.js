@@ -114,7 +114,6 @@ module.exports = {
       photoSet.comments = _.isArray(photoSet.comments) ? photoSet.comments : [];
       photoSet.photos.map((image, y) => {
         image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litter.id}/puppies/${y}/${i}`) : '';
-        delete image.fd;
       });
       return photoSet;
     }) : '';
