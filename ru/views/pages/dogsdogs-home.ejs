@@ -302,7 +302,7 @@
           sortableв
           prop="price"
           width="80">
-          <template slot-scope="scope" v-if="scope.row.price > 0">
+          <template slot-scope="scope" v-if="scope.row.price > 0 && scope.row.sale" >
             <span v-if="scope.row.currency === 'рубль'">{{scope.row.price}} &#8381;</span>
             <span v-else-if="scope.row.currency === 'euro'">€ {{scope.row.price}}</span>
             <span v-else>$ {{scope.row.price}}</span>
