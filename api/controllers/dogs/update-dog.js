@@ -28,7 +28,6 @@ module.exports = {
     },
 
 
-
     dateBirth: {
       type: 'string',
       required: true,
@@ -164,14 +163,14 @@ module.exports = {
       type: 'string',
       description: 'Клыки. Количество клыков.',
       example: '4',
-      defaultsTo:'4'
+      defaultsTo: '4'
     },
 
     teethCountTop: {
       type: 'string',
       description: 'Количество зубов вверху.',
       example: '6',
-      defaultsTo:'6'
+      defaultsTo: '6'
     },
 
 
@@ -179,7 +178,7 @@ module.exports = {
       type: 'string',
       description: 'Количество зубов внизу.',
       example: '6',
-      defaultsTo:'6'
+      defaultsTo: '6'
     },
 
 
@@ -238,7 +237,7 @@ module.exports = {
     }
     let dog = await Dog.findOne(inputs.id);
     let images = inputs.images ? inputs.images : dog.images;
-    let imagesNew=[];
+    let imagesNew = [];
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
@@ -275,12 +274,12 @@ module.exports = {
     //
     // dateDeath = !_.isEmpty(dateDeath) ? moment.tz(dateDeath, 'Europe/Moscow').format() : '';
 
-    console.log('inputs.letter::: ' , inputs.letter);
-    console.log('inputs.bite::: ' , inputs.bite);
-    console.log('inputs.teethCountBottom::: ' , inputs.teethCountBottom);
-    console.log('inputs.teethCountTop::: ' , inputs.teethCountTop);
-    console.log('inputs.canine::: ' , inputs.canine);
-
+    console.log('inputs.letter::: ', inputs.letter);
+    console.log('inputs.bite::: ', inputs.bite);
+    console.log('inputs.teethCountBottom::: ', inputs.teethCountBottom);
+    console.log('inputs.teethCountTop::: ', inputs.teethCountTop);
+    console.log('inputs.canine::: ', inputs.canine);
+    let letter = inputs.letter ? inputs.letter : label[0];
     let updateObj = {
       label: label,
       // kennel: inputs.kennel,
@@ -304,11 +303,11 @@ module.exports = {
       stamp: inputs.stamp,
       bite: inputs.bite,
       dogTests: inputs.dogTests,
-      letter: inputs.letter ? inputs.letter : label[0],
+      letter: letter,
       canine: inputs.canine,
       teethCountBottom: inputs.teethCountBottom,
       teethCountTop: inputs.teethCountTop,
-      teethCount:`${inputs.teethCountTop}x${inputs.teethCountBottom}x${inputs.canine}`,
+      teethCount: `${inputs.teethCountTop}x${inputs.teethCountBottom}x${inputs.canine}`,
     };
 
 
@@ -327,7 +326,7 @@ module.exports = {
     console.log('ListPhoto imagesNew: ', imagesNew);
     // console.log('ListPhoto fileList isEmpty?: ', _.isEmpty(fileList));
 
-    !_.isEmpty(images) || !_.isEmpty(imagesNew)  ? updateObj.images = [...images, ...imagesNew] : '';
+    !_.isEmpty(images) || !_.isEmpty(imagesNew) ? updateObj.images = [...images, ...imagesNew] : '';
     // console.log('После обработки List photo:: ' ,   updateObj.images);
     // Создаём собаку
     let updateDog = await Dog.updateOne({id: inputs.id})
@@ -356,8 +355,11 @@ module.exports = {
       throw 'badRequest';
     }
 
-    // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    // await sails.sockets.broadcast('dog', 'list-dog');
+    console.log('UPDATE DOGGG::: ', updateDog);
+    let year = _.trim(inputs.dateBirth.split('-')[0], '"');
+    console.log('year:::::' , year);
+    // Рассылаем данные всем подписанным на событие forSale-dog данной комнаты.
+    await sails.sockets.broadcast('dog', 'forSale-dog', await sails.helpers.forSaleDog.with({letter:inputs.letter, year:year}));
 
     return exits.success();
   }

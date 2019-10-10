@@ -466,11 +466,8 @@ parasails.registerPage('dogs-home', {
 
 
     async submitForm(formName) {
-      console.log('this.buttonUpdate::: ', this.buttonUpdate);
       this.$refs[formName].validate((valid) => {
-        console.log('valid::: ', valid);
         if (valid && !this.buttonUpdate) {
-
           this.addDog();
         } else if (valid && this.buttonUpdate) {
           this.updateDog();
@@ -539,8 +536,6 @@ parasails.registerPage('dogs-home', {
 
     async updateDog() {
       this.openFullScreen();
-      console.log('IMG::: ', this.ruleForm.fileList);
-      // console.log('DATE R::; ' , this.dateDeathUpdate);
       let data = {
         id: this.ruleForm.id,
         fileList: this.ruleForm.fileList,
@@ -572,11 +567,10 @@ parasails.registerPage('dogs-home', {
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
       };
-      console.log('DATA перед отправкой::: ', data);
+      // console.log('DATA перед отправкой::: ', data);
 
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
-        console.log('jwResjwResjwRes::: ', this);
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
+        (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
@@ -1124,19 +1118,9 @@ parasails.registerPage('dogs-home', {
       this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
       this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
       this.ruleForm = row;
-      // console.log('row.dateBirth:::', moment(row.dateBirth));
-
-      console.log('born isObject? :::', _.isObject(row.dateBirth));
-      // this.ruleForm.dateBirthUpdate = _.isObject(row.dateBirth) ? row.dateBirth : JSON.parse(row.dateBirth);
-      this.dateBirthUpdate = row.dateBirth;
+       this.dateBirthUpdate = row.dateBirth;
       this.dateDeathUpdate = row.dateDeath;
-      console.log('this.dateDeathUpdate :::', this.dateDeathUpdate);
-      // console.log(index, row);
-      // console.log('this.$refs.upload::: ', this.$refs.upload);
-      // this.ruleForm.fileList = row.imagesArrUrl;
-
       this.ruleForm.kennel = row.kennel.id;
-
       this.dialogEditor = true;
       this.centerDialogAdded = true;
       this.buttonUpdate = true;
@@ -1144,21 +1128,8 @@ parasails.registerPage('dogs-home', {
 
 
     handleEditPhotos(index, row) {
-      // this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
-      // this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
-      // this.ruleForm = row;
-      // this.dateBirth = row.dateBirth;
-      // this.dateDeath = row.dateDeath;
       this.photos = row;
-      // console.log(index, row);
-      // console.log('row::: ', row);
-      // this.ruleForm.fileList = row.imagesArrUrl;
-      //
-      // this.ruleForm.kennel = row.kennel.id;
-      //
       this.centerDialogVisiblePhotos = true;
-      // this.centerDialogAdded = true;
-      // this.buttonUpdate = true;
     },
 
     handleDelete(index, row) {

@@ -46,6 +46,7 @@ parasails.registerPage('litter', {
     commentUpdate: '',
     commentId: '',
     indexPhotoSet: 0,
+    forSale:false,
     confirmDeleteLitterModalOpen: false,
     confirmDeletePresentationModalOpen: false,
     editableTabsValue: 'photo',
@@ -71,7 +72,7 @@ parasails.registerPage('litter', {
     count: 0,
     dialogVisible: false,
     circleUrl: 'https://d3a1wbnh2r1l7y.cloudfront.net/ava.png',
-    limit: 50,
+    limit: 50, // photos in slider
     letter: '',
     autoplay: true,
     isAfterDate: false,
@@ -104,7 +105,8 @@ parasails.registerPage('litter', {
     ruleFormEdit: {
       showShootingDate: false,
       descriptionPhotoSession: '',
-      dateShooting: ''
+      dateShooting: '',
+      sessionName: '',
     },
     rules: {
       // born: [
@@ -171,6 +173,8 @@ parasails.registerPage('litter', {
         textUrlErr: 'Invalid URL field. Data transfer protocol not specified. For example: http:// or https:// ',
         successUploadFiles: `Files uploaded successfully!`,
         titlePuppies: `Puppies`,
+        ratingNotCount: `Rating not counted`,
+        thankRating: `Thank you for rating. Your vote has been counted!`,
         titlechilds: `childs`,
         getFormatDateLocale: `yyyy-MM-dd`,
         getFormatDateTimeLocale: `yyyy-MM-dd HH:mm:ss`,
@@ -194,6 +198,8 @@ parasails.registerPage('litter', {
         textUrlErr: 'Не верно заполнено поле УРЛ. Не указан протокол передачи данных. Например:  http:// or https:// ',
         successUploadFiles: `Файлы успешно загружены!`,
         titlePuppies: `Щенки`,
+        ratingNotCount: `Рейтинг не засчитан`,
+        thankRating: `Спасибо за оценку. Ваш голос был учтён!`,
         titlechilds: `Родители`,
         getFormatDateLocale: `dd.MM.yyyy`,
         getFormatDateTimeLocale: `dd.MM.yyyy HH:mm:ss`,
@@ -287,7 +293,15 @@ parasails.registerPage('litter', {
         // this.$forceUpdate();
       }
     });
-
+    io.socket.on('forSale-dog', (data) => {
+      console.log('Пришли обновлённые данные forSale-dog::: ', data);
+      // console.log('DATA :::: ' , data);
+      (data.letter === this.litter.letter && data.year === this.litter.born.split('-')[0]) ?  this.forSale = data.forSale : '';
+    });
+    io.socket.get(`/dogs/for-sale/${this.litter.letter}/${this.litter.born.split('-')[0]}`, function gotResponse(body, response) {
+      console.log('Сервис Dog forSale ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // this.forSale =  (body === 'Ok');
+    });
     // Принимаем данные по событию add-*
     io.socket.on('add-like', (data) => {
       console.log('Пришли обновлённые данные LIKE::: ', data);
@@ -374,6 +388,14 @@ parasails.registerPage('litter', {
       }
     },
 
+   /* forSale:{
+      get:function () {
+        io.socket.get(`/dogs/for-sale`, function gotResponse(body, response) {
+          console.log('Сервис Dog forSale ответил кодом ' + response.statusCode + ' и данными: ', body);
+          return (response.statusCode === 200)? 1:0;
+        });
+      }
+    },*/
     // listWowUserName: {
     //   get: function () {
     //     // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
@@ -502,12 +524,12 @@ parasails.registerPage('litter', {
         // console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
         if (response.statusCode === 200) {
           sel.$message({
-            message: 'Спасибо за оценку. Ваш голос был учтён!',
+            message:sel.i19p.thankRating,
             type: 'success'
           });
         } else {
           sel.$message({
-            message: `Произошла ошибка ${response.statusCode}! Рейтинг не засчитан.`,
+            message: `${sel.i19p.textOneErr} ${response.statusCode}! ${sel.i19p.ratingNotCount}.`,
             type: 'error'
           });
         }
@@ -665,6 +687,7 @@ parasails.registerPage('litter', {
       this.ruleFormEdit.showShootingDate = _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === this.indexPhotoSet)).showShootingDate;
       this.ruleFormEdit.dateShooting = _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === this.indexPhotoSet)).dateShooting;
       this.ruleFormEdit.descriptionPhotoSession = _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === this.indexPhotoSet)).descriptionPhotoSession;
+      this.ruleFormEdit.sessionName = _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === this.indexPhotoSet)).sessionName;
       this.dialogDescriptionPhotoSession = true;
     },
 
@@ -1086,18 +1109,21 @@ parasails.registerPage('litter', {
     },
 
 
-    async updatePhotoSetName() {
+    async updatePhotoSetName(form) {
+      console.log('this[form].sessionName::: ' , this[form].sessionName);
       let data = {
         id: this.litter.id,
         indexPhotoSet: this.indexPhotoSet,
-        sessionName: this.ruleForm.sessionName,
+        sessionName: this[form].sessionName,
       };
+      console.log('NAME after upload:::: ', data);
       io.socket.post('/api/v1/litters/update-session-name', data, (dataRes, jwRes) => {
         this.errorMessages(jwRes);
         this.dialogFormVisible = false;
         if (jwRes.statusCode === 200) {
-          this.resetForm('ruleForm');
-          this.litter.puppies[data.indexPhotoSet].sessionName = data.sessionName ? data.sessionName : '';
+          this.resetForm(form);
+          // this.litter.puppies[data.indexPhotoSet].sessionName = data.sessionName ? data.sessionName : '';
+          _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === data.indexPhotoSet)).sessionName = data.sessionName ? data.sessionName : '';
         }
       });
     },
@@ -1128,6 +1154,7 @@ parasails.registerPage('litter', {
           // this.ruleFormEdit.showShootingDate = false;
 
           _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === data.indexPhotoSet)).descriptionPhotoSession = data.descriptionPhotoSession ? data.descriptionPhotoSession : '';
+          _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === data.indexPhotoSet)).sessionName = data.sessionName ? data.sessionName : '';
           _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === data.indexPhotoSet)).dateShooting = data.dateShooting ? data.dateShooting : '';
           _.last(this.litter.puppies.filter(photoSet => photoSet.indexPhotoSet === data.indexPhotoSet)).showShootingDate = data.showShootingDate ? data.showShootingDate : false;
           // this.$forceUpdate();

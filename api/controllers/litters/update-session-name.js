@@ -14,9 +14,8 @@ module.exports = {
     },
 
 
-
     indexPhotoSet: {
-      type: 'number',
+      type: 'string',
       description: `Индекс объекта данной фотосессии в массиве фотосессий.`,
       required: true
     },
@@ -63,11 +62,11 @@ module.exports = {
       throw 'badRequest';
     }
 
-    await _.each(litter.puppies, async (pup, i) => {
-      pup.sessionName = (i === inputs.indexPhotoSet) ? inputs.sessionName : pup.sessionName;
+    await _.each(litter.puppies, async (pup) => {
+      pup.sessionName = (pup.indexPhotoSet === inputs.indexPhotoSet) ? inputs.sessionName : pup.sessionName;
     });
 
-    let u= await Litter.updateOne(inputs.id)
+    await Litter.updateOne(inputs.id)
       .set({
         puppies: litter.puppies
       });

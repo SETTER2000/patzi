@@ -13,7 +13,7 @@ parasails.registerPage('litters-home', {
     dialogTableVisible: false,
     autoplay: true,
     sires: [],
-    limit: 50, // count files uploads one
+    limit: 49, // count files uploads one
     litterId: '',
     indexPhoto: 0,
     imageUrl2: '',

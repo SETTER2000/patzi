@@ -175,6 +175,8 @@ module.exports.routes = {
 
   'POST   /api/v1/dogs/create-dog': {action: 'dogs/create-dog', csrf: false},
   'GET    /api/v1/dogs/list': {action: 'dogs/list'},
+  'GET    /dogs/for-sale/:letter/:year': {action: 'dogs/get-for-sale'},
+
   'GET    /api/v1/dogs/list-sire': {action: 'dogs/list-sire'},
   'GET    /api/v1/dogs/list-dam': {action: 'dogs/list-dam'},
   'POST   /api/v1/dogs/search-dog': {action: 'dogs/search-dog', csrf: false},
