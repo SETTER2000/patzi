@@ -214,17 +214,17 @@
   <% /* Диалоговое окно Редактор названия фотосессии*/ %>
   <el-dialog title="<%= __('Photo Shoot Editor') %>" :visible.sync="dialogFormVisible">
     <el-form :label-position="'top'"
-             :model="ruleForm" :rules="rules" ref="ruleForm"
+             :model="ruleFormEdit" :rules="rules" ref="ruleFormEdit"
              label-width="120px" class="demo-ruleForm">
       <% /*Название фотосессии*/ %>
       <el-form-item label="<%= __('Name photoshoot puppies') %>" prop="sessionName">
         <el-input :maxlength="photoSetNameLength" autofocus="true" show-word-limit
-                  v-model="ruleForm.sessionName"></el-input>
+                  v-model="ruleFormEdit.sessionName"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisible = false"><%= __('Cancel') %></el-button>
-    <el-button type="primary" @click="updatePhotoSetName('ruleForm')"><%= __('Save') %></el-button>
+    <el-button type="primary" @click="updatePhotoSetName('ruleFormEdit')"><%= __('Save') %></el-button>
   </span>
   </el-dialog>
   <% /* Диалоговое окно Редактор описания фотосессии*/ %>
@@ -524,7 +524,7 @@
                 </el-col>
 
                 <el-col :xs="6" :sm="8" :md="6" :lg="2">
-                  <el-button class="mt-4" @click="goDogsSale" type="success"
+                  <el-button v-if="forSale" class="mt-4" @click="goDogsSale" type="success"
                              round><%= __('Puppies for sale') %></el-button>
 
                 </el-col>
