@@ -52,7 +52,8 @@ module.exports = {
 
     /**
      * Генерирует ссылки с параметрами изображения,
-     * которое должен вернуть S3 для данного модуля
+     * которое должен вернуть S3 для данного модуля.
+     * Все картинки по умолчанию примут высоту 800px
      * https://sharp.pixelplumbing.com/en/stable/api-resize/
      */
     litters = await sails.helpers.cloudFrontUrl.with({

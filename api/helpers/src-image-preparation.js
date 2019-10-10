@@ -11,7 +11,7 @@ module.exports = {
     year: {
       description: 'Год помёта.',
       type: 'string',
-      maxLength:4,
+      maxLength: 4,
       required: true
     },
 
@@ -60,7 +60,7 @@ module.exports = {
     moment.locale(inputs.preferredLocale);
 
     // Получаем объект конкретного помёта
-    let litter = await Litter.findOne({letter: inputs.letter, year:inputs.year}).populate('owner');
+    let litter = await Litter.findOne({letter: inputs.letter, year: inputs.year}).populate('owner');
 
     if (!litter) {
       console.log('Ошибка! Объект litter не создан.');
@@ -68,6 +68,8 @@ module.exports = {
     /**
      * Генерирует ссылки с параметрами изображения,
      * которое должен вернуть S3 для данного модуля
+     * Картинки в свойстве images примут размеры по умолчанию как в хелпере, т.е. h800
+     * Свойство images, будет содержать ссылки на картинки для слайдера родителей
      * https://sharp.pixelplumbing.com/en/stable/api-resize/
      */
     litter = await sails.helpers.cloudFrontUrl.with({
@@ -84,30 +86,13 @@ module.exports = {
     });
 
 
-    litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((image, i) => {
+  /*  litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((image, i) => {
       // image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litter.id}/images/${i}`) : '';
       delete image.fd;
       return image;
-    }) : '';
+    }) : '';*/
 
-    /**
-     * Генерирует ссылки с параметрами изображения,
-     * которое должен вернуть S3 для данного модуля
-     * https://sharp.pixelplumbing.com/en/stable/api-resize/
-     */
-    /*litter = await sails.helpers.cloudFrontUrl.with({
-      collection: litter,
-      collectionName: 'litter',
-      field:'puppies',
-      // Этот объект обязателен, хотя может быть и пустой.
-      edits: {
-        // grayscale: true,
-        /!*    resize: {
-              width: resizeX,
-              height: resizeY
-            }*!/
-      }
-    });*/
+
 
     // Подготовка объекта фотоссессии
     litter.puppies = (!_.isEmpty(litter.puppies)) ? await litter.puppies.map((photoSet, i) => {
@@ -119,39 +104,59 @@ module.exports = {
     }) : '';
 
 
-
-
-
-      /**
-       * Создаём поле imagesMin.
-       * Поле imagesMin создаётся по умолчанию , если не указано другое название в параметре createField.
-       * Новое свойство imagesMin будет содержать картинки из поля установленного в параметре field,
-       * но уже с изменениями предложенными в свойстве edits.
-       * Генерирует ссылки с параметрами изображения.
-       * https://sharp.pixelplumbing.com/en/stable/api-resize/
-       */
-      _.each(litter.puppies, async (photosession,i) => {
-        photosession = await sails.helpers.cloudFrontUrlMin.with({
-          collection: photosession,
-          collectionName: 'litter',
-          field: 'photos',
-          photoSet: i,
-          collectionId:litter.id,
-          subfolder:'puppies',
-          // Этот объект обязателен, хотя может быть и пустой.
-          edits:
-            {
-              resize: {
-                // fit: 'inside',
-                width: 520
-                // height:160
-              }
+    /**
+     * Создаём новое свойство imagesMin в объекте Litter.
+     * Поле imagesMin создаётся по умолчанию , если не указано другое название в параметре createField.
+     * Новое свойство imagesMin будет содержать картинки из поля установленного в параметре field,
+     * но уже с изменениями предложенными в свойстве edits.
+     * Это нужно для разного представления картинок в разных местах дизайна страниц,
+     * тем самым используя одну оригинальную картинку в S3, страница имея сгенерированный url,
+     * запрашивает уже нужную по размеру дизайна картинку для представления.
+     * Генерирует ссылки с параметрами изображения.
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    _.each(litter.puppies, async (photosession, i) => {
+      photosession = await sails.helpers.cloudFrontUrlMin.with({
+        collection: photosession,
+        collectionName: 'litter',
+        field: 'photos',
+        photoSet: i,
+        collectionId: litter.id,
+        subfolder: 'puppies',
+        // Этот объект обязателен, хотя может быть и пустой.
+        edits:
+          {
+            resize: {
+              // fit: 'inside',
+              width: 520
+              // height:160
             }
-        });
-
+          }
       });
+    });
 
-
+    // указываем новое свойство imagesSlider, которое будет содержать ссылки
+    // на картинки для слайдера щенков
+    _.each(litter.puppies, async (photosession, i) => {
+      photosession = await sails.helpers.cloudFrontUrlMin.with({
+        collection: photosession,
+        collectionName: 'litter',
+        field: 'photos',
+        createField: 'imagesSlider',
+        photoSet: i,
+        collectionId: litter.id,
+        subfolder: 'puppies',
+        // Этот объект обязателен, хотя может быть и пустой.
+        edits:
+          {
+            resize: {
+              // fit: 'inside',
+              //width: 520
+              height:800
+            }
+          }
+      });
+    });
 
     litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`);
     litter.bornNt = moment.parseZone(litter.born).format(format);

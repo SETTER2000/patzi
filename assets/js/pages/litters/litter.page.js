@@ -584,6 +584,7 @@ parasails.registerPage('litter', {
       return this.indexSlide;
     },
 
+    //Показывает слайдер картинок родителей
     showSliderImages(indexPhoto) {
       this.fullscreenLoading = true;
       this.dialogTableVisible = true;
@@ -599,6 +600,8 @@ parasails.registerPage('litter', {
     handleClick(tab, event) {
       console.log(tab, event);
     },
+
+    // Показывает слайдер картинок щенков
     showSlider: async function (indexPhoto, indexPhotoSet) {
       this.fullscreenLoading = true;
       this.indexSlide = indexPhoto;
@@ -608,7 +611,8 @@ parasails.registerPage('litter', {
       this.title = this.i19p.titlePuppies;
       this.dialogTableVisible = true;
       let photoSession = await this.litter.puppies.filter((phSes, i) => i === this.indexPhotoSet);
-      this.photos = photoSession[0].photos;
+      this.photos = photoSession[0].imagesSlider;
+      // this.photos = photoSession[0].photos;
       this.litterId = this.litter.id;
       this.handlerSetActiveSlider();
       setTimeout(() => {

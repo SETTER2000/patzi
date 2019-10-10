@@ -97,20 +97,8 @@ module.exports = {
 
     if (!_.isArray(inputs.collection)) {
       console.log('Collections One:');
-      /* if (sails.config.environment !== 'production') {
-         let imagesN = inputs.collection[inputs.field];
-         inputs.collection[inputs.createField] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ? imagesN : '';
-         inputs.collection[inputs.createField] = (!_.isEmpty(inputs.collection[inputs.createField])) ? await inputs.collection[inputs.createField].map((image, i) => {
-           let imageRequest = JSON.stringify({
-             bucket: sails.config.uploads.bucket,
-             key: image.fd,
-             edits: inputs.edits
-           });
-           image.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-           return image;
-         }) : '';
-       } else {*/
       if (sails.config.environment === 'production') {
+        console.log('Collections One Production');
         let im = reprocessedObj(inputs.collection[inputs.field], 'fd');
         (!_.isEmpty(inputs.collection[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ?
           im.map(img => {
@@ -125,15 +113,7 @@ module.exports = {
           }) : '';
         inputs.collection[inputs.createField] = im;
       } else {
-        /*
-        * photoSet.comments = _.isArray(photoSet.comments) ? photoSet.comments : [];
-      photoSet.photos.map((image, y) => {
-        image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litter.id}/puppies/${y}/${i}`) : '';
-        delete image.fd;
-      });
-      return photoSet;
-        * */
-        console.log('SOOOLLL');
+        console.log('Collections One Locale');
         console.log('Входящая коллекцияЖЖЖ ', inputs.collection);
         let im = reprocessedObj(inputs.collection[inputs.field], 'name');
         console.log('I:::', im);
@@ -153,7 +133,7 @@ module.exports = {
     else {
       console.log('Collections Many:');
       await _.each(inputs.collection, async (obj) => {
-
+        console.log('Collections Many Production');
         if (sails.config.environment === 'production') {
           let im = reprocessedObj(obj[inputs.field], 'fd');
           (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ?
@@ -169,7 +149,7 @@ module.exports = {
             }) : '';
           obj[inputs.createField] = im;
         } else {
-          console.log('DOOOO::::obj');
+          console.log('Collections Many Location');
           obj[inputs.createField] = (!_.isEmpty(obj[inputs.field])) ? await obj[inputs.field].map((image, i) => {
             i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
             image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${obj.id}/${inputs.field}/${i}`) : '';
