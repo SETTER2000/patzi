@@ -62,8 +62,8 @@
                  class="mx-3"
                  title="<%= __('Remove') %>"
                  icon="el-icon-delete"></el-link>
-        <el-link v-else disabled :underline="false" class="mx-3" title="<%= __('Remove') %>"
-                 icon="el-icon-delete"></el-link>
+        <!--<el-link v-else disabled :underline="false" class="mx-3" title="<%= __('Remove') %>"
+                 icon="el-icon-delete"></el-link>-->
           </span>
       </div>
       <el-checkbox-group v-model="checkedPhoto" @change="handleCheckedPhotosChange">
@@ -229,7 +229,8 @@
             :preview-src-list="o.imagesArrUrl">
           </el-image>
           <div class="text-center">
-            <div>{{o.fullName}}</div>
+            <div><%= __('Litter') %> {{o.letter}} / {{o.dateBirth.split('-')[0]}}</div>
+            <h5>{{o.fullName}}</h5>
             <div>
               <em><strong><i class="el-icon-present"></i> <%= __('Dob') %>:</strong></em>
               <time class="time"> {{ o.dateBirth | getCreate(me.preferredLocale,'L') }}</time>
