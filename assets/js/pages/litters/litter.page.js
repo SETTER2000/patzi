@@ -293,15 +293,7 @@ parasails.registerPage('litter', {
         // this.$forceUpdate();
       }
     });
-    io.socket.on('forSale-dog', (data) => {
-      console.log('Пришли обновлённые данные forSale-dog::: ', data);
-      // console.log('DATA :::: ' , data);
-      (data.letter === this.litter.letter && data.year === this.litter.born.split('-')[0]) ?  this.forSale = data.forSale : '';
-    });
-    io.socket.get(`/dogs/for-sale/${this.litter.letter}/${this.litter.born.split('-')[0]}`, function gotResponse(body, response) {
-      console.log('Сервис Dog forSale ответил кодом ' + response.statusCode + ' и данными: ', body);
-      // this.forSale =  (body === 'Ok');
-    });
+
     // Принимаем данные по событию add-*
     io.socket.on('add-like', (data) => {
       console.log('Пришли обновлённые данные LIKE::: ', data);
@@ -339,7 +331,8 @@ parasails.registerPage('litter', {
       }
     });
 
-
+     // Получить информацию о наличие щенков в продаже
+    this.getForSale();
   },
 
   filters: {
@@ -1304,6 +1297,19 @@ parasails.registerPage('litter', {
           // console.log('data letters::', data);
           this.letters = data;
         });
+    },
+
+    //
+    async getForSale() {
+      await io.socket.on('forSale-dog', (data) => {
+          console.log('Пришли обновлённые данные forSale-dog::: ', data);
+          // console.log('DATA :::: ' , data);
+          (data.letter === this.litter.letter && data.year === this.litter.born.split('-')[0]) ?  this.forSale = data.forSale : '';
+        });
+      await  io.socket.get(`/dogs/for-sale/${this.litter.letter}/${this.litter.born.split('-')[0]}`, function gotResponse(body, response) {
+        console.log('Сервис Dog forSale ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // this.forSale =  (body === 'Ok');
+      });
     },
     getLikes: function (likes) {
       console.log('likes::: ', likes.length);
