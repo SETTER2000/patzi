@@ -401,8 +401,8 @@
           <el-divider v-if="litter.images" content-position="left"><%= __('Parents') %></el-divider>
 
           <% /*Маленькие фото. Превью.*/ %>
-          <ul class="flex-container wrap" v-if="litter.images">
-            <li class="flex-item" v-for="(img, index, key) in litter.images" :key="index +  '-label'">
+          <ul class="flex-container wrap" v-if="litter.imagesMin">
+            <li class="flex-item" v-for="(img, index, key) in litter.imagesMin" :key="index +  '-label'">
               <template v-if="me.isSuperAdmin">
                 <div class="ell-relation" v-if="litter.cover === index">
                   <el-button type="warning" size="mini" title="<%= __("Album's cover") %>"
