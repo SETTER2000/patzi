@@ -114,16 +114,13 @@ module.exports = {
         inputs.collection[inputs.createField] = im;
       } else {
         console.log('Collections One Locale');
-        console.log('Входящая коллекцияЖЖЖ ', inputs.collection);
+        // console.log('Входящая коллекцияЖЖЖ ', inputs.collection);
         let im = reprocessedObj(inputs.collection[inputs.field], 'name');
         console.log('I:::', im);
         let collectionId = inputs.collection.id ? inputs.collection.id : inputs.collectionId;
         let subfolder = inputs.subfolder ? inputs.subfolder : inputs.field ;
         (!_.isEmpty(inputs.collection[inputs.field])) ? im.map((image, i) => {
-          console.log('IIMMM::: ', image);
-          console.log('inputs.photoSet::: ', inputs.photoSet);
           let id = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
-          console.log('i:::: ', id);
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${collectionId}/${subfolder}/${id}`) : '';
           return image;
         }) : '';
@@ -158,8 +155,8 @@ module.exports = {
         }
       });
     }
-    console.log('Выходная коллекция One:::: ', inputs.collection);
-    console.log(`Выходная коллекция Many 1 из ${inputs.collection.length} :::: `, inputs.collection[0]);
+  /*  console.log('Выходная коллекция One:::: ', inputs.collection);
+    console.log(`Выходная коллекция Many 1 из ${inputs.collection.length} :::: `, inputs.collection[0]);*/
     return inputs.collection;
   }
 };

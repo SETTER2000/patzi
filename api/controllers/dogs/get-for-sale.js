@@ -48,7 +48,7 @@ module.exports = {
 
    let resp = await sails.helpers.forSaleDog.with({letter:inputs.letter, year:inputs.year});
 
-    console.log('resp:::', resp);
+    // console.log('resp:::', resp);
     await sails.sockets.broadcast('dog', 'forSale-dog', resp);
 
     return exits.success();
