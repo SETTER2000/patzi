@@ -19,9 +19,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url("/images/super.svg");
-    background-position: center;
-    background-repeat: no-repeat;
+    background: url("../../../images/super.svg") no-repeat center;
     background-size: contain;
   }
   .pointer {
@@ -29,7 +27,6 @@
       cursor: pointer;
     }
   }
-
 
   .portfolio_details_inner .portfolio_right_text .list li span {
     width: 137px;
@@ -134,11 +131,7 @@
   }
   .el-col {
     margin-bottom: 4px;
-    //padding-right: 8px!important;
 
-    &:last-child {
-      //margin-bottom: 0;
-    }
   }
   .share::after {
     content: '';
@@ -147,9 +140,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url('../../images/share.svg');
-    background-position: center;
-    background-repeat: no-repeat;
+    background: url('../../../images/share.svg') no-repeat center;
     background-size: contain;
   }
 
@@ -520,11 +511,20 @@
 
   }
 
-  @media (max-width: 767px) {
+  @media (min-width: 320px) {
+    .pad {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+  }
+
+    @media (max-width: 767px) {
 
     img.ell {
       height: 100%;
     }
+
+
 
     //#el-collapse-content-4617 > div > span > ul:nth-child(4) > li.comm > ul > li:nth-child(2){
     //  &:hover{

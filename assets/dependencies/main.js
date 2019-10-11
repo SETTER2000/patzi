@@ -1,3 +1,21 @@
+
+
+
+
+var map;
+
+function initMap() {
+  if (document.getElementById('map') !== null) {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 55.636564706, lng: 37.516969567},
+      zoom: 16
+    });
+  }
+}
+
+
+
+
 $(document).ready(function () {
   "use strict";
 
@@ -245,6 +263,37 @@ $(document).ready(function () {
     if (!!SAILS_LOCALS.me) {
       $.datepicker.setDefaults($.datepicker.regional[SAILS_LOCALS.me.preferredLocale]);
     }
+
+
+    const langGet =  function (){
+      let language = $(this).attr('data-language');
+      $.ajax({
+        url: "/api/v1/account/update-language",
+        global: false,
+        type: "POST",
+        data: ({language: language}),
+        dataType: "html",
+        success: function (msg) {
+          location.reload();
+        }
+      });
+    }
+    $('#flag').hide();
+    if ($(window).height() < 800) {
+      $('#flag').show();
+    }
+    $('#mobile-nav #language').click(langGet);
+    $('#language').click(langGet);
+
+    // var language = $(this).attr("data-language");
+    var $container = $('masonry-container');
+    $container.imagesLoaded(function () {
+      $container.masonry({
+        columnWidth: ".item",
+        itemSelector: ".item"
+      });
+      $('.item').imagefill();
+    });
   });
 
   //----------- Datepicker js ----------------//
@@ -255,8 +304,14 @@ $(document).ready(function () {
   if($(document).width()<1024) {$('.container').addClass('container-fluid').removeClass('container');}
   if($(document).width()>1025) {$('.container-fluid').addClass('container').removeClass('container-fluid');}
 
+  $('.your-class').slick({});
 
 
+  let lang = ELEMENT.lang.en;
+  lang = (SAILS_LOCALS.me && SAILS_LOCALS.me.preferredLocale === 'ru') ? ELEMENT.lang.ruRU : lang;
+
+  ELEMENT.locale(lang);
+  (!!SAILS_LOCALS.me) ? moment.locale(SAILS_LOCALS.me.preferredLocale) : '';
 });
 
 
