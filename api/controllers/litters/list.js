@@ -153,7 +153,7 @@ module.exports = {
       collection: litters,
       collectionName: 'litter',
       field:'images',
-      createField:'w480',
+      createField:'wdt',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
         "resize": {
