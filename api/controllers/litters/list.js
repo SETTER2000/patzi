@@ -127,11 +127,25 @@ module.exports = {
       field:'images',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
-            resize: {
-              // fit: 'inside',
-              width: 420,
-              // height:160
-            }
+        "resize": {
+          "width": 148,
+          "height": 118,
+          "fit": "inside",
+          "background": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "alpha": 1
+          }
+        },
+        "flatten": {
+          "background": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "alpha": null
+          }
+        }
       }
     });
 
