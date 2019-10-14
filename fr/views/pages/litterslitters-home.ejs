@@ -405,11 +405,11 @@
                 </div>
               </template>
               <div class="ell-image-flex">
-                <a href="#" @click="showSlider(litter.id, index)">
+                <a href="#" @click="showSlider(litter.id, index)">GO::: {{litter.w480[index].imageSrc}}
                   <!--<img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">-->
                   <picture>
                     <!--<source media="(min-width: 800px)" srcset="head.jpg, head-2x.jpg 2x">-->
-                    <source media="(max-width: 480px)" :srcset="litter.w480[key].imageSrc" >
+                    <source media="(max-width: 480px)" :srcset="litter.wdt[index].imageSrc" >
                     <img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">
                     <!--<img :src="img.imageSrc" class="ell object-fit_cover" srcset="head-fb-2x.jpg 2x" :alt="img.name">-->
                   </picture>
