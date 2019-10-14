@@ -128,8 +128,8 @@ module.exports = {
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
         "resize": {
-          "width": 164,
-          "height": 164,
+          // "width": 164,
+          "height": 160,
           "fit": "inside",
           "background": {
             "r": 255,
@@ -149,7 +149,34 @@ module.exports = {
       }
     });
 
-
+    litters = await sails.helpers.cloudFrontUrlMin.with({
+      collection: litters,
+      collectionName: 'litter',
+      field:'images',
+      createField:'w480',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        "resize": {
+          "width": 480,
+          // "height": 160,
+          "fit": "inside",
+          "background": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "alpha": 1
+          }
+        },
+        "flatten": {
+          "background": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "alpha": null
+          }
+        }
+      }
+    });
 
     await sails.sockets.broadcast('litter', 'list-litter', litters);
     return exits.success();
