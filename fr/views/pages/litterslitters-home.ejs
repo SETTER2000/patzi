@@ -391,7 +391,7 @@
 
           <% /*Маленькие фото. Превью.*/ %>
           <ul class="flex-container wrap" v-if="litter.imagesMin">
-            <li class="flex-item" v-for="(img, index, key) in litter.imagesMin" :key="index +  '-label'">
+            <li class="flex-item" v-for="(img, index, key) in litter.imagesMin"  :key="index +  '-label'">
               <template v-if="me.isSuperAdmin">
                 <div class="ell-relation" v-if="litter.cover === index">
                   <el-button type="warning" size="mini" title="<%= __("Album's cover") %>"
@@ -406,12 +406,12 @@
               </template>
               <div class="ell-image-flex">
                 <a href="#" @click="showSlider(litter.id, index)">
-                  <img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">
-                <!--  <picture>
-                    <source media="(min-width: 800px)" srcset="head.jpg, head-2x.jpg 2x">
-                    <source media="(min-width: 450px)" srcset="head-small.jpg, head-small-2x.jpg 2x">
+                  <!--<img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">-->
+                  <picture>
+                    <!--<source media="(min-width: 800px)" srcset="head.jpg, head-2x.jpg 2x">-->
+                    <source media="(max-width: 480px)" :srcset="{litter.w480[key]}">
                     <img :src="img.imageSrc" class="ell object-fit_cover" srcset="head-fb-2x.jpg 2x" :alt="img.name">
-                  </picture>-->
+                  </picture>
                 </a>
               </div>
 
