@@ -128,8 +128,8 @@ module.exports = {
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
         "resize": {
-          "width": 148,
-          "height": 118,
+          "width": 164,
+          "height": 164,
           "fit": "inside",
           "background": {
             "r": 255,
