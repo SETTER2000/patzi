@@ -105,7 +105,6 @@ module.exports = {
             let imageRequest = JSON.stringify({
               bucket: sails.config.uploads.bucket,
               key: img.fd,
-              // key: '1a3cf345-e303-475c-a48b-cc874bf26b42.jpg',
               edits: inputs.edits
             });
             img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
@@ -138,7 +137,6 @@ module.exports = {
               let imageRequest = JSON.stringify({
                 bucket: sails.config.uploads.bucket,
                 key: img.fd,
-                // key: '1a3cf345-e303-475c-a48b-cc874bf26b42.jpg',
                 edits: inputs.edits
               });
               img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;

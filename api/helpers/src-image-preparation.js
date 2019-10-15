@@ -69,7 +69,7 @@ module.exports = {
      * Генерирует ссылки с параметрами изображения,
      * которое должен вернуть S3 для данного модуля
      * Картинки в свойстве images примут размеры по умолчанию как в хелпере, т.е. h800
-     * Свойство images, будет содержать ссылки на картинки для слайдера родителей
+     * Свойство images, будет содержать ссылки на картинки для слайдера родителей.
      * https://sharp.pixelplumbing.com/en/stable/api-resize/
      */
     litter = await sails.helpers.cloudFrontUrl.with({
@@ -86,13 +86,33 @@ module.exports = {
     });
 
 
+
   /*  litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((image, i) => {
       // image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litter.id}/images/${i}`) : '';
       delete image.fd;
       return image;
     }) : '';*/
 
-
+    litter = await sails.helpers.cloudFrontUrlMin.with({
+      collection: litter,
+      collectionName: 'litter',
+      field:'images',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        "resize": {
+          "width": 590,
+          "fit": "inside",
+        },
+        /*  "flatten": {
+            "background": {
+              "r": 255,
+              "g": 255,
+              "b": 255,
+              "alpha": null
+            }
+          }*/
+      }
+    });
 
     // Подготовка объекта фотоссессии
     litter.puppies = (!_.isEmpty(litter.puppies)) ? await litter.puppies.map((photoSet, i) => {
@@ -116,6 +136,7 @@ module.exports = {
      * https://sharp.pixelplumbing.com/en/stable/api-resize/
      */
     _.each(litter.puppies, async (photosession, i) => {
+      //Фото для картинок превью одной фотосессии для desktop
       photosession = await sails.helpers.cloudFrontUrlMin.with({
         collection: photosession,
         collectionName: 'litter',
@@ -127,9 +148,9 @@ module.exports = {
         edits:
           {
             resize: {
-              // fit: 'inside',
-              width: 520
-              // height:160
+              fit: 'inside',
+              // width: 148,
+              height:118
             }
           }
       });

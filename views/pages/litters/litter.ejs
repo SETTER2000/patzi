@@ -411,7 +411,12 @@
               <ul v-if="litter.images.length">
                 <li v-for="(img ,index, key) in litter.images" :key="index + '-lst'">
                   <a href="#" @click="showSliderImages()">
-                    <el-image :src="img.imageSrc" v-if="index===litter.cover" :lazy="true">
+                   <!-- <picture>
+                      <source media="(max-width: 480px)" :srcset="litter.imagesMin[index].imageSrc" >
+                      <img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">
+                    </picture>-->
+                    <!--<el-image :src="img.imageSrc" v-if="index===litter.cover" :lazy="true">-->
+                    <el-image :src="litter.imagesMin[index].imageSrc" v-if="index===litter.cover" :lazy="true">
                       <div slot="placeholder" class="image-slot" style="height:500px;">
                         Loading<span class="dot">...</span>
                       </div>
@@ -652,6 +657,10 @@
                             </template>
                             <a v-loading.fullscreen.lock="fullscreenLoading" href="#" @click="showSlider(idx, index)">
                               <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
+                           <!--   <picture>
+                                <source media="(max-width: 480px)" :srcset="litter.wdt[index].imageSrc" >
+                                <img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">
+                              </picture>-->
                             </a>
                           </el-col>
                         </el-row>
