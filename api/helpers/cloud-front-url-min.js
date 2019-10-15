@@ -91,7 +91,12 @@ module.exports = {
      */
     function reprocessedObj(object, fieldName) {
       let a = [];
-      _.pluck(object, fieldName).map(y => y === y ? a.push({fd: y, imageSrc: ''}) : '');
+      _.pluck(object, fieldName).map((y, i) => y === y ? a.push({
+        fd: y,
+        imageSrc: '',
+        title: object[i].title ? object[i].title : '',
+        name: object[i].name
+      }) : '');
       return a;
     }
 
@@ -117,7 +122,7 @@ module.exports = {
         let im = reprocessedObj(inputs.collection[inputs.field], 'name');
         console.log('I:::', im);
         let collectionId = inputs.collection.id ? inputs.collection.id : inputs.collectionId;
-        let subfolder = inputs.subfolder ? inputs.subfolder : inputs.field ;
+        let subfolder = inputs.subfolder ? inputs.subfolder : inputs.field;
         (!_.isEmpty(inputs.collection[inputs.field])) ? im.map((image, i) => {
           let id = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${collectionId}/${subfolder}/${id}`) : '';
@@ -153,8 +158,8 @@ module.exports = {
         }
       });
     }
-  /*  console.log('Выходная коллекция One:::: ', inputs.collection);
-    console.log(`Выходная коллекция Many 1 из ${inputs.collection.length} :::: `, inputs.collection[0]);*/
+    /*  console.log('Выходная коллекция One:::: ', inputs.collection);
+      console.log(`Выходная коллекция Many 1 из ${inputs.collection.length} :::: `, inputs.collection[0]);*/
     return inputs.collection;
   }
 };

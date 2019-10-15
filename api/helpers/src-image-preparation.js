@@ -86,17 +86,16 @@ module.exports = {
     });
 
 
-
-  /*  litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((image, i) => {
-      // image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litter.id}/images/${i}`) : '';
-      delete image.fd;
-      return image;
-    }) : '';*/
+    /*  litter.images = (!_.isEmpty(litter.images)) ? await litter.images.map((image, i) => {
+        // image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/litter/${litter.id}/images/${i}`) : '';
+        delete image.fd;
+        return image;
+      }) : '';*/
 
     litter = await sails.helpers.cloudFrontUrlMin.with({
       collection: litter,
       collectionName: 'litter',
-      field:'images',
+      field: 'images',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
         "resize": {
@@ -150,7 +149,7 @@ module.exports = {
             resize: {
               fit: 'inside',
               // width: 148,
-              height:118
+              height: 118
             }
           }
       });
@@ -159,7 +158,8 @@ module.exports = {
     // указываем новое свойство imagesSlider, которое будет содержать ссылки
     // на картинки для слайдера щенков
     _.each(litter.puppies, async (photosession, i) => {
-      photosession = await sails.helpers.cloudFrontUrlMin.with({
+      // Изменяет фото для просмотра в слайдере (imagesSlider)
+      await sails.helpers.cloudFrontUrlMin.with({
         collection: photosession,
         collectionName: 'litter',
         field: 'photos',
@@ -173,11 +173,33 @@ module.exports = {
             resize: {
               // fit: 'inside',
               //width: 520
-              height:800
+              height: 800
             }
           }
       });
     });
+    _.each(litter.puppies, async (photosession, i) => {
+      // Изменяет фото для просмотра в мобильных устройствах (imagesMobile)
+      await sails.helpers.cloudFrontUrlMin.with({
+        collection: photosession,
+        collectionName: 'litter',
+        field: 'photos',
+        createField: 'imagesMobile',
+        photoSet: i,
+        collectionId: litter.id,
+        subfolder: 'puppies',
+        // Этот объект обязателен, хотя может быть и пустой.
+        edits:
+          {
+            resize: {
+              // fit: 'inside',
+              width: 520
+              // height:800
+            }
+          }
+      });
+    });
+
 
     litter.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${litter.id}`);
     litter.bornNt = moment.parseZone(litter.born).format(format);
