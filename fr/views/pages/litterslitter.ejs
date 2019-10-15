@@ -636,8 +636,8 @@
                           <em v-if="photoSet.descriptionPhotoSession">{{photoSet.descriptionPhotoSession}}</em></p>
 
                       </div>
+                      <% /*Маленькие фото. Превью.*/ %>
                       <div class="card-text mt-sm-4">
-                        <% /*Маленькие фото. Превью.*/ %>
                         <el-row :gutter="4" justify="center">
                           <el-col :xs="24" :sm="6" :md="4" :lg="3" :xl="3"
                                   v-for="(img, idx, key) in photoSet.imagesMin"
