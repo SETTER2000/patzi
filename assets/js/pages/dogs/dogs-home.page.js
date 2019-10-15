@@ -4,6 +4,11 @@ parasails.registerPage('dogs-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     dogs: [],
+    filterDogs: [],
+    filterName: '',
+    isActive: true,
+
+    error: null,
     isCollapse: true,
     dialogEditor: false,
     photoDescUpdate: false,
@@ -120,7 +125,7 @@ parasails.registerPage('dogs-home', {
       ],
       label: [
         {required: true, message: 'Please input dog name', trigger: 'blur'},
-        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
+        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
       ],
       gender: [
         {required: true, message: 'Please select a dog gender.', trigger: 'change'}
@@ -156,7 +161,9 @@ parasails.registerPage('dogs-home', {
       registerNumber: ''
     }],
     ruleForm: {
+      errInputDogName: false,
       sale: false,
+      see: true,
       dateBirth: '',
       // dateBirthUpdate: '',
       dateDeath: '',
@@ -217,6 +224,9 @@ parasails.registerPage('dogs-home', {
         warnRemove: 'This will permanently delete the object. Continue?',
         warning: 'Warning',
         delCancel: 'Delete canceled',
+        all: 'All',
+        sire: 'Sire',
+        dam: 'Dam',
         photoEditor: 'Photo editor',
         cancel: 'Cancel',
         text400Err: 'Error. Could not create! ',
@@ -244,6 +254,9 @@ parasails.registerPage('dogs-home', {
         photoEditor: 'Редактор фотографий',
         warning: 'Внимание',
         delCancel: 'Удаление отменено',
+        all: 'Все',
+        sire: 'Sire',
+        dam: 'Dam',
         cancel: 'Отменить',
         text400Err: 'Ошибка. Не смог создать!',
         text400ErrUpdate: 'Ошибка. Не смог обновить!',
@@ -293,7 +306,8 @@ parasails.registerPage('dogs-home', {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
-
+    // Устанавливает перевод названия фильтра
+    this.filterName = this.i19p.all;
     // Подключаемся к комнате color
     io.socket.get(`/api/v1/colors/list`, function gotResponse(body, response) {
       console.log('Сервер color ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -339,6 +353,22 @@ parasails.registerPage('dogs-home', {
       return (moment(value).format(formatNew)) ? moment(value).format(formatNew) : value;
       // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
+    abc(value, ruleForm) {
+      if (!value) {
+        return '';
+      }
+      this.ruleForm = ruleForm;
+      const regex = /[a-z]+/ig;
+      console.log('DATTT:::: ', value);
+      let r = regex.exec(value);
+      // this.errInputDogName = true;
+      console.log('regex::: ', r);
+      console.log('ruleForm::: ', '');
+       _.isArray(r) ? this.ruleForm.label = value : '';
+      this.ruleForm.errInputDogName = (!_.isArray(r));
+      // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+    },
+
 
     // countAll: function (value, lakes) {
     //   if (!value) {
@@ -385,6 +415,13 @@ parasails.registerPage('dogs-home', {
         alphabet.map(y => y === y ? ar.push({value: y, label: y}) : '');
         return ar;
       }
+    },
+    // Управление стилем заголовка
+    classObject: function () {
+      return {
+        // 'actionH1': this.ruleForm.see ,
+        'text-danger': !this.ruleForm.see
+      }
     }
   },
 
@@ -393,6 +430,17 @@ parasails.registerPage('dogs-home', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    // abc(value, l, format) {
+    //   if (!value) {
+    //     return '';
+    //   }
+    //   const regex = /^[a]+/ig;
+    //   console.log('DATTT:::: ' , value);
+    //   console.log('regex::: ' , regex.exec(value));
+    //  // return   !_.isNull(regex.exec(value)) ? 'qqq' : value;
+    //   // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+    // },
+
     async getList() {
       await io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -400,8 +448,9 @@ parasails.registerPage('dogs-home', {
 
       // Принимаем данные по событию list-*
       await io.socket.on('list-dog', (data) => {
-        this.dogs = _.isNull(data) ? [] : data;
+        this.dogs = this.filterDogs = _.isNull(data) ? [] : data;
         console.log('this.dogs: ', this.dogs);
+        console.log('this.filterDogs: ', this.filterDogs);
       });
       // Принимаем данные по событию list-*
       await  io.socket.on('list-continent', (data) => {
@@ -503,6 +552,7 @@ parasails.registerPage('dogs-home', {
         dam: this.ruleForm.dam,
         sire: this.ruleForm.sire,
         sale: this.ruleForm.sale,
+        see: this.ruleForm.see,
         price: +this.ruleForm.price,
         saleDescription: this.ruleForm.saleDescription,
         currency: this.ruleForm.currency,
@@ -552,6 +602,7 @@ parasails.registerPage('dogs-home', {
         growth: this.ruleForm.growth,
         type: this.ruleForm.type,
         sale: this.ruleForm.sale,
+        see: this.ruleForm.see,
         price: +this.ruleForm.price,
         saleDescription: this.ruleForm.saleDescription,
         currency: this.ruleForm.currency,
@@ -826,87 +877,112 @@ parasails.registerPage('dogs-home', {
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
       ${files.length + fileList.length} ${this.i19p.files}`);
-    }
-    ,
+    },
     showMenu(id, e) {
       this.dogId = id;
       this.show = true;
       this.showDog = id;
-    }
-    ,
+    },
 
     showOut() {
       this.show = false;
-    }
-    ,
+    },
+
+    /**
+     * Фильтр по свойству gender
+     * @param command
+     */
+    gender(command) {
+      if (_.isEmpty(command.com)) return false;
+      let newDogs = [];
+      this.dogs = this.filterDogs;
+      console.log('1::', this.filterDogs);
+      this.filterName = this.i19p[command.com];
+      this.dogs = command.com !== 'all' ? this.dogs.filter(d => d.gender === command.com) : this.filterDogs;
+      console.log('2::', this.dogs);
+      // return this.dogs ;
+    },
+
     /* Открывает диалоговое окно редактирования*/
     handleCommand(command) {
       switch (command.com) {
-        case 'a':
-          this.setIndexPhotoSet(command);
-          this.dialogFormVisible = true;
-          break;
-        case 'b':
-          this.setValueEditPhotoSet(command);
-          break;
         case 'c':
           this.goDogSale();
-          break;
-        case 'd':
-          this.setIndexPhotoSet(command);
-          this.dialogDeletePhotoSession = true;
-          this.nameSessionPhoto = command.name;
-          // this.ruleForm.description =  this.litter.description;
           break;
         case 'e':
           this.dialogEditorList = true;
           // this.ruleForm.description =  this.litter.description;
           break;
-        case 'f':
-          window.location = '/litters/new';
+        case 'dam':
+          this.gender(command);
           break;
-        case 'g':
-          this.setAddedPresentation(command);
+        case 'sire':
+          this.gender(command);
           break;
-        case 'dl':
-          this.clickDeleteLitter();
+        case 'all':
+          this.gender(command);
           break;
-        case 'allView':
-          this.allViewed(command);
+
+        /*
+           case 'a':
+          this.setIndexPhotoSet(command);
+          this.dialogFormVisible = true;
           break;
-        case 'like':
-          this.addLike(command);
+          case 'b':
+          this.setValueEditPhotoSet(command);
           break;
-        case 'super':
-          this.addLike(command);
-          break;
-        case 'wow':
-          this.addLike(command);
-          break;
-        case 'haha':
-          this.addLike(command);
-          break;
-        case 'commentLike':
-          this.commentLike(command);
-          break;
-        case 'commentSuper':
-          this.commentLike(command);
-          break;
-        case 'commentWow':
-          this.commentLike(command);
-          break;
-        case 'commentHaha':
-          this.commentLike(command);
-          break;
-        case 'link':
-          window.location = '/litters';
-          break;
-        case 'deleteComment':
-          this.deleteComment(command);
-          break;
-        case 'changeComment':
-          this.changeOpenComment(command);
-          break;
+           case 'd':
+           this.setIndexPhotoSet(command);
+           this.dialogDeletePhotoSession = true;
+           this.nameSessionPhoto = command.name;
+           // this.ruleForm.description =  this.litter.description;
+           break;
+           case 'f':
+               window.location = '/litters/new';
+               break;
+                case 'g':
+                  this.setAddedPresentation(command);
+                  break;
+                case 'dl':
+                  this.clickDeleteLitter();
+                  break;
+                   case 'allView':
+                   this.allViewed(command);
+                   break;
+                  case 'like':
+                     this.addLike(command);
+                     break;
+                   case 'super':
+                     this.addLike(command);
+                     break;
+                   case 'wow':
+                     this.addLike(command);
+                     break;
+                   case 'haha':
+                     this.addLike(command);
+                     break;
+                   case 'commentLike':
+                     this.commentLike(command);
+                     break;
+                   case 'commentSuper':
+                     this.commentLike(command);
+                     break;
+                   case 'commentWow':
+                     this.commentLike(command);
+                     break;
+                   case 'commentHaha':
+                     this.commentLike(command);
+                     break;
+                   case 'link':
+                     window.location = '/litters';
+                     break;
+                   case 'deleteComment':
+                     this.deleteComment(command);
+                     break;
+                   case 'changeComment':
+                     this.changeOpenComment(command);
+                     break;*/
+
         //default:  this.setIndexPhotoSet(command);
       }
       // }
@@ -1118,7 +1194,7 @@ parasails.registerPage('dogs-home', {
       this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
       this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
       this.ruleForm = row;
-       this.dateBirthUpdate = row.dateBirth;
+      this.dateBirthUpdate = row.dateBirth;
       this.dateDeathUpdate = row.dateDeath;
       this.ruleForm.kennel = row.kennel.id;
       this.dialogEditor = true;
@@ -1205,7 +1281,17 @@ parasails.registerPage('dogs-home', {
       });
       return `${this.cloudFrontUrl}/${btoa(imageRequest)}`;
     },
-
+    openAlert() {
+      this.$alert('This is a message', 'Title', {
+        confirmButtonText: 'OK',
+        callback: action => {
+          this.$message({
+            type: 'info',
+            message: `action: ${ action }`
+          });
+        }
+      });
+    }
 
   }
 })

@@ -1,4 +1,11 @@
 #dogs-home {
+  .not-border{
+    border: 0 !important;
+    &:hover{
+      border: 0 !important;
+      background: none;
+    }
+  }
   //@PoiretOne-font: 'Poiret One', cursive;
   //@Italianno-font: 'Italianno', cursive;
   //@AlexBrush-font: 'Alex Brush', cursive;
@@ -19,7 +26,9 @@
 
   @color-text: #afb1b7;
 
-
+  .about-content h1{
+    font-size: 2.6vw;
+  }
 
   /*************/
   //.el-row {
@@ -1038,7 +1047,9 @@
   }
 
   @media (max-width: 769px) {
-
+    .about-content h1{
+      font-size: 6vw;
+    }
     .sale-dogs {
       h1 {
         font-size: 6vw;

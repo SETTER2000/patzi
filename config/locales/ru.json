@@ -3,6 +3,7 @@
 	"Dog World": "Мир собак",
 	"Welcome": "Добро пожаловать",
 	"Chat": "Чат",
+	"filter": "фильтр",
 	"reset all filters": "сбросить все фильтры",
 	" if the error persists.": " если ошибка не устранена",
 	"The credentials you entered are not associated with an account. Please check your email and/or password and try again.": "Введенные вами учетные данные не связаны с учетной записью. Пожалуйста, проверьте свою электронную почту и / или пароль и попробуйте снова.",
@@ -102,6 +103,8 @@
 	"About": "О нас",
 	"Litters": "Помёты",
 	"Dogs": "Собаки",
+	"The name of the dog is written only in English letters. Switch the keyboard to the correct layout.": "Имя собаки пишется только английскими буквами. Переключите клавиатуру в правильную раскладку.",
+	"If you do not set the letter of the litter yourself, the system will do this automatically by setting the first letter of the dog’s name as a litter.": "Если вы не устанавливает сами букву помёта, то система это сделает автоматически установив первую букву имени собаки в качестве литеры помёта.",
 	"Help": "Помощь",
 	"Account": "Аккаунт",
 	"Sign out": "Выход",
@@ -125,6 +128,11 @@
 	"Erect ears": "Стоячие уши",
 	"Delivery": "Доставка",
 	"Sign up": "Регистрация",
+	"Visibility": "Видимость",
+	"All": "Все",
+	"visible": "видна",
+	"Your dog is currently not visible in the catalog. Until you turn on the visibility no one can see it.": "В данный момент ваша собака не видна в каталоге. Пока вы не включите видимость ни кто не сможет её увидеть.",
+	"not visible": "не видна",
 	"Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of dogs by color, but rather an attempt to provide more information on the appearance of the dog. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding dogs.": "Китайская хохлатая может иметь любое сочетание цветов, как предписано в стандарте FCI 288. Данный пункт не относится к классификации собаки по по цветовому признаку, это скорее попытка дать больше информации по внешнему виду собаки. Люди в своей жизни всегда имеют приоритеты, это касается и цвета, предпочтение того или иного цвета часто становится определяющим при покупке или вязки собак.",
 	"Dog height (cm)": "Рост (см)",
 	"Does the standard dictate the definition of color?": "Стандарт предписывает определение цвета?",
@@ -610,5 +618,7 @@
 	"MB": "MB",
 	"Update": "Update",
 	"Decription": "Decription",
-	"Size": "Size"
+	"Size": "Size",
+	"dogs": "dogs",
+	"Letter": "Letter"
 }

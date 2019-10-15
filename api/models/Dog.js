@@ -46,7 +46,14 @@ module.exports = {
     sale: {
       type: 'boolean',
       defaultsTo: false,
-      description: `Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
+      description: `Флаг продажи собаки. Продаётся или нет. По умолчанию не продаётся.`
+    },
+
+
+    see: {
+      type: 'boolean',
+      defaultsTo: true,
+      description: `Флаг видимости собаки. Видна или нет. По умолчанию не видна.`
     },
 
     currency: {

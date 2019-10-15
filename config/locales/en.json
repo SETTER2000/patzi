@@ -548,5 +548,17 @@
 	"Teeth top": "Teeth top",
 	"Teeth": "Teeth",
 	"Bite": "Bite",
-	"Tests": "Tests"
+	"Tests": "Tests",
+	"Visibility": "Visibility",
+	"All": "All",
+	"visible": "visible",
+	"not visible": "not visible",
+	"Your dog is currently not visible in the catalog. Until you turn on the visibility no one can see it.": "Your dog is currently not visible in the catalog. Until you turn on the visibility no one can see it.",
+	"Filter": "Filter",
+	"filter": "filter",
+	"dogs": "dogs",
+	"Letter": "Letter",
+	"If you do not set the letter of the litter yourself, the system will do this automatically by setting the first letter of the dog’s name as a litter.": "If you do not set the letter of the litter yourself, the system will do this automatically by setting the first letter of the dog’s name as a litter.",
+	"The name of the dog is written only in English letters. Switch the keyboard to the correct layout.": "The name of the dog is written only in English letters. Switch the keyboard to the correct layout.",
+	"Error": "Error"
 }

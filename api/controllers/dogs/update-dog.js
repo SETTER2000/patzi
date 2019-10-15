@@ -20,6 +20,12 @@ module.exports = {
     },
 
 
+    see: {
+      type: 'boolean',
+      defaultsTo: true,
+      description: `Флаг видимости собаки. Видна или нет. По умолчанию не видна.`
+    },
+
     gender: {
       type: 'string',
       required: true,
@@ -284,6 +290,7 @@ module.exports = {
       label: label,
       // kennel: inputs.kennel,
       gender: inputs.gender,
+      see: inputs.see,
       currency: inputs.currency,
       price: inputs.price,
       saleDescription: inputs.saleDescription,

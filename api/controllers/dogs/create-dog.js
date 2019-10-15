@@ -41,6 +41,13 @@ module.exports = {
     },
 
 
+    see: {
+      type: 'boolean',
+      defaultsTo: true,
+      description: `Флаг видимости собаки. Видна или нет. По умолчанию не видна.`
+    },
+
+
     sire: {
       type: 'string',
       description: 'Отец.',
@@ -284,6 +291,7 @@ module.exports = {
       dateDeath: await sails.helpers.dateFix(inputs.dateDeath),
       nickname: inputs.nickname,
       subtitle: inputs.subtitle,
+      see: inputs.see,
       weight: inputs.weight,
       growth: inputs.growth,
       type: inputs.type,
