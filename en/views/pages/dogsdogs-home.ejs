@@ -62,7 +62,7 @@
                  class="mx-3"
                  title="<%= __('Remove') %>"
                  icon="el-icon-delete"></el-link>
-        <!--<el-link v-else disabled :underline="false" class="mx-3" title="<%= __('Remove') %>"
+          <!--<el-link v-else disabled :underline="false" class="mx-3" title="<%= __('Remove') %>"
                  icon="el-icon-delete"></el-link>-->
           </span>
       </div>
@@ -302,7 +302,7 @@
           sortableв
           prop="price"
           width="80">
-          <template slot-scope="scope" v-if="scope.row.price > 0 && scope.row.sale" >
+          <template slot-scope="scope" v-if="scope.row.price > 0 && scope.row.sale">
             <span v-if="scope.row.currency === 'рубль'">{{scope.row.price}} &#8381;</span>
             <span v-else-if="scope.row.currency === 'euro'">€ {{scope.row.price}}</span>
             <span v-else>$ {{scope.row.price}}</span>
@@ -506,7 +506,41 @@
 
       </el-image>
     </el-dialog>
-    <h1 v-if="buttonUpdate" class="flex justify-content-center">{{ruleForm.fullName}}</h1>
+    <% /* Диалоговое окно. Не верный текст имени собаки. */ %>
+    <el-dialog
+      title="<%= __('Error') %>"
+      width="30%"
+      :visible.sync="ruleForm.errInputDogName"
+      :show-close=false
+      append-to-body>
+      <span><%= __('The name of the dog is written only in English letters. Switch the keyboard to the correct layout.') %></span>
+      <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="ruleForm.errInputDogName = false; ruleForm.label=''">Ok</el-button>
+  </span>
+    </el-dialog>
+    <template v-if="!ruleForm.see">
+      <el-popover
+        ref="popover"
+        placement="top-start"
+        title="<%= __('Visibility') %>"
+        width="270"
+        trigger="hover"
+        content="<%= __('Your dog is currently not visible in the catalog. Until you turn on the visibility no one can see it.') %>">
+      </el-popover>
+      <div class="menu-center">
+        <h1 v-if="buttonUpdate" class="flex justify-content-center"
+            :class="classObject"
+        >{{ruleForm.fullName}}
+        </h1><el-button class="not-border" icon="el-icon-warning-outline" size="mini" v-popover:popover circle></el-button>
+      </div>
+    </template>
+    <template v-else>
+      <h1 v-if="buttonUpdate" class="flex justify-content-center"
+          :class="classObject"
+      >{{ruleForm.fullName}}</h1>
+    </template>
+
+
     <div v-if="ruleForm.imageUrl">
       <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
     </div>
@@ -548,6 +582,31 @@
       <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
                  class="demo-ruleForm">
+
+          <% /* ВИДНА СОБАКА ИЛИ НЕТ */ %>
+          <template>
+            <!-- <el-form-item label="<%= __('Visibility') %>" prop="see">
+              <el-checkbox v-model="ruleForm.see"></el-checkbox>
+            </el-form-item>-->
+            <el-form-item prop="see">
+              <!--    <el-switch
+                    v-model="ruleForm.see"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949">
+                  </el-switch>-->
+
+              <el-switch
+                style="display: block"
+                v-model="ruleForm.see"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                active-text="<%= __('visible') %>"
+                inactive-text="<%= __('not visible') %>">
+              </el-switch>
+            </el-form-item>
+          </template>
+
+          <% /* ПИТОМНИК */ %>
           <el-form-item v-if="!buttonUpdate" label="<%= __('Kennel') %>" prop="kennel">
             <el-select v-model="ruleForm.kennel" placeholder="<%= __('Choose your cattery') %>"
                        class="form-width"
@@ -571,20 +630,21 @@
 
               <div size="mini" round class="el-icon-question "></div>
             </el-tooltip>
-
           </el-form-item>
 
-
+          <% /* ИМЯ СОБАКИ*/ %>
           <template v-if="ruleForm.kennel &&  !buttonUpdate">
+
             <el-form-item label="<%= __('Dog') %>" prop="label">
               <el-input minlength="3" maxlength="80" show-word-limit
                         style="width:80%;"
+                        :keyup="ruleForm.label | abc(ruleForm)"
                         placeholder="<%= __('The official name without the name of the kennel') %>"
                         v-model="ruleForm.label"></el-input>
             </el-form-item>
           </template>
 
-
+          <% /* ДЕНЬ РОЖДЕНИЕ */ %>
           <el-form-item v-if="!buttonUpdate" label="<%= __('DoB') %>" prop="dateBirth">
             <el-row :gutter="2">
               <el-col :span="11">
@@ -597,7 +657,6 @@
               </el-col>
             </el-row>
           </el-form-item>
-
           <el-form-item v-if="buttonUpdate" label="<%= __('DoB') %>" prop="dateBirthUpdate">
             <el-row :gutter="2">
               <el-col :span="11">
@@ -611,6 +670,7 @@
             </el-row>
           </el-form-item>
 
+          <% /* ДЕНЬ СМЕРТИ */ %>
           <el-form-item v-if="!buttonUpdate" label="<%= __('DoD') %>" prop="dateDeath">
             <el-row :gutter="2">
               <el-col :span="11">
@@ -799,7 +859,6 @@
             </el-form-item>
           </template>
 
-
           <% /* БУКВА ПОМЁТА  */ %>
           <template>
             <el-row :gutter="2">
@@ -813,12 +872,28 @@
                       :value="item.value">
                     </el-option>
                   </el-select>
+                  <el-button class="not-border" icon="el-icon-warning-outline" size="mini" v-popover:popover2 circle></el-button>
                 </el-col>
+                <el-popover
+                  ref="popover2"
+                  placement="top-start"
+                  title="<%= __('Letter') %>"
+                  width="270"
+                  trigger="hover"
+                  content="<%= __('If you do not set the letter of the litter yourself, the system will do this automatically by setting the first letter of the dog’s name as a litter.') %>">
+                </el-popover>
+
+                <!--<el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                  <el-tooltip effect="dark"
+                              placement="top-start">
+                    <div slot="content"><%= __("If you do not set the letter of the litter yourself, the system will do this automatically by setting the first letter of the dog’s name as a litter.") %></div>
+                    <div size="mini" round class="el-icon-question ml-3"></div>
+                  </el-tooltip>
+                </el-col>-->
+
               </el-form-item>
             </el-row>
           </template>
-
-
 
           <% /* ОПИСАНИЕ */ %>
           <template>
@@ -837,8 +912,6 @@
             </el-form-item>
           </template>
 
-
-
           <% /* ТЕСТЫ */ %>
           <template>
             <el-form-item label="<%= __('Tests') %>" prop="dogTests">
@@ -855,7 +928,6 @@
               </el-col>
             </el-form-item>
           </template>
-
 
 
           <div class="my-sm-5">
@@ -1194,13 +1266,24 @@
       <% /* Фильтры. */ %>
 
       <% /* Кнопки управления, фильтры */ %>
-      <div class="menu-right mb-1" v-if="_.pluck(dogs, 'label').length >0">
+      <div class="menu-between mb-1" v-if="_.pluck(filterDogs, 'label').length >0">
+        <div ><span class="text-lowercase font-weight-light font-italic"><%= __('Dogs') %>: {{filterName}}</span></div>
         <div class="grid-content bg-purple">
           <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
                               <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
                             </span>
             <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-female" :command="{com:'dam'}">
+                <%= __('Dam') %>
+              </el-dropdown-item>
+
+              <el-dropdown-item icon="el-icon-male" :command="{com:'sire'}">
+                <%= __('Sire') %>
+              </el-dropdown-item>
+              <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'all'}">
+                <%= __('All') %>
+              </el-dropdown-item>
 
               <el-dropdown-item v-if="_.some(dogs, 'sale', true)" icon="el-icon-money"
                                 :command="{com:'c'}">
@@ -1210,6 +1293,7 @@
               <el-dropdown-item v-if="me.isSuperAdmin || me.isAdmin" icon="el-icon-edit" :command="{com:'e'}">
                 <%= __('Dog editor') %>
               </el-dropdown-item>
+
 
               <!--<el-dropdown-item icon="el-icon-present" :command="{com:'g'}">-->
               <!--<%= __('Add presentation') %>-->
@@ -1236,11 +1320,10 @@
           </el-dropdown>
         </div>
       </div>
-
-      <% /*Превью.*/ %>
+      <% /* ФОТО СОБАК */ %>
       <div class="scrollbar" id="style-1" v-if="_.pluck(dogs, 'cover').length > 0">
         <el-row :gutter="2" class="flex-container wrap">
-          <el-col v-if="!_.isEmpty(dog.cover)" class="flex-item" v-for="(dog, index) in dogs" :key="dog.id"
+          <el-col v-if="!_.isEmpty(dog.cover)" class="flex-item" v-for="(dog, index) in dogs.filter(dog=>dog.see)" :key="dog.id"
                   :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
             <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
                  style="position: relative;" class="ell-image-flex"
