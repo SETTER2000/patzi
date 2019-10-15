@@ -656,11 +656,12 @@
 
                             </template>
                             <a v-loading.fullscreen.lock="fullscreenLoading" href="#" @click="showSlider(idx, index)">
-                              <img :src="img.imageSrc" class="ell object-fit_cover" alt="">
-                           <!--   <picture>
-                                <source media="(max-width: 480px)" :srcset="litter.wdt[index].imageSrc" >
+                              <!--<img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">-->
+                              <picture>
+                                <source media="(max-width: 520px)" :srcset="photoSet.imagesMobile[idx].imageSrc" >
+                                <source media="(max-width: 750px)" :srcset="photoSet.photos[idx].imageSrc" >
                                 <img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">
-                              </picture>-->
+                              </picture>
                             </a>
                           </el-col>
                         </el-row>
