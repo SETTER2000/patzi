@@ -359,14 +359,10 @@ parasails.registerPage('dogs-home', {
       }
       this.ruleForm = ruleForm;
       const regex = /[a-z]+/ig;
-      console.log('DATTT:::: ', value);
       let r = regex.exec(value);
-      // this.errInputDogName = true;
-      console.log('regex::: ', r);
-      console.log('ruleForm::: ', '');
-       _.isArray(r) ? this.ruleForm.label = value : '';
+       _.isArray(r) ? this.ruleForm.label = r[0] : '';
       this.ruleForm.errInputDogName = (!_.isArray(r));
-      // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+      r=[];
     },
 
 
