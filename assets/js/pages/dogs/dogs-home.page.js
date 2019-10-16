@@ -1339,10 +1339,11 @@ parasails.registerPage('dogs-home', {
           if(dog.id === id){
             console.log('INDEX: ' , index);
             // let field = 'images';
-            let cut = dog['images'].splice(index, 1);
+            let cut = dog['images'].splice(index, 1).pop();
             console.log('Вырезали этот объект: ', cut);
+            dog['images'].unshift(cut);
             // dog['images'] = [...cut,...dog['images']];
-            dog['images'].splice( 0,0,cut);
+            // dog['images'].splice( 0,0,cut);
             console.log('Объеденённый массив::: ', dog['images']);
             dog.imagesArrUrl = _.pluck(dog['images'], 'imageSrc');
           }
