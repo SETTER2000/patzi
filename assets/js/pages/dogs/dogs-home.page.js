@@ -1349,6 +1349,7 @@ parasails.registerPage('dogs-home', {
           }
 
         });
+
         this.$forceUpdate();
         console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
