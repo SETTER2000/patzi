@@ -68,10 +68,28 @@
       </div>
       <el-checkbox-group v-model="checkedPhoto" @change="handleCheckedPhotosChange">
         <div class="photo-editor">
+
           <el-card shadow="hover" :body-style="{ padding: '0px'}"
                    v-for="(img, index, key) in photos.images"
                    :key="index + '-photo'">
-            <img :src="img.imageSrc" class="image">
+
+            <template v-if="me.isSuperAdmin">
+              <div class="ell-relation" v-if="photos.cover === index">
+                <el-button type="warning" size="mini" title="<%= __("Album's cover") %>"
+                           class="ell-position-button check" icon="el-icon-star-off"
+                           circle></el-button>
+              </div>
+              <div class="ell-relation" v-else>
+                <el-button size="mini" title="<%= __('Make an album cover') %>"
+                           class="ell-position-button" @click="coverPhoto(photos.id,index)"
+                           icon="el-icon-document" circle></el-button>
+              </div>
+            </template>
+
+                 <img :src="img.imageSrc" class="image">
+
+
+
             <div style="padding: 14px;">
               <el-row :gutter="2">
                 <el-col :span="11">
@@ -277,10 +295,10 @@
             <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
           </template>
           <template slot-scope="scope">
-            <div v-if="scope.row.cover">
+            <div v-if="!_.isEmpty(scope.row.images)">
               <a href="#" @click="clickShowPhoto(scope.$index,scope.row)" class="flex justify-content-center">
                 <el-avatar :size="38" @error="errorHandler">
-                  <img :src="scope.row.cover"/>
+                  <img :src="scope.row.images[scope.row.cover].imageSrc"/>
                 </el-avatar>
               </a>
             </div>
@@ -318,7 +336,7 @@
           <template slot-scope="scope">
             <el-tooltip content="<%= __('Image editor') %>" placement="left" effect="light">
               <el-button
-                v-if="scope.row.cover"
+                v-if="scope.row.images"
                 size="mini"
                 icon="el-icon-picture-outline-round"
                 @click="handleEditPhotos(scope.$index, scope.row)">
@@ -531,7 +549,8 @@
         <h1 v-if="buttonUpdate" class="flex justify-content-center"
             :class="classObject"
         >{{ruleForm.fullName}}
-        </h1><el-button class="not-border" icon="el-icon-warning-outline" size="mini" v-popover:popover circle></el-button>
+        </h1>
+        <el-button class="not-border" icon="el-icon-warning-outline" size="mini" v-popover:popover circle></el-button>
       </div>
     </template>
     <template v-else>
@@ -1213,16 +1232,19 @@
   <% /* Диалоговое окно. Фото собаки. */ %>
   <el-dialog
     :title="objOne.fullName"
+    custom-class="dialog-kennel-add"
     :visible.sync="photoVisible"
-    width="30%"
     :before-close="handleCloseDialog">
-    <div class="block">
-      <el-image :src="objOne.cover">
+    <div class="menu-center" v-if="objOne.images">
+      <img :src="objOne.images[objOne.cover].imageSrc" style="width: 100%" :alt="objOne.fullName">
+    </div>
+    <!--<div class="block">
+      <el-image :src="objOne.img" class="cov">
         <div slot="placeholder" class="image-slot">
           Loading<span class="dot">...</span>
         </div>
       </el-image>
-    </div>
+    </div>-->
     <span slot="footer" class="dialog-footer">
     <el-button type="primary" @click="objOne={};photoVisible = false"><%= __('Close') %></el-button>
   </span>
@@ -1267,7 +1289,7 @@
 
       <% /* Кнопки управления, фильтры */ %>
       <div class="menu-between mb-1" v-if="_.pluck(filterDogs, 'label').length >0">
-        <div ><span class="text-lowercase font-weight-light font-italic"><%= __('Dogs') %>: {{filterName}}</span></div>
+        <div><span class="text-lowercase font-weight-light font-italic"><%= __('Dogs') %>: {{filterName}}</span></div>
         <div class="grid-content bg-purple">
           <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
@@ -1321,10 +1343,12 @@
         </div>
       </div>
       <% /* ФОТО СОБАК */ %>
-      <div class="scrollbar" id="style-1" v-if="_.pluck(dogs, 'cover').length > 0">
+      <div class="scrollbar" id="style-1">
         <el-row :gutter="2" class="flex-container wrap">
-          <el-col v-if="!_.isEmpty(dog.cover)" class="flex-item" v-for="(dog, index) in dogs.filter(dog=>dog.see)" :key="dog.id"
+          <el-col v-if="dog.images[dog.cover] && dog.see" class="flex-item"
+                  v-for="(dog, index) in dogs.filter(dog=>dog.see)" :key="dog.id"
                   :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
+
             <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
                  style="position: relative;" class="ell-image-flex"
                  v-if="!_.isEmpty(dog.imagesArrUrl)">
@@ -1343,7 +1367,7 @@
                 </div>
               </transition-group>
               <el-image
-                :src="dog.cover"
+                :src="dog.images[dog.cover].imageSrc"
                 :key="dog.id"
                 :fit="'cover'"
                 :scroll-container="'#style-1'"
