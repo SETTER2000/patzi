@@ -78,7 +78,7 @@ module.exports = {
       dog.fullName = dog.kennel.right ? `${dog.label} ${dog.kennel.label}` : `${dog.kennel.label} ${dog.label}`;
       dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
       dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
-      dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
+      // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
        return dog;
     });
 

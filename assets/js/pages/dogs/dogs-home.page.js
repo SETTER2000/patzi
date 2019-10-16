@@ -360,9 +360,9 @@ parasails.registerPage('dogs-home', {
       this.ruleForm = ruleForm;
       const regex = /[ a-z]+/i;
       let r = regex.exec(value);
-       _.isArray(r) ? this.ruleForm.label = r[0] : '';
+      _.isArray(r) ? this.ruleForm.label = r[0] : '';
       this.ruleForm.errInputDogName = (!_.isArray(r));
-      r=[];
+      r = [];
       // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
 
@@ -897,6 +897,7 @@ parasails.registerPage('dogs-home', {
       this.filterName = this.i19p[command.com];
       this.dogs = command.com !== 'all' ? this.dogs.filter(d => d.gender === command.com) : this.filterDogs;
       console.log('2::', this.dogs);
+      this.$forceUpdate();
       // return this.dogs ;
     },
 
@@ -1074,7 +1075,8 @@ parasails.registerPage('dogs-home', {
       console.log('Удалённые картинки: ', removeImage);
       let data = this.photos;
       data['removeImage'] = _.pluck(removeImage, 'id');
-
+      // Если картинок нет закрываем окно редактора
+      _.isEmpty(this.photos.images) ? this.centerDialogVisiblePhotos = false : '';
       io.socket.delete('/api/v1/dogs/destroy-many-img', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
@@ -1202,6 +1204,7 @@ parasails.registerPage('dogs-home', {
 
     handleEditPhotos(index, row) {
       this.photos = row;
+      console.log('Собака::: ', row);
       this.centerDialogVisiblePhotos = true;
     },
 
@@ -1218,9 +1221,12 @@ parasails.registerPage('dogs-home', {
     },
 
     clickShowPhoto(index, row) {
+
       this.photoVisible = true;
       console.log('row:', row);
-      this.objOne = row;
+      // this.objOne = row;
+      this.objOne = Object.assign({}, this.objOne, row);
+      console.log('this.objOne:', this.objOne);
     },
 
 
@@ -1288,7 +1294,64 @@ parasails.registerPage('dogs-home', {
           });
         }
       });
-    }
+    },
+
+    /**
+     * Формирует масисив картинок для показа в слайдере
+     * причём в зависимости от индекса cover, поднимает фото обложки на первую позициию
+     * в массиве, чтоб просмотр начинался с этой картинки
+     * @param collectionObj - объект коллекции (dog, litter и т.д.)
+     * @param cover - index объекта картинки в массиве
+     * @param field - свойство объекта в котором находится массив объектов картинок
+     * @param prop  - свойство в объекте картинки, в котором прописан её url
+     * @returns {*}
+     */
+   async imgArrSlider(collectionObj, cover, field, prop = 'imageSrc') {
+      if (!_.isArray(collectionObj[field])) return collectionObj;
+      let n = collectionObj;
+      n.imagesArrUrl ='';
+      console.log('::::::::::::::::::::FUNCTION::::::::::');
+      console.log('Индекс картинки которую нужно переместить:: ', cover);
+      console.log('Должен быть наверху: ', n[field][cover]);
+      let itemIndex = _.findIndex(n[field], n[field][cover]);
+      console.log('itemIndex:::: ', itemIndex);
+// новый индекс, без удаления, отсоединить элемент и вернуть его
+      n[field].splice(0, 0, n[field].splice(cover, 1)[0]);
+      // collectionObj[field].splice(0, 0, collectionObj[field].splice(itemIndex, 1)[0]);
+      console.log('dog.images::: ', n[field]);
+      n.imagesArrUrl = _.pluck(n[field], prop); // Массив url картинок для просмотра в слайдере
+
+
+      return n;
+    },
+
+
+    async coverPhoto(id, index) {
+      /*console.log('id:: ', id);
+      console.log('index:: ', index);*/
+      await io.socket.put(`/api/v1/files/update-cover-album`, {
+        id: id,
+        cover: index,
+        field: 'images',
+        collectionName: 'Dog'
+      }, (body, response) => {
+        this.dogs.map(dog => {
+          if(dog.id === id){
+            console.log('INDEX: ' , index);
+            // let field = 'images';
+            let cut = dog['images'].splice(index, 1);
+            console.log('Вырезали этот объект: ', cut);
+            // dog['images'] = [...cut,...dog['images']];
+            dog['images'].splice( 0,0,cut);
+            console.log('Объеденённый массив::: ', dog['images']);
+            dog.imagesArrUrl = _.pluck(dog['images'], 'imageSrc');
+          }
+
+        });
+        this.$forceUpdate();
+        console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+    },
 
   }
 })

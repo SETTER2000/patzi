@@ -115,7 +115,7 @@ module.exports.routes = {
   'POST    /litters/files': {action: 'litters/upload-files', csrf: false},
   'POST    /api/v1/litters/create-litter': {action: 'litters/create-litter', csrf: false},
   'GET     /api/v1/litters/list': {action: 'litters/list'},
-  'PUT     /api/v1/litters/update-cover-album': {action: 'litters/update-cover-album', csrf: false},
+  // 'PUT     /api/v1/litters/update-cover-album': {action: 'litters/update-cover-album', csrf: false},
   'GET     /api/v1/litters/list-letter': {action: 'litters/list-letter'},
   // 'GET     /api/v1/litters/list-comment/:id': {action: 'litters/list-comment'},
   'POST    /api/v1/litters/update-session-name': {action: 'litters/update-session-name', csrf: false},
@@ -176,7 +176,6 @@ module.exports.routes = {
   'POST   /api/v1/dogs/create-dog': {action: 'dogs/create-dog', csrf: false},
   'GET    /api/v1/dogs/list': {action: 'dogs/list'},
   'GET    /dogs/for-sale/:letter/:year': {action: 'dogs/get-for-sale'},
-
   'GET    /api/v1/dogs/list-sire': {action: 'dogs/list-sire'},
   'GET    /api/v1/dogs/list-dam': {action: 'dogs/list-dam'},
   'POST   /api/v1/dogs/search-dog': {action: 'dogs/search-dog', csrf: false},
@@ -185,7 +184,7 @@ module.exports.routes = {
   'DELETE /api/v1/dogs/destroy-many-img': {action: 'dogs/destroy-many-img', csrf: false},
 
   'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},
-  // 'POST   /api/v1/files/set-album-cover': { action: 'files/set-album-cover', csrf: false },
+  'PUT    /api/v1/files/update-cover-album': { action: 'files/update-cover-album', csrf: false },
 
   'GET    /api/v1/city/list/:regionId?': {action: 'city/list'},
 

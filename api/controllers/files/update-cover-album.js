@@ -8,12 +8,25 @@ module.exports = {
 
 
   inputs: {
+    collectionName: {
+      type: 'string',
+      description: `Имя коллекции.`,
+      required: true
+    },
+
+
+    field: {
+      type: 'string',
+      description: `Поле где находится массив объектов фотографий.`,
+      required: true
+    },
+
     cover: {
-      type: 'number',
+      type: 'string',
       description: `Ключ картинки в массиве фоторгафий привязанных к объекту коллекции. 
       Согласно которому это фото будет обложкой.`,
       required: true
-    } ,
+    },
 
     id: {
       type: 'string',
@@ -47,22 +60,14 @@ module.exports = {
       throw 'badRequest';
     }
 
-    // console.log('COVER INPUTS:: ', inputs.cover);
+    let updateObject =  await sails.helpers.imgCover.with({
+      id: inputs.id,
+      cover: inputs.cover,
+      field: 'images',
+      collectionName: inputs.collectionName
+    });
 
 
-
-
-    // let info = await Image.findOne(q);
-    // Update the record for the logged-in user.
-    await Litter.updateOne({id: inputs.id})
-      .set({
-        cover: inputs.cover
-      });
-
-
-    // await sails.sockets.broadcast(inputs.collection, `list-${inputs.collection}`);
-
-    // All done.
     return exits.success();
 
   }

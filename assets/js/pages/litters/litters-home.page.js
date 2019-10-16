@@ -290,11 +290,11 @@ parasails.registerPage('litters-home', {
 
 
     async coverPhoto(id, index) {
-      await io.socket.put(`/api/v1/litters/update-cover-album`, {id: id, cover: index}, (body, response) => {
+      await io.socket.put(`/api/v1/files/update-cover-album`, {id: id, cover: index, collectionName:'Litter'}, (body, response) => {
         this.litters.map(litter => {
           (litter.id === id) ? litter.cover = index : litter;
         });
-        // console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
+        console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
     },
 
