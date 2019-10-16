@@ -1339,18 +1339,17 @@ parasails.registerPage('dogs-home', {
           if(dog.id === id){
             console.log('INDEX: ' , index);
             // let field = 'images';
-            let cut = dog['images'].splice(index, 1).pop();
+            let cut = dog['images'].splice(index, 1);
             console.log('Вырезали этот объект: ', cut);
-            dog['images'].unshift(cut);
-            // dog['images'] = [...cut,...dog['images']];
+            // dog['images'].unshift(cut);
+            dog['images'] = [...cut,...dog['images']];
             // dog['images'].splice( 0,0,cut);
             console.log('Объеденённый массив::: ', dog['images']);
             dog.imagesArrUrl = _.pluck(dog['images'], 'imageSrc');
           }
-
+          this.$forceUpdate();
         });
 
-        this.$forceUpdate();
         console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
     },
