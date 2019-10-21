@@ -160,7 +160,7 @@ console.log('INPUTS:::: ' , inputs);
       whoCreate: this.req.me.id,
       rightName: inputs.rightName,
       registerNumber: _.trim(inputs.registerNumber),
-      dateCreate: inputs.dateCreate,
+      dateCreate: await sails.helpers.dateFix(inputs.dateCreate),
       subtitle: inputs.subtitle,
       site: _.trim(inputs.site),
       city: inputs.city,

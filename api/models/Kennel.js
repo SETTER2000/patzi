@@ -24,6 +24,20 @@ module.exports = {
     },
 
 
+    dateCreate: {
+      type: 'string',
+      required: true,
+      description: `Дата создания.`
+    },
+
+
+    registerNumber: {
+      type: 'string',
+      description: `Регистрационный номер.`,
+      required: true,
+      example: '123964-54'
+    },
+
     section: {
       type: 'string',
       defaultsTo: 'Питомник'
@@ -82,19 +96,6 @@ module.exports = {
     },
 
 
-    dateCreate: {
-      type: 'string',
-      required: true,
-      description: `Дата создания.`
-    },
-
-
-    registerNumber: {
-      type: 'string',
-      description: `Регистрационный номер.`,
-      required: true,
-      example: '123964-54'
-    },
 
 
     location: {
