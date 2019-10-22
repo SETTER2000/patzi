@@ -44,7 +44,7 @@
         </div>
         <div class="row">
           <% /* Главная картинка собаки */ %>
-          <div class="col-md-6">
+         <!-- <div class="col-md-6">
 
             <div class="left_img">
               <ul v-if="dog.cover>=0">
@@ -64,8 +64,29 @@
                 </li>
               </ul>
             </div>
-          </div>
-
+          </div>-->
+          <% /* Карусель */ %>
+          <template>
+            <div class="menu-between" v-for="(img ,index, key) in dog.images" :key="index + '-DOGS'">
+              <picture>
+                <source media="(min-width: 799px)" :srcset="img.imageSrc">
+                <source media="(max-width: 800px)" :srcset="img.imageSrc">
+                <img :src="img.imageSrc" class="portrait" :alt="img.name">
+              </picture>
+            </div>
+        <!--    <el-carousel :interval="4000"
+                         :autoplay="false"
+                         type="card"
+                         height="390px">
+              <el-carousel-item v-for="(img ,index, key) in dog.images" :key="index + '-DOGS'">
+                <img :src="img.imageSrc"  alt="">
+           &lt;!&ndash;     <el-image
+                  style="width: 100vh"
+                  :src="img.imageSrc"
+                  :fit="'contain'"></el-image>&ndash;&gt;
+              </el-carousel-item>
+            </el-carousel>-->
+          </template>
          <!-- <div class="offset-md-1 col-md-5">
             <div class="portfolio_right_text ">
               <el-row :gutter="20">
