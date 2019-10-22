@@ -1818,6 +1818,7 @@ module.exports.bootstrap = async function () {
       label: `Neron`,
       gender: 'sire',
       letter:'N',
+      winner:true,
       sale:false,
       see:true,
       dateBirth: '2017-11-02T21:00:00.000Z',

@@ -61,6 +61,11 @@ module.exports = {
       maxLength: 80
     },
 
+    // winner: {
+    //   type: 'boolean',
+    //   defaultsTo: false,
+    //   description: `Флаг устанавливается, если собака стала Чемпионом Мира.`
+    // },
 
     saleDescription: {
       type: 'string',
@@ -285,6 +290,7 @@ module.exports = {
       kennel: inputs.kennel,
       gender: inputs.gender,
       currency: inputs.currency,
+      winner: inputs.winner,
       price: inputs.price,
       saleDescription: inputs.saleDescription,
       dateBirth: await sails.helpers.dateFix(inputs.dateBirth),

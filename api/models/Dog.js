@@ -99,7 +99,11 @@ module.exports = {
       required: true,
     },
 
-
+    winner: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: `Флаг устанавливается, если собака стала Чемпионом Мира.`
+    },
 
     canine: {
       type: 'number',
@@ -108,13 +112,11 @@ module.exports = {
     },
 
 
-
     teethCountTop: {
       type: 'number',
       description: 'Количество зубов сверху.',
       example: '6'
     },
-
 
 
     teethCountBottom: {
@@ -136,7 +138,7 @@ module.exports = {
       description: 'Прикус.',
       example: 'ножнецеобразный',
       isIn: ['перекус', 'недокус', 'ножнецеобразный'],
-      defaultsTo:'ножнецеобразный'
+      defaultsTo: 'ножнецеобразный'
     },
 
 

@@ -624,5 +624,6 @@
 	"dogs": "dogs",
 	"Letter": "Letter",
 	"An error occurred while processing your request. Please check the information and try again, or contact ": "An error occurred while processing your request. Please check the information and try again, or contact ",
-	"Perhaps you are using an unsecured connection. Use this address:": "Perhaps you are using an unsecured connection. Use this address:"
+	"Perhaps you are using an unsecured connection. Use this address:": "Perhaps you are using an unsecured connection. Use this address:",
+	"Error": "Error"
 }

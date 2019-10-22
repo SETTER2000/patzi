@@ -3,6 +3,7 @@ parasails.registerPage('dog', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
+
     dic: [
       ['en', {
         textOneErr: `An error has occurred`,
@@ -56,19 +57,63 @@ parasails.registerPage('dog', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function() {
+  beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
+
+
+    // console.log('DOGGG ', this.dog);
+
+
   },
+
+
   mounted: async function () {
   },
+
+
+  filters: {
+    getCreate: function (value, l, format) {
+      if (!value) {
+        return '';
+      }
+      moment.locale(l);
+      let formatNew = (!format) ? 'LLL' : format;
+      return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+    },
+
+    getAge: function (value, l, format) {
+      if (!value) {
+        return '';
+      }
+      moment.locale(l);
+      let formatNew = (!format) ? 'LLL' : format;
+      let now = moment.parseZone();
+      /*  let event = moment.parseZone(value, ["DD.MM.YYYY"]);
+         let a=moment.preciseDiff(now, event);
+        console.log('now: ', now);
+        console.log('EVENT: ', event);
+        console.log('a: ', a);*/
+      return moment(value).preciseDiff(now);
+      // return moment.parseZone(value).toNow(true);
+      // return moment(value).toNow(true);
+      // (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+    },
+  },
+
 
   computed: {
     i19p: {
       get: function () {
         // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
         return new Map(this.dic).get(this.me.preferredLocale);
+      }
+    },
+    isWinner: {
+      get: function () {
+        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+        return this.dog.winner;
       }
     },
 
@@ -108,7 +153,79 @@ parasails.registerPage('dog', {
       // this.photos = _.pluck(this.litter.puppies, 'photos');
       return this.indexPhoto;
     },
-
+    /* Открывает диалоговое окно редактирования*/
+    handleCommand(command) {
+      switch (command.com) {
+        case 'a':
+          this.setIndexPhotoSet(command);
+          this.dialogFormVisible = true;
+          break;
+        case 'b':
+          this.setValueEditPhotoSet(command);
+          break;
+        case 'c':
+          this.setAddedPhotoSet(command);
+          break;
+        case 'd':
+          this.setIndexPhotoSet(command);
+          this.dialogDeletePhotoSession = true;
+          this.nameSessionPhoto = command.name;
+          // this.ruleForm.description =  this.litter.description;
+          break;
+        case 'e':
+          this.dialogEditor = true;
+          // this.ruleForm.description =  this.litter.description;
+          break;
+        case 'f':
+          window.location = '/litters/new';
+          break;
+        case 'g':
+          this.setAddedPresentation(command);
+          break;
+        case 'dl':
+          this.clickDeleteLitter();
+          break;
+        case 'allView':
+          this.allViewed(command);
+          break;
+        case 'like':
+          this.addLike(command);
+          break;
+        case 'super':
+          this.addLike(command);
+          break;
+        case 'wow':
+          this.addLike(command);
+          break;
+        case 'haha':
+          this.addLike(command);
+          break;
+        case 'commentLike':
+          this.commentLike(command);
+          break;
+        case 'commentSuper':
+          this.commentLike(command);
+          break;
+        case 'commentWow':
+          this.commentLike(command);
+          break;
+        case 'commentHaha':
+          this.commentLike(command);
+          break;
+        case 'link':
+          window.location = '/litters';
+          break;
+        case 'deleteComment':
+          this.deleteComment(command);
+          break;
+        case 'changeComment':
+          this.changeOpenComment(command);
+          break;
+        //default:  this.setIndexPhotoSet(command);
+      }
+      // }
+      // this.$message('Нажат элемент: ' + command);
+    },
 
 
   }

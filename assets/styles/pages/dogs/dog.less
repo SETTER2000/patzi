@@ -1,13 +1,39 @@
 #dog {
-  //.portrait {
-  //  object-fit: cover;
-  //  width: 310px;
-  //  height: 207px;
-  //}
+
+  .winner{
+    background: left 15%  repeat-y url(/images/crown2.png), right 15%  repeat-y url(/images/crown2.png) ;
+    //background: right 15%  repeat-y url(/images/crown2.png) ;
+    //background-attachment: fixed;
+
+    //opacity: 0.7; /* Полупрозрачный фон */
+    //filter: alpha(Opacity=20); /* Прозрачность в IE */
+    .service-area{
+      background: none;
+    }
+  }
+
+  .errorClass{
+
+  }
+/*  background-image: url(images/crown2.png);
+  background-repeat: repeat;
+  background-color:  #fc0 ;
+  background-size: 50% ;*/
+
+  //background-position: 100px 150px;
+  .gender {
+    .el-icon-male {
+      font-size: 3vw;
+      padding-top: 12px;
+    }
+  }
+
   .portrait {
     object-fit: cover;
-    width: 310px;
-    height: 207px;
+    width: 299px;
+    height: 199px;
+    margin-block-start: 3px;
+    margin-inline-end: 3px;
   }
   .flex {
     display: flex;
@@ -59,9 +85,9 @@
       //object-fit: cover;
       width: 100%;
       height: auto;
+      margin-block-start: 3px;
     }
   }
-
 
   @media (min-width: 991px) {
     .portrait {
@@ -71,12 +97,13 @@
     }
   }
 
-
-  @media (min-width: 1300px) {
+  @media (min-width: 1240px) {
     .portrait {
       object-fit: cover;
-      width: 310px;
-      height: 207px;
+      width: 299px;
+      height: 199px;
+      margin-block-start: 3px;
+      margin-inline-end: 3px;
     }
   }
 }
