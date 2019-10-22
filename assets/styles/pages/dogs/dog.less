@@ -1,14 +1,82 @@
 #dog {
-
-  .portfolio_details_inner .portfolio_right_text .list li span {
-    width: 137px;
-    color: inherit;
+  //.portrait {
+  //  object-fit: cover;
+  //  width: 310px;
+  //  height: 207px;
+  //}
+  .portrait {
+    object-fit: cover;
+    width: 310px;
+    height: 207px;
   }
-  .el-image {
-    img{
-      max-width: 530px;
-      height: 100%;
-    }
+  .flex {
+    display: flex;
+  }
+  .flex-wrap {
+    .flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
 
+  .flex-wrap-col {
+    .flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  .pointer {
+    cursor: pointer;
+  }
+
+  .menu-right {
+    .flex-wrap;
+    justify-content: flex-end;
+    width: 100%;
+  }
+  .menu-left {
+    .flex-wrap;
+    justify-content: flex-start;
+  }
+  .menu-center {
+    .flex-wrap;
+    justify-content: center;
+  }
+  .menu-center-v {
+    .flex-wrap-col;
+    align-content: space-evenly;
+    justify-content: space-evenly;
+  }
+  .menu-center-2 {
+    .flex-wrap;
+    justify-content: space-around;
+  }
+  .menu-between {
+    .flex-wrap;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 414px) {
+    .portrait {
+      //object-fit: cover;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+
+  @media (min-width: 991px) {
+    .portrait {
+      object-fit: cover;
+      width: 240px;
+      height: 160px;
+    }
+  }
+
+
+  @media (min-width: 1300px) {
+    .portrait {
+      object-fit: cover;
+      width: 310px;
+      height: 207px;
+    }
   }
 }

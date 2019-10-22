@@ -230,6 +230,8 @@
 	"Update personal gravatar": "Обновить личный граватар",
 	"contact support": "техподдержку",
 	"An error occured while processing your request. Please check your information and try again, or": "Произошла ошибка при обработке вашего запроса. Пожалуйста, проверьте информацию и попробуйте снова, или обратитесь в ",
+	"An error occurred while processing your request. Please check the information and try again, or contact": "Произошла ошибка при обработке вашего запроса. Пожалуйста, проверьте информацию и попробуйте снова, или обратитесь в ",
+	"Perhaps you are using an unsecured connection. Use this address: ": "Возможно вы используете не защищённое соединение. Используйте этот адрес:  ",
 	"Your new password and confirmation do not match": "Ваш новый пароль и подтверждение не совпадают",
 	"Please enter a password or choose \"Cancel\"": "Пожалуйста, введите пароль или выберите «Отмена»",
 	"New password": "Новый пароль",
@@ -559,7 +561,7 @@
 	"You can still access your dashboard now, but some features will be unvavailable until we've verified your email address": "Вы по-прежнему можете получить доступ к своей панели мониторинга, но некоторые функции будут недоступны, пока мы не проверим ваш адрес электронной почты",
 	"Check your email": "Проверьте свою электронную почту",
 	"Please enter a password": "Пожалуйста, введите пароль",
-	"An error occured while processing your request. Please check your information and try again, or ": "Произошла ошибка при обработке вашего запроса. Пожалуйста, проверьте информацию и попробуйте снова, или",
+	"An error occured while processing your request. Please check your information and try again, or ": "Произошла ошибка при обработке вашего запроса. Пожалуйста, проверьте информацию и попробуйте снова, или ",
 	"Add photo": "Добавить фото",
 	"Hairless": "Голая",
 	"For Sale": "В продаже",
@@ -620,5 +622,7 @@
 	"Decription": "Decription",
 	"Size": "Size",
 	"dogs": "dogs",
-	"Letter": "Letter"
+	"Letter": "Letter",
+	"An error occurred while processing your request. Please check the information and try again, or contact ": "An error occurred while processing your request. Please check the information and try again, or contact ",
+	"Perhaps you are using an unsecured connection. Use this address:": "Perhaps you are using an unsecured connection. Use this address:"
 }

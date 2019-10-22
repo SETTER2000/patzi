@@ -59,7 +59,8 @@ module.exports = {
 
     /**
      * Генерирует ссылки с параметрами изображения,
-     * которое должен вернуть S3 для данного модуля
+     * которое должен вернуть S3 для данного модуля.
+     * По умолчанию это h800
      * https://sharp.pixelplumbing.com/en/stable/api-resize/
      */
     dog = await sails.helpers.cloudFrontUrl.with({
@@ -74,36 +75,73 @@ module.exports = {
             }*/
       }
     });
-    /* dog.images = (!_.isEmpty(dog.images)) ? await dog.images.map((image, i) => {
-       image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/dog/${dog.id}/images/${i}`) : '';
-       // image.detail = `/litters/dog/${litterId}`;
-       delete image.fd;
-       return image;
-     }) : '';*/
-    //
-    // // Подготовка объекта фотоссессии
-    // dog.puppies = (!_.isEmpty(dog.puppies)) ? await dog.puppies.map((photoSet, i) => {
-    //   photoSet.comments = _.isArray(photoSet.comments) ? photoSet.comments : [];
-    //   photoSet.photos.map((image, y) => {
-    //     image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/api/v1/files/download/dog/${dog.id}/puppies/${y}/${i}`) : '';
-    //     delete image.fd;
-    //   });
-    //   // image.detail = `/litters/dog/${litterId}`;
-    //
-    //   return photoSet;
-    // }) : '';
-    //
 
-    // dog.bornNt = moment(dog.born, moment.HTML5_FMT.DATETIME_LOCAL).format(format);
-    // Устанавливаем свойство источника изображения
-    // // Первый аргумент, базовый url
-    // dog.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/litters/${dog.id}`);
-    // // dog.bornNt = moment(dog.born).format(format);
-    // dog.bornNt = moment.parseZone(dog.born).format(format);
 
-    // ... затем мы удаляем наш файловый дескриптор
-    // delete dog.imageUploadFD;
-    // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
+    /**
+     * Создаём поле imagesMin.
+     * Поле imagesMin создаётся по умолчанию , если не указано другое название в параметре createField.
+     * Новое свойство imagesMin будет содержать картинки из поля установленного в параметре field,
+     * но уже с изменениями предложенными в свойстве edits.
+     * Генерирует ссылки с параметрами изображения.
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    dog = await sails.helpers.cloudFrontUrlMin.with({
+      collection: dog,
+      collectionName: 'dog',
+      field:'images',
+      createField:'imgI7',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        "resize": {
+          "width": 414,
+          // "height": 160,
+          "fit": "inside",
+          "background": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "alpha": 1
+          }
+        },
+        "flatten": {
+          "background": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "alpha": null
+          }
+        }
+      }
+    });
+
+ dog = await sails.helpers.cloudFrontUrlMin.with({
+      collection: dog,
+      collectionName: 'dog',
+      field:'images',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        "resize": {
+          "width": 310,
+          // "height": 160,
+          "fit": "inside",
+          "background": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "alpha": 1
+          }
+        },
+        "flatten": {
+          "background": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "alpha": null
+          }
+        }
+      }
+    });
+
 
 
     console.log('DOGG::: ', dog);
