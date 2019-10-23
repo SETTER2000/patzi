@@ -235,13 +235,14 @@
     :before-close="handlerCloseDialogSlider"
     v-if="virtualPageSlug==='sale'"
   >
+
     <section>
       <div class="showcase">
         <el-card shadow="hover" v-for="(o, index) in dogs" :key="o.id" class="my-2 "
-                 v-if="o.sale && _.isString(o.cover) && o.price > 0 && !_.isEmpty(o.currency)"
+                 v-if="!_.isEmpty(o.images)  && o.price > 0 && o.sale && !_.isEmpty(o.currency)"
                  :body-style="{ padding: '0px' }">
           <el-image
-            :src="o.cover"
+            :src="o.images[o.cover].imageSrc"
             :key="o.id"
             :fit="'cover'"
             lazy
