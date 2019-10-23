@@ -1,114 +1,245 @@
-<div id="dog" class="content" v-cloak >
-  <div v-bind:class="{ winner: isWinner }">
-  <% /* Шапка страницы */ %>
-  <section class="banner-area relative"  >
-    <div class="container">
-      <div class="row d-flex align-items-center justify-content-center">
-        <div class="about-content col-lg-12">
-          <h1 class="text-white">{{dog.fullName}}</h1>
-          <p>{{dog.dateBirth | getAge}}</p>
-          <p class="gender" v-if="dog.gender === 'sire'"><i class="el-icon-male"></i></p>
-          <p class="gender" v-else><i class="el-icon-female"></i></p>
-          <p></p>
+<div id="dog" class="content" v-cloak>
+  <% /*Диалоговое окно НАГРАДЫ */ %>
+  <el-drawer
+    title="<%= __('Awards') %> <%= (dog.fullName) %>"
+    :visible.sync="dialogFormAwards"
+    :direction="direction"
+    custom-class="awards"
+  >
+    <el-row type="flex" class="row-bg" justify="space-around">
+      <el-col :span="1">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+      <el-col :span="18">
+        <div class="grid-content bg-purple-light">
+          <!-- <h4><%= __('Welcome') %>, {{me.fullName}}!</h4>
+          <p>{{i19p.startOfNegotiations}} {{this.fullNameDogNegotiations}}.</p>
+          <p>{{i19p.startOfNegotiations2}}</p>-->
+        </div>
+      </el-col>
+      <el-col :span="1">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+    </el-row>
+    <el-row type="flex" class="row-bg" justify="space-around">
+      <el-col :span="1">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+      <el-col :span="18">
+        <div class="mt-4">
+          <% /* Поле ввода комментария */ %>
+          <!--<el-form @submit.native.prevent>
+            <el-form-item>
+              <el-input @keyup.enter.native="addComment('negotiation')"
+                        class="lb mt-2"
+                        maxLength="1000"
+                        clearable
+                        placeholder="<%= __('Write a message') %>"
+                        v-model="comment">
+                <i slot="prefix" class="el-input__icon el-icon-chat-line-round"></i>
+                <template slot="prepend">
+                  <el-avatar :size="35" :src="me[me.defaultIcon]"></el-avatar>
+                </template>
+              </el-input>
+            </el-form-item>
+          </el-form>-->
+        </div>
+      </el-col>
+      <el-col :span="1">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+    </el-row>
+  </el-drawer>
+
+
+  <div :class="{ winner: isWinner }">
+    <% /* Шапка страницы */ %>
+    <section class="banner-area relative">
+      <div class="container">
+        <div class="row d-flex align-items-center justify-content-center">
+          <div class="about-content col-lg-12">
+            <h1 class="text-white">{{dog.fullName}}</h1>
+            <p>{{dog.dateBirth | getAge}}</p>
+            <H2 v-if="dog.nickname" class="text-gold">
+              <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
+              <i v-else class="el-icon-female"></i>
+              {{dog.nickname}}
+            </H2>
+            <p v-else class="gender">
+              <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
+              <i v-else class="el-icon-female"></i>
+            </p>
+
+
+            <p></p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <% /* Главное Фото */ %>
-  <section class="service-area section-gap">
-    <div class="container">
-      <div class="portfolio_details_inner ">
-        <div class="row">
-          <% /* Хлебные крошки */ %>
-          <div class="col-md-6">
-            <el-breadcrumb separator-class="el-icon-arrow-right">
-              <el-breadcrumb-item><a href="/"><%= __('Home-menu') %></a></el-breadcrumb-item>
-              <el-breadcrumb-item><a href="/dogs/chinese-crested"><%= __('Dogs') %></a></el-breadcrumb-item>
-              <el-breadcrumb-item> {{dog.fullName}}</el-breadcrumb-item>
-              <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
-            </el-breadcrumb>
-          </div>
-          <div class="col-md-6">
-            <el-row type="flex" class="row-bg" justify="end">
+    <% /* Главное Фото */ %>
+    <section class="service-area section-gap">
+      <div class="container">
+        <div class="portfolio_details_inner ">
+          <div class="row">
+            <% /* Хлебные крошки */ %>
+            <div class="col-md-6">
+              <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item><a href="/"><%= __('Home-menu') %></a></el-breadcrumb-item>
+                <el-breadcrumb-item><a href="/dogs/chinese-crested"><%= __('Dogs') %></a></el-breadcrumb-item>
+                <el-breadcrumb-item> {{dog.fullName}}</el-breadcrumb-item>
+                <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
+              </el-breadcrumb>
+            </div>
+            <div class="col-md-6">
+              <el-row type="flex" class="row-bg" justify="end">
 
-              <% /* Заводчик Владелец */ %>
-              <el-col :span="21">
-                <el-row type="flex" class="row-bg" justify="end">
-                  <el-col :span="11">
-                    <h5 class="text-center">
-                      <small>breeder:</small>
-                      Olga Petrova
-                    </h5>
-                  </el-col>
-                  <el-col :span="11">
-                    <h5 class="text-center">
-                      <small>owner:</small>
-                      Alexander Petrova
-                    </h5>
-                  </el-col>
-                </el-row>
+                <% /* Заводчик Владелец */ %>
+                <el-col :span="21">
+                  <el-row type="flex" class="row-bg" justify="end">
+                    <el-col :span="11">
+                      <h5 class="text-center">
+                        <small>breeder:</small>
+                        FirstName LastName
+                      </h5>
+                    </el-col>
+                    <el-col :span="11">
+                      <h5 class="text-center">
+                        <small>owner:</small>
+                        FirstName LastName
+                      </h5>
+                    </el-col>
+                  </el-row>
 
-              </el-col>
+                </el-col>
 
-              <% /* Кнопки управления */ %>
-              <el-col :span="1">
-                <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
-                  <el-dropdown @command="handleCommand">
+                <% /* Кнопки управления */ %>
+                <el-col :span="1">
+                  <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
+                    <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
                               <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
                             </span>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
-                        <%= __('Add photo') %>
-                      </el-dropdown-item>
-             <!--         <el-dropdown-item icon="el-icon-present" :command="{com:'g'}">
-                        <%= __('Add presentation') %>
-                      </el-dropdown-item>-->
-                    </el-dropdown-menu>
-                  </el-dropdown>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
-        </div>
-        <% /*ГЛАВНАЯ КАРТИНКА */ %>
-        <div class="menu-center">
-          <!--<div><img src="/images/crown.png" alt=""></div>-->
-          <img :src="dog.images[dog.cover].imageSrc" class="img-fluid" alt="dog.images[dog.cover].name">
-
-        </div>
-      </div>
-      </div>
-  </section>
-
-  <% /* Content */ %>
-  <section class="portfolio_details_area section-gap">
-    <div class="container">
-      <div class="portfolio_details_inner ">
-        <div class="row">
-          <% /* КАРТИНКИ СОБАКИ */ %>
-          <div class="col menu-center">
-            <div v-for="(img ,index, key) in dog.images" :key="index + '-DOGS'">
-              <picture class="">
-                <source media="(min-width: 1240px)" :srcset="dog.imagesMin[index].imageSrc">
-                <source media="(max-width: 414px)" :srcset="dog.imgI7[index].imageSrc">
-                <img :src="img.imageSrc" class="portrait" :alt="img.name">
-              </picture>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
+                          <%= __('Add photo') %>
+                        </el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-present" :command="{com:'a'}">
+                          <%= __('Awards') %>
+                        </el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </div>
+                </el-col>
+              </el-row>
             </div>
           </div>
-        </div>
-        <div class="row ">
-          <% /* Полное описание собаки */ %>
-          <div class="col ">
-            {{dog.description}}
+          <% /*ГЛАВНАЯ КАРТИНКА */ %>
+          <div class="menu-center">
+            <!--<div><img src="/images/crown.png" alt=""></div>-->
+            <img :src="dog.images[dog.cover].imageSrc" class="img-fluid" alt="dog.images[dog.cover].name">
+
           </div>
         </div>
-
       </div>
-    </div>
-  </section>
-  <!--<router-view></router-view>-->
-</div>
+    </section>
+
+    <% /* ИНФОРМАЦИЯ о СОБАКЕ */ %>
+    <section class="service-area ">
+      <div class="container">
+        <div class="menu-center">
+
+          <el-card class="box-card ">
+            <div slot="header" class="clearfix">
+              <span><%= __('Information') %></span>
+              <el-button style="float: right; padding: 3px 0" v-if="me.isAdmin || me.isSuperAdmin" type="text">
+                <el-link icon="el-icon-edit"></el-link>
+              </el-button>
+            </div>
+            <div class="menu-between-v">
+              <div class="menu-between">
+                <span><%= __('DoB') %>:</span> <span>{{dog.dateBirth | getCreate(me.preferredLocale)}}</span>
+              </div>
+              <div class="menu-between">
+                <span><%= __('Color') %>:</span> <span> {{dog.color}}</span>
+              </div>
+              <div class="menu-between">
+                <span><%= __('Variety') %>:</span> <span>{{dog.type}}</span>
+              </div>
+              <div class="menu-between">
+                <span><%= __('Size') %>: </span> <span>{{dog.growth}}cm({{dog.growth | getDin}}")</span>
+              </div>
+            </div>
+          </el-card>
+
+          <% /* ЗАВОДЧИК BREEDER*/ %>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>Breeder: First Name Last Name</span>
+              <el-button style="float: right; padding: 3px 0" v-if="me.isAdmin || me.isSuperAdmin" type="text">
+                <el-link icon="el-icon-edit"></el-link>
+              </el-button>
+            </div>
+            <div class="menu-center">
+              <!--<div class="sub-title">First Name Last Name</div>-->
+              <!-- <div class="demo-basic&#45;&#45;circle">
+                 <div class="block">
+                   <el-avatar :size="'large'" :src="circleUrl"></el-avatar>
+                 </div>
+               </div>-->
+
+              <div class="block">
+                <el-avatar :size="100" :src="me.gravatar"></el-avatar>
+              </div>
+            </div>
+          </el-card>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>Owner: First Name Last Name</span>
+              <el-button style="float: right; padding: 3px 0" v-if="me.isAdmin || me.isSuperAdmin" type="text">
+                <el-link icon="el-icon-edit"></el-link>
+              </el-button>
+            </div>
+            <div class="menu-center">
+              <div class="demo-basic--circle">
+                <div class="block">
+                  <el-avatar :size="100" :src="me.gravatar"></el-avatar>
+                </div>
+              </div>
+            </div>
+          </el-card>
+
+        </div>
+      </div>
+    </section>
+
+    <% /* Content */ %>
+    <section class="portfolio_details_area ">
+      <div class="container">
+        <div class="portfolio_details_inner ">
+          <div class="row">
+            <% /* КАРТИНКИ СОБАКИ */ %>
+            <div class="col menu-center">
+              <div v-for="(img ,index, key) in dog.images" :key="index + '-DOGS'">
+                <picture class="">
+                  <source media="(min-width: 1240px)" :srcset="dog.imagesMin[index].imageSrc">
+                  <source media="(max-width: 414px)" :srcset="dog.imgI7[index].imageSrc">
+                  <img :src="img.imageSrc" class="portrait" :alt="img.name">
+                </picture>
+              </div>
+            </div>
+          </div>
+          <div class="row ">
+            <% /* Полное описание собаки */ %>
+            <div class="col ">
+              {{dog.description}}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <!--<router-view></router-view>-->
+  </div>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
