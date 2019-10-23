@@ -560,5 +560,8 @@
 	"Letter": "Letter",
 	"If you do not set the letter of the litter yourself, the system will do this automatically by setting the first letter of the dog’s name as a litter.": "If you do not set the letter of the litter yourself, the system will do this automatically by setting the first letter of the dog’s name as a litter.",
 	"The name of the dog is written only in English letters. Switch the keyboard to the correct layout.": "The name of the dog is written only in English letters. Switch the keyboard to the correct layout.",
-	"Error": "Error"
+	"Error": "Error",
+	"Awards": "Awards",
+	"Information": "Information",
+	"Variety": "Variety"
 }

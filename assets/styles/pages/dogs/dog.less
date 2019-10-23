@@ -1,30 +1,58 @@
 #dog {
 
-  .winner{
-    background: left 15%  repeat-y url(/images/crown2.png), right 15%  repeat-y url(/images/crown2.png) ;
+  .winner {
+    background: left 15% repeat-y url(/images/crown2.png), right 15% repeat-y url(/images/crown2.png);
     //background: right 15%  repeat-y url(/images/crown2.png) ;
     //background-attachment: fixed;
 
     //opacity: 0.7; /* Полупрозрачный фон */
     //filter: alpha(Opacity=20); /* Прозрачность в IE */
-    .service-area{
+    .service-area {
       background: none;
     }
   }
 
-  .errorClass{
+  .errorClass {
 
   }
-/*  background-image: url(images/crown2.png);
-  background-repeat: repeat;
-  background-color:  #fc0 ;
-  background-size: 50% ;*/
+  //CARD start
+  .text {
+    font-size: 14px;
+  }
+
+  .item {
+    margin-bottom: 18px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+
+  .box-card {
+    width: 400px;
+  }
+  //CARD end
+
+  /*  background-image: url(images/crown2.png);
+    background-repeat: repeat;
+    background-color:  #fc0 ;
+    background-size: 50% ;*/
 
   //background-position: 100px 150px;
   .gender {
-    .el-icon-male {
+    .el-icon-male, .el-icon-female {
       font-size: 3vw;
       padding-top: 12px;
+    }
+  }
+  .awards {
+    .el-drawer__header>:first-child{
+      font-size: 1.5em;
     }
   }
 
@@ -78,6 +106,29 @@
   .menu-between {
     .flex-wrap;
     justify-content: space-between;
+    margin-block-end: 1em;
+  }
+  /*
+  .menu-between .ver{
+    .menu-between;
+    margin-block-end:2em;
+  }
+  */
+
+  .menu-between-v {
+    .flex-wrap-col;
+    align-content: stretch;
+  }
+
+  @media (max-width: 1300px) {
+    //.box-card {
+    //  width: 50%;
+    //}
+  }
+  @media (min-width: 300px) {
+    .box-card {
+      width: 100%;
+    }
   }
 
   @media (max-width: 414px) {
@@ -90,6 +141,10 @@
   }
 
   @media (min-width: 991px) {
+    .box-card {
+      width: 50%;
+    }
+
     .portrait {
       object-fit: cover;
       width: 240px;
@@ -98,6 +153,10 @@
   }
 
   @media (min-width: 1240px) {
+    .box-card {
+      width: 400px;
+    }
+
     .portrait {
       object-fit: cover;
       width: 299px;
@@ -106,4 +165,5 @@
       margin-inline-end: 3px;
     }
   }
+
 }

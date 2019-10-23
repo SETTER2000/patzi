@@ -3,7 +3,12 @@ parasails.registerPage('dog', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-
+    dialogFormAwards: false,
+    direction: 'ttb',
+    comment: '',
+    circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+    squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+    sizeList: ["large", "medium", "small"],
     dic: [
       ['en', {
         textOneErr: `An error has occurred`,
@@ -25,6 +30,7 @@ parasails.registerPage('dog', {
         successUploadFiles: `Files uploaded successfully!`,
         titlePuppies: `Puppies`,
         titlechilds: `childs`,
+        areYouClose: 'Are you sure you want to close chat?',
         getFormatDateLocale: `yyyy-MM-dd`,
         getFormatDateTimeLocale: `yyyy-MM-dd HH:mm:ss`,
       }],
@@ -48,6 +54,7 @@ parasails.registerPage('dog', {
         successUploadFiles: `Файлы успешно загружены!`,
         titlePuppies: `Щенки`,
         titlechilds: `Родители`,
+        areYouClose: 'Вы уверены, что хотите закрыть чат?',
         getFormatDateLocale: `dd.MM.yyyy`,
         getFormatDateTimeLocale: `dd.MM.yyyy HH:mm:ss`,
       }]
@@ -81,6 +88,13 @@ parasails.registerPage('dog', {
       moment.locale(l);
       let formatNew = (!format) ? 'LLL' : format;
       return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+    },
+    //Сантиметры в дюймы
+    getDin: function (value, l, format) {
+      if (!value) {
+        return '';
+      }
+     return 0;
     },
 
     getAge: function (value, l, format) {
@@ -146,8 +160,19 @@ parasails.registerPage('dog', {
         this.fullscreenLoading = false;
       }, 2000);
     },
+    handleClose2(done) {
+      this.$confirm(this.i19p.areYouClose)
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {
+        });
+    },
 
-
+    // Получить все награды собаки
+    getAwards(command) {
+      console.log('command::: ', command);
+    },
     handlerSetActiveSlider(i) {
       // console.log('Нажали по слайду: ', i);
       // this.photos = _.pluck(this.litter.puppies, 'photos');
@@ -157,70 +182,60 @@ parasails.registerPage('dog', {
     handleCommand(command) {
       switch (command.com) {
         case 'a':
-          this.setIndexPhotoSet(command);
-          this.dialogFormVisible = true;
+          this.getAwards(command);
+          this.dialogFormAwards = true;
           break;
         case 'b':
           this.setValueEditPhotoSet(command);
           break;
         case 'c':
-          this.setAddedPhotoSet(command);
+          this.goto('/dogs/chinese-crested');
           break;
-        case 'd':
-          this.setIndexPhotoSet(command);
-          this.dialogDeletePhotoSession = true;
-          this.nameSessionPhoto = command.name;
-          // this.ruleForm.description =  this.litter.description;
-          break;
-        case 'e':
-          this.dialogEditor = true;
-          // this.ruleForm.description =  this.litter.description;
-          break;
-        case 'f':
-          window.location = '/litters/new';
-          break;
-        case 'g':
-          this.setAddedPresentation(command);
-          break;
-        case 'dl':
-          this.clickDeleteLitter();
-          break;
-        case 'allView':
-          this.allViewed(command);
-          break;
-        case 'like':
-          this.addLike(command);
-          break;
-        case 'super':
-          this.addLike(command);
-          break;
-        case 'wow':
-          this.addLike(command);
-          break;
-        case 'haha':
-          this.addLike(command);
-          break;
-        case 'commentLike':
-          this.commentLike(command);
-          break;
-        case 'commentSuper':
-          this.commentLike(command);
-          break;
-        case 'commentWow':
-          this.commentLike(command);
-          break;
-        case 'commentHaha':
-          this.commentLike(command);
-          break;
-        case 'link':
-          window.location = '/litters';
-          break;
-        case 'deleteComment':
-          this.deleteComment(command);
-          break;
-        case 'changeComment':
-          this.changeOpenComment(command);
-          break;
+        /* case 'f':
+           window.location = '/litters/new';
+           break;
+         case 'g':
+           this.setAddedPresentation(command);
+           break;
+         case 'dl':
+           this.clickDeleteLitter();
+           break;
+         case 'allView':
+           this.allViewed(command);
+           break;
+         case 'like':
+           this.addLike(command);
+           break;
+         case 'super':
+           this.addLike(command);
+           break;
+         case 'wow':
+           this.addLike(command);
+           break;
+         case 'haha':
+           this.addLike(command);
+           break;
+         case 'commentLike':
+           this.commentLike(command);
+           break;
+         case 'commentSuper':
+           this.commentLike(command);
+           break;
+         case 'commentWow':
+           this.commentLike(command);
+           break;
+         case 'commentHaha':
+           this.commentLike(command);
+           break;
+         case 'link':
+           window.location = '/litters';
+           break;
+         case 'deleteComment':
+           this.deleteComment(command);
+           break;
+         case 'changeComment':
+           this.changeOpenComment(command);
+           break;*/
         //default:  this.setIndexPhotoSet(command);
       }
       // }

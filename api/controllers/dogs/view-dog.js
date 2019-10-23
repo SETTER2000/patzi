@@ -40,7 +40,11 @@ module.exports = {
     // let dog = await Dog.findOne({letter: inputs.letter}).populate('owner');
     let fullName = _.startCase(inputs.fullName);
     console.log('dogName::: ', fullName);
-    let dog = await Dog.findOne({'fullName': fullName}).populate('kennel');
+    let dog = await Dog.findOne({'fullName': fullName})
+      .populate('parent')
+      .populate('children')
+      .populate('kennel')
+    ;
     //
     if (!dog) {
       throw 'notFound';

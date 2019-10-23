@@ -669,7 +669,6 @@ parasails.registerPage('litter', {
     // Установить инбокс фотосессии
     setIndexPhotoSet: function (command) {
       this.indexPhotoSet = command.i;
-
     },
 
 

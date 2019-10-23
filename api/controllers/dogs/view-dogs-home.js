@@ -41,15 +41,36 @@ module.exports = {
     if (!dogs) {
       throw 'notFound';
     }
+
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля.
+     * Все картинки по умолчанию примут высоту 800px
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    dogs = await sails.helpers.cloudFrontUrl.with({
+      collection: dogs,
+      collectionName: 'dog',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        // grayscale: true,
+        /*    resize: {
+              width: resizeX,
+              height: resizeY
+            }*/
+      }
+    });
+
+
     _.each(dogs, (dog) => {
       dog.born = moment(dog.born).format('LL');
       // Устанавливаем свойство источника изображения
       // Первый аргумент, базовый url
-      dog.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/dogs/${dog.id}`);
-      // ... затем мы удаляем наш файловый дескриптор
-      delete dog.imageUploadFD;
-      // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
-      delete dog.imageUploadMime;
+      // dog.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/dogs/${dog.id}`);
+      // // ... затем мы удаляем наш файловый дескриптор
+      // delete dog.imageUploadFD;
+      // // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию
+      // delete dog.imageUploadMime;
     });
 
     // Respond with view.
