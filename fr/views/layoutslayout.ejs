@@ -1,8 +1,4 @@
 <% if (typeof me === 'undefined') {
-  // In case we're displaying the 404 or 500 page and relevant code in the "custom" hook was not able to run,
-  // we make sure `me` exists.  This ensures we don't have to do `typeof` checks below.
-  // Dans le cas, si nous affichons une page 404 ou 500 et le code correspondant à «l'utilisateur» s hoek n'a pas pu démarrer,
-  // nous sommes convaincus que `je` existe. Cela garantit que nous n'avons pas besoin de faire une vérification de `typeof` ci-dessous.
   var me = undefined;
 } %><!DOCTYPE html>
 <html lang="zxx" class="no-js">
@@ -11,7 +7,6 @@
 
   <% /* Viewport tag for sensible mobile support
     La balise Viewport pour un mobile de soutien */ %>
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">-->
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -57,11 +52,7 @@ La balise meta robots / noindex permet d'éviter les visites des moteurs de rech
 sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
 (https://sailsjs.com/docs/concepts/assets/task-automation)
     */ %>
-<!--  <link rel="preload"  as="font" href="https://d3a1wbnh2r1l7y.cloudfront.net/element-icons.woff" crossorigin="crossorigin" />-->
- <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:300,500,600|Roboto:400,700"/>-->
- <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.mi.css"/>-->
-  <!-- import CSS -->
-  <!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+
 
   <% /* Auto-injected «link» tags: */ %>
   <!--STYLES-->
@@ -166,7 +157,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/css/jquery.fancybox.min.css"/>
   <link rel="stylesheet"  type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   <!-- import JavaScript -->
-  <!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+
 </head>
 <body>
 
@@ -189,15 +180,10 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
     <header id="header" class="mb-0 way-down">
       <div class="container main-menu">
         <div class="row align-items-center d-flex">
-          <!--<div id="logo">-->
-          <a href="/" class="logo">
-            <!--<img src="/images/logo.png" alt="Poale Ell logo" title=""/>-->
-          </a>
-          <!--</div>-->
+          <a href="/" class="logo"></a>
           <nav id="nav-menu-container">
             <ul class="nav-menu">
               <% if(me) { %>
-
               <li>
                 <a href="/" class="active"> <%= __('Home-menu') %></a>
               </li>
@@ -290,7 +276,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
                 <a class="<%= me.preferredLocale %>" title="<%= me.preferredLocale %>"></a>
 
                 <a id="flag" style="top:0;">
-                  <img src="https://d3a1wbnh2r1l7y.cloudfront.net/Flag_of_Russia.jpg"
+                  <img src="../../images/Flag_of_Russia.jpg"
                        width="36vw" alt="">
                 </a>
                 <ul>
@@ -352,8 +338,6 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
         </div>
       </div>
     </header>
-    <!-- Alert if email has not been confirmed -->
-    <!-- Alerte si l'e-mail n'a pas été confirmée -->
     <% if(me && me.emailChangeCandidate) { %>
     <div class="container-fluid">
       <div class="alert alert-secondary mt-2" role="alert">
@@ -371,14 +355,6 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
     </div>
     <% } %>
 
-    <!--  <p>Date: <input type="text" id="datepicker">&nbsp;
-        <select id="locale">
-          <option value="ar">Arabic (&#8235;(&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</option>
-          <option value="zh-TW">Chinese Traditional (&#32321;&#39636;&#20013;&#25991;)</option>
-          <option value="">English</option>
-          <option value="fr" selected="selected">French (Fran&ccedil;ais)</option>
-          <option value="he">Hebrew (&#8235;(&#1506;&#1489;&#1512;&#1497;&#1514;</option>
-        </select></p>-->
     <!-- End Header Area -->
     <%- body %>
     <!-- start footer Area -->
@@ -448,7 +424,6 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
 <footer class="footer  ">
   <div class="navbar navbar-light justify-content-between flex-row-reverse">
     <div class="nav">
-      <% /*  <small class="nav-item"><a class="nav-link text-info" target="_blank" href="https://github.com/mikermcneil/ration">Source code</a></small>*/ %>
       <small class="nav-item"><a class="nav-link text-info" href="/contact"><%= __('Contact') %><span
             class="d-none d-sm-inline"></span></a></small>
       <small class="nav-item"><a class="nav-link text-info" href="/legal/terms"><%= __('Terms') %><span
@@ -901,127 +876,6 @@ sur le pipeline des actifs entre les "SCRIPTS" et "SCRIPTS END", ou les deux.
 <!--SCRIPTS END-->
 
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=sails.config.custom.googleMapKey%>&callback=initMap"></script>
-
-<!--<script>-->
-<!--$( function() {-->
-<!--$( "#datepicker" ).datepicker( $.datepicker.regional[ "fr" ] );-->
-<!--$( "#locale" ).on( "change", function() {-->
-<!--console.log('me.preferredLocale::' , SAILS_LOCALS.me.preferredLocale);-->
-<!--$( "#datepicker" ).datepicker( "option",-->
-<!--$.datepicker.regional[ SAILS_LOCALS.me.preferredLocale  ] );-->
-<!--});-->
-<!--} );-->
-<!--</script>-->
-
-
-
-<!--<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>-->
-<!--<script src='https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js'></script>-->
-<!--<script src='https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js'></script>-->
-<!--<script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>-->
-<!--&lt;!&ndash;<script src="//unpkg.com/element-ui"></script>&ndash;&gt;-->
-<!--<script src="//unpkg.com/element-ui/lib/umd/locale/en.js"></script>-->
-<!--<script src="//unpkg.com/element-ui@2.12.0/lib/umd/locale/ru-RU.js"></script>-->
-<!--
-
-
-<script type="text/javascript">
-
-  (function () {
-
-    // document.onreadystatechange = () => {
-    //
-    //   if (document.readyState === 'complete') {
-    //
-    //     /**
-    //      * Setup your Lazy Line element.
-    //      * see README file for more settings
-    //      */
-    //
-    //     // let el = document.querySelector('#Untitled1');
-    //     // let myAnimation = new LazyLinePainter(el, {"ease":"easeInOutSine","strokeWidth":19.0,"strokeOpacity":0.9,"strokeColor":"#E84B3C","strokeCap":"butt"});
-    //     // myAnimation.paint();
-    //
-    //
-    //
-    //     /**
-    //      * Setup your Lazy Line element.
-    //      * see README file for more settings
-    //      */
-    //
-    //     // let wow = document.querySelector('#wow');
-    //     //  let wowAnimation = new LazyLinePainter(wow, {"ease":"easeOutSine","strokeWidth":19,"strokeOpacity":1,"strokeColor":"#ffb007","strokeCap":"square"});
-    //     //  wowAnimation.paint();
-    //
-    //
-    //     /*
-    //     let like = document.querySelector('#like');
-    //      let likeAnimation = new LazyLinePainter(like, {"ease":"easeOutBounce","strokeWidth":19,"strokeOpacity":1,"strokeColor":"#2980B9","strokeCap":"square"});
-    //      likeAnimation.paint();
-    //      */
-    //   }
-    // }
-
-  })();
-
-</script>
--->
-
-<!--
-
-<script>
-/*  let lang = ELEMENT.lang.en
-  lang = (SAILS_LOCALS.me && SAILS_LOCALS.me.preferredLocale === 'ru') ? ELEMENT.lang.ruRU : lang;
-
-  ELEMENT.locale(lang);
-  (!!SAILS_LOCALS.me) ? moment.locale(SAILS_LOCALS.me.preferredLocale) : '';*/
-
-
-
-  $(document).ready(function () {
-  const langGet =  function (){
-      let language = $(this).attr('data-language');
-      $.ajax({
-        url: "/api/v1/account/update-language",
-        global: false,
-        type: "POST",
-        data: ({language: language}),
-        dataType: "html",
-        success: function (msg) {
-          location.reload();
-        }
-      });
-    }
-    $('#flag').hide();
-    if ($(window).height() < 800) {
-      $('#flag').show();
-    }
-    $('#mobile-nav #language').click(langGet);
-    $('#language').click(langGet);
-
-    // var language = $(this).attr("data-language");
-    var $container = $('maçonnerie-container');
-    $container.imagesLoaded(function () {
-      $container.maçonnerie({
-        columnWidth: ".item
-        itemSelector: ".item"
-      });
-      $('.item').imagefill();
-    });
-  });
-
-  // console.log('locle:', SAILS_LOCALS.me.preferredLocal);
-
-
-</script>
-
--->
-
-<!--<script type="text/javascript">
-  $(document).ready(function () {
-    $('.your-class').slick({});
-  });
-</script>-->
 
 <% /* Display an overlay if the current browser is not supported.
     (Relies on `bowser`, which is loaded inline above.)
