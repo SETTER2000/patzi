@@ -52,12 +52,27 @@
   </el-drawer>
 
 
-  <div :class="{ winner: isWinner }">
+  <div :class="{ winner: dog.winner }">
     <% /* Шапка страницы */ %>
     <section class="banner-area relative">
       <div class="container">
         <div class="row d-flex align-items-center justify-content-center">
           <div class="about-content col-lg-12">
+            <div v-if="dog.winner" class="menu-center">
+              <el-popover
+                placement="right-start"
+                trigger="hover"
+                width="320">
+                <div class="menu-center"><h4><%= __('World Winner') %></h4>
+                  <el-table :data="worldWinner">
+                    <el-table-column width="70" property="year" label="<%= __('year') %>"></el-table-column>
+                    <el-table-column width="150" property="address" label="<%= __('address') %>"></el-table-column>
+                    <el-table-column width="600" property="description" label="<%= __('description') %>"></el-table-column>
+                  </el-table>
+                </div>
+                <i slot="reference" style="font-size: 2em" class="ti-crown"></i>
+              </el-popover>
+            </div>
             <h1 class="text-white">{{dog.fullName}}</h1>
             <p>{{dog.dateBirth | getAge}}</p>
             <H2 v-if="dog.nickname" class="text-gold">
@@ -69,9 +84,6 @@
               <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
               <i v-else class="el-icon-female"></i>
             </p>
-
-
-            <p></p>
           </div>
         </div>
       </div>
@@ -93,16 +105,17 @@
             </div>
             <div class="col-md-6">
               <el-row type="flex" class="row-bg" justify="end">
-
-                <% /* Заводчик Владелец */ %>
                 <el-col :span="21">
                   <el-row type="flex" class="row-bg" justify="end">
+                    <% /* Заводчик */ %>
                     <el-col :span="11">
                       <h5 class="text-center">
                         <small>breeder:</small>
                         FirstName LastName
                       </h5>
                     </el-col>
+
+                    <% /* Владелец  */ %>
                     <el-col :span="11">
                       <h5 class="text-center">
                         <small>owner:</small>
@@ -124,7 +137,7 @@
                         <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
                           <%= __('Add photo') %>
                         </el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-present" :command="{com:'a'}">
+                        <el-dropdown-item icon="ti-medall" :command="{com:'a'}">
                           <%= __('Awards') %>
                         </el-dropdown-item>
                       </el-dropdown-menu>
@@ -193,6 +206,7 @@
               </div>
             </div>
           </el-card>
+          <% /* ВЛАДЕЛЕЦ OWNER*/ %>
           <el-card class="box-card">
             <div slot="header" class="clearfix">
               <span>Owner: First Name Last Name</span>
