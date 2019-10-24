@@ -300,6 +300,7 @@
             </el-input>
           </el-form-item>
 
+          <%/* OWNER */%>
           <el-form-item label="<%= __('Your kennel?') %>" prop="yourKennel">
             <el-switch
               v-model="ruleForm.yourKennel"
@@ -315,6 +316,26 @@
             </el-tooltip>
           </el-form-item>
 
+          <%/* CO-OWNER */%>
+          <template v-if="ruleForm.yourKennel">
+            <!--<template >-->
+            <el-form-item label="<%= __('Co-owner') %>" prop="coOwner">
+              <el-autocomplete
+                popper-class="my-autocomplete"
+                v-model="ruleForm.coOwner"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="<%= __('Please Input co-owner') %>"
+                :trigger-on-focus="false"
+                @select="handleSelect"
+                style="width: 58%;"
+              >
+                <template slot-scope="{ item }">
+                  <span class="value">{{ item.fullName }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fullName }}</span>
+                </template>
+              </el-autocomplete>
+            </el-form-item>
+          </template>
 
           <el-form-item v-if="ruleForm.yourKennel" label="<%= __('About Us') %>" prop="subtitle">
             <el-input minlength="10" maxlength="300" show-word-limit

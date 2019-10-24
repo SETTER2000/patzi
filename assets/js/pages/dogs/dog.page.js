@@ -9,6 +9,11 @@ parasails.registerPage('dog', {
     circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
     squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
     sizeList: ["large", "medium", "small"],
+    worldWinner: [ {
+      year: '2013',
+      address: 'Hungary, Budapest',
+      description:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
+    }],
     dic: [
       ['en', {
         textOneErr: `An error has occurred`,
@@ -124,12 +129,12 @@ parasails.registerPage('dog', {
         return new Map(this.dic).get(this.me.preferredLocale);
       }
     },
-    isWinner: {
+  /*  winner: {
       get: function () {
         // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
         return this.dog.winner;
       }
-    },
+    },*/
 
     indexSlide: {
       get: function () {

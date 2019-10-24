@@ -1,10 +1,9 @@
 module.exports = {
 
 
-  friendlyName: 'Get list',
+  friendlyName: 'List form',
 
-
-  description: 'Обрабатывает сокет подключение клиента и отдаёт весь список пользователей системы.',
+  description: 'Обрабатывает сокет подключение клиента. Отдаёт краткий список пользователей системы.',
 
 
   inputs: {
@@ -74,7 +73,7 @@ module.exports = {
     let users = await User.find(inputs.query).limit(inputs.count).populate('groups');
 
 
-    // Получить список групп, которые существуют в системе. Для вывода в select
+   /* // Получить список групп, которые существуют в системе. Для вывода в select
     let allGroups = await Group.find();
 
 
@@ -87,7 +86,7 @@ module.exports = {
       delete group.whoCreate;
       group.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/groups/${group.id}`);
     });
-
+*/
 
     /**
      * Здесь будем превращать поток байт в нормальное изображение для frontend
@@ -102,16 +101,16 @@ module.exports = {
       user.imageSrc = user.avatarFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/users/${user.id}`) : '';
 
       // Добавляем массив групп для каждого пользователя
-      user.allGroups = allGroups;
+      // user.allGroups = allGroups;
 
       // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
-      user.createdAtFormat = moment(user.createdAt).format(format);
+      // user.createdAtFormat = moment(user.createdAt).format(format);
 
       // Столбец: Дата регистрации. Формат фильтра.
-      user.createdAtFormatFilter = moment(user.createdAt).format(format);
+      // user.createdAtFormatFilter = moment(user.createdAt).format(format);
       // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
       // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
-      user.groups = _.pluck(user.groups, 'id'); // friendIds: [id,id,id...]
+      // user.groups = _.pluck(user.groups, 'id'); // friendIds: [id,id,id...]
 
       // Удаляем файловый дескриптор
       delete user.imageUploadFD;
@@ -125,12 +124,34 @@ module.exports = {
       delete user.billingCardExpMonth;
       delete user.billingCardExpYear;
       delete user.billingCardLast4;
+      delete user.avatarMime;
+      delete user.avatarFD;
+      delete user.createdAt;
+      delete user.defaultIcon;
+      delete user.createdAtFormat;
+      delete user.createdAtFormatFilter;
+      delete user.emailChangeCandidate;
+      delete user.emailConfirmationReminderAlreadySent;
+      delete user.emailProofToken;
+      delete user.emailProofTokenExpiresAt;
+      delete user.emailStatus;
+      delete user.isSuperAdmin;
+      delete user.isAdmin;
+      delete user.ratio;
+      delete user.filename;
+      delete user.groups;
+      delete user.phone;
+      delete user.stripeCustomerId;
+      delete user.tosAcceptedByIp;
+      delete user.updatedAt;
+      delete user.allGroups;
 
     });
 
 
     data.users = users;
     data.count = inputs.count;
+    // console.log('DATA USERS:::: ' , data);
     await sails.sockets.broadcast('user', 'list', data);
     // Respond with view.
     return exits.success();

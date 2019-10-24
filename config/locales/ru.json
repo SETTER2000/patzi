@@ -48,6 +48,7 @@
 	"How do you call the house, a nickname, affectionate name": "Как называете дома, прозвище, ласковое имя",
 	"Currency": "Валюта",
 	"Ters": "",
+	"World Winner": "Чемпион Мира",
 	"Presentation Name": "Наименование презентации",
 	"Presentation description": "Описание презентации",
 	"add a link to the pdf file of your presentation": "добавьте ссылку на пдф файл вашей презентации",
@@ -628,5 +629,10 @@
 	"Letter": "Letter",
 	"An error occurred while processing your request. Please check the information and try again, or contact ": "An error occurred while processing your request. Please check the information and try again, or contact ",
 	"Perhaps you are using an unsecured connection. Use this address:": "Perhaps you are using an unsecured connection. Use this address:",
-	"Error": "Error"
+	"Error": "Error",
+	"year": "год",
+	"address": "место",
+	"description": "описание",
+	"Co-owner": "Co-owner",
+	"Please Input co-owner": "Please Input co-owner"
 }

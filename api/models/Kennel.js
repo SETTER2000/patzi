@@ -143,11 +143,30 @@ module.exports = {
     },
 
 
-    users: {
+  /*  users: {
       collection: 'user',
       via: 'kennels',
       description: `Многие ко Многим (Many-to-Many). Владельцы питомника. Их может быть несколько.`
+    },*/
+
+
+    // Добавьте одну сторону множественной рефлексивной ассоциации
+    // Владельцы
+    owners: {
+      collection: 'user',
+      via: 'kennels',
+      description: `  Однако также возможно иметь связь между двумя атрибутами в одной и той же модели. 
+                      Это называется рефлексивной ассоциацией.
+                      
+                      Добавить пользователя № 12 в качестве родителя пользователя № 23
+                      await User.addToCollection(23, 'parents', 12);
+                      Найти пользователя № 12 и заполнить его детей
+                      var userTwelve = await User.findOne(12).populate('children');
+                      parents и children атрибуты могут быть изменены с помощью 
+                      .addToCollection(), .removeFromCollection()и .replaceCollection()
+                    `
     },
+
 
 
     whoCreate: {

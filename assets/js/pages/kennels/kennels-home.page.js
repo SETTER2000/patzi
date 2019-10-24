@@ -7,7 +7,8 @@ parasails.registerPage('kennels-home', {
     citys: [],
     links: [],
     props: {multiple: true},
-    website:null,
+    website: null,
+    users: [],
     optionsTest: [
       {
         value: 1,
@@ -114,6 +115,7 @@ parasails.registerPage('kennels-home', {
       imageUrl: '',
       previewImageSrc: '',
       continent: null,
+      coOwner: null,
       dialogImageUrl: '',
       dialogVisible: false,
       country: null,
@@ -164,7 +166,7 @@ parasails.registerPage('kennels-home', {
       ['en', {
         warnNoKennel: `At the moment there is no nursery in the database.
          You should create at least one kennel to start with to add a dog.`,
-        warnNotRecover:'After deletion, the object cannot be restored. Delete object?',
+        warnNotRecover: 'After deletion, the object cannot be restored. Delete object?',
         text400Err: 'Could not create! ',
         text400ErrDel: 'Could not delete! ',
         badRequestDog: 'Cannot be deleted! You have associated files: cattery. You should remove all dogs associated with this kennel.',
@@ -178,7 +180,7 @@ parasails.registerPage('kennels-home', {
       ['ru', {
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
-        warnNotRecover:'После удаления объект невозможно будет восстановить. Удалить объект?',
+        warnNotRecover: 'После удаления объект невозможно будет восстановить. Удалить объект?',
         text400Err: 'Не смог создать!',
         text400ErrDel: 'Не удалось удалить!',
         badRequestDog: 'Не возможно удалить! У вас есть связанные файлы: собака. Вам следует удалить всех собак связанны с данным питомником.',
@@ -202,39 +204,54 @@ parasails.registerPage('kennels-home', {
 
     // Подписываемся на комнату continent  и событие list-continent
     io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
-      console.log('Сервер continents ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // console.log('Сервер continents ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
     // Подписываемся на комнату country  и событие list-country
     io.socket.get(`/api/v1/country/list`, function gotResponse(body, response) {
-      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
     // Подписываемся на комнату kennel  и событие list-kennel
     io.socket.get(`/api/v1/kennels/list`, function gotResponse(body, response) {
-      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
-
+    io.socket.get(`/sockets/users/list-form`, function gotResponse(body, response) {
+      // console.log('Сервер User-Form ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Принимаем данные по событию list
+    io.socket.on('list', (data) => {
+      this.users = data.users;
+      console.log(' this.users::: ', this.users);
+    });
 
     // Принимаем данные по событию list-*
     io.socket.on('list-kennel', (data) => {
       console.log('data KENNELS:', data);
-      this.kennels = data;});
+      this.kennels = data;
+    });
 
     // Принимаем данные по событию list-*
-    io.socket.on('list-continent', (data) => {this.continents = data.continents;});
+    io.socket.on('list-continent', (data) => {
+      this.continents = data.continents;
+    });
 
     // Получаем данные для селектов в форме
-    io.socket.on('list-country', (data ) => {this.countrys = data.countrys;});
+    io.socket.on('list-country', (data) => {
+      this.countrys = data.countrys;
+    });
 
     // Получаем данные для селектов в форме
-    io.socket.on('list-region', (data ) => {this.regions = data.regions;});
+    io.socket.on('list-region', (data) => {
+      this.regions = data.regions;
+    });
   },
 
 
   mounted() {
     this.links = this.cityList();
+    // this.users = this.userList();
   },
 
   computed: {
@@ -371,6 +388,7 @@ parasails.registerPage('kennels-home', {
         country: this.ruleForm.country,
         region: this.ruleForm.region,
         city: this.cityId,
+        coOwner: this.coOwner,
         rightName: this.ruleForm.rightName,
         site: this.ruleForm.website,
         registerNumber: this.ruleForm.registerNumber,
@@ -380,7 +398,7 @@ parasails.registerPage('kennels-home', {
         phones: this.ruleForm.phones
       };
 
-console.log('KENNEL after added::: ' ,data);
+      console.log('KENNEL after added::: ', data);
       await io.socket.post('/api/v1/kennels/create-kennel', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -499,6 +517,32 @@ console.log('KENNEL after added::: ' ,data);
     },
 
 
+
+    querySearchAsync(queryString, cb) {
+      let users = this.users;
+      let results = queryString ? users.filter(this.createFilterOwner(queryString)) : users;
+
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        cb(results);
+      }, 3000 * Math.random());
+    },
+
+    createFilterOwner(queryString) {
+      return (user) => {
+        // console.log('ppp::: ' ,(user.fullName.toLowerCase().indexOf(queryString.toLowerCase()) === 0));
+        /*      console.log('VfullName.fullName::: ', user.fullName.toLowerCase());
+              // return fullName.value;
+              console.log('Запросовая строка::: ',  queryString);*/
+        return (user.fullName.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+
+    handleSelected(item) {
+      console.log('handleSelect::: ', item);
+      this.coOwner = (_.isNumber(e.id)) ? e.id : undefined;
+    },
+
     mesSuccess(text = '') {
       this.$notify({
         title: 'Success',
@@ -586,6 +630,19 @@ console.log('KENNEL after added::: ' ,data);
     },
 
 
+    async userList() {
+
+      /*      await io.socket.get(`/sockets/users/list-form`, function gotResponse(body, response) {
+              console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
+            });
+            // Принимаем данные по событию list-*
+            await io.socket.on('list', (data) => {
+              this.users = data;
+              console.log(' this.users::: ' ,  this.users);
+            });*/
+    },
+
+
     // Реагирует на событие change в поле города|city
     // async changeCountry(countryId) {
     //   this.countryId = countryId;
@@ -611,7 +668,6 @@ console.log('KENNEL after added::: ' ,data);
         this.countrys = data;
       });
     },
-
 
 
     async regionList() {
@@ -664,19 +720,19 @@ console.log('KENNEL after added::: ' ,data);
          */
         io.socket.delete('/api/v1/kennels/destroy-one-kennel', {'id': this.selectedKennel.id}, (data, jwRes) => {
 
-            (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successDel)) :
-              (jwRes.statusCode === 400 && jwRes.headers['x-exit'] === 'badRequestDog') ? this.mesError(this.i19p.badRequestDog):
+          (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successDel)) :
+            (jwRes.statusCode === 400 && jwRes.headers['x-exit'] === 'badRequestDog') ? this.mesError(this.i19p.badRequestDog) :
               (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrDel) :
-              (jwRes.statusCode === 403) ? this.mesError(this.i19p.text403ErrForbd) :
-              (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
-                (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
-                  (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+                (jwRes.statusCode === 403) ? this.mesError(this.i19p.text403ErrForbd) :
+                  (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
+                    (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
+                      (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
-console.log('jwRes.headers: ',jwRes.headers['x-exit']);
-console.log('jwRes.headers: ', jwRes.headers);
-/*
-* jwRes.headers:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}
-* */
+          console.log('jwRes.headers: ', jwRes.headers['x-exit']);
+          console.log('jwRes.headers: ', jwRes.headers);
+          /*
+          * jwRes.headers:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}
+          * */
 
           console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
         });

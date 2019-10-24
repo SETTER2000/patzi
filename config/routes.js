@@ -152,6 +152,7 @@ module.exports.routes = {
 
   'PUT    /sockets/user/update-user-group': {action: 'users/update-user-group', csrf: false},
   'GET    /sockets/user/list/:count?/:query?': {action: 'users/list'},
+  'GET    /sockets/users/list-form/:count?/:query?': {action: 'users/list-form'},
   'PUT    /api/v1/users/update-search': {action: 'users/update-search', csrf: false},
   'PUT    /api/v1/users/update-filter-date': {action: 'users/update-filter-date', csrf: false},
   'GET    /sockets/user/count-all': {action: 'users/count-all'},

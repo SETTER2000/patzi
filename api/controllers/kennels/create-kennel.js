@@ -92,6 +92,13 @@ module.exports = {
 
 
 
+    coOwner: {
+      type: 'string',
+      description: 'Совладелец питомника.'
+    },
+
+
+
     city: {
       type: 'string',
       description: 'Город где находится питомник.'
@@ -174,6 +181,27 @@ console.log('INPUTS:::: ' , inputs);
     if (!newKennel) {
       throw 'badRequest';
     }
+
+
+    /**
+     * Для питомника с id 23 добавить владельца с  id 12
+     * await Kennel.addToCollection(23, 'parents', 12);
+     * Для собаки 3 замените всех детей
+     * из коллекции «children» на детей 99 и 98:
+     * await Dog.replaceCollection(3, 'children').members([99,98]);
+     *
+     * Для собаки с updateDog.id меняем родителей в массиве идентификаторы
+     */
+    let owners = [];
+    // inputs.dam ? owners.push(inputs.dam) : '';
+    (inputs.yourKennel) ? owners.push(this.req.me.id) : '';
+    (inputs.coOwner) ? owners.push(inputs.coOwner) : '';
+    // inputs.sire ? owners.push(inputs.sire) : '';
+    let ownerFind = await Kennel.find({fullName: owners});
+    owners.length > 0 ? await Kennel.addToCollection(newKennel.id, 'owners').members(owners) : '';
+
+
+
 
     // Вызываем помощника сформировать правильно данные для ответа.
     let result = await sails.helpers.formatCollectionKennel(req);

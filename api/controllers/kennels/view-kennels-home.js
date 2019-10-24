@@ -28,7 +28,7 @@ module.exports = {
       .populate('country')
       .populate('region')
       .populate('whoCreate')
-      .populate('users');
+      .populate('owners');
 
     // Respond with view.
     return exits.success({

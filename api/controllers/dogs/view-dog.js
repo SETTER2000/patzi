@@ -29,37 +29,18 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    // Have the socket which made the request join the "dog" room.
-    // Подключить сокет, который сделал запрос, к комнате «dog».
-
-    // // Бибилиотека Node.js
     const url = require('url');
-    // const moment = require('moment');
-    // // Формат отображаемой даты
-    // let format = 'LL';
-    // let dog = await Dog.findOne({letter: inputs.letter}).populate('owner');
+
     let fullName = _.startCase(inputs.fullName);
     console.log('dogName::: ', fullName);
     let dog = await Dog.findOne({'fullName': fullName})
-      .populate('parent')
+      .populate('parents')
       .populate('children')
       .populate('kennel')
     ;
-    //
     if (!dog) {
       throw 'notFound';
     }
-    // // Устанавливаем соответствующую локаль для даты, установленую пользователем.
-    // moment.locale(this.req.me.preferredLocale);
-    // Формируем массив с картинками
-
-    // let dog = await sails.helpers.srcImagePreparation.with(
-    //   {
-    //     letter: inputs.letter,
-    //     year:inputs.year,
-    //     preferredLocale: this.req.me.preferredLocale
-    //   });
-
 
     /**
      * Генерирует ссылки с параметрами изображения,
@@ -148,7 +129,7 @@ module.exports = {
 
 
 
-    console.log('DOGG::: ', dog);
+    // console.log('DOGG::: ', dog);
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
 
     // Respond with view.

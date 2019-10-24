@@ -349,10 +349,12 @@ It just means they have a customer entry in Stripe, which might or might not hav
 
     kennels: {
       collection: 'kennel',
-      via: 'users',
+      via: 'owners',
       // dominant: true,
       description: `Многие ко Многим (Many-to-Many)`
     },
+
+
 
 
     comments: {

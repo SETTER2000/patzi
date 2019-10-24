@@ -563,5 +563,9 @@
 	"Error": "Error",
 	"Awards": "Awards",
 	"Information": "Information",
-	"Variety": "Variety"
+	"Variety": "Variety",
+	"World Winner": "World Winner",
+	"year": "year",
+	"address": "address",
+	"description": "description"
 }
