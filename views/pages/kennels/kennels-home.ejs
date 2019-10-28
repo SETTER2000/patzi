@@ -332,10 +332,10 @@
           <%/* CO-OWNER */%>
           <template v-if="ruleForm.yourKennel">
             <!--<template >-->
-            <el-form-item label="<%= __('Co-owner') %>" prop="fullName">
+            <el-form-item label="<%= __('Co-owner') %>" prop="coOwner">
               <el-autocomplete
                 popper-class="my-autocomplete"
-                v-model="ruleForm.fullName"
+                v-model="ruleForm.coOwner"
                 :fetch-suggestions="querySearchAsync"
                 placeholder="<%= __('Please Input co-owner') %>"
                 :trigger-on-focus="false"
@@ -344,7 +344,6 @@
               >
 
                 <template slot-scope="{ item }">
-                  HHHHH:::{{item}}
                   <span class="value">{{ item.fullName }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fullName }}</span>
                 </template>

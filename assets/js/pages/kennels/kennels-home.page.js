@@ -8,6 +8,7 @@ parasails.registerPage('kennels-home', {
     links: [],
     props: {multiple: true},
     website: null,
+    coOwner: '',
     users: [],
     optionsTest: [
       {
@@ -112,6 +113,7 @@ parasails.registerPage('kennels-home', {
       }],
       email: '',
       label: '',
+      coOwner: '',
       website: '',
       imageUrl: '',
       previewImageSrc: '',
@@ -253,7 +255,7 @@ parasails.registerPage('kennels-home', {
 
   mounted() {
     this.links = this.cityList();
-    // this.users = this.userList();
+    this.users = this.userList();
   },
 
   computed: {
