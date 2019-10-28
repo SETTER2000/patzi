@@ -99,7 +99,14 @@ parasails.registerPage('dog', {
       if (!value) {
         return '';
       }
-     return 0;
+     return (value * 0.393700).toFixed(1);
+    },
+    //Киллограммы в фунты
+    getFunt: function (value, l, format) {
+      if (!value) {
+        return '';
+      }
+     return (value/1000 * 2.20462).toFixed(1);
     },
 
     getAge: function (value, l, format) {

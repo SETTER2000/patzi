@@ -567,5 +567,7 @@
 	"World Winner": "World Winner",
 	"year": "year",
 	"address": "address",
-	"description": "description"
+	"description": "description",
+	"kg": "kg",
+	"cm": "cm"
 }
