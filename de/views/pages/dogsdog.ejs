@@ -180,7 +180,7 @@
                 <span><%= __('Variety') %>:</span> <span>{{dog.type}}</span>
               </div>
               <div class="menu-between">
-                <span><%= __('Size') %>: </span> <span>{{dog.growth}}cm({{dog.growth | getDin}}")</span>
+                <span><%= __('Size') %>: </span> <span>{{dog.growth}}<%= __('cm') %> ({{dog.growth | getDin}}") / {{dog.weight/1000}}<%= __('kg') %> ({{dog.weight | getFunt}}#)</span>
               </div>
             </div>
           </el-card>
