@@ -42,7 +42,7 @@
     <el-dialog
       width="80%"
       top="3vh"
-      title="Continents 6"
+      title="<%= __('Continents') %> 6"
       :visible.sync="innerVisible"
       append-to-body>
 
@@ -52,6 +52,19 @@
           :src=url
           :fit="fit"></el-image>
 
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      width="30%"
+      top="3vh"
+      title="<%= __('Who can be a co-owner') %>"
+      :visible.sync="innerVisibleCo"
+      append-to-body>
+      <div class="justify-content-center">
+        <%= __('You can add a co-owner of the nursery, if one exists.') %>
+       <br> <%= __('Co-owner may be registered user with a valid email. Start typing your username and select the person you want from the list provided.') %>
+       <br> <%= __('The case of letters does not matter.') %>
       </div>
     </el-dialog>
 
@@ -219,7 +232,7 @@
               >
                 <template slot-scope="{ item }">
 
-                  <span class="value">{{ item.value }}</span>
+                  <span class="value">{{ item.labelRu  }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
                 </template>
               </el-autocomplete>
@@ -326,15 +339,30 @@
                 :fetch-suggestions="querySearchAsync"
                 placeholder="<%= __('Please Input co-owner') %>"
                 :trigger-on-focus="false"
-                @select="handleSelect"
+                @select="handleSelected"
                 style="width: 58%;"
               >
+
                 <template slot-scope="{ item }">
                   <span class="value">{{ item.fullName }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fullName }}</span>
                 </template>
               </el-autocomplete>
+              <el-tooltip class="ml-3" effect="dark" content="<%= __('Who can be a co-owner') %>"
+                          placement="top-start">
+                <el-button @click="innerVisibleCo=true" size="mini" round icon="el-icon-question"></el-button>
+              </el-tooltip>
             </el-form-item>
+
+
+       <!--     <el-popover
+              placement="bottom"
+              title="Title"
+              width="200"
+              trigger="click"
+              content="this is content, this is content, this is content">
+              <el-button slot="reference">Click to activate</el-button>
+            </el-popover>-->
           </template>
 
           <el-form-item v-if="ruleForm.yourKennel" label="<%= __('About Us') %>" prop="subtitle">
