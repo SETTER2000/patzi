@@ -83,6 +83,7 @@ parasails.registerPage('kennels-home', {
       }
     ],
     cityId: undefined,
+    coOwnerId: undefined,
     state1: '',
     selectedKennel: undefined,
     // countryId: 0,
@@ -115,7 +116,7 @@ parasails.registerPage('kennels-home', {
       imageUrl: '',
       previewImageSrc: '',
       continent: null,
-      coOwner: null,
+      // coOwner: null,
       dialogImageUrl: '',
       dialogVisible: false,
       country: null,
@@ -127,6 +128,7 @@ parasails.registerPage('kennels-home', {
     },
     outerVisible: false,
     innerVisible: false,
+    innerVisibleCo: false,
     centerDialogVisible: false,
     centerDialogAdded: false,
     rules: {
@@ -166,7 +168,7 @@ parasails.registerPage('kennels-home', {
       ['en', {
         warnNoKennel: `At the moment there is no nursery in the database.
          You should create at least one kennel to start with to add a dog.`,
-        warnNotRecover: 'After deletion, the object cannot be restored. Delete object?',
+        warnNotRecover: 'After deletion, the object cannot be restored. Delete object',
         text400Err: 'Could not create! ',
         text400ErrDel: 'Could not delete! ',
         badRequestDog: 'Cannot be deleted! You have associated files: cattery. You should remove all dogs associated with this kennel.',
@@ -180,7 +182,7 @@ parasails.registerPage('kennels-home', {
       ['ru', {
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
-        warnNotRecover: 'После удаления объект невозможно будет восстановить. Удалить объект?',
+        warnNotRecover: 'После удаления объект невозможно будет восстановить. Удалить объект',
         text400Err: 'Не смог создать!',
         text400ErrDel: 'Не удалось удалить!',
         badRequestDog: 'Не возможно удалить! У вас есть связанные файлы: собака. Вам следует удалить всех собак связанны с данным питомником.',
@@ -221,7 +223,7 @@ parasails.registerPage('kennels-home', {
       // console.log('Сервер User-Form ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Принимаем данные по событию list
-    io.socket.on('list', (data) => {
+    io.socket.on('list-form', (data) => {
       this.users = data.users;
       console.log(' this.users::: ', this.users);
     });
@@ -388,7 +390,7 @@ parasails.registerPage('kennels-home', {
         country: this.ruleForm.country,
         region: this.ruleForm.region,
         city: this.cityId,
-        coOwner: this.coOwner,
+        coOwner: this.coOwnerId,
         rightName: this.ruleForm.rightName,
         site: this.ruleForm.website,
         registerNumber: this.ruleForm.registerNumber,
@@ -432,9 +434,10 @@ parasails.registerPage('kennels-home', {
     // Это кнопка вызывает модальное окно <modal> с <ajax-form>
     // для удаления объекта
     clickDeleteObject: function (id) {
-      this.text = this.i19p.warnNotRecover;
+
       this.centerDialogVisibleConfirm = true;
       this.selectedKennel = _.find(this.kennels, {id: id});
+      this.text = `${this.i19p.warnNotRecover} ${this.selectedKennel.label}?`;
     },
 
     // Закрывает модальное окно для удаления объекта
@@ -521,11 +524,11 @@ parasails.registerPage('kennels-home', {
     querySearchAsync(queryString, cb) {
       let users = this.users;
       let results = queryString ? users.filter(this.createFilterOwner(queryString)) : users;
-
-      clearTimeout(this.timeout);
-      this.timeout = setTimeout(() => {
+console.log('RESULT USER::: ', results);
+     /* clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {*/
         cb(results);
-      }, 3000 * Math.random());
+/*      }, 3000 * Math.random());*/
     },
 
     createFilterOwner(queryString) {
@@ -538,9 +541,9 @@ parasails.registerPage('kennels-home', {
       };
     },
 
-    handleSelected(item) {
-      console.log('handleSelect::: ', item);
-      this.coOwner = (_.isNumber(e.id)) ? e.id : undefined;
+    handleSelected(e) {
+      console.log('handleSelected::: ', e);
+      this.coOwnerId = e.id ? e.id : undefined;
     },
 
     mesSuccess(text = '') {
@@ -686,6 +689,7 @@ parasails.registerPage('kennels-home', {
     querySearch(queryString, cb) {
       let links = this.citys;
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      console.log('RESULT CITYS::: ', results);
       cb(results);
     },
 
@@ -699,6 +703,7 @@ parasails.registerPage('kennels-home', {
 
 
     async handleSelect(e) {
+      console.log('handleSelect::: ', e);
       this.cityId = (_.isNumber(e.id)) ? e.id : undefined;
     },
 
