@@ -523,9 +523,10 @@ parasails.registerPage('kennels-home', {
 
 
 
-    querySearchAsync(queryString, cb) {
+    querySearchFoo(queryString, cb) {
       let users = this.users;
       let results = queryString ? users.filter(this.createFilterOwner(queryString)) : users;
+      results[0].value="PIZDEC";
 console.log('RESULT USER::: ', results);
      /* clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {*/
@@ -543,7 +544,7 @@ console.log('RESULT USER::: ', results);
       };
     },
 
-    handleSelected(e) {
+   async handleSelected(e) {
       console.log('handleSelected::: ', e);
       this.coOwnerId = e.id ? e.id : undefined;
     },

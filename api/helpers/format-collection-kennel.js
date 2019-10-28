@@ -42,6 +42,7 @@ module.exports = {
       .populate('continent')
       .populate('country')
       .populate('region')
+      .populate('owners')
       .sort('label');
 
     await _.each(kennels, (kennel) => {

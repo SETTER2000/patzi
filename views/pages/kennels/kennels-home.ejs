@@ -334,9 +334,9 @@
             <!--<template >-->
             <el-form-item label="<%= __('Co-owner') %>" prop="coOwner">
               <el-autocomplete
-                popper-class="my-autocomplete"
+                class="inline-input"
                 v-model="ruleForm.coOwner"
-                :fetch-suggestions="querySearchAsync"
+                :fetch-suggestions="querySearchFoo"
                 placeholder="<%= __('Please Input co-owner') %>"
                 :trigger-on-focus="false"
                 @select="handleSelected"
