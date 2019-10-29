@@ -19,7 +19,7 @@ parasails.registerPage('users-home', {
     plain: false,
     dialog: {},
     limit: 50,
-    groups:[],
+    groups: [],
     dialogImageUrl: '',
     dialogVisible: false,
     buttonUpdate: false,
@@ -58,7 +58,7 @@ parasails.registerPage('users-home', {
     },
     formLabelWidth: '120px',
     loadingSearch: false,
-    loading:{},
+    loading: {},
     options: [],
     counts: 0,
     fits: 'cover',
@@ -94,22 +94,29 @@ parasails.registerPage('users-home', {
     },
     ruleForm: {
       fullName: '',
-     emailStatus:'unconfirmed'
+      emailStatus: 'unconfirmed',
+      sendCodEmail: 'unconfirmed'
     },
     rules: {
-      kennel: [
-        {required: true, message: 'Please select kennel name', trigger: 'change'}
-      ],
+      // kennel: [
+      //   {required: true, message: 'Please select kennel name', trigger: 'change'}
+      // ],
       label: [
-        {required: true, message: 'Please input dog name', trigger: 'blur'},
+        {required: true, message: 'Please input you name', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
       ],
       emailAddress: [
-        {required: true, message: 'Please input dog name', trigger: 'blur'},
+        {required: true, message: 'Please input email', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
       ],
       gender: [
         {required: true, message: 'Please select a dog gender.', trigger: 'change'}
+      ],
+      password: [
+        {required: true, message: 'Please input password.', trigger: 'change'}
+      ],
+      checkPass: [
+        {required: true, message: 'Please input checkPass.', trigger: 'change'}
       ],
       // dateBirth: [
       //   {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
@@ -269,7 +276,7 @@ parasails.registerPage('users-home', {
     });
     io.socket.on('list', (data) => {
       this.users = _.get(data, 'users') ? data.users : this.users;
-      console.log(' this.users::: ' ,  this.users);
+      console.log(' this.users::: ', this.users);
       // this.count = _.get(data, 'count') ?  data.count : this.count;
     });
 
@@ -278,7 +285,7 @@ parasails.registerPage('users-home', {
     });
 
     io.socket.on('group-form', (data) => {
-      console.log('GFRUPSS::: ',  data);
+      console.log('GFRUPSS::: ', data);
       this.groups = data;
     });
 
@@ -537,10 +544,10 @@ parasails.registerPage('users-home', {
     },
 
 
-  /*  handleEdit(index, row) {
-      console.log(index, row);
-    },
-*/
+    /*  handleEdit(index, row) {
+        console.log(index, row);
+      },
+  */
     handleClick() {
       console.log('click');
     },
@@ -613,7 +620,9 @@ parasails.registerPage('users-home', {
       this.dialogVisible = true;
     },
 
-
+    checkPasword() {
+      return this.ruleForm.password === this.ruleForm.checkPass;
+    },
     beforeUpload(file) {
       // Проверка размера входящего файла картинки не более (MB)
 
@@ -689,6 +698,7 @@ parasails.registerPage('users-home', {
     // Create User
     async add() {
       this.openFullScreen();
+      !this.checkPasword() ? this.mesError(text = '') : '' ;
       console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
       let data = {
         fileList: this.ruleForm.fileList,
@@ -697,6 +707,8 @@ parasails.registerPage('users-home', {
         dateDeath: this.ruleForm.dateDeath,
         gender: this.ruleForm.gender,
         kennel: this.ruleForm.kennel,
+        sendCodEmail: this.sendCodEmail,
+        password: this.ruleForm.password,
         nickname: this.ruleForm.nickname,
         federation: this.ruleForm.federation,
         weight: this.ruleForm.weight,

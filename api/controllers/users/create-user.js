@@ -37,6 +37,19 @@ module.exports = {
       description: 'Массив с файлами данных о загруженных файлах.'
     },
 
+    sendCodEmail: {
+      type: 'string',
+      isIn: ['unconfirmed', 'confirmed'],
+      defaultsTo: 'confirmed',
+      description: 'Отправить код подтверждения email?.',
+      extendedDescription:
+        `Пользователи могут быть созданы как «неподтвержденные» (например, обычная регистрация) или как «подтвержденные» (например, жестко запрограммированные)
+пользователи админа). Когда функция проверки электронной почты включена, новые пользователи создаются с помощью
+в форме регистрации есть \`emailStatus: 'unsfirmed'\`, пока они не нажмут на ссылку в электронном подтверждении.
+Точно так же, когда существующий пользователь меняет свой адрес электронной почты, он переключается на «запрос на изменение»
+статус электронной почты, пока они не нажмут на ссылку в электронном письме с подтверждением.`
+    },
+
     emailStatus: {
       type: 'string',
       isIn: ['unconfirmed', 'change-requested', 'confirmed'],
@@ -351,39 +364,27 @@ module.exports = {
     let fullName = _.startCase(inputs.fullName.toString().toLowerCase());
     // let rightFullName = _.startCase(fullName + ' ' + kennel.fullName);
     // let leftFullName = _.startCase(kennel.fullName + ' ' + fullName);
-
-
-    // Создаём пользователя
-    let newUser = await User.create({
+    let data = {
       fullName: fullName,
       emailStatus: inputs.emailStatus,
       see: inputs.see,
-      images:images,
-      // currency: inputs.currency,
-      // winner: inputs.winner,
-      // price: inputs.price,
-      // saleDescription: inputs.saleDescription,
-      dateBirth: inputs.dateBirth ? await sails.helpers.dateFix(inputs.dateBirth):'',
-      // dateDeath: await sails.helpers.dateFix(inputs.dateDeath),
-      // nickname: inputs.nickname,
-      // subtitle: inputs.subtitle,
-      // see: inputs.see,
-      // weight: inputs.weight,
-      // growth: inputs.growth,
-      // type: inputs.type,
+      password: await sails.helpers.passwords.hashPassword(inputs.password),
+      images: images,
+      dateBirth: inputs.dateBirth ? await sails.helpers.dateFix(inputs.dateBirth) : '',
       emailAddress: emailAddress,
-      // images: images,
-      // color: inputs.color,
-      // stamp: inputs.stamp,
-      // bite: inputs.bite,
-      // canine: inputs.canine,
-      // teethCountBottom: inputs.teethCountBottom,
-      // teethCountTop: inputs.teethCountTop,
-      // userTests: inputs.userTests,
-      // letter: inputs.letter ? inputs.letter : fullName[0],
-      // teethCount:`${inputs.teethCountTop}x${inputs.teethCountBottom}x${inputs.canine}`,
+    };
 
-    }).fetch();
+    // Если установлен флаг отправки подтверждения email, то добавляются временные отметки
+    _.extend(data, (inputs.sendCodEmail === 'confirmed') ? {
+      emailProofToken: await sails.helpers.strings.random('url-friendly'),
+      emailProofTokenExpiresAt: Date.now() + sails.config.custom.emailProofTokenTTL,
+      emailStatus: 'unconfirmed'
+    } : {});
+
+
+    console.log('DATA USER::: ' , data);
+    // Создаём пользователя
+    let newUser = await User.create(data).fetch();
     // Если не создан возвращаем ошибку.
     if (!newUser) {
 
