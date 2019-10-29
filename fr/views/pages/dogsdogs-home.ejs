@@ -572,10 +572,10 @@
     <div class="my-2">
       <el-divider content-position="left"><%= __('Add photo') %></el-divider>
     </div>
+    <!---------------------------------------------------------------------------------------->
+    <% /*Загрузка фото NEW*/ %>
     <el-row type="flex" class="row-bg" justify="center">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <!---------------------------------------------------------------------------------------->
-        <% /*Загрузка фото NEW*/ %>
         <el-upload
           action="/api/v1/files/upload"
           list-type="picture-card"
@@ -599,6 +599,7 @@
         </el-dialog>
       </el-col>
     </el-row>
+    <!---------------------------------------------------------------------------------------->
     <el-row type="flex" class="row-bg" justify="center">
       <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
