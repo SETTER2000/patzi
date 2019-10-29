@@ -102,7 +102,7 @@ module.exports = {
       // Устанавливаем свойство источника изображения
       // Первый аргумент, базовый url
       user.imageSrc = user.avatarFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/users/${user.id}`) : '';
-
+      user.value = user.fullName;
       // Добавляем массив групп для каждого пользователя
       // user.allGroups = allGroups;
 

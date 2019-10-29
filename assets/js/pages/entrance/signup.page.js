@@ -38,20 +38,20 @@ parasails.registerPage('signup', {
 
     submittedForm: async function() {
       if(this.isEmailVerificationRequired) {
-        // If email confirmation is enabled, show the success message.
+        // Если подтверждение по электронной почте включено, показать сообщение об успехе.
         this.cloudSuccess = true;
       }
       else {
-        // Otherwise, redirect to the logged-in dashboard.
-        // > (Note that we re-enable the syncing state here.  This is on purpose--
-        // > to make sure the spinner stays there until the page navigation finishes.)
+        // В противном случае, перенаправить на панель входа в систему.
+        //> (Обратите внимание, что здесь мы снова включаем состояние синхронизации. Это специально
+        //> чтобы убедиться, что спиннер остается там до завершения навигации по страницам.)
         this.syncing = true;
         window.location = '/';
       }
     },
 
     handleParsingForm: function() {
-      // Clear out any pre-existing error messages.
+      // Удалите все существующие сообщения об ошибках.
       this.formErrors = {};
 
       var argins = this.formData;
@@ -71,19 +71,19 @@ parasails.registerPage('signup', {
         this.formErrors.password = true;
       }
 
-      // Validate password confirmation:
+      // Подтвердите подтверждение пароля:
       if(argins.password && argins.password !== argins.confirmPassword) {
         this.formErrors.confirmPassword = true;
       }
 
-      // Validate ToS agreement:
+      // Подтвердить соглашение ToS:
       if(!argins.agreed) {
         this.formErrors.agreed = true;
       }
 
-      // If there were any issues, they've already now been communicated to the user,
-      // so simply return undefined.  (This signifies that the submission should be
-      // cancelled.)
+      // Если были какие-либо проблемы, они уже были сообщены пользователю,
+      // так просто вернуть undefined. (Это означает, что представление должно быть
+      // отменено.)
       if (Object.keys(this.formErrors).length > 0) {
         return;
       }

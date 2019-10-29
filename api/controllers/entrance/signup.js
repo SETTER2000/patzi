@@ -8,7 +8,7 @@ module.exports = {
 
 
   extendedDescription:
-`This creates a new user record in the database, signs in the requesting user agent
+    `This creates a new user record in the database, signs in the requesting user agent
 by modifying its [session](https://sailsjs.com/documentation/concepts/sessions), and
 (if emailing with Mailgun is enabled) sends an account verification email.
 
@@ -44,7 +44,7 @@ the account verification message.)
       description: 'The unencrypted password to use for the new account.'
     },
 
-    fullName:  {
+    fullName: {
       required: true,
       type: 'string',
       example: 'Frida Kahlo de Rivera',
@@ -63,7 +63,7 @@ the account verification message.)
     invalid: {
       responseType: 'badRequest',
       description: 'The provided fullName, password and/or email address are invalid.',
-      extendedDescription: 'If this request was sent from a graphical user interface, the request '+
+      extendedDescription: 'If this request was sent from a graphical user interface, the request ' +
       'parameters should have been validated/coerced _before_ they were sent.'
     },
 
@@ -77,26 +77,26 @@ the account verification message.)
 
   fn: async function (inputs) {
 
-    var newEmailAddress = inputs.emailAddress.toLowerCase();
+    let newEmailAddress = inputs.emailAddress.toLowerCase();
 
     // Build up data for the new user record and save it to the database.
     // (Also use `fetch` to retrieve the new ID so that we can use it below.)
     // Создаем данные для новой пользовательской записи и сохраняем их в базе данных.
     // (Также используйте `fetch`, чтобы получить новый идентификатор,
     // чтобы мы могли использовать его ниже.)
-    var newUserRecord = await User.create(_.extend({
+    let newUserRecord = await User.create(_.extend({
       emailAddress: newEmailAddress,
       password: await sails.helpers.passwords.hashPassword(inputs.password),
       fullName: inputs.fullName,
       tosAcceptedByIp: this.req.ip
-    }, sails.config.custom.verifyEmailAddresses? {
+    }, sails.config.custom.verifyEmailAddresses ? {
       emailProofToken: await sails.helpers.strings.random('url-friendly'),
       emailProofTokenExpiresAt: Date.now() + sails.config.custom.emailProofTokenTTL,
       emailStatus: 'unconfirmed'
-    }:{}))
-    .intercept('E_UNIQUE', 'emailAlreadyInUse')
-    .intercept({name: 'UsageError'}, 'invalid')
-    .fetch();
+    } : {}))
+      .intercept('E_UNIQUE', 'emailAlreadyInUse')
+      .intercept({name: 'UsageError'}, 'invalid')
+      .fetch();
 
     // If billing feaures are enabled, save a new customer entry in the Stripe API.
     // Then persist the Stripe customer id in the database.
@@ -105,17 +105,13 @@ the account verification message.)
         emailAddress: newEmailAddress
       }).timeout(5000).retry();
       await User.updateOne(newUserRecord.id)
-      .set({
-        stripeCustomerId
-      });
+        .set({
+          stripeCustomerId
+        });
     }
 
     // Store the user's new id in their session.
     this.req.session.userId = newUserRecord.id;
-
-
-
-
 
 
     if (sails.config.custom.verifyEmailAddresses) {

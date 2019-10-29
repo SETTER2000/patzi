@@ -526,8 +526,7 @@ parasails.registerPage('kennels-home', {
     querySearchFoo(queryString, cb) {
       let users = this.users;
       let results = queryString ? users.filter(this.createFilterOwner(queryString)) : users;
-      results[0].value="PIZDEC";
-console.log('RESULT USER::: ', results);
+
      /* clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {*/
         cb(results);

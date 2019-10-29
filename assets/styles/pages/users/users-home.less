@@ -22,5 +22,145 @@
       }
     }
   }
+  .dialog-add {
+    margin-top: 2vh !important;
+    //font-size: 3rem;
+    //width: 40vw;
+  }
 
+  .el-upload-dragger {
+    width: 146px;
+    height: 146px;
+  }
+
+  .pointer {
+    cursor: pointer;
+  }
+
+  .flex {
+    display: flex;
+  }
+  .flex-wrap {
+    .flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
+  .flex-wrap-col {
+    .flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  .menu-right {
+    .flex-wrap;
+    justify-content: flex-end;
+    width: 100%;
+  }
+  .menu-left {
+    .flex-wrap;
+    justify-content: flex-start;
+  }
+  .menu-center {
+    .flex-wrap;
+    justify-content: center;
+  }
+  .menu-center-v {
+    .flex-wrap-col;
+    align-content: space-evenly;
+    justify-content: space-evenly;
+  }
+  .menu-center-2 {
+    .flex-wrap;
+    justify-content: space-around;
+  }
+  .menu-between {
+    .flex-wrap;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 1980px) {
+    .dialog-kennel-add {
+      width: 60vw;
+    }
+
+  }
+  @media (max-width: 1300px) {
+    .dialog-kennel-add {
+      width: 80vw;
+    }
+
+    .single-gallery-image {
+      background-size: contain !important;
+      width: 100vw;
+    }
+
+    .rasp {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1200px) {
+
+    .sale-dogs {
+
+      .showcase {
+        .el-card {
+          width: 48vw;
+        }
+      }
+    }
+
+    .item {
+      height: 350px;
+    }
+
+    .dialog-kennel-add {
+      width: 80vw;
+    }
+
+    .single-gallery-image {
+      background-size: contain !important;
+      height: 120px;
+    }
+
+    .rasp {
+      display: none;
+    }
+  }
+
+  @media (max-width: 992px) {
+    .item {
+      height: 300px;
+    }
+
+    .el-image {
+      height: 100vh;
+    }
+
+    .dialog-kennel-add {
+      width: 90vw;
+      margin-top: 0 !important;
+    }
+
+    .el-dialog {
+      width: 100vw;
+      //height: 100%;
+    }
+
+    .single-gallery-image {
+      background-size: contain !important;
+      height: 80px;
+    }
+
+    .rasp {
+      display: none;
+    }
+
+  }
+  @media (min-width: 300px) {
+    .dialog-add {
+      margin-top: 0 !important;
+      //width: 40vw;
+    }
+  }
 }

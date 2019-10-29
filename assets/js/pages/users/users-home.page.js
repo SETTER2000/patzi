@@ -14,9 +14,19 @@ parasails.registerPage('users-home', {
     value: '',
     value1: '',
     value2: '',
+    files: [],
     value3: '',
     plain: false,
+    dialog: {},
+    limit: 50,
+    groups:[],
+    dialogImageUrl: '',
+    dialogVisible: false,
+    buttonUpdate: false,
+    centerDialogAdded: false,
     value5: [],
+    sizeLess: 5, // MB
+    fileList: [],
     count: 5,
     query: 5,
     search: '',
@@ -47,12 +57,14 @@ parasails.registerPage('users-home', {
       desc: ''
     },
     formLabelWidth: '120px',
-    loading: false,
+    loadingSearch: false,
+    loading:{},
     options: [],
     counts: 0,
     fits: 'cover',
+    formErrors: {},
     objOne: '',
-    dialogFormVisible:false,
+    dialogFormVisible: false,
     dialogTableVisible: false,
     centerDialogVisible: false,
     centerDialogVisibleConfirm: false,
@@ -63,22 +75,50 @@ parasails.registerPage('users-home', {
           picker.$emit('pick', new Date());
         }
       },
-      {
-        text: 'Yesterday',
-        onClick(picker) {
-          const date = new Date();
-          date.setTime(date.getTime() - 3600 * 1000 * 24);
-          picker.$emit('pick', date);
-        }
-      },
-      {
-        text: 'A week ago',
-        onClick(picker) {
-          const date = new Date();
-          date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-          picker.$emit('pick', date);
-        }
-      }]
+        {
+          text: 'Yesterday',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() - 3600 * 1000 * 24);
+            picker.$emit('pick', date);
+          }
+        },
+        {
+          text: 'A week ago',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', date);
+          }
+        }]
+    },
+    ruleForm: {
+      fullName: '',
+     emailStatus:'unconfirmed'
+    },
+    rules: {
+      kennel: [
+        {required: true, message: 'Please select kennel name', trigger: 'change'}
+      ],
+      label: [
+        {required: true, message: 'Please input dog name', trigger: 'blur'},
+        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
+      ],
+      emailAddress: [
+        {required: true, message: 'Please input dog name', trigger: 'blur'},
+        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
+      ],
+      gender: [
+        {required: true, message: 'Please select a dog gender.', trigger: 'change'}
+      ],
+      // dateBirth: [
+      //   {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
+      // ],
+
+      subtitle: [
+        {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
+        {max: 700, message: 'Length should be 10 to 100', trigger: 'blur'}
+      ]
     },
     tableData: [
       {
@@ -136,6 +176,68 @@ parasails.registerPage('users-home', {
         label: 'Option5'
       }
     ],
+    dic: [
+      ['en', {
+        warnNoKennel: `At the moment there is no nursery in the database.
+         You should create at least one kennel to start with to add a dog.`,
+        warnRemove: 'This will permanently delete the object. Continue?',
+        warning: 'Warning',
+        delCancel: 'Delete canceled',
+        all: 'All',
+        sire: 'Sire',
+        dam: 'Dam',
+        photoEditor: 'Photo editor',
+        cancel: 'Cancel',
+        text400Err: 'Error. Could not create! ',
+        text500Err: 'Server Error! Unable to create. ',
+        text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
+        success: 'Congratulations! Object successfully created. ',
+        successUpdate: 'Object updated successfully.',
+        successDelete: 'Object deleted successfully. ',
+        selectGender: 'Please select a dog gender.',
+        growth: 'How to measure a dog\'s height?',
+        hairless: 'What is a down or naked dog?',
+        infoColor: 'Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of dogs by color, but rather an attempt to provide more information on the appearance of the dog. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding dogs.',
+        whyColor: 'Why determine the color.',
+        priceTitle: 'Selling price.',
+        priceText: 'You can set the price at any time, but until the price is set, the dog will not appear on the sales page. Remember to set the selling currency.',
+        recommendationsSale: 'Recommendations for the sale of dogs. Describe the main advantages and benefits of the dog. This information will be posted on the dog’s card on the sales page.',
+        areYouClose: 'Are you sure you want to close chat?',
+        startOfNegotiations: 'My name is Olga, I am a breeder and owner of the nursery Poale Ell. I see your choice fell on a puppy by name ',
+        startOfNegotiations2: '. Ready to answer your questions.',
+      }],
+      ['ru', {
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
+        warnRemove: 'Это навсегда удалит объект. Продолжить?',
+        photoEditor: 'Редактор фотографий',
+        warning: 'Внимание',
+        delCancel: 'Удаление отменено',
+        all: 'Все',
+        sire: 'Sire',
+        dam: 'Dam',
+        cancel: 'Отменить',
+        text400Err: 'Ошибка. Не смог создать!',
+        text400ErrUpdate: 'Ошибка. Не смог обновить!',
+        text500Err: 'Ошибка сервера! Невозможно создать.',
+        text500ErrUpdate: 'Ошибка сервера! Невозможно обновить.',
+        text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
+        success: 'Поздравляем! Объект успешно создан.',
+        successUpdate: 'Объект успешно обновлён.',
+        successDelete: 'Объект успешно удалён.',
+        selectGender: 'Пожалуйста выберите пол собаки.',
+        growth: 'Как измерить рост собаки?',
+        hairless: 'Что такое пуховая или голая собака?',
+        infoColor: 'Китайская хохлатая может иметь любое сочетание цветов, как предписано в стандарте FCI 288. <br>Данный пункт не относится к классификации собаки по по цветовому признаку, это скорее попытка дать больше информации по внешнему виду собаки. Люди в своей жизни всегда имеют приоритеты, это касается и цвета, предпочтение того или иного цвета часто становится определяющим при покупке или вязки собак.',
+        whyColor: 'Зачем определять цвет.',
+        priceTitle: 'Цена продажи.',
+        priceText: 'Установить цену продажи можно в любое время, но пока не установена цена собака не появится на странице продаж. Не забудьте установить валюту продажи.',
+        recommendationsSale: 'Рекомендации для продажи собаки. Опишите главные достоинства и преимущества собаки. Эта информация будет размещена в карточке собаки на странице продаж.',
+        areYouClose: 'Вы уверены, что хотите закрыть чат?',
+        startOfNegotiations: 'Меня зовут Ольга, я заводчик и владелец питомника Poale Ell. Я вижу ваш выбор пал на щенка по имени ',
+        startOfNegotiations2: 'Готова ответить на Ваши вопросы.',
+      }]
+    ]
   },
 
 
@@ -158,14 +260,27 @@ parasails.registerPage('users-home', {
     io.socket.get(`/sockets/user/list/${this.count}`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
+    // запрос групп имеющихся в системе
+    io.socket.get(`/sockets/groups/group-form`, function gotResponse(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
     io.socket.get('/sockets/user/count-all', function gotResp(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     io.socket.on('list', (data) => {
       this.users = _.get(data, 'users') ? data.users : this.users;
+      console.log(' this.users::: ' ,  this.users);
       // this.count = _.get(data, 'count') ?  data.count : this.count;
     });
-    io.socket.on('count-all', (data) => {this.counts = data;});
+
+    io.socket.on('count-all', (data) => {
+      this.counts = data;
+    });
+
+    io.socket.on('group-form', (data) => {
+      console.log('GFRUPSS::: ',  data);
+      this.groups = data;
+    });
 
   },
 
@@ -182,6 +297,27 @@ parasails.registerPage('users-home', {
 
 
   filters: {
+    getCreate: function (value, l, format) {
+      if (!value) {
+        return '';
+      }
+      moment.locale(l);
+      let formatNew = (!format) ? 'LLL' : format;
+      return (moment(value).format(formatNew)) ? moment(value).format(formatNew) : value;
+      // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+    },
+    abc(value, ruleForm) {
+      if (!value) {
+        return '';
+      }
+      this.ruleForm = ruleForm;
+      const regex = /[ a-z]+/i;
+      let r = regex.exec(value);
+      _.isArray(r) ? this.ruleForm.label = r[0] : '';
+      this.ruleForm.errInputDogName = (!_.isArray(r));
+      r = [];
+      // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+    },
     /*date: function (value) {
       // return value.toLocaleString();
       if (!value) return '';
@@ -207,6 +343,12 @@ parasails.registerPage('users-home', {
 
 
   computed: {
+    i19p: {
+      get: function () {
+        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+        return new Map(this.dic).get(this.me.preferredLocale);
+      }
+    },
     getUsers: {
       get: function () {
         if (_.isArray(this.users)) {
@@ -268,19 +410,21 @@ parasails.registerPage('users-home', {
         // this.count = _.get(data, 'count') ?  data.count : this.count;
       });
       // Кол-во всего пользователей в системе
-      await  io.socket.on('count-all', (data) => {this.counts = data;});
+      await  io.socket.on('count-all', (data) => {
+        this.counts = data;
+      });
     },
 
     async remoteMethod(query) {
       if (query !== '') {
         this.arrSearch = query;
-        this.loading = true;
+        this.loadingSearch = true;
         console.log('this.arrSearch: ', this.arrSearch);
         await  io.socket.get(`/sockets/user/list/${this.count}/${this.arrSearch}`, function gotResp(body, response) {
           console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
         });
         setTimeout(() => {
-          this.loading = false;
+          this.loadingSearch = false;
           this.options = this.users.filter(item => {
             // console.log(item);
             return item.fullName.toLowerCase().indexOf(query.toLowerCase()) > -1;
@@ -393,10 +537,10 @@ parasails.registerPage('users-home', {
     },
 
 
-    handleEdit(index, row) {
+  /*  handleEdit(index, row) {
       console.log(index, row);
     },
-
+*/
     handleClick() {
       console.log('click');
     },
@@ -447,8 +591,245 @@ parasails.registerPage('users-home', {
     },
     onSubmit() {
       console.log('submit!');
-    }
+    },
 
+
+    clickAddButton() {
+      this.warning = this.i19p.warnNoKennel;
+      this.centerDialogAdded = true;
+      // this.centerDialogVisibleWarnings = true;
+    },
+
+
+    showDialog(string) {
+      this.innerVisible = true;
+      this.dialog = new Map(this.map).get(string);
+      this.dialog.header = this.i19p[string];
+    },
+
+
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+
+
+    beforeUpload(file) {
+      // Проверка размера входящего файла картинки не более (MB)
+
+      const isJPG = file.type === 'image/jpeg';
+      const isLt2M = file.size / 1024 / 1024 < this.sizeLess;
+
+      if (!isJPG) {
+        this.$message.error('Picture must be JPG format!');
+      }
+
+      if (!isLt2M) {
+        this.$message.error(`Picture size can not exceed ${this.sizeLess}MB!`);
+      }
+
+      return isJPG && isLt2M;
+    },
+
+
+    handleSuccess(res, file) {
+      console.log('RWSPONNN::: ', res);
+      // this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
+      _.isArray(this.ruleForm.fileList) ? this.ruleForm.fileList.push(res) :
+        this.ruleForm.fileList = [res];
+    },
+
+
+    // функция перехвата при превышении лимита
+    handleExceed(files, fileList) {
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      ${files.length + fileList.length} ${this.i19p.files}`);
+    },
+
+
+    // Срабатывает перед удалением одного файла
+    handleRemove(file, fileList) {
+      this.fileList = fileList;
+    },
+
+
+    handleAvatarSuccess(res, file) {
+      this.files.push(file.response);
+      this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
+      this.ruleForm.file = file.response;
+    },
+
+    beforeAvatarUpload(file) {
+      const isIMG = (file.type === 'image/jpeg') || (file.type === 'image/png') || (file.type === 'image/svg+xml');
+      const isLt1M = file.size / 1024 / 1024 < 0.25;
+      if (!isIMG) {
+        this.$message.error('Logo picture must be JPG, PNG or SVG format!');
+      }
+      if (!isLt1M) {
+        this.$message.error('Logo picture size can not exceed 250Kb!');
+      }
+      return isIMG && isLt1M;
+    },
+
+    async submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid && !this.buttonUpdate) {
+          this.add();
+        } else if (valid && this.buttonUpdate) {
+          this.update();
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+
+
+    // Create User
+    async add() {
+      this.openFullScreen();
+      console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
+      let data = {
+        fileList: this.ruleForm.fileList,
+        fullName: this.ruleForm.label,
+        dateBirth: JSON.stringify(this.ruleForm.dateBirth),
+        dateDeath: this.ruleForm.dateDeath,
+        gender: this.ruleForm.gender,
+        kennel: this.ruleForm.kennel,
+        nickname: this.ruleForm.nickname,
+        federation: this.ruleForm.federation,
+        weight: this.ruleForm.weight,
+        growth: this.ruleForm.growth,
+        canine: this.ruleForm.canine,
+        bite: this.ruleForm.bite,
+        letter: this.ruleForm.letter,
+        teethCountTop: this.ruleForm.teethCountTop,
+        teethCountBottom: this.ruleForm.teethCountBottom,
+        type: this.ruleForm.type,
+        dam: this.ruleForm.dam,
+        sire: this.ruleForm.sire,
+        emailAddress: this.ruleForm.emailAddress,
+        emailStatus: this.ruleForm.emailStatus,
+        see: this.ruleForm.see,
+        price: +this.ruleForm.price,
+        saleDescription: this.ruleForm.saleDescription,
+        currency: this.ruleForm.currency,
+        groups: this.ruleForm.groups,
+        stamp: this.ruleForm.stamp,
+        registerNumber: this.ruleForm.registerNumber,
+        subtitle: this.ruleForm.subtitle,
+        yourKennel: this.ruleForm.yourKennel,
+      };
+      await io.socket.post('/api/v1/users/create-user', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+        this.centerDialogAdded = false;
+        this.loading.close();
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          // this.ruleForm.file = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+        }
+      });
+    },
+
+    async update() {
+      this.openFullScreen();
+      let data = {
+        id: this.ruleForm.id,
+        fileList: this.ruleForm.fileList,
+        label: this.ruleForm.label,
+        dateBirth: JSON.stringify(this.dateBirthUpdate),
+        dateDeath: JSON.stringify(this.dateDeathUpdate),
+        gender: this.ruleForm.gender,
+        kennel: this.ruleForm.kennel,
+        dam: this.dam,
+        sire: this.sire,
+        nickname: this.ruleForm.nickname,
+        federation: this.ruleForm.federation,
+        weight: this.ruleForm.weight,
+        growth: this.ruleForm.growth,
+        type: this.ruleForm.type,
+        sale: this.ruleForm.sale,
+        see: this.ruleForm.see,
+        price: +this.ruleForm.price,
+        saleDescription: this.ruleForm.saleDescription,
+        currency: this.ruleForm.currency,
+        color: this.ruleForm.color,
+        stamp: this.ruleForm.stamp,
+        canine: this.ruleForm.canine,
+        bite: this.ruleForm.bite,
+        letter: this.ruleForm.letter,
+        dogTests: this.ruleForm.dogTests,
+        teethCountTop: this.ruleForm.teethCountTop,
+        teethCountBottom: this.ruleForm.teethCountBottom,
+        registerNumber: this.ruleForm.registerNumber,
+        subtitle: this.ruleForm.subtitle,
+        yourKennel: this.ruleForm.yourKennel,
+      };
+      // console.log('DATA перед отправкой::: ', data);
+
+      await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        this.loading.close();
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          // this.ruleForm.file = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+        }
+      });
+    },
+
+
+    openFullScreen() {
+      this.loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+      // setTimeout(() => {
+      //   loading.close();
+      // }, 2000);
+    },
+
+
+    handleEdit(index, row) {
+      this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
+      this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
+      this.ruleForm = row;
+      this.dateBirthUpdate = row.dateBirth;
+      this.dateDeathUpdate = row.dateDeath;
+      this.ruleForm.kennel = row.kennel.id;
+      this.dialogEditor = true;
+      this.centerDialogAdded = true;
+      this.buttonUpdate = true;
+    },
+
+    resetForm(formName) {
+      this.$refs.upload ? this.$refs.upload.clearFiles() : '';
+      this.$refs[formName].resetFields();
+      this.ruleForm.fileList = [];
+      this.ruleForm.imageUrl = '';
+      this.ruleForm.price = 0;
+      this.ruleForm.federations = this.resetFederation;
+    },
 
   }
 });

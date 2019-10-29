@@ -12,12 +12,23 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-    // getFullName:{
-    //   type:'ref',
-    // },
-    // getFullName: function () {
-    //   return this.fullName + ' ' + this.emailAddress ;
-    // },
+
+
+    see: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: `Флаг видимости пользователя. Виден или нет. По умолчанию не виден.`
+    },
+
+    fullName: {
+      type: 'string',
+      required: true,
+      description: 'Полное представление имени пользователя.',
+      maxLength: 120,
+      example: 'Mary Sue van der McHenst'
+    },
+
+
     emailAddress: {
       type: 'string',
       required: true,
@@ -32,7 +43,7 @@ module.exports = {
       type: 'string',
       isIn: ['unconfirmed', 'change-requested', 'confirmed'],
       defaultsTo: 'confirmed',
-      description: 'The confirmation status of the user\'s email address.',
+      description: 'Статус подтверждения адреса электронной почты пользователя.',
       extendedDescription:
         `Пользователи могут быть созданы как «неподтвержденные» (например, обычная регистрация) или как «подтвержденные» (например, жестко запрограммированные)
 пользователи админа). Когда функция проверки электронной почты включена, новые пользователи создаются с помощью
@@ -45,27 +56,17 @@ module.exports = {
     emailChangeCandidate: {
       type: 'string',
       isEmail: true,
-      description: 'A still-unconfirmed email address that this user wants to change to (if relevant).'
+      description: 'Неподтвержденный адрес электронной почты, на который этот пользователь хочет изменить (при необходимости).'
     },
 
 
     password: {
       type: 'string',
       // required: true,
-      description: 'Securely hashed representation of the user\'s login password.',
+      description: 'Надежно хешируется представление пароля пользователя для входа.',
       protect: true,
       example: '2$28a8eabna301089103-13948134nad'
     },
-
-
-    fullName: {
-      type: 'string',
-      required: true,
-      description: 'Full representation of the user\'s name.',
-      maxLength: 120,
-      example: 'Mary Sue van der McHenst'
-    },
-
 
     isAdmin: {
       type: 'boolean',
@@ -124,13 +125,16 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
 
     emailProofToken: {
       type: 'string',
-      description: 'A pseudorandom, probabilistically-unique token for use in our account verification emails.'
+      description: `Псевдослучайный, вероятностно-уникальный токен для использования в
+       электронных письмах с подтверждением аккаунта.`
     },
 
 
     emailProofTokenExpiresAt: {
       type: 'number',
-      description: 'A JS timestamp (epoch ms) representing the moment when this user\'s `emailProofToken` will expire (or 0 if the user currently has no such token).',
+      description: `Метка времени JS (эпоха мс), представляющая момент истечения срока действия 
+      \`emailProofToken\` этого пользователя (или 0, если у пользователя в настоящее время нет
+      такого токена).`,
       example: 1502844074211
     },
 
@@ -138,10 +142,10 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
     stripeCustomerId: {
       type: 'string',
       protect: true,
-      description: 'The id of the customer entry in Stripe associated with this user (or empty string if this user is not linked to a Stripe customer -- e.g. if billing features are not enabled).',
+      description: 'Идентификатор записи клиента в Stripe, связанной с этим пользователем (или пустая строка, если этот пользователь не связан с клиентом Stripe - например, если функции биллинга не включены).',
       extendedDescription:
-        `Just because this value is set doesn't necessarily mean that this user has a billing card.
-It just means they have a customer entry in Stripe, which might or might not have a billing card.`
+        `То, что это значение установлено, не обязательно означает, что у этого пользователя есть платежная карта.
+Это просто означает, что у них есть запись клиента в Stripe, которая может иметь или не иметь платежную карту.`
     },
 
 
@@ -209,6 +213,12 @@ It just means they have a customer entry in Stripe, which might or might not hav
     },
 
 
+
+    dateBirth: {
+      type: 'string',
+      description: 'Дата рождения.'
+    },
+
     gravatar: {
       type: 'string',
       description: 'Email адрес зарегистрированый в граватар сервисе',
@@ -225,6 +235,12 @@ It just means they have a customer entry in Stripe, which might or might not hav
 
     },
 
+    images: {
+      type: 'ref',
+      defaultsTo: [],
+      example: [{},{}],
+      description: `Коллекция объектов загруженных фотографий с FD `
+    },
 
     avatarFD: {
       type: 'string',

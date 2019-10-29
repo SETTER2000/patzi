@@ -155,12 +155,12 @@ module.exports = {
 
 
     info = await sails.upload(inputs.file);
-    console.log('INFO UPLOAD::: ', info);
+    // console.log('INFO UPLOAD::: ', info);
 
 
     let fd = _.pluck(info, 'fd')[0];
     // fd = (sails.config.environment === 'production') ? `${sails.config.custom.pathPhotoS3}/${fd}` : fd;
-    console.log('FD:', fd);
+    // console.log('FD:', fd);
   /*  Jimp.read(fd)
       .then(resizePhoto => {
         return resizePhoto

@@ -149,7 +149,9 @@ module.exports.routes = {
   'GET    /api/v1/groups/:id': {action: 'groups/download-group'},
   'DELETE /api/v1/groups/destroy-one-group': {action: 'groups/destroy-one-group'},
   'PUT    /api/v1/groups/update-group': {action: 'groups/update-group'},
+  'GET    /sockets/groups/group-form': {action: 'groups/group-form'},
 
+  'POST   /api/v1/users/create-user': {action: 'users/create-user', csrf: false},
   'PUT    /sockets/user/update-user-group': {action: 'users/update-user-group', csrf: false},
   'GET    /sockets/user/list/:count?/:query?': {action: 'users/list'},
   'GET    /sockets/users/list-form/:count?/:query?': {action: 'users/list-form'},
@@ -185,7 +187,7 @@ module.exports.routes = {
   'DELETE /api/v1/dogs/destroy-many-img': {action: 'dogs/destroy-many-img', csrf: false},
 
   'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},
-  'PUT    /api/v1/files/update-cover-album': { action: 'files/update-cover-album', csrf: false },
+  'PUT    /api/v1/files/update-cover-album': {action: 'files/update-cover-album', csrf: false},
 
   'GET    /api/v1/city/list/:regionId?': {action: 'city/list'},
 

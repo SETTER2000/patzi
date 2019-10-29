@@ -38,7 +38,7 @@ module.exports = {
       throw 'badRequest';
     }
 
-    // Добавить пользователя inputs.userId в группу inputs.groupId.
+    // Добавить пользователя inputs.id в группу inputs.groupId.
     await User.replaceCollection(inputs.id, 'groups', inputs.groupId);
 
 
