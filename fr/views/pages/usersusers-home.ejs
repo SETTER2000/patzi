@@ -100,8 +100,6 @@
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
                  class="demo-ruleForm">
 
-
-
           <% /* ПИТОМНИК */ %>
           <!--  <el-form-item v-if="!buttonUpdate" label="<%= __('Kennel') %>" prop="kennel">
             <el-select v-model="ruleForm.kennel" placeholder="<%= __('Choose your cattery') %>"
@@ -140,6 +138,27 @@
             </el-form-item>
           </template>
 
+          <% /* ПАРОЛЬ */ %>
+          <template v-if="!buttonUpdate">
+
+            <el-form-item label="<%= __('Password') %>" prop="checkPass">
+              <el-col :span="8">
+              <el-input type="password" size="small"  v-model="ruleForm.password" autocomplete="off"></el-input>
+              </el-col>
+              <el-col class="menu-center" :span="1">-</el-col>
+              <el-col :span="8">
+                <el-input type="password" size="small"  v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+              </el-col>
+            </el-form-item>
+           <!-- <el-form-item label="Confirm"  size="small" prop="checkPass">
+
+           &lt;!&ndash;   <el-input minlength="3" maxlength="120" show-word-limit
+                        style="width:80%;"
+                        size="small"
+                        placeholder="<%= __('Full name user') %>"
+                        v-model=""></el-input>&ndash;&gt;
+            </el-form-item>-->
+          </template>
 
           <% /* EMAIL адрес */ %>
           <template>
@@ -159,12 +178,23 @@
           </template>
 
           <% /* ПОДТВЕРЖДЁН EMAIL | НЕ ПОДТВЕРЖДЁН EMAIL  */ %>
-          <template >
+          <template>
             <el-form-item prop="emailStatus" class="menu-center">
-              <el-radio-group  v-model="ruleForm.emailStatus" size="small">
+              <el-radio-group v-model="ruleForm.emailStatus" size="small">
+                <el-radio-button label="confirmed">Подтверждён</el-radio-button>
                 <el-radio-button label="unconfirmed">Не подтверждён</el-radio-button>
                 <!--<el-radio-button label="change-requested">Запрос на изменение</el-radio-button>-->
-                <el-radio-button label="confirmed">Подтверждён</el-radio-button>
+
+              </el-radio-group>
+            </el-form-item>
+          </template>
+
+          <% /* ОТПРАВИТЬ КОД С ПОДТВЕРЖДЕНИЕ НА EMAIL? */ %>
+          <template>
+            <el-form-item prop="sendCodEmail" class="menu-center">
+              <el-radio-group v-model="ruleForm.sendCodEmail" size="small">
+                <el-radio-button label="confirmed">Отправить код подтверждения</el-radio-button>
+                <el-radio-button label="unconfirmed">Не отправлять</el-radio-button>
               </el-radio-group>
             </el-form-item>
           </template>
@@ -173,7 +203,6 @@
           <div class="my-sm-5">
             <el-divider content-position="left"><%= __('Properties') %></el-divider>
           </div>
-
 
           <% /* ВИДЕН ПОЛЬЗОВАТЕЛЬ ИЛИ НЕТ */ %>
           <template>
@@ -188,9 +217,6 @@
               </el-switch>
             </el-form-item>
           </template>
-
-
-
 
           <% /* ГРУППА ПОЛЬЗОВАТЕЛЯ  */ %>
           <template>
@@ -584,8 +610,6 @@
             </el-row>
 
           </template>-->
-
-
 
           <% /* ОТЕЦ */ %>
           <!-- <template v-if="sires">
