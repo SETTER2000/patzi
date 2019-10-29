@@ -63,8 +63,8 @@
       append-to-body>
       <div class="justify-content-center">
         <%= __('You can add a co-owner of the nursery, if one exists.') %>
-       <br> <%= __('Co-owner may be registered user with a valid email. Start typing your username and select the person you want from the list provided.') %>
-       <br> <%= __('The case of letters does not matter.') %>
+        <br> <%= __('Co-owner may be registered user with a valid email. Start typing your username and select the person you want from the list provided.') %>
+        <br> <%= __('The case of letters does not matter.') %>
       </div>
     </el-dialog>
 
@@ -269,12 +269,11 @@
               <el-input placeholder="<%= __('Full Name') %>" v-model="phone.fullName"></el-input>
             </el-col>
             <el-col :span="6">
-
               <el-button-group>
-                <el-tooltip effect="dark" content="<%= __('Add phone') %>" placement="top-end">
-                  <el-button @click="addDomain" size="mini" round icon="el-icon-share"></el-button>
-                </el-tooltip>
-                <el-tooltip effect="dark" content="<%= __('Remove phone') %>" placement="top-start">
+                    <el-tooltip  effect="dark" content="<%= __('Add phone') %>" placement="top-end">
+                      <el-button @click="addDomain" size="mini" round icon="el-icon-circle-plus-outline"></el-button>
+                    </el-tooltip>
+                <el-tooltip effect="dark" v-if="index > 0" content="<%= __('Remove phone') %>" placement="top-start">
                   <el-button @click.prevent="removeDomain(phone)" size="mini" round icon="el-icon-delete"></el-button>
                 </el-tooltip>
               </el-button-group>
@@ -313,7 +312,7 @@
             </el-input>
           </el-form-item>
 
-          <%/* OWNER */%>
+          <% /* OWNER */ %>
           <el-form-item label="<%= __('Your kennel?') %>" prop="yourKennel">
             <el-switch
               v-model="ruleForm.yourKennel"
@@ -329,14 +328,14 @@
             </el-tooltip>
           </el-form-item>
 
-          <%/* CO-OWNER */%>
+          <% /* CO-OWNER */ %>
           <template v-if="ruleForm.yourKennel">
             <!--<template >-->
             <el-form-item label="<%= __('Co-owner') %>" prop="coOwner">
               <el-autocomplete
-                popper-class="my-autocomplete"
+                class="inline-input"
                 v-model="ruleForm.coOwner"
-                :fetch-suggestions="querySearchAsync"
+                :fetch-suggestions="querySearchFoo"
                 placeholder="<%= __('Please Input co-owner') %>"
                 :trigger-on-focus="false"
                 @select="handleSelected"
@@ -355,14 +354,14 @@
             </el-form-item>
 
 
-       <!--     <el-popover
-              placement="bottom"
-              title="Title"
-              width="200"
-              trigger="click"
-              content="this is content, this is content, this is content">
-              <el-button slot="reference">Click to activate</el-button>
-            </el-popover>-->
+            <!--     <el-popover
+                   placement="bottom"
+                   title="Title"
+                   width="200"
+                   trigger="click"
+                   content="this is content, this is content, this is content">
+                   <el-button slot="reference">Click to activate</el-button>
+                 </el-popover>-->
           </template>
 
           <el-form-item v-if="ruleForm.yourKennel" label="<%= __('About Us') %>" prop="subtitle">
@@ -415,10 +414,10 @@
       </p>
       <div v-if="me.hasBillingCard || me.isSuperAdmin" class="mt-5 section-title text-center">
         <!--<button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add kennel') %></button>-->
-        <button @click="centerDialogAdded=true" class="btn btn-outline-info"><%= __('Add kennel') %></button>
+        <el-button   @click="centerDialogAdded=true" icon="el-icon-circle-plus-outline" class="btn btn-outline-info"><%= __('Add kennel') %></el-button>
       </div>
       <div class="mt-5 section-title text-center" v-else>
-        <button @click="centerDialogVisible = true" class="btn btn-outline-info"><%= __('Add kennel') %></button>
+        <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline" class="btn btn-outline-info"><%= __('Add kennel') %></el-button>
       </div>
     </div>
   </section>
@@ -470,10 +469,10 @@
               <div class="flx">
                 <% /* КНОПКА Редактирования питомника */ %>
                 <!--<div class="fixButton">-->
-                  <!--<a class="p-button" href="#"-->
-                     <!--@click="clickEditKennel(item.id)">-->
-                    <!--<i class="el-icon-edit"></i>-->
-                  <!--</a>-->
+                <!--<a class="p-button" href="#"-->
+                <!--@click="clickEditKennel(item.id)">-->
+                <!--<i class="el-icon-edit"></i>-->
+                <!--</a>-->
                 <!--</div>-->
                 <% /* КНОПКА Удаления питомника */ %>
                 <div class="fixButton">
