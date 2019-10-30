@@ -304,19 +304,24 @@
   }
 
   .bg {
+    background: linear-gradient(95deg,#dcdcdc,#859398);
+    background-size: 200% 200%;
+    text-align: center;
+    animation: gradientAnimation 10s ease infinite;
+    color: @color-text;
     //height: 100vh;
     //min-height: 100vh;
     //background: url('/images/rq.jpg') no-repeat #66e8ed;
-    background: linear-gradient(45deg, #283048, #859398);
-    background-size: 200% 200%;
-    text-align: center;
+    //background: linear-gradient(45deg, #283048, #859398);
+    //background-size: 200% 200%;
+    //text-align: center;
     //padding-left: 10%;
     //padding-right: 10%;
-    color: @color-text;
+
     h1, h2, h3, h4 {
       color: @color-text;
     }
-    animation: gradientAnimation 10s ease infinite;
+
   }
   @keyframes gradientAnimation {
     0% {

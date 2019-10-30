@@ -39,6 +39,15 @@ module.exports = {
     },
 
 
+    description: {
+      type: 'string',
+      maxLength: 1700,
+      description: 'Описание пользователя',
+      example: 'Отличный заводчик и владелец.',
+      // moreInfoUrl: 'https://ru.gravatar.com/'
+    },
+
+
     emailStatus: {
       type: 'string',
       isIn: ['unconfirmed', 'change-requested', 'confirmed'],
@@ -219,12 +228,20 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       description: 'Дата рождения.'
     },
 
+
+    dateDeath: {
+      type: 'string',
+      description: 'Дата смерти.'
+    },
+
     gravatar: {
       type: 'string',
       description: 'Email адрес зарегистрированый в граватар сервисе',
       example: 'my-email@gmail.com',
       moreInfoUrl: 'https://ru.gravatar.com/'
     },
+
+
 
 
     avatar: {

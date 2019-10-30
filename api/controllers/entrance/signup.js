@@ -62,7 +62,7 @@ the account verification message.)
 
     invalid: {
       responseType: 'badRequest',
-      description: 'The provided fullName, password and/or email address are invalid.',
+      description: 'Предоставленные полное имя, пароль и / или адрес электронной почты являются недействительными.',
       extendedDescription: 'If this request was sent from a graphical user interface, the request ' +
       'parameters should have been validated/coerced _before_ they were sent.'
     },
@@ -110,7 +110,7 @@ the account verification message.)
         });
     }
 
-    // Store the user's new id in their session.
+    //Сохраните новый идентификатор пользователя в его сеансе.
     this.req.session.userId = newUserRecord.id;
 
 

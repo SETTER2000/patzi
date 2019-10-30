@@ -108,23 +108,24 @@ parasails.registerPage('users-home', {
       emailAddress: [
         {required: true, message: 'Please input email', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
+        // { isEmail: true, message: 'Не верный формат Email', trigger: 'blur'},
       ],
       gender: [
         {required: true, message: 'Please select a dog gender.', trigger: 'change'}
       ],
-      password: [
-        {required: true, message: 'Please input password.', trigger: 'change'}
-      ],
-      checkPass: [
-        {required: true, message: 'Please input checkPass.', trigger: 'change'}
-      ],
+      // password: [
+      //   {required: true, message: 'Please input password.', trigger: 'change'}
+      // ],
+      // checkPass: [
+      //   {required: true, message: 'Please input checkPass.', trigger: 'change'}
+      // ],
       // dateBirth: [
       //   {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
       // ],
 
-      subtitle: [
+    description: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
-        {max: 700, message: 'Length should be 10 to 100', trigger: 'blur'}
+        {max: 1700, message: 'Length should be 10 to 1700', trigger: 'blur'}
       ]
     },
     tableData: [
@@ -190,6 +191,7 @@ parasails.registerPage('users-home', {
         warnRemove: 'This will permanently delete the object. Continue?',
         warning: 'Warning',
         delCancel: 'Delete canceled',
+        errorPasswordConfirm: 'Passwords do not match.',
         all: 'All',
         sire: 'Sire',
         dam: 'Dam',
@@ -220,6 +222,7 @@ parasails.registerPage('users-home', {
         photoEditor: 'Редактор фотографий',
         warning: 'Внимание',
         delCancel: 'Удаление отменено',
+        errorPasswordConfirm: 'Пароли не совпадают.',
         all: 'Все',
         sire: 'Sire',
         dam: 'Dam',
@@ -378,7 +381,7 @@ parasails.registerPage('users-home', {
     tableDateFilter: {
       cache: false,
       get: function () {
-        console.log('dateFilter: ', this.dateFilter);
+        // console.log('dateFilter: ', this.dateFilter);
         return this.dateFilter;
       }
     }
@@ -620,9 +623,7 @@ parasails.registerPage('users-home', {
       this.dialogVisible = true;
     },
 
-    checkPasword() {
-      return this.ruleForm.password === this.ruleForm.checkPass;
-    },
+
     beforeUpload(file) {
       // Проверка размера входящего файла картинки не более (MB)
 
@@ -698,41 +699,51 @@ parasails.registerPage('users-home', {
     // Create User
     async add() {
       this.openFullScreen();
-      !this.checkPasword() ? this.mesError(text = '') : '' ;
+
+        // this.mesError(this.i19p.errorPasswordConfirm);
+
+
       console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
       let data = {
         fileList: this.ruleForm.fileList,
         fullName: this.ruleForm.label,
         dateBirth: JSON.stringify(this.ruleForm.dateBirth),
-        dateDeath: this.ruleForm.dateDeath,
-        gender: this.ruleForm.gender,
-        kennel: this.ruleForm.kennel,
-        sendCodEmail: this.sendCodEmail,
-        password: this.ruleForm.password,
-        nickname: this.ruleForm.nickname,
-        federation: this.ruleForm.federation,
-        weight: this.ruleForm.weight,
-        growth: this.ruleForm.growth,
-        canine: this.ruleForm.canine,
-        bite: this.ruleForm.bite,
-        letter: this.ruleForm.letter,
-        teethCountTop: this.ruleForm.teethCountTop,
-        teethCountBottom: this.ruleForm.teethCountBottom,
-        type: this.ruleForm.type,
-        dam: this.ruleForm.dam,
-        sire: this.ruleForm.sire,
+        dateDeath:JSON.stringify( this.ruleForm.dateDeath),
         emailAddress: this.ruleForm.emailAddress,
         emailStatus: this.ruleForm.emailStatus,
         see: this.ruleForm.see,
-        price: +this.ruleForm.price,
-        saleDescription: this.ruleForm.saleDescription,
-        currency: this.ruleForm.currency,
+        sendCodEmail: this.ruleForm.sendCodEmail,
+        password: this.ruleForm.password,
+        checkPass: this.ruleForm.checkPass,
         groups: this.ruleForm.groups,
-        stamp: this.ruleForm.stamp,
-        registerNumber: this.ruleForm.registerNumber,
-        subtitle: this.ruleForm.subtitle,
-        yourKennel: this.ruleForm.yourKennel,
+        description: this.ruleForm.description,
+        // gender: this.ruleForm.gender,
+        // kennel: this.ruleForm.kennel,
+
+        // nickname: this.ruleForm.nickname,
+        // federation: this.ruleForm.federation,
+        // weight: this.ruleForm.weight,
+        // growth: this.ruleForm.growth,
+        // canine: this.ruleForm.canine,
+        // bite: this.ruleForm.bite,
+        // letter: this.ruleForm.letter,
+        // teethCountTop: this.ruleForm.teethCountTop,
+        // teethCountBottom: this.ruleForm.teethCountBottom,
+        // type: this.ruleForm.type,
+        // dam: this.ruleForm.dam,
+        // sire: this.ruleForm.sire,
+
+        // price: +this.ruleForm.price,
+        // saleDescription: this.ruleForm.saleDescription,
+        // currency: this.ruleForm.currency,
+
+        // stamp: this.ruleForm.stamp,
+        // registerNumber: this.ruleForm.registerNumber,
+
+        // yourKennel: this.ruleForm.yourKennel,
       };
+
+      console.log('DATA перед отправкой::: ' ,  data);
       await io.socket.post('/api/v1/users/create-user', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -764,27 +775,27 @@ parasails.registerPage('users-home', {
         kennel: this.ruleForm.kennel,
         dam: this.dam,
         sire: this.sire,
-        nickname: this.ruleForm.nickname,
-        federation: this.ruleForm.federation,
-        weight: this.ruleForm.weight,
-        growth: this.ruleForm.growth,
-        type: this.ruleForm.type,
-        sale: this.ruleForm.sale,
+        // nickname: this.ruleForm.nickname,
+        // federation: this.ruleForm.federation,
+        // weight: this.ruleForm.weight,
+        // growth: this.ruleForm.growth,
+        // type: this.ruleForm.type,
+        // sale: this.ruleForm.sale,
         see: this.ruleForm.see,
-        price: +this.ruleForm.price,
-        saleDescription: this.ruleForm.saleDescription,
-        currency: this.ruleForm.currency,
-        color: this.ruleForm.color,
-        stamp: this.ruleForm.stamp,
-        canine: this.ruleForm.canine,
-        bite: this.ruleForm.bite,
-        letter: this.ruleForm.letter,
-        dogTests: this.ruleForm.dogTests,
-        teethCountTop: this.ruleForm.teethCountTop,
-        teethCountBottom: this.ruleForm.teethCountBottom,
-        registerNumber: this.ruleForm.registerNumber,
-        subtitle: this.ruleForm.subtitle,
-        yourKennel: this.ruleForm.yourKennel,
+        // price: +this.ruleForm.price,
+        // saleDescription: this.ruleForm.saleDescription,
+        // currency: this.ruleForm.currency,
+        // color: this.ruleForm.color,
+        // stamp: this.ruleForm.stamp,
+        // canine: this.ruleForm.canine,
+        // bite: this.ruleForm.bite,
+        // letter: this.ruleForm.letter,
+        // dogTests: this.ruleForm.dogTests,
+        // teethCountTop: this.ruleForm.teethCountTop,
+        // teethCountBottom: this.ruleForm.teethCountBottom,
+        // registerNumber: this.ruleForm.registerNumber,
+        description: this.ruleForm.description,
+        // yourKennel: this.ruleForm.yourKennel,
       };
       // console.log('DATA перед отправкой::: ', data);
 

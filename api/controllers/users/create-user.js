@@ -32,6 +32,8 @@ module.exports = {
       type: 'ref',
       description: 'Массив ID групп в которую входит пользователь.'
     },
+
+
     fileList: {
       type: 'ref',
       description: 'Массив с файлами данных о загруженных файлах.'
@@ -41,13 +43,7 @@ module.exports = {
       type: 'string',
       isIn: ['unconfirmed', 'confirmed'],
       defaultsTo: 'confirmed',
-      description: 'Отправить код подтверждения email?.',
-      extendedDescription:
-        `Пользователи могут быть созданы как «неподтвержденные» (например, обычная регистрация) или как «подтвержденные» (например, жестко запрограммированные)
-пользователи админа). Когда функция проверки электронной почты включена, новые пользователи создаются с помощью
-в форме регистрации есть \`emailStatus: 'unsfirmed'\`, пока они не нажмут на ссылку в электронном подтверждении.
-Точно так же, когда существующий пользователь меняет свой адрес электронной почты, он переключается на «запрос на изменение»
-статус электронной почты, пока они не нажмут на ссылку в электронном письме с подтверждением.`
+      description: 'Отправить письмо с данными авторизации на email.',
     },
 
     emailStatus: {
@@ -74,7 +70,15 @@ module.exports = {
       type: 'string',
       // required: true,
       description: 'Надежно хешируется представление пароля пользователя для входа.',
-      protect: true,
+      // protect: true,
+      example: '2$28a8eabna301089103-13948134nad'
+    },
+
+    checkPass: {
+      type: 'string',
+      // required: true,
+      description: 'Повторный пароль.',
+      // protect: true,
       example: '2$28a8eabna301089103-13948134nad'
     },
 
@@ -90,199 +94,17 @@ module.exports = {
       description: 'Дата рождения.'
     },
 
-    /*  fullName: {
-        type: 'string',
-        required: true,
-        description: `Официальное имя собаки. Поле обязательно для заполнения.
-        В рамках всей коллекции это поле не может быть сделано уникальным, только проверка имени вместе
-        с названием питомника может однозначно установить уникальность собаки в базе.`
-      },
 
+    dateDeath: {
+      type: 'string',
+      description: 'Дата смерти.'
+    },
 
-      letter: {
-        type: 'string',
-        description: `Буква помёта к которому пренадлежит собака.
-        Информация нужна для фиксации кнопки о продаже на странице помёта.
-        В случаи когда дата рождения щенков одного помёта разная.
-        (например в 23:00 первый родился и через 2 часа второй. Помёт один, а дата рождения разная.).
-        Если буква не указана, то автоматически берётся первая буква имени собаки.`,
-        //required: true,
-      },
-
-
-      fileList: {
-        type: 'ref',
-        description: 'Массив с файлами данных о загруженных файлах.'
-      },
-
-
-      subtitle: {
-        type: 'string',
-        description: 'Дополнительная информация. Описание питомника.',
-        maxLength: 700
-      },
-
-
-      see: {
-        type: 'boolean',
-        defaultsTo: true,
-        description: `Флаг видимости собаки. Видна или нет. По умолчанию не видна.`
-      },
-
-
-      sire: {
-        type: 'string',
-        description: 'Отец.',
-        maxLength: 80
-      },
-
-
-      dam: {
-        type: 'string',
-        description: 'Мать.',
-        maxLength: 80
-      },
-
-      // winner: {
-      //   type: 'boolean',
-      //   defaultsTo: false,
-      //   description: `Флаг устанавливается, если собака стала Чемпионом Мира.`
-      // },
-
-      saleDescription: {
-        type: 'string',
-        description: `Рекомендации к продаже. Сопроводительный текст, который будет виден на странице
-         продаж для данной собаки.`,
-        maxLength: 700
-      },
-
-
-      dateBirth: {
-        type: 'string',
-        required: true,
-        description: 'Дата рождения.'
-      },
-
-      dateDeath: {
-        type: 'string',
-        description: 'Дата смерти.'
-      },
-
-      sale: {
-        type: 'boolean',
-        defaultsTo: false,
-        description: `Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
-      },
-
-
-      currency: {
-        type: 'string',
-        description: `Валюта продажи. Валюта за катоую можно купить собаку.`,
-        example: 'dollar, рубль, euro',
-        isIn: ['dollar', 'рубль', 'euro'],
-        // required: true,
-        minLength: 4,
-        maxLength: 6
-      },
-
-
-      price: {
-        type: 'number',
-        // required: true,
-        description: 'Цена продажи собаки.'
-      },
-
-
-      kennel: {
-        type: 'string',
-        description: 'Идентификатор питомника'
-      },
-
-
-      gender: {
-        type: 'string',
-        required: true,
-        example: 'sire, dam',
-        description: 'Пол собак. В смысле не пол собаки, а конец есть или нет.'
-      },
-
-
-      nickname: {
-        type: 'string',
-        description: 'Кличка, ласковое имя.'
-      },
-
-
-      weight: {
-        type: 'number',
-        description: 'Вес. В граммах.',
-        example: 4500
-      },
-
-
-      growth: {
-        type: 'number',
-        description: 'Рост. В сантиметрах.',
-        example: 30
-      },
-
-
-      type: {
-        type: 'string',
-        description: 'Тип. Возможны два варианта.',
-        example: 'hairless, powderpuff',
-      },
-
-      color: {
-        type: 'string',
-        description: 'Цвет.',
-        // example:'hairless, powderpuff',
-      },
-
-      stamp: {
-        type: 'string',
-        description: 'Клеймо. Номер собаки в реестре.',
-        // example:'hairless, powderpuff',
-      },
-
-
-      canine: {
-        type: 'string',
-        description: 'Клыки. Количество клыков.',
-        example: '4',
-        defaultsTo:'4'
-      },
-
-      teethCountTop: {
-        type: 'string',
-        description: 'Количество зубов вверху.',
-        example: '6',
-        defaultsTo:'6'
-      },
-
-
-      teethCountBottom: {
-        type: 'string',
-        description: 'Количество зубов внизу.',
-        example: '6',
-        defaultsTo:'6'
-      },
-
-
-      bite: {
-        type: 'string',
-        description: 'Прикус.',
-        example: 'ножнецеобразный',
-        isIn: ['перекус', 'недокус', 'ножнецеобразный'],
-        defaultsTo: 'ножнецеобразный'
-      },
-
-
-      userTests: {
-        type: 'string',
-        description: 'Тесты собаки.'
-      },
-  */
+    description: {
+      type: 'string',
+      maxLength: 200,
+      description: `Описание пользователя.`
+    },
 
   },
 
@@ -300,21 +122,37 @@ module.exports = {
       description: 'No image upload was provided.',
       responseType: 'badRequest'
     },
-
+    invalid: {
+      responseType: 'badRequest',
+      description: 'Предоставленные полное имя, пароль и / или адрес электронной почты являются недействительными.',
+      extendedDescription: 'If this request was sent from a graphical user interface, the request ' +
+      'parameters should have been validated/coerced _before_ they were sent.'
+    },
     userAlreadyInUse: {
       statusCode: 409,
-      description: 'The specified user name is already in use.',
+      description: 'Such Email is already registered. Change email.',
     },
 
     userAlreadyInUseRU: {
       statusCode: 409,
-      description: 'Указанное имя собаки уже используется.',
+      description: 'Такой Email уже зарегистрирован. Измените email.',
+    },
+
+    checkPassEN: {
+      statusCode: 409,
+      description: 'Passwords are not equal.',
+    },
+
+    checkPassRU: {
+      statusCode: 409,
+      description: 'Пароли не совпадают.',
     },
   },
 
 
   fn: async function (inputs, exits) {
     // Бибилиотека Node.js
+    const url = require('url');
     const req = this.req;
     const moment = require('moment');
     const tz = require('moment-timezone');
@@ -323,7 +161,7 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-    let images;
+    let images = [];
 
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
@@ -346,53 +184,75 @@ module.exports = {
         delete img.field;
       });
     }
-    // console.log('inputs.fileList после обработки: ', inputs.fileList);
-
-    // Удаляем название питомника из имени собаки
-    // let kennel = await Kennel.findOne({id: inputs.kennel});
-    // inputs.fullName = inputs.fullName.replace(kennel.fullName, '');
+    let avatarFD = images.length > 0 ? images[0].fd : '';
+    let avatarMime = images.length > 0 ? images[0].type : '';
+    let filenameAvatar = images.length > 0 ? images[0].name : '';
     let emailAddress = inputs.emailAddress.toLowerCase();
-
-    // Проверка существования такой же собаки.
-    let conflictingUser = await User.findOne({
-      emailAddress: emailAddress
-    });
-
-    if (conflictingUser) {
-      throw (req.me.preferredLocale === 'ru') ? 'userAlreadyInUseRU' : 'userAlreadyInUse';
-    }
+    let conflictingEmail = (req.me.preferredLocale === 'ru') ? 'userAlreadyInUseRU' : 'userAlreadyInUse';
+    let confirmedAccount = (req.me.preferredLocale === 'ru') ? 'Подтвердите ваш аккаунт' : 'Please confirm your account';
     let fullName = _.startCase(inputs.fullName.toString().toLowerCase());
-    // let rightFullName = _.startCase(fullName + ' ' + kennel.fullName);
-    // let leftFullName = _.startCase(kennel.fullName + ' ' + fullName);
+    // Проверка парелей на равенство
+    if (inputs.password !== inputs.checkPass && !_.isEmpty(inputs.password)) {
+      throw (req.me.preferredLocale === 'ru') ? 'checkPassRU' : 'checkPassEN';
+    }
+
+    let password = _.isEmpty(inputs.password) ? await sails.helpers.strings.random('alphanumeric', 6) : inputs.password;
+
+
+
     let data = {
       fullName: fullName,
-      emailStatus: inputs.emailStatus,
+      emailStatus: (inputs.sendCodEmail === 'confirmed') ? 'confirmed' : inputs.emailStatus,
+      description: inputs.description,
       see: inputs.see,
-      password: await sails.helpers.passwords.hashPassword(inputs.password),
+      filename: filenameAvatar,
+      avatarFD: avatarFD,
+      avatarMime: avatarMime,
+      password: await sails.helpers.passwords.hashPassword(password),
       images: images,
       dateBirth: inputs.dateBirth ? await sails.helpers.dateFix(inputs.dateBirth) : '',
+      dateDeath: inputs.dateDeath ? await sails.helpers.dateFix(inputs.dateDeath) : '',
       emailAddress: emailAddress,
     };
 
     // Если установлен флаг отправки подтверждения email, то добавляются временные отметки
-    _.extend(data, (inputs.sendCodEmail === 'confirmed') ? {
-      emailProofToken: await sails.helpers.strings.random('url-friendly'),
-      emailProofTokenExpiresAt: Date.now() + sails.config.custom.emailProofTokenTTL,
-      emailStatus: 'unconfirmed'
-    } : {});
+    // _.extend(data, (inputs.sendCodEmail === 'confirmed') ? {
+    //   emailProofToken: await sails.helpers.strings.random('url-friendly'),
+    //   emailProofTokenExpiresAt: Date.now() + sails.config.custom.emailProofTokenTTL,
+    //   emailStatus: 'unconfirmed'
+    // } : {});
 
 
-    console.log('DATA USER::: ' , data);
+
     // Создаём пользователя
-    let newUser = await User.create(data).fetch();
-    // Если не создан возвращаем ошибку.
-    if (!newUser) {
+    let newUser = await User.create(data)
+      .intercept('E_UNIQUE', conflictingEmail)
+      .intercept({name: 'UsageError'}, 'invalid')
+      .fetch();
 
-      throw 'badRequest';
+    // console.log('inputs.sendCodEmail', inputs.sendCodEmail);
+    if (sails.config.custom.verifyEmailAddresses && inputs.sendCodEmail === 'confirmed') {
+      // Send "confirm account" email
+      await sails.helpers.sendTemplateEmail.with({
+        to: emailAddress,
+        subject: confirmedAccount,
+        template: 'email-send-password',
+        templateData: {
+          fullName: inputs.fullName,
+          login:emailAddress,
+          pass:password,
+          // token: newUser.emailProofToken
+        }
+      });
+    } else {
+      sails.log.info('Skipping new account email verification... (since `verifyEmailAddresses` is disabled)');
     }
-
     // Добавить нового пользователя alexFox.id в группу 'admin'
     await User.addToCollection(newUser.id, 'groups', inputs.groups);
+
+
+    // Устанавливаем ссылку на аватар
+    images.length > 0 ?  await User.updateOne(newUser).set({avatar: url.resolve(sails.config.custom.baseUrl, `/api/v1/account/${newUser.id}`)}):'';
 
 
     /**
@@ -404,13 +264,14 @@ module.exports = {
      *
      * Для собаки с updateUser.id меняем родителей в массиве идентификаторы
      */
-    let parents = [];
+ /*   let parents = [];
     inputs.dam ? parents.push(inputs.dam) : '';
     inputs.sire ? parents.push(inputs.sire) : '';
     let parentFind = await User.find({fullName: parents});
     parents = _.pluck(parentFind, 'id');
     parents.length > 0 ? await User.addToCollection(newUser.id, 'parents').members(parents) : '';
-
+*/
+    console.log('DATA USER::: ', data);
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
     await sails.sockets.broadcast('user', 'list-user');

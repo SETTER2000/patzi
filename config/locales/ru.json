@@ -131,6 +131,8 @@
 	"Sign up": "Регистрация",
 	"Visibility": "Видимость",
 	"All": "Все",
+	"Make confirmed email. The user will not be sent a verification letter by mail.": "Сделать подтверждённым email. Пользователю не будет отправлено верификационное письмо на почту.",
+	"At the moment, the user is not active, i.e. it will not be visible in the system. Set the visibility.": "В данный момент пользователь не активен, т.е. он не будет виден в системе. Установите видимость.",
 	"visible": "видна",
 	"Your dog is currently not visible in the catalog. Until you turn on the visibility no one can see it.": "В данный момент ваша собака не видна в каталоге. Пока вы не включите видимость ни кто не сможет её увидеть.",
 	"not visible": "не видна",
@@ -598,6 +600,7 @@
 	"Photo shoot title": "Название фотосессии",
 	"Name photoshoot puppies": "Название фотосессии щенков",
 	"litter": "помёт",
+	"Send authorization data to email the user": "Отправить данные для авторизации на email пользователя.",
 	"Please input dog name": "Пожалуйста, введите имя собаки",
 	"Pedigree": "Родословная",
 	"Confirm": "Подтвердить",
@@ -655,5 +658,7 @@
 	"Co-owner": "Совладелец",
 	"We've encountered an unexpected error": "Мы столкнулись с неожиданной ошибкой",
 	"Please Input co-owner": "Начните вводить имя",
-	"Email": "Email"
+	"IMPORTANT! Be sure to change the password after authorization": "ВАЖНО! Обязательно смените пароль, после авторизации",
+	"Email": "Email",
+	"This is your credentials": "Это ваши данные для авторизации"
 }
