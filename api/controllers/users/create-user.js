@@ -155,7 +155,6 @@ module.exports = {
     const url = require('url');
     const req = this.req;
     const moment = require('moment');
-    const tz = require('moment-timezone');
     moment.locale('en');
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
@@ -166,7 +165,6 @@ module.exports = {
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'user');
-    console.log('inputs.fileList:::: ', inputs.fileList);
     // console.log('inputs.fileList DOG-create: ', inputs.fileList);
     if (inputs.fileList) {
       images = inputs.fileList.filter(o => !_.isNull(o));
@@ -180,13 +178,16 @@ module.exports = {
         delete img.field;
       });
     }
+
     let avatarFD = images.length > 0 ? images[0].fd : '';
     let avatarMime = images.length > 0 ? images[0].type : '';
     let filenameAvatar = images.length > 0 ? images[0].name : '';
     let emailAddress = inputs.emailAddress.toLowerCase();
     let conflictingEmail = (req.me.preferredLocale === 'ru') ? 'userAlreadyInUseRU' : 'userAlreadyInUse';
     let confirmedAccount = (req.me.preferredLocale === 'ru') ? 'Подтвердите ваш аккаунт' : 'Please confirm your account';
-    let fullName = _.startCase(inputs.fullName.toString().toLowerCase());
+    let fullName =  await sails.helpers.startLetter.with({str:inputs.fullName});
+
+
     // Проверка паролей на равенство
     if (inputs.password !== inputs.checkPass && (!_.isEmpty(inputs.password) && !_.isEmpty(inputs.checkPass))) {
       throw (req.me.preferredLocale === 'ru') ? 'checkPassRU' : 'checkPassEN';
@@ -195,7 +196,9 @@ module.exports = {
     // Если пароль не указан генерируем пароль самостоятельно
     let password = _.isEmpty(inputs.password) || _.isEmpty(inputs.checkPass) ? await sails.helpers.strings.random('alphanumeric', 6) : inputs.password;
 
-
+console.log('inputs.emailAddress::: ' , inputs.emailAddress);
+console.log('emailAddress::: ' , emailAddress);
+console.log('fullName::: ' , fullName);
     let data = {
       fullName: fullName,
       emailStatus: (inputs.sendCodEmail === 'confirmed') ? 'confirmed' : inputs.emailStatus,
@@ -268,7 +271,7 @@ module.exports = {
        parents = _.pluck(parentFind, 'id');
        parents.length > 0 ? await User.addToCollection(newUser.id, 'parents').members(parents) : '';
    */
-    console.log('DATA USER::: ', data);
+    // console.log('DATA USER::: ', data);
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
     await sails.sockets.broadcast('user', 'list-user');

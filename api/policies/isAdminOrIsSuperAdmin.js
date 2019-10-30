@@ -8,7 +8,7 @@ module.exports = function isAdminOrIsSuperAdmin(req, res, next) {
         return res.redirect('/');
     }
 
-    User.findOne(req.me).exec(function (err, foundUser) {
+    User.findOne({id:req.me.id}).exec(function (err, foundUser) {
 
         if (err) return res.negotiate(err);
 
