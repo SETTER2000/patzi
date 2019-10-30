@@ -32,11 +32,11 @@
     <template v-if="!ruleForm.see">
       <el-popover
         ref="popover"
-        placement="top-start"
+        placement="top"
         title="<%= __('Visibility') %>"
-        width="270"
+        width="275"
         trigger="hover"
-        content="<%= __('Your dog is currently not visible in the catalog. Until you turn on the visibility no one can see it.') %>">
+        content="<%= __('At the moment, the user is not active, i.e. it will not be visible in the system. Set the visibility.') %>">
       </el-popover>
       <div class="menu-center">
         <h1 v-if="buttonUpdate" class="flex justify-content-center"
@@ -138,67 +138,63 @@
             </el-form-item>
           </template>
 
-          <% /* ПАРОЛЬ */ %>
-          <template v-if="!buttonUpdate">
-
-            <el-form-item label="<%= __('Password') %>" prop="checkPass">
-              <el-col :span="8">
-              <el-input type="password" size="small"  v-model="ruleForm.password" autocomplete="off"></el-input>
-              </el-col>
-              <el-col class="menu-center" :span="1">-</el-col>
-              <el-col :span="8">
-                <el-input type="password" size="small"  v-model="ruleForm.checkPass" autocomplete="off"></el-input>
-              </el-col>
-            </el-form-item>
-           <!-- <el-form-item label="Confirm"  size="small" prop="checkPass">
-
-           &lt;!&ndash;   <el-input minlength="3" maxlength="120" show-word-limit
-                        style="width:80%;"
-                        size="small"
-                        placeholder="<%= __('Full name user') %>"
-                        v-model=""></el-input>&ndash;&gt;
-            </el-form-item>-->
-          </template>
-
           <% /* EMAIL адрес */ %>
           <template>
             <el-form-item label="<%= __('Email') %>" prop="emailAddress">
-              <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+              <el-col :span="11">
                 <el-input
-                  type="textarea"
-                  :rows="3"
                   autosize
+                  size="small"
                   placeholder="Please input"
                   v-model="ruleForm.emailAddress"
-                  maxlength="700"
+                  maxlength="70"
                   show-word-limit>
                 </el-input>
+              </el-col>
+              <el-col class="menu-center" :span="1">-</el-col>
+
+              <% /* ПОДТВЕРЖДЁН EMAIL | НЕ ПОДТВЕРЖДЁН EMAIL  */ %>
+              <el-col :span="8">
+                <template>
+                  <el-tooltip placement="top">
+                    <div slot="content"><%= __('Make confirmed email. The user will not be sent a verification letter by mail.') %></div>
+                    <el-radio-group v-model="ruleForm.emailStatus" size="small">
+                      <el-radio-button label="confirmed">Да</el-radio-button>
+                      <el-radio-button label="unconfirmed">Нет</el-radio-button>
+                    </el-radio-group>
+                  </el-tooltip>
+                </template>
               </el-col>
             </el-form-item>
           </template>
 
-          <% /* ПОДТВЕРЖДЁН EMAIL | НЕ ПОДТВЕРЖДЁН EMAIL  */ %>
-          <template>
-            <el-form-item prop="emailStatus" class="menu-center">
-              <el-radio-group v-model="ruleForm.emailStatus" size="small">
-                <el-radio-button label="confirmed">Подтверждён</el-radio-button>
-                <el-radio-button label="unconfirmed">Не подтверждён</el-radio-button>
-                <!--<el-radio-button label="change-requested">Запрос на изменение</el-radio-button>-->
 
-              </el-radio-group>
+          <% /* ПАРОЛЬ */ %>
+          <template v-if="!buttonUpdate">
+            <el-form-item label="<%= __('Password') %>" prop="checkPass">
+              <el-col :span="8">
+                <el-input type="password" size="small" v-model="ruleForm.password" autocomplete="off"></el-input>
+              </el-col>
+              <el-col class="menu-center" :span="1">-</el-col>
+              <el-col :span="8">
+                <el-input type="password" size="small" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+              </el-col>
             </el-form-item>
           </template>
 
-          <% /* ОТПРАВИТЬ КОД С ПОДТВЕРЖДЕНИЕ НА EMAIL? */ %>
-          <template>
+
+          <% /* ОТПРАВИТЬ пароль НА EMAIL? */ %>
+          <template v-if="ruleForm.emailStatus==='confirmed'">
             <el-form-item prop="sendCodEmail" class="menu-center">
-              <el-radio-group v-model="ruleForm.sendCodEmail" size="small">
-                <el-radio-button label="confirmed">Отправить код подтверждения</el-radio-button>
-                <el-radio-button label="unconfirmed">Не отправлять</el-radio-button>
-              </el-radio-group>
+              <el-tooltip placement="top">
+                <div slot="content"><%= __('Send authorization data to email the user') %>.</div>
+                <el-radio-group v-model="ruleForm.sendCodEmail" size="small">
+                  <el-radio-button label="confirmed">Отправить пароль на email</el-radio-button>
+                  <el-radio-button label="unconfirmed">Не отправлять</el-radio-button>
+                </el-radio-group>
+              </el-tooltip>
             </el-form-item>
           </template>
-
 
           <div class="my-sm-5">
             <el-divider content-position="left"><%= __('Properties') %></el-divider>
@@ -219,7 +215,7 @@
           </template>
 
           <% /* ГРУППА ПОЛЬЗОВАТЕЛЯ  */ %>
-          <template>
+          <template v-if="ruleForm.emailStatus==='confirmed'">
             <el-form-item label="Группы" prop="groups">
               <el-select
                 v-model="ruleForm.groups"
@@ -266,7 +262,7 @@
           </el-form-item>
 
           <% /* ДЕНЬ СМЕРТИ */ %>
-          <!--      <el-form-item v-if="!buttonUpdate" label="<%= __('DoD') %>" prop="dateDeath">
+          <el-form-item v-if="!buttonUpdate" label="<%= __('DoD') %>" prop="dateDeath">
             <el-row :gutter="2">
               <el-col :span="11">
                 <el-date-picker
@@ -290,7 +286,7 @@
               </el-col>
             </el-row>
           </el-form-item>
--->
+
 
           <!--         <el-form-item label="<%= __('Gender') %>" prop="gender">
             <el-col :xs="8" :sm="10" :md="10" :lg="16" :xl="16">
@@ -492,15 +488,15 @@
 
           <% /* ОПИСАНИЕ */ %>
           <template>
-            <el-form-item label="<%= __('Description') %>" prop="subtitle">
+            <el-form-item label="<%= __('Description') %>" prop="description">
               <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
                 <el-input
                   type="textarea"
                   :rows="2"
                   autosize
                   placeholder="Please input"
-                  v-model="ruleForm.subtitle"
-                  maxlength="700"
+                  v-model="ruleForm.description"
+                  maxlength="1700"
                   show-word-limit>
                 </el-input>
               </el-col>
@@ -508,9 +504,9 @@
           </template>
 
 
-          <div class="my-sm-5">
-            <el-divider content-position="left"><%= __('Teeth') %></el-divider>
-          </div>
+          <!--<div class="my-sm-5">-->
+            <!--<el-divider content-position="left"><%= __('Teeth') %></el-divider>-->
+          <!--</div>-->
 
           <% /* ПРИКУС */ %>
           <!--      <template>
@@ -684,9 +680,9 @@
           </template>-->
 
 
-          <div class="my-sm-5">
-            <el-divider content-position="left"><%= __('Sale') %></el-divider>
-          </div>
+          <!--<div class="my-sm-5">-->
+            <!--<el-divider content-position="left"><%= __('Sale') %></el-divider>-->
+          <!--</div>-->
 
           <% /* ПРОДАЁТСЯ */ %>
           <!--       <template>
@@ -887,13 +883,28 @@
   <% /* Диалоговое окно. Показывает фото профиля. */ %>
   <el-dialog :title="objOne.fullName" :visible.sync="dialogTableVisible">
     <div class="demo-image__placeholder">
-      <div class="block">
+      <div class="menu-center">
         <span class="demonstration">{{objOne.kennel}}</span>
-        <el-image :src="objOne.imageSrc">
-          <div slot="placeholder" class="image-slot">
-            Loading<span class="dot">...</span>
-          </div>
-        </el-image>
+        <el-row class="demo-avatar demo-basic">
+          <el-col :span="24">
+            <!--<div class="sub-title">circle</div>-->
+            <div class="demo-basic--circle">
+              <div class="block">
+                <el-image :src="objOne.imageSrc">
+                  <div slot="placeholder" class="image-slot">
+                    Loading<span class="dot">...</span>
+                  </div>
+                </el-image>
+                <!--<el-avatar :size="50" :src="objOne.imageSrc"></el-avatar>-->
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <!--    <el-image :src="objOne.imageSrc">
+            <div slot="placeholder" class="image-slot">
+              Loading<span class="dot">...</span>
+            </div>
+          </el-image>-->
       </div>
     </div>
   </el-dialog>
