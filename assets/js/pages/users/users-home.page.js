@@ -94,7 +94,7 @@ parasails.registerPage('users-home', {
     },
     ruleForm: {
       fullName: '',
-      emailStatus: 'unconfirmed',
+      emailStatus: 'confirmed',
       sendCodEmail: 'unconfirmed'
     },
     rules: {
