@@ -171,11 +171,7 @@ module.exports = {
     if (inputs.fileList) {
       images = inputs.fileList.filter(o => !_.isNull(o));
 
-      console.log('images:::: ', images);
-      console.log('inputs.dateBirth:::: ', inputs.dateBirth);
-
       _.each(images, img => {
-        console.log('FDDDk:::', img);
         img.id = _.first(_.last(img.fd.split('\\')).split('.'));
         img.description = '';
         img.dateTaken = '';
@@ -191,13 +187,13 @@ module.exports = {
     let conflictingEmail = (req.me.preferredLocale === 'ru') ? 'userAlreadyInUseRU' : 'userAlreadyInUse';
     let confirmedAccount = (req.me.preferredLocale === 'ru') ? 'Подтвердите ваш аккаунт' : 'Please confirm your account';
     let fullName = _.startCase(inputs.fullName.toString().toLowerCase());
-    // Проверка парелей на равенство
-    if (inputs.password !== inputs.checkPass && !_.isEmpty(inputs.password)) {
+    // Проверка паролей на равенство
+    if (inputs.password !== inputs.checkPass && (!_.isEmpty(inputs.password) && !_.isEmpty(inputs.checkPass))) {
       throw (req.me.preferredLocale === 'ru') ? 'checkPassRU' : 'checkPassEN';
     }
 
-    let password = _.isEmpty(inputs.password) ? await sails.helpers.strings.random('alphanumeric', 6) : inputs.password;
-
+    // Если пароль не указан генерируем пароль самостоятельно
+    let password = _.isEmpty(inputs.password) || _.isEmpty(inputs.checkPass) ? await sails.helpers.strings.random('alphanumeric', 6) : inputs.password;
 
 
     let data = {
@@ -223,7 +219,6 @@ module.exports = {
     // } : {});
 
 
-
     // Создаём пользователя
     let newUser = await User.create(data)
       .intercept('E_UNIQUE', conflictingEmail)
@@ -239,20 +234,22 @@ module.exports = {
         template: 'email-send-password',
         templateData: {
           fullName: inputs.fullName,
-          login:emailAddress,
-          pass:password,
+          login: emailAddress,
+          pass: password,
           // token: newUser.emailProofToken
         }
       });
     } else {
       sails.log.info('Skipping new account email verification... (since `verifyEmailAddresses` is disabled)');
     }
+
+    console.log('inputs.groups::: ', inputs.groups);
     // Добавить нового пользователя alexFox.id в группу 'admin'
-    await User.addToCollection(newUser.id, 'groups', inputs.groups);
+   !_.isEmpty(inputs.groups) > 0 ? await User.addToCollection(newUser.id, 'groups', inputs.groups) : '';
 
 
     // Устанавливаем ссылку на аватар
-    images.length > 0 ?  await User.updateOne(newUser).set({avatar: url.resolve(sails.config.custom.baseUrl, `/api/v1/account/${newUser.id}`)}):'';
+    images.length > 0 ? await User.updateOne(newUser).set({avatar: url.resolve(sails.config.custom.baseUrl, `/api/v1/account/${newUser.id}`)}) : '';
 
 
     /**
@@ -264,13 +261,13 @@ module.exports = {
      *
      * Для собаки с updateUser.id меняем родителей в массиве идентификаторы
      */
- /*   let parents = [];
-    inputs.dam ? parents.push(inputs.dam) : '';
-    inputs.sire ? parents.push(inputs.sire) : '';
-    let parentFind = await User.find({fullName: parents});
-    parents = _.pluck(parentFind, 'id');
-    parents.length > 0 ? await User.addToCollection(newUser.id, 'parents').members(parents) : '';
-*/
+    /*   let parents = [];
+       inputs.dam ? parents.push(inputs.dam) : '';
+       inputs.sire ? parents.push(inputs.sire) : '';
+       let parentFind = await User.find({fullName: parents});
+       parents = _.pluck(parentFind, 'id');
+       parents.length > 0 ? await User.addToCollection(newUser.id, 'parents').members(parents) : '';
+   */
     console.log('DATA USER::: ', data);
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.

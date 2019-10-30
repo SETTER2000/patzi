@@ -569,5 +569,11 @@
 	"address": "address",
 	"description": "description",
 	"kg": "kg",
-	"cm": "cm"
+	"cm": "cm",
+	"This is your credentials": "This is your credentials",
+	"IMPORTANT! Be sure to": "IMPORTANT! Be sure to",
+	"change the password": "change the password",
+	"after authorization": "after authorization",
+	"Login": "Login",
+	"Log In": "Log In"
 }
