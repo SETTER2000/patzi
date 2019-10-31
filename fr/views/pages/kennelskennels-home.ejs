@@ -574,7 +574,7 @@
                 <!--</a>-->
                 <!--</div>-->
                 <% /* КНОПКА Удаления питомника */ %>
-                <div class="fixButton">
+                <div v-if="item.whoCreate.id===me.id" class="fixButton">
                   <a class="p-button" href="#"
                      @click="clickDeleteObject(item.id)">
                     <i class="el-icon-delete"></i>
@@ -665,15 +665,17 @@
                  v-if="!_.isEmpty(kennel.imagesArrUrl)">
               <transition-group appear name="el-zoom-in-top">
                 <div v-show="show && (showDog === kennel.id)" class="transition-box" :key="kennel.id">
-                  <% /* Кнопки управления собакой */ %>
-                  <div class="menu-right mt-1">
+                  <% /* Кнопки управления Питомником */ %>
+                  <div v-if="kennel.whoCreate===me.id" class="menu-right mt-1">
                     <el-link type="danger" class="px-2" @click="goTo2(kennel.detail)" :underline="false"
                              title="<%= __('More') %>">
                       {{kennel.fullName}}
                     </el-link>
-                    &lt;!&ndash;<el-link type="danger" class="px-2" @click="openRemoveDialog(kennel.id)" :underline="false"
+                    <el-link type="danger" class="px-2"
+                             @click="openRemoveDialog(kennel.id)"
+                             :underline="false"
                              title="<%= __('Remove') %>"
-                             icon="el-icon-close"></el-link>&ndash;&gt;
+                             icon="el-icon-close"></el-link>
                   </div>
                 </div>
               </transition-group>
