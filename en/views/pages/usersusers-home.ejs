@@ -29,6 +29,69 @@
     <el-button type="primary" @click="ruleForm.errInputDogName = false; ruleForm.label=''">Ok</el-button>
   </span>
     </el-dialog>-->
+    <% /* Диалоговое окно. Подсказка о использование поля пароля. */ %>
+    <el-dialog
+      title="Установка пароля"
+      :visible.sync="dialogVisiblePass"
+      custom-class="dia"
+      :before-close="handleClose"
+      append-to-body>
+      <p>1. Если вы не устанавливаете пароль, то он генерируется автоматически. Это удобно использовать когда Вам нет необходимости заходить
+        на сайт под именем данного пользователя, т.к. пароль вы не будете знать. В то же время при нажатие кнопки "Отправить пароль на
+        email"
+        вы отправите сгенерированный пароль реальному пользователю данного Email.<br>
+        <i class="el-icon-warning-outline"></i> Используйте эту процедуру когда вас попросили создать чужой аккаунт и вы знаете реальный
+        емайл пользователя.</p>
+      <p class="pt-2" style="word-break: break-all">2. Если вы устанавливаете пароль, то его следует вписать в оба поля одинаково.
+        <br> <i class="el-icon-warning-outline"></i> Используйте эту процедуру когда вам нужно войти от имени данного пользователя в
+        систему, чтобы произвести какие-то действия от его имени. Например создать питомник и добавить собак.</p>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisiblePass = false">Cancel</el-button>
+  </span>
+    </el-dialog>
+
+    <% /* Диалоговое окно. Подсказка о использование поля Email. */ %>
+    <el-dialog
+      title="Установка Email пользователя"
+      :visible.sync="dialogVisibleEmail"
+      custom-class="dia"
+      :before-close="handleClose"
+      append-to-body>
+      <p>1. Если вы не устанавливаете Email, то он генерируется автоматически. За основу берётся полное имя пользователя.
+        <br>
+        <i class="el-icon-warning-outline"></i> Используйте эту процедуру чтобы создать пользователя в системе к которому нужно привязать
+        данные например питомник, но вы не знаете его контактных данных или вам не важны его контактные данные.</p>
+      <p class="pt-2" style="word-break: break-all">
+        2. Если вы устанавливаете Email, то с помощью кнопок "Да" и "Нет" вы можете определить будет ли email подтверждён или нет.
+        Для правильной связи с пользователем требуется проверенный контакт, в данном случае адрес электронной почты.
+        Если этот контакт не был подтверждён пользователем из письма, которое отправляется ему при регистрации, то возможны ошибки
+        в написании email или не идентифицированные пользователи в системе. Этого нельзя допускать.
+        <br>Если email не подтверждён, некоторые возможности работы в системе будут не доступны, например не
+        возможно будет привязать этого пользователя к питомнику в качестве совладельца.
+        <br> <i class="el-icon-warning-outline"></i>
+        Рекомендуется активировать кнопку "Да".
+      </p>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisibleEmail = false">Cancel</el-button>
+  </span>
+    </el-dialog>
+
+    <% /* Диалоговое окно. Подсказка о использование поля Группы. */ %>
+    <el-dialog
+      title="Установка Email пользователя"
+      :visible.sync="dialogVisibleGroup"
+      custom-class="dia"
+      :before-close="handleClose"
+      append-to-body>
+      <p>
+        Обязательно установите группу "user" если Email стоит "Да".
+      </p>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisibleGroup = false">Cancel</el-button>
+  </span>
+    </el-dialog>
+
+
     <template v-if="!ruleForm.see">
       <el-popover
         ref="popover"
@@ -140,52 +203,83 @@
 
           <% /* EMAIL адрес */ %>
           <template>
-            <el-form-item label="<%= __('Email') %>" prop="emailAddress">
-              <el-col :span="11">
-                <el-input
-                  autosize
-                  size="small"
-                  placeholder="Please input"
-                  v-model="ruleForm.emailAddress"
-                  maxlength="70"
-                  show-word-limit>
-                </el-input>
-              </el-col>
-              <el-col class="menu-center" :span="1">-</el-col>
+            <el-row :gutter="10">
+              <el-form-item label="<%= __('Email') %>" prop="emailAddress">
+                <el-col :span="11">
+                  <el-input
+                    autosize
+                    size="small"
+                    placeholder="Please input"
+                    v-model="ruleForm.emailAddress"
+                    maxlength="70"
+                    :clearable="true"
+                    show-word-limit>
+                  </el-input>
+                </el-col>
+                <!--<el-col class="menu-center" :span="1">-</el-col>-->
 
-              <% /* ПОДТВЕРЖДЁН EMAIL | НЕ ПОДТВЕРЖДЁН EMAIL  */ %>
-              <el-col :span="8">
-                <template>
-                  <el-tooltip placement="top">
-                    <div slot="content"><%= __('Make confirmed email. The user will not be sent a verification letter by mail.') %></div>
-                    <el-radio-group v-model="ruleForm.emailStatus" size="small">
-                      <el-radio-button label="confirmed">Да</el-radio-button>
-                      <el-radio-button label="unconfirmed">Нет</el-radio-button>
-                    </el-radio-group>
-                  </el-tooltip>
-                </template>
-              </el-col>
-            </el-form-item>
+                <% /* ПОДТВЕРЖДЁН EMAIL | НЕ ПОДТВЕРЖДЁН EMAIL  */ %>
+                <el-col :span="8">
+                  <template>
+                    <el-tooltip placement="top">
+                      <div slot="content"><%= __('Make confirmed email. The user will not be sent a verification letter by mail.') %></div>
+                      <el-radio-group @change="groupAction()" class="my-1" v-model="ruleForm.emailStatus" size="small">
+                        <el-radio-button label="confirmed">Да</el-radio-button>
+                        <el-radio-button label="unconfirmed">Нет</el-radio-button>
+                      </el-radio-group>
+                    </el-tooltip>
+                  </template>
+                </el-col>
+                <el-col :span="1">
+                  <el-button @click="dialogVisibleEmail=true" class="not-border my-1" icon="el-icon-warning-outline" size="mini"
+                             circle></el-button>
+                  <!--<el-button type="text" @click="dialogVisiblePass = true">click to open the Dialog</el-button>-->
+                  <!--  <el-popover
+                  ref="popover2"
+                  placement="top-start"
+                  title="<%= __('Letter') %>"
+                  width="270"
+                  trigger="hover"
+                  content="">
+                </el-popover>-->
+                </el-col>
+              </el-form-item>
+            </el-row>
           </template>
-
 
           <% /* ПАРОЛЬ */ %>
           <template v-if="!buttonUpdate">
-            <el-form-item label="<%= __('Password') %>" prop="checkPass">
-              <el-col :span="8">
-                <el-input type="password" size="small" v-model="ruleForm.password" autocomplete="off"></el-input>
-              </el-col>
-              <el-col class="menu-center" :span="1">-</el-col>
-              <el-col :span="8">
-                <el-input type="password" size="small" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
-              </el-col>
-            </el-form-item>
+            <el-row :gutter="10">
+              <el-form-item label="<%= __('Password') %>" prop="checkPass">
+                <el-col :span="8">
+                  <el-input :clearable="true" minlength="8" maxlength="30" type="password" size="small" v-model="ruleForm.password"
+                            autocomplete="off"></el-input>
+                </el-col>
+                <!--<el-col class="menu-center" :span="1">-</el-col>-->
+                <el-col :span="8">
+                  <el-input :clearable="true" minlength="8" maxlength="30" type="password" size="small" v-model="ruleForm.checkPass"
+                            autocomplete="off"></el-input>
+                </el-col>
+                <el-col :span="1">
+                  <el-button @click="dialogVisiblePass=true" class="not-border my-1" icon="el-icon-warning-outline" size="mini"
+                             circle></el-button>
+                  <!--<el-button type="text" @click="dialogVisiblePass = true">click to open the Dialog</el-button>-->
+                  <!--  <el-popover
+                  ref="popover2"
+                  placement="top-start"
+                  title="<%= __('Letter') %>"
+                  width="270"
+                  trigger="hover"
+                  content="">
+                </el-popover>-->
+                </el-col>
+              </el-form-item>
+            </el-row>
           </template>
-
 
           <% /* ОТПРАВИТЬ пароль НА EMAIL? */ %>
           <template v-if="ruleForm.emailStatus==='confirmed'">
-            <el-form-item prop="sendCodEmail" class="menu-center">
+            <el-form-item prop="sendCodEmail" class="menu-left pl-5 ml-md-2">
               <el-tooltip placement="top">
                 <div slot="content"><%= __('Send authorization data to email the user') %>.</div>
                 <el-radio-group v-model="ruleForm.sendCodEmail" size="small">
@@ -231,6 +325,12 @@
                   :value="item.id">
                 </el-option>
               </el-select>
+
+              <el-button @click="dialogVisibleGroup=true" class="not-border my-1" icon="el-icon-warning-outline" size="mini"
+                         circle></el-button>
+
+
+            </el-form-item>
             </el-form-item>
           </template>
 
@@ -505,7 +605,7 @@
 
 
           <!--<div class="my-sm-5">-->
-            <!--<el-divider content-position="left"><%= __('Teeth') %></el-divider>-->
+          <!--<el-divider content-position="left"><%= __('Teeth') %></el-divider>-->
           <!--</div>-->
 
           <% /* ПРИКУС */ %>
@@ -681,7 +781,7 @@
 
 
           <!--<div class="my-sm-5">-->
-            <!--<el-divider content-position="left"><%= __('Sale') %></el-divider>-->
+          <!--<el-divider content-position="left"><%= __('Sale') %></el-divider>-->
           <!--</div>-->
 
           <% /* ПРОДАЁТСЯ */ %>
@@ -1000,10 +1100,14 @@
 
           <el-table-column type="expand">
             <template slot-scope="props">
-              <p>Телефон: {{ props.row.phone }}</p>
-              <p>Город: {{ props.row.city }}</p>
-              <p>Адрес: {{ props.row.address }}</p>
-              <p>Сайт: {{ props.row.suite }}</p>
+              <p v-if="!_.isEmpty(_.pluck(props.row.kennels,'phones')[0])">Телефон: {{ _.pluck(_.pluck(props.row.kennels,'phones'),'value').join(', ') }}</p>
+              <p v-if="!_.isEmpty(_.pluck(props.row.kennels,'continent')[0])">Continent: {{ _.pluck(props.row.kennels,'continent').join(', ') }}</p>
+              <p v-if="!_.isEmpty(_.pluck(props.row.kennels,'country')[0])">Country: {{ _.pluck(props.row.kennels,'country').join(', ') }}</p>
+              <p v-if="!_.isEmpty(_.pluck(props.row.kennels,'region')[0])"><%= __('Region') %>: {{ _.pluck(props.row.kennels,'region').join(', ') }}</p>
+              <p v-if="!_.isEmpty(_.pluck(props.row.kennels,'city')[0])">Город: {{ _.pluck(props.row.kennels,'city').join(', ') }}</p>
+              <p v-if="!_.isEmpty(_.pluck(props.row.kennels,'address')[0])">Адрес: {{ _.pluck(props.row.kennels,'address').join(', ') }}</p>
+              <p v-if="!_.isEmpty(_.pluck(props.row.kennels,'site')[0])">Сайт: {{ _.pluck(props.row.kennels,'site').join(', ') }}</p>
+              <p v-if="!_.isEmpty(_.pluck(props.row.kennels,'label')[0])">Питомник: {{ _.pluck(props.row.kennels,'label').join(', ') }}</p>
             </template>
           </el-table-column>
           <el-table-column
