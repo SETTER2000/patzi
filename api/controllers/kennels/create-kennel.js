@@ -24,7 +24,7 @@ module.exports = {
 
     subtitle: {
       type: 'string',
-      maxLength:300,
+      maxLength: 300,
       description: 'Дополнительная информация. Описание питомника.'
     },
 
@@ -33,7 +33,7 @@ module.exports = {
       description: 'Массив телефонов для связи.',
       // Тип массив словарей
       type: [{
-        key:'number',
+        key: 'number',
         value: 'string',
         fullName: 'string'
       }],
@@ -54,7 +54,7 @@ module.exports = {
     yourKennel: {
       type: 'boolean',
       description: 'Это ваш питомник?.',
-      defaultsTo:false
+      defaultsTo: false
     },
 
     registerNumber: {
@@ -83,13 +83,11 @@ module.exports = {
     },
 
 
-
     region: {
       type: 'string',
       required: true,
       description: 'Край, область где находится питомник.'
     },
-
 
 
     coOwner: {
@@ -98,12 +96,10 @@ module.exports = {
     },
 
 
-
     city: {
       type: 'string',
       description: 'Город где находится питомник.'
     },
-
 
 
     address: {
@@ -154,7 +150,7 @@ module.exports = {
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'kennel');
-console.log('INPUTS:::: ' , inputs);
+    console.log('INPUTS:::: ', inputs);
 
     inputs.file = (_.get(inputs.file, 'fd')) ? inputs.file : '';
 
@@ -201,14 +197,18 @@ console.log('INPUTS:::: ' , inputs);
     owners.length > 0 ? await Kennel.addToCollection(newKennel.id, 'owners').members(owners) : '';
 
 
+    let addGroup = await sails.helpers.addGroup.with({
+      groups: ['user', 'breeder', 'owner'],
+      userId:this.req.me.id
+    });
 
 
     // Вызываем помощника сформировать правильно данные для ответа.
     let result = await sails.helpers.formatCollectionKennel(req);
 
-    console.log('RESULT COL::: ' , result);
+    console.log('RESULT COL::: ', result);
     // Рассылаем данные всем подписанным на событие list данной комнаты.
-    await sails.sockets.broadcast('kennel', 'list-kennel',result.collection);
+    await sails.sockets.broadcast('kennel', 'list-kennel', result.collection);
 
     return exits.success();
   }

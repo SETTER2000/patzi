@@ -21,8 +21,8 @@ module.exports = {
 
     emailAddress: {
       type: 'string',
-      required: true,
-      unique: true,
+      // required: true,
+      // unique: true,
       isEmail: true,
       maxLength: 200,
       example: 'mary.sue@example.com'
@@ -69,6 +69,8 @@ module.exports = {
     password: {
       type: 'string',
       // required: true,
+     /* minLength: 8,
+      maxLength: 30,*/
       description: 'Надежно хешируется представление пароля пользователя для входа.',
       // protect: true,
       example: '2$28a8eabna301089103-13948134nad'
@@ -182,7 +184,8 @@ module.exports = {
     let avatarFD = images.length > 0 ? images[0].fd : '';
     let avatarMime = images.length > 0 ? images[0].type : '';
     let filenameAvatar = images.length > 0 ? images[0].name : '';
-    let emailAddress = inputs.emailAddress.toLowerCase();
+
+    let emailAddress =  await sails.helpers.genEmail.with({email: inputs.emailAddress, fullName:inputs.fullName});
     let conflictingEmail = (req.me.preferredLocale === 'ru') ? 'userAlreadyInUseRU' : 'userAlreadyInUse';
     let confirmedAccount = (req.me.preferredLocale === 'ru') ? 'Подтвердите ваш аккаунт' : 'Please confirm your account';
     let fullName =  await sails.helpers.startLetter.with({str:inputs.fullName});
@@ -194,7 +197,7 @@ module.exports = {
     }
 
     // Если пароль не указан генерируем пароль самостоятельно
-    let password = _.isEmpty(inputs.password) || _.isEmpty(inputs.checkPass) ? await sails.helpers.strings.random('alphanumeric', 6) : inputs.password;
+    let password = _.isEmpty(inputs.password) || _.isEmpty(inputs.checkPass) ? await sails.helpers.strings.random('alphanumeric', 8) : inputs.password;
 
 console.log('inputs.emailAddress::: ' , inputs.emailAddress);
 console.log('emailAddress::: ' , emailAddress);
@@ -221,7 +224,7 @@ console.log('fullName::: ' , fullName);
     //   emailStatus: 'unconfirmed'
     // } : {});
 
-
+console.log('DATA created: ', data);
     // Создаём пользователя
     let newUser = await User.create(data)
       .intercept('E_UNIQUE', conflictingEmail)

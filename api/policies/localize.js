@@ -4,7 +4,7 @@ module.exports = async function (req, res, proceed) {
   if (!req.session.userId) {
     return proceed();
   }
-  var me = await User.findOne({id: req.session.userId});
+  const me = await User.findOne({id: req.session.userId});
   if (me.preferredLocale) {
     req.setLocale(me.preferredLocale);
   }

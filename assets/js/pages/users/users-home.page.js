@@ -17,6 +17,9 @@ parasails.registerPage('users-home', {
     files: [],
     value3: '',
     plain: false,
+    dialogVisiblePass: false,
+    dialogVisibleEmail: false,
+    dialogVisibleGroup: false,
     dialog: {},
     limit: 50,
     groups: [],
@@ -94,6 +97,8 @@ parasails.registerPage('users-home', {
     },
     ruleForm: {
       fullName: '',
+      groups:[],
+      see:true,
       emailStatus: 'confirmed',
       sendCodEmail: 'unconfirmed'
     },
@@ -105,11 +110,11 @@ parasails.registerPage('users-home', {
         {required: true, message: 'Please input you name', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
       ],
-      emailAddress: [
+      /*emailAddress: [
         {required: true, message: 'Please input email', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
-        // { isEmail: true, message: 'Не верный формат Email', trigger: 'blur'},
-      ],
+        //{isEmail: true, message: 'Не верный формат Email', trigger: 'blur'},
+      ],*/
       gender: [
         {required: true, message: 'Please select a dog gender.', trigger: 'change'}
       ],
@@ -123,48 +128,48 @@ parasails.registerPage('users-home', {
       //   {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
       // ],
 
-    description: [
+      description: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
         {max: 1700, message: 'Length should be 10 to 1700', trigger: 'blur'}
       ]
     },
-    tableData: [
-      {
-        date: '2016-05-03',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles'
-      },
-      {
-        date: '2016-05-02',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles'
-      },
-      {
-        date: '2016-05-04',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles'
-      },
-      {
-        date: '2016-05-01',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles'
-      },
-      {
-        date: '2016-05-08',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles'
-      },
-      {
-        date: '2016-05-06',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles'
-      },
-      {
-        date: '2016-05-07',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles'
-      }
-    ],
+    /*  tableData: [
+        {
+          date: '2016-05-03',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles'
+        },
+        {
+          date: '2016-05-02',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles'
+        },
+        {
+          date: '2016-05-04',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles'
+        },
+        {
+          date: '2016-05-01',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles'
+        },
+        {
+          date: '2016-05-08',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles'
+        },
+        {
+          date: '2016-05-06',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles'
+        },
+        {
+          date: '2016-05-07',
+          name: 'Tom',
+          address: 'No. 189, Grove St, Los Angeles'
+        }
+      ],*/
     multipleSelection: [],
     selectOptions: [
       {
@@ -290,6 +295,7 @@ parasails.registerPage('users-home', {
     io.socket.on('group-form', (data) => {
       console.log('GFRUPSS::: ', data);
       this.groups = data;
+      this.groupAction();
     });
 
   },
@@ -700,7 +706,7 @@ parasails.registerPage('users-home', {
     async add() {
       this.openFullScreen();
 
-        // this.mesError(this.i19p.errorPasswordConfirm);
+      // this.mesError(this.i19p.errorPasswordConfirm);
 
 
       console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
@@ -708,7 +714,7 @@ parasails.registerPage('users-home', {
         fileList: this.ruleForm.fileList,
         fullName: this.ruleForm.label,
         dateBirth: JSON.stringify(this.ruleForm.dateBirth),
-        dateDeath:JSON.stringify( this.ruleForm.dateDeath),
+        dateDeath: JSON.stringify(this.ruleForm.dateDeath),
         emailAddress: this.ruleForm.emailAddress,
         emailStatus: this.ruleForm.emailStatus,
         see: this.ruleForm.see,
@@ -743,7 +749,7 @@ parasails.registerPage('users-home', {
         // yourKennel: this.ruleForm.yourKennel,
       };
 
-      console.log('DATA перед отправкой::: ' ,  data);
+      console.log('DATA перед отправкой::: ', data);
       await io.socket.post('/api/v1/users/create-user', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -854,6 +860,18 @@ parasails.registerPage('users-home', {
       this.ruleForm.federations = this.resetFederation;
     },
 
+groupAction(){
+  this.ruleForm.groups = this.ruleForm.emailStatus==='confirmed' ? [_.pluck(this.groups,'id')[0]] : [];
+  console.log('this.ruleForm.groups:: ' , this.ruleForm.groups);
+},
+    handleClose(done) {
+      done();
+      /*  this.$confirm('Вы уверены, что хотите закрыть диалог?')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});*/
+    }
   }
 });
 

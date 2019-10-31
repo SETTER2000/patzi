@@ -24,11 +24,16 @@ module.exports = {
     // Выбираем авторизованного пользователя, который сделал этот запрос
     // и всех его друзей по ассоциативному полю friends
     let kennels = await Kennel.find()
+      .populate('dogs')
+      .populate('owners')
+      .populate('whoCreate')
+      .populate('yourKennel')
       .populate('continent')
       .populate('country')
       .populate('region')
-      .populate('whoCreate')
-      .populate('owners');
+      .populate('city')
+
+    ;
 
     // Respond with view.
     return exits.success({

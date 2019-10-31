@@ -39,10 +39,14 @@ module.exports = {
 
     // Выбираем весь список объектов данной коллекции.
     let kennels = await Kennel.find()
+      .populate('dogs')
+      .populate('owners')
+      .populate('whoCreate')
+      .populate('yourKennel')
       .populate('continent')
       .populate('country')
       .populate('region')
-      .populate('owners')
+      .populate('city')
       .sort('label');
 
     await _.each(kennels, (kennel) => {

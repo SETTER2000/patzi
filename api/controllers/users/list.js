@@ -71,7 +71,10 @@ module.exports = {
 
     // Формат отображаемой даты
     let format = 'LL HH:mm';
-    let users = await User.find(inputs.query).limit(inputs.count).populate('groups');
+    let users = await User.find(inputs.query).limit(inputs.count)
+      .populate('groups')
+      .populate('kennels')
+    ;
 
 
     // Получить список групп, которые существуют в системе. Для вывода в select

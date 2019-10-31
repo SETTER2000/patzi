@@ -575,5 +575,13 @@
 	"change the password": "change the password",
 	"after authorization": "after authorization",
 	"Login": "Login",
-	"Log In": "Log In"
+	"Log In": "Log In",
+	"Add user": "Add user",
+	"At the moment, the user is not active, i.e. it will not be visible in the system. Set the visibility.": "At the moment, the user is not active, i.e. it will not be visible in the system. Set the visibility.",
+	"Full name user": "Full name user",
+	"Email": "Email",
+	"Make confirmed email. The user will not be sent a verification letter by mail.": "Make confirmed email. The user will not be sent a verification letter by mail.",
+	"Send authorization data to email the user": "Send authorization data to email the user",
+	"Properties": "Properties",
+	"1. If you do not set a password, then it is generated automatically. This is convenient to use when you do not need to go to the site under the name of this user, because you will not know the password. At the same time, when you click the \\\"Send password to email\\\" button, you will send the generated password to the real user of this Email.": "1. If you do not set a password, then it is generated automatically. This is convenient to use when you do not need to go to the site under the name of this user, because you will not know the password. At the same time, when you click the \\\"Send password to email\\\" button, you will send the generated password to the real user of this Email."
 }

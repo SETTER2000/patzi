@@ -53,7 +53,7 @@ module.exports = {
     action: {
       type: 'boolean',
       defaultsTo: true,
-      description: 'Активация питомника в системе. Если false, то заблокирован.'
+      description: 'Видимость питомника в системе. Если false, то заблокирован.'
     },
 
 

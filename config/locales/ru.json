@@ -13,6 +13,7 @@
 	"Please enter a litter letter": "Пожалуйста введите букву помёта",
 	"Name": "Имя",
 	"Dog editor": "Редактор собак",
+	"Kennel editor": "Редактор питомников",
 	"Write a message": "Напишите сообщение",
 	"Home-menu": "Главная",
 	"My account": "Учетная запись",
@@ -247,7 +248,7 @@
 	"Send": "Отправить",
 	"Back to login": "На страницу входа",
 	"There was an error updating your credit card information. Please check your information and try again, or": "При обновлении информации о вашей кредитной карте произошла ошибка. Пожалуйста, проверьте информацию и попробуйте снова, или",
-	"You have not linked a payment source to your account. In order to access paid features, you'll need to provide your credit card information. (Don't worry: you will only be charged when you've reached the limit of your free plan.)": "Вы не связали источник оплаты с вашей учетной записью. Чтобы получить доступ к платным функциям, вам необходимо предоставить информацию о вашей кредитной карте. (Не беспокойтесь: оплата будет взиматься только по достижении лимита вашего бесплатного периода.)",
+	"You have not linked a payment source to your account. In order to access paid features, you'll need to provide your credit card information. (Don't worry: you will only be charged when you've reached the limit of your free plan.)": "Вы не связали источник оплаты с вашей учетной записью. Чтобы получить доступ к платным сервисам, вам необходимо предоставить информацию о вашей кредитной карте. (Не беспокойтесь: оплата будет взиматься только по достижении лимита вашего бесплатного периода.)",
 	"Moscow, Russia": "Россия. Москва.",
 	"Topic": "Тема",
 	"st. Ostrovityanova d. 27 Bldg. 3": "ул. Островитянова д.27 к.3",
@@ -640,6 +641,7 @@
 	"Decription": "Decription",
 	"Size": "Size",
 	"dogs": "dogs",
+	"Home": "Дом",
 	"The case of letters does not matter.": "Регистр букв не имеет значения.",
 	"Letter": "Letter",
 	"An error occurred while processing your request. Please check the information and try again, or contact ": "Произошла ошибка при обработке вашего запроса. Пожалуйста, проверьте информацию и попробуйте еще раз, или свяжитесь с ",
@@ -660,5 +662,6 @@
 	"Please Input co-owner": "Начните вводить имя",
 	"IMPORTANT! Be sure to change the password after authorization": "ВАЖНО! Обязательно смените пароль, после авторизации",
 	"Email": "Email",
-	"This is your credentials": "Это ваши данные для авторизации"
+	"This is your credentials": "Это ваши данные для авторизации",
+	"Where is the name of the kennel in relation to the name of the kennel.": "Where is the name of the kennel in relation to the name of the kennel."
 }

@@ -74,7 +74,7 @@ module.exports = {
       // required: true,
       description: 'Надежно хешируется представление пароля пользователя для входа.',
       protect: true,
-      example: '2$28a8eabna301089103-13948134nad'
+      example: '$2a$10$AmUxHrObSpUhf7oefkPn0X7XCIZK2x.mFb2ISG'
     },
 
     isAdmin: {
