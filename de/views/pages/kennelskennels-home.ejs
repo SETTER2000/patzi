@@ -1,4 +1,4 @@
-<div id="kennels-home" v-cloak>
+<div id="kennels-home" class="content" v-cloak>
 
   <% /* Диалоговое окно. Подтверждение удаления объекта. */ %>
   <el-dialog
@@ -296,7 +296,7 @@
               inactive-text="<%= __('left') %>">
             </el-switch>
             <el-tooltip effect="dark" placement="top-start">
-              <div slot="content"><%= __('Where is the name of the dog in relation to the name of the kennel.') %><br>
+              <div slot="content"><%= __('Where is the name of the kennel in relation to the name of the kennel.') %><br>
                 (<%= __('right: KennelName DogName | left: DogName KennelName') %>)"
               </div>
               <div size="mini" round class="el-icon-question ml-3"></div>
@@ -391,6 +391,105 @@
   </span>
   </el-dialog>
 
+  <% /* Диалоговое окно Редактор Питомника. Список питомников*/ %>
+  <el-dialog title="<%= __('Kennel editor') %>. <%= __('List') %>."
+             custom-class="dialog-kennel-add"
+             :visible.sync="dialogEditorList">
+    <!--<template>
+      <el-table
+        ref="filterTable"
+        :data="kennels.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))"
+        :default-sort="{prop: 'fullName', order: 'descending'}"
+        max-height="650"
+        style="width: 100%">
+        <el-table-column
+          type="index"
+          fixed="left"
+          width="35">
+        </el-table-column>
+
+        <el-table-column
+          property="cover"
+          label=""
+          fixed="left"
+          width="90">
+          <template slot="header" slot-scope="scope">
+
+            <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
+          </template>
+          <template slot-scope="scope">
+            <div v-if="!_.isEmpty(scope.row.images)">
+              <a href="#" @click="clickShowPhoto(scope.$index,scope.row)" class="flex justify-content-center">
+                <el-avatar :size="38" @error="errorHandler">
+                  <img :src="scope.row.images[scope.row.cover].imageSrc"/>
+                </el-avatar>
+              </a>
+            </div>
+            <div v-else class="photo-preview col">
+              <div class="image-wrapper round  d-flex align-items-center justify-content-center">&lt;!&ndash;&ndash;&gt; &lt;!&ndash;&ndash;&gt; <span
+                  class="placeholder-icon fa fa-picture-o"></span></div>
+            </div>
+          </template>
+        </el-table-column>
+
+
+        <el-table-column
+          label="<%= __('Name') %>"
+          sortableв
+          prop="fullName">
+        </el-table-column>
+        <el-table-column
+          label="<%= __('Price') %>"
+          sortableв
+          prop="price"
+          width="80">
+          <template slot-scope="scope" v-if="scope.row.price > 0 && scope.row.sale">
+            <span v-if="scope.row.currency === 'рубль'">{{scope.row.price}} &#8381;</span>
+            <span v-else-if="scope.row.currency === 'euro'">€ {{scope.row.price}}</span>
+            <span v-else>$ {{scope.row.price}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="right">
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
+              size="mini"
+              placeholder="Type to search"/>
+          </template>
+          <template slot-scope="scope">
+            <el-tooltip content="<%= __('Image editor') %>" placement="left" effect="light">
+              <el-button
+                v-if="scope.row.images"
+                size="mini"
+                icon="el-icon-picture-outline-round"
+                @click="handleEditPhotos(scope.$index, scope.row)">
+              </el-button>
+            </el-tooltip>
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.$index, scope.row)">
+              Edit
+            </el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="openRemoveDialog(scope.row.id)"
+            >Delete
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </template>
+    <span slot="footer" class="dialog-footer">
+      <span class="flex justify-content-between">
+         <el-button @click="clearFilter"><%= __('reset all filters') %></el-button>
+        <span>
+            <el-button @click="buttonUpdate = false; dialogEditorList = false"><%= __('Close') %></el-button>
+        </span>
+      </span>
+    </span>-->
+  </el-dialog>
+
   <% /* Главный банер, с названием страницы. */ %>
   <section class="banner-area relative">
     <div class="container">
@@ -428,14 +527,14 @@
 
       <% /*ФИЛЬТР ПИТОМНИКОВ*/ %>
       <!--<span class="demonstration">Display all tags (default)</span>-->
-      <div v-if="kennels" class="pb-5">
+<!--      <div v-if="kennels" class="pb-5">
         <el-cascader
           :options="optionsTest"
           :props="props"
           placeholder="<%= __('Select kennel') %>"
           clearable>
         </el-cascader>
-      </div>
+      </div>-->
 
       <!--     <nav class="product-filter">
         <h2><%= __('Kennels') %></h2>
@@ -494,6 +593,104 @@
     </div>
   </section>
 
+  <% /*Фильтр и блоки фото NEW.*/ %>
+  <section class="work-area">
+    <div class="container">
+      <% /* Фильтры. */ %>
+
+      <% /* Кнопки управления, фильтры */ %>
+     <!-- <div class="menu-between mb-1" v-if="_.pluck(filterDogs, 'label').length >0">
+        <div><span class="text-lowercase font-weight-light font-italic"><%= __('Dogs') %>: {{filterName}}</span></div>
+        <div class="grid-content bg-purple">
+          <el-dropdown @command="handleCommand">
+                            <span class="el-dropdown-link">
+                              <el-link :underline="false"> <i class="el-icon-more el-icon&#45;&#45;right"></i></el-link>
+                            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-female" :command="{com:'dam'}">
+                <%= __('Dam') %>
+              </el-dropdown-item>
+
+              <el-dropdown-item icon="el-icon-male" :command="{com:'sire'}">
+                <%= __('Sire') %>
+              </el-dropdown-item>
+              <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'all'}">
+                <%= __('All') %>
+              </el-dropdown-item>
+
+              <el-dropdown-item v-if="_.some(kennels, 'sale', true)" icon="el-icon-money"
+                                :command="{com:'c'}">
+                <%= __('For Sale') %>
+              </el-dropdown-item>
+
+              <el-dropdown-item v-if="me.isSuperAdmin || me.isAdmin" icon="el-icon-edit" :command="{com:'e'}">
+                <%= __('Dog editor') %>
+              </el-dropdown-item>
+
+
+              &lt;!&ndash;<el-dropdown-item icon="el-icon-present" :command="{com:'g'}">&ndash;&gt;
+              &lt;!&ndash;<%= __('Add presentation') %>&ndash;&gt;
+              &lt;!&ndash;</el-dropdown-item>&ndash;&gt;
+              &lt;!&ndash;<el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:photoSet.indexPhotoSet}">&ndash;&gt;
+              &lt;!&ndash;<%= __('Photo session name') %>&ndash;&gt;
+              &lt;!&ndash;</el-dropdown-item>&ndash;&gt;
+              &lt;!&ndash;<el-dropdown-item icon="el-icon-edit" :command="{com:'b',i:photoSet.indexPhotoSet}">&ndash;&gt;
+              &lt;!&ndash;<%= __('Photo session description') %>&ndash;&gt;
+              &lt;!&ndash;</el-dropdown-item>&ndash;&gt;
+
+              &lt;!&ndash;<el-dropdown-item icon="el-icon-delete-solid"&ndash;&gt;
+              &lt;!&ndash;:command="{com:'d',i:photoSet.indexPhotoSet, name:photoSet.sessionName}">&ndash;&gt;
+              &lt;!&ndash;<%= __('Delete photo session') %>&ndash;&gt;
+              &lt;!&ndash;</el-dropdown-item>&ndash;&gt;
+
+              &lt;!&ndash;<el-dropdown-item :divided="true" disabled v-if="photoSet.createdAt" icon="el-icon-date"&ndash;&gt;
+              &lt;!&ndash;command="">&ndash;&gt;
+              &lt;!&ndash;<%= __('Date publication') %> : <br>{{photoSet.createdAt |&ndash;&gt;
+              &lt;!&ndash;getCreate(me.preferredLocale)}}&ndash;&gt;
+              &lt;!&ndash;</el-dropdown-item>&ndash;&gt;
+
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </div>-->
+      <% /* ФОТО ПИТОМНИКОВ */ %>
+      <div class="scrollbar" id="style-1">
+        <el-row :gutter="2" class="flex-container wrap">
+          <el-col v-if="kennel.images[kennel.cover] && kennel.see" class="flex-item"
+                  v-for="(kennel, index) in kennels.filter(kennel=>kennel.see)" :key="kennel.id"
+                  :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
+
+            <div @mouseenter="showMenu(kennel.id)" @mouseleave="showOut()"
+                 style="position: relative;" class="ell-image-flex"
+                 v-if="!_.isEmpty(kennel.imagesArrUrl)">
+              <transition-group appear name="el-zoom-in-top">
+                <div v-show="show && (showDog === kennel.id)" class="transition-box" :key="kennel.id">
+                  <% /* Кнопки управления собакой */ %>
+                  <div class="menu-right mt-1">
+                    <el-link type="danger" class="px-2" @click="goTo2(kennel.detail)" :underline="false"
+                             title="<%= __('More') %>">
+                      {{kennel.fullName}}
+                    </el-link>
+                    &lt;!&ndash;<el-link type="danger" class="px-2" @click="openRemoveDialog(kennel.id)" :underline="false"
+                             title="<%= __('Remove') %>"
+                             icon="el-icon-close"></el-link>&ndash;&gt;
+                  </div>
+                </div>
+              </transition-group>
+              <el-image
+                :src="kennel.images[kennel.cover].imageSrc"
+                :key="kennel.id"
+                :fit="'cover'"
+                :scroll-container="'#style-1'"
+                lazy
+                :preview-src-list="kennel.imagesArrUrl">
+              </el-image>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
+  </section>
 
 </div>
 
