@@ -1,0 +1,37 @@
+<div id="kennel" class="content" v-cloak>
+  <% /* Шапка страницы */ %>
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <div v-if="kennel.winner" class="menu-center">
+            <el-popover
+              placement="right-start"
+              trigger="hover"
+              width="320">
+              <div class="menu-center"><h4><%= __('World Winner') %></h4>
+                <el-table :data="worldWinner">
+                  <el-table-column width="70" property="year" label="<%= __('year') %>"></el-table-column>
+                  <el-table-column width="150" property="address" label="<%= __('address') %>"></el-table-column>
+                  <el-table-column width="600" property="description" label="<%= __('description') %>"></el-table-column>
+                </el-table>
+              </div>
+              <i slot="reference" style="font-size: 2em" class="ti-crown"></i>
+            </el-popover>
+          </div>
+          <h1 class="text-white">{{kennel.label}}</h1>
+          <p>{{kennel.dateCreate | getAge}}</p>
+          <el-tooltip class="item" effect="dark" content="<%= __('Country') %>" placement="bottom">
+          <H3  class="text-gold">
+
+            <!--<i  class="ti-world"></i>-->
+            {{kennel.country.label}}
+
+          </H3>
+          </el-tooltip>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
