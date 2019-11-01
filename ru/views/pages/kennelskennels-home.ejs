@@ -270,9 +270,9 @@
             </el-col>
             <el-col :span="6">
               <el-button-group>
-                    <el-tooltip  effect="dark" content="<%= __('Add phone') %>" placement="top-end">
-                      <el-button @click="addDomain" size="mini" round icon="el-icon-circle-plus-outline"></el-button>
-                    </el-tooltip>
+                <el-tooltip effect="dark" content="<%= __('Add phone') %>" placement="top-end">
+                  <el-button @click="addDomain" size="mini" round icon="el-icon-circle-plus-outline"></el-button>
+                </el-tooltip>
                 <el-tooltip effect="dark" v-if="index > 0" content="<%= __('Remove phone') %>" placement="top-start">
                   <el-button @click.prevent="removeDomain(phone)" size="mini" round icon="el-icon-delete"></el-button>
                 </el-tooltip>
@@ -297,7 +297,7 @@
             </el-switch>
             <el-tooltip effect="dark" placement="top-start">
               <div slot="content"><%= __('Where is the name of the kennel in relation to the name of the kennel.') %><br>
-                (<%= __('right: KennelName DogName | left: DogName KennelName') %>)"
+                (<%= __('right: KennelName kennelName | left: kennelName KennelName') %>)"
               </div>
               <div size="mini" round class="el-icon-question ml-3"></div>
             </el-tooltip>
@@ -395,7 +395,7 @@
   <el-dialog title="<%= __('Kennel editor') %>. <%= __('List') %>."
              custom-class="dialog-kennel-add"
              :visible.sync="dialogEditorList">
-    <!--<template>
+    <template>
       <el-table
         ref="filterTable"
         :data="kennels.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))"
@@ -407,14 +407,12 @@
           fixed="left"
           width="35">
         </el-table-column>
-
         <el-table-column
           property="cover"
           label=""
           fixed="left"
           width="90">
           <template slot="header" slot-scope="scope">
-
             <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
           </template>
           <template slot-scope="scope">
@@ -426,13 +424,12 @@
               </a>
             </div>
             <div v-else class="photo-preview col">
-              <div class="image-wrapper round  d-flex align-items-center justify-content-center">&lt;!&ndash;&ndash;&gt; &lt;!&ndash;&ndash;&gt; <span
+              <div class="image-wrapper round  d-flex align-items-center justify-content-center">&lt;!&ndash;&ndash;&gt; &lt;!&ndash;&ndash;&gt;
+                <span
                   class="placeholder-icon fa fa-picture-o"></span></div>
             </div>
           </template>
         </el-table-column>
-
-
         <el-table-column
           label="<%= __('Name') %>"
           sortableв
@@ -487,7 +484,7 @@
             <el-button @click="buttonUpdate = false; dialogEditorList = false"><%= __('Close') %></el-button>
         </span>
       </span>
-    </span>-->
+    </span>
   </el-dialog>
 
   <% /* Главный банер, с названием страницы. */ %>
@@ -496,7 +493,7 @@
       <div class="row d-flex align-items-center justify-content-center">
         <div class="about-content col-lg-12">
           <h1 class="text-white"><%= __('Kennels') %></h1>
-          <p><%= __('Chinese Crested Dog. Catalog of nurseries of the world.') %> </p>
+          <p><%= __('Chinese Crested kennel. Catalog of nurseries of the world.') %> </p>
 
         </div>
       </div>
@@ -509,34 +506,36 @@
       <!--<el-page-header @back="goBack" content="detail"></el-page-header>-->
       <h3 class="text-heading"><%= __('World Kennel Catalog') %></h3>
       <p class="sample-text">
-        <%= __('The page presents the Chinese Crested Dog Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested Dog kennels in the world.') %>
+        <%= __('The page presents the Chinese Crested kennel Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested kennel kennels in the world.') %>
       </p>
       <div v-if="me.hasBillingCard || me.isSuperAdmin" class="mt-5 section-title text-center">
         <!--<button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add kennel') %></button>-->
-        <el-button   @click="centerDialogAdded=true" icon="el-icon-circle-plus-outline" class="btn btn-outline-info"><%= __('Add kennel') %></el-button>
+        <el-button @click="centerDialogAdded=true" icon="el-icon-circle-plus-outline"
+                   class="btn btn-outline-info"><%= __('Add kennel') %></el-button>
       </div>
       <div class="mt-5 section-title text-center" v-else>
-        <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline" class="btn btn-outline-info"><%= __('Add kennel') %></el-button>
+        <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"
+                   class="btn btn-outline-info"><%= __('Add kennel') %></el-button>
       </div>
     </div>
   </section>
 
   <% /*Фильтр и блоки фото.*/ %>
-  <section class="about-area ">
+  <!-- <section class="about-area ">
     <div class="container">
 
       <% /*ФИЛЬТР ПИТОМНИКОВ*/ %>
-      <!--<span class="demonstration">Display all tags (default)</span>-->
-<!--      <div v-if="kennels" class="pb-5">
+      &lt;!&ndash;<span class="demonstration">Display all tags (default)</span>&ndash;&gt;
+      &lt;!&ndash;      <div v-if="kennels" class="pb-5">
         <el-cascader
           :options="optionsTest"
           :props="props"
           placeholder="<%= __('Select kennel') %>"
           clearable>
         </el-cascader>
-      </div>-->
+      </div>&ndash;&gt;
 
-      <!--     <nav class="product-filter">
+      &lt;!&ndash;     <nav class="product-filter">
         <h2><%= __('Kennels') %></h2>
         <% /*Фильтры*/ %>
         <div class="sort">
@@ -554,11 +553,11 @@
           </div>
 
         </div>
-      </nav>-->
+      </nav>&ndash;&gt;
 
       <% /*ФОТО*/ %>
       <section class="products">
-        <!-- It's likely you'll need to link the card somewhere. You could add a button in the info, link the titles, or even wrap the entire card in an <a href="..."> -->
+        &lt;!&ndash; It's likely you'll need to link the card somewhere. You could add a button in the info, link the titles, or even wrap the entire card in an <a href="..."> &ndash;&gt;
         <div class="product-card" v-for="item of kennels">
           <transition name="collapse">
             <div class="product-image">
@@ -567,12 +566,12 @@
 
               <div class="flx">
                 <% /* КНОПКА Редактирования питомника */ %>
-                <!--<div class="fixButton">-->
-                <!--<a class="p-button" href="#"-->
-                <!--@click="clickEditKennel(item.id)">-->
-                <!--<i class="el-icon-edit"></i>-->
-                <!--</a>-->
-                <!--</div>-->
+                &lt;!&ndash;<div class="fixButton">&ndash;&gt;
+                &lt;!&ndash;<a class="p-button" href="#"&ndash;&gt;
+                &lt;!&ndash;@click="clickEditKennel(item.id)">&ndash;&gt;
+                &lt;!&ndash;<i class="el-icon-edit"></i>&ndash;&gt;
+                &lt;!&ndash;</a>&ndash;&gt;
+                &lt;!&ndash;</div>&ndash;&gt;
                 <% /* КНОПКА Удаления питомника */ %>
                 <div v-if="item.whoCreate.id===me.id" class="fixButton">
                   <a class="p-button" href="#"
@@ -588,26 +587,26 @@
             <h6 v-if="item.country"><%= __('Country') %>: {{item.country.label}}</h6>
           </div>
         </div>
-        <!-- more products -->
+        &lt;!&ndash; more products &ndash;&gt;
       </section>
     </div>
-  </section>
+  </section>-->
 
   <% /*Фильтр и блоки фото NEW.*/ %>
-  <section class="work-area">
+  <section class="about-area">
     <div class="container">
       <% /* Фильтры. */ %>
 
       <% /* Кнопки управления, фильтры */ %>
-     <!-- <div class="menu-between mb-1" v-if="_.pluck(filterDogs, 'label').length >0">
-        <div><span class="text-lowercase font-weight-light font-italic"><%= __('Dogs') %>: {{filterName}}</span></div>
-        <div class="grid-content bg-purple">
+      <div class="menu-between mb-1" v-if="_.pluck(filterObjects, 'label').length >0">
+        <div><span class="text-lowercase font-weight-light font-italic"><%= __('Kennels') %>: {{ruleForm.continent ? _.last(_.pluck(_.filter(continents,'id', +ruleForm.continent),'label')) : filterName}} </span></div>
+        <div class="grid-content">
           <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
                               <el-link :underline="false"> <i class="el-icon-more el-icon&#45;&#45;right"></i></el-link>
                             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-female" :command="{com:'dam'}">
+             <!-- <el-dropdown-item icon="el-icon-female" :command="{com:'dam'}">
                 <%= __('Dam') %>
               </el-dropdown-item>
 
@@ -617,77 +616,54 @@
               <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'all'}">
                 <%= __('All') %>
               </el-dropdown-item>
-
+-->
               <el-dropdown-item v-if="_.some(kennels, 'sale', true)" icon="el-icon-money"
                                 :command="{com:'c'}">
                 <%= __('For Sale') %>
               </el-dropdown-item>
-
+              <el-dropdown-item v-if="_.some(kennels, 'action', true)" icon="ti-world"
+                                :command="{com:'c'}">
+                <el-select size="small" @change="changeSelectContinent()" v-model="ruleForm.continent"
+                           placeholder="<%= __('Where is the nursery registered?') %>"
+                           :clearable="true"
+                           style="padding-left: 4px;padding-right: 5px;">
+                  <el-option v-for="item in continents"
+                             :key="item.id"
+                             :label="item.label"
+                             :value="item.id">
+                    <span style="float: left">{{ item.label }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                  </el-option>
+                </el-select>
+              </el-dropdown-item>
               <el-dropdown-item v-if="me.isSuperAdmin || me.isAdmin" icon="el-icon-edit" :command="{com:'e'}">
-                <%= __('Dog editor') %>
+                <%= __('Kennel editor') %>
               </el-dropdown-item>
 
-
-              &lt;!&ndash;<el-dropdown-item icon="el-icon-present" :command="{com:'g'}">&ndash;&gt;
-              &lt;!&ndash;<%= __('Add presentation') %>&ndash;&gt;
-              &lt;!&ndash;</el-dropdown-item>&ndash;&gt;
-              &lt;!&ndash;<el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:photoSet.indexPhotoSet}">&ndash;&gt;
-              &lt;!&ndash;<%= __('Photo session name') %>&ndash;&gt;
-              &lt;!&ndash;</el-dropdown-item>&ndash;&gt;
-              &lt;!&ndash;<el-dropdown-item icon="el-icon-edit" :command="{com:'b',i:photoSet.indexPhotoSet}">&ndash;&gt;
-              &lt;!&ndash;<%= __('Photo session description') %>&ndash;&gt;
-              &lt;!&ndash;</el-dropdown-item>&ndash;&gt;
-
-              &lt;!&ndash;<el-dropdown-item icon="el-icon-delete-solid"&ndash;&gt;
-              &lt;!&ndash;:command="{com:'d',i:photoSet.indexPhotoSet, name:photoSet.sessionName}">&ndash;&gt;
-              &lt;!&ndash;<%= __('Delete photo session') %>&ndash;&gt;
-              &lt;!&ndash;</el-dropdown-item>&ndash;&gt;
-
-              &lt;!&ndash;<el-dropdown-item :divided="true" disabled v-if="photoSet.createdAt" icon="el-icon-date"&ndash;&gt;
-              &lt;!&ndash;command="">&ndash;&gt;
-              &lt;!&ndash;<%= __('Date publication') %> : <br>{{photoSet.createdAt |&ndash;&gt;
-              &lt;!&ndash;getCreate(me.preferredLocale)}}&ndash;&gt;
-              &lt;!&ndash;</el-dropdown-item>&ndash;&gt;
 
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-      </div>-->
+      </div>
       <% /* ФОТО ПИТОМНИКОВ */ %>
-      <div class="scrollbar" id="style-1">
-        <el-row :gutter="2" class="flex-container wrap">
-          <el-col v-if="kennel.images[kennel.cover] && kennel.see" class="flex-item"
-                  v-for="(kennel, index) in kennels.filter(kennel=>kennel.see)" :key="kennel.id"
-                  :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
+      <div class="scrollbar" id="style-1">      dss      {{ruleForm.continent}}
 
-            <div @mouseenter="showMenu(kennel.id)" @mouseleave="showOut()"
-                 style="position: relative;" class="ell-image-flex"
-                 v-if="!_.isEmpty(kennel.imagesArrUrl)">
-              <transition-group appear name="el-zoom-in-top">
-                <div v-show="show && (showDog === kennel.id)" class="transition-box" :key="kennel.id">
-                  <% /* Кнопки управления Питомником */ %>
-                  <div v-if="kennel.whoCreate===me.id" class="menu-right mt-1">
-                    <el-link type="danger" class="px-2" @click="goTo2(kennel.detail)" :underline="false"
-                             title="<%= __('More') %>">
-                      {{kennel.fullName}}
-                    </el-link>
-                    <el-link type="danger" class="px-2"
-                             @click="openRemoveDialog(kennel.id)"
-                             :underline="false"
-                             title="<%= __('Remove') %>"
-                             icon="el-icon-close"></el-link>
-                  </div>
-                </div>
-              </transition-group>
+        <el-row :gutter="2" class="flex-container wrap">
+          <el-col class="flex-item"
+                  v-for="(kennel, index) in kennels.filter(kennel=>kennel.action)" :key="kennel.id"
+                  :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
+            <el-link type="danger" class="px-2" @click="goTo2(kennel.detail)" :underline="false"
+                     title="<%= __('More') %>">
               <el-image
-                :src="kennel.images[kennel.cover].imageSrc"
+                :src="kennel.imageSrc"
                 :key="kennel.id"
                 :fit="'cover'"
                 :scroll-container="'#style-1'"
                 lazy
-                :preview-src-list="kennel.imagesArrUrl">
+                >
               </el-image>
-            </div>
+            </el-link>
+
           </el-col>
         </el-row>
       </div>
