@@ -321,6 +321,176 @@
   .collapse-leave-to {
     opacity: 0;
   }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+
+  .el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .el-col {
+    border-radius: 4px;
+  }
+
+  //.bg-purple-dark {
+  //  background: #99a9bf;
+  //}
+  //
+  //.bg-purple {
+  //  background: #d3dce6;
+  //}
+  //
+  //.bg-purple-light {
+  //  background: #e5e9f2;
+  //}
+
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+
+  .row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
+  }
+
+
+
+  /******* copy dogs-home*******************/
+  .photo-editor {
+    .flex-wrap;
+    align-content: space-evenly;
+    justify-content: space-evenly;
+    .el-card {
+      width: 300px;
+      //width: 14vw;
+      margin-bottom: 5vh;
+      .el-card__body {
+        overflow-y: hidden;
+      }
+      .image {
+        width: 100%;
+        max-width: inherit;
+        overflow-y: hidden;
+        height: 100%;
+      }
+      .el-checkbox__label {
+        display: none;
+      }
+    }
+  }
+  .el-image{
+    height: 25vh;
+    img{
+      max-width: 924px;
+      min-width: 320px;
+    }
+  }
+  .flex {
+    display: flex;
+  }
+  .flex-wrap {
+    .flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .flex-wrap-col {
+    .flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  .pointer {
+    cursor: pointer;
+  }
+  .menu-right {
+    .flex-wrap;
+    justify-content: flex-end;
+    width: 100%;
+  }
+  .menu-left {
+    .flex-wrap;
+    justify-content: flex-start;
+  }
+  .menu-center {
+    .flex-wrap;
+    justify-content: center;
+  }
+  .menu-center-v {
+    .flex-wrap-col;
+    align-content: space-evenly;
+    justify-content: space-evenly;
+  }
+  .menu-center-2 {
+    .flex-wrap;
+    justify-content: space-around;
+  }
+  .menu-between {
+    .flex-wrap;
+    justify-content: space-between;
+  }
+  .el-link.el-link--danger:hover {
+    .pointer;
+    color: #F78989;
+  }
+  .el-link.el-link--primary:hover {
+    .pointer;
+    color: #409EFF;
+  }
+  .el-link.el-link--default:hover {
+    .pointer;
+    color: #606266;
+  }
+  .el-link.el-link--warning:hover {
+    .pointer;
+    color: #ebb563;
+  }
+  .el-link.el-link--success:hover {
+    .pointer;
+    color: #85ce61;
+  }
+  .showcase {
+    .menu-center;
+    align-content: space-evenly;
+    justify-content: space-evenly;
+    //  width: 100%;
+  }
+  .scrollbar {
+    background-color: white;
+    height: 1000px;
+    margin-bottom: 5vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  /**************************/
+
+
 
   @keyframes collapse-slide {
     from {
@@ -430,65 +600,7 @@
     }
   }
 
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
 
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
-
-  .el-row {
-    margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  .el-col {
-    border-radius: 4px;
-  }
-
-  .bg-purple-dark {
-    background: #99a9bf;
-  }
-
-  .bg-purple {
-    background: #d3dce6;
-  }
-
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
-
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
-
-  .row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
-  }
 
 
 }

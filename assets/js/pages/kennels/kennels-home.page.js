@@ -6,12 +6,16 @@ parasails.registerPage('kennels-home', {
     kennels: [],
     citys: [],
     links: [],
+    search: '',
+    show: false,
+    filterObjects: [],
     dialogEditorList: false,
+    showObject: undefined,
     props: {multiple: true},
     website: null,
     coOwner: '',
     users: [],
-    optionsTest: [
+   /* optionsTest: [
       {
         value: 1,
         label: 'Asia',
@@ -83,7 +87,7 @@ parasails.registerPage('kennels-home', {
           ]
         }]
       }
-    ],
+    ],*/
     cityId: undefined,
     coOwnerId: undefined,
     state1: '',
@@ -169,6 +173,7 @@ parasails.registerPage('kennels-home', {
     // Переводы
     dic: [
       ['en', {
+        all: 'All',
         warnNoKennel: `At the moment there is no nursery in the database.
          You should create at least one kennel to start with to add a dog.`,
         warnNotRecover: 'After deletion, the object cannot be restored. Delete object',
@@ -183,6 +188,7 @@ parasails.registerPage('kennels-home', {
         successDel: 'Object successfully delete. ',
       }],
       ['ru', {
+        all: 'Все',
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         warnNotRecover: 'После удаления объект невозможно будет восстановить. Удалить объект',
@@ -206,7 +212,8 @@ parasails.registerPage('kennels-home', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
 
-
+    // Устанавливает перевод названия фильтра
+    this.filterName = this.i19p.all;
     // Подписываемся на комнату continent  и событие list-continent
     io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
       // console.log('Сервер continents ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -234,12 +241,15 @@ parasails.registerPage('kennels-home', {
     // Принимаем данные по событию list-*
     io.socket.on('list-kennel', (data) => {
       console.log('data KENNELS:', data);
-      this.kennels = data;
+      this.kennels = this.filterObjects = _.isNull(data.kennels) ? [] : data;
+      console.log('this.kennels: ', this.kennels);
+      console.log('this.filterObjects: ', this.filterObjects);
     });
 
     // Принимаем данные по событию list-*
     io.socket.on('list-continent', (data) => {
       this.continents = data.continents;
+      console.log('  this.continents ::: ' ,   this.continents );
     });
 
     // Получаем данные для селектов в форме
@@ -287,9 +297,12 @@ parasails.registerPage('kennels-home', {
       });
 
       // Принимаем данные по событию list-*
-      await io.socket.on('list-kennel', (data) => {
-        this.kennels = data.kennels;
-      });
+  /*    await io.socket.on('list-kennel', (data) => {
+        this.kennels = this.filterObjects = _.isNull(data.kennels) ? [] : data;
+        console.log('this.kennels: ', this.kennels);
+        console.log('this.filterObjects: ', this.filterObjects);
+        // this.kennels = data.kennels;
+      });*/
       // Принимаем данные по событию list-*
       await  io.socket.on('list-continent', (data) => {
         this.continents = data.continents;
@@ -689,7 +702,21 @@ parasails.registerPage('kennels-home', {
       });
     },
 
+    showMenu(id, e) {
+      this.dogId = id;
+      this.show = true;
+      this.showObject = id;
+    },
 
+    showOut() {
+      this.show = false;
+    },
+    goTo(path) {
+      window.location = `/${path}`;
+    },
+    goTo2(path) {
+      this.goto(path);
+    },
     /* Авто поиск по городам */
     querySearch(queryString, cb) {
       let links = this.citys;
@@ -753,7 +780,10 @@ parasails.registerPage('kennels-home', {
         this.confirm = false;
       }
     },
-
+    clearFilter() {
+      this.$refs.filterTable.clearFilter();
+      this.search = '';
+    },
 
     openFullScreen() {
       this.loading = this.$loading({

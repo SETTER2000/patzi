@@ -62,7 +62,7 @@ module.exports = {
       // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
       // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
       kennel.groups = _.pluck(kennel.groups, 'id'); // friendIds: [id,id,id...]
-
+      kennel.detail = kennel.label ? `/kennel/${kennel.label.split(" ").join('-')}` : '';
       // Удаляем файловый дескриптор
       delete kennel.imageUploadFD;
       // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию и т.д....
