@@ -348,10 +348,36 @@ parasails.registerPage('dogs-home', {
       if (!value) {
         return '';
       }
+      console.log('format::: ', format);
       moment.locale(l);
-      let formatNew = (!format) ? 'LLL' : format;
+      let formatNew = _.isEmpty(format) ? 'LLL' : format;
       return (moment(value).format(formatNew)) ? moment(value).format(formatNew) : value;
       // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+    },
+    /**
+     * Показывает возраст с учётом смерти.
+     * @param value дата рождения
+     * @param l язык предпочтения (en|ru)
+     * @param dateDeath
+     * @returns {*}
+     */
+    getAge: function (value, l,  dateDeath) {
+      if (!value) {
+        return '';
+      }
+      moment.locale(l);
+      let start = moment(value);
+      let end = !_.isEmpty(dateDeath) ? moment(dateDeath) : '';
+      // return end ? end.from(start, true) : moment(value).fromNow(true);
+
+
+      let now = moment.parseZone();
+      /*  let event = moment.parseZone(value, ["DD.MM.YYYY"]);
+         let a=moment.preciseDiff(now, event);
+        console.log('now: ', now);
+        console.log('EVENT: ', event);
+        console.log('a: ', a);*/
+      return end ? moment(value).preciseDiff(end) : moment(value).fromNow(true);
     },
     abc(value, ruleForm) {
       if (!value) {
@@ -1306,10 +1332,10 @@ parasails.registerPage('dogs-home', {
      * @param prop  - свойство в объекте картинки, в котором прописан её url
      * @returns {*}
      */
-   async imgArrSlider(collectionObj, cover, field, prop = 'imageSrc') {
+    async imgArrSlider(collectionObj, cover, field, prop = 'imageSrc') {
       if (!_.isArray(collectionObj[field])) return collectionObj;
       let n = collectionObj;
-      n.imagesArrUrl ='';
+      n.imagesArrUrl = '';
       console.log('::::::::::::::::::::FUNCTION::::::::::');
       console.log('Индекс картинки которую нужно переместить:: ', cover);
       console.log('Должен быть наверху: ', n[field][cover]);
@@ -1336,13 +1362,13 @@ parasails.registerPage('dogs-home', {
         collectionName: 'Dog'
       }, (body, response) => {
         this.dogs.map(dog => {
-          if(dog.id === id){
-            console.log('INDEX: ' , index);
+          if (dog.id === id) {
+            console.log('INDEX: ', index);
             // let field = 'images';
             let cut = dog['images'].splice(index, 1);
             console.log('Вырезали этот объект: ', cut);
             // dog['images'].unshift(cut);
-            dog['images'] = [...cut,...dog['images']];
+            dog['images'] = [...cut, ...dog['images']];
             // dog['images'].splice( 0,0,cut);
             console.log('Объеденённый массив::: ', dog['images']);
             dog.imagesArrUrl = _.pluck(dog['images'], 'imageSrc');

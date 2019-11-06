@@ -9,10 +9,10 @@ parasails.registerPage('dog', {
     circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
     squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
     sizeList: ["large", "medium", "small"],
-    worldWinner: [ {
+    worldWinner: [{
       year: '2013',
       address: 'Hungary, Budapest',
-      description:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
+      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
     }],
     dic: [
       ['en', {
@@ -94,37 +94,46 @@ parasails.registerPage('dog', {
       let formatNew = (!format) ? 'LLL' : format;
       return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
+
     //Сантиметры в дюймы
     getDin: function (value, l, format) {
       if (!value) {
         return '';
       }
-     return (value * 0.393700).toFixed(1);
+      return (value * 0.393700).toFixed(1);
     },
     //Киллограммы в фунты
     getFunt: function (value, l, format) {
       if (!value) {
         return '';
       }
-     return (value/1000 * 2.20462).toFixed(1);
+      return (value / 1000 * 2.20462).toFixed(1);
     },
 
-    getAge: function (value, l, format) {
+    /**
+     * Показывает возраст с учётом смерти.
+     * @param value дата рождения
+     * @param l язык предпочтения (en|ru)
+     * @param dateDeath
+     * @returns {*}
+     */
+    getAge: function (value, l, dateDeath) {
       if (!value) {
         return '';
       }
       moment.locale(l);
-      let formatNew = (!format) ? 'LLL' : format;
+      let start = moment(value);
+      let end = !_.isEmpty(dateDeath) ? moment(dateDeath) : '';
+      // return end ? end.from(start, true) : moment(value).fromNow(true);
+
+
       let now = moment.parseZone();
       /*  let event = moment.parseZone(value, ["DD.MM.YYYY"]);
          let a=moment.preciseDiff(now, event);
         console.log('now: ', now);
         console.log('EVENT: ', event);
         console.log('a: ', a);*/
-      return moment(value).preciseDiff(now);
-      // return moment.parseZone(value).toNow(true);
-      // return moment(value).toNow(true);
-      // (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+      return end ? moment(value).preciseDiff(end) : moment(value).preciseDiff(now);
     },
   },
 
@@ -136,12 +145,12 @@ parasails.registerPage('dog', {
         return new Map(this.dic).get(this.me.preferredLocale);
       }
     },
-  /*  winner: {
-      get: function () {
-        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
-        return this.dog.winner;
-      }
-    },*/
+    /*  winner: {
+        get: function () {
+          // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
+          return this.dog.winner;
+        }
+      },*/
 
     indexSlide: {
       get: function () {
@@ -254,6 +263,19 @@ parasails.registerPage('dog', {
       // this.$message('Нажат элемент: ' + command);
     },
 
-
+// Выбираем заводчика
+  /*  async getBreeder() {
+      await io.socket.get(`/api/v1/comments/list-comment/${this.litter.id}/${field}`, function gotResponse(body, response) {
+        // console.log('Сервис Comment List ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.get(`/api/v1/breeders/${this.dog.}`, function gotResponse(body, response) {
+        console.log('Сервис Dogs sire ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-sire', (data) => {
+        this.sires = data;
+      });
+    },*/
   }
 });

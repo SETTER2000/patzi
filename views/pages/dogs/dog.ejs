@@ -54,7 +54,7 @@
 
   <div :class="{ winner: dog.winner }">
     <% /* Шапка страницы */ %>
-    <section class="banner-area relative">
+    <section class="banner-area relative" :class="{deathColor:dog.dateDeath}">
       <div class="container">
         <div class="row d-flex align-items-center justify-content-center">
           <div class="about-content col-lg-12">
@@ -73,8 +73,8 @@
                 <i slot="reference" style="font-size: 2em" class="ti-crown"></i>
               </el-popover>
             </div>
-            <h1 class="text-white">{{dog.fullName}}</h1>
-            <p>{{dog.dateBirth | getAge}}</p>
+            <h1 class="text-white" >{{dog.fullName}}</h1>
+            <p>{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</p>
             <H2 v-if="dog.nickname" class="text-gold">
               <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
               <i v-else class="el-icon-female"></i>
@@ -188,7 +188,7 @@
           <% /* ЗАВОДЧИК BREEDER*/ %>
           <el-card class="box-card">
             <div slot="header" class="clearfix">
-              <span>Breeder: First Name Last Name</span>
+              <span>Breeder: {{dog.breeder}}</span>
               <el-button style="float: right; padding: 3px 0" v-if="me.isAdmin || me.isSuperAdmin" type="text">
                 <el-link icon="el-icon-edit"></el-link>
               </el-button>

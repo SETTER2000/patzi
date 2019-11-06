@@ -42,6 +42,10 @@ module.exports = {
       throw 'notFound';
     }
 
+
+    let breeder = dog.kennel.yourKennel ? await User.findOne({id: dog.kennel.yourKennel}) : '';
+    dog.breeder = breeder.fullName;
+    // console.log('breeder::: ', breeder);
     /**
      * Генерирует ссылки с параметрами изображения,
      * которое должен вернуть S3 для данного модуля.
@@ -73,8 +77,8 @@ module.exports = {
     dog = await sails.helpers.cloudFrontUrlMin.with({
       collection: dog,
       collectionName: 'dog',
-      field:'images',
-      createField:'imgI7',
+      field: 'images',
+      createField: 'imgI7',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
         "resize": {
@@ -99,10 +103,10 @@ module.exports = {
       }
     });
 
- dog = await sails.helpers.cloudFrontUrlMin.with({
+    dog = await sails.helpers.cloudFrontUrlMin.with({
       collection: dog,
       collectionName: 'dog',
-      field:'images',
+      field: 'images',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
         "resize": {
@@ -126,7 +130,6 @@ module.exports = {
         }
       }
     });
-
 
 
     // console.log('DOGG::: ', dog);
