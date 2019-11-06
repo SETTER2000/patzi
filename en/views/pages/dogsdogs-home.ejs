@@ -87,8 +87,7 @@
               </div>
             </template>
 
-                 <img :src="img.imageSrc" class="image">
-
+            <img :src="img.imageSrc" class="image">
 
 
             <div style="padding: 14px;">
@@ -1292,7 +1291,8 @@
 
       <% /* Кнопки управления, фильтры */ %>
       <div class="menu-between mb-1" v-if="_.pluck(filterDogs, 'label').length >0">
-        <div><span class="text-lowercase font-weight-light font-italic"><%= __('Dogs') %>: {{filterName}}</span></div>
+        <div><span class=" font-weight-bold">
+            <%= __('Dogs') %>: {{filterName}}</span></div>
         <div class="grid-content bg-purple">
           <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
@@ -1355,20 +1355,24 @@
             <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
                  style="position: relative;" class="ell-image-flex"
                  v-if="!_.isEmpty(dog.imagesArrUrl)">
-              <transition-group appear name="el-zoom-in-top">
-                <div v-show="show && (showDog === dog.id)" class="transition-box" :key="dog.id">
+              <transition-group appear name="el-fade-in">
+                <div v-show="show && (showDog === dog.id)" class="transition-box blue-dark" :class="{death:dog.dateDeath}" :key="dog.id">
                   <% /* Кнопки управления собакой */ %>
-                  <div class="menu-right mt-1">
-                    <el-link type="danger" class="px-2" @click="goTo2(dog.detail)" :underline="false"
-                             title="<%= __('More') %>">
-                      {{dog.fullName}}
-                    </el-link>
-                    <!--<el-link type="danger" class="px-2" @click="openRemoveDialog(dog.id)" :underline="false"
+                  <div class="menu-center-v">
+                    <el-link  class="link" @click="goTo2(dog.detail)" :underline="false">
+
+                      <div :class="{deathColor:dog.dateDeath}"> {{dog.fullName}}</div>
+
+                      <div class="date" :class="{deathColor:dog.dateDeath}">{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</div>
+                      <!--<el-link type="danger" class="px-2" @click="openRemoveDialog(dog.id)" :underline="false"
                              title="<%= __('Remove') %>"
                              icon="el-icon-close"></el-link>-->
+                    </el-link>
                   </div>
                 </div>
+
               </transition-group>
+
               <el-image
                 :src="dog.images[dog.cover].imageSrc"
                 :key="dog.id"
