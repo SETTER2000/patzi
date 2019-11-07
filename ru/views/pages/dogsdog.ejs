@@ -196,7 +196,7 @@
       <div class="container">
         <div class="menu-between mb-5">
         <h2 ><span><%= __('Dog description') %></span></h2>
-        <el-button type="primary" @click="clickPedigree()" round><%= __('Pedigree') %></el-button>
+        <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()" round><%= __('Pedigree') %></el-button>
         </div>
         <div class="menu-center">
           <el-card class="box-card ">
@@ -234,7 +234,9 @@
             <div class="menu-center">
               <div class="block">
                 <a href="#" @click="clickShowPhoto(dog.breeder)" class="flex justify-content-center">
-                  <el-avatar :size="100" :src="dog.breeder.avatar"></el-avatar>
+                  <el-avatar :size="100" :src="dog.breeder.avatar"  @error="errorHandler">
+                    <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                  </el-avatar>
                 </a>
               </div>
             </div>
