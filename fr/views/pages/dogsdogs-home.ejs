@@ -174,7 +174,7 @@
       </div>
     </ajax-form>
   </modal>
-  <% /* Диалоговое окно "В ПРОДАЖЕ" (SALE)*/ %>
+  <% /* Выезжающая вкладка чата с покупателем*/ %>
   <el-drawer
     title="<%= __('Chat') %>"
     :visible.sync="drawer"
@@ -224,6 +224,7 @@
       </el-col>
     </el-row>
   </el-drawer>
+  <% /* Диалоговое окно "В ПРОДАЖЕ" (SALE)*/ %>
   <el-dialog
     title="<%= __('Buy puppy chinese crested') %>"
     :visible.sync="dialogPedigreeVisible"
@@ -331,8 +332,9 @@
           <template slot="header" slot-scope="scope">
             <el-input
               v-model="search"
-              size="mini"
-              placeholder="Type to search"/>
+              size="small"
+              placeholder="Type to search"
+              clearable/>
           </template>
           <template slot-scope="scope">
             <el-tooltip content="<%= __('Image editor') %>" placement="left" effect="light">
@@ -1287,13 +1289,13 @@
 
   <section class="work-area">
     <div class="container">
-      <% /* Фильтры. */ %>
 
       <% /* Кнопки управления, фильтры */ %>
       <div class="menu-between mb-1" v-if="_.pluck(filterDogs, 'label').length >0">
         <div><span class=" font-weight-bold">
             <%= __('Dogs') %>: {{filterName}}</span></div>
-        <div class="grid-content bg-purple">
+
+        <div class="grid-content">
           <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
                               <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
@@ -1345,11 +1347,20 @@
           </el-dropdown>
         </div>
       </div>
+
+      <% /* ПОИСК. */ %>
+      <div class="menu-center my-3">
+        <el-input
+          v-model="searchObjects"
+          placeholder="<%= __('Search by dog name') %>"
+          clearable/>
+      </div>
+
       <% /* ФОТО СОБАК */ %>
       <div class="scrollbar" id="style-1">
         <el-row :gutter="2" class="flex-container wrap">
           <el-col v-if="dog.images[dog.cover] && dog.see" class="flex-item"
-                  v-for="(dog, index) in dogs.filter(dog=>dog.see)" :key="dog.id"
+                  v-for="(dog, index) in dogsFilter()" :key="dog.id"
                   :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
 
             <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
@@ -1359,15 +1370,25 @@
                 <div v-show="show && (showDog === dog.id)" class="transition-box blue-dark" :class="{death:dog.dateDeath}" :key="dog.id">
                   <% /* Кнопки управления собакой */ %>
                   <div class="menu-center-v">
-                    <el-link  class="link" @click="goTo2(dog.detail)" :underline="false">
+                    <div class="py-4">
+                      <el-link class="link" @click="goTo2(dog.detail)" :underline="false">
 
-                      <div :class="{deathColor:dog.dateDeath}"> {{dog.fullName}}</div>
+                        <div :class="{deathColor:dog.dateDeath}"> {{dog.fullName}}</div>
 
-                      <div class="date" :class="{deathColor:dog.dateDeath}">{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</div>
-                      <!--<el-link type="danger" class="px-2" @click="openRemoveDialog(dog.id)" :underline="false"
-                             title="<%= __('Remove') %>"
-                             icon="el-icon-close"></el-link>-->
-                    </el-link>
+                        <div class="date" :class="{deathColor:dog.dateDeath}">{{dog.dateBirth | getAge(me.preferredLocale,
+                          dog.dateDeath)}}
+                        </div>
+                      </el-link>
+                      <el-row class="mt-2">
+                        <!--<el-button icon="el-icon-search" circle></el-button>-->
+                        <!--<el-button type="primary" icon="el-icon-picture" circle></el-button>-->
+                        <el-button v-if="dog.price>0 & dog.sale" @click="goTo2('/dogs/chinese-crested/sale')" type="success"  round>
+                          <%= __('For sale') %></el-button>
+                        <!--<el-button type="info" icon="el-icon-message" circle></el-button>-->
+                        <!--<el-button type="warning" icon="el-icon-star-off" circle></el-button>-->
+                        <!--<el-button type="danger" icon="el-icon-delete" circle></el-button>-->
+                      </el-row>
+                    </div>
                   </div>
                 </div>
 
