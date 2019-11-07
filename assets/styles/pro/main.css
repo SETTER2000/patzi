@@ -3494,17 +3494,17 @@ body.mobile-nav-active #mobile-nav-toggle {
   }
 }
 
-.about-content h1 {
+/*.about-content h1 {
   font-size: 50px;
   font-weight: 700;
   margin-bottom: 10px;
-}
+}*/
 
-/*@media (max-width: 767px) {
+@media (max-width: 767px) {
   .about-content h1 {
     font-size: 35px;
   }
-}*/
+}
 
 .about-content p {
   margin-bottom: 0;

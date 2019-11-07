@@ -59,7 +59,8 @@ module.exports = {
     currency: {
       type: 'string',
       description: `Валюта продажи. Валюта за катоую можно купить собаку.
-      Знак рубля:  &#8381;`,
+      Знак рубля:  &#8381;
+      Знак euro:  &#8364; или &#x20ac;`,
       example: 'dollar',
       isIn: ['dollar', 'рубль', 'euro'],
       // required: true,

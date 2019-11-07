@@ -4,6 +4,7 @@ parasails.registerPage('dogs-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     dogs: [],
+    searchObjects:'',
     filterDogs: [],
     filterName: '',
     isActive: true,
@@ -1379,6 +1380,12 @@ parasails.registerPage('dogs-home', {
         console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
     },
+
+    dogsFilter(){
+      // dogs.filter(dog=>dog.see)
+    return  this.dogs.filter(data => (!this.searchObjects || data.fullName.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see)
+    },
+
 
   }
 })

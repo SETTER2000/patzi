@@ -6,6 +6,8 @@ parasails.registerPage('dog', {
     dialogFormAwards: false,
     direction: 'ttb',
     comment: '',
+    objOne: {},
+    photoVisible: false,
     circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
     squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
     sizeList: ["large", "medium", "small"],
@@ -75,7 +77,7 @@ parasails.registerPage('dog', {
     moment().locale(this.me.preferredLocale);
 
 
-    // console.log('DOGGG ', this.dog);
+    console.log('DOGGG ', this.dog);
 
 
   },
@@ -95,6 +97,14 @@ parasails.registerPage('dog', {
       return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
 
+    // Получить значёк валюты
+    getCurrency: function (value) {
+      if (!value) {
+        return '';
+      }
+      return (value === 'dollar') ? '$' :
+        (value === 'euro') ? '€' : '₽';
+    },
     //Сантиметры в дюймы
     getDin: function (value, l, format) {
       if (!value) {
@@ -262,7 +272,32 @@ parasails.registerPage('dog', {
       // }
       // this.$message('Нажат элемент: ' + command);
     },
+    handleCloseDialog(done) {
+      this.objOne={};
+      done();
+     /* this.$confirm('Are you sure to close this dialog?')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {
+        });*/
+    },
+    goTo(path) {
+      window.location = `/${path}`;
+    },
+    goTo2(path) {
+      this.goto(path);
+    },
 
+
+    clickShowPhoto(row) {
+
+      this.photoVisible = true;
+      console.log('row:', row);
+      // this.objOne = row;
+      this.objOne = Object.assign({}, this.objOne, row);
+      console.log('this.objOne:', this.objOne);
+    },
 // Выбираем заводчика
   /*  async getBreeder() {
       await io.socket.get(`/api/v1/comments/list-comment/${this.litter.id}/${field}`, function gotResponse(body, response) {

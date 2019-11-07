@@ -54,7 +54,8 @@ module.exports = {
 
     // Выбираем весь список объектов данной коллекции.
     let dogs = await Dog.find()
-      .sort('createdAt DESC')
+    // сортируем сначала тех кто в продаже, затем по дате добавления.
+      .sort([{sale:'DESC'},{createdAt:'DESC'}])
       .populate('kennel')
       .populate('children')
       .populate('parents');

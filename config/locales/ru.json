@@ -233,6 +233,7 @@
 	"Update personal avatar": "Обновить личный аватар",
 	"Update personal gravatar": "Обновить личный граватар",
 	"Information": "Информация",
+	"Search by dog name": "Поиск по имени собаки",
 	"Variety": "Тип",
 	"contact support": "техподдержку",
 	"An error occured while processing your request. Please check your information and try again, or": "Произошла ошибка при обработке вашего запроса. Пожалуйста, проверьте информацию и попробуйте снова, или обратитесь в ",
@@ -243,6 +244,7 @@
 	"New password": "Новый пароль",
 	"Expiration": "Истекает",
 	"Awards": "Награды",
+	"For sale": "Продаётся",
 	"Send message": "Отправить сообщение",
 	"Send reset link": "Получить ссылку на сброс пароля",
 	"Send": "Отправить",
@@ -662,9 +664,10 @@
 	"Please Input co-owner": "Начните вводить имя",
 	"IMPORTANT! Be sure to change the password after authorization": "ВАЖНО! Обязательно смените пароль, после авторизации",
 	"Email": "Email",
+	"Dog description": "Описание собаки",
 	"This is your credentials": "Это ваши данные для авторизации",
 	"Where is the name of the kennel in relation to the name of the kennel.": "Where is the name of the kennel in relation to the name of the kennel.",
-	"right: KennelName kennelName | left: kennelName KennelName": "right: KennelName kennelName | left: kennelName KennelName",
-	"Chinese Crested kennel. Catalog of nurseries of the world.": "Chinese Crested kennel. Catalog of nurseries of the world.",
-	"The page presents the Chinese Crested kennel Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested kennel kennels in the world.": "The page presents the Chinese Crested kennel Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested kennel kennels in the world."
+	"right: KennelName kennelName | left: kennelName KennelName": "справо: KennelName kennelName | слева: kennelName KennelName",
+	"Chinese Crested kennel. Catalog of nurseries of the world.": "Питомник китайских хохлатых. Каталог питомников мира.",
+	"The page presents the Chinese Crested kennel Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested kennel kennels in the world.": "На странице представлены питомники китайских хохлатых, созданные по всему миру. Эта база данных питомников не может претендовать на полноту, как и любая другая база данных в мире. Вопрос только в том, кто его использует. По мере того, как механизм обновления и сбора данных в известных питомниках растет и совершенствуется, эта база данных будет автоматически собирать, поддерживать и обновлять соответствующую информацию, которая появляется в открытом доступе к другим сайтам. Составление полного списка питомников китайских хохлатых в мире."
 }
