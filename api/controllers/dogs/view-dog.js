@@ -29,7 +29,8 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    const url = require('url');
+    const moment = require('moment');
+
 
     let fullName = _.startCase(inputs.fullName);
     console.log('dogName::: ', fullName);
@@ -49,6 +50,17 @@ module.exports = {
       avatar: breeder.defaultIcon === 'avatar' ? breeder.avatar : breeder.gravatar
     };
 
+
+    let litter = await sails.helpers.srcImagePreparation.with(
+      {
+        letter: dog.letter,
+        year: moment(dog.dateBirth).format("YYYY"),
+        preferredLocale: this.req.me.preferredLocale
+      });
+
+    console.log('HOOOOO:::', litter);
+    // Проверяем наличие помёта
+    dog.isPedigree = litter.letter;
 
     dog.parents = await sails.helpers.cloudFrontUrl.with({
       collection: dog.parents,
