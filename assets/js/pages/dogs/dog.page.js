@@ -289,7 +289,15 @@ parasails.registerPage('dog', {
       this.goto(path);
     },
 
-
+    clickPedigree() {
+      // this.dialogPedigreeVisible = true;
+      this.goto(`/litter/${this.dog.letter}/${moment(this.dog.dateBirth).format("YYYY")}/pedigree`);
+      // this.litterId = litterId;
+      // this.indexSlide = indexPhoto;
+      // this.handlerSetActiveSlider();
+      // console.log('this.litterId: ', this.litterId);
+      // console.log('this.indexPhoto: ', this.indexPhoto);
+    },
     clickShowPhoto(row) {
 
       this.photoVisible = true;
