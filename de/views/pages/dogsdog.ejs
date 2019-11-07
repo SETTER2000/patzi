@@ -6,7 +6,8 @@
     :visible.sync="photoVisible"
     :before-close="handleCloseDialog">
     <div class="menu-center" v-if="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)">
-      <img :src="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)" style="width: 100%" :alt="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)">
+      <img :src="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)" style="width: 100%"
+           :alt="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)">
     </div>
     <!--<div class="block">
       <el-image :src="objOne.img" class="cov">
@@ -93,7 +94,7 @@
                 <i slot="reference" style="font-size: 2em" class="ti-crown"></i>
               </el-popover>
             </div>
-            <h1 class="text-white" >{{dog.fullName}}</h1>
+            <h1 class="text-white">{{dog.fullName}}</h1>
             <p>{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</p>
             <H2 v-if="dog.nickname" class="text-gold">
               <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
@@ -169,11 +170,12 @@
           </div>
           <% /*ГЛАВНАЯ КАРТИНКА */ %>
           <div class="menu-center " style="position: relative; overflow:hidden ">
-            <div class="lenta" >
 
-              <div style="color: white;">{{dog.currency | getCurrency()}}{{dog.price}}</div>
-
-            </div>
+            <el-tooltip v-if="dog.sale & dog.price>0" class="item" effect="dark" content="<%= __('For sale') %>" placement="left">
+              <el-button class="lenta pointer" @click="goTo2('/dogs/chinese-crested/sale')">
+                <div style="color: white;">{{dog.currency | getCurrency()}}{{dog.price}}</div>
+              </el-button>
+            </el-tooltip>
             <!--<div><img src="/images/crown.png" alt=""></div>-->
             <!--<img :src="dog.images[dog.cover].imageSrc" class="img-fluid" alt="dog.images[dog.cover].name">-->
             <el-image
@@ -192,7 +194,10 @@
     <% /* ИНФОРМАЦИЯ о СОБАКЕ */ %>
     <section class="service-area ">
       <div class="container">
-        <h2 class="menu-center mb-5"> <span><%= __('Dog description') %></span></h2>
+        <div class="menu-between mb-5">
+        <h2 ><span><%= __('Dog description') %></span></h2>
+        <el-button type="primary" @click="clickPedigree()" round><%= __('Pedigree') %></el-button>
+        </div>
         <div class="menu-center">
           <el-card class="box-card ">
             <div slot="header" class="clearfix">
@@ -212,7 +217,8 @@
                 <span><%= __('Variety') %>:</span> <span>{{dog.type}}</span>
               </div>
               <div class="menu-between">
-                <span><%= __('Size') %>: </span> <span>{{dog.growth}}<%= __('cm') %> ({{dog.growth | getDin}}") / {{dog.weight/1000}}<%= __('kg') %> ({{dog.weight | getFunt}}#)</span>
+                <span><%= __('Size') %>: </span> <span>{{dog.growth}}<%= __('cm') %>
+                  ({{dog.growth | getDin}}") / {{dog.weight/1000}}<%= __('kg') %> ({{dog.weight | getFunt}}#)</span>
               </div>
             </div>
           </el-card>
@@ -226,10 +232,10 @@
               </el-button>
             </div>
             <div class="menu-center">
-              <div class="block" >
-                  <a href="#" @click="clickShowPhoto(dog.breeder)" class="flex justify-content-center">
-                <el-avatar :size="100" :src="dog.breeder.avatar"></el-avatar>
-                  </a>
+              <div class="block">
+                <a href="#" @click="clickShowPhoto(dog.breeder)" class="flex justify-content-center">
+                  <el-avatar :size="100" :src="dog.breeder.avatar"></el-avatar>
+                </a>
               </div>
             </div>
           </el-card>
@@ -253,23 +259,25 @@
           <% /* РОДИТЕЛИ PARENTS */ %>
           <el-card class="box-card " v-for="(parent, index) of dog.parents" :key="'p-' + index">
             <div slot="header" class="clearfix">
-              <span><i :class="[parent.gender==='sire' ? 'el-icon-male':'', 'el-icon-female']"></i> {{parent.gender}}:</span> <span @click="goTo2(parent.detail)" class="pointer">{{parent.fullName}}</span>
+              <span><i :class="[parent.gender==='sire' ? 'el-icon-male':'', 'el-icon-female']"></i> {{parent.gender}}:</span> <span
+                @click="goTo2(parent.detail)" class="pointer">{{parent.fullName}}</span>
               <el-button style="float: right; padding: 3px 0" v-if="me.isAdmin || me.isSuperAdmin" type="text">
                 <el-link icon="el-icon-edit"></el-link>
               </el-button>
             </div>
             <div class="menu-between">
-              <span><%= __('Size') %>: </span> <span>{{parent.growth}}<%= __('cm') %> ({{parent.growth | getDin}}") / {{parent.weight/1000}}<%= __('kg') %> ({{parent.weight | getFunt}}#)</span>
+              <span><%= __('Size') %>: </span> <span>{{parent.growth}}<%= __('cm') %>
+                ({{parent.growth | getDin}}") / {{parent.weight/1000}}<%= __('kg') %> ({{parent.weight | getFunt}}#)</span>
             </div>
-            <div  v-if="parent" >
-                <template>
-                  <el-carousel  trigger="click" :autoplay="false" indicator-position="none">
-                    <el-carousel-item v-for="(img, index) of parent.imgI7" :key="img.id" class="menu-center">
-                      <p class="medium">{{ parent.description }}</p>
-                      <img :src="img.imageSrc" style="width: auto; height: 300px; "  alt="" >
-                    </el-carousel-item>
-                  </el-carousel>
-                </template>
+            <div v-if="parent">
+              <template>
+                <el-carousel trigger="click" :autoplay="false" indicator-position="none">
+                  <el-carousel-item v-for="(img, index) of parent.imgI7" :key="img.id" class="menu-center">
+                    <p class="medium">{{ parent.description }}</p>
+                    <img :src="img.imageSrc" style="width: auto; height: 300px; " alt="">
+                  </el-carousel-item>
+                </el-carousel>
+              </template>
             </div>
           </el-card>
         </div>
@@ -284,7 +292,7 @@
             <% /* КАРТИНКИ СОБАКИ */ %>
             <div class="col menu-center">
               <div v-for="(img ,index, key) in dog.images" :key="index + '-DOGS'">
-                <picture @click="clickShowPhoto(img)" >
+                <picture @click="clickShowPhoto(img)" class="pointer">
                   <source media="(min-width: 1240px)" :srcset="dog.imagesMin[index].imageSrc">
                   <source media="(max-width: 414px)" :srcset="dog.imgI7[index].imageSrc">
                   <img :src="img.imageSrc" class="portrait" :alt="img.name">
