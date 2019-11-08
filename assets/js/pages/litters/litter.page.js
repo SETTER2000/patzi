@@ -226,16 +226,16 @@ parasails.registerPage('litter', {
     this.isAfter();
     this.ratio = _.last(_.pluck(this.me.ratio.filter(rat => rat.letter === this.litter.letter), 'litter'));
     // Super SVG animation
-    this.superSvg();
+    // this.superSvg();
 
     // Haha SVG animation
-    this.hahaSvg();
+    // this.hahaSvg();
 
     // Wow SVG animation
-    this.wowSvg();
+    // this.wowSvg();
 
     // Like SVG animation
-    this.likeSvg();
+    // this.likeSvg();
     // Буквы помёта
     this.letterList();
     this.commentList('puppies');
@@ -478,28 +478,33 @@ parasails.registerPage('litter', {
 
     // Wow SVG animation
     wowSvg() {
-      let wow = document.querySelector('#wow');
-      let wowAnimation = new LazyLinePainter(wow, {
-        'ease': 'easeOutSine',
-        'strokeWidth': 19,
-        'strokeOpacity': 1,
-        'strokeColor': '#ffb007',
-        'strokeCap': 'square'
-      });
-      wowAnimation.paint();
+      let el = document.querySelector('#wow');
+      console.log('ELLL wow::; ', el);
+      let myAnimation = new LazyLinePainter(el, {"ease":"easeInOutQuad","strokeWidth":19,"strokeOpacity":1,"strokeColor":"#F2C511","strokeCap":"square"});
+      myAnimation.paint();
+      /*    let myAnimation = new LazyLinePainter(el, {
+            'ease': 'easeOutSine',
+            'strokeWidth': 19.0,
+            'strokeOpacity': 0.9,
+            'strokeColor': '#ffb007',
+            'strokeCap': 'square'
+          });
+          myAnimation.paint();*/
     },
     // Haha SVG animation
     hahaSvg() {
-      let el = document.querySelector('#haha');
+      let el = this.$el.querySelector('#haha');
       console.log('ELLL haha::; ', el);
-      let myAnimation = new LazyLinePainter(el, {
-        'ease': 'easeInOutBounce',
-        'strokeWidth': 19,
-        'strokeOpacity': .7,
-        'strokeColor': '#9274a6',
-        'strokeCap': 'square'
-      });
+      let myAnimation = new LazyLinePainter(el, {"ease":"easeInOutQuart","strokeWidth":16,"strokeOpacity":1,"strokeColor":"#8acab0","strokeCap":"square"});
       myAnimation.paint();
+      /* let myAnimation = new LazyLinePainter(el, {
+         'ease': 'easeInOutBounce',
+         'strokeWidth': 19,
+         'strokeOpacity': .7,
+         'strokeColor': '#9274a6',
+         'strokeCap': 'square'
+       });
+       myAnimation.paint();*/
     },
 
 
