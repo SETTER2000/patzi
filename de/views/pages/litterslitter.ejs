@@ -382,7 +382,7 @@
         <div class="row">
           <% /* Хлебные крошки */ %>
           <div class="col col-md-6">
-            <el-breadcrumb separator-class="el-icon-arrow-right" >
+            <el-breadcrumb separator-class="el-icon-arrow-right">
               <el-breadcrumb-item><a href="/"><%= __('Home-menu') %></a></el-breadcrumb-item>
               <el-breadcrumb-item><a href="/litters"><%= __('Litters') %></a></el-breadcrumb-item>
               <el-breadcrumb-item><%= __('Litter') %> {{litter.letter}}</el-breadcrumb-item>
@@ -411,10 +411,10 @@
               <ul v-if="litter.images.length">
                 <li v-for="(img ,index, key) in litter.images" :key="index + '-lst'">
                   <a href="#" @click="showSliderImages()">
-                   <!-- <picture>
-                      <source media="(max-width: 480px)" :srcset="litter.imagesMin[index].imageSrc" >
-                      <img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">
-                    </picture>-->
+                    <!-- <picture>
+                       <source media="(max-width: 480px)" :srcset="litter.imagesMin[index].imageSrc" >
+                       <img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">
+                     </picture>-->
                     <!--<el-image :src="img.imageSrc" v-if="index===litter.cover" :lazy="true">-->
                     <el-image :src="litter.imagesMin[index].imageSrc" v-if="index===litter.cover" :lazy="true">
                       <div slot="placeholder" class="image-slot" style="height:500px;">
@@ -513,10 +513,10 @@
                   </span>: {{litter.letter.toUpperCase()}}...
                 </li>
                 <li><span class="title-description"><%= __('Sire') %></span>:
-                  <el-link :underline="false"  type="danger" @click="goDog(litter.sire[1])"> {{litter.sire[1]}}</el-link>
+                  <el-link :underline="false" type="danger" @click="goDog(litter.sire[1])"> {{litter.sire[1]}}</el-link>
                 </li>
                 <li><span><%= __('Dam') %></span>:
-                  <el-link :underline="false"  type="danger" @click="goDog(litter.dam[1])"> {{litter.dam[1]}}</el-link
+                  <el-link :underline="false" type="danger" @click="goDog(litter.dam[1])"> {{litter.dam[1]}}</el-link>
                 </li>
 
               </ul>
@@ -658,8 +658,8 @@
                             <a v-loading.fullscreen.lock="fullscreenLoading" href="#" @click="showSlider(idx, index)">
                               <!--<img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">-->
                               <picture>
-                                <source media="(max-width: 520px)" :srcset="photoSet.imagesMobile[idx].imageSrc" >
-                                <source media="(max-width: 750px)" :srcset="photoSet.photos[idx].imageSrc" >
+                                <source media="(max-width: 520px)" :srcset="photoSet.imagesMobile[idx].imageSrc">
+                                <source media="(max-width: 750px)" :srcset="photoSet.photos[idx].imageSrc">
                                 <img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">
                               </picture>
                             </a>
@@ -670,19 +670,22 @@
                       <!--// Показатели рейтингов-->
                       <el-row class="sv" :gutter="2">
                         <el-col :xs="8" :sm="12" :md="12" :lg="16" :xl="18">
-                          <el-tooltip class="item" effect="dark" placement="top-start">
-                            <div slot="content">
-                              <ul>
-                                <li v-for="(usName, index) in listLikeUserName" :key="index +  '-usNm'"> {{usName}}</li>
-                              </ul>
-                            </div>
-                            <!--// like SVG-->
-                            <span v-show="countLike > 0" class="container-icon">
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                 width="537.584px" height="443.04px" viewBox="0 0 537.584 443.04"
-                                 enable-background="new 0 0 537.584 443.04"
-                                 xml:space="preserve" data-llp-composed="true" id="like" class="lazy-line-painter">
+                          <div class="menu-center icos">
+                            <!--// Like-->
+
+                              <el-tooltip class="item" effect="dark" placement="top-start">
+                                <div slot="content">
+                                  <ul>
+                                    <li v-for="(usName, index) in listLikeUserName" :key="index +  '-usaNm'"> {{usName}}</li>
+                                  </ul>
+                                </div>
+                                <!--// like SVG-->
+                                <span v-show="countLike > 0" class="container-icon">
+                                  <svg version="1.1" id="like" xmlns="http://www.w3.org/2000/svg"
+                                   xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                   width="537.584px" height="443.04px" viewBox="0 0 537.584 443.04"
+                                   enable-background="new 0 0 537.584 443.04"
+                                   xml:space="preserve" data-llp-composed="true" class="lazy-line-painter">
                             <g id="Layer_1" display="none">
                             	<path display="inline" fill="#FFFFFF" stroke-miterlimit="10"
                                     d="M15.094,59.777&#10;&#9;&#9;c83.753-118.244,227.586-29.655,257.242,9.655c26.896-37.242,209.655-116.548,258.621-1.379&#10;&#9;&#9;c53.002,124.661-254.482,315.859-282.069,373.793C222.681,383.23-66.975,175.644,15.094,59.777z"
@@ -748,18 +751,22 @@
                                     style=""/>
                             </g>
                             </svg>
-                          </span>
-                          </el-tooltip>
-                          <el-tooltip class="item" effect="dark" placement="top-start">
-                            <div slot="content">
-                              <ul>
-                                <li v-for="(usName, index) in listSuperUserName" :key="index +  '-usNm'"> {{usName}}
-                                </li>
-                              </ul>
-                            </div>
-                            <!--// super SVG -->
-                            <span v-show="countSuper > 0" class="container-icon">
-                            <svg version="1.1" id="Untitled1" xmlns="http://www.w3.org/2000/svg"
+                                </span>
+                              </el-tooltip>
+
+                            <!--// super-->
+
+                              <el-tooltip class="item" effect="dark" placement="top-start">
+                                <div slot="content">
+                                  <ul>
+                                    <li v-for="(usName, index) in listSuperUserName" :key="index +  '-usNm'">
+                                      {{usName}}
+                                    </li>
+                                  </ul>
+                                </div>
+                                <!--// super SVG -->
+                                <span v-show="countSuper > 0" class="container-icon">
+                                  <svg version="1.1" id="super" xmlns="http://www.w3.org/2000/svg"
                                  xmlns:xlink="http://www.w3.org/1999/xlink"
                                  x="0px" y="0px" width="537.584px" height="443.04px" viewBox="0 0 537.584 443.04"
                                  enable-background="new 0 0 537.584 443.04" xml:space="preserve"
@@ -767,25 +774,28 @@
                                  class="lazy-line-painter">
                               <path fill="#FFFFFF" stroke-miterlimit="10"
                                     d="M15.094,59.777c83.753-118.244,227.586-29.655,257.242,9.655&#10;&#9;c26.896-37.242,209.655-116.548,258.621-1.379c53.002,124.661-254.482,315.859-282.069,373.793&#10;&#9;C222.681,383.23-66.975,175.644,15.094,59.777z"
-                                    data-llp-id="Untitled1-0" data-llp-duration="1490" data-llp-delay="0"
+                                    data-llp-id="super-0" data-llp-duration="1490" data-llp-delay="0"
                                     fill-opacity="0"
                                     style="stroke-linecap: butt;" data-llp-stroke-join="" data-llp-stroke-cap="butt"/>
                             </svg>
-                          </span>
-                          </el-tooltip>
-                          <el-tooltip class="item" effect="dark" placement="top-start">
-                            <div slot="content">
-                              <ul>
-                                <li v-for="(usName, index) in listWowUserName" :key="index +  '-usNm'"> {{usName}}</li>
-                              </ul>
-                            </div>
-                            <!--// wow SVG-->
-                            <span v-show="countWow > 0" class="container-icon">
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                </span>
+                              </el-tooltip>
+
+                            <!--// wow-->
+
+                              <el-tooltip class="item" effect="dark" placement="top-start">
+                                <div slot="content">
+                                  <ul>
+                                    <li v-for="(usName, index) in listWowUserName" :key="index +  '-usNam'"> {{usName}}</li>
+                                  </ul>
+                                </div>
+                                <!--// wow SVG-->
+                                <span v-show="countWow > 0" class="container-icon">
+                            <svg version="1.1" id="wow" xmlns="http://www.w3.org/2000/svg"
                                  xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                  width="537.584px" height="443.04px" viewBox="0 0 537.584 443.04"
                                  enable-background="new 0 0 537.584 443.04"
-                                 xml:space="preserve" data-llp-composed="true" id="wow" class="lazy-line-painter">
+                                 xml:space="preserve" data-llp-composed="true" class="lazy-line-painter">
                               <g id="Layer_1" display="none">
                               	<path display="inline" fill="#FFFFFF" stroke-miterlimit="10"
                                       d="M15.094,59.777&#10;&#9;&#9;c83.753-118.244,227.586-29.655,257.242,9.655c26.896-37.242,209.655-116.548,258.621-1.379&#10;&#9;&#9;c53.002,124.661-254.482,315.859-282.069,373.793C222.681,383.23-66.975,175.644,15.094,59.777z"
@@ -832,17 +842,18 @@
                               </g>
                             </svg>
                           </span>
-                          </el-tooltip>
+                              </el-tooltip>
 
+                            <!--// haha-->
 
-                          <el-tooltip class="item" effect="dark" placement="top-start">
-                            <div slot="content">
-                              <ul>
-                                <li v-for="(usName, index) in listHahaUserName" :key="index +  '-usNm'"> {{usName}}</li>
-                              </ul>
-                            </div>
-                            <!--// haha SVG-->
-                            <span v-show="countHaha > 0" class="container-icon">
+                              <el-tooltip class="item" effect="dark" placement="top-start">
+                                <div slot="content">
+                                  <ul>
+                                    <li v-for="(usName, index) in listHahaUserName" :key="index +  '-usNm'"> {{usName}}</li>
+                                  </ul>
+                                </div>
+                                <!--// haha SVG-->
+                                <span v-show="countHaha > 0" class="container-icon">
                                <svg version="1.1" id="haha" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 537.6 443"
                                     style="enable-background:new 0 0 537.6 443;" xml:space="preserve"
@@ -864,18 +875,21 @@
                                                 fill-opacity="0" style=""/>
                                           </svg>
                              </span>
-                          </el-tooltip>
+                              </el-tooltip>
 
+                            <!--// count-->
 
-                          <el-tooltip class="item" effect="dark" placement="top-start" v-cloak>
-                            <div slot="content">
-                              <ul>
-                                <li v-for="(usName, index) in listAllUsers" :key="index +  '-usNm'"> {{usName}}</li>
-                              </ul>
-                            </div>
-                            <!--// countLike-->
-                            <span>  {{photoSet.countLike ? photoSet.countLike : 0}}</span>
-                          </el-tooltip>
+                              <el-tooltip class="item container-icon" effect="dark" placement="top-start" v-cloak>
+                                <div slot="content">
+                                  <ul>
+                                    <li v-for="(usName, index) in listAllUsers" :key="index +  '-usNem'"> {{usName}}</li>
+                                  </ul>
+                                </div>
+                                <!--// countLike-->
+                                <span>  {{photoSet.countLike ? photoSet.countLike : 0}}</span>
+                              </el-tooltip>
+
+                          </div>
                         </el-col>
                         <el-col :xs="8" :sm="6" :md="6" :lg="4" :xl="3" class="text-right">
                           <div class="grid-content bg-purple text-right">
@@ -1005,10 +1019,10 @@
 
                                               </div>
                                               <ul class="sub-string ">
-                                                <li>
+                                                <!-- <li>
                                                   <el-dropdown placement="top" @command="handleCommand">
                                                     <span class="el-dropdown-link pointer" style="color:#385898;">
-                                                      <!--<i class="ti-thumb-up"></i>-->
+                                                      &lt;!&ndash;<i class="ti-thumb-up"></i>&ndash;&gt;
                                                       <%= __('Like') %>
                                                     </span>
                                                     <el-dropdown-menu slot="dropdown">
@@ -1030,7 +1044,7 @@
                                                       </el-dropdown-item>
                                                     </el-dropdown-menu>
                                                   </el-dropdown>
-                                                </li>
+                                                </li>-->
                                                 <li @click="openReplayFun(com.id)"><%= __('Replay') %> </li>
 
                                                 <li>
@@ -1124,13 +1138,15 @@
 
                                             <template v-if="com.child">
 
-                                              <el-link style="color: rgb(56, 88, 152); margin-left: 50px" :underline="false" v-if="_.isArray(com.child) && com.child.length>0" icon="el-icon-caret-right" @click="newComOpen(com.id)" type="primary">
+                                              <el-link style="color: rgb(56, 88, 152); margin-left: 50px" :underline="false"
+                                                       v-if="_.isArray(com.child) && com.child.length>0" icon="el-icon-caret-right"
+                                                       @click="newComOpen(com.id)" type="primary">
                                                 {{ com.child[0].userName}} <%= __('answered') %></el-link>
 
-                                                <ul  class="hr child" v-for="(cm,index) in com.child"
-                                                    :key="cm.id + '-child1'">
+                                              <ul class="hr child" v-for="(cm,index) in com.child"
+                                                  :key="cm.id + '-child1'">
 
-                                                  <div v-if="newCom && (comId === cm.parent)">
+                                                <div v-if="newCom && (comId === cm.parent)">
                                                   <li class="avat">
                                                     <div class="avat">
                                                       <el-avatar :size="35" :src="cm.avatarUrl"></el-avatar>
@@ -1272,8 +1288,6 @@
                                                     </ul>
 
 
-
-
                                                     <ul v-if="openReplay && commentId === com.id">
                                                       <li class="replay-open">
                                                         <% /* Поле ввода Replay комментария */ %>
@@ -1297,8 +1311,8 @@
                                                       </li>
                                                     </ul>
                                                   </li>
-                                                  </div>
-                                                </ul>
+                                                </div>
+                                              </ul>
 
                                             </template>
 
