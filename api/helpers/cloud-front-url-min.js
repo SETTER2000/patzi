@@ -101,9 +101,9 @@ module.exports = {
     }
 
     if (!_.isArray(inputs.collection)) {
-      console.log('Collections One:');
+      // console.log('Collections One:');
       if (sails.config.environment === 'production') {
-        console.log('Collections One Production');
+        // console.log('Collections One Production');
         let im = reprocessedObj(inputs.collection[inputs.field], 'fd');
         (!_.isEmpty(inputs.collection[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ?
           im.map(img => {
@@ -117,10 +117,10 @@ module.exports = {
           }) : '';
         inputs.collection[inputs.createField] = im;
       } else {
-        console.log('Collections One Locale');
+        // console.log('Collections One Locale');
         // console.log('Входящая коллекцияЖЖЖ ', inputs.collection);
         let im = reprocessedObj(inputs.collection[inputs.field], 'name');
-        console.log('I:::', im);
+        // console.log('I:::', im);
         let collectionId = inputs.collection.id ? inputs.collection.id : inputs.collectionId;
         let subfolder = inputs.subfolder ? inputs.subfolder : inputs.field;
         (!_.isEmpty(inputs.collection[inputs.field])) ? im.map((image, i) => {
@@ -132,7 +132,7 @@ module.exports = {
       }
     }
     else {
-      console.log('Collections Many:');
+      // console.log('Collections Many:');
       await _.each(inputs.collection, async (obj) => {
         console.log('Collections Many Production');
         if (sails.config.environment === 'production') {
@@ -149,7 +149,7 @@ module.exports = {
             }) : '';
           obj[inputs.createField] = im;
         } else {
-          console.log('Collections Many Location');
+          // console.log('Collections Many Location');
           obj[inputs.createField] = (!_.isEmpty(obj[inputs.field])) ? await obj[inputs.field].map((image, i) => {
             i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
             image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${obj.id}/${inputs.field}/${i}`) : '';

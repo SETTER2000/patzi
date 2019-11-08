@@ -422,7 +422,8 @@
           width: '100%',
           'z-index': '9000',
           display: 'table',
-          'background': 'radial-gradient(circle, rgba(0,0,0,0.98) 0%, rgba(35,8,8,0.87) 80%, rgba(20,5,5,0.85) 100%)',
+          // 'background': 'radial-gradient(circle, rgba(0,0,0,0.98) 0%, rgba(35,8,8,0.87) 80%, rgba(20,5,5,0.85) 100%)',
+          'background': 'radial-gradient(circle, rgba(72,187,101,0.6138830532212884) 0%, rgba(125,224,203,0.5438550420168067) 43%, rgba(0,212,255,0.3225665266106442) 100%)',
           // (Thanks cssgradient.io!)
         })
         .appendTo('body');
@@ -445,7 +446,7 @@
         $('#parasails-error-handler [role="error-handler-content"] pre').css({
           color: '#ff5555',
           display: 'block',
-          'background': '#112f1f',
+          'background': 'rgba(95, 184, 211, 0)',
           'white-space': 'pre-wrap',
           'padding': '10px',
           'margin-left': 'auto',

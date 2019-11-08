@@ -351,7 +351,7 @@ parasails.registerPage('litter', {
       }
 
       // console.log('value::::', this.countCommentAll.push(value).length);
-      return lakes.length;
+      // return lakes.length;
       value === 'like' ? this.countCommentLike++ :
         value === 'wow' ? this.countCommentWow++ :
           value === 'haha' ? this.countCommentHaha++ :
@@ -463,13 +463,14 @@ parasails.registerPage('litter', {
 
     // Super SVG animation
     superSvg() {
-      let el = document.querySelector('#Untitled1');
+      let el = document.querySelector('#super');
+      console.log('ELLL super::; ', el);
       let myAnimation = new LazyLinePainter(el, {
         'ease': 'easeInOutSine',
         'strokeWidth': 19.0,
         'strokeOpacity': 0.9,
         'strokeColor': '#E84B3C',
-        'strokeCap': 'butt'
+        'strokeCap': 'square'
       });
       myAnimation.paint();
     },
@@ -490,6 +491,7 @@ parasails.registerPage('litter', {
     // Haha SVG animation
     hahaSvg() {
       let el = document.querySelector('#haha');
+      console.log('ELLL haha::; ', el);
       let myAnimation = new LazyLinePainter(el, {
         'ease': 'easeInOutBounce',
         'strokeWidth': 19,
@@ -1347,7 +1349,7 @@ parasails.registerPage('litter', {
     // Выбираем все лайки
     listLike: async function (field) {
       await io.socket.get(`/api/v1/likes/list-like/${this.litter.id}/${field}`, function gotResponse(body, response) {
-        // console.log('Сервис Like List ответил кодом ' + response.statusCode + ' и данными: ', body);
+        console.log('Сервис Like List ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
 
 
@@ -1356,6 +1358,7 @@ parasails.registerPage('litter', {
         // console.log('LIST LIKE::: ', data);
         if (data.length > 0 && _.isArray(this.litter[field])) {
           this.litter[field].map(puppyPhotoSet => {
+            console.log('puppyPhotoSet::: ' , puppyPhotoSet);
             puppyPhotoSet.likes = _.isArray(puppyPhotoSet.likes) ? puppyPhotoSet.likes : [];
             puppyPhotoSet.likes = data.filter(like => like.indexPhotoSet === puppyPhotoSet.indexPhotoSet);
             // console.log('FILTER LIKE photoset +::: ', _.pluck(_.filter(puppyPhotoSet.likes, {like: 'like'}), 'like'));

@@ -1,4 +1,58 @@
 #litter {
+  .flex {
+    display: flex;
+  }
+  .nowrap {
+    flex-wrap: nowrap;
+  }
+  .flex-wrap {
+    .flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
+  .flex-wrap-col {
+    .flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  .pointer {
+    cursor: pointer;
+  }
+
+  .menu-right {
+    .flex-wrap;
+    justify-content: flex-end;
+    width: 100%;
+  }
+  .menu-left {
+    .flex-wrap;
+    justify-content: flex-start;
+  }
+  .menu-center {
+    .flex-wrap;
+    justify-content: center;
+  }
+  .menu-center-v {
+    .flex-wrap-col;
+    align-content: space-evenly;
+    justify-content: space-evenly;
+  }
+  .menu-center-2 {
+    .flex-wrap;
+    justify-content: space-around;
+  }
+  .menu-between {
+    .flex-wrap;
+    justify-content: space-between;
+    //margin-block-end: 1em;
+  }
+
+  .menu-between-v {
+    .flex-wrap-col;
+    align-content: stretch;
+  }
+
   //START ANIMATION
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
@@ -6,7 +60,7 @@
   .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
     opacity: 0;
   }
-  .about-content h1{
+  .about-content h1 {
     font-size: 2vw;
   }
   .super-ico {
@@ -14,6 +68,26 @@
     display: inline-block;
     height: 16px;
     width: 16px;
+  }
+  .icos{
+    width: 130px;
+    .counts{
+      margin-left:10px;
+    }
+  }
+  .container-icon {
+    position: absolute;
+    margin: 0 4px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    //#super {
+    //  width: 1.6vw;
+    //  height: 1.6vh;
+    //  position: relative;
+    //  overflow: visible;
+    //}
+
   }
   .super-ico::after {
     content: '';
@@ -30,8 +104,6 @@
       cursor: pointer;
     }
   }
-
-
 
   .portfolio_details_inner .portfolio_right_text .list li span {
     width: 137px;
@@ -506,8 +578,7 @@
     font-size: 1.6rem;
   }
 
-
-    @media (max-width: 900px) {
+  @media (max-width: 900px) {
 
     .el-dialog {
       width: 90%;
@@ -520,29 +591,27 @@
   }
 
   @media (min-width: 320px) {
-    .about-content h1{
+    .about-content h1 {
       font-size: 6vw;
     }
+
     .pad {
       padding-top: 10px;
       padding-bottom: 10px;
     }
   }
 
-
   @media (min-width: 900px) {
-    .about-content h1{
+    .about-content h1 {
       font-size: 3vw;
     }
   }
 
-    @media (max-width: 767px) {
+  @media (max-width: 767px) {
 
     img.ell {
       height: 100%;
     }
-
-
 
     //#el-collapse-content-4617 > div > span > ul:nth-child(4) > li.comm > ul > li:nth-child(2){
     //  &:hover{
