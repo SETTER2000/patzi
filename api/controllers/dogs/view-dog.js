@@ -90,7 +90,7 @@ module.exports = {
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
         "resize": {
-          "width": 80,
+          "width": 460,
           // "height": 160,
           "fit": "inside",
           "background": {
