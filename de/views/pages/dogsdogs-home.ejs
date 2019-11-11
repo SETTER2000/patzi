@@ -512,10 +512,10 @@
   <% /* Диалоговое окно. Добавить собаку. */ %>
   <el-dialog title="<%= __('Add your dog') %>"
              :visible.sync="centerDialogAdded"
-             custom-class="dialog-kennel-add"
+             custom-class="dialog-kennel-add-dog"
              center>
     <el-dialog
-      width="80%"
+      width="60%"
       :title="dialog.header"
       :visible.sync="innerVisible"
       append-to-body>
@@ -601,10 +601,10 @@
       </el-col>
     </el-row>
     <!---------------------------------------------------------------------------------------->
-    <el-row type="flex" class="row-bg" justify="center">
-      <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
-                 class="demo-ruleForm">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <el-row type="flex" class="row-bg" justify="center">
+
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
 
           <% /* ВИДНА СОБАКА ИЛИ НЕТ */ %>
           <template>
@@ -654,7 +654,6 @@
               <div size="mini" round class="el-icon-question "></div>
             </el-tooltip>
           </el-form-item>
-
           <% /* ИМЯ СОБАКИ*/ %>
           <template v-if="ruleForm.kennel &&  !buttonUpdate">
 
@@ -1206,7 +1205,7 @@
           </template>
 
 
-          <div class="my-3 pt-4 text-center hidden-xs-only">
+          <!--   <div class="my-3 pt-4 text-center hidden-xs-only">
             <el-form-item>
 
               <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
@@ -1225,11 +1224,73 @@
                          @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
               <el-button v-else type="primary" @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
             </el-button-group>
-          </div>
-        </el-form>
-      </el-col>
-    </el-row>
+          </div>-->
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+          <el-form-item label="Activity name">
+            <el-input v-model="ruleForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="Activity zone">
+            <el-select v-model="ruleForm.region" placeholder="please select your zone">
+              <el-option label="Zone one" value="shanghai"></el-option>
+              <el-option label="Zone two" value="beijing"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Activity time">
+            <el-col :span="11">
+              <el-date-picker type="date" placeholder="Pick a date" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
+            </el-col>
+            <el-col class="line" :span="2">-</el-col>
+            <el-col :span="11">
+              <el-time-picker placeholder="Pick a time" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="Instant delivery">
+            <el-switch v-model="ruleForm.delivery"></el-switch>
+          </el-form-item>
+          <el-form-item label="Activity type">
+            <el-checkbox-group v-model="ruleForm.type">
+              <el-checkbox label="Online activities" name="type"></el-checkbox>
+              <el-checkbox label="Promotion activities" name="type"></el-checkbox>
+              <el-checkbox label="Offline activities" name="type"></el-checkbox>
+              <el-checkbox label="Simple brand exposure" name="type"></el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="Resources">
+            <el-radio-group v-model="ruleForm.resource">
+              <el-radio label="Sponsor"></el-radio>
+              <el-radio label="Venue"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="Activity form">
+            <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+          </el-form-item>
 
+        </el-col>
+      </el-row>
+      <el-row type="flex"  justify="center" >
+        <div class="my-3 pt-4 text-center hidden-xs-only">
+          <el-form-item>
+
+            <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+            <el-button @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
+            <el-button v-if="!buttonUpdate" type="primary"
+                       @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+            <el-button v-else type="primary" @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
+
+          </el-form-item>
+        </div>
+        <div class="text-center hidden-sm-and-up">
+          <el-button-group>
+            <el-button @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
+            <el-button @click="buttonUpdate = false; centerDialogAdded = false" icon="el-icon-close"></el-button>
+            <el-button v-if="!buttonUpdate" type="primary"
+                       @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+            <el-button v-else type="primary" @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+          </el-button-group>
+        </div>
+      </el-row>
+    </el-form>
     <span slot="footer" class="dialog-footer">
   </span>
   </el-dialog>
@@ -1382,7 +1443,7 @@
                       <el-row class="mt-2">
                         <!--<el-button icon="el-icon-search" circle></el-button>-->
                         <!--<el-button type="primary" icon="el-icon-picture" circle></el-button>-->
-                        <el-button v-if="dog.price>0 & dog.sale" @click="goTo2('/dogs/chinese-crested/sale')" type="success"  round>
+                        <el-button v-if="dog.price>0 & dog.sale" @click="goTo2('/dogs/chinese-crested/sale')" type="success" round>
                           <%= __('For sale') %></el-button>
                         <!--<el-button type="info" icon="el-icon-message" circle></el-button>-->
                         <!--<el-button type="warning" icon="el-icon-star-off" circle></el-button>-->
