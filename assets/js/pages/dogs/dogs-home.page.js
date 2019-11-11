@@ -8,7 +8,6 @@ parasails.registerPage('dogs-home', {
     filterDogs: [],
     filterName: '',
     isActive: true,
-
     error: null,
     isCollapse: true,
     dialogEditor: false,
@@ -98,16 +97,7 @@ parasails.registerPage('dogs-home', {
     cloudError: '',
     subtitle: '',
     dialogFormVisible: false,
-    // form: {
-    //   name: '',
-    //   region: '',
-    //   date1: '',
-    //   date2: '',
-    //   delivery: false,
-    //   type: [],
-    //   resource: '',
-    //   desc: ''
-    // },
+
     formLabelWidth: '120px',
     centerDialogAdded: false,
     centerDialogVisible: false,
@@ -162,6 +152,15 @@ parasails.registerPage('dogs-home', {
       registerNumber: ''
     }],
     ruleForm: {
+      //
+      name: '',
+      region: '',
+      date1: '',
+      date2: '',
+      delivery: false,
+      resource: '',
+      desc: '',
+      //
       errInputDogName: false,
       sale: false,
       see: true,

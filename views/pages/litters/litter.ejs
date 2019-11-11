@@ -581,7 +581,6 @@
 
                       <% /* Имя фотосессии */ %>
                       <el-col :span="22">
-
                         <h5 class="text-center"> {{photoSet.sessionName}}</h5>
                       </el-col>
 
@@ -625,7 +624,6 @@
 
                     <% /*  */ %>
                     <div class="card-body">
-                      <!--<h4 class="card-title"> {{litter.bornNt}}</h4>-->
                       <% /*Описание фотосессии.*/ %>
                       <div class="card-text">
                         <p>
@@ -666,204 +664,78 @@
                           </el-col>
                         </el-row>
                       </div>
-
                       <!--// Показатели рейтингов-->
                       <el-row class="sv" :gutter="2">
                         <el-col :xs="8" :sm="12" :md="12" :lg="16" :xl="18">
-                          <div class="menu-center icos">
-                            <!--// Like-->
-
-                              <el-tooltip class="item" effect="dark" placement="top-start">
-                                <div slot="content">
-                                  <ul>
-                                    <li v-for="(usName, index) in listLikeUserName" :key="index +  '-usaNm'"> {{usName}}</li>
-                                  </ul>
-                                </div>
-                                <!--// like SVG-->
-                                <span v-show="countLike > 0" class="container-icon">
-                                  <svg version="1.1" id="like" xmlns="http://www.w3.org/2000/svg"
-                                   xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                   width="537.584px" height="443.04px" viewBox="0 0 537.584 443.04"
-                                   enable-background="new 0 0 537.584 443.04"
-                                   xml:space="preserve" data-llp-composed="true" class="lazy-line-painter">
-                            <g id="Layer_1" display="none">
-                            	<path display="inline" fill="#FFFFFF" stroke-miterlimit="10"
-                                    d="M15.094,59.777&#10;&#9;&#9;c83.753-118.244,227.586-29.655,257.242,9.655c26.896-37.242,209.655-116.548,258.621-1.379&#10;&#9;&#9;c53.002,124.661-254.482,315.859-282.069,373.793C222.681,383.23-66.975,175.644,15.094,59.777z"
-                                    data-llp-id="like-0" data-llp-duration="770" data-llp-delay="0" fill-opacity="0"
-                                    style=""/>
-                            </g>
-                            <g id="Layer_2" display="none">
-                            	<circle display="inline" fill="#FFFFFF" stroke-miterlimit="10" cx="268.792" cy="221.521"
-                                      r="219.31"
-                                      data-llp-id="like-1" data-llp-duration="770" data-llp-delay="770" fill-opacity="0"
-                                      style=""/>
-
-                            		<ellipse display="inline" fill="none" stroke-miterlimit="10" cx="268.793" cy="336.102"
-                                         rx="64.339"
-                                         ry="78.244" data-llp-id="like-2" data-llp-duration="770" data-llp-delay="1540"
-                                         fill-opacity="0"
-                                         style=""/>
-                            	<path display="inline" fill="none" stroke-miterlimit="10"
-                                    d="M119.011,107.926c0,0,71.612-95.109,111.894-35.806&#10;&#9;&#9;"
-                                    data-llp-id="like-3"
-                                    data-llp-duration="770" data-llp-delay="2310" fill-opacity="0" style=""/>
-                            	<path display="inline" fill="none" stroke-miterlimit="10"
-                                    d="M413.29,115.758c0,0-73.851-97.347-114.131-38.043"
-                                    data-llp-id="like-4" data-llp-duration="770" data-llp-delay="3080" fill-opacity="0"
-                                    style=""/>
-
-                            		<ellipse display="inline" fill="none" stroke-miterlimit="10" cx="187.265" cy="147.647"
-                                         rx="40.281"
-                                         ry="44.198" data-llp-id="like-5" data-llp-duration="770" data-llp-delay="3850"
-                                         fill-opacity="0"
-                                         style=""/>
-
-                            		<ellipse display="inline" fill="none" stroke-miterlimit="10" cx="342.796" cy="151.564"
-                                         rx="40.281"
-                                         ry="44.198" data-llp-id="like-6" data-llp-duration="770" data-llp-delay="4620"
-                                         fill-opacity="0"
-                                         style=""/>
-
-                            		<ellipse display="inline" fill="none" stroke-miterlimit="10" cx="190.623" cy="143.73"
-                                         rx="22.379"
-                                         ry="25.734" data-llp-id="like-7" data-llp-duration="770" data-llp-delay="5390"
-                                         fill-opacity="0"
-                                         style=""/>
-                            	<path display="inline" fill="none" stroke-miterlimit="10"
-                                    d="M360.699,143.729&#10;&#9;&#9;c0,14.214-10.017,25.735-22.379,25.735c-12.358,0-22.378-11.521-22.378-25.735c0-14.212,10.02-25.734,22.378-25.734&#10;&#9;&#9;C350.682,117.995,360.699,129.517,360.699,143.729z"
-                                    data-llp-id="like-8" data-llp-duration="770" data-llp-delay="6160" fill-opacity="0"
-                                    style=""/>
-
-                            		<ellipse display="inline" fill="none" stroke-miterlimit="10" cx="265.591" cy="206.95"
-                                         rx="25.735"
-                                         ry="26.296" data-llp-id="like-9" data-llp-duration="770" data-llp-delay="6930"
-                                         fill-opacity="0"
-                                         style=""/>
-                            </g>
-                            <g id="Layer_3">
-                            	<path fill="none" stroke-miterlimit="10"
-                                    d="M70.312,255.032l70.316-37.059c0,0,75.067,94.073,79.818,195.746&#10;&#9;&#9;c-33.257,22.806-43.71,26.606-43.71,26.606S131.125,268.336,70.312,255.032z"
-                                    data-llp-id="like-10" data-llp-duration="770" data-llp-delay="7700" fill-opacity="0"
-                                    style=""/>
-                            	<path fill="none" stroke-miterlimit="10"
-                                    d="M163.433,208.472c0,0,30.407-43.71,57.013-50.361&#10;&#9;&#9;c16.154-26.606,21.855-59.864,26.606-95.022s0.95-51.312,15.203-57.963c33.126-15.458,42.76,48.461,42.76,48.461&#10;&#9;&#9;s10.453,25.656-15.204,86.469c45.612-9.502,68.34-56.026,110.226-29.456c52.842,33.52,100.124,89.064,37.059,179.592&#10;&#9;&#9;c-58.914,84.568-121.628,66.513-152.985,76.017c-31.357,9.503-46.561,36.108-46.561,36.108S227.097,264.534,163.433,208.472z"
-                                    data-llp-id="like-11" data-llp-duration="770" data-llp-delay="8470" fill-opacity="0"
-                                    style=""/>
-                            </g>
-                            </svg>
-                                </span>
-                              </el-tooltip>
-
+                          <div class="menu-left icos" v-if="photoSet.countLike>0">
+                            <!--// like-->
+                            <el-tooltip v-if="photoSet.countRatLike > 0" class="item" effect="dark" placement="top-start">
+                              <div slot="content">
+                                <ul style="color: #c5c5c5">
+                                  <li style="border-bottom: .2px solid #8d8d8d; margin-bottom: 3px; padding-bottom:3px; " class="text-center">{{photoSet.countRatLike}}</li>
+                                  <li v-for="(usName, index) in photoSet.listLikeUserName" :key="index +  '-usaNm'">
+                                    {{usName}}
+                                  </li>
+                                </ul>
+                              </div>
+                              <!--// like SVG-->
+                              <div  class="container-icon ">
+                                <i style="color:#2980B9;" class="ti-thumb-up"></i>
+                              </div>
+                            </el-tooltip>
                             <!--// super-->
-
-                              <el-tooltip class="item" effect="dark" placement="top-start">
-                                <div slot="content">
-                                  <ul>
-                                    <li v-for="(usName, index) in listSuperUserName" :key="index +  '-usNm'">
-                                      {{usName}}
-                                    </li>
-                                  </ul>
-                                </div>
-                                <!--// super SVG -->
-                                <span v-show="countSuper > 0" class="container-icon">
-                                  <svg version="1.1" id="super" xmlns="http://www.w3.org/2000/svg"
-                                 xmlns:xlink="http://www.w3.org/1999/xlink"
-                                 x="0px" y="0px" width="537.584px" height="443.04px" viewBox="0 0 537.584 443.04"
-                                 enable-background="new 0 0 537.584 443.04" xml:space="preserve"
-                                 data-llp-composed="true"
-                                 class="lazy-line-painter">
-                              <path fill="#FFFFFF" stroke-miterlimit="10"
-                                    d="M15.094,59.777c83.753-118.244,227.586-29.655,257.242,9.655&#10;&#9;c26.896-37.242,209.655-116.548,258.621-1.379c53.002,124.661-254.482,315.859-282.069,373.793&#10;&#9;C222.681,383.23-66.975,175.644,15.094,59.777z"
-                                    data-llp-id="super-0" data-llp-duration="1490" data-llp-delay="0"
-                                    fill-opacity="0"
-                                    style="stroke-linecap: butt;" data-llp-stroke-join="" data-llp-stroke-cap="butt"/>
-                            </svg>
-                                </span>
-                              </el-tooltip>
+                            <el-tooltip v-show="photoSet.countSuper > 0" class="item" effect="dark" placement="top">
+                              <div slot="content">
+                                <ul style="color: #c5c5c5">
+                                  <li style="border-bottom: .2px solid #8d8d8d; margin-bottom: 3px; padding-bottom:3px; " class="text-center"> {{photoSet.countSuper}}</li>
+                                  <li v-for="(usName, index) in photoSet.listSuperUserName" :key="index +  '-usNm'">
+                                    {{usName}}
+                                  </li>
+                                </ul>
+                              </div>
+                              <!--// super SVG -->
+                              <div class="container-icon">
+                                <i style="color:#E84B3C;" class="ti-heart"></i>
+                              </div>
+                            </el-tooltip>
 
                             <!--// wow-->
-
-                              <el-tooltip class="item" effect="dark" placement="top-start">
-                                <div slot="content">
-                                  <ul>
-                                    <li v-for="(usName, index) in listWowUserName" :key="index +  '-usNam'"> {{usName}}</li>
-                                  </ul>
-                                </div>
-                                <!--// wow SVG-->
-                                <span v-show="countWow > 0" class="container-icon">
-                                   <svg version="1.1" id="wow" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="272.034px" height="272.034px" viewBox="0 0 272.034 272.034" enable-background="new 0 0 272.034 272.034" xml:space="preserve" data-llp-composed="true" class="lazy-line-painter">
-                                      <circle fill="#FFFFFF" stroke-miterlimit="10" cx="136.017" cy="136.018" r="135.517" data-llp-id="wow-0" data-llp-duration="500" data-llp-delay="0" fill-opacity="0" style=""/>
-                                      <circle fill="#FFFFFF" stroke-miterlimit="10" cx="178.086" cy="64.983" r="19.655" data-llp-id="wow-1" data-llp-duration="500" data-llp-delay="500" fill-opacity="0" style=""/>
-                                      <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="136.707" cy="193.259" rx="42.414" ry="61.725" data-llp-id="wow-2" data-llp-duration="500" data-llp-delay="1000" fill-opacity="0" style=""/>
-                                      <circle fill="#FFFFFF" stroke-miterlimit="10" cx="88.431" cy="62.914" r="19.655" data-llp-id="wow-3" data-llp-duration="500" data-llp-delay="1500" fill-opacity="0" style=""/>
-                                      <circle fill="#FFFFFF" stroke-miterlimit="10" cx="89.121" cy="67.052" r="11.379" data-llp-id="wow-4" data-llp-duration="500" data-llp-delay="2000" fill-opacity="0" style=""/>
-                                      <circle fill="#FFFFFF" stroke-miterlimit="10" cx="177.397" cy="69.122" r="11.379" data-llp-id="wow-5" data-llp-duration="500" data-llp-delay="2500" fill-opacity="0" style=""/>
-                                      <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="133.948" cy="99.121" rx="19.655" ry="12.414" data-llp-id="wow-6" data-llp-duration="500" data-llp-delay="3000" fill-opacity="0" style=""/>
-                                      <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="137.742" cy="231.879" rx="25.517" ry="16.207" data-llp-id="wow-7" data-llp-duration="500" data-llp-delay="3500" fill-opacity="0" style=""/>
-                                   </svg>
-                         <!--   <svg version="1.1" id="wow" xmlns="http://www.w3.org/2000/svg"
-                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                 width="537.584px" height="443.04px" viewBox="0 0 537.584 443.04"
-                                 enable-background="new 0 0 537.584 443.04"
-                                 xml:space="preserve" data-llp-composed="true" class="lazy-line-painter">
-                              <g id="Layer_1" display="none">
-                              	<path display="inline" fill="#FFFFFF" stroke-miterlimit="10"
-                                      d="M15.094,59.777&#10;&#9;&#9;c83.753-118.244,227.586-29.655,257.242,9.655c26.896-37.242,209.655-116.548,258.621-1.379&#10;&#9;&#9;c53.002,124.661-254.482,315.859-282.069,373.793C222.681,383.23-66.975,175.644,15.094,59.777z"
-                                      data-llp-id="wow-0" data-llp-duration="500" data-llp-delay="0" fill-opacity="0"
-                                      style=""/>
-                              </g>
-                              <g id="Layer_2">
-                                <circle fill="#FFFFFF" stroke-miterlimit="10" cx="268.792" cy="221.521" r="219.31"
-                                        data-llp-id="wow-1"
-                                        data-llp-duration="500"
-                                        data-llp-delay="500" fill-opacity="0" style=""/>
-                                <ellipse fill="none" stroke-miterlimit="10" cx="268.793" cy="336.102" rx="64.339"
-                                         ry="78.244"
-                                         data-llp-id="wow-2" data-llp-duration="500"
-                                         data-llp-delay="1000" fill-opacity="0" style=""/>
-                                <path fill="none" stroke-miterlimit="10"
-                                      d="M119.011,107.926c0,0,71.612-95.109,111.894-35.806"
-                                      data-llp-id="wow-3" data-llp-duration="500"
-                                      data-llp-delay="1500" fill-opacity="0" style=""/>
-                                <path fill="none" stroke-miterlimit="10"
-                                      d="M413.29,115.758c0,0-73.851-97.347-114.131-38.043"
-                                      data-llp-id="wow-4" data-llp-duration="500"
-                                      data-llp-delay="2000" fill-opacity="0" style=""/>
-                                <ellipse fill="none" stroke-miterlimit="10" cx="187.265" cy="147.647" rx="40.281"
-                                         ry="44.198"
-                                         data-llp-id="wow-5" data-llp-duration="500"
-                                         data-llp-delay="2500" fill-opacity="0" style=""/>
-                                <ellipse fill="none" stroke-miterlimit="10" cx="342.796" cy="151.564" rx="40.281"
-                                         ry="44.198"
-                                         data-llp-id="wow-6" data-llp-duration="500"
-                                         data-llp-delay="3000" fill-opacity="0" style=""/>
-                                <ellipse fill="none" stroke-miterlimit="10" cx="190.623" cy="143.73" rx="22.379"
-                                         ry="25.734"
-                                         data-llp-id="wow-7" data-llp-duration="500"
-                                         data-llp-delay="3500" fill-opacity="0" style=""/>
-                                <path fill="none" stroke-miterlimit="10"
-                                      d="M360.699,143.729c0,14.214-10.017,25.735-22.379,25.735&#10;&#9;&#9;c-12.358,0-22.378-11.521-22.378-25.735c0-14.212,10.02-25.734,22.378-25.734C350.682,117.995,360.699,129.517,360.699,143.729z"
-                                      data-llp-id="wow-8" data-llp-duration="500" data-llp-delay="4000" fill-opacity="0"
-                                      style=""/>
-                                <ellipse fill="none" stroke-miterlimit="10" cx="265.591" cy="206.95" rx="25.735"
-                                         ry="26.296"
-                                         data-llp-id="wow-9" data-llp-duration="500"
-                                         data-llp-delay="4500" fill-opacity="0" style=""/>
-                              </g>
-                            </svg>-->
-                          </span>
-                              </el-tooltip>
+                            <el-tooltip v-show="photoSet.countWow > 0" class="item" effect="dark" placement="top">
+                              <div slot="content">
+                                <ul style="color: #c5c5c5">
+                                  <li style="border-bottom: .2px solid #8d8d8d; margin-bottom: 3px; padding-bottom:3px; " class="text-center"> {{photoSet.countWow}}</li>
+                                  <li v-for="(usName, index) in photoSet.listWowUserName" :key="index +  '-usNam'"> {{usName}}</li>
+                                </ul>
+                              </div>
+                              <!--// wow SVG-->
+                              <div id="wow" class="container-icon">
+                                <i class="el-icon-loading" style="color:#ffb007;"> </i>
+                                <!--  <svg version="1.1" id="wow" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="272.034px" height="272.034px" viewBox="0 0 272.034 272.034" enable-background="new 0 0 272.034 272.034" xml:space="preserve" data-llp-composed="true" class="lazy-line-painter">
+                                     <circle fill="#FFFFFF" stroke-miterlimit="10" cx="136.017" cy="136.018" r="135.517" data-llp-id="wow-0" data-llp-duration="500" data-llp-delay="0" fill-opacity="0" style=""/>
+                                     <circle fill="#FFFFFF" stroke-miterlimit="10" cx="178.086" cy="64.983" r="19.655" data-llp-id="wow-1" data-llp-duration="500" data-llp-delay="500" fill-opacity="0" style=""/>
+                                     <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="136.707" cy="193.259" rx="42.414" ry="61.725" data-llp-id="wow-2" data-llp-duration="500" data-llp-delay="1000" fill-opacity="0" style=""/>
+                                     <circle fill="#FFFFFF" stroke-miterlimit="10" cx="88.431" cy="62.914" r="19.655" data-llp-id="wow-3" data-llp-duration="500" data-llp-delay="1500" fill-opacity="0" style=""/>
+                                     <circle fill="#FFFFFF" stroke-miterlimit="10" cx="89.121" cy="67.052" r="11.379" data-llp-id="wow-4" data-llp-duration="500" data-llp-delay="2000" fill-opacity="0" style=""/>
+                                     <circle fill="#FFFFFF" stroke-miterlimit="10" cx="177.397" cy="69.122" r="11.379" data-llp-id="wow-5" data-llp-duration="500" data-llp-delay="2500" fill-opacity="0" style=""/>
+                                     <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="133.948" cy="99.121" rx="19.655" ry="12.414" data-llp-id="wow-6" data-llp-duration="500" data-llp-delay="3000" fill-opacity="0" style=""/>
+                                     <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="137.742" cy="231.879" rx="25.517" ry="16.207" data-llp-id="wow-7" data-llp-duration="500" data-llp-delay="3500" fill-opacity="0" style=""/>
+                                  </svg>-->
+                              </div>
+                            </el-tooltip>
 
                             <!--// haha-->
-                              <el-tooltip class="item" effect="dark" placement="top-start">
+
+                              <el-tooltip v-show="photoSet.countHaha > 0" class="item" effect="dark" placement="top">
                                 <div slot="content">
-                                  <ul>
-                                    <li v-for="(usName, index) in listHahaUserName" :key="index +  '-usNm'"> {{usName}}</li>
+                                  <ul style="color: #c5c5c5">
+                                    <li style="border-bottom: .2px solid #8d8d8d; margin-bottom: 3px; padding-bottom:3px; " class="text-center">  {{photoSet.countHaha}}</li>
+                                    <li v-for="(usName, index) in photoSet.listHahaUserName" :key="index +  '-usNm'"> {{usName}}</li>
                                   </ul>
                                 </div>
                                 <!--// haha SVG-->
-                                <span  class="container-icon">
-                                  <svg version="1.1" id="haha" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="272.034px" height="272.034px" viewBox="0 0 272.034 272.034" enable-background="new 0 0 272.034 272.034" xml:space="preserve" data-llp-composed="true" class="lazy-line-painter">
+                                <div class="container-icon">
+                                  <i style="color:#9274a6;" class="ti-face-smile"></i>
+                                  <!--<svg v-show="countHaha > 0" version="1.1" id="haha" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="272.034px" height="272.034px" viewBox="0 0 272.034 272.034" enable-background="new 0 0 272.034 272.034" xml:space="preserve" data-llp-composed="true" class="lazy-line-painter">
                                     <circle fill="#FFFFFF" stroke-miterlimit="10" cx="136.017" cy="136.018" r="135.517" data-llp-id="haha-0" data-llp-duration="500" data-llp-delay="0" fill-opacity="0" style=""/>
                                     <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="183.949" cy="66.017" rx="25.517" ry="18.621" data-llp-id="haha-1" data-llp-duration="500" data-llp-delay="500" fill-opacity="0" style=""/>
                                     <path fill="#FFFFFF" stroke-miterlimit="10" d="M210.845,145.327c0,14.664-50.712,61.38-74.138,61.38&#10;&#9;c-23.424,0-77.585-44.647-77.585-59.312c0-14.665,54.161,6.207,77.585,6.207C160.133,153.603,210.845,130.662,210.845,145.327z" data-llp-id="haha-2" data-llp-duration="500" data-llp-delay="1000" fill-opacity="0" style=""/>
@@ -872,42 +744,21 @@
                                     <circle fill="#FFFFFF" stroke-miterlimit="10" cx="177.397" cy="69.122" r="11.379" data-llp-id="haha-5" data-llp-duration="500" data-llp-delay="2500" fill-opacity="0" style=""/>
                                     <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="131.189" cy="104.638" rx="19.655" ry="12.414" data-llp-id="haha-6" data-llp-duration="500" data-llp-delay="3000" fill-opacity="0" style=""/>
                                     <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="136.363" cy="183.604" rx="25.518" ry="16.207" data-llp-id="haha-7" data-llp-duration="500" data-llp-delay="3500" fill-opacity="0" style=""/>
-                                  </svg>
-                             <!--  <svg version="1.1" id="haha" xmlns="http://www.w3.org/2000/svg"
-                                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 537.6 443"
-                                    style="enable-background:new 0 0 537.6 443;" xml:space="preserve"
-                                    data-llp-composed="true" class="lazy-line-painter">
-                                          <ellipse class="st0" cx="268.2" cy="210.5" rx="217.4" ry="207.7"
-                                                   data-llp-id="haha-0" data-llp-duration="500" data-llp-delay="0"
-                                                   fill-opacity="0" style=""/>
-                                          <path class="st1"
-                                                d="M415.4,233.2c0,0-25.6,165.5-151.2,158.4c-119.8-6.7-151.9-158.4-151.9-158.4s94.8,28,156.9,28&#10;&#9;S415.4,233.2,415.4,233.2z"
-                                                data-llp-id="haha-1" data-llp-duration="500" data-llp-delay="500"
-                                                fill-opacity="0" style=""/>
-                                          <path class="st2"
-                                                d="M367.8,94c-21.7,21-90,41.1-90,41.1s50.8-20.7,103.5,4c29.3,13.7,36.4,7.8,36.4,7.8"
-                                                data-llp-id="haha-2" data-llp-duration="500" data-llp-delay="1000"
-                                                fill-opacity="0" style=""/>
-                                          <path class="st3"
-                                                d="M145.5,95.7c21.2,23.8,100.1,42.2,100.1,42.2s-50.5-22.6-104.2,7.4c-29.9,16.7-36.9,10-36.9,10"
-                                                data-llp-id="haha-3" data-llp-duration="500" data-llp-delay="1500"
-                                                fill-opacity="0" style=""/>
-                                          </svg>-->
-                             </span>
+                                  </svg>-->
+                                </div>
                               </el-tooltip>
+
 
                             <!--// count-->
-
-                              <el-tooltip class="item container-icon" effect="dark" placement="top-start" v-cloak>
-                                <div slot="content">
-                                  <ul>
-                                    <li v-for="(usName, index) in listAllUsers" :key="index +  '-usNem'"> {{usName}}</li>
-                                  </ul>
-                                </div>
-                                <!--// countLike-->
-                                <span>  {{photoSet.countLike ? photoSet.countLike : 0}}</span>
-                              </el-tooltip>
-
+                            <el-tooltip v-if="photoSet.countLike>0" class="item container-icon" effect="dark" placement="top" v-cloak>
+                              <div slot="content">
+                                <ul>
+                                  <li v-for="(usName, index) in photoSet.listAllUsers" :key="index +  '-usNem'"> {{usName}}</li>
+                                </ul>
+                              </div>
+                              <!--// countLike-->
+                              <span style="font-size: 13px">  {{photoSet.countLike ? photoSet.countLike : 0}}</span>
+                            </el-tooltip>
                           </div>
                         </el-col>
                         <el-col :xs="8" :sm="6" :md="6" :lg="4" :xl="3" class="text-right">
@@ -942,8 +793,7 @@
                               </el-dropdown-item>
                               <el-dropdown-item style="color:#E84B3C;"
                                                 :command="{com:'super',photoSet:photoSet,field:'puppies'}"
-                                                icon="ti-heart">
-                                <%= __('Super') %>
+                                                icon="ti-heart"> <%= __('Super') %>
                               </el-dropdown-item>
                               <el-dropdown-item style="color:#ffb007;"
                                                 :command="{com:'wow',photoSet:photoSet,field:'puppies'}"

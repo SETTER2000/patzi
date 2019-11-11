@@ -208,7 +208,7 @@ module.exports = {
     });
 
     dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc');
-    // console.log('DOGG::: ', dog);
+    console.log('DOGG::: ', dog);
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
 
     // Respond with view.

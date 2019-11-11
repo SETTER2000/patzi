@@ -282,6 +282,10 @@ parasails.registerPage('dog', {
         .catch(_ => {
         });*/
     },
+    rootImg(){
+      return _.isEmpty(this.dog.images) ? '' :
+        _.isString(this.dog.images[this.dog.cover].imageSrc) ? this.dog.images[this.dog.cover].imageSrc:'';
+    },
     goTo(path) {
       window.location = `/${path}`;
     },

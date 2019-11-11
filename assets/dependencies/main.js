@@ -1,7 +1,3 @@
-
-
-
-
 var map;
 
 function initMap() {
@@ -14,10 +10,72 @@ function initMap() {
 }
 
 
-
-
 $(document).ready(function () {
   "use strict";
+
+
+  (function () {
+/*
+    document.onreadystatechange = () => {
+
+      if (document.readyState === 'complete') {
+
+        /!**
+         * Setup your Lazy Line element.
+         * see README file for more settings
+         *!/
+        let haha = document.querySelector('#haha');
+        console.log('EL1L haha::; ', haha);
+        if(!_.isNull(haha)) {
+          let hahaAnimation = new LazyLinePainter(haha, {
+            "ease": "easeInOutQuart",
+            "strokeWidth": 16,
+            "strokeOpacity": 1,
+            "strokeColor": "#67cac7",
+            "strokeCap": "square"
+          });
+          hahaAnimation.paint();
+        }
+        let el = document.querySelector('#wow');
+        if(!_.isNull(el)) {
+          let myAnimation = new LazyLinePainter(el, {
+            "ease": "easeInOutQuad",
+            "strokeWidth": 6.9,
+            "strokeOpacity": 1,
+            "strokeColor": "#F2C511",
+            "strokeCap": "square"
+          });
+          myAnimation.paint();
+        }
+
+        let sup = document.querySelector('#super');
+        if(!_.isNull(sup)) {
+          console.log('ELLL super::; ', sup);
+          let superAnimation = new LazyLinePainter(sup, {
+            'ease': 'easeInOutSine',
+            'strokeWidth': 19.0,
+            'strokeOpacity': 0.9,
+            'strokeColor': '#E84B3C',
+            'strokeCap': 'square'
+          });
+          superAnimation.paint();
+        }
+        let like = document.querySelector('#like');
+        if(!_.isNull(like)) {
+        let likeAnimation = new LazyLinePainter(like, {
+          'ease': 'easeOutBounce',
+          'strokeWidth': 19,
+          'strokeOpacity': 1,
+          'strokeColor': '#2980B9',
+          'strokeCap': 'square'
+        });
+        likeAnimation.paint();
+      }
+      }
+    }*/
+
+  })();
+
 
   var window_width = $(window).width(),
     window_height = window.innerHeight,
@@ -258,6 +316,7 @@ $(document).ready(function () {
 
   });
 
+
   //----------- Datepicker js ----------------//
   $(document).ready(function () {
     if (!!SAILS_LOCALS.me) {
@@ -265,7 +324,7 @@ $(document).ready(function () {
     }
 
 
-    const langGet =  function (){
+    const langGet = function () {
       let language = $(this).attr('data-language');
       $.ajax({
         url: "/api/v1/account/update-language",
@@ -277,7 +336,7 @@ $(document).ready(function () {
           location.reload();
         }
       });
-    }
+    };
     $('#flag').hide();
     if ($(window).height() < 800) {
       $('#flag').show();
@@ -301,8 +360,12 @@ $(document).ready(function () {
   //   if($(document).width()<1024) {$('.container').addClass('container-fluid').removeClass('container');}
   //   if($(document).width()>1025) {$('.container-fluid').addClass('container').removeClass('container-fluid');}
   // });
-  if($(document).width()<1024) {$('.container').addClass('container-fluid').removeClass('container');}
-  if($(document).width()>1025) {$('.container-fluid').addClass('container').removeClass('container-fluid');}
+  if ($(document).width() < 1024) {
+    $('.container').addClass('container-fluid').removeClass('container');
+  }
+  if ($(document).width() > 1025) {
+    $('.container-fluid').addClass('container').removeClass('container-fluid');
+  }
 
   $('.your-class').slick({});
 

@@ -6,8 +6,10 @@ parasails.registerPage('litter', {
     dialogTableVisible: false,
     viewChangeComment: false,
     dialogPedigreeVisible: true,
-    size:5, // Mb input img
+    size: 5, // Mb input img
     likeId: '',
+    elWow: '',
+    showLike: false,
     pathDogSale: '/dogs/chinese-crested/sale',
     pathDogs: '/dogs/chinese-crested',
     pathDog: '/chinese-crested',
@@ -46,7 +48,7 @@ parasails.registerPage('litter', {
     commentUpdate: '',
     commentId: '',
     indexPhotoSet: 0,
-    forSale:false,
+    forSale: false,
     confirmDeleteLitterModalOpen: false,
     confirmDeletePresentationModalOpen: false,
     editableTabsValue: 'photo',
@@ -228,20 +230,46 @@ parasails.registerPage('litter', {
     // Super SVG animation
     // this.superSvg();
 
-    // Haha SVG animation
-    // this.hahaSvg();
-
-    // Wow SVG animation
-    // this.wowSvg();
+    // // Haha SVG animation
+    // this.countHaha > 0 ?  this.hahaSvg():'';
+    //
+    // // Wow SVG animation
+    // this.countWow > 0 ? this.wowSvg() : '';
 
     // Like SVG animation
-    // this.likeSvg();
+    // console.log('this.countWow::: ', this.countWow);
+    // this.countLike > 0 ? this.likeSvg():'';
     // Буквы помёта
     this.letterList();
     this.commentList('puppies');
     this.listLike('puppies');
-    // Принимаем данные по событию list-*
 
+    // Принимаем данные по событию list-*
+    io.socket.on('list-like', (data) => {
+      // console.log('LIST LIKE::: ', data);
+      if (data.length > 0 && _.isArray(this.litter['puppies'])) {
+        _.each(this.litter['puppies'],puppyPhotoSet => {
+          console.log('puppyPhotoSet::: ', puppyPhotoSet);
+          puppyPhotoSet.likes = _.isArray(puppyPhotoSet.likes) ? puppyPhotoSet.likes : [];
+          puppyPhotoSet.likes = data.filter(like => like.indexPhotoSet === puppyPhotoSet.indexPhotoSet);
+          puppyPhotoSet.countRatLike = this.countLike = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'like'}), 'like').length;
+          puppyPhotoSet.listLikeUserName= this.listLikeUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'like'}), 'userName'));
+          puppyPhotoSet.countWow = this.countWow = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'wow'}), 'like').length;
+          puppyPhotoSet.listWowUserName= this.listWowUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'wow'}), 'userName'));
+          puppyPhotoSet.listAllUsers =this.listAllUsers = _.uniq(_.pluck(puppyPhotoSet.likes, 'userName'));
+          puppyPhotoSet.countSuper = this.countSuper = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'super'}), 'like').length;
+          puppyPhotoSet.listSuperUserName= this.listSuperUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'super'}), 'userName'));
+          puppyPhotoSet.countHaha = this.countHaha = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'haha'}), 'like').length;
+          puppyPhotoSet.listHahaUserName=this.listHahaUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'haha'}), 'userName'));
+          this.$forceUpdate();
+        });
+
+        console.log('ALL DATA event list-like:::: ', data);
+        console.log('ALL DATA event this.litter[\'puppies\']:::: ', this.litter['puppies']);
+      }
+
+
+    });
 
     // Принимаем данные по событию list-*
     io.socket.on('delete-PhotoSet', (response) => {
@@ -298,18 +326,22 @@ parasails.registerPage('litter', {
     io.socket.on('add-like', (data) => {
       console.log('Пришли обновлённые данные LIKE::: ', data);
       if (data) {
-        this.litter[data.likes.field].map(puppyPhotoSet => {
+        _.each(this.litter[data.likes.field], puppyPhotoSet => {
           if (puppyPhotoSet.indexPhotoSet === data.likes.indexPhotoSet) {
             puppyPhotoSet.likes = _.isArray(puppyPhotoSet.likes) ? puppyPhotoSet.likes : [];
             puppyPhotoSet.countLike = data.countLike;
             puppyPhotoSet.likes.push(data.likes);
-            data.likes.like === 'super' ? (`${this.superSvg()} ${this.$forceUpdate()}`) :
-              data.likes.like === 'like' ? (`${this.likeSvg()} ${this.$forceUpdate()}`) :
-                data.likes.like === 'wow' ? (`${this.wowSvg()} ${this.$forceUpdate()}`) :
-                  data.likes.like === 'haha' ? (`${this.hahaSvg()} ${this.$forceUpdate()}`) : '';
+            data.likes.like === 'super' ? (`${puppyPhotoSet.countSuper++} ${_.isArray(puppyPhotoSet.listSuperUserName) ? ((puppyPhotoSet.listSuperUserName.indexOf(data.likes.userName)>=0) ? '':puppyPhotoSet.listSuperUserName.push(data.likes.userName)): puppyPhotoSet.listSuperUserName=[data.likes.userName]}`)  :
+              data.likes.like === 'like' ? (`${puppyPhotoSet.countRatLike++} ${_.isArray(puppyPhotoSet.listLikeUserName) ? ((puppyPhotoSet.listLikeUserName.indexOf(data.likes.userName)>=0) ? '':puppyPhotoSet.listLikeUserName.push(data.likes.userName)) : puppyPhotoSet.listLikeUserName=[data.likes.userName]}`) :
+                data.likes.like === 'wow' ? (`${ puppyPhotoSet.countWow++} ${_.isArray(puppyPhotoSet.listWowUserName) ? ((puppyPhotoSet.listWowUserName.indexOf(data.likes.userName)>=0) ? '':puppyPhotoSet.listWowUserName.push(data.likes.userName)) : puppyPhotoSet.listWowUserName=[data.likes.userName]}`)  :
+                  data.likes.like === 'haha' ? (`${puppyPhotoSet.countHaha++}${_.isArray(puppyPhotoSet.listHahaUserName) ? ((puppyPhotoSet.listHahaUserName.indexOf(data.likes.userName)>=0) ? '':puppyPhotoSet.listHahaUserName.push(data.likes.userName)) : puppyPhotoSet.listHahaUserName=[data.likes.userName]}`)  : '';
+            this.$forceUpdate();
           }
         });
+        console.log(' LITTER added new data::::: ', this.litter[data.likes.field]);
+        this.$forceUpdate();
       }
+
     });
 
     // Принимаем данные по событию comment-like
@@ -331,7 +363,7 @@ parasails.registerPage('litter', {
       }
     });
 
-     // Получить информацию о наличие щенков в продаже
+    // Получить информацию о наличие щенков в продаже
     this.getForSale();
   },
 
@@ -381,14 +413,14 @@ parasails.registerPage('litter', {
       }
     },
 
-   /* forSale:{
-      get:function () {
-        io.socket.get(`/dogs/for-sale`, function gotResponse(body, response) {
-          console.log('Сервис Dog forSale ответил кодом ' + response.statusCode + ' и данными: ', body);
-          return (response.statusCode === 200)? 1:0;
-        });
-      }
-    },*/
+    /* forSale:{
+       get:function () {
+         io.socket.get(`/dogs/for-sale`, function gotResponse(body, response) {
+           console.log('Сервис Dog forSale ответил кодом ' + response.statusCode + ' и данными: ', body);
+           return (response.statusCode === 200)? 1:0;
+         });
+       }
+     },*/
     // listWowUserName: {
     //   get: function () {
     //     // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
@@ -435,18 +467,6 @@ parasails.registerPage('litter', {
       this.commentId = commentId;
     },
 
-    // Like SVG animation
-    likeSvg() {
-      let like = document.querySelector('#like');
-      let likeAnimation = new LazyLinePainter(like, {
-        'ease': 'easeOutBounce',
-        'strokeWidth': 19,
-        'strokeOpacity': 1,
-        'strokeColor': '#2980B9',
-        'strokeCap': 'square'
-      });
-      likeAnimation.paint();
-    },
 
     clearLocalStor() {
       localStorage.clear();
@@ -474,39 +494,63 @@ parasails.registerPage('litter', {
       });
       myAnimation.paint();
     },
-
-
-    // Wow SVG animation
-    wowSvg() {
-      let el = document.querySelector('#wow');
-      console.log('ELLL wow::; ', el);
-      let myAnimation = new LazyLinePainter(el, {"ease":"easeInOutQuad","strokeWidth":19,"strokeOpacity":1,"strokeColor":"#F2C511","strokeCap":"square"});
-      myAnimation.paint();
-      /*    let myAnimation = new LazyLinePainter(el, {
-            'ease': 'easeOutSine',
-            'strokeWidth': 19.0,
-            'strokeOpacity': 0.9,
-            'strokeColor': '#ffb007',
-            'strokeCap': 'square'
-          });
-          myAnimation.paint();*/
-    },
-    // Haha SVG animation
-    hahaSvg() {
-      let el = this.$el.querySelector('#haha');
-      console.log('ELLL haha::; ', el);
-      let myAnimation = new LazyLinePainter(el, {"ease":"easeInOutQuart","strokeWidth":16,"strokeOpacity":1,"strokeColor":"#8acab0","strokeCap":"square"});
-      myAnimation.paint();
-      /* let myAnimation = new LazyLinePainter(el, {
-         'ease': 'easeInOutBounce',
+    // Like SVG animation
+    likeSvg() {
+      this.countLike = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'like'}), 'like').length;
+      // this.showLike = false;
+      /* let like = document.querySelector('#like');
+       let likeAnimation = new LazyLinePainter(like, {
+         'ease': 'easeOutBounce',
          'strokeWidth': 19,
-         'strokeOpacity': .7,
-         'strokeColor': '#9274a6',
+         'strokeOpacity': 1,
+         'strokeColor': '#2980B9',
          'strokeCap': 'square'
        });
-       myAnimation.paint();*/
+       likeAnimation.paint();*/
     },
-
+    // Wow SVG animation
+    /*  wowSvg() {
+       this.elWow = this.$el.querySelector('#wow');
+       console.log('ELLL elWow::; ', this.elWow);
+       let myAnimation = new LazyLinePainter(this.elWow, {
+         "ease": "easeInOutQuad",
+         "strokeWidth": 19,
+         "strokeOpacity": 1,
+         "strokeColor": "#F2C511",
+         "strokeCap": "square"
+       });
+       myAnimation.paint();
+       /!*    let myAnimation = new LazyLinePainter(el, {
+             'ease': 'easeOutSine',
+             'strokeWidth': 19.0,
+             'strokeOpacity': 0.9,
+             'strokeColor': '#ffb007',
+             'strokeCap': 'square'
+           });
+           myAnimation.paint();*!/
+     },
+     // Haha SVG animation
+     hahaSvg() {
+       let el = this.$el.querySelector('#haha');
+       console.log('ELLL haha::; ', el);
+       let myAnimation = new LazyLinePainter(el, {
+         "ease": "easeInOutQuart",
+         "strokeWidth": 16,
+         "strokeOpacity": 1,
+         "strokeColor": "#8acab0",
+         "strokeCap": "square"
+       });
+       myAnimation.paint();
+       /!* let myAnimation = new LazyLinePainter(el, {
+          'ease': 'easeInOutBounce',
+          'strokeWidth': 19,
+          'strokeOpacity': .7,
+          'strokeColor': '#9274a6',
+          'strokeCap': 'square'
+        });
+        myAnimation.paint();*!/
+     },
+ */
 
     changeRatio: function (letter) {
       this.me.ratio.push({litter: this.ratio, letter: letter});
@@ -524,7 +568,7 @@ parasails.registerPage('litter', {
         // console.log('Сервис Letter List ответил кодом ' + response.statusCode + ' и данными: ', body);
         if (response.statusCode === 200) {
           sel.$message({
-            message:sel.i19p.thankRating,
+            message: sel.i19p.thankRating,
             type: 'success'
           });
         } else {
@@ -1109,7 +1153,7 @@ parasails.registerPage('litter', {
 
 
     async updatePhotoSetName(form) {
-      console.log('this[form].sessionName::: ' , this[form].sessionName);
+      console.log('this[form].sessionName::: ', this[form].sessionName);
       let data = {
         id: this.litter.id,
         indexPhotoSet: this.indexPhotoSet,
@@ -1308,10 +1352,10 @@ parasails.registerPage('litter', {
     //
     async getForSale() {
       await io.socket.on('forSale-dog', (data) => {
-          console.log('Пришли обновлённые данные forSale-dog::: ', data);
-          // console.log('DATA :::: ' , data);
-          (data.letter === this.litter.letter && data.year === this.litter.born.split('-')[0]) ?  this.forSale = data.forSale : '';
-        });
+        console.log('Пришли обновлённые данные forSale-dog::: ', data);
+        // console.log('DATA :::: ' , data);
+        (data.letter === this.litter.letter && data.year === this.litter.born.split('-')[0]) ? this.forSale = data.forSale : '';
+      });
       await  io.socket.get(`/dogs/for-sale/${this.litter.letter}/${this.litter.born.split('-')[0]}`, function gotResponse(body, response) {
         console.log('Сервис Dog forSale ответил кодом ' + response.statusCode + ' и данными: ', body);
         // this.forSale =  (body === 'Ok');
@@ -1358,7 +1402,7 @@ parasails.registerPage('litter', {
       });
 
 
-      // Принимаем данные по событию list-*
+      /*// Принимаем данные по событию list-*
       io.socket.on('list-like', (data) => {
         // console.log('LIST LIKE::: ', data);
         if (data.length > 0 && _.isArray(this.litter[field])) {
@@ -1379,15 +1423,15 @@ parasails.registerPage('litter', {
             this.countHaha = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'haha'}), 'like').length;
             this.listHahaUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'haha'}), 'userName'));
             this.superSvg();
-            this.wowSvg();
-            this.likeSvg();
-            this.hahaSvg();
+            // this.wowSvg();
+            // this.likeSvg();
+            // this.hahaSvg();
             this.$forceUpdate();
           });
         }
 
 
-      });
+      });*/
 
 
     },
@@ -1450,7 +1494,7 @@ parasails.registerPage('litter', {
     возмутительно*/
     // Добавить Like
     async addLike(command) {
-      console.log('photoSet:: ', command.photoSet);
+
       let data = {
         instanceModuleId: this.litter.id,
         like: command.com,
@@ -1460,7 +1504,8 @@ parasails.registerPage('litter', {
         letter: this.litter.letter,
         indexPhotoSet: command.photoSet.indexPhotoSet
       };
-
+      // command.com === 'Like' ? this.showLike = false : '';
+      console.log('POST photoSet data:: ', data);
       let sel = this;
       await io.socket.post('/api/v1/likes/add-like', data, (dataRes, response) => {
         // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
