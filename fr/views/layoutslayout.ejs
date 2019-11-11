@@ -293,7 +293,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
               <li class="menu-has-children">
                 <a href="#" class=""><span class="el-icon-s-tools"></span></a>
                 <ul>
-                  <% if(me.isSuperAdmin ) { %>
+                  <% if(me.isSuperAdmin  || me.isAdmin) { %>
                   <li>
                     <a
                       class="dropdown-item nav-item nav-link  <%= typeof currentSection !== 'undefined' && currentSection === 'users' ? 'current' : '' %>"
