@@ -140,7 +140,7 @@
                     <el-col :span="11">
                       <h5 class="text-center">
                         <small>owner:</small>
-                        FirstName LastName
+                        {{dog.owners.fullName}}
                       </h5>
                     </el-col>
                   </el-row>
@@ -202,11 +202,23 @@
     <% /* ИНФОРМАЦИЯ о СОБАКЕ */ %>
     <section class="service-area ">
       <div class="container">
+        <h2 class="text-center text-uppercase"><%= __('Dog description') %></h2>
         <div class="menu-between mb-5">
-        <h2 ><span><%= __('Dog description') %></span></h2>
         <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()" round><%= __('Pedigree') %></el-button>
         </div>
         <div class="menu-center">
+          <div v-if="dog.subtitle" class="card  mb-4">
+            <div class="card-header">
+              <%= __('Quote') %>
+            </div>
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <p>{{dog.subtitle}}</p>
+                <footer class="blockquote-footer">{{dog.breeder.fullName}} <cite :title="dog.kennel.label">{{dog.kennel.label}}</cite></footer>
+              </blockquote>
+            </div>
+          </div>
+
           <el-card class="box-card ">
             <div slot="header" class="clearfix">
               <span><%= __('Dog') %></span>
@@ -252,16 +264,18 @@
           <% /* ВЛАДЕЛЕЦ OWNER*/ %>
           <el-card class="box-card">
             <div slot="header" class="clearfix">
-              <span>Owner: First Name Last Name</span>
+              <span>Owner: {{dog.owners.fullName}}</span>
               <el-button style="float: right; padding: 3px 0" v-if="me.isAdmin || me.isSuperAdmin" type="text">
                 <el-link icon="el-icon-edit"></el-link>
               </el-button>
             </div>
             <div class="menu-center">
-              <div class="demo-basic--circle">
-                <div class="block">
-                  <el-avatar :size="100" :src="me.gravatar"></el-avatar>
-                </div>
+              <div class="block">
+                <a href="#" @click="clickShowPhoto(dog.owners)" class="flex justify-content-center">
+                  <el-avatar :size="100" :src="dog.owners | getFoto()"  @error="errorHandler">
+                    <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                  </el-avatar>
+                </a>
               </div>
             </div>
           </el-card>
