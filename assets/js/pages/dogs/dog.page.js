@@ -105,6 +105,13 @@ parasails.registerPage('dog', {
       return (value === 'dollar') ? '$' :
         (value === 'euro') ? '€' : '₽';
     },
+    // Получить ссылку на аватар или граватар
+    getFoto: function (value) {
+      if (!value) {
+        return '';
+      }
+      return (value.defaultIcon === 'gravatar') ? value.gravatar :value.avatar;
+    },
     //Сантиметры в дюймы
     getDin: function (value, l, format) {
       if (!value) {

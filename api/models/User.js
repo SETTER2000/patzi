@@ -387,7 +387,12 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       description: `Многие ко Многим (Many-to-Many)`
     },
 
-
+    dogs:{
+      collection: 'dog',
+      via: 'owners',
+      // dominant: true,
+      description: `Многие ко Многим (Many-to-Many)`
+    },
 
 
     comments: {

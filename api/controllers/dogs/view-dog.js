@@ -30,15 +30,13 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const moment = require('moment');
-
-
     let fullName = _.startCase(inputs.fullName);
     console.log('dogName::: ', fullName);
     let dog = await Dog.findOne({'fullName': fullName})
       .populate('parents')
       .populate('children')
       .populate('kennel')
-    ;
+      .populate('owners');
     if (!dog) {
       throw 'notFound';
     }
@@ -50,6 +48,15 @@ module.exports = {
       avatar: breeder.defaultIcon === 'avatar' ? breeder.avatar : breeder.gravatar
     };
 
+    dog.owners = {
+      fullName: _.last(_.pluck(dog.owners, 'fullName')),
+      avatar: _.last(_.pluck(dog.owners, 'avatar')),
+      gravatar: _.last(_.pluck(dog.owners, 'gravatar')),
+      defaultIcon: _.last(_.pluck(dog.owners, 'defaultIcon'))
+    };
+
+
+console.log('DDD::: ' , dog.owners);
 
     let litter = await sails.helpers.srcImagePreparation.with(
       {

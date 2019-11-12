@@ -2,7 +2,20 @@
   <p class="text-danger"
      v-if="cloudError === 'dogAlreadyInUse'"><%= __('There is already an account using that email address') %>.
   </p>
-
+  <% /* Диалоговое окно. ВЛАДЕЛЕЦ */ %>
+  <el-dialog
+    width="30%"
+    top="3vh"
+    title="<%= __('Who can be a owner') %>"
+    :visible.sync="innerVisibleCo"
+    append-to-body>
+    <div class="justify-content-center">
+      <%= __('You can add a owner of the kennel, if one exists.') %>
+      <br> <%= __('Owner may be registered user with a valid email. Start typing username and select the person you want from the list provided.') %>
+      <br><%= __('If the owner has not been selected, the owner of the dog automatically becomes the current user who added the dog to the database.') %>
+      <br> <%= __('The case of letters does not matter.') %>
+    </div>
+  </el-dialog>
   <% /* Диалоговое окно. Редактор картинок. */ %>
   <el-dialog
     :title="`${i19p.photoEditor} ${photos.fullName}`"
@@ -250,7 +263,7 @@
           </el-image>
           <div class="text-center">
             <div><%= __('Litter') %> {{o.letter}} / {{o.dateBirth.split('-')[0]}}</div>
-            <h5>{{o.fullName}}</h5>
+            <h5><el-link @click="goTo2(o.detail)" type="primary">{{o.fullName}}</el-link></h5>
             <div>
               <em><strong><i class="el-icon-present"></i> <%= __('Dob') %>:</strong></em>
               <time class="time"> {{ o.dateBirth | getCreate(me.preferredLocale,'L') }}</time>
@@ -536,9 +549,11 @@
       append-to-body>
       <span><%= __('The name of the dog is written only in English letters. Switch the keyboard to the correct layout.') %></span>
       <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="ruleForm.errInputDogName = false; ruleForm.label=''">Ok</el-button>
+    <el-button autofocus type="primary" @click="ruleForm.errInputDogName = false; ruleForm.label=''">Ok</el-button>
   </span>
     </el-dialog>
+
+
     <template v-if="!ruleForm.see">
       <el-popover
         ref="popover"
@@ -662,6 +677,8 @@
                 <div size="mini" round class="el-icon-question "></div>
               </el-tooltip>
             </el-form-item>
+
+
             <% /* ИМЯ СОБАКИ*/ %>
             <template v-if="ruleForm.kennel &&  !buttonUpdate">
 
@@ -950,7 +967,7 @@
                     type="textarea"
                     :rows="3"
                     autosize
-                    placeholder="Please input"
+                    placeholder="<%= __('PLL, PRA clear by parent') %>"
                     v-model="ruleForm.dogTests"
                     maxlength="700"
                     show-word-limit>
@@ -1039,7 +1056,7 @@
             <% /* ЗУБЫ НИЗ */ %>
             <template>
               <el-row :gutter="2">
-                <el-form-item label="<%= __('Teeth top') %>" prop="teethCountBottom">
+                <el-form-item label="<%= __('Teeth bottom') %>" prop="teethCountBottom">
                   <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
                     <el-slider
                       class="hidden-xs-only"
@@ -1234,31 +1251,83 @@
             </el-button-group>
           </div>-->
           </div>
-          <div style="border-left: 2px dashed rgb(220, 224, 228); padding-left: 50px" class="col col-lg-5 menu-center">
-            <!--<el-form-item label="<%= __('Ranks') %>">-->
-            <!--<el-input v-model="ruleForm.name"></el-input>-->
-            <!--</el-form-item>-->
+          <div style="border-left: 2px dashed rgb(220, 224, 228); padding-left: 50px" class="col col-lg-5">
 
-          <h4><%= __('Ranks') %></h4>
+
+
+
+            <% /* ВЛАДЕЛЕЦ. OWNER */ %>
+            <template v-if="me.isAdmin | me.isSuperAdmin">
+              <!--<template >-->
+              <el-form-item label="<%= __('Owner') %>" prop="owner">
+                <el-autocomplete
+                  v-if="!buttonUpdate"
+                  class="inline-input"
+                  v-model="ruleForm.owner"
+                  :fetch-suggestions="querySearchFoo"
+                  placeholder="<%= __('Please Input co-owner') %>"
+                  :trigger-on-focus="false"
+                  @select="handleSelected"
+                  style="width: 58%;"
+                >
+                  <template slot-scope="{ item }">
+                    <span class="value">{{ item.fullName }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fullName }}</span>
+                  </template>
+                </el-autocomplete>
+                <el-autocomplete
+                  v-else
+                  class="inline-input"
+                  v-model="owner"
+                  :fetch-suggestions="querySearchFoo"
+                  placeholder="<%= __('Please Input co-owner') %>"
+                  :trigger-on-focus="false"
+                  @select="handleSelected"
+                  style="width: 58%;"
+                >
+                  <template slot-scope="{ item }">
+                    <span class="value">{{ item.fullName }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fullName }}</span>
+                  </template>
+                </el-autocomplete>
+                <el-tooltip class="ml-3" effect="dark" content="<%= __('Who can be a owner') %>"
+                            placement="top-start">
+                  <el-button @click="innerVisibleCo=true" size="mini" round icon="el-icon-question"></el-button>
+                </el-tooltip>
+              </el-form-item>
+
+
+              <!--     <el-popover
+                     placement="bottom"
+                     title="Title"
+                     width="200"
+                     trigger="click"
+                     content="this is content, this is content, this is content">
+                     <el-button slot="reference">Click to activate</el-button>
+                   </el-popover>-->
+            </template>
+
+
             <% /* ЗВАНИЯ */ %>
             <el-form-item
               v-for="(federation, index) in ruleForm.federations"
               :label="'№ ' + index"
               :key="federation.key"
               :prop="'federations.' + index + '.registerNumber'"
-              :rules="{required: true, message: 'Federation can not be null', trigger: 'blur'}">
+              :rules="{required: false, message: 'Federation can not be null', trigger: 'blur'}">
               <el-col :xs="14" :sm="18" :md="18" :lg="17" :xl="16">
+                <%= __('Dignity') %>
                 <el-input placeholder="<%= __("Dog's registration number") %>" v-model="federation.registerNumber"
                           class="input-with-select">
 
                   <el-select v-model="federation.value" slot="prepend" class="wds" placeholder="Select">
-                    <el-option label="FCI" value="1"></el-option>
-                    <el-option label="RKF" value="2"></el-option>
+                    <el-option :label="ob.abbr" :title="me.preferredLocale==='ru'?ob.labelRu:ob.label" :value="ob.value" v-for="(ob, index) in ranks"></el-option>
+                 <!--   <el-option label="RKF" value="2"></el-option>
                     <el-option label="BCU" value="3"></el-option>
                     <el-option label="UKU" value="4"></el-option>
                     <el-option label="IKC" value="5"></el-option>
                     <el-option label="VDH" value="6"></el-option>
-                    <el-option label="KCG" value="7"></el-option>
+                    <el-option label="KCG" value="7"></el-option>-->
                   </el-select>
                   <el-button slot="append" @click="copyElement" icon="el-icon-copy-document"></el-button>
                   <el-button slot="append" @click.prevent="removeElement(federation)"

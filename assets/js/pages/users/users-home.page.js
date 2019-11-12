@@ -99,6 +99,7 @@ parasails.registerPage('users-home', {
       fullName: '',
       groups:[],
       see:true,
+      activeType:[],
       emailStatus: 'confirmed',
       sendCodEmail: 'unconfirmed'
     },

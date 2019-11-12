@@ -6,7 +6,8 @@ parasails.registerPage('account-overview', {
     isBillingEnabled: false,
     group:'',
     hasBillingCard: false,
-
+    objOne: '',
+    dialogTableVisible: false,
     // Syncing/loading states for this page.
     syncingOpenCheckout: false,
     syncingUpdateCard: false,
@@ -166,5 +167,11 @@ console.log('this.me.defaultIcon',this.me.defaultIcon);
 
     },
 
+
+    clickShowPhoto(index, row) {
+      this.dialogTableVisible = true;
+      console.log('row:', row);
+      this.objOne = row;
+    },
   }
 });

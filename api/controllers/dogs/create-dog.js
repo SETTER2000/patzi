@@ -28,6 +28,12 @@ module.exports = {
     },
 
 
+    owner: {
+      type: 'string',
+      description: `Кто является владельцем собаки. (ID)`,
+    },
+
+
     fileList: {
       type: 'ref',
       description: 'Массив с файлами данных о загруженных файлах.'
@@ -168,14 +174,14 @@ module.exports = {
       type: 'string',
       description: 'Клыки. Количество клыков.',
       example: '4',
-      defaultsTo:'4'
+      defaultsTo: '4'
     },
 
     teethCountTop: {
       type: 'string',
       description: 'Количество зубов вверху.',
       example: '6',
-      defaultsTo:'6'
+      defaultsTo: '6'
     },
 
 
@@ -183,7 +189,7 @@ module.exports = {
       type: 'string',
       description: 'Количество зубов внизу.',
       example: '6',
-      defaultsTo:'6'
+      defaultsTo: '6'
     },
 
 
@@ -311,7 +317,7 @@ module.exports = {
       teethCountTop: inputs.teethCountTop,
       dogTests: inputs.dogTests,
       letter: inputs.letter ? inputs.letter : label[0],
-      teethCount:`${inputs.teethCountTop}x${inputs.teethCountBottom}x${inputs.canine}`,
+      teethCount: `${inputs.teethCountTop}x${inputs.teethCountBottom}x${inputs.canine}`,
       fullName: kennel.right ? `${rightFullName}` : `${leftFullName}`
     }).fetch();
     // Если не создан возвращаем ошибку.
@@ -335,6 +341,16 @@ module.exports = {
     let parentFind = await Dog.find({fullName: parents});
     parents = _.pluck(parentFind, 'id');
     parents.length > 0 ? await Dog.addToCollection(newDog.id, 'parents').members(parents) : '';
+
+    let owner = inputs.owner ? inputs.owner : this.req.me.id;
+
+    console.log('Пользователь::: ' , inputs.owner);
+    /**
+     * Добавить питомца в коллекцию пользователя: "User.dogs",
+     * где у пользователя есть идентификатор 10 и питомец имеет идентификатор 300.
+     * await User.addToCollection(10, 'dogs', 300);
+     */
+    await User.addToCollection(owner, 'dogs', newDog.id);
 
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.

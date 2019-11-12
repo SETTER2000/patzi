@@ -5,10 +5,16 @@ parasails.registerPage('dogs-home', {
   data: {
     dogs: [],
     searchObjects:'',
+    ranks:[{label:'Russian Junior Champion', abbr:'RUSJCH', labelRu: 'Юный чемпион России' , value:1},{label:'Hungarian Junior Champion',abbr:'HJCH', labelRu: 'Юный чемпион Болгарии', value:2}],
     filterDogs: [],
     filterName: '',
+    owner: '',
+    ownerId: '',
+    // owner: this.ownerId,
     isActive: true,
+    users: [],
     error: null,
+    innerVisibleCo: false,
     isCollapse: true,
     dialogEditor: false,
     photoDescUpdate: false,
@@ -181,6 +187,7 @@ parasails.registerPage('dogs-home', {
       fileList: [],
       color: '',
       dam: '',
+      owner: '',
       gender: '',
       label: '',
       nickname: '',
@@ -324,6 +331,15 @@ parasails.registerPage('dogs-home', {
       this.colors = data.colors;
     });
 
+    // Запрос данных
+    io.socket.get(`/sockets/users/list-form`, function gotResponse(body, response) {
+      console.log('Сервер User-Form ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Принимаем данные по событию list
+    io.socket.on('list-form', (data) => {
+      this.users = data.users;
+      console.log(' this.users::: ', this.users);
+    });
 
     /* Весь список*/
     this.getList();
@@ -560,6 +576,7 @@ parasails.registerPage('dogs-home', {
         dateBirth: JSON.stringify(this.ruleForm.dateBirth),
         dateDeath: this.ruleForm.dateDeath,
         gender: this.ruleForm.gender,
+        owner: this.ownerId,
         kennel: this.ruleForm.kennel,
         nickname: this.ruleForm.nickname,
         federation: this.ruleForm.federation,
@@ -585,7 +602,7 @@ parasails.registerPage('dogs-home', {
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
       };
-
+console.log('DATA before send: ' , data);
       await io.socket.post('/api/v1/dogs/create-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -618,6 +635,7 @@ parasails.registerPage('dogs-home', {
         gender: this.ruleForm.gender,
         kennel: this.ruleForm.kennel,
         dam: this.dam,
+        owner: this.ownerId,
         sire: this.sire,
         nickname: this.ruleForm.nickname,
         federation: this.ruleForm.federation,
@@ -1216,8 +1234,10 @@ parasails.registerPage('dogs-home', {
 
 
     handleEdit(index, row) {
+      console.log('ROWWW::: ' , row);
       this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
       this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
+      this.owner = _.last(_.pluck(row.owners,'fullName'));
       this.ruleForm = row;
       this.dateBirthUpdate = row.dateBirth;
       this.dateDeathUpdate = row.dateDeath;
@@ -1383,6 +1403,34 @@ parasails.registerPage('dogs-home', {
     dogsFilter(){
       // dogs.filter(dog=>dog.see)
     return  this.dogs.filter(data => (!this.searchObjects || data.fullName.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see)
+    },
+
+
+    querySearchFoo(queryString, cb) {
+      console.log('this.users:::: ' , this.users);
+      if(_.isUndefined(this.users)) return ;
+      let users = this.users;
+      let results = queryString ? users.filter(this.createFilterOwner(queryString)) : users;
+
+      /* clearTimeout(this.timeout);
+       this.timeout = setTimeout(() => {*/
+      cb(results);
+      /*      }, 3000 * Math.random());*/
+    },
+
+    createFilterOwner(queryString) {
+      return (user) => {
+        // console.log('ppp::: ' ,(user.fullName.toLowerCase().indexOf(queryString.toLowerCase()) === 0));
+        /*      console.log('VfullName.fullName::: ', user.fullName.toLowerCase());
+              // return fullName.value;
+              console.log('Запросовая строка::: ',  queryString);*/
+        return (user.fullName.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+
+    async handleSelected(e) {
+      console.log('handleSelected::: ', e);
+      this.ownerId = e.id ? e.id : undefined;
     },
 
 

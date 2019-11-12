@@ -227,6 +227,20 @@ module.exports = {
       model: 'kennel',
       description: 'Собака может принадлежать только одному питомнику. One to Many'
     },
+// Добавьте одну сторону множественной рефлексивной ассоциации
+    // Владельцы
+    owners: {
+      collection: 'user',
+      via: 'dogs',
+      description: `  Добавить питомца в коллекцию пользователя: "User.dogs" , 
+                      где у пользователя есть идентификатор 10 и питомец имеет идентификатор 300.
+                      await User.addToCollection(10, 'dogs', 300);
+                      
+                      parents и children атрибуты могут быть изменены с помощью 
+                      .addToCollection(), .removeFromCollection()и .replaceCollection()
+                    `
+    },
+
 
     // sire: {
     //   model: 'dog',

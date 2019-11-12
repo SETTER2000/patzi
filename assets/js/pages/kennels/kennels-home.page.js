@@ -266,7 +266,7 @@ parasails.registerPage('kennels-home', {
 
   mounted() {
     this.links = this.cityList();
-    this.users = this.userList();
+    // this.users = this.userList();
   },
 
   computed: {
@@ -651,17 +651,17 @@ parasails.registerPage('kennels-home', {
     },
 
 
-    async userList() {
+  /*  async userList() {
 
-      /*      await io.socket.get(`/sockets/users/list-form`, function gotResponse(body, response) {
+      /!*      await io.socket.get(`/sockets/users/list-form`, function gotResponse(body, response) {
               console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
             });
             // Принимаем данные по событию list-*
             await io.socket.on('list', (data) => {
               this.users = data;
               console.log(' this.users::: ' ,  this.users);
-            });*/
-    },
+            });*!/
+    },*/
 
 
     // Реагирует на событие change в поле города|city

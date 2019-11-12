@@ -58,7 +58,9 @@ module.exports = {
       .sort([{sale:'DESC'},{createdAt:'DESC'}])
       .populate('kennel')
       .populate('children')
-      .populate('parents');
+      .populate('parents')
+      .populate('owners')
+    ;
 
 
     /**

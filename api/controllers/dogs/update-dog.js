@@ -34,6 +34,12 @@ module.exports = {
     },
 
 
+    owner: {
+      type: 'string',
+      description: 'Идентификатор владельца собаки.'
+    },
+
+
     dateBirth: {
       type: 'string',
       required: true,
@@ -361,6 +367,18 @@ module.exports = {
     if (!updateDog) {
       throw 'badRequest';
     }
+
+    let owner = inputs.owner ? inputs.owner : this.req.me.id;
+
+    console.log('Пользователь::: ' , inputs.owner);
+    /**
+     * Добавить питомца в коллекцию пользователя: "User.dogs",
+     * где у пользователя есть идентификатор 10 и питомец имеет идентификатор 300.
+     * await User.addToCollection(10, 'dogs', 300);
+     * Для собаки с updateDog.id меняем владельцев в owner (может быть массивом идентификаторов)
+     */
+    // await User.addToCollection(owner, 'dogs', newDog.id);
+    await Dog.replaceCollection(updateDog.id, 'owners').members(owner);
 
     console.log('UPDATE DOGGG::: ', updateDog);
     let year = _.trim(inputs.dateBirth.split('-')[0], '"');
