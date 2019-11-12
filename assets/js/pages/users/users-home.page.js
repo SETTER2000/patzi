@@ -97,9 +97,9 @@ parasails.registerPage('users-home', {
     },
     ruleForm: {
       fullName: '',
-      groups:[],
-      see:true,
-      activeType:[],
+      groups: [],
+      see: true,
+      activeType: [],
       emailStatus: 'confirmed',
       sendCodEmail: 'unconfirmed'
     },
@@ -415,6 +415,22 @@ parasails.registerPage('users-home', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+
+    async handleCellClick(row) {
+      try {
+        // 1) Copy text
+        await navigator.clipboard.writeText(row.emailAddress);
+        this.$message({
+          message: 'Email скопирован.',
+          type: 'success'
+        });
+        // 2) Catch errors
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+        this.$message.error('Oops, this is a error message.');
+      }
+
+    },
     async getList() {
       await  io.socket.get(`/sockets/user/list/${this.count}`, function gotResponse(body, response) {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -861,10 +877,10 @@ parasails.registerPage('users-home', {
       this.ruleForm.federations = this.resetFederation;
     },
 
-groupAction(){
-  this.ruleForm.groups = this.ruleForm.emailStatus==='confirmed' ? [_.pluck(this.groups,'id')[0]] : [];
-  console.log('this.ruleForm.groups:: ' , this.ruleForm.groups);
-},
+    groupAction() {
+      this.ruleForm.groups = this.ruleForm.emailStatus === 'confirmed' ? [_.pluck(this.groups, 'id')[0]] : [];
+      console.log('this.ruleForm.groups:: ', this.ruleForm.groups);
+    },
     handleClose(done) {
       done();
       /*  this.$confirm('Вы уверены, что хотите закрыть диалог?')
@@ -873,7 +889,8 @@ groupAction(){
           })
           .catch(_ => {});*/
     }
-  }
+  },
+
 });
 
 
