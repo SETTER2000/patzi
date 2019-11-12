@@ -223,7 +223,7 @@ module.exports.bootstrap = async function () {
       letter:'A',
       sale:false,
       see:true,
-      dateBirth: moment('2017-11-02T21:00:00.000Z').format(),
+      dateBirth: moment('2016-04-10T23:35:00.000Z').format(),
       kennel: 'Poale Ell'
     },
     {
@@ -232,7 +232,7 @@ module.exports.bootstrap = async function () {
       letter:'E',
       sale:false,
       see:true,
-      dateBirth: '2017-11-02T21:00:00.000Z',
+      dateBirth: '2013-07-08T21:00:00.000Z',
       kennel: 'Sasquehanna'
     },
     {
@@ -241,7 +241,7 @@ module.exports.bootstrap = async function () {
       letter:'D',
       sale:false,
       see:true,
-      dateBirth: '2017-11-02T21:00:00.000Z',
+      dateBirth: '2015-12-09T21:00:00.000Z',
       kennel: 'Alfa Laval'
     },
     {
@@ -250,7 +250,7 @@ module.exports.bootstrap = async function () {
       letter:'N',
       sale:false,
       see:true,
-      dateBirth: '2017-11-02T21:00:00.000Z',
+      dateBirth: '2015-09-25T21:00:00.000Z',
       kennel: 'Olegro Katrin'
     },
     {
@@ -260,7 +260,7 @@ module.exports.bootstrap = async function () {
       winner:true,
       sale:false,
       see:true,
-      dateBirth: '2017-11-02T21:00:00.000Z',
+      dateBirth: '2011-03-02T21:00:00.000Z',
       kennel: 'Zlato Dinastii'
     },
   ];
