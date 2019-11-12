@@ -387,7 +387,12 @@
             </el-row>
           </el-form-item>
 
-
+          <!--<el-form-item label="<%= __('Activity type') %>">-->
+            <!--<el-checkbox-group v-model="ruleForm.activeType">-->
+              <!--&lt;!&ndash;<el-checkbox label="<%= __('Breeder') %>" name="activeType"></el-checkbox>&ndash;&gt;-->
+              <!--<el-checkbox label="<%= __('Owner') %>" name="activeType"></el-checkbox>-->
+            <!--</el-checkbox-group>-->
+          <!--</el-form-item>-->
           <!--         <el-form-item label="<%= __('Gender') %>" prop="gender">
             <el-col :xs="8" :sm="10" :md="10" :lg="16" :xl="16">
               <el-radio-group v-model="ruleForm.gender">
@@ -880,61 +885,6 @@
   </span>
   </el-dialog>
 
-
-  <!-- start banner Area -->
-  <section class="banner-area relative">
-    <div class="container">
-      <div class="row d-flex align-items-center justify-content-center">
-        <div class="about-content col-lg-12">
-          <h1 class="text-white"><%= __('Users') %> </h1>
-          <p>Все пользователи системы.</p>
-        </div>
-      </div>
-
-      <!--{{options}}-->
-    </div>
-  </section>
-  <!-- End banner Area -->
-
-  <!-- Start Sample Area -->
-  <section class="sample-text-area">
-    <div class="container">
-      <h3 class="text-heading">Пользователи системы.</h3>
-      <p class="sample-text">
-        В данном разделе содержится вся информация о пользователях системы. Тех кто зарегистрировался и подтвердил свой
-        email и тех кто ещё
-        не подтвердил. Информация актуальна на данную секунду, так как обновление данных происходит мгновенно в реальном
-        времени и не
-        нуждается в перезагрузке страницы.
-      </p>
-      <!--<p><button @click="sayHello()">Подключиться к сокету</button></p>-->
-      <el-divider><i class="el-icon-star-on"></i></el-divider>
-
-      <el-row :gutter="5">
-        <el-col :xs="24" :sm="8">
-          <el-card shadow="hover">
-            <p class="text-center">Всего: {{counts}}</p>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="8">
-          <el-card shadow="hover" :body-style="{padding:'13px'}">
-            <div v-if="me.isSuperAdmin || me.isAdmin" class="menu-center">
-              <el-button @click="clickAddButton()" class="btn btn-outline-info"
-                         icon="el-icon-circle-plus-outline"><%= __('Add') %></el-button>
-
-            </div>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="8">
-          <el-card shadow="hover">
-            <p class="text-center"> Заблокировано:</p>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-  </section>
-  <!-- End Sample Area -->
-
   <% /* Диалоговое окно. Отправка сообщения. */ %>
   <el-dialog title="Shipping address" :visible.sync="dialogFormVisible">
     <el-form :model="form">
@@ -1008,6 +958,64 @@
       </div>
     </div>
   </el-dialog>
+
+
+
+  <!-- start banner Area -->
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white"><%= __('Users') %> </h1>
+          <p>Все пользователи системы.</p>
+        </div>
+      </div>
+
+      <!--{{options}}-->
+    </div>
+  </section>
+  <!-- End banner Area -->
+
+  <!-- Start Sample Area -->
+  <section class="sample-text-area">
+    <div class="container">
+      <h3 class="text-heading">Пользователи системы.</h3>
+      <p class="sample-text">
+        В данном разделе содержится вся информация о пользователях системы. Тех кто зарегистрировался и подтвердил свой
+        email и тех кто ещё
+        не подтвердил. Информация актуальна на данную секунду, так как обновление данных происходит мгновенно в реальном
+        времени и не
+        нуждается в перезагрузке страницы.
+      </p>
+      <!--<p><button @click="sayHello()">Подключиться к сокету</button></p>-->
+      <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+      <el-row :gutter="5">
+        <el-col :xs="24" :sm="8">
+          <el-card shadow="hover">
+            <p class="text-center">Всего: {{counts}}</p>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :sm="8">
+          <el-card shadow="hover" :body-style="{padding:'13px'}">
+            <div v-if="me.isSuperAdmin || me.isAdmin" class="menu-center">
+              <el-button @click="clickAddButton()" class="btn btn-outline-info"
+                         icon="el-icon-circle-plus-outline"><%= __('Add') %></el-button>
+
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :sm="8">
+          <el-card shadow="hover">
+            <p class="text-center"> Заблокировано:</p>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
+  </section>
+  <!-- End Sample Area -->
+
+
 
   <!-- Start Align Area -->
   <div class="whole-wrap mb-5">
