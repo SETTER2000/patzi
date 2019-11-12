@@ -55,6 +55,7 @@
       </div>
     </el-dialog>
 
+    <%/* Диалоговое окно.  Кто может быть совладельцем */%>
     <el-dialog
       width="30%"
       top="3vh"
@@ -92,21 +93,6 @@
                 <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
-              <!--    <el-upload
-                    class="upload-demo"
-                    drag
-                    action="/api/v1/files/upload"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :before-upload="beforeAvatarUpload"
-                    :on-success="handleAvatarSuccess"
-                    :file-list="fileList"
-                    multiple>
-                    <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="">
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
-                    <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div>
-                  </el-upload>-->
             </div>
             <div class="col-sm-12  col-md-6">
               <p class="image-advice text-muted" v-if="!formErrors.photo">
