@@ -1,13 +1,49 @@
 <div id="account-overview" class="content" v-cloak>
+
+  <% /* Диалоговое окно. Показывает фото профиля. */ %>
+  <el-dialog :title="me.fullName"
+             custom-class="avatar" :visible.sync="dialogTableVisible">
+    <div class="demo-image__placeholder">
+      <div class="menu-center">
+        <!--<span class="demonstration">{{objOne.kennel}}</span>-->
+        <el-row class="demo-avatar demo-basic">
+          <el-col :span="24">
+            <!--<div class="sub-title">circle</div>-->
+            <div class="demo-basic--circle">
+              <div class="block">
+                <el-image :src="me.avatar">
+                  <div slot="placeholder" class="image-slot">
+                    Loading<span class="dot">...</span>
+                  </div>
+                </el-image>
+                <!--<el-avatar :size="50" :src="objOne.imageSrc"></el-avatar>-->
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <!--    <el-image :src="objOne.imageSrc">
+            <div slot="placeholder" class="image-slot">
+              Loading<span class="dot">...</span>
+            </div>
+          </el-image>-->
+      </div>
+    </div>
+  </el-dialog>
+
+
   <div class="container">
     <div class="row">
-      <div class="col">    <h1><%= __('My account') %>
+      <div class="col"><h1><%= __('My account') %>
           <!--<small v-if="group" class="text-success">(status: {{group}})</small>-->
           <!--<small v-else class="text-success">(status: {{group}})</small>-->
         </h1></div>
       <div class="col-sm-2 ">
-        <div v-if="group" class="alert  text-center" :class="[group === 'user'  ? 'alert-secondary' : group === 'breeder' ? 'alert-success' : group === 'owner' ? 'alert-warning' : '']" role="alert">
-          <h4 :class="[group === 'user'  ? 'text-secondary' : group === 'breeder' ? 'text-success' : group === 'owner' ? 'text-warning' : group === 'admin' ? 'text-warning' : '']"><%= __('Status') %>: {{group}}</h4>
+        <div v-if="group" class="alert  text-center"
+             :class="[group === 'user'  ? 'alert-secondary' : group === 'breeder' ? 'alert-success' : group === 'owner' ? 'alert-warning' : '']"
+             role="alert">
+          <h4
+            :class="[group === 'user'  ? 'text-secondary' : group === 'breeder' ? 'text-success' : group === 'owner' ? 'text-warning' : group === 'admin' ? 'text-warning' : '']"><%= __('Status') %>
+            : {{group}}</h4>
         </div>
         <div v-else class="alertalert-light text-center" role="alert">
           status: {{group}}
@@ -17,14 +53,14 @@
 
     <hr/>
     <!--<div class="row">-->
-      <!--<div class="col-sm-4 offset-sm-4">-->
-        <!--<div v-if="group" class="alert  text-center" :class="[group === 'user'  ? 'alert-secondary' : group === 'breeder' ? 'alert-success' : group === 'owner' ? 'alert-warning' : '']" role="alert">-->
-         <!--<h4 :class="[group === 'user'  ? 'text-secondary' : group === 'breeder' ? 'text-success' : group === 'owner' ? 'text-warning' : '']">status: {{group}}</h4>-->
-        <!--</div>-->
-        <!--<div v-else class="alertalert-light text-center" role="alert">-->
-          <!--status: {{group}}-->
-        <!--</div>-->
-      <!--</div>-->
+    <!--<div class="col-sm-4 offset-sm-4">-->
+    <!--<div v-if="group" class="alert  text-center" :class="[group === 'user'  ? 'alert-secondary' : group === 'breeder' ? 'alert-success' : group === 'owner' ? 'alert-warning' : '']" role="alert">-->
+    <!--<h4 :class="[group === 'user'  ? 'text-secondary' : group === 'breeder' ? 'text-success' : group === 'owner' ? 'text-warning' : '']">status: {{group}}</h4>-->
+    <!--</div>-->
+    <!--<div v-else class="alertalert-light text-center" role="alert">-->
+    <!--status: {{group}}-->
+    <!--</div>-->
+    <!--</div>-->
     <!--</div>-->
     <div class="row mb-3">
       <div class="col-sm-6">
@@ -96,51 +132,56 @@
       </div>
     </div>
     <div class="row ">
-      <div class="col-xl-3 col-md-3 col-5 pt-3"> {{ (formData.defaultIcon==='avatar') ?  'По умолчанию' : 'Сделать по умолчанию'}} :</div>
+      <div class="col-xl-3 col-md-3 col-5 pt-3"> {{ (formData.defaultIcon==='avatar') ? 'По умолчанию' : 'Сделать по умолчанию'}} :</div>
       <div class="col-xl-1 col-3 ">
         <ajax-form action="updateDefaultIcon" :syncing.sync="syncing" :cloud-error.sync="cloudError"
                    :handle-parsing="handleParsingIconForm" @submitted="submittedUpdateDefaultIcon()">
-        <div class="custom-control custom-radio">
-          <input type="radio" id="customRadio2" v-model="formData.defaultIcon" value="avatar"
-                 class="custom-control-input">
-          <label class="custom-control-label" for="customRadio2">
-           </label>
-        </div>
-        <ajax-button type="submit" :syncing="syncing" class="btn btn-primary btn-sm ml-1"><span class="ti-save"></span></ajax-button>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="customRadio2" v-model="formData.defaultIcon" value="avatar"
+                   class="custom-control-input">
+            <label class="custom-control-label" for="customRadio2">
+            </label>
+          </div>
+          <ajax-button type="submit" :syncing="syncing" class="btn btn-primary btn-sm ml-1"><span class="ti-save"></span></ajax-button>
         </ajax-form>
       </div>
       <div class="photo-preview col-2">
-        <div class="image-wrapper round">
-          <img :src="me.avatar" class="personPhoto" alt="">
-        </div>
+        <el-link :underline="false" @click="dialogTableVisible=true">
+          <div class="image-wrapper round">
+            <img :src="me.avatar" class="personPhoto" alt="">
+          </div>
+        </el-link>
       </div>
     </div>
     <hr/>
 
     <div class="row mb-3">
       <div class="col-sm-6">
-        <h4>Gravatar   <el-tooltip class="item" effect="dark" content="<%= __('A Globally Recognized Avatar') %>. (https://ru.gravatar.com)" placement="right-start">
+        <h4>Gravatar
+          <el-tooltip class="item" effect="dark" content="<%= __('A Globally Recognized Avatar') %>. (https://ru.gravatar.com)"
+                      placement="right-start">
             <i class="el-icon-question"></i>
-          </el-tooltip></h4>
+          </el-tooltip>
+        </h4>
       </div>
       <div class="col-sm-6">
 
       </div>
     </div>
     <div class="row">
-      <div class="col-xl-3 col-md-3 col-5 pt-3">{{ (formData.defaultIcon==='gravatar') ?  'По умолчанию' : 'Сделать по умолчанию'}}:</div>
+      <div class="col-xl-3 col-md-3 col-5 pt-3">{{ (formData.defaultIcon==='gravatar') ? 'По умолчанию' : 'Сделать по умолчанию'}}:</div>
       <div class="col-xl-1 col-3 ">
 
 
         <ajax-form action="updateDefaultIcon" :syncing.sync="syncing" :cloud-error.sync="cloudError"
                    :handle-parsing="handleParsingIconForm" @submitted="submittedUpdateDefaultIcon($event)">
-        <div class="custom-control custom-radio">
-          <input type="radio" v-model="formData.defaultIcon"  id="customRadio1" class="custom-control-input" value="gravatar">
-          <label class="custom-control-label" for="customRadio1"></label>
-        </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" v-model="formData.defaultIcon" id="customRadio1" class="custom-control-input" value="gravatar">
+            <label class="custom-control-label" for="customRadio1"></label>
+          </div>
           <ajax-button type="submit" :syncing="syncing" class="btn btn-primary btn-sm ml-1"><span class="ti-save"></span>
           </ajax-button>
-          </ajax-form>
+        </ajax-form>
       </div>
       <div class="photo-preview col-2">
         <div class="image-wrapper round">
@@ -199,7 +240,8 @@
 
 
       <div class="modal-body">
-        <p><%= __('Are you sure you want to remove your') %> {{me.billingCardBrand}} <%= __('ending in') %> <strong>{{me.billingCardLast4}}</strong>?
+        <p><%= __('Are you sure you want to remove your') %> {{me.billingCardBrand}} <%= __('ending in') %>
+          <strong>{{me.billingCardLast4}}</strong>?
         </p>
         <p class="text-muted"><%= __('This may restrict your access to paid features') %>.</p>
         <p class="text-danger" v-if="cloudError">
