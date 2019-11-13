@@ -201,6 +201,50 @@
             </el-form-item>
           </template>
 
+          <% /* КОНТИНЕНТ*/ %>
+          <template>
+            <el-form-item label="<%= __('Continent') %>" prop="continent">
+              <el-select @change="changeSelectContinent()" v-model="ruleForm.continent"
+                         placeholder="<%= __('Where is the nursery registered?') %>"
+                         :clearable="true"
+                         style="width: 58%;">
+                <el-option v-for="item in continents"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
+              </el-select>
+
+              <el-tooltip class="ml-3" effect="dark" content="<%= __('Continental Information') %>"
+                          placement="top-start">
+                <el-button @click="innerVisible=true" size="mini" round icon="el-icon-question"></el-button>
+              </el-tooltip>
+            </el-form-item>
+          </template>
+
+
+          <% /* СТАРАНА*/ %>
+          <template v-if="ruleForm.continent">
+            <!--<template >-->
+            <el-form-item label="<%= __('Country') %>" prop="country">
+              <el-select v-model="ruleForm.country"
+                         placeholder="<%= __('Where is the kennel registered?') %>"
+                         style="width: 58%;"
+                         :clearable="true"
+                         @visible-change="changeSelectCountry"
+              >
+                <el-option v-for="item in getPullCountry()"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </template>
           <% /* EMAIL адрес */ %>
           <template>
             <el-row :gutter="10">
