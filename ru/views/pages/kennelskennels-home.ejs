@@ -282,8 +282,8 @@
               inactive-text="<%= __('left') %>">
             </el-switch>
             <el-tooltip effect="dark" placement="top-start">
-              <div slot="content"><%= __('Where is the name of the kennel in relation to the name of the kennel.') %><br>
-                (<%= __('right: KennelName kennelName | left: kennelName KennelName') %>)"
+              <div slot="content"><%= __('Which side is the name of the dog written in relation to the name of the kennel.') %><br>
+                (<%= __('right: KennelName DogName | left: DogName KennelName') %>)"
               </div>
               <div size="mini" round class="el-icon-question ml-3"></div>
             </el-tooltip>
@@ -631,15 +631,26 @@
           </el-dropdown>
         </div>
       </div>
+
+
+      <% /* ПОИСК. */ %>
+      <div class="menu-center my-3">
+        <el-input
+          v-model="searchObjects"
+          placeholder="<%= __('Search by kennel name') %>"
+          clearable/>
+      </div>
+
+
       <% /* ФОТО ПИТОМНИКОВ */ %>
-      <div class="scrollbar" id="style-1">      dss      {{ruleForm.continent}}
+      <div class="scrollbar" id="style-1">  Continent:   {{ruleForm.continent}}
 
         <el-row :gutter="2" class="flex-container wrap">
           <el-col class="flex-item"
-                  v-for="(kennel, index) in kennels.filter(kennel=>kennel.action)" :key="kennel.id"
+                  v-for="(kennel, index) in objFilter()" :key="kennel.id"
                   :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
             <el-link type="danger" class="px-2" @click="goTo2(kennel.detail)" :underline="false"
-                     title="<%= __('More') %>">
+                    :title="kennel.label">
               <el-image
                 :src="kennel.imageSrc"
                 :key="kennel.id"
