@@ -576,6 +576,7 @@ parasails.registerPage('dogs-home', {
         dateBirth: JSON.stringify(this.ruleForm.dateBirth),
         dateDeath: this.ruleForm.dateDeath,
         gender: this.ruleForm.gender,
+        showTeeth: this.ruleForm.showTeeth,
         owner: this.ownerId,
         kennel: this.ruleForm.kennel,
         nickname: this.ruleForm.nickname,
@@ -634,6 +635,7 @@ console.log('DATA before send: ' , data);
         dateDeath: JSON.stringify(this.dateDeathUpdate),
         gender: this.ruleForm.gender,
         kennel: this.ruleForm.kennel,
+        showTeeth: this.ruleForm.showTeeth,
         dam: this.dam,
         owner: this.ownerId,
         sire: this.sire,
@@ -1036,12 +1038,13 @@ console.log('DATA before send: ' , data);
       console.log(key, keyPath);
     },
     handleCloseDialog(done) {
-      this.$confirm('Are you sure to close this dialog?')
+      done();
+    /*  this.$confirm('Are you sure to close this dialog?')
         .then(_ => {
           done();
         })
         .catch(_ => {
-        });
+        });*/
     },
 
     handleClose(key, keyPath) {
@@ -1089,12 +1092,13 @@ console.log('DATA before send: ' , data);
 
 
     handleClose2(done) {
-      this.$confirm(this.i19p.areYouClose)
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {
-        });
+      done();
+      // this.$confirm(this.i19p.areYouClose)
+      //   .then(_ => {
+      //     done();
+      //   })
+      //   .catch(_ => {
+      //   });
     },
 
 
@@ -1238,6 +1242,7 @@ console.log('DATA before send: ' , data);
       this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
       this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
       this.owner = _.last(_.pluck(row.owners,'fullName'));
+      this.ownerId = _.last(_.pluck(row.owners,'id'));
       this.ruleForm = row;
       this.dateBirthUpdate = row.dateBirth;
       this.dateDeathUpdate = row.dateDeath;
@@ -1400,7 +1405,7 @@ console.log('DATA before send: ' , data);
       });
     },
 
-    dogsFilter(){
+    objFilter(){
       // dogs.filter(dog=>dog.see)
     return  this.dogs.filter(data => (!this.searchObjects || data.fullName.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see)
     },

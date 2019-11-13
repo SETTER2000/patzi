@@ -6,6 +6,7 @@ parasails.registerPage('kennels-home', {
     kennels: [],
     citys: [],
     links: [],
+    searchObjects:'',
     search: '',
     show: false,
     filterObjects: [],
@@ -287,7 +288,7 @@ parasails.registerPage('kennels-home', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    async getList() {
+/*    async getList() {
       await io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
         console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
@@ -297,12 +298,12 @@ parasails.registerPage('kennels-home', {
       });
 
       // Принимаем данные по событию list-*
-  /*    await io.socket.on('list-kennel', (data) => {
+  /!*    await io.socket.on('list-kennel', (data) => {
         this.kennels = this.filterObjects = _.isNull(data.kennels) ? [] : data;
         console.log('this.kennels: ', this.kennels);
         console.log('this.filterObjects: ', this.filterObjects);
         // this.kennels = data.kennels;
-      });*/
+      });*!/
       // Принимаем данные по событию list-*
       await  io.socket.on('list-continent', (data) => {
         this.continents = data.continents;
@@ -314,7 +315,7 @@ parasails.registerPage('kennels-home', {
         // this.count = _.get(data, 'count') ?  data.count : this.count;
       });
 
-    },
+    },*/
 
 
     submittedUploadForm: function (result) {
@@ -883,6 +884,14 @@ parasails.registerPage('kennels-home', {
       // this.$message('Нажат элемент: ' + command);
     },
 
+
+    objFilter(){
+
+      console.log('KKKK:: ' , this.ruleForm.continent);
+      // dogs.filter(dog=>dog.see)
+      return  this.kennels.filter(data => (!this.searchObjects  || data.label.toLowerCase().includes(this.searchObjects.toLowerCase()) || (+data.continent.id === +this.ruleForm.continent)) & data.action)
+
+    },
 
 
   }

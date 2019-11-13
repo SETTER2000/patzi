@@ -22,8 +22,7 @@ module.exports = {
 
     see: {
       type: 'boolean',
-      defaultsTo: true,
-      description: `Флаг видимости собаки. Видна или нет. По умолчанию не видна.`
+      description: `Флаг видимости блока собаки. Видна или нет. По умолчанию не видна.`
     },
 
     gender: {
@@ -65,6 +64,14 @@ module.exports = {
       type: 'ref',
       description: 'Массив с объектами данных о новых загруженных файлах.'
     },
+
+
+    showTeeth: {
+      type: 'boolean',
+      defaultsTo: true,
+      description: `Флаг видимости зубов собаки. Виднен или нет блок на сайте. По умолчанию не виден.`
+    },
+
 
     imagesArrUrl: {
       type: 'ref',
@@ -310,6 +317,7 @@ module.exports = {
       subtitle: inputs.subtitle,
       weight: inputs.weight,
       growth: inputs.growth,
+      showTeeth: inputs.showTeeth,
       type: inputs.type,
       sale: inputs.sale,
       color: inputs.color,
@@ -320,7 +328,7 @@ module.exports = {
       canine: inputs.canine,
       teethCountBottom: inputs.teethCountBottom,
       teethCountTop: inputs.teethCountTop,
-      teethCount: `${inputs.teethCountTop}x${inputs.teethCountBottom}x${inputs.canine}`,
+      teethCount: `${inputs.canine}x${inputs.teethCountTop}x${inputs.teethCountBottom}`,
     };
 
 

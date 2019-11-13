@@ -47,6 +47,12 @@ module.exports = {
     },
 
 
+    showTeeth: {
+      type: 'boolean',
+      description: `Флаг видимости блока зубов собаки. Виднен или нет блок на сайте. По умолчанию не виден.`
+    },
+
+
     see: {
       type: 'boolean',
       defaultsTo: true,
@@ -296,6 +302,7 @@ module.exports = {
       kennel: inputs.kennel,
       gender: inputs.gender,
       currency: inputs.currency,
+      showTeeth: inputs.showTeeth,
       winner: inputs.winner,
       price: inputs.price,
       saleDescription: inputs.saleDescription,
@@ -317,7 +324,7 @@ module.exports = {
       teethCountTop: inputs.teethCountTop,
       dogTests: inputs.dogTests,
       letter: inputs.letter ? inputs.letter : label[0],
-      teethCount: `${inputs.teethCountTop}x${inputs.teethCountBottom}x${inputs.canine}`,
+      teethCount: `${inputs.canine}x${inputs.teethCountTop}x${inputs.teethCountBottom}`,
       fullName: kennel.right ? `${rightFullName}` : `${leftFullName}`
     }).fetch();
     // Если не создан возвращаем ошибку.

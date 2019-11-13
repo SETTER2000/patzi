@@ -29,6 +29,14 @@ module.exports = {
     },
 
 
+    fullNameEn: {
+      type: 'string',
+      description: 'Полное представление имени пользователя в транслите. Генерируется автоматически в контроллере',
+      maxLength: 120,
+      example: 'Mary Sue van der McHenst'
+    },
+
+
     emailAddress: {
       type: 'string',
       required: true,
@@ -281,7 +289,8 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
     preferredLocale: {
       type: 'string',
       description: `Предпочитаемый язык интерфейса. Пользователь сам устанавливает эту
-                    опцию в настройках своего аккаунта после авторизации.`,
+                   опцию в настройках своего аккаунта после авторизации.`,
+      defaultsTo:'ru',
       example: 'ru',
       moreInfoUrl: 'https://gist.github.com/mikermcneil/0af155ed546f3ddf164b4885fb67830c; https://sailsjs.com/documentation/reference/request-req/req-set-locale',
       // defaultsTo: 'en',
@@ -405,6 +414,18 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       collection: 'like',
       via: 'owner',
       description: 'У пользователя, может быть много лайков. One to Many'
+    },
+
+
+    continent: {
+      model: 'continent',
+      description: 'Пользователь может принадлежать только одному континенту. One to Many'
+    },
+
+
+    country: {
+      model: 'country',
+      description: 'Пользователь может принадлежать только одной стране. One to Many'
     },
 
   },

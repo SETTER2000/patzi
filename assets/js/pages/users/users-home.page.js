@@ -15,6 +15,8 @@ parasails.registerPage('users-home', {
     value1: '',
     value2: '',
     files: [],
+    continents: [],
+    countrys: [],
     value3: '',
     plain: false,
     dialogVisiblePass: false,
@@ -98,6 +100,7 @@ parasails.registerPage('users-home', {
     ruleForm: {
       fullName: '',
       groups: [],
+      country: null,
       see: true,
       activeType: [],
       emailStatus: 'confirmed',
@@ -110,6 +113,12 @@ parasails.registerPage('users-home', {
       label: [
         {required: true, message: 'Please input you name', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
+      ],
+      continent: [
+        {required: true, message: 'Please select your continent', trigger: 'change'}
+      ],
+      country: [
+        {required: true, message: 'Please select your country', trigger: 'change'}
       ],
       /*emailAddress: [
         {required: true, message: 'Please input email', trigger: 'blur'},
@@ -283,11 +292,36 @@ parasails.registerPage('users-home', {
     io.socket.get('/sockets/user/count-all', function gotResp(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
+
+
+    // Подписываемся на комнату continent  и событие list-continent
+    io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
+      // console.log('Сервер continents ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+
+    // Подписываемся на комнату country  и событие list-country
+    io.socket.get(`/api/v1/country/list`, function gotResponse(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+
+
     io.socket.on('list', (data) => {
       this.users = _.get(data, 'users') ? data.users : this.users;
       console.log(' this.users::: ', this.users);
       // this.count = _.get(data, 'count') ?  data.count : this.count;
     });
+
+    // Принимаем данные по событию list-*
+    io.socket.on('list-continent', (data) => {
+      this.continents = data.continents;
+      console.log('  this.continents ::: ' ,   this.continents );
+    });
+
+    // Получаем данные для селектов в форме
+    io.socket.on('list-country', (data) => {
+      this.countrys = data.countrys;
+    });
+
 
     io.socket.on('count-all', (data) => {
       this.counts = data;
@@ -722,10 +756,6 @@ parasails.registerPage('users-home', {
     // Create User
     async add() {
       this.openFullScreen();
-
-      // this.mesError(this.i19p.errorPasswordConfirm);
-
-
       console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
       let data = {
         fileList: this.ruleForm.fileList,
@@ -735,6 +765,8 @@ parasails.registerPage('users-home', {
         emailAddress: this.ruleForm.emailAddress,
         emailStatus: this.ruleForm.emailStatus,
         see: this.ruleForm.see,
+        continent: this.ruleForm.continent,
+        country: this.ruleForm.country,
         sendCodEmail: this.ruleForm.sendCodEmail,
         password: this.ruleForm.password,
         checkPass: this.ruleForm.checkPass,
@@ -795,6 +827,8 @@ parasails.registerPage('users-home', {
         dateBirth: JSON.stringify(this.dateBirthUpdate),
         dateDeath: JSON.stringify(this.dateDeathUpdate),
         gender: this.ruleForm.gender,
+        continent: this.ruleForm.continent,
+        country: this.ruleForm.country,
         kennel: this.ruleForm.kennel,
         dam: this.dam,
         sire: this.sire,
@@ -888,7 +922,38 @@ parasails.registerPage('users-home', {
             done();
           })
           .catch(_ => {});*/
-    }
+    },
+
+    changeSelectCountry() {
+      console.log('changeSelectCountry: ');
+      // this.ruleForm.city = null;
+    },
+
+    getPullCountry() {
+      let t = this.continents.filter(continent => {
+        return continent.id === this.ruleForm.continent;
+      });
+      console.log('TTTTT::: ' , t);
+      let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
+      return _.sortBy(t[0].countrys, field);
+    },
+
+
+    changeSelectContinent() {
+      this.ruleForm.country = null;
+    },
+    async countryList() {
+      await io.socket.get(`/api/v1/country/list`, function gotResponse(body, response) {
+        // console.log('Сервер country ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+
+      // Ждём данные от загрузки нового питомника
+      await io.socket.on('list-country', (data) => {
+        this.countrys = data;
+      });
+    },
+
+
   },
 
 });

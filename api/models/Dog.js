@@ -49,6 +49,11 @@ module.exports = {
       description: `Флаг продажи собаки. Продаётся или нет. По умолчанию не продаётся.`
     },
 
+    showTeeth: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: `Флаг видимости блока зубов собаки. Виднен или нет блок на сайте. По умолчанию не виден.`
+    },
 
     see: {
       type: 'boolean',

@@ -39,7 +39,7 @@ module.exports = {
       "Щ": "SCH",
       "З": "Z",
       "Х": "H",
-      "Ъ": "'",
+      "Ъ": "_",
       "ё": "yo",
       "й": "i",
       "ц": "ts",
@@ -52,7 +52,7 @@ module.exports = {
       "щ": "sch",
       "з": "z",
       "х": "h",
-      "ъ": "'",
+      "ъ": "",
       "Ф": "F",
       "Ы": "I",
       "В": "V",
@@ -81,7 +81,7 @@ module.exports = {
       "М": "M",
       "И": "I",
       "Т": "T",
-      "Ь": "'",
+      "Ь": "",
       "Б": "B",
       "Ю": "YU",
       "я": "ya",
@@ -90,14 +90,14 @@ module.exports = {
       "м": "m",
       "и": "i",
       "т": "t",
-      "ь": "'",
+      "ь": "",
       "б": "b",
       "ю": "yu"
     };
 
 
     return inputs.str.split(' ').map(function (word) {
-      let y = word.split('').map(char=>a[char] || char).join("");
+      let y = word.split('').map(char=>a[char] || '').join("");
       console.log('LET Y::: ' , y);
       return y;
     }).join(" ");

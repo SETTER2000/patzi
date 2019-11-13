@@ -19,6 +19,17 @@ module.exports = {
     },
 
 
+    continent: {
+      type: 'string',
+      description: 'Континент пользователя'
+    },
+
+
+    country: {
+      type: 'string',
+      description: 'Страна пользователя.'
+    },
+
     emailAddress: {
       type: 'string',
       // required: true,
@@ -204,11 +215,14 @@ console.log('emailAddress::: ' , emailAddress);
 console.log('fullName::: ' , fullName);
     let data = {
       fullName: fullName,
+      fullNameEn:  await sails.helpers.translitWord.with({str: fullName}),
       emailStatus: (inputs.sendCodEmail === 'confirmed') ? 'confirmed' : inputs.emailStatus,
       description: inputs.description,
       see: inputs.see,
       filename: filenameAvatar,
       avatarFD: avatarFD,
+      continent:inputs.continent,
+      country:inputs.country,
       avatarMime: avatarMime,
       password: await sails.helpers.passwords.hashPassword(password),
       images: images,

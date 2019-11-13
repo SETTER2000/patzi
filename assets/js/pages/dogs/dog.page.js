@@ -313,6 +313,18 @@ parasails.registerPage('dog', {
       this.objOne = Object.assign({}, this.objOne, row);
       console.log('this.objOne:', this.objOne);
     },
+
+    open() {
+      this.$alert('Клыки x Верхние резцы x Нижние резцы', '', {
+        confirmButtonText: 'OK',
+       /* callback: action => {
+          this.$message({
+            type: 'info',
+            message: `action: ${ action }`
+          });
+        }*/
+      });
+    }
 // Выбираем заводчика
   /*  async getBreeder() {
       await io.socket.get(`/api/v1/comments/list-comment/${this.litter.id}/${field}`, function gotResponse(body, response) {

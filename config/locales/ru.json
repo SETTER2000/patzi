@@ -679,7 +679,12 @@
 	"The page presents the Chinese Crested kennel Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested kennel kennels in the world.": "На странице представлены питомники китайских хохлатых, созданные по всему миру. Эта база данных питомников не может претендовать на полноту, как и любая другая база данных в мире. Вопрос только в том, кто его использует. По мере того, как механизм обновления и сбора данных в известных питомниках растет и совершенствуется, эта база данных будет автоматически собирать, поддерживать и обновлять соответствующую информацию, которая появляется в открытом доступе к другим сайтам. Составление полного списка питомников китайских хохлатых в мире.",
 	"You can add a owner of the kennel, if one exists.": "Вы можете добавить владельца питомника, если таковой существует.",
 	"Dignity": "Титул",
-	"You can add a co-owner of the nursery, if one exists.": "You can add a co-owner of the nursery, if one exists.",
-	"Where is the name of the kennel in relation to the name of the kennel.": "Where is the name of the kennel in relation to the name of the kennel.",
-	"right: KennelName kennelName | left: kennelName KennelName": "right: KennelName kennelName | left: kennelName KennelName"
+	"Which side is the name of the dog written in relation to the name of the kennel.": "С какой стороны пишется имя собаки по отношению к названию питомника.",
+	"right: KennelName kennelName | left: kennelName KennelName": "right: KennelName kennelName | left: kennelName KennelName",
+	"You can add a co-owner of the nursery, if one exists.": "Вы можете добавить совладельца питомника, если таковой существует.",
+	"Let's get acquainted": "Давайте знакомиться",
+	"Show teeth": "Показывать зубы",
+	"Do not show teeth": "Не показывать зубы",
+	"Number of teeth": "Количество зубов",
+	"Search by kennel name": "Search by kennel name"
 }

@@ -175,7 +175,6 @@ module.exports = {
       description: `Это ваш питомник?`
     },
 
-
     continent: {
       model: 'continent',
       required: true,
