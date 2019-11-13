@@ -263,7 +263,9 @@
           </el-image>
           <div class="text-center">
             <div><%= __('Litter') %> {{o.letter}} / {{o.dateBirth.split('-')[0]}}</div>
-            <h5><el-link @click="goTo2(o.detail)" type="primary">{{o.fullName}}</el-link></h5>
+            <h5>
+              <el-link @click="goTo2(o.detail)" type="primary">{{o.fullName}}</el-link>
+            </h5>
             <div>
               <em><strong><i class="el-icon-present"></i> <%= __('Dob') %>:</strong></em>
               <time class="time"> {{ o.dateBirth | getCreate(me.preferredLocale,'L') }}</time>
@@ -329,7 +331,12 @@
           label="<%= __('Name') %>"
           sortableв
           prop="fullName">
+          <template slot-scope="scope">
+            <el-link @click="goTo2(scope.row.detail)" type="primary">{{scope.row.fullName}}</el-link>
+          </template>
         </el-table-column>
+
+
         <el-table-column
           label="<%= __('Price') %>"
           sortableв
@@ -678,7 +685,6 @@
               </el-tooltip>
             </el-form-item>
 
-
             <% /* ИМЯ СОБАКИ*/ %>
             <template v-if="ruleForm.kennel &&  !buttonUpdate">
 
@@ -980,7 +986,15 @@
             <div class="my-sm-5">
               <el-divider content-position="left"><%= __('Teeth') %></el-divider>
             </div>
+            <% /* показывать|не показывать ЗУБЫ */ %>
+            <template>
+              <!-- `checked` should be true or false -->
 
+              <el-checkbox v-model="ruleForm.showTeeth">
+                <span :class="[ruleForm.showTeeth ? 'text-success' : '', 'text-secondary']"><%= __('Show teeth') %></span>
+                | <span :class="[!ruleForm.showTeeth ? 'text-success' : '', 'text-secondary']"><%= __('Do not show teeth') %></span>
+              </el-checkbox>
+            </template>
             <% /* ПРИКУС */ %>
             <template>
               <el-row :gutter="2">
@@ -1253,9 +1267,6 @@
           </div>
           <div style="border-left: 2px dashed rgb(220, 224, 228); padding-left: 50px" class="col col-lg-5">
 
-
-
-
             <% /* ВЛАДЕЛЕЦ. OWNER */ %>
             <template v-if="me.isAdmin | me.isSuperAdmin">
               <!--<template >-->
@@ -1307,7 +1318,6 @@
                    </el-popover>-->
             </template>
 
-
             <% /* ЗВАНИЯ */ %>
             <el-form-item
               v-for="(federation, index) in ruleForm.federations"
@@ -1321,13 +1331,14 @@
                           class="input-with-select">
 
                   <el-select v-model="federation.value" slot="prepend" class="wds" placeholder="Select">
-                    <el-option :label="ob.abbr" :title="me.preferredLocale==='ru'?ob.labelRu:ob.label" :value="ob.value" v-for="(ob, index) in ranks"></el-option>
-                 <!--   <el-option label="RKF" value="2"></el-option>
-                    <el-option label="BCU" value="3"></el-option>
-                    <el-option label="UKU" value="4"></el-option>
-                    <el-option label="IKC" value="5"></el-option>
-                    <el-option label="VDH" value="6"></el-option>
-                    <el-option label="KCG" value="7"></el-option>-->
+                    <el-option :label="ob.abbr" :title="me.preferredLocale==='ru'?ob.labelRu:ob.label" :value="ob.value"
+                               v-for="(ob, index) in ranks"></el-option>
+                    <!--   <el-option label="RKF" value="2"></el-option>
+                       <el-option label="BCU" value="3"></el-option>
+                       <el-option label="UKU" value="4"></el-option>
+                       <el-option label="IKC" value="5"></el-option>
+                       <el-option label="VDH" value="6"></el-option>
+                       <el-option label="KCG" value="7"></el-option>-->
                   </el-select>
                   <el-button slot="append" @click="copyElement" icon="el-icon-copy-document"></el-button>
                   <el-button slot="append" @click.prevent="removeElement(federation)"
@@ -1542,7 +1553,7 @@
       <div class="scrollbar" id="style-1">
         <el-row :gutter="2" class="flex-container wrap">
           <el-col v-if="dog.images[dog.cover] && dog.see" class="flex-item"
-                  v-for="(dog, index) in dogsFilter()" :key="dog.id"
+                  v-for="(dog, index) in objFilter()" :key="dog.id"
                   :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
 
             <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
