@@ -585,7 +585,8 @@
 
       <% /* Кнопки управления, фильтры */ %>
       <div class="menu-between mb-1" v-if="_.pluck(filterObjects, 'label').length >0">
-        <div><span class="text-lowercase font-weight-light font-italic"><%= __('Kennels') %>: {{ruleForm.continent ? _.last(_.pluck(_.filter(continents,'id', +ruleForm.continent),'label')) : filterName}} </span></div>
+        <div><span class="text-lowercase font-weight-light font-italic"><%= __('Kennels') %>:
+            {{ruleForm.continent ? _.last(_.pluck(_.filter(continents,'id', +ruleForm.continent),'label')) : filterName}} </span></div>
         <div class="grid-content">
           <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">

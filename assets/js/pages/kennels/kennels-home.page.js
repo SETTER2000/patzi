@@ -886,10 +886,10 @@ parasails.registerPage('kennels-home', {
 
 
     objFilter(){
-
-      console.log('KKKK:: ' , this.ruleForm.continent);
+      // let nameKennel =_.last(_.pluck(_.filter(this.continents,'id', +this.ruleForm.continent),'label'));
+      console.log('KKKK:: ' ,this.ruleForm.continent );
       // dogs.filter(dog=>dog.see)
-      return  this.kennels.filter(data => (!this.searchObjects  || data.label.toLowerCase().includes(this.searchObjects.toLowerCase()) || (+data.continent.id === +this.ruleForm.continent)) & data.action)
+      return  this.kennels.filter(data => ((!this.searchObjects || !this.ruleForm.continent)  || data.label.toLowerCase().includes(this.searchObjects.toLowerCase()) || console.log('gggg::: ' , data.continent.id) || data.continent.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.action)
 
     },
 
