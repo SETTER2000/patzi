@@ -1,5 +1,5 @@
 <div id="dog" class="content" v-cloak>
-  <% /* Диалоговое окно. Аватар пользователя. */ %>
+  <% /* Диалоговое окно. Аватар пользователя, картинка собаки. */ %>
   <el-dialog
     :title="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)"
     custom-class="dialog-kennel-add"
@@ -207,6 +207,7 @@
         <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()" round><%= __('Pedigree') %></el-button>
         </div>
         <div class="menu-center">
+          <% /* ЦИТАТА, ЗАМЕТКА о СОБАКЕ */ %>
           <div v-if="dog.subtitle" class="card  mb-4">
             <div class="card-header">
               <%= __('Quote') %>
@@ -218,10 +219,10 @@
               </blockquote>
             </div>
           </div>
-
+          <% /* СОБАКА */ %>
           <el-card class="box-card ">
             <div slot="header" class="clearfix">
-              <span><%= __('Dog') %></span>
+              <span><%= __('Dog') %> ({{dog.gender}})</span>
               <el-button style="float: right; padding: 3px 0" v-if="me.isAdmin || me.isSuperAdmin" type="text">
                 <el-link icon="el-icon-edit"></el-link>
               </el-button>
@@ -302,6 +303,30 @@
                   </el-carousel-item>
                 </el-carousel>
               </template>
+            </div>
+          </el-card>
+
+          <% /* ЗУБЫ */ %>
+          <el-card class="box-card " v-if="dog.showTeeth">
+            <div slot="header" class="clearfix">
+              <span><%= __('Teeth') %></span>
+              <el-button style="float: right; padding: 3px 0" v-if="me.isAdmin || me.isSuperAdmin" type="text">
+                <el-link icon="el-icon-edit"></el-link>
+              </el-button>
+            </div>
+            <div class="menu-between-v">
+              <div class="menu-between">
+                <span><%= __('Bite') %>:</span> <span>{{dog.bite}}</span>
+              </div>
+              <div class="menu-between" v-if="dog.teethCount">
+                <span><%= __('Number of teeth') %>:</span>
+                <el-tooltip content="?"  placement="top" effect="light">
+                <el-link :underline="false" @click="open" type="info">
+                  {{dog.teethCount}}
+                </el-link>
+                </el-tooltip>
+              </div>
+
             </div>
           </el-card>
         </div>
