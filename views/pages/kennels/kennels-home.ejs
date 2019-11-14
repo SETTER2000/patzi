@@ -260,7 +260,7 @@
                          style="width: 58%;"
                          @visible-change="changeSelectCountry"
               >
-                <el-option v-for="item in getPullCountryUpdate()"
+                <el-option v-for="item in getPullCountry()"
                            :key="item.id"
                            :label="item.label"
                            :value="item.id">

@@ -607,8 +607,8 @@ parasails.registerPage('kennels-home', {
 
 
     changeSelectContinent() {
-      this.ruleForm.country = null;
-      this.country = null;
+      this.buttonUpdate ? this.country = null: this.ruleForm.country = null;
+
     },
 
 
