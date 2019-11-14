@@ -6,9 +6,18 @@ parasails.registerPage('kennels-home', {
     kennels: [],
     citys: [],
     links: [],
-    searchObjects:'',
+    see: true,
+    searchObjects: '',
+    dateCreateUpdate: '',
     search: '',
+    objOne: {},
+    buttonUpdate: false,
+    sr: '',
+    continent: '',
+    country: '',
+    region: '',
     show: false,
+    photoVisible: false,
     filterObjects: [],
     dialogEditorList: false,
     showObject: undefined,
@@ -16,79 +25,79 @@ parasails.registerPage('kennels-home', {
     website: null,
     coOwner: '',
     users: [],
-   /* optionsTest: [
-      {
-        value: 1,
-        label: 'Asia',
-        children: [{
-          value: 2,
-          label: 'China',
-          children: [
-            {value: 3, label: 'Beijing'},
-            {value: 4, label: 'Shanghai'},
-            {value: 5, label: 'Hangzhou'}
-          ]
-        }, {
-          value: 6,
-          label: 'Japan',
-          children: [
-            {value: 7, label: 'Tokyo'},
-            {value: 8, label: 'Osaka'},
-            {value: 9, label: 'Kyoto'}
-          ]
-        }, {
-          value: 10,
-          label: 'Korea',
-          children: [
-            {value: 11, label: 'Seoul'},
-            {value: 12, label: 'Busan'},
-            {value: 13, label: 'Taegu'}
-          ]
-        }]
-      },
-      {
-        value: 14,
-        label: 'Europe',
-        children: [{
-          value: 15,
-          label: 'France',
-          children: [
-            {value: 16, label: 'Paris'},
-            {value: 17, label: 'Marseille'},
-            {value: 18, label: 'Lyon'}
-          ]
-        }, {
-          value: 19,
-          label: 'UK',
-          children: [
-            {value: 20, label: 'London'},
-            {value: 21, label: 'Birmingham'},
-            {value: 22, label: 'Manchester'}
-          ]
-        }]
-      },
-      {
-        value: 23,
-        label: 'North America',
-        children: [{
-          value: 24,
-          label: 'US',
-          children: [
-            {value: 25, label: 'New York'},
-            {value: 26, label: 'Los Angeles'},
-            {value: 27, label: 'Washington'}
-          ]
-        }, {
-          value: 28,
-          label: 'Canada',
-          children: [
-            {value: 29, label: 'Toronto'},
-            {value: 30, label: 'Montreal'},
-            {value: 31, label: 'Ottawa'}
-          ]
-        }]
-      }
-    ],*/
+    /* optionsTest: [
+       {
+         value: 1,
+         label: 'Asia',
+         children: [{
+           value: 2,
+           label: 'China',
+           children: [
+             {value: 3, label: 'Beijing'},
+             {value: 4, label: 'Shanghai'},
+             {value: 5, label: 'Hangzhou'}
+           ]
+         }, {
+           value: 6,
+           label: 'Japan',
+           children: [
+             {value: 7, label: 'Tokyo'},
+             {value: 8, label: 'Osaka'},
+             {value: 9, label: 'Kyoto'}
+           ]
+         }, {
+           value: 10,
+           label: 'Korea',
+           children: [
+             {value: 11, label: 'Seoul'},
+             {value: 12, label: 'Busan'},
+             {value: 13, label: 'Taegu'}
+           ]
+         }]
+       },
+       {
+         value: 14,
+         label: 'Europe',
+         children: [{
+           value: 15,
+           label: 'France',
+           children: [
+             {value: 16, label: 'Paris'},
+             {value: 17, label: 'Marseille'},
+             {value: 18, label: 'Lyon'}
+           ]
+         }, {
+           value: 19,
+           label: 'UK',
+           children: [
+             {value: 20, label: 'London'},
+             {value: 21, label: 'Birmingham'},
+             {value: 22, label: 'Manchester'}
+           ]
+         }]
+       },
+       {
+         value: 23,
+         label: 'North America',
+         children: [{
+           value: 24,
+           label: 'US',
+           children: [
+             {value: 25, label: 'New York'},
+             {value: 26, label: 'Los Angeles'},
+             {value: 27, label: 'Washington'}
+           ]
+         }, {
+           value: 28,
+           label: 'Canada',
+           children: [
+             {value: 29, label: 'Toronto'},
+             {value: 30, label: 'Montreal'},
+             {value: 31, label: 'Ottawa'}
+           ]
+         }]
+       }
+     ],*/
     cityId: undefined,
     coOwnerId: undefined,
     state1: '',
@@ -250,7 +259,7 @@ parasails.registerPage('kennels-home', {
     // Принимаем данные по событию list-*
     io.socket.on('list-continent', (data) => {
       this.continents = data.continents;
-      console.log('  this.continents ::: ' ,   this.continents );
+      console.log('  this.continents ::: ', this.continents);
     });
 
     // Получаем данные для селектов в форме
@@ -265,13 +274,20 @@ parasails.registerPage('kennels-home', {
   },
 
 
+  filters: {},
   mounted() {
     this.links = this.cityList();
     // this.users = this.userList();
   },
 
   computed: {
-
+    // Управление стилем заголовка
+    classObject: function () {
+      return {
+        // 'actionH1': this.ruleForm.see ,
+        'text-danger': !this.ruleForm.see
+      }
+    },
     langSearch: {
       get: function () {
         return (this.me.preferredLocale === 'ru') ? 'На русском поиск' : 'English search';
@@ -288,7 +304,13 @@ parasails.registerPage('kennels-home', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-/*    async getList() {
+
+    getNameContinent() {
+      return this.ruleForm.continent ? _.last(_.pluck(_.filter(this.continents, 'id', +this.ruleForm.continent), 'label')) : false;
+    },
+
+
+    async getList() {
       await io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
         console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
@@ -298,12 +320,13 @@ parasails.registerPage('kennels-home', {
       });
 
       // Принимаем данные по событию list-*
-  /!*    await io.socket.on('list-kennel', (data) => {
+      await io.socket.on('list-kennel', (data) => {
         this.kennels = this.filterObjects = _.isNull(data.kennels) ? [] : data;
         console.log('this.kennels: ', this.kennels);
         console.log('this.filterObjects: ', this.filterObjects);
         // this.kennels = data.kennels;
-      });*!/
+
+      });
       // Принимаем данные по событию list-*
       await  io.socket.on('list-continent', (data) => {
         this.continents = data.continents;
@@ -315,7 +338,7 @@ parasails.registerPage('kennels-home', {
         // this.count = _.get(data, 'count') ?  data.count : this.count;
       });
 
-    },*/
+    },
 
 
     submittedUploadForm: function (result) {
@@ -358,14 +381,25 @@ parasails.registerPage('kennels-home', {
 
     async submitForm(formName) {
       console.log(formName);
+
       this.$refs[formName].validate((valid) => {
-        if (valid) {
+        if (valid && !this.buttonUpdate) {
           this.addKennel();
+        } else if (valid && this.buttonUpdate) {
+          this.updateKennel();
         } else {
           console.log('error submit!!');
           return false;
         }
       });
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
+      //     this.addKennel();
+      //   } else {
+      //     console.log('error submit!!');
+      //     return false;
+      //   }
+      // });
     },
 
 
@@ -388,7 +422,28 @@ parasails.registerPage('kennels-home', {
 
 
     resetForm(formName) {
+      // console.log('REFSSSS::: ' , this.$refs);
       this.$refs[formName].resetFields();
+
+      this.fuleForm = {
+        label: '',
+        registerNumber: '',
+        dateCreate: undefined,
+        site: '',
+        phones: undefined,
+        continent: undefined,
+        region: undefined,
+        country: undefined,
+        city: undefined,
+      };
+      // this.$forceUpdate();
+
+      this.buttonUpdate = false;
+      this.centerDialogAdded = false;
+      // this.continent = '';
+      // this.country = '';
+      // this.region = '';
+      // this.city = '';
       this.ruleForm.imageUrl = '';
     },
 
@@ -446,6 +501,51 @@ parasails.registerPage('kennels-home', {
         }
       });
     },
+
+
+    async updateKennel() {
+      this.openFullScreen();
+      let data = {
+        id: this.ruleForm.kennel,
+        file: this.ruleForm.file,
+        label: this.ruleForm.label,
+        dateCreate: JSON.stringify(this.dateCreateUpdate),
+        continent: this.continent,
+        country: this.country,
+        region: this.region,
+        city: this.city,
+        coOwner: this.coOwnerId,
+        rightName: this.ruleForm.rightName,
+        site: this.ruleForm.website,
+        registerNumber: this.ruleForm.registerNumber,
+        subtitle: this.ruleForm.subtitle,
+        yourKennel: this.ruleForm.yourKennel,
+        address: this.ruleForm.address,
+        phones: this.ruleForm.phones
+      };
+      console.log('DATA перед отправкой::: ', data);
+
+      await io.socket.put('/api/v1/kennels/update-kennel', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        this.loading.close();
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          // this.ruleForm.file = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+          this.$forceUpdate();
+        }
+      });
+    },
+
 
     // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
     // Это кнопка вызывает модальное окно <modal> с <ajax-form>
@@ -512,20 +612,28 @@ parasails.registerPage('kennels-home', {
 
 
     getPullCountry() {
+      console.log('this.continents::: ', this.continents);
+
       let t = this.continents.filter(continent => {
-        return continent.id === this.ruleForm.continent;
+        return continent.id === this.ruleForm.continent || continent.id === this.continent;
       });
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
-      return _.sortBy(t[0].countrys, field);
+
+      console.log('DDDDD', t);
+      return !_.isEmpty(t) ? _.sortBy(t[0].countrys, field) : '';
+
     },
 
 
     getPullRegion() {
+
       let t = this.countrys.filter(country => {
-        return country.id === this.ruleForm.country;
+        return country.id === this.ruleForm.country || country.id === this.country;
       });
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
-      return _.sortBy(t[0].regions, field);
+      // console.log('t[0].regions::: ', t[0]);
+      return !_.isEmpty(t) ? _.sortBy(t[0].regions, field) : '';
+
     },
 
 
@@ -537,17 +645,16 @@ parasails.registerPage('kennels-home', {
     },
 
 
-
     querySearchFoo(queryString, cb) {
-      console.log('this.users:::: ' , this.users);
-      if(_.isUndefined(this.users)) return ;
+      console.log('this.users:::: ', this.users);
+      if (_.isUndefined(this.users)) return;
       let users = this.users;
       let results = queryString ? users.filter(this.createFilterOwner(queryString)) : users;
 
-     /* clearTimeout(this.timeout);
-      this.timeout = setTimeout(() => {*/
-        cb(results);
-/*      }, 3000 * Math.random());*/
+      /* clearTimeout(this.timeout);
+       this.timeout = setTimeout(() => {*/
+      cb(results);
+      /*      }, 3000 * Math.random());*/
     },
 
     createFilterOwner(queryString) {
@@ -560,7 +667,7 @@ parasails.registerPage('kennels-home', {
       };
     },
 
-   async handleSelected(e) {
+    async handleSelected(e) {
       console.log('handleSelected::: ', e);
       this.coOwnerId = e.id ? e.id : undefined;
     },
@@ -652,17 +759,17 @@ parasails.registerPage('kennels-home', {
     },
 
 
-  /*  async userList() {
+    /*  async userList() {
 
-      /!*      await io.socket.get(`/sockets/users/list-form`, function gotResponse(body, response) {
-              console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
-            });
-            // Принимаем данные по событию list-*
-            await io.socket.on('list', (data) => {
-              this.users = data;
-              console.log(' this.users::: ' ,  this.users);
-            });*!/
-    },*/
+        /!*      await io.socket.get(`/sockets/users/list-form`, function gotResponse(body, response) {
+                console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
+              });
+              // Принимаем данные по событию list-*
+              await io.socket.on('list', (data) => {
+                this.users = data;
+                console.log(' this.users::: ' ,  this.users);
+              });*!/
+      },*/
 
 
     // Реагирует на событие change в поле города|city
@@ -885,15 +992,98 @@ parasails.registerPage('kennels-home', {
     },
 
 
-    objFilter(){
-      let nameKennel =_.last(_.pluck(_.filter(this.continents,'id', +this.ruleForm.continent),'label'));
-      console.log('KKKK:: ' ,nameKennel );
-      // dogs.filter(dog=>dog.see)
+    objFilter() {
+      let res;
+      let nameKennel = !_.isEmpty(res = _.filter(this.continents, 'id', +this.ruleForm.continent)) ? _.last(_.pluck(res, 'label')) : '';
+      this.sr = this.searchObjects ? this.searchObjects : nameKennel;
+      return this.kennels.filter(data => (!this.sr || data.continent.label.toLowerCase().includes(this.sr.toLowerCase()) || data.label.toLowerCase().includes(this.sr.toLowerCase())) & data.action)
 
-      return  this.kennels.filter(data => (!this.searchObjects || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())  || data.continent.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.action)
+    },
+
+
+    handleEdit(index, row) {
+      console.log('ROWWW::: ', row);
+      this.continent = row.continent.id;
+      this.country = row.country.id;
+      this.region = row.region.id;
+      this.city = row.city ? row.city.id : '';
+      // this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
+      // this.owner = _.last(_.pluck(row.owners,'fullName'));
+      // this.ownerId = _.last(_.pluck(row.owners,'id'));
+      this.ruleForm = row;
+      this.dateCreateUpdate = row.dateCreate;
+      // this.dateDeathUpdate = row.dateDeath;
+      this.ruleForm.kennel = row.id;
+      this.dialogEditor = true;
+      this.centerDialogAdded = true;
+      this.buttonUpdate = true;
+    },
+    errorHandler() {
+      return true;
+    },
+    clickShowPhoto(index, row) {
+      this.photoVisible = true;
+      console.log('row:', row);
+      // this.objOne = row;
+      this.objOne = Object.assign({}, this.objOne, row);
+      console.log('this.objOne:', this.objOne);
+    },
+
+    handleCloseDialog(done) {
+      this.resetForm('ruleForm');
+      this.ruleForm.label= '';
+      // this.ruleForm.continent= 1;
+      this.ruleForm.registerNumber= '';
+      // this.continent = null;
+      // this.country = '';
+      // this.region = '';
+      // this.city = '';
+
+      // this.fuleForm = {
+      //   label: '',
+      //   registerNumber: '',
+      //   dateCreate: undefined,
+      //   site: '',
+      //   phones: undefined,
+      //   continent: undefined,
+      //   region: undefined,
+      //   country: undefined,
+      //   city: undefined,
+      // };
+
+      this.$forceUpdate();
+
+      this.centerDialogAdded = false;
+      done();
+    },
+
+    // clickOpenDialog() {
+    //   this.fuleForm = {
+    //     label: '',
+    //     registerNumber: '',
+    //     dateCreate: undefined,
+    //     site: '',
+    //     phones: undefined,
+    //     continent: undefined,
+    //     region: undefined,
+    //     country: undefined,
+    //     city: undefined,
+    //   };
+    //   this.continent = '';
+    //   this.country = '';
+    //   this.region = '';
+    //   this.city = '';
+    //   this.$forceUpdate();
+    //   this.centerDialogAdded = true;
+    // },
+    clickCloseDialog() {
+      this.resetForm('ruleForm');
+      this.buttonUpdate = false;
+      this.centerDialogAdded = false;
 
     },
 
 
   }
 });
+// ((!this.searchObjects && !nameKennel) || data.continent.label.toLowerCase().includes(nameKennel.toLowerCase())  || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())  || data.continent.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.action)

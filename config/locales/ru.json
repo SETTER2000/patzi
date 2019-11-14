@@ -686,5 +686,7 @@
 	"Show teeth": "Показывать зубы",
 	"Do not show teeth": "Не показывать зубы",
 	"Number of teeth": "Количество зубов",
-	"Search by kennel name": "Search by kennel name"
+	"Search by kennel name": "Поиск по названию питомника",
+	"Selected": "Выбрано",
+	"Reset filter": "Сбросить фильтр"
 }
