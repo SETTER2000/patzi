@@ -597,7 +597,7 @@ parasails.registerPage('kennels-home', {
 
     changeSelectCountry() {
       console.log('changeSelectCountry: ');
-      // this.ruleForm.city = null;
+      this.buttonUpdate ? this.region = null: this.ruleForm.region = null;
     },
 
     changeSelectRegion() {
