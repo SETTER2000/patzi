@@ -55,6 +55,25 @@ module.exports = {
       description: 'Дополнительная информация. Описание питомника.'
     },
 
+    continent: {
+      type: 'string',
+      required: true,
+      description: 'Континент где находится питомник.'
+    },
+
+
+    country: {
+      type: 'string',
+      required: true,
+      description: 'Страна где находится питомник.'
+    },
+
+
+    region: {
+      type: 'string',
+      required: true,
+      description: 'Край, область где находится питомник.'
+    },
 
    /* phones: {
       description: 'Массив телефонов для связи.',
@@ -86,25 +105,6 @@ module.exports = {
     },
 
 
-    continent: {
-      type: 'string',
-      // required: true,
-      description: 'Континент где находится питомник.'
-    },
-
-
-    country: {
-      type: 'string',
-      // required: true,
-      description: 'Страна где находится питомник.'
-    },
-
-
-    region: {
-      type: 'string',
-      // required: true,
-      description: 'Край, область где находится питомник.'
-    },
 
 
     coOwner: {
