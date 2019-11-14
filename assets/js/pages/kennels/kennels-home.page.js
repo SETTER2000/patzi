@@ -608,19 +608,40 @@ parasails.registerPage('kennels-home', {
 
     changeSelectContinent() {
       this.ruleForm.country = null;
+      this.country = null;
     },
 
 
     getPullCountry() {
       console.log('this.continents::: ', this.continents);
-
+console.log('ВЫБРАЛ континент:: ' , this.ruleForm.continent);
+console.log('ВЫБРАЛ континент country:: ' , this.country);
       let t = this.continents.filter(continent => {
         return continent.id === this.ruleForm.continent || continent.id === this.continent;
       });
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
 
       console.log('DDDDD', t);
-      return !_.isEmpty(t) ? _.sortBy(t[0].countrys, field) : '';
+      let o = !_.isEmpty(t) ? _.sortBy(t[0].countrys, field) : '';
+      console.log("RETU::: " , o);
+      return o;
+
+    },
+
+
+    getPullCountryUpdate() {
+      console.log('this.continents::: ', this.continents);
+console.log('ВЫБРАЛ континент:: ' , this.ruleForm.continent);
+console.log('ВЫБРАЛ континент country:: ' , this.country);
+      let t = this.continents.filter(continent => {
+        return  continent.id === this.continent;
+      });
+      let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
+
+      console.log('DDDDD', t);
+      let o = !_.isEmpty(t) ? _.sortBy(t[0].countrys, field) : '';
+      console.log("RETU::: " , o);
+      return o;
 
     },
 
