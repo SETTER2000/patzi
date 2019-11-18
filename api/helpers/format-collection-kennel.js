@@ -69,7 +69,9 @@ module.exports = {
       delete kennel.imageUploadMime;
     });
 
-
+    /**
+     * kennels = (req.me.isAdmin || req.me.isSuperAdmin )? kennels :  _.find(kennels, {yourKennel.id:req.me.id})
+     */
     data.collection = kennels;
     return exits.success(data);
   }
