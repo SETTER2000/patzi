@@ -184,7 +184,7 @@
               </el-form-item>
             </el-col>
           </el-form-item>
-          <el-form-item v-if="buttonUpdate" label="<%= __('Date') %>" required>
+          <el-form-item v-else label="<%= __('Date') %>" required>
             <el-col :span="11">
               <el-form-item prop="dateCreateUpdate">
                 <el-date-picker
@@ -418,7 +418,17 @@
           <% /* OWNER */ %>
           <el-form-item label="<%= __('Your kennel?') %>" prop="yourKennel">
             <el-switch
+              v-if="!buttonUpdate"
               v-model="ruleForm.yourKennel"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="Yes!"
+              inactive-text="No"
+            >
+            </el-switch>
+            <el-switch
+              v-else
+              v-model="yourKennel"
               active-color="#13ce66"
               inactive-color="#ff4949"
               active-text="Yes!"
@@ -488,7 +498,7 @@
             <div class="my-3 pt-4 text-center hidden-xs-only">
               <el-form-item>
 
-                <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+                <el-button v-if="!buttonUpdate"  @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
                 <el-button @click="clickCloseDialog()"><%= __('Cancel') %></el-button>
                 <el-button v-if="!buttonUpdate" type="primary"
                            @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
@@ -498,7 +508,7 @@
             </div>
             <div class="text-center hidden-sm-and-up">
               <el-button-group>
-                <el-button @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
+                <el-button v-if="!buttonUpdate"  @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
                 <el-button @click="clickCloseDialog()" icon="el-icon-close"></el-button>
                 <el-button v-if="!buttonUpdate" type="primary"
                            @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
@@ -526,7 +536,7 @@
     <template>
       <el-table
         ref="filterTable"
-        :data="kennels.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))"
+        :data="kennels.filter(data => !search || data.label.toLowerCase().includes(search.toLowerCase()))"
         :default-sort="{prop: 'label', order: 'descending'}"
         max-height="650"
         style="width: 100%">
@@ -560,14 +570,15 @@
         </el-table-column>
         <el-table-column
           label="<%= __('Name') %>"
-          sortableв
+          sortable
           prop="label">
         </el-table-column>
         <el-table-column
           label="<%= __('Country') %>"
           sortableв
           prop="country"
-          width="80">
+          sortable
+          width="120">
           <template slot-scope="scope">
             {{me.preferredLocale==='ru' ? scope.row.country.labelRu : scope.row.country.label}}
           </template>
@@ -577,7 +588,7 @@
             <el-input
               v-model="search"
               size="mini"
-              placeholder="Type to search"/>
+              placeholder="Start typing a kennel name"/>
           </template>
           <template slot-scope="scope">
             <el-tooltip content="<%= __('Image editor') %>" placement="left" effect="light">
