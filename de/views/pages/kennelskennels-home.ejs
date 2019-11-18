@@ -152,12 +152,44 @@
     </div>
 
 
+
+
     <el-row :gutter="20">
       <el-col :span="1"></el-col>
       <el-col :span="23">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
                  label-width="120px" class="demo-ruleForm">
 
+
+
+          <% /* ВИДИМОСТЬ ПИТОМНИКА */ %>
+          <el-form-item label="<%= __('Set Visibility') %>" prop="action">
+            <el-switch
+              v-if="!buttonUpdate"
+              v-model="ruleForm.action"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="Yes!"
+              inactive-text="No"
+            >
+            </el-switch>
+            <el-switch
+              v-else
+              v-model="action"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="Yes!"
+              inactive-text="No"
+            >
+            </el-switch>
+            <el-tooltip effect="dark" placement="top-start">
+              <div slot="content"><%= __('Set Visibility') %></div>
+              <div size="mini" round class="el-icon-question ml-3"></div>
+            </el-tooltip>
+          </el-form-item>
+
+
+          <% /* ПИТОМНИК */ %>
           <el-form-item label="<%= __('Kennel') %>" prop="label">
             <el-input minlength="3" maxlength="80" show-word-limit
                       placeholder="<%= __('The official name') %>"
@@ -781,11 +813,9 @@
                   </el-option>
                 </el-select>
               </el-dropdown-item>
-              <el-dropdown-item v-if="me.isSuperAdmin || me.isAdmin" icon="el-icon-edit" :command="{com:'e'}">
+              <el-dropdown-item v-if="me.isSuperAdmin || me.isAdmin || breeder" icon="el-icon-edit" :command="{com:'e'}">
                 <%= __('Kennel editor') %>
               </el-dropdown-item>
-
-
             </el-dropdown-menu>
           </el-dropdown>
         </div>
