@@ -245,6 +245,84 @@
               </el-select>
             </el-form-item>
           </template>
+
+          <% /* РЕГИОН */ %>
+          <template v-if="ruleForm.country">
+            <!--<template >-->
+            <el-form-item label="<%= __('Region') %>" prop="region">
+              <el-select v-model="ruleForm.region"
+                         v-if="!buttonUpdate"
+                         placeholder="<%= __('Where is the kennel registered?') %>"
+                         style="width: 58%;"
+                         :clearable="true"
+                         @visible-change="changeSelectRegion"
+                         @change="changeRegion">
+                <el-option v-for="item in getPullRegion()"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: rgb(132,146,166); font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
+              </el-select>
+              <el-select v-model="region"
+                         v-else
+                         placeholder="<%= __('Where is the kennel registered?') %>"
+                         style="width: 58%;"
+                         :clearable="true"
+                         @visible-change="changeSelectRegion"
+                         @change="changeRegion">
+                <el-option v-for="item in getPullRegion()"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: rgb(132,146,166); font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </template>
+
+
+          <% /* ГОРОД */ %>
+          <template v-if="ruleForm.country">
+            <el-form-item label="<%= __('City') %>" prop="city">
+              <el-autocomplete v-model="ruleForm.city"
+                               v-if="!buttonUpdate"
+                               popper-class="my-autocomplete"
+
+                               :fetch-suggestions="querySearch"
+                               placeholder="<%= __('Please Input City') %>"
+                               :trigger-on-focus="false"
+                               @select="handleSelectCity"
+                               style="width: 58%;"
+              >
+                <template slot-scope="{ item }">
+
+                  <span class="value">{{ item.labelRu  }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                </template>
+              </el-autocomplete>
+              <el-autocomplete v-model="city"
+                               v-else
+                               popper-class="my-autocomplete"
+                               :fetch-suggestions="querySearch"
+                               placeholder="<%= __('Please Input City') %>"
+                               :trigger-on-focus="false"
+                               @select="handleSelect"
+                               style="width: 58%;">
+                <template slot-scope="{ item }">
+                  <span class="value">{{ item.labelRu  }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                </template>
+              </el-autocomplete>
+              <!--<el-tooltip effect="dark" content="<%= __('English search') %>" placement="top-start">-->
+              <!--<div size="mini" round class="el-icon-question ml-3"></div>-->
+              <!--</el-tooltip>-->
+            </el-form-item>
+          </template>
+
+
           <% /* EMAIL адрес */ %>
           <template>
             <el-row :gutter="10">
