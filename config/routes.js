@@ -174,7 +174,7 @@ module.exports.routes = {
   'GET    /api/v1/kennels/list': {action: 'kennels/list'},
   'PUT    /api/v1/kennels/update-kennel': { action: 'kennels/update-kennel', csrf: false},
   'POST   /api/v1/kennels/create-kennel': {action: 'kennels/create-kennel', csrf: false},
-  'DELETE /api/v1/kennels/destroy-one-kennel': {action: 'kennels/destroy-one-kennel', csrf: false},
+  'POST   /api/v1/kennels/destroy-one-kennel': {action: 'kennels/destroy-one-kennel', csrf: false},
   'PUT    /api/v1/dogs/update-description-img': {action: 'dogs/update-description-img', csrf: false},
 
 

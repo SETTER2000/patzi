@@ -172,7 +172,7 @@ module.exports = {
 
     yourKennel: {
       model: 'User',
-      description: `Это ваш питомник?`
+      description: `Это ваш питомник. По умолчанию нет.`
     },
 
     continent: {

@@ -428,6 +428,15 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       description: 'Пользователь может принадлежать только одной стране. One to Many'
     },
 
+    region: {
+      model: 'region',
+      description: 'Питомник может принадлежать только однму региону. One to Many'
+    },
+
+    city: {
+      model: 'city',
+      description: `Питомник может принадлежать только одноу городу. One to Many.`
+    },
   },
 
   // methods: {

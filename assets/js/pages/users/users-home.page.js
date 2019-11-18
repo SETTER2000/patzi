@@ -15,8 +15,13 @@ parasails.registerPage('users-home', {
     value1: '',
     value2: '',
     files: [],
+    cityId: undefined,
+    continent: '',
+    country: '',
+    region: '',
     continents: [],
     countrys: [],
+    regions: [],
     value3: '',
     plain: false,
     dialogVisiblePass: false,
@@ -41,7 +46,7 @@ parasails.registerPage('users-home', {
     confirm: false,
     rowTable: '',
     users: [],
-    sizeForm: {
+ /*   sizeForm: {
       name: '',
       region: '',
       date1: '',
@@ -50,8 +55,8 @@ parasails.registerPage('users-home', {
       type: [],
       resource: '',
       desc: ''
-    },
-    form: {
+    },*/
+  /*  form: {
       name: '',
       region: '',
       date1: '',
@@ -60,7 +65,7 @@ parasails.registerPage('users-home', {
       type: [],
       resource: '',
       desc: ''
-    },
+    },*/
     formLabelWidth: '120px',
     loadingSearch: false,
     loading: {},
@@ -120,6 +125,10 @@ parasails.registerPage('users-home', {
       country: [
         {required: true, message: 'Please select your country', trigger: 'change'}
       ],
+      region: [
+        {required: true, message: 'Please select Activity zone', trigger: 'change'}
+      ],
+
       /*emailAddress: [
         {required: true, message: 'Please input email', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
@@ -332,7 +341,10 @@ parasails.registerPage('users-home', {
       this.groups = data;
       this.groupAction();
     });
-
+    // Получаем данные для селектов в форме
+    io.socket.on('list-region', (data) => {
+      this.regions = data.regions;
+    });
   },
 
 
@@ -389,7 +401,7 @@ parasails.registerPage('users-home', {
 
   mounted: function () {
     this.$emit('valChanged', this.value);
-
+    this.links = this.cityList();
   },
 
 
@@ -567,6 +579,10 @@ parasails.registerPage('users-home', {
     },
 
 
+    async handleSelectCity(e) {
+      console.log('handleSelect::: ', e);
+      this.cityId = (_.isNumber(e.id)) ? e.id : undefined;
+    },
     handleDeleteGroup(e, index, row) {
       io.socket.delete('/users/destroy-user-group', {'id': row.id, 'groupId': [e]}, (data, jwRes) => {
         console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
@@ -765,6 +781,8 @@ parasails.registerPage('users-home', {
         emailAddress: this.ruleForm.emailAddress,
         emailStatus: this.ruleForm.emailStatus,
         see: this.ruleForm.see,
+        region: this.ruleForm.region,
+        city: this.cityId,
         continent: this.ruleForm.continent,
         country: this.ruleForm.country,
         sendCodEmail: this.ruleForm.sendCodEmail,
@@ -831,6 +849,8 @@ parasails.registerPage('users-home', {
         country: this.ruleForm.country,
         kennel: this.ruleForm.kennel,
         dam: this.dam,
+        region: this.region,
+        city: this.city,
         sire: this.sire,
         // nickname: this.ruleForm.nickname,
         // federation: this.ruleForm.federation,
@@ -909,6 +929,17 @@ parasails.registerPage('users-home', {
       this.ruleForm.imageUrl = '';
       this.ruleForm.price = 0;
       this.ruleForm.federations = this.resetFederation;
+      this.fuleForm = {
+        label: '',
+        registerNumber: '',
+        dateCreate: undefined,
+        site: '',
+        phones: undefined,
+        continent: undefined,
+        region: undefined,
+        country: undefined,
+        city: undefined,
+      };
     },
 
     groupAction() {
@@ -922,6 +953,12 @@ parasails.registerPage('users-home', {
             done();
           })
           .catch(_ => {});*/
+    },
+
+
+    changeSelectRegion() {
+      console.log('changeSelectRegion: ');
+      // this.ruleForm.city = null;
     },
 
     changeSelectCountry() {
@@ -954,8 +991,91 @@ parasails.registerPage('users-home', {
     },
 
 
-  },
+    // Реагирует на событие change в поле города|city
+    async changeRegion(regionId) {
+      this.regionId = regionId;
+      console.log('this.ruleForm.city:', this.ruleForm.city);
+      await this.cityList();
+    },
 
+
+    async cityList() {
+      await io.socket.get(`/api/v1/city/list/${this.regionId}`, function gotResponse(body, response) {
+        console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-city', (data) => {
+        this.citys = data;
+      });
+    },
+
+
+    /* Авто поиск по городам */
+    querySearch(queryString, cb) {
+      let links = this.citys;
+      let results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      console.log('RESULT CITYS::: ', results);
+      cb(results);
+    },
+
+    createFilter(queryString) {
+      return (link) => {
+        return (this.me.preferredLocale === 'ru') ? (link.labelRu.toLowerCase().indexOf(queryString.toLowerCase()) === 0) :
+          (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+
+    getPullRegion() {
+
+      let t = this.countrys.filter(country => {
+        return country.id === this.ruleForm.country || country.id === this.country;
+      });
+      let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
+      // console.log('t[0].regions::: ', t[0]);
+      return !_.isEmpty(t) ? _.sortBy(t[0].regions, field) : '';
+
+    },
+
+
+    getPullCity() {
+      let regions = this.regions.filter(region => {
+        return region.id === this.ruleForm.country;
+      });
+      return regions[0].citys;
+    },
+
+
+    async regionList() {
+      await io.socket.get(`/api/v1/region/list`, function gotResponse(body, response) {
+        // console.log('Сервер country ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+
+      // Ждём данные от загрузки нового питомника
+      await io.socket.on('list-region', (data) => {
+        this.regions = data;
+      });
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  },
 });
 
 

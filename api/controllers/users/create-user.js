@@ -30,6 +30,18 @@ module.exports = {
       description: 'Страна пользователя.'
     },
 
+
+    region: {
+      type: 'string',
+      description: 'Область.'
+    },
+
+
+    city: {
+      type: 'string',
+      description: 'Город пользователя.'
+    },
+
     emailAddress: {
       type: 'string',
       // required: true,
@@ -80,8 +92,8 @@ module.exports = {
     password: {
       type: 'string',
       // required: true,
-     /* minLength: 8,
-      maxLength: 30,*/
+      /* minLength: 8,
+       maxLength: 30,*/
       description: 'Надежно хешируется представление пароля пользователя для входа.',
       // protect: true,
       example: '2$28a8eabna301089103-13948134nad'
@@ -196,10 +208,10 @@ module.exports = {
     let avatarMime = images.length > 0 ? images[0].type : '';
     let filenameAvatar = images.length > 0 ? images[0].name : '';
 
-    let emailAddress =  await sails.helpers.genEmail.with({email: inputs.emailAddress, fullName:inputs.fullName});
+    let emailAddress = await sails.helpers.genEmail.with({email: inputs.emailAddress, fullName: inputs.fullName});
     let conflictingEmail = (req.me.preferredLocale === 'ru') ? 'userAlreadyInUseRU' : 'userAlreadyInUse';
     let confirmedAccount = (req.me.preferredLocale === 'ru') ? 'Подтвердите ваш аккаунт' : 'Please confirm your account';
-    let fullName =  await sails.helpers.startLetter.with({str:inputs.fullName});
+    let fullName = await sails.helpers.startLetter.with({str: inputs.fullName});
 
 
     // Проверка паролей на равенство
@@ -210,19 +222,21 @@ module.exports = {
     // Если пароль не указан генерируем пароль самостоятельно
     let password = _.isEmpty(inputs.password) || _.isEmpty(inputs.checkPass) ? await sails.helpers.strings.random('alphanumeric', 8) : inputs.password;
 
-console.log('inputs.emailAddress::: ' , inputs.emailAddress);
-console.log('emailAddress::: ' , emailAddress);
-console.log('fullName::: ' , fullName);
+    console.log('inputs.emailAddress::: ', inputs.emailAddress);
+    console.log('emailAddress::: ', emailAddress);
+    console.log('fullName::: ', fullName);
     let data = {
       fullName: fullName,
-      fullNameEn:  await sails.helpers.translitWord.with({str: fullName}),
+      fullNameEn: await sails.helpers.translitWord.with({str: fullName}),
       emailStatus: (inputs.sendCodEmail === 'confirmed') ? 'confirmed' : inputs.emailStatus,
       description: inputs.description,
       see: inputs.see,
       filename: filenameAvatar,
       avatarFD: avatarFD,
-      continent:inputs.continent,
-      country:inputs.country,
+      region: inputs.region,
+      city: inputs.city,
+      continent: inputs.continent,
+      country: inputs.country,
       avatarMime: avatarMime,
       password: await sails.helpers.passwords.hashPassword(password),
       images: images,
@@ -238,7 +252,7 @@ console.log('fullName::: ' , fullName);
     //   emailStatus: 'unconfirmed'
     // } : {});
 
-console.log('DATA created: ', data);
+    console.log('DATA created: ', data);
     // Создаём пользователя
     let newUser = await User.create(data)
       .intercept('E_UNIQUE', conflictingEmail)
@@ -265,7 +279,7 @@ console.log('DATA created: ', data);
 
     console.log('inputs.groups::: ', inputs.groups);
     // Добавить нового пользователя alexFox.id в группу 'admin'
-   !_.isEmpty(inputs.groups) > 0 ? await User.addToCollection(newUser.id, 'groups', inputs.groups) : '';
+    !_.isEmpty(inputs.groups) > 0 ? await User.addToCollection(newUser.id, 'groups', inputs.groups) : '';
 
 
     // Устанавливаем ссылку на аватар

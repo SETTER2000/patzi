@@ -5,6 +5,8 @@ parasails.registerPage('kennels-home', {
   data: {
     kennels: [],
     citys: [],
+    removeKennelId: undefined,
+    yourKennel:false,
     links: [],
     see: true,
     searchObjects: '',
@@ -184,6 +186,8 @@ parasails.registerPage('kennels-home', {
     dic: [
       ['en', {
         all: 'All',
+        warnRemove: 'This will permanently delete the object. Continue?',
+        delCancel: 'Delete canceled',
         warnNoKennel: `At the moment there is no nursery in the database.
          You should create at least one kennel to start with to add a dog.`,
         warnNotRecover: 'After deletion, the object cannot be restored. Delete object',
@@ -199,6 +203,8 @@ parasails.registerPage('kennels-home', {
       }],
       ['ru', {
         all: 'Все',
+        warnRemove: 'Это навсегда удалит объект. Продолжить?',
+        delCancel: 'Удаление отменено',
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         warnNotRecover: 'После удаления объект невозможно будет восстановить. Удалить объект',
@@ -438,7 +444,7 @@ parasails.registerPage('kennels-home', {
       };
       // this.$forceUpdate();
 
-      this.buttonUpdate = false;
+      // this.buttonUpdate = false;
       this.centerDialogAdded = false;
       // this.continent = '';
       // this.country = '';
@@ -505,10 +511,12 @@ parasails.registerPage('kennels-home', {
 
     async updateKennel() {
       this.openFullScreen();
+
       let data = {
         id: this.ruleForm.kennel,
         file: this.ruleForm.file,
         label: this.ruleForm.label,
+        // dateCreate: "2010-08-13T00:00:00+04:00",
         dateCreate: JSON.stringify(this.dateCreateUpdate),
         continent: this.continent,
         country: this.country,
@@ -519,7 +527,8 @@ parasails.registerPage('kennels-home', {
         site: this.ruleForm.website,
         registerNumber: this.ruleForm.registerNumber,
         subtitle: this.ruleForm.subtitle,
-        yourKennel: this.ruleForm.yourKennel,
+        yourKennel: this.yourKennel,
+        // yourKennel: this.ruleForm.yourKennel,
         address: this.ruleForm.address,
         phones: this.ruleForm.phones
       };
@@ -527,11 +536,11 @@ parasails.registerPage('kennels-home', {
 
       await io.socket.put('/api/v1/kennels/update-kennel', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (jwRes.statusCode === 400) ? this.mesError(`${this.i19p.text400Err} Ошибка обновления.`) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
-        this.buttonUpdate = false;
+        // this.buttonUpdate = false;
         this.centerDialogAdded = false;
         this.loading.close();
         if (jwRes.statusCode === 200) {
@@ -544,6 +553,7 @@ parasails.registerPage('kennels-home', {
           this.$forceUpdate();
         }
       });
+
     },
 
 
@@ -597,7 +607,7 @@ parasails.registerPage('kennels-home', {
 
     changeSelectCountry() {
       console.log('changeSelectCountry: ');
-      this.buttonUpdate ? this.region = null: this.ruleForm.region = null;
+      this.buttonUpdate ? this.region = null : this.ruleForm.region = null;
     },
 
     changeSelectRegion() {
@@ -607,41 +617,41 @@ parasails.registerPage('kennels-home', {
 
 
     changeSelectContinent() {
-      this.buttonUpdate ? this.country = null: this.ruleForm.country = null;
+      this.buttonUpdate ? this.country = null : this.ruleForm.country = null;
 
     },
 
 
     getPullCountry() {
-      console.log('this.continents::: ', this.continents);
-console.log('ВЫБРАЛ континент:: ' , this.ruleForm.continent);
-console.log('ВЫБРАЛ континент country:: ' , this.country);
+      // console.log('this.continents::: ', this.continents);
+      // console.log('ВЫБРАЛ континент:: ', this.ruleForm.continent);
+      // console.log('ВЫБРАЛ континент country:: ', this.country);
       let t = this.continents.filter(continent => {
         return continent.id === this.ruleForm.continent || continent.id === this.continent;
       });
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
 
-      console.log('DDDDD', t);
+      // console.log('DDDDD', t);
       let o = !_.isEmpty(t) ? _.sortBy(t[0].countrys, field) : '';
-      console.log("RETU::: " , o);
+      // console.log("RETU::: ", o);
       return o;
 
     },
 
 
     getPullCountryUpdate() {
-      console.log('this.continents::: ', this.continents);
-console.log('ВЫБРАЛ континент:: ' , this.ruleForm.continent);
-console.log('ВЫБРАЛ континент country:: ' , this.country);
+      // console.log('this.continents::: ', this.continents);
+      // console.log('ВЫБРАЛ континент:: ', this.ruleForm.continent);
+      // console.log('ВЫБРАЛ континент country:: ', this.country);
       let t = this.continents.filter(continent => {
-        return  continent.id === this.continent;
+        return continent.id === this.continent;
       });
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
 
-      console.log('DDDDD', t);
-      let o = !_.isEmpty(t) ? _.sortBy(t[0].countrys, field) : '';
-      console.log("RETU::: " , o);
-      return o;
+      // console.log('DDDDD', t);
+      return  !_.isEmpty(t) ? _.sortBy(t[0].countrys, field) : '';
+      // console.log("RETU::: ", o);
+
 
     },
 
@@ -1033,6 +1043,7 @@ console.log('ВЫБРАЛ континент country:: ' , this.country);
       // this.ownerId = _.last(_.pluck(row.owners,'id'));
       this.ruleForm = row;
       this.dateCreateUpdate = row.dateCreate;
+      this.yourKennel = row.yourKennel;
       // this.dateDeathUpdate = row.dateDeath;
       this.ruleForm.kennel = row.id;
       this.dialogEditor = true;
@@ -1052,9 +1063,10 @@ console.log('ВЫБРАЛ континент country:: ' , this.country);
 
     handleCloseDialog(done) {
       this.resetForm('ruleForm');
-      this.ruleForm.label= '';
+      this.ruleForm.label = '';
+
       // this.ruleForm.continent= 1;
-      this.ruleForm.registerNumber= '';
+      this.ruleForm.registerNumber = '';
       // this.continent = null;
       // this.country = '';
       // this.region = '';
@@ -1105,6 +1117,60 @@ console.log('ВЫБРАЛ континент country:: ' , this.country);
     },
 
 
+    deleteKennel: async function () {
+      let data = {
+        id: this.removeKennelId,
+      };
+      console.log('Перед отправкой data DOG: ', data);
+      io.socket.post('/api/v1/kennels/destroy-one-kennel', data, (dataRes, jwRes) => {
+        this.errorMessages(jwRes, this.i19p.successDelete);
+        this.dialogDeletePhotoSession = false;
+        if (jwRes.statusCode === 200) {
+          // this.$message({
+          //   type: 'success',
+          //   message: this.i19p.success
+          // });
+          this.getList();
+          this.$forceUpdate();
+        }
+      });
+    },
+
+    openRemoveDialog(id) {
+      this.removeKennelId = id;
+      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
+        confirmButtonText: 'OK',
+        cancelButtonText: this.i19p.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.deleteKennel();
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.i19p.delCancel
+        });
+      });
+    },
+
+    errorMessages(jwRes, successText) {
+      (jwRes.statusCode === 200) ? (this.mesSuccess(successText)) :
+        (jwRes.statusCode === 400) ? this.mesError(jwRes.headers['x-exit-description']) :
+        // (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+    }
+    ,
+
+
+
+
+
+
   }
 });
 // ((!this.searchObjects && !nameKennel) || data.continent.label.toLowerCase().includes(nameKennel.toLowerCase())  || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())  || data.continent.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.action)
+
+

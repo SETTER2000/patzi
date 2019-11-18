@@ -82,7 +82,7 @@ parasails.registerPage('dogs-home', {
     direction: 'rtl',
     show: false,
     limit: 50,
-    removeDog: undefined,
+    removeDogId: undefined,
     dogId: undefined,
     dialog: {},
     showDog: undefined,
@@ -1065,7 +1065,7 @@ console.log('DATA before send: ' , data);
 
     deleteDog: async function () {
       let data = {
-        id: this.removeDog,
+        id: this.removeDogId,
       };
       console.log('Перед отправкой data DOG: ', data);
       io.socket.post('/api/v1/dogs/destroy-one-dog', data, (dataRes, jwRes) => {
@@ -1103,7 +1103,7 @@ console.log('DATA before send: ' , data);
 
 
     openRemoveDialog(id) {
-      this.removeDog = id;
+      this.removeDogId = id;
       this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
         confirmButtonText: 'OK',
         cancelButtonText: this.i19p.cancel,
@@ -1118,6 +1118,8 @@ console.log('DATA before send: ' , data);
         });
       });
     },
+
+
     async destroyManyPhotos() {
       let removeImage = _.remove(this.photos.images, img => _.indexOf(this.checkedPhoto, img.id) > -1);
       console.log('Удалённые картинки: ', removeImage);
