@@ -43,13 +43,13 @@ console.log('inputs.regionId::' , inputs.regionId);
     // Бибилиотека Node.js
     const url = require('url');
     const moment = require('moment');
-    let query = (inputs.regionId) ? {region: inputs.regionId} : {region:0};
+    let query = (inputs.regionId !== 'undefined') ? {region: inputs.regionId} : {region:0};
     // Устанавливаем соответствующую локаль для даты, установленую пользователем.
     moment.locale(this.req.me.preferredLocale);
 
     // Формат отображаемой даты
     // let format = 'LL HH:mm';
-
+console.log('QUERY::; ' , query);
     // Have the socket which made the request join the "city" room.
     // Подключить сокет, который сделал запрос, к комнате «city».
     await sails.sockets.join(req, 'city');

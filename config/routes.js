@@ -151,6 +151,7 @@ module.exports.routes = {
   'DELETE /api/v1/groups/destroy-one-group': {action: 'groups/destroy-one-group'},
   'PUT    /api/v1/groups/update-group': {action: 'groups/update-group'},
   'GET    /sockets/groups/group-form': {action: 'groups/group-form'},
+  'GET    /api/v1/groups/is-breeder': { action: 'groups/is-breeder' },
 
   'POST   /api/v1/users/create-user': {action: 'users/create-user', csrf: false},
   'PUT    /sockets/user/update-user-group': {action: 'users/update-user-group', csrf: false},

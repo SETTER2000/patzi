@@ -154,7 +154,7 @@ module.exports = {
 
     data.users = users;
     data.count = inputs.count;
-    console.log('DATA USERS:::: ' , data);
+    // console.log('DATA USERS:::: ' , data);
     await sails.sockets.broadcast('user', 'list-form', data);
     // Respond with view.
     return exits.success();

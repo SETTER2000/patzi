@@ -5,6 +5,7 @@ parasails.registerPage('kennels-home', {
   data: {
     kennels: [],
     citys: [],
+    breeder:false,
     removeKennelId: undefined,
     yourKennel:false,
     links: [],
@@ -130,6 +131,7 @@ parasails.registerPage('kennels-home', {
       }],
       email: '',
       label: '',
+      region: '',
       coOwner: '',
       website: '',
       imageUrl: '',
@@ -277,6 +279,8 @@ parasails.registerPage('kennels-home', {
     io.socket.on('list-region', (data) => {
       this.regions = data.regions;
     });
+
+    this.isBreeder();
   },
 
 
@@ -467,6 +471,7 @@ parasails.registerPage('kennels-home', {
         continent: this.ruleForm.continent,
         country: this.ruleForm.country,
         region: this.ruleForm.region,
+        action: this.ruleForm.action,
         city: this.cityId,
         coOwner: this.coOwnerId,
         rightName: this.ruleForm.rightName,
@@ -522,6 +527,7 @@ parasails.registerPage('kennels-home', {
         country: this.country,
         region: this.region,
         city: this.city,
+        action: this.action,
         coOwner: this.coOwnerId,
         rightName: this.ruleForm.rightName,
         site: this.ruleForm.website,
@@ -662,7 +668,7 @@ parasails.registerPage('kennels-home', {
         return country.id === this.ruleForm.country || country.id === this.country;
       });
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
-      // console.log('t[0].regions::: ', t[0]);
+      console.log('t[0].regions::: ', t[0]);
       return !_.isEmpty(t) ? _.sortBy(t[0].regions, field) : '';
 
     },
@@ -1043,6 +1049,7 @@ parasails.registerPage('kennels-home', {
       // this.ownerId = _.last(_.pluck(row.owners,'id'));
       this.ruleForm = row;
       this.dateCreateUpdate = row.dateCreate;
+      this.action = row.action;
       this.yourKennel = row.yourKennel;
       // this.dateDeathUpdate = row.dateDeath;
       this.ruleForm.kennel = row.id;
@@ -1161,10 +1168,14 @@ parasails.registerPage('kennels-home', {
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+    },
+
+    async isBreeder(){
+      await io.socket.get(`/api/v1/groups/is-breeder`,(body, response) => {
+        console.log('Сервер (is-breeder) ответил кодом  ' + response.statusCode + ' и данными: ', body);
+        this.breeder =  (response.statusCode === 200);
+      });
     }
-    ,
-
-
 
 
 

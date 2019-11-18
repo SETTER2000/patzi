@@ -24,6 +24,7 @@ module.exports.policies = {
   'kennels/*':'is-all-group',
   // 'kennels/*':['is-super-admin','is-admin'],
   'users/list-status':true,
+  'groups/is-breeder':true,
   'entrance/*': true,
   'account/logout': true,
   'message/message-mailgun': true,

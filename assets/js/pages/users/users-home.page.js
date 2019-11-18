@@ -46,7 +46,7 @@ parasails.registerPage('users-home', {
     confirm: false,
     rowTable: '',
     users: [],
- /*   sizeForm: {
+    sizeForm: {
       name: '',
       region: '',
       date1: '',
@@ -55,8 +55,8 @@ parasails.registerPage('users-home', {
       type: [],
       resource: '',
       desc: ''
-    },*/
-  /*  form: {
+    },
+    form: {
       name: '',
       region: '',
       date1: '',
@@ -65,7 +65,7 @@ parasails.registerPage('users-home', {
       type: [],
       resource: '',
       desc: ''
-    },*/
+    },
     formLabelWidth: '120px',
     loadingSearch: false,
     loading: {},
@@ -105,6 +105,7 @@ parasails.registerPage('users-home', {
     ruleForm: {
       fullName: '',
       groups: [],
+      region: '',
       country: null,
       see: true,
       activeType: [],

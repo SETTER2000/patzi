@@ -51,6 +51,13 @@ module.exports = {
     },
 
 
+    action: {
+      type: 'boolean',
+      description: 'Видимость питомника.',
+      defaultsTo: false
+    },
+
+
     yourKennel: {
       type: 'boolean',
       description: 'Это ваш питомник?.',
