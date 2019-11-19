@@ -1510,7 +1510,7 @@
                 <%= __('For Sale') %>
               </el-dropdown-item>
 
-              <el-dropdown-item v-if="me.isSuperAdmin || me.isAdmin" icon="el-icon-edit" :command="{com:'e'}">
+              <el-dropdown-item v-if="me.isSuperAdmin || me.isAdmin || isOwner" icon="el-icon-edit" :command="{com:'e'}">
                 <%= __('Dog editor') %>
               </el-dropdown-item>
 
