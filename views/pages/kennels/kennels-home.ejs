@@ -149,11 +149,10 @@
   </el-dialog>
 
   <% /* Диалоговое окно. Редактировать Питомник. */ %>
-  <el-dialog
-    :visible.sync="centerDialogUpdate"
-    custom-class="dialog-kennel-add"
-    :before-close="handleCloseDialog"
-    center>
+  <el-dialog  :visible.sync="centerDialogUpdate"
+              custom-class="dialog-kennel-add"
+              :before-close="handleCloseDialog"
+              center>
     <template slot="title" slot-scope="scope">
       <span style="font-size: 1.2rem">{{ !buttonUpdate ? 'Add your kennel' : 'edit kennel'}}</span>
     </template>
@@ -171,11 +170,10 @@
       </div>
     </el-dialog>
     <% /* Диалоговое окно.  Кто может быть совладельцем */ %>
-    <el-dialog
+    <el-dialog :visible.sync="innerVisibleCo"
       width="30%"
       top="3vh"
       title="<%= __('Who can be a co-owner') %>"
-      :visible.sync="innerVisibleCo"
       append-to-body>
       <div class="justify-content-center">
         <%= __('You can add a co-owner of the nursery, if one exists.') %>
@@ -267,7 +265,7 @@
           </el-form-item>
 
           <% /* ИМЯ ПИТОМНИКА */ %>
-         <!-- <el-form-item  label="<%= __('Kennel') %>" prop="label">
+          <!-- <el-form-item  label="<%= __('Kennel') %>" prop="label">
             <el-input minlength="3" maxlength="80" show-word-limit
                       placeholder="<%= __('The official name') %>"
                       v-model="rowUpdate.label"></el-input>
@@ -276,8 +274,8 @@
           <% /* НОМЕР ПИТОМНИКА */ %>
           <el-form-item label="<%= __('Number') %>" prop="registerNumber">
             <el-input  minlength="3" maxlength="20" show-word-limit
-                      v-model="rowUpdate.registerNumber"
-                      placeholder="<%= __('Kennel registration number') %>"></el-input>
+                       v-model="rowUpdate.registerNumber"
+                       placeholder="<%= __('Kennel registration number') %>"></el-input>
           </el-form-item>
 
           <% /* ДАТА РЕГИСТРАЦИИ ПИТОМНИКА */ %>
@@ -401,8 +399,8 @@
           <template v-if="rowUpdate.city">
             <el-form-item label="<%= __('Address') %>" prop="address">
               <el-input
-                        placeholder="<%= __('street, house, building') %>" minlength="3" maxlength="100" show-word-limit
-                        v-model="rowUpdate.address"></el-input>
+                placeholder="<%= __('street, house, building') %>" minlength="3" maxlength="100" show-word-limit
+                v-model="rowUpdate.address"></el-input>
             </el-form-item>
           </template>
 
@@ -457,9 +455,9 @@
           <% /* САЙТ */ %>
           <el-form-item label="<%= __('WebSite') %>" prop="website">
             <el-input
-                      minlength="3" maxlength="30" show-word-limit
-                      placeholder="<%= __('Without http:// | https://') %>"
-                      v-model="rowUpdate.website">
+              minlength="3" maxlength="30" show-word-limit
+              placeholder="<%= __('Without http:// | https://') %>"
+              v-model="rowUpdate.website">
               <template slot="prepend">//</template>
             </el-input>
           </el-form-item>
@@ -555,8 +553,7 @@
 
 
   <% /* Диалоговое окно. Добавить Питомник*/ %>
-  <el-dialog
-    :visible.sync="centerDialogAdded"
+  <el-dialog :visible.sync="centerDialogAdded"
     custom-class="dialog-kennel-add"
     :before-close="handleCloseDialog"
     center>

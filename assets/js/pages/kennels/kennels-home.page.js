@@ -7,6 +7,7 @@ parasails.registerPage('kennels-home', {
     kennelsEditList: [],
     citys: [],
     row:{},
+    rowUpdate:{},
     city: '',
     address: '',
     phones:'',
@@ -88,6 +89,32 @@ parasails.registerPage('kennels-home', {
     centerDialogAdded: false,
     centerDialogUpdate: false,
     rules: {
+      label: [
+        {required: true, message: 'Please input kennel name', trigger: 'blur'},
+        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
+      ],
+      registerNumber: [
+        {required: true, message: 'Please input register number', trigger: 'blur'},
+        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
+      ],
+      region: [
+        {required: true, message: 'Please select Activity zone', trigger: 'change'}
+      ],
+      continent: [
+        {required: true, message: 'Please select your continent', trigger: 'change'}
+      ],
+      country: [
+        {required: true, message: 'Please select your country', trigger: 'change'}
+      ],
+      dateCreate: [
+        {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
+      ],
+      subtitle: [
+        {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
+        {min: 10, max: 300, message: 'Length should be 10 to 100', trigger: 'blur'}
+      ]
+    },
+    uprows: {
       label: [
         {required: true, message: 'Please input kennel name', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
