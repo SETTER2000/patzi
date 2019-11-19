@@ -922,9 +922,7 @@
               <el-form-item>
                 <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
                 <el-button @click="clickCloseDialog()"><%= __('Cancel') %></el-button>
-                <el-button type="primary"
-                           @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
-                <el-button v-else type="primary" @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
+                <el-button type="primary"  @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
 
               </el-form-item>
             </div>
@@ -932,9 +930,7 @@
               <el-button-group>
                 <el-button @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
                 <el-button @click="clickCloseDialog()" icon="el-icon-close"></el-button>
-                <el-button type="primary"
-                           @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
-                <el-button v-else type="primary" @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+                <el-button type="primary"  @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
               </el-button-group>
             </div>
           </el-row>
