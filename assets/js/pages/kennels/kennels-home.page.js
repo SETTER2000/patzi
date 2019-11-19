@@ -4,14 +4,22 @@ parasails.registerPage('kennels-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     kennels: [],
+    kennelsEditList: [],
     citys: [],
-    breeder:false,
+    row:{},
+    city: '',
+    address: '',
+    phones:'',
+    isBreeder: false,
     removeKennelId: undefined,
-    yourKennel:false,
+    yourKennel: false,
     links: [],
     see: true,
     searchObjects: '',
     dateCreateUpdate: '',
+    rightName: '',
+    subtitle: '',
+    registerNumber: '',
     search: '',
     objOne: {},
     buttonUpdate: false,
@@ -28,84 +36,10 @@ parasails.registerPage('kennels-home', {
     website: null,
     coOwner: '',
     users: [],
-    /* optionsTest: [
-       {
-         value: 1,
-         label: 'Asia',
-         children: [{
-           value: 2,
-           label: 'China',
-           children: [
-             {value: 3, label: 'Beijing'},
-             {value: 4, label: 'Shanghai'},
-             {value: 5, label: 'Hangzhou'}
-           ]
-         }, {
-           value: 6,
-           label: 'Japan',
-           children: [
-             {value: 7, label: 'Tokyo'},
-             {value: 8, label: 'Osaka'},
-             {value: 9, label: 'Kyoto'}
-           ]
-         }, {
-           value: 10,
-           label: 'Korea',
-           children: [
-             {value: 11, label: 'Seoul'},
-             {value: 12, label: 'Busan'},
-             {value: 13, label: 'Taegu'}
-           ]
-         }]
-       },
-       {
-         value: 14,
-         label: 'Europe',
-         children: [{
-           value: 15,
-           label: 'France',
-           children: [
-             {value: 16, label: 'Paris'},
-             {value: 17, label: 'Marseille'},
-             {value: 18, label: 'Lyon'}
-           ]
-         }, {
-           value: 19,
-           label: 'UK',
-           children: [
-             {value: 20, label: 'London'},
-             {value: 21, label: 'Birmingham'},
-             {value: 22, label: 'Manchester'}
-           ]
-         }]
-       },
-       {
-         value: 23,
-         label: 'North America',
-         children: [{
-           value: 24,
-           label: 'US',
-           children: [
-             {value: 25, label: 'New York'},
-             {value: 26, label: 'Los Angeles'},
-             {value: 27, label: 'Washington'}
-           ]
-         }, {
-           value: 28,
-           label: 'Canada',
-           children: [
-             {value: 29, label: 'Toronto'},
-             {value: 30, label: 'Montreal'},
-             {value: 31, label: 'Ottawa'}
-           ]
-         }]
-       }
-     ],*/
     cityId: undefined,
     coOwnerId: undefined,
     state1: '',
     selectedKennel: undefined,
-    // countryId: 0,
     regionId: 0,
     url: 'https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg',
     fit: 'cover',
@@ -152,6 +86,7 @@ parasails.registerPage('kennels-home', {
     innerVisibleCo: false,
     centerDialogVisible: false,
     centerDialogAdded: false,
+    centerDialogUpdate: false,
     rules: {
       label: [
         {required: true, message: 'Please input kennel name', trigger: 'blur'},
@@ -199,7 +134,7 @@ parasails.registerPage('kennels-home', {
         text403ErrForbd: 'Mistake! Could not remove. You may not have permission to delete this object. ',
         text404Err: 'Not found object! ',
         text500Err: 'Server Error! Unable to create. ',
-        text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical names. ',
+        text500ExistsErr: 'Looks like such an entry already exists. Cannot create two identical object. ',
         success: 'Congratulations! Object successfully created. ',
         successDel: 'Object successfully delete. ',
       }],
@@ -216,7 +151,7 @@ parasails.registerPage('kennels-home', {
         text403ErrForbd: 'Не смог удалить. Возможно у вас нет прав на удаление данного объекта. ',
         text404Err: 'Не могу найти объект! ',
         text500Err: 'Ошибка сервера! Невозможно создать.',
-        text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых имя.',
+        text500ExistsErr: 'Похоже такая запись уже существует. Невозможно создать два одинаковых объекта.',
         success: 'Поздравляем! Объект успешно создан.',
         successDel: 'Объект успешно удален. ',
       }]
@@ -259,7 +194,7 @@ parasails.registerPage('kennels-home', {
     // Принимаем данные по событию list-*
     io.socket.on('list-kennel', (data) => {
       console.log('data KENNELS:', data);
-      this.kennels = this.filterObjects = _.isNull(data.kennels) ? [] : data;
+      this.kennels = this.kennelsEditList = this.filterObjects = _.isNull(data.kennels) ? [] : data;
       console.log('this.kennels: ', this.kennels);
       console.log('this.filterObjects: ', this.filterObjects);
     });
@@ -280,7 +215,7 @@ parasails.registerPage('kennels-home', {
       this.regions = data.regions;
     });
 
-    this.isBreeder();
+    this.isBreederCheck();
   },
 
 
@@ -435,21 +370,21 @@ parasails.registerPage('kennels-home', {
       // console.log('REFSSSS::: ' , this.$refs);
       this.$refs[formName].resetFields();
 
-      this.fuleForm = {
-        label: '',
-        registerNumber: '',
-        dateCreate: undefined,
-        site: '',
-        phones: undefined,
-        continent: undefined,
-        region: undefined,
-        country: undefined,
-        city: undefined,
-      };
+      // this.fuleForm = {
+      //   label: '',
+      //   registerNumber: '',
+      //   dateCreate: undefined,
+      //   site: '',
+      //   phones: undefined,
+      //   continent: undefined,
+      //   region: undefined,
+      //   country: undefined,
+      //   city: undefined,
+      // };
       // this.$forceUpdate();
 
       // this.buttonUpdate = false;
-      this.centerDialogAdded = false;
+      // this.centerDialogAdded = false;
       // this.continent = '';
       // this.country = '';
       // this.region = '';
@@ -516,7 +451,6 @@ parasails.registerPage('kennels-home', {
 
     async updateKennel() {
       this.openFullScreen();
-
       let data = {
         id: this.ruleForm.kennel,
         file: this.ruleForm.file,
@@ -526,17 +460,17 @@ parasails.registerPage('kennels-home', {
         continent: this.continent,
         country: this.country,
         region: this.region,
-        city: this.city,
+        city: this.cityId,
         action: this.action,
         coOwner: this.coOwnerId,
-        rightName: this.ruleForm.rightName,
-        site: this.ruleForm.website,
-        registerNumber: this.ruleForm.registerNumber,
-        subtitle: this.ruleForm.subtitle,
+        rightName: this.rightName,
+        site: this.website,
+        registerNumber: this.registerNumber,
+        subtitle: this.subtitle,
         yourKennel: this.yourKennel,
         // yourKennel: this.ruleForm.yourKennel,
-        address: this.ruleForm.address,
-        phones: this.ruleForm.phones
+        address: this.address,
+        phones: this.phones
       };
       console.log('DATA перед отправкой::: ', data);
 
@@ -547,7 +481,7 @@ parasails.registerPage('kennels-home', {
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
         // this.buttonUpdate = false;
-        this.centerDialogAdded = false;
+        this.centerDialogUpdate = false;
         this.loading.close();
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
@@ -618,7 +552,11 @@ parasails.registerPage('kennels-home', {
 
     changeSelectRegion() {
       console.log('changeSelectRegion: ');
-      // this.ruleForm.city = null;
+      this.buttonUpdate ? this.city = null : this.ruleForm.city = null;
+    },
+
+    changeSelectCity() {
+      console.log('changeSelectCity: ');
     },
 
 
@@ -655,7 +593,7 @@ parasails.registerPage('kennels-home', {
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
 
       // console.log('DDDDD', t);
-      return  !_.isEmpty(t) ? _.sortBy(t[0].countrys, field) : '';
+      return !_.isEmpty(t) ? _.sortBy(t[0].countrys, field) : '';
       // console.log("RETU::: ", o);
 
 
@@ -668,7 +606,7 @@ parasails.registerPage('kennels-home', {
         return country.id === this.ruleForm.country || country.id === this.country;
       });
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
-      console.log('t[0].regions::: ', t[0]);
+      // console.log('t[0].regions::: ', t[0]);
       return !_.isEmpty(t) ? _.sortBy(t[0].regions, field) : '';
 
     },
@@ -785,7 +723,7 @@ parasails.registerPage('kennels-home', {
 
 
     async cityList() {
-
+      if (!this.regionId) return this.citys = [];
       await io.socket.get(`/api/v1/city/list/${this.regionId}`, function gotResponse(body, response) {
         console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
@@ -809,12 +747,7 @@ parasails.registerPage('kennels-home', {
       },*/
 
 
-    // Реагирует на событие change в поле города|city
-    // async changeCountry(countryId) {
-    //   this.countryId = countryId;
-    //   console.log('this.ruleForm.city:', this.ruleForm.city);
-    //   await this.cityList();
-    // },
+
 
     // Реагирует на событие change в поле города|city
     async changeRegion(regionId) {
@@ -864,6 +797,7 @@ parasails.registerPage('kennels-home', {
     },
     /* Авто поиск по городам */
     querySearch(queryString, cb) {
+      console.log('LINKS CITYS::;; ', this.citys);
       let links = this.citys;
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
       console.log('RESULT CITYS::: ', results);
@@ -881,7 +815,9 @@ parasails.registerPage('kennels-home', {
 
     async handleSelect(e) {
       console.log('handleSelect::: ', e);
-      this.cityId = (_.isNumber(e.id)) ? e.id : undefined;
+      this.cityId = _.isNumber(e.id) ? e.id : undefined;
+      this.city = _.isString(e.value) ? e.value : '';
+
     },
 
 
@@ -941,7 +877,14 @@ parasails.registerPage('kennels-home', {
       //   loading.close();
       // }, 2000);
     },
+    dialogEditors() {
 
+      this.kennelsEditList = this.isBreeder ? this.kennels.filter(data => _.isObject(data.yourKennel) ? (data.yourKennel.id === this.me.id) : false) :
+        (this.me.isAdmin || this.me.isSuperAdmin) ? this.kennels : [];
+
+      console.log('kennelsEditList::: ', this.kennelsEditList);
+      this.dialogEditorList = true;
+    },
     /* Открывает диалоговое окно редактирования*/
     handleCommand(command) {
       switch (command.com) {
@@ -949,7 +892,7 @@ parasails.registerPage('kennels-home', {
           this.goDogSale();
           break;
         case 'e':
-          this.dialogEditorList = true;
+          this.dialogEditors();
           // this.ruleForm.description =  this.litter.description;
           break;
         case 'dam':
@@ -1031,6 +974,7 @@ parasails.registerPage('kennels-home', {
 
     objFilter() {
       let res;
+      console.log('objFilter kennels:::: ' , this.kennels);
       let nameKennel = !_.isEmpty(res = _.filter(this.continents, 'id', +this.ruleForm.continent)) ? _.last(_.pluck(res, 'label')) : '';
       this.sr = this.searchObjects ? this.searchObjects : nameKennel;
       return this.kennels.filter(data => (!this.sr || data.continent.label.toLowerCase().includes(this.sr.toLowerCase()) || data.label.toLowerCase().includes(this.sr.toLowerCase())) & data.action)
@@ -1039,22 +983,31 @@ parasails.registerPage('kennels-home', {
 
 
     handleEdit(index, row) {
-      console.log('ROWWW::: ', row);
+      console.log('ROW::: ', row);
       this.continent = row.continent.id;
       this.country = row.country.id;
       this.region = row.region.id;
-      this.city = row.city ? row.city.id : '';
+      this.city = row.city ? row.city.value : '';
       // this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
       // this.owner = _.last(_.pluck(row.owners,'fullName'));
       // this.ownerId = _.last(_.pluck(row.owners,'id'));
-      this.ruleForm = row;
+      // this.ruleForm = row;
+      this.registerNumber = row.registerNumber;
       this.dateCreateUpdate = row.dateCreate;
+      this.rightName = row.rightName;
+      this.subtitle = row.subtitle;
+      this.website = row.website;
+      this.address = row.address;
+      this.phones = row.phones;
       this.action = row.action;
-      this.yourKennel = row.yourKennel;
+      this.yourKennel = (row.yourKennel && row.yourKennel.id) ? (this.me.id === row.yourKennel.id) : false;
+      console.log('this.yourKennel:: ', this.yourKennel);
       // this.dateDeathUpdate = row.dateDeath;
       this.ruleForm.kennel = row.id;
-      this.dialogEditor = true;
-      this.centerDialogAdded = true;
+      this.row = row;
+      // this.dialogEditor = true;
+      this.centerDialogAdded = false;
+      this.centerDialogUpdate = true;
       this.buttonUpdate = true;
     },
     errorHandler() {
@@ -1069,31 +1022,18 @@ parasails.registerPage('kennels-home', {
     },
 
     handleCloseDialog(done) {
-      this.resetForm('ruleForm');
-      this.ruleForm.label = '';
-
-      // this.ruleForm.continent= 1;
-      this.ruleForm.registerNumber = '';
-      // this.continent = null;
-      // this.country = '';
-      // this.region = '';
-      // this.city = '';
-
-      // this.fuleForm = {
-      //   label: '',
-      //   registerNumber: '',
-      //   dateCreate: undefined,
-      //   site: '',
-      //   phones: undefined,
-      //   continent: undefined,
-      //   region: undefined,
-      //   country: undefined,
-      //   city: undefined,
-      // };
-
-      this.$forceUpdate();
-
+      // this.resetForm('ruleForm');
+      // this.buttonUpdate = false;
+      // this.$forceUpdate();
+      this.centerDialogUpdate = false;
       this.centerDialogAdded = false;
+      done();
+    },
+
+    handleCloseDialogListKennel(done) {
+      this.dialogEditorList = false;
+      // this.$forceUpdate();
+      // this.centerDialogAdded = false;
       done();
     },
 
@@ -1117,9 +1057,10 @@ parasails.registerPage('kennels-home', {
     //   this.centerDialogAdded = true;
     // },
     clickCloseDialog() {
-      this.resetForm('ruleForm');
-      this.buttonUpdate = false;
+      // this.resetForm('ruleForm');
+      // this.buttonUpdate = false;
       this.centerDialogAdded = false;
+      this.centerDialogUpdate = false;
 
     },
 
@@ -1163,21 +1104,25 @@ parasails.registerPage('kennels-home', {
     errorMessages(jwRes, successText) {
       (jwRes.statusCode === 200) ? (this.mesSuccess(successText)) :
         (jwRes.statusCode === 400) ? this.mesError(jwRes.headers['x-exit-description']) :
-        // (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          // (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
           (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
     },
 
-    async isBreeder(){
-      await io.socket.get(`/api/v1/groups/is-breeder`,(body, response) => {
+    async isBreederCheck() {
+      await io.socket.get(`/api/v1/groups/is-breeder`, (body, response) => {
         console.log('Сервер (is-breeder) ответил кодом  ' + response.statusCode + ' и данными: ', body);
-        this.breeder =  (response.statusCode === 200);
+        this.isBreeder = (response.statusCode === 200);
       });
-    }
+    },
 
 
+    add() {
+      this.centerDialogAdded = true;
+      this.buttonUpdate = false;
+    },
 
 
   }

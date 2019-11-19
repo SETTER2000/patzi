@@ -151,7 +151,8 @@ module.exports.routes = {
   'DELETE /api/v1/groups/destroy-one-group': {action: 'groups/destroy-one-group'},
   'PUT    /api/v1/groups/update-group': {action: 'groups/update-group'},
   'GET    /sockets/groups/group-form': {action: 'groups/group-form'},
-  'GET    /api/v1/groups/is-breeder': { action: 'groups/is-breeder' },
+  'GET    /api/v1/groups/is-breeder': {action: 'groups/is-breeder'},
+  'GET    /api/v1/groups/is-owner': {action: 'groups/is-owner'},
 
   'POST   /api/v1/users/create-user': {action: 'users/create-user', csrf: false},
   'PUT    /sockets/user/update-user-group': {action: 'users/update-user-group', csrf: false},
@@ -173,7 +174,7 @@ module.exports.routes = {
 
   'GET    /api/v1/kennels/:id': {action: 'kennels/download-photo'},
   'GET    /api/v1/kennels/list': {action: 'kennels/list'},
-  'PUT    /api/v1/kennels/update-kennel': { action: 'kennels/update-kennel', csrf: false},
+  'PUT    /api/v1/kennels/update-kennel': {action: 'kennels/update-kennel', csrf: false},
   'POST   /api/v1/kennels/create-kennel': {action: 'kennels/create-kennel', csrf: false},
   'POST   /api/v1/kennels/destroy-one-kennel': {action: 'kennels/destroy-one-kennel', csrf: false},
   'PUT    /api/v1/dogs/update-description-img': {action: 'dogs/update-description-img', csrf: false},

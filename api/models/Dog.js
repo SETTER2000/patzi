@@ -28,6 +28,7 @@ module.exports = {
       description: `Полное имя собаки.`,
       example: 'Poale Ell Adam',
       required: true,
+      unique: true,
       minLength: 2,
       maxLength: 50
     },

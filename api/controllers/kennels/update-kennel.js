@@ -75,57 +75,46 @@ module.exports = {
       description: 'Край, область где находится питомник.'
     },
 
-    /* phones: {
-       description: 'Массив телефонов для связи.',
-       // Тип массив словарей
-       type: [{
-         key: 'number',
-         value: 'string',
-         fullName: 'string'
-       }],
-       // type: ['string'],
-       // Пример данных, которые ожидаются на входе в экшен
-       example: [
-         {
-           key: 1,
-           value: '+7 (910) 406 7 406',
-           fullName: 'Olga Petrova'
-         }
-       ],
-     },
+    city: {
+      type: 'string',
+      description: 'Город где находится питомник.'
+    },
+
+    phones: {
+      description: 'Массив телефонов для связи.',
+      // Тип массив словарей
+      type: [{
+        key: 'number',
+        value: 'string',
+        fullName: 'string'
+      }],
+      // type: ['string'],
+      // Пример данных, которые ожидаются на входе в экшен
+      example: [
+        {
+          key: 1,
+          value: '+7 (910) 406 7 406',
+          fullName: 'Olga Petrova'
+        }
+      ],
+    },
+
+    site: {
+      type: 'string',
+      description: 'Сайт.'
+    },
+
+    address: {
+      type: 'string',
+      description: 'Адрес где находится питомник.'
+    },
+
+    coOwner: {
+      type: 'string',
+      description: 'Совладелец питомника.'
+    },
 
 
-
-
-
-
-     site: {
-       type: 'string',
-       description: 'Сайт.'
-     },
-
-
-
-
-     coOwner: {
-       type: 'string',
-       description: 'Совладелец питомника.'
-     },
-
-
-     city: {
-       type: 'string',
-       description: 'Город где находится питомник.'
-     },
-
-
-     address: {
-       type: 'string',
-       description: 'Адрес где находится питомник.'
-     },
-
-
-     */
   },
 
 

@@ -15,17 +15,6 @@ module.exports = {
   },
 
 
-  exits: {
-
-    success: {
-      outputFriendlyName: 'Kennel user',
-    },
-
-    noKennelFound: {
-      description: 'Could not find  kennel.'
-    }
-  },
-
 
   fn: async function (inputs) {
     let kennel = {};

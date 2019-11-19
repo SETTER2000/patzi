@@ -4,11 +4,13 @@ parasails.registerPage('dogs-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     dogs: [],
+    owner:false,
     searchObjects:'',
     ranks:[{label:'Russian Junior Champion', abbr:'RUSJCH', labelRu: 'Юный чемпион России' , value:1},{label:'Hungarian Junior Champion',abbr:'HJCH', labelRu: 'Юный чемпион Болгарии', value:2}],
     filterDogs: [],
     filterName: '',
-    owner: '',
+    dogsEditList: [],
+    isOwner: false,
     ownerId: '',
     // owner: this.ownerId,
     isActive: true,
@@ -357,6 +359,9 @@ parasails.registerPage('dogs-home', {
     //
     // // Принимаем данные по событию list-*
     // io.socket.on('list-kennel', data => {this.kennels = data});
+
+    // Является ли пользователь владельцем
+    this.isOwnerCheck();
   },
 
   filters: {
@@ -487,7 +492,7 @@ parasails.registerPage('dogs-home', {
 
       // Принимаем данные по событию list-*
       await io.socket.on('list-dog', (data) => {
-        this.dogs = this.filterDogs = _.isNull(data) ? [] : data;
+        this.dogs = this.dogsEditList = this.filterDogs = _.isNull(data) ? [] : data;
         console.log('this.dogs: ', this.dogs);
         console.log('this.filterDogs: ', this.filterDogs);
       });
@@ -1439,6 +1444,21 @@ console.log('DATA before send: ' , data);
       console.log('handleSelected::: ', e);
       this.ownerId = e.id ? e.id : undefined;
     },
+
+    dialogEditors() {
+      this.dogsEditList = this.isOwner ? this.dogs.filter(data=>_.isObject(data.yourKennel) ? (data.yourKennel.id === this.me.id) : false) :
+        (this.me.isAdmin || this.me.isSuperAdmin) ? this.kennels : [];
+
+      console.log('kennelsEditList::: ' , this.kennelsEditList);
+      this.dialogEditorList = true;
+    },
+
+    async isOwnerCheck() {
+      await io.socket.get(`/api/v1/groups/is-owner`, (body, response) => {
+        console.log('Сервер (is-breeder) ответил кодом  ' + response.statusCode + ' и данными: ', body);
+        this.isOwner = (response.statusCode === 200);
+      });
+    }
 
 
   }

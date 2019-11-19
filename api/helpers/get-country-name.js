@@ -15,14 +15,6 @@ module.exports = {
   },
 
 
-  exits: {
-
-    success: {
-      outputFriendlyName: 'Country name',
-    },
-
-  },
-
 
   fn: async function (inputs) {
 

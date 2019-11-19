@@ -287,7 +287,7 @@ module.exports = {
       kennel: inputs.kennel,
       label: inputs.label
     });
-
+console.log('conflictingDog:::: ' , conflictingDog);
     if (conflictingDog) {
       throw (req.me.preferredLocale === 'ru') ? 'dogAlreadyInUseRU' : 'dogAlreadyInUse';
     }

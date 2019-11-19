@@ -1,10 +1,10 @@
 module.exports = {
 
 
-  friendlyName: 'Is breeder',
+  friendlyName: 'Is owner',
 
 
-  description: 'Проверяет на соответствие к группе breeder',
+  description: 'Проверяет на соответствие к группе owner',
 
   inputs: {},
 
@@ -16,7 +16,6 @@ module.exports = {
       description: 'There is no such object with such ID.',
       responseType: 'notFound' // как раньше res.notFound(), сейчас это встроеная функция sails
     },
-
     badRequest: {
       description: 'Error.',
       responseType: 'badRequest'
@@ -31,9 +30,9 @@ module.exports = {
       throw 'badRequest';
     }
 
-   if(!await sails.helpers.groupBy.with({group:'breeder', me:req.me})){
-     throw 'notFound';
-   }
+    if (!await sails.helpers.groupBy.with({group: 'owner', me: req.me})) {
+      throw 'notFound';
+    }
 
     return exits.success();
   }
