@@ -734,6 +734,7 @@ console.log(' this.ruleForm.country:: ' ,  this.ruleForm.country);
       this.files.push(file.response);
       this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
       this.ruleForm.file = file.response;
+      this.updateForm.file = file.response;
     },
 
 
