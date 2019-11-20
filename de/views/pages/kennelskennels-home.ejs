@@ -99,7 +99,7 @@
         </el-table-column>
         <el-table-column
           label="<%= __('Country') %>"
-          sortableв
+          sortable
           prop="country"
           sortable
           width="120">
@@ -142,7 +142,7 @@
       <span class="flex justify-content-between">
          <el-button @click="clearFilter"><%= __('reset all filters') %></el-button>
         <span>
-            <el-button @click="goTo2('/kennels')"><%= __('Close') %></el-button>
+            <el-button @click="clickCloseDialog()"><%= __('Close') %></el-button>
         </span>
       </span>
     </span>
@@ -182,7 +182,7 @@
       </div>
     </el-dialog>
     <div class="container">
-      <template v-if="!rowUpdate.action">
+      <template v-if="!updateForm.action">
         <el-popover
           ref="popover"
           placement="top-start"
@@ -194,7 +194,7 @@
         <div class="menu-center">
           <h1 v-if="buttonUpdate" class="flex justify-content-center"
               :class="classObject"
-          >{{rowUpdate.label}}
+          >{{updateForm.label}}
           </h1>
           <el-button class="not-border" icon="el-icon-warning-outline" size="mini"
                      v-popover:popover circle></el-button>
@@ -203,12 +203,12 @@
       <template v-else>
         <h1 v-if="buttonUpdate" class="flex justify-content-center"
             :class="classObject"
-        >{{rowUpdate.label}}</h1>
+        >{{updateForm.label}}</h1>
       </template>
 
 
-      <div v-if="rowUpdate.imageUrl" class="col">
-        <div class="single-gallery-image" :style="{ backgroundImage: `url('${rowUpdate.imageUrl}')` }"></div>
+      <div v-if="updateForm.imageUrl" class="col">
+        <div class="single-gallery-image" :style="{ backgroundImage: `url('${updateForm.imageUrl}')` }"></div>
       </div>
       <!--<img src="https://d3a1wbnh2r1l7y.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" class="img-fluid" alt="Responsive image">-->
       <div class="form-group">
@@ -216,7 +216,7 @@
         <!--xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">-->
         <!--<image xlink:href="https://d3a1wbnh2r1l7y.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" height="100" width="200"/>-->
         <!--</svg>-->
-        <label v-if="!rowUpdate.imageUrl"> <%= __('Add logo') %>:</label>
+        <label v-if="!updateForm.imageUrl"> <%= __('Add logo') %>:</label>
         <hr>
         <div class="photo-uploader">
           <div class="row file-upload-field  ">
@@ -227,7 +227,7 @@
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="rowUpdate.imageUrl" :src="rowUpdate.imageUrl" class="avatar">
+                <img v-if="updateForm.imageUrl" :src="updateForm.imageUrl" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </div>
@@ -244,14 +244,13 @@
     <el-row :gutter="20">
       <el-col :span="1"></el-col>
       <el-col :span="23">
-        <el-form :model="rowUpdate" :rules="uprows" ref="rowUpdate"
+        <el-form :model="updateForm" :rules="uprows" ref="updateForm"
                  label-width="120px" class="demo-ruleForm">
 
           <% /* ВИДИМОСТЬ ПИТОМНИКА */ %>
           <el-form-item label="<%= __('Set Visibility') %>" prop="action">
             <el-switch
-              v-else
-              v-model="rowUpdate.action"
+              v-model="updateForm.action"
               active-color="#13ce66"
               inactive-color="#ff4949"
               active-text="Yes!"
@@ -266,26 +265,29 @@
 
           <% /* ИМЯ ПИТОМНИКА */ %>
           <!-- <el-form-item  label="<%= __('Kennel') %>" prop="label">
-            <el-input minlength="3" maxlength="80" show-word-limit
-                      placeholder="<%= __('The official name') %>"
-                      v-model="rowUpdate.label"></el-input>
-          </el-form-item>-->
+  <el-input minlength="3" maxlength="80" show-word-limit
+            placeholder="<%= __('The official name') %>"
+            v-model="updateForm.label"></el-input>
+</el-form-item>-->
 
           <% /* НОМЕР ПИТОМНИКА */ %>
           <el-form-item label="<%= __('Number') %>" prop="registerNumber">
             <el-input  minlength="3" maxlength="20" show-word-limit
-                       v-model="rowUpdate.registerNumber"
+                       v-model="updateForm.registerNumber"
                        placeholder="<%= __('Kennel registration number') %>"></el-input>
           </el-form-item>
 
+
           <% /* ДАТА РЕГИСТРАЦИИ ПИТОМНИКА */ %>
+          <!--updateForm.dateCreate::: {{updateForm.dateCreate}}<br>-->
+          <!--updateForm.dateCreate test::: {{test}}-->
           <el-form-item label="<%= __('Date') %>" required>
             <el-col :span="11">
-              <el-form-item prop="dateCreateUpdate">
+              <el-form-item prop="dateCreate">
                 <el-date-picker
                   type="date"
+                  v-model="updateForm.dateCreate"
                   placeholder="<%= __('Registration date') %>"
-                  v-model="rowUpdate.dateCreateUpdate"
                   style="width: 100%;"
                 />
               </el-form-item>
@@ -295,7 +297,7 @@
           <% /* КОНТИНЕНТ */ %>
           <template>
             <el-form-item label="<%= __('Continent') %>" prop="continent">
-              <el-select v-model="rowUpdate.continent"
+              <el-select v-model="updateForm.continent.id"
                          @change="changeSelectContinent()"
                          placeholder="<%= __('Where is the nursery registered?') %>"
                          style="width: 58%;">
@@ -315,11 +317,11 @@
             </el-form-item>
           </template>
 
+
           <% /* СТРАНА */ %>
-          <template v-if="rowUpdate.continent">
-            <!--<template >-->
+          <template v-if="updateForm.continent.id">
             <el-form-item label="<%= __('Country') %>" prop="country">
-              <el-select v-model="rowUpdate.country"
+              <el-select v-model="updateForm.country.id"
                          placeholder="<%= __('Where is the kennel registered?') %>"
                          style="width: 58%;"
                          @visible-change="changeSelectCountry"
@@ -336,26 +338,10 @@
           </template>
 
           <% /* ОБЛАСТЬ, РЕГИОН */ %>
-          <template v-if="ruleForm.country">
+          <template v-if="updateForm.country.id">
             <!--<template >-->
             <el-form-item label="<%= __('Region') %>" prop="region">
-              <el-select v-model="ruleForm.region"
-                         v-if="!buttonUpdate"
-                         placeholder="<%= __('Where is the kennel registered?') %>"
-                         style="width: 58%;"
-                         :clearable="true"
-                         @visible-change="changeSelectRegion"
-                         @change="changeRegion">
-                <el-option v-for="item in getPullRegion()"
-                           :key="item.id"
-                           :label="item.label"
-                           :value="item.id">
-                  <span style="float: left">{{ item.label }}</span>
-                  <span style="float: right; color: rgb(132,146,166); font-size: 13px">{{ item.labelRu }}</span>
-                </el-option>
-              </el-select>
-              <el-select v-model="region"
-                         v-else
+              <el-select v-model="updateForm.region.id"
                          placeholder="<%= __('Where is the kennel registered?') %>"
                          style="width: 58%;"
                          :clearable="true"
@@ -373,9 +359,9 @@
           </template>
 
           <% /* ГОРОД */ %>
-          <template v-if="rowUpdate.country">
+          <template v-if="updateForm.country">
             <el-form-item label="<%= __('City') %>" prop="city">
-              <el-autocomplete v-model="rowUpdate.city"
+              <el-autocomplete v-model="updateForm.city"
                                clearable
                                popper-class="my-autocomplete"
                                :fetch-suggestions="querySearch"
@@ -395,20 +381,20 @@
             </el-form-item>
           </template>
 
+
           <% /* АДРЕС */ %>
-          <template v-if="rowUpdate.city">
+          <template v-if="updateForm.city">
             <el-form-item label="<%= __('Address') %>" prop="address">
               <el-input
                 placeholder="<%= __('street, house, building') %>" minlength="3" maxlength="100" show-word-limit
-                v-model="rowUpdate.address"></el-input>
+                v-model="updateForm.address"></el-input>
             </el-form-item>
           </template>
 
           <% /* ТЕЛЕФОНЫ */ %>
           <% /* Как сделать обязательным заполнения телефона:
-               :rules="{ required: true, message: 'Phone can not be null', trigger: 'blur' }" */ %>
-          <el-form-item
-            v-for="(phone, index) in phones"
+             :rules="{ required: true, message: 'Phone can not be null', trigger: 'blur' }" */ %>
+          <el-form-item v-for="(phone, index) in updateForm.phones"
             :label="'Phone: ' + `${index + 1}`"
             :key="phone.key"
             :prop="'phones.' + index + '.value'">
@@ -437,7 +423,7 @@
           <% /* С КАКОЙ СТОРОНЫ ИМЯ ПИТОМНИКА */ %>
           <el-form-item label="<%= __('Name on') %>:" prop="rightName">
             <el-switch
-              v-model="rowUpdate.rightName"
+              v-model="updateForm.rightName"
               active-color="#13ce66"
               inactive-color="#ff4949"
               active-text="<%= __('right') %>"
@@ -453,39 +439,38 @@
           </el-form-item>
 
           <% /* САЙТ */ %>
-          <el-form-item label="<%= __('WebSite') %>" prop="website">
+          <el-form-item label="<%= __('WebSite') %>" prop="site">
             <el-input
               minlength="3" maxlength="30" show-word-limit
               placeholder="<%= __('Without http:// | https://') %>"
-              v-model="rowUpdate.website">
+              v-model="updateForm.site">
               <template slot="prepend">//</template>
             </el-input>
           </el-form-item>
 
           <% /* OWNER */ %>
-
           <el-form-item label="<%= __('Your kennel?') %>" prop="yourKennel">
             <el-switch
-              v-model="rowUpdate.yourKennel"
+              v-model="updateForm.yourKennel"
               active-color="#13ce66"
               inactive-color="#ff4949"
               active-text="Yes!"
               inactive-text="No"
             >
             </el-switch>
-            <el-tooltip effect="dark" placement="top-start">
+            <el-tooltip v-if="!updateForm.yourKennel" effect="dark" placement="top-start">
               <div slot="content"><%= __('Is the kennel registered to you, are you a breeder?') %></div>
               <div size="mini" round class="el-icon-question ml-3"></div>
             </el-tooltip>
           </el-form-item>
 
           <% /* CO-OWNER */ %>
-          <template v-if="rowUpdate.yourKennel">
+          <template v-if="updateForm.yourKennel">
             <!--<template >-->
             <el-form-item label="<%= __('Co-owner') %>" prop="coOwner">
               <el-autocomplete
                 class="inline-input"
-                v-model="rowUpdate.coOwner"
+                v-model="updateForm.coOwner"
                 :fetch-suggestions="querySearchFoo"
                 placeholder="<%= __('Please Input co-owner') %>"
                 :trigger-on-focus="false"
@@ -515,8 +500,8 @@
                  </el-popover>-->
           </template>
 
-          <% /* ОПИСАНИЕ ПИТОМНИКА ? */ %>
-          <el-form-item v-if="rowUpdate.yourKennel" label="<%= __('About Us') %>" prop="subtitle">
+          <% /* ОПИСАНИЕ ПИТОМНИКА */ %>
+          <el-form-item v-if="updateForm.yourKennel" label="<%= __('About Us') %>" prop="subtitle">
             <el-input minlength="10" maxlength="300" show-word-limit
                       placeholder="<%= __('Tell us about the kennel') %>" type="textarea"
                       v-model="subtitle"></el-input>
@@ -528,17 +513,17 @@
             <div class="my-3 pt-4 text-center hidden-xs-only">
               <el-form-item>
 
-                <el-button  @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
-                <el-button @click="clickCloseDialog()"><%= __('Cancel') %></el-button>
-                <el-button  type="primary" @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
+                <el-button  @click="resetForm('updateForm')"><%= __('Reset') %></el-button>
+                <el-button @click="clickCloseDialogEditorKennel()"><%= __('Cancel') %></el-button>
+                <el-button  type="primary" @click="submitForm('updateForm')"><%= __('Update') %></el-button>
 
               </el-form-item>
             </div>
             <div class="text-center hidden-sm-and-up">
               <el-button-group>
-                <el-button   @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
-                <el-button @click="clickCloseDialog()" icon="el-icon-close"></el-button>
-                <el-button  type="primary" @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+                <el-button   @click="resetForm('updateForm')" icon="el-icon-minus"></el-button>
+                <el-button @click="clickCloseDialogEditorKennel()" icon="el-icon-close"></el-button>
+                <el-button  type="primary" @click="submitForm('updateForm')" icon="el-icon-check"></el-button>
               </el-button-group>
             </div>
           </el-row>
@@ -765,7 +750,6 @@
             <el-form-item label="<%= __('City') %>" prop="city">
               <el-autocomplete v-model="ruleForm.city"
                                popper-class="my-autocomplete"
-
                                :fetch-suggestions="querySearch"
                                placeholder="<%= __('Please Input City') %>"
                                :trigger-on-focus="false"
