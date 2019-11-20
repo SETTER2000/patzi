@@ -20,40 +20,6 @@ module.exports = {
       description: 'Официальное наименование питомника.'
 
     },
-    file: {
-      type: 'ref',
-      description: 'Массив с данными о загруженом файле. Логотип в данной коллекции.'
-    },
-    dateCreate: {
-      type: 'string',
-      required: true,
-      description: 'Дата создания питомника.'
-    },
-
-    rightName: {
-      type: 'string',
-      description: 'Имя собаки с какой стороны от названия питомника пишется.',
-      example: 'left'
-    },
-
-
-    yourKennel: {
-      type: 'boolean',
-      description: 'Это ваш питомник?.',
-      allowNull: true
-    },
-
-    registerNumber: {
-      type: 'string',
-      // required: true,
-      description: 'Регистрационный номаер.'
-    },
-
-    subtitle: {
-      type: 'string',
-      maxLength: 300,
-      description: 'Дополнительная информация. Описание питомника.'
-    },
 
     continent: {
       type: 'string',
@@ -75,10 +41,68 @@ module.exports = {
       description: 'Край, область где находится питомник.'
     },
 
+    dateCreate: {
+      type: 'string',
+      required: true,
+      description: 'Дата создания питомника.'
+    },
+
+    registerNumber: {
+      type: 'string',
+      required: true,
+      description: 'Регистрационный номер.'
+    },
+
+    file: {
+      type: 'ref',
+      description: 'Массив с данными о загруженом файле. Логотип в данной коллекции.'
+    },
+
+    rightName: {
+      type: 'boolean',
+      description: `С какой стороны пишется имя собаки от названия питомника.
+                    true - имя собаки пишется справа от названия питомника (KennelName DogName).`,
+    },
+
+
+    action: {
+      type: 'boolean',
+      description: `Видимость питомника в системе. true - виден`,
+    },
+
+
+    yourKennel: {
+      type: 'boolean',
+      description: 'Это ваш питомник?.',
+      allowNull: true
+    },
+
+    subtitle: {
+      type: 'string',
+      maxLength: 300,
+      description: 'Дополнительная информация. Описание питомника.'
+    },
+
     city: {
       type: 'string',
       description: 'Город где находится питомник.'
     },
+
+    site: {
+      type: 'string',
+      description: 'Сайт.'
+    },
+
+    address: {
+      type: 'string',
+      description: 'Адрес где находится питомник.'
+    },
+
+    coOwner: {
+      type: 'string',
+      description: 'Совладелец питомника.'
+    },
+
 
     phones: {
       description: 'Массив телефонов для связи.',
@@ -98,22 +122,6 @@ module.exports = {
         }
       ],
     },
-
-    site: {
-      type: 'string',
-      description: 'Сайт.'
-    },
-
-    address: {
-      type: 'string',
-      description: 'Адрес где находится питомник.'
-    },
-
-    coOwner: {
-      type: 'string',
-      description: 'Совладелец питомника.'
-    },
-
 
   },
 
@@ -157,6 +165,7 @@ module.exports = {
       filename: inputs.file.filename,
       // label: _.startCase(inputs.label.toString().toLowerCase()).replace(/Fci\b/g, '(FCI)'),
       whoCreate: this.req.me.id,
+      action: inputs.action,
       rightName: inputs.rightName,
       registerNumber: _.trim(inputs.registerNumber),
       dateCreate: await sails.helpers.dateFix(inputs.dateCreate),

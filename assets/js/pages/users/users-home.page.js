@@ -775,8 +775,8 @@ parasails.registerPage('users-home', {
       this.openFullScreen();
       console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
       let data = {
-        fileList: this.ruleForm.fileList,
         fullName: this.ruleForm.label,
+        fileList: this.ruleForm.fileList,
         dateBirth: JSON.stringify(this.ruleForm.dateBirth),
         dateDeath: JSON.stringify(this.ruleForm.dateDeath),
         emailAddress: this.ruleForm.emailAddress,
@@ -790,31 +790,7 @@ parasails.registerPage('users-home', {
         password: this.ruleForm.password,
         checkPass: this.ruleForm.checkPass,
         groups: this.ruleForm.groups,
-        description: this.ruleForm.description,
-        // gender: this.ruleForm.gender,
-        // kennel: this.ruleForm.kennel,
-
-        // nickname: this.ruleForm.nickname,
-        // federation: this.ruleForm.federation,
-        // weight: this.ruleForm.weight,
-        // growth: this.ruleForm.growth,
-        // canine: this.ruleForm.canine,
-        // bite: this.ruleForm.bite,
-        // letter: this.ruleForm.letter,
-        // teethCountTop: this.ruleForm.teethCountTop,
-        // teethCountBottom: this.ruleForm.teethCountBottom,
-        // type: this.ruleForm.type,
-        // dam: this.ruleForm.dam,
-        // sire: this.ruleForm.sire,
-
-        // price: +this.ruleForm.price,
-        // saleDescription: this.ruleForm.saleDescription,
-        // currency: this.ruleForm.currency,
-
-        // stamp: this.ruleForm.stamp,
-        // registerNumber: this.ruleForm.registerNumber,
-
-        // yourKennel: this.ruleForm.yourKennel,
+        description: this.ruleForm.description
       };
 
       console.log('DATA перед отправкой::: ', data);

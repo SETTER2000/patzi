@@ -53,7 +53,7 @@ module.exports = {
     action: {
       type: 'boolean',
       defaultsTo: true,
-      description: 'Видимость питомника в системе. Если false, то заблокирован.'
+      description: 'Видимость питомника в системе. false - заблокирован.'
     },
 
 
@@ -114,7 +114,7 @@ module.exports = {
 
     phones: {
       type: 'ref',
-      description: 'Список телефонов'
+      description: 'Массив объектов телефонов. Список телефонов'
     },
 
 

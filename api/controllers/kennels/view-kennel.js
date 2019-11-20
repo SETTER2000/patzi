@@ -22,6 +22,10 @@ module.exports = {
     forbidden: {
       responseType: 'forbidden'
     },
+    temporarilyNotAvailable: {
+      statusCode: 410,
+      description: 'Content is temporarily unavailable.'
+    },
     notFound: {
       responseType: 'notFound'
     }
@@ -45,7 +49,9 @@ module.exports = {
     if (!kennel) {
       throw 'notFound';
     }
-
+    if (!kennel.action) {
+      throw 'temporarilyNotAvailable';
+    }
     /**
      * Генерирует ссылки с параметрами изображения,
      * которое должен вернуть S3 для данного модуля.
@@ -77,8 +83,8 @@ module.exports = {
     kennel = await sails.helpers.cloudFrontUrlMin.with({
       collection: kennel,
       collectionName: 'kennel',
-      field:'images',
-      createField:'imgI7',
+      field: 'images',
+      createField: 'imgI7',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
         "resize": {
@@ -106,7 +112,7 @@ module.exports = {
     kennel = await sails.helpers.cloudFrontUrlMin.with({
       collection: kennel,
       collectionName: 'kennel',
-      field:'images',
+      field: 'images',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
         "resize": {
@@ -130,7 +136,6 @@ module.exports = {
         }
       }
     });
-
 
 
     // console.log('DOGG::: ', kennel);

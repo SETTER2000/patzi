@@ -181,6 +181,45 @@ parasails.registerPage('kennel', {
         });
     },
 
+
+    mesSuccess(text = '') {
+      this.$notify({
+        title: 'Success',
+        message: text,
+        offset: 100,
+        type: 'success'
+      });
+    },
+
+
+    mesWarning(text = '') {
+      this.$notify({
+        title: 'Warning',
+        message: text,
+        offset: 100,
+        type: 'warning'
+      });
+    },
+
+
+    mesInfo(text = '') {
+      this.$notify.info({
+        title: 'Info',
+        message: text,
+        offset: 100,
+      });
+    },
+
+
+    mesError(text = '') {
+      this.$notify.error({
+        title: 'Error',
+        message: text,
+        offset: 100,
+      });
+    },
+
+
     // Получить все награды собаки
     getAwards(command) {
       console.log('command::: ', command);

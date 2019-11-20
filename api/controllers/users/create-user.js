@@ -127,7 +127,7 @@ module.exports = {
 
     description: {
       type: 'string',
-      maxLength: 200,
+      maxLength: 1700,
       description: `Описание пользователя.`
     },
 
