@@ -42,7 +42,7 @@ module.exports = {
     }
 
 
-    let breeder = dog.kennel.yourKennel ? await User.findOne({id: dog.kennel.yourKennel}) : '';
+    let breeder = dog.kennel.breeder ? await User.findOne({id: dog.kennel.breeder}) : '';
     dog.breeder = {
       fullName: breeder.fullName,
       avatar: breeder.defaultIcon === 'avatar' ? breeder.avatar : breeder.gravatar
