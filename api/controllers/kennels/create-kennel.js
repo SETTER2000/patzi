@@ -16,6 +16,11 @@ module.exports = {
 
     },
 
+    breeder: {
+      type: 'string',
+      description: 'Идентификатор хозяина питомника.'
+    },
+
     file: {
       type: 'ref',
       description: 'Массив с данными о загруженом файле. Логотип в данной коллекции.'
@@ -166,7 +171,8 @@ module.exports = {
       imageUploadMime: inputs.file.type,
       filename: inputs.file.filename,
       label: _.startCase(inputs.label.toString().toLowerCase()).replace(/Fci\b/g, '(FCI)'),
-      yourKennel: (inputs.yourKennel) ? this.req.me.id : null,
+      yourKennel: inputs.yourKennel,
+      breeder: (inputs.yourKennel) ? this.req.me.id : null,
       whoCreate: this.req.me.id,
       rightName: inputs.rightName,
       registerNumber: _.trim(inputs.registerNumber),
@@ -196,22 +202,34 @@ module.exports = {
      * Для собаки с updateDog.id меняем родителей в массиве идентификаторы
      */
     let owners = [];
-    // inputs.dam ? owners.push(inputs.dam) : '';
-    (inputs.yourKennel) ? owners.push(this.req.me.id) : '';
     (inputs.coOwner) ? owners.push(inputs.coOwner) : '';
-    // inputs.sire ? owners.push(inputs.sire) : '';
     let ownerFind = await Kennel.find({fullName: owners});
+    // Обновляет данные о совладельцах питомника
     owners.length > 0 ? await Kennel.addToCollection(newKennel.id, 'owners').members(owners) : '';
 
 
     let addGroup = await sails.helpers.addGroup.with({
       groups: ['user', 'breeder', 'owner'],
-      userId:this.req.me.id
+      userId: this.req.me.id
     });
 
 
     // Вызываем помощника сформировать правильно данные для ответа.
     let result = await sails.helpers.formatCollectionKennel(req);
+
+
+    if (newKennel) {
+      await sails.helpers.sendTemplateEmail.with({
+        to: req.me.emailAddress,
+        subject: 'Создан новый питомник в системе patzi',
+        template: 'email-verify-new-email',
+        templateData: {
+          fullName: inputs.fullName||req.me.fullName,
+          token: newKennel.id
+        }
+      });
+    }
+
 
     console.log('RESULT COL::: ', result);
     // Рассылаем данные всем подписанным на событие list данной комнаты.

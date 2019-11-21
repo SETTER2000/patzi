@@ -27,7 +27,7 @@ module.exports = {
       .populate('dogs')
       .populate('owners')
       .populate('whoCreate')
-      .populate('yourKennel')
+      .populate('breeder')
       .populate('continent')
       .populate('country')
       .populate('region')

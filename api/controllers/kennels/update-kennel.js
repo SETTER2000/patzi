@@ -53,10 +53,23 @@ module.exports = {
       description: 'Регистрационный номер.'
     },
 
+
+    city: {
+      type: 'string',
+      description: 'Город где находится питомник.'
+    },
+
+    breeder: {
+      type: 'string',
+      description: 'Идентификатор хозяина питомника.'
+    },
+
+
     file: {
       type: 'ref',
       description: 'Массив с данными о загруженом файле. Логотип в данной коллекции.'
     },
+
 
     rightName: {
       type: 'boolean',
@@ -74,7 +87,6 @@ module.exports = {
     yourKennel: {
       type: 'boolean',
       description: 'Это ваш питомник?.',
-      allowNull: true
     },
 
     subtitle: {
@@ -83,10 +95,6 @@ module.exports = {
       description: 'Дополнительная информация. Описание питомника.'
     },
 
-    city: {
-      type: 'string',
-      description: 'Город где находится питомник.'
-    },
 
     site: {
       type: 'string',
@@ -159,12 +167,22 @@ module.exports = {
     inputs.file = (_.get(inputs.file, 'fd')) ? inputs.file : '';
 
 
-    let updateObj = {
+    let obj = {
       imageUploadFD: inputs.file.fd,
       imageUploadMime: inputs.file.type,
       filename: inputs.file.filename,
       // label: _.startCase(inputs.label.toString().toLowerCase()).replace(/Fci\b/g, '(FCI)'),
       whoCreate: this.req.me.id,
+      yourKennel: inputs.yourKennel,
+      /**
+       * Здесь устанавливаем владельца питомника.
+       * В зависимости ответа на вопрос "Это ваш питомник?"
+       * становятся видимы разные поля.
+       * Если питомник ваш, то видно поле добавления совладельца питомника,
+       * если питомник не ваш и вы есть суперадмин или админ, то видно поле
+       * добавления владельца (breeder)
+       */
+      breeder: (inputs.yourKennel) ? this.req.me.id : inputs.breeder ? inputs.breeder : null,
       action: inputs.action,
       rightName: inputs.rightName,
       registerNumber: _.trim(inputs.registerNumber),
@@ -178,11 +196,84 @@ module.exports = {
       address: inputs.address,
       phones: inputs.phones
     };
+
+    let update = await Kennel.updateOne({id: inputs.id}).set(obj);
+
     /**
-     * yourKennel - не может содержать значение null
+     * Если в поле inputs.breeder есть значение, то добавляем этого пользователя в группу breeder
      */
-    inputs.yourKennel ? updateObj.yourKennel = this.req.me.id : '';
-    let update = await Kennel.updateOne({id: inputs.id}).set(updateObj);
+    inputs.breeder ? await sails.helpers.addGroup.with({
+      groups: ['user', 'owner', 'breeder'],
+      userId: inputs.breeder
+    }) : '';
+
+    /**
+     * Для питомника с id 23 добавить владельца с  id 12
+     * await Kennel.addToCollection(23, 'parents', 12);
+     * Для собаки 3 замените всех детей
+     * из коллекции «children» на детей 99 и 98:
+     * await Dog.replaceCollection(3, 'children').members([99,98]);
+     *
+     * Для собаки с updateDog.id меняем родителей в массиве идентификаторы
+     */
+
+    let kennel = await Kennel.find({id: inputs.id}).populate('owners');
+    let ownersId = _.pluck(kennel.owners, 'id');
+    inputs.coOwner ? ownersId.push(inputs.coOwner) : '';
+
+    // Если есть идентификаторы совладельцев ...
+    if (ownersId.length > 0) {
+      // ... то обновляет данные о совладельцах питомника
+      await Kennel.addToCollection(inputs.id, 'owners').members(ownersId);
+      // ...  то добавляем совладельцев в группы соответствия
+      _.each(ownersId, async id => {
+        await sails.helpers.addGroup.with({
+          groups: ['user', 'owner', 'breeder'],
+          userId: id
+        })
+      });
+    }
+
+    /**
+     * Обновляем список групп для пользователя, который отказался от питомника как владелец и
+     * при этом он не является админом или суперадмином.
+     * Так же учитывается является ли пользователь совладельцем других питомников,
+     * т.е. если питомник может принадлежать тебе только один, то совладельцем ты
+     * можешь быть сколько угодно раз и так же будешь входить в группу breeder.
+     *
+     */
+    if (!inputs.yourKennel && (!req.me.isAdmin && !req.me.isSuperAdmin)) {
+
+      /**
+       * Очищаем всех совладельцев этого питомника, т.к. только владелец питомника может
+       * задавать данный параметр.
+       */
+      await Kennel.replaceCollection(inputs.id, 'owners').members([]);
+
+
+      /**
+       * Массив содержит идентификаторы всех совладельцев со всех питомников.
+       * @type {Array}
+       */
+      let ids = [];
+      let ownerToKennel = await Kennel.find().populate('owners');
+      _.each(ownerToKennel, otk => {
+        ids.push(_.pluck(otk.owners, 'id'));
+      });
+
+      console.log('_.flatten(ids).includes(req.me.id)::: ' , _.flatten(ids).includes(req.me.id));
+
+      /**
+       * Если пользователь не найден в качестве совладельца в других питомниках,
+       * то убираем его из группы breeder
+       */
+      !_.flatten(ids).includes(req.me.id) ? await sails.helpers.addGroup.with({
+        groups: ['user', 'owner'],
+        userId: req.me.id
+      }) : '';
+
+    }
+
 
     // Если не создан возвращаем ошибку.
     if (!update) {

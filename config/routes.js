@@ -174,12 +174,14 @@ module.exports.routes = {
 
   'GET    /api/v1/kennels/:id': {action: 'kennels/download-photo'},
   'GET    /api/v1/kennels/list': {action: 'kennels/list'},
+  'POST /api/v1/kennels/destroy-one-coowner': { action: 'kennels/destroy-one-coowner', csrf: false },
   'PUT    /api/v1/kennels/update-kennel': {action: 'kennels/update-kennel', csrf: false},
   'POST   /api/v1/kennels/create-kennel': {action: 'kennels/create-kennel', csrf: false},
   'POST   /api/v1/kennels/destroy-one-kennel': {action: 'kennels/destroy-one-kennel', csrf: false},
+
+
+
   'PUT    /api/v1/dogs/update-description-img': {action: 'dogs/update-description-img', csrf: false},
-
-
   'POST   /api/v1/dogs/create-dog': {action: 'dogs/create-dog', csrf: false},
   'GET    /api/v1/dogs/list': {action: 'dogs/list'},
   'GET    /dogs/for-sale/:letter/:year': {action: 'dogs/get-for-sale'},

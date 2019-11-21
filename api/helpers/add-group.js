@@ -26,7 +26,7 @@ module.exports = {
 
     let groups = await Group.find({label: {in: inputs.groups}});
     groups = _.pluck(groups, 'id');
-    return await User.addToCollection(inputs.userId, 'groups').members(groups);
+    return await User.replaceCollection(inputs.userId, 'groups').members(groups);
   }
 };
 

@@ -684,10 +684,12 @@
 	"You can add a co-owner of the nursery, if one exists.": "Вы можете добавить совладельца питомника, если таковой существует.",
 	"Let's get acquainted": "Давайте знакомиться",
 	"Show teeth": "Показывать зубы",
+	"Confirm removal of this user from the co-owners of your cattery.": "Подтвердите удаление данного пользователя из совладельцев вашего питомника.",
 	"Do not show teeth": "Не показывать зубы",
 	"Number of teeth": "Количество зубов",
 	"Search by kennel name": "Поиск по названию питомника",
 	"Selected": "Выбрано",
 	"Reset filter": "Сбросить фильтр",
+	"Please set the owner of the kennel": "Пожалуйста установите владельца питомника",
 	"Set Visibility": "Установите видимость"
 }

@@ -42,7 +42,7 @@ module.exports = {
       .populate('dogs')
       .populate('owners')
       .populate('whoCreate')
-      .populate('yourKennel')
+      .populate('breeder')
       .populate('continent')
       .populate('country')
       .populate('region')
@@ -53,7 +53,7 @@ module.exports = {
       // Устанавливаем свойство источника изображения
       // Первый аргумент, базовый url
       kennel.imageSrc = kennel.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/kennels/${kennel.id}`) : '';
-
+      kennel.yourKennel = kennel.breeder ? (kennel.breeder.id === inputs.req.me.id) : false;
       // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
       kennel.createdAtFormat = moment(kennel.createdAt).format(format);
 
@@ -69,9 +69,7 @@ module.exports = {
       delete kennel.imageUploadMime;
     });
 
-    /**
-     * kennels = (req.me.isAdmin || req.me.isSuperAdmin )? kennels :  _.find(kennels, {yourKennel.id:req.me.id})
-     */
+
     data.collection = kennels;
     return exits.success(data);
   }

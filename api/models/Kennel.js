@@ -64,6 +64,12 @@ module.exports = {
     },
 
 
+    yourKennel: {
+      type: 'boolean',
+      description: `Это ваш питомник. По умолчанию нет.`
+    },
+
+
     imageUploadFD: {
       type: 'string',
       description: 'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение, связанное с этой «вещью».'
@@ -145,19 +151,18 @@ module.exports = {
 
 
     // Добавьте одну сторону множественной рефлексивной ассоциации
-    // Владельцы
     owners: {
       collection: 'user',
       via: 'kennels',
-      description: `  Однако также возможно иметь связь между двумя атрибутами в одной и той же модели. 
-                      Это называется рефлексивной ассоциацией.
-                      
-                      Добавить пользователя № 12 в качестве родителя пользователя № 23
-                      await User.addToCollection(23, 'parents', 12);
-                      Найти пользователя № 12 и заполнить его детей
-                      var userTwelve = await User.findOne(12).populate('children');
-                      parents и children атрибуты могут быть изменены с помощью 
-                      .addToCollection(), .removeFromCollection()и .replaceCollection()
+      description: `Совладельцы питомника.
+      Однако также возможно иметь связь между двумя атрибутами в одной и той же модели. 
+      Это называется рефлексивной ассоциацией.
+      Добавить пользователя № 12 в качестве родителя пользователя № 23
+      await User.addToCollection(23, 'parents', 12);
+      Найти пользователя № 12 и заполнить его детей
+      var userTwelve = await User.findOne(12).populate('children');
+      parents и children атрибуты могут быть изменены с помощью 
+      .addToCollection(), .removeFromCollection()и .replaceCollection()
                     `
     },
 
@@ -170,10 +175,12 @@ module.exports = {
     },
 
 
-    yourKennel: {
+
+    breeder: {
       model: 'User',
-      description: `Это ваш питомник. По умолчанию нет.`
+      description: 'Заводчик, хозяин, кто представляет питомник, на кого зарегистрирован питомник.'
     },
+
 
     continent: {
       model: 'continent',

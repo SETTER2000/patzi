@@ -75,6 +75,7 @@ module.exports.bootstrap = async function () {
     emailAddress: sails.config.custom.internalEmailAddress,
     fullName: 'Alex Fox',
     isAdmin: false,
+    defaultIcon:'gravatar',
     // getFullName: function(){return  `${this.fullName} ${this.emailAddress}`;},
     isSuperAdmin: true,
     preferredLocale: 'en',
@@ -98,6 +99,16 @@ module.exports.bootstrap = async function () {
     fullName: 'SETTER Петров',
     isAdmin: false,
     preferredLocale: 'en',
+    password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
+    gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
+  }).fetch();
+
+  let elena_sova = await User.create({
+    emailAddress: 'elena_sova@poaleell.com',
+    fullName: 'Елена Сова',
+    isAdmin: false,
+    preferredLocale: 'ru',
+    avatar:'https://d3a1wbnh2r1l7y.cloudfront.net/sova.jpg',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
     gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
   }).fetch();
@@ -162,7 +173,7 @@ module.exports.bootstrap = async function () {
       country: 1,
       region: 1000001,
     },
-    {
+    /*{
       label: `Zlato Dinastii`,
       rightName: true,
       dateCreate: '2010-09-13T00:00:00+04:00',
@@ -171,7 +182,7 @@ module.exports.bootstrap = async function () {
       continent: 1,
       country: 1,
       region: 1000001,
-    },
+    },*/
     {
       label: `Poale Ell`,
       rightName: true,
@@ -252,7 +263,7 @@ module.exports.bootstrap = async function () {
       dateBirth: '2015-09-25T09:00:00.000Z',
       kennel: 'Olegro Katrin'
     },
-    {
+ /*   {
       label: `Neron`,
       gender: 'sire',
       letter:'N',
@@ -261,7 +272,7 @@ module.exports.bootstrap = async function () {
       see:true,
       dateBirth: '2011-03-02T09:00:00.000Z',
       kennel: 'Zlato Dinastii'
-    },
+    },*/
   ];
 
   dogsArr.map(dog => {

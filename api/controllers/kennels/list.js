@@ -44,9 +44,9 @@ module.exports = {
     // Вызываем помощника сформировать правильно данные для ответа.
     let result = await sails.helpers.formatCollectionKennel(req);
 
-
+    // console.log('BEFORE: ', result.collection);
     // Рассылаем данные всем подписанным на событие list данной комнаты.
-    await sails.sockets.broadcast('kennel', 'list-kennel',result.collection);
+    await sails.sockets.broadcast('kennel', 'list-kennel', result.collection);
 
 
     // Respond with view.
