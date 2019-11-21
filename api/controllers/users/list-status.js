@@ -57,7 +57,7 @@ module.exports = {
 
    console.log('STATUS: ', status);
 
-    await sails.sockets.broadcast('user', 'list-status', status);
+    // await sails.sockets.broadcast('user', 'list-status', status);
     // Respond with view.
     return exits.success();
   }

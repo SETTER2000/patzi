@@ -109,8 +109,7 @@ module.exports.bootstrap = async function () {
     isAdmin: false,
     preferredLocale: 'ru',
     avatar:'https://d3a1wbnh2r1l7y.cloudfront.net/sova.jpg',
-    password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
-    gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
+    password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin)
   }).fetch();
 
   let bob = await User.create({
