@@ -54,9 +54,9 @@ module.exports = {
     },
 
 
-    city: {
+    cityId: {
       type: 'string',
-      description: 'Город где находится питомник.'
+      description: 'Идентификатор города где находится питомник.'
     },
 
     breeder: {
@@ -189,7 +189,7 @@ module.exports = {
       dateCreate: await sails.helpers.dateFix(inputs.dateCreate),
       subtitle: inputs.subtitle,
       site: _.trim(inputs.site),
-      city: inputs.city,
+      city: _.isUndefined(inputs.cityId) ? null : inputs.cityId,
       country: inputs.country,
       continent: inputs.continent,
       region: inputs.region,

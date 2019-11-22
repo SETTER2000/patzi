@@ -4,9 +4,14 @@ parasails.registerPage('dogs-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     dogs: [],
-    owner:false,
-    searchObjects:'',
-    ranks:[{label:'Russian Junior Champion', abbr:'RUSJCH', labelRu: 'Юный чемпион России' , value:1},{label:'Hungarian Junior Champion',abbr:'HJCH', labelRu: 'Юный чемпион Болгарии', value:2}],
+    owner: false,
+    searchObjects: '',
+    ranks: [{
+      label: 'Russian Junior Champion',
+      abbr: 'RUSJCH',
+      labelRu: 'Юный чемпион России',
+      value: 1
+    }, {label: 'Hungarian Junior Champion', abbr: 'HJCH', labelRu: 'Юный чемпион Болгарии', value: 2}],
     filterDogs: [],
     filterName: '',
     dogsEditList: [],
@@ -309,7 +314,16 @@ parasails.registerPage('dogs-home', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
 
+    io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
 
+    // Принимаем данные по событию list-*
+    io.socket.on('list-dog', (data) => {
+      this.dogs = this.dogsEditList = this.filterDogs = _.isNull(data) ? [] : data;
+      console.log('this.dogs: ', this.dogs);
+      console.log('this.filterDogs: ', this.filterDogs);
+    });
     // Подключаемся к комнате kennel
     io.socket.get(`/api/v1/kennels/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -344,7 +358,7 @@ parasails.registerPage('dogs-home', {
     });
 
     /* Весь список*/
-    this.getList();
+    // this.getList();
 
 
     // Кобели
@@ -382,22 +396,14 @@ parasails.registerPage('dogs-home', {
      * @param dateDeath
      * @returns {*}
      */
-    getAge: function (value, l,  dateDeath) {
+    getAge: function (value, l, dateDeath) {
       if (!value) {
         return '';
       }
       moment.locale(l);
       let start = moment(value);
       let end = !_.isEmpty(dateDeath) ? moment(dateDeath) : '';
-      // return end ? end.from(start, true) : moment(value).fromNow(true);
-
-
       let now = moment.parseZone();
-      /*  let event = moment.parseZone(value, ["DD.MM.YYYY"]);
-         let a=moment.preciseDiff(now, event);
-        console.log('now: ', now);
-        console.log('EVENT: ', event);
-        console.log('a: ', a);*/
       return end ? moment(value).preciseDiff(end) : moment(value).fromNow(true);
     },
     abc(value, ruleForm) {
@@ -489,18 +495,25 @@ parasails.registerPage('dogs-home', {
       await io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
+      await io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
+        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
 
       // Принимаем данные по событию list-*
       await io.socket.on('list-dog', (data) => {
         this.dogs = this.dogsEditList = this.filterDogs = _.isNull(data) ? [] : data;
         console.log('this.dogs: ', this.dogs);
         console.log('this.filterDogs: ', this.filterDogs);
+        this.dialogEditors();
       });
       // Принимаем данные по событию list-*
       await  io.socket.on('list-continent', (data) => {
         this.continents = data;
       });
-
+      // Принимаем данные по событию list-*
+      await  io.socket.on('list-country', (data) => {
+        this.continents = data.continents;
+      });
     },
 
 
@@ -608,7 +621,7 @@ parasails.registerPage('dogs-home', {
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
       };
-console.log('DATA before send: ' , data);
+      console.log('DATA before send: ', data);
       await io.socket.post('/api/v1/dogs/create-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -926,6 +939,7 @@ console.log('DATA before send: ' , data);
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
+
     showMenu(id, e) {
       this.dogId = id;
       this.show = true;
@@ -959,7 +973,7 @@ console.log('DATA before send: ' , data);
           this.goDogSale();
           break;
         case 'e':
-          this.dialogEditorList = true;
+          this.dialogEditors();
           // this.ruleForm.description =  this.litter.description;
           break;
         case 'dam':
@@ -1044,12 +1058,12 @@ console.log('DATA before send: ' , data);
     },
     handleCloseDialog(done) {
       done();
-    /*  this.$confirm('Are you sure to close this dialog?')
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {
-        });*/
+      /*  this.$confirm('Are you sure to close this dialog?')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {
+          });*/
     },
 
     handleClose(key, keyPath) {
@@ -1245,11 +1259,11 @@ console.log('DATA before send: ' , data);
 
 
     handleEdit(index, row) {
-      console.log('ROWWW::: ' , row);
+      console.log('ROWWW::: ', row);
       this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
       this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
-      this.owner = _.last(_.pluck(row.owners,'fullName'));
-      this.ownerId = _.last(_.pluck(row.owners,'id'));
+      this.owner = _.last(_.pluck(row.owners, 'fullName'));
+      this.ownerId = _.last(_.pluck(row.owners, 'id'));
       this.ruleForm = row;
       this.dateBirthUpdate = row.dateBirth;
       this.dateDeathUpdate = row.dateDeath;
@@ -1412,15 +1426,15 @@ console.log('DATA before send: ' , data);
       });
     },
 
-    objFilter(){
+    objFilter() {
       // dogs.filter(dog=>dog.see)
-    return  this.dogs.filter(data => (!this.searchObjects || data.fullName.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see)
+      return this.dogs.filter(data => (!this.searchObjects || data.fullName.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & !_.isEmpty(data.images[data.cover]))
     },
 
 
     querySearchFoo(queryString, cb) {
-      console.log('this.users:::: ' , this.users);
-      if(_.isUndefined(this.users)) return ;
+      console.log('this.users:::: ', this.users);
+      if (_.isUndefined(this.users)) return;
       let users = this.users;
       let results = queryString ? users.filter(this.createFilterOwner(queryString)) : users;
 
@@ -1446,10 +1460,10 @@ console.log('DATA before send: ' , data);
     },
 
     dialogEditors() {
-      this.dogsEditList = this.isOwner ? this.dogs.filter(data=>_.isObject(data.yourKennel) ? (data.yourKennel.id === this.me.id) : false) :
-        (this.me.isAdmin || this.me.isSuperAdmin) ? this.kennels : [];
+      this.dogsEditList = (this.me.isAdmin || this.me.isSuperAdmin) ? this.dogs :
+        this.isOwner ? this.dogs.filter(data => _.isObject(data.kennel) ? (data.kennel.breeder === this.me.id) : false) : [];
 
-      console.log('kennelsEditList::: ' , this.kennelsEditList);
+      console.log('dogsEditList::: ', this.dogsEditList);
       this.dialogEditorList = true;
     },
 
@@ -1458,7 +1472,8 @@ console.log('DATA before send: ' , data);
         console.log('Сервер (is-breeder) ответил кодом  ' + response.statusCode + ' и данными: ', body);
         this.isOwner = (response.statusCode === 200);
       });
-    }
+    },
+
 
 
   }

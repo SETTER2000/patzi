@@ -7,6 +7,7 @@ parasails.registerPage('kennels-home', {
     test: '',
     kennelsEditList: [],
     citys: [],
+    kennelId:'',
     row: {},
     coownerId: '',
     city: '',
@@ -14,6 +15,7 @@ parasails.registerPage('kennels-home', {
     isBreeder: false,
     centerDialogConfirmDeleteCoOwner: false,
     removeKennelId: undefined,
+    // showKennel: undefined,
     yourKennel: false,
     links: [],
     see: true,
@@ -263,7 +265,25 @@ parasails.registerPage('kennels-home', {
     this.isBreederCheck();
   },
 
-  filters: {},
+  filters: {
+    /**
+     * Показывает возраст с учётом смерти.
+     * @param value дата рождения
+     * @param l язык предпочтения (en|ru)
+     * @param dateDeath
+     * @returns {*}
+     */
+    getAge: function (value, l, dateDeath) {
+      if (!value) {
+        return '';
+      }
+      moment.locale(l);
+      let start = moment(value);
+      let end = !_.isEmpty(dateDeath) ? moment(dateDeath) : '';
+      let now = moment.parseZone();
+      return end ? moment(value).preciseDiff(end) : moment(value).fromNow(true);
+    },
+  },
 
   mounted() {
     this.links = this.cityList();
@@ -310,6 +330,7 @@ parasails.registerPage('kennels-home', {
 
       // Принимаем данные по событию list-*
       await io.socket.on('list-kennel', (data) => {
+        console.log('DATA обновлённые данные: ', data);
         this.kennels = this.kennelsEditList = this.filterObjects = _.isNull(data.kennels) ? [] : data;
         // Ограничевает видимость только собственным питомником владельца
         this.dialogEditors();
@@ -456,8 +477,7 @@ parasails.registerPage('kennels-home', {
       data.region = this.updateForm.region.id;
       data.coOwner = this.coOwnerId;
       data.breeder = this.breederId;
-      // data.yourKennel = (this.updateForm.yourKennel);
-      data.city = this.cityId;
+      data.cityId = this.cityId;
       data.dateCreate = JSON.stringify(this.updateForm.dateCreate);
 
       console.log('DATA перед отправкой::: ', data);
@@ -590,8 +610,8 @@ parasails.registerPage('kennels-home', {
 
     querySearchFoo(queryString, cb) {
       if (_.isUndefined(this.users)) return;
-      let users = this.users;
-      let results = queryString ? users.filter(this.createFilterOwner(queryString)) : users;
+      // let users = this.users;
+      let results = queryString ? this.users.filter(this.createFilterOwner(queryString)) : this.users;
 
       /* clearTimeout(this.timeout);
        this.timeout = setTimeout(() => {*/
@@ -671,6 +691,7 @@ parasails.registerPage('kennels-home', {
 
     handleAvatarSuccess(res, file) {
       this.files.push(file.response);
+      console.log('file.response::: ' , file.response);
       this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
       this.updateForm.imageUrl = URL.createObjectURL(file.raw);
       this.ruleForm.file = file.response;
@@ -734,7 +755,7 @@ parasails.registerPage('kennels-home', {
     },
 
     showMenu(id, e) {
-      this.dogId = id;
+      this.kennelId = id;
       this.show = true;
       this.showObject = id;
     },
@@ -754,6 +775,17 @@ parasails.registerPage('kennels-home', {
     /* Авто поиск по городам */
     querySearch(queryString, cb) {
       let links = this.citys;
+      console.log('ГОРОДА для выбора: ', links);
+      let results = queryString ? links.filter(this.createFilter(queryString)) : links;
+      cb(results);
+    },
+
+    /* Авто поиск по городам */
+    querySearchUpdate(queryString, cb) {
+      console.log('Строка поиска города: ', queryString);
+      this.cityList();
+      let links = this.citys;
+      console.log('ГОРОДА для выбора: ', links);
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
       cb(results);
     },
@@ -827,6 +859,7 @@ parasails.registerPage('kennels-home', {
     dialogEditors() {
       this.kennelsEditList = (this.me.isAdmin || this.me.isSuperAdmin) ? this.kennels :
         this.isBreeder ? this.kennels.filter(data => _.isObject(data.breeder) ? (data.breeder.id === this.me.id) : false) : [];
+      // console.log('kennelsEditList:::: ' , this.kennelsEditList);
       this.dialogEditorList = true;
     },
 
@@ -857,15 +890,19 @@ parasails.registerPage('kennels-home', {
       // console.log('objFilter kennels:::: ' , this.kennels);
       let nameKennel = !_.isEmpty(res = _.filter(this.continents, 'id', +this.ruleForm.continent)) ? _.last(_.pluck(res, 'label')) : '';
       this.sr = this.searchObjects ? this.searchObjects : nameKennel;
-      let y = this.kennels.filter(data => (!this.sr || data.continent.label.toLowerCase().includes(this.sr.toLowerCase()) || data.label.toLowerCase().includes(this.sr.toLowerCase())) && data.action);
+      let y = this.kennels.filter(data => (!this.sr || data.continent.label.toLowerCase().includes(this.sr.toLowerCase()) || data.label.toLowerCase().includes(this.sr.toLowerCase())) & data.action & !_.isEmpty(data.imageSrc));
       // console.log('KENNEL ALL:', y);
       return y;
     },
 
+
     handleEdit(index, row) {
       console.log('ROW::: ', row);
-      this.updateForm = row;
+      // this.updateForm = row;
+      row.coOwner = '';
+      this.updateForm = Object.assign({}, this.updateForm, row);
       this.updateForm.dateCreate = moment(row.dateCreate);
+
       // console.log('this.test.getTime ::: ', this.test.getTime());
       this.updateForm.city = row.city ? row.city.value : null;
       this.updateForm.breeder = row.breeder ? row.breeder.fullName : null;
@@ -980,8 +1017,8 @@ parasails.registerPage('kennels-home', {
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
 
         if (jwRes.statusCode === 200) {
-          this.updateForm.owners = this.updateForm.owners.filter(owner=>owner.id !== this.coownerId);
-          console.log('OWWW::: ' ,  this.updateForm.owners);
+          this.updateForm.owners = this.updateForm.owners.filter(owner => owner.id !== this.coownerId);
+          console.log('OWWW::: ', this.updateForm.owners);
           this.getList();
           this.$forceUpdate();
           this.centerDialogConfirmDeleteCoOwner = false;
@@ -989,10 +1026,10 @@ parasails.registerPage('kennels-home', {
       });
     },
 
-     // Имя удаляемого совладельца
-    nameDeleteCoOwner(){
-      if(!this.coownerId) return ;
-       return _.last(_.filter(this.updateForm.owners,'id', this.coownerId)) ? _.last(_.filter(this.updateForm.owners,'id', this.coownerId)).fullName : '';
+    // Имя удаляемого совладельца
+    nameDeleteCoOwner() {
+      if (!this.coownerId) return;
+      return _.last(_.filter(this.updateForm.owners, 'id', this.coownerId)) ? _.last(_.filter(this.updateForm.owners, 'id', this.coownerId)).fullName : '';
     }
 
   }
