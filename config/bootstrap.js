@@ -86,7 +86,7 @@ module.exports.bootstrap = async function () {
   let star = await User.create({
     emailAddress: 'vasef@mail.ru',
     fullName: 'Ольга Петрова',
-    isAdmin: true,
+    isAdmin: false,
     // getFullName: function(){return  `${this.fullName} ${this.emailAddress}`;},
     isSuperAdmin: false,
     preferredLocale: 'en',
