@@ -1,46 +1,4 @@
 <div id="kennels-home" class="content" v-cloak>
-  <% /* Диалоговое окно. Логотип питомника. */ %>
-  <el-dialog
-    :title="objOne.label"
-    custom-class="dialog-kennel-add"
-    :visible.sync="photoVisible"
-    :before-close="handleCloseDialog">
-    <div class="menu-center" v-if="objOne.imageSrc">
-      <img :src="objOne.imageSrc" style="width: 100%" :alt="objOne.label">
-    </div>
-    <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="objOne={};photoVisible = false"><%= __('Close') %></el-button>
-  </span>
-  </el-dialog>
-  <% /* Диалоговое окно. Подтверждение удаления объекта. */ %>
-  <el-dialog
-    title="<%= __('Warning') %>"
-    :visible.sync="centerDialogVisibleConfirm"
-    width="30%"
-    center>
-    <span>{{text}}</span>
-    <span slot="footer" class="dialog-footer">
-                <el-button @click="centerDialogVisibleConfirm = false"><%= __('Cancel') %></el-button>
-                <el-button type="primary" @click="confirmDeletion()"><%= __('Yes') %></el-button>
-             </span>
-  </el-dialog>
-  <% /* Диалоговое окно. Тарифы. */ %>
-  <el-dialog
-    title="<%= __('Warning') %>"
-    :visible.sync="centerDialogVisible"
-    width="53%"
-    style="margin-top: 17vh"
-    center>
-    <el-alert
-      title="<%= __('You have not linked a payment source to your account. In order to access paid features, you\'ll need to provide your credit card information. (Don\'t worry: you will only be charged when you\'ve reached the limit of your free plan.)') %>"
-      type="warning">
-    </el-alert>
-
-    <span slot="footer" class="dialog-footer">
-    <el-button @click="goToCard()"><%= __('Add card') %></el-button>
-    <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>
-  </span>
-  </el-dialog>
 
   <% /* Диалоговое окно Редактор питомников. Список питомников*/ %>
   <el-dialog title="<%= __('Kennel editor') %>. <%= __('List') %>."
@@ -212,12 +170,12 @@
       </template>
 
 
-      <div v-if="updateForm.imageUrl" class="col">
-        <div class="single-gallery-image" :style="{ backgroundImage: `url('${updateForm.imageUrl}')` }"></div>
+      <div v-if="updateForm.imageSrc" class="col">
+        <div class="single-gallery-image" :style="{ backgroundImage: `url('${updateForm.imageSrc}')` }"></div>
       </div>
       <!--<img src="https://d3a1wbnh2r1l7y.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" class="img-fluid" alt="Responsive image">-->
       <div class="form-group">
-        <label v-if="!updateForm.imageUrl"> <%= __('Add logo') %>:</label>
+        <label v-if="!updateForm.imageUrl"> <%= __('Change logo') %>:</label>
         <hr>
         <div class="photo-uploader">
           <div class="row file-upload-field  ">
@@ -363,7 +321,7 @@
               <el-autocomplete v-model="updateForm.city"
                                clearable
                                popper-class="my-autocomplete"
-                               :fetch-suggestions="querySearch"
+                               :fetch-suggestions="querySearchUpdate"
                                placeholder="<%= __('Please Input City') %>"
                                :trigger-on-focus="false"
                                @select="handleSelect"
@@ -474,6 +432,7 @@
                 :trigger-on-focus="false"
                 @select="handleBreederSelected"
                 style="width: 58%;"
+                clearable
               >
 
                 <template slot-scope="{ item }">
@@ -528,21 +487,21 @@
               <div class="demo-basic--circle menu-center">
                 <div class="block mx-1" v-for="(owner, index) in updateForm.owners" :key="index +'-ow'">
                   <template v-if="updateForm.yourKennel || me.isAdmin || me.isSuperAdmin">
-                  <el-popover
-                    placement="top-start"
-                    :title="owner.fullName"
-                    width="200"
-                    trigger="hover"
-                    :content="owner.emailAddress">
-                    <el-link slot="reference" @click="centerDialogConfirmDeleteCoOwner = true; coownerId=owner.id" :underline="false">
-                      <template v-if="owner.defaultIcon === 'gravatar'">
-                        <el-avatar :size="50" :src="owner.gravatar"></el-avatar>
-                      </template>
-                      <template v-else>
-                        <el-avatar :size="50" :src="owner.avatar"></el-avatar>
-                      </template>
-                    </el-link>
-                  </el-popover>
+                    <el-popover
+                      placement="top-start"
+                      :title="owner.fullName"
+                      width="200"
+                      trigger="hover"
+                      :content="owner.emailAddress">
+                      <el-link slot="reference" @click="centerDialogConfirmDeleteCoOwner = true; coownerId=owner.id" :underline="false">
+                        <template v-if="owner.defaultIcon === 'gravatar'">
+                          <el-avatar :size="50" :src="owner.gravatar"></el-avatar>
+                        </template>
+                        <template v-else>
+                          <el-avatar :size="50" :src="owner.avatar"></el-avatar>
+                        </template>
+                      </el-link>
+                    </el-popover>
                   </template>
                   <template v-else>
                     <template v-if="owner.defaultIcon === 'gravatar'">
@@ -987,6 +946,51 @@
   </span>
   </el-dialog>
 
+
+
+  <% /* Диалоговое окно. Логотип питомника. */ %>
+  <el-dialog
+    :title="objOne.label"
+    custom-class="dialog-kennel-add"
+    :visible.sync="photoVisible"
+    :before-close="handleCloseDialog">
+    <div class="menu-center" v-if="objOne.imageSrc">
+      <img :src="objOne.imageSrc" style="width: 100%" :alt="objOne.label">
+    </div>
+    <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="objOne={};photoVisible = false"><%= __('Close') %></el-button>
+  </span>
+  </el-dialog>
+  <% /* Диалоговое окно. Подтверждение удаления объекта. */ %>
+  <el-dialog
+    title="<%= __('Warning') %>"
+    :visible.sync="centerDialogVisibleConfirm"
+    width="30%"
+    center>
+    <span>{{text}}</span>
+    <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialogVisibleConfirm = false"><%= __('Cancel') %></el-button>
+                <el-button type="primary" @click="confirmDeletion()"><%= __('Yes') %></el-button>
+             </span>
+  </el-dialog>
+  <% /* Диалоговое окно. Тарифы. */ %>
+  <el-dialog
+    title="<%= __('Warning') %>"
+    :visible.sync="centerDialogVisible"
+    width="53%"
+    style="margin-top: 17vh"
+    center>
+    <el-alert
+      title="<%= __('You have not linked a payment source to your account. In order to access paid features, you\'ll need to provide your credit card information. (Don\'t worry: you will only be charged when you\'ve reached the limit of your free plan.)') %>"
+      type="warning">
+    </el-alert>
+
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="goToCard()"><%= __('Add card') %></el-button>
+    <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>
+  </span>
+  </el-dialog>
+
   <% /* Главный банер, с названием страницы. */ %>
   <section class="banner-area relative">
     <div class="container">
@@ -1107,10 +1111,7 @@
           <span v-if="ruleForm.continent"> <el-tooltip effect="dark" content="<%= __('Reset filter') %>" placement="top-start"><el-link
                 @click="ruleForm.continent=this.sr='';objFilter()" type="danger" :underline="false"
                 icon="el-icon-document-remove"></el-link></el-tooltip></span>
-
         </div>
-
-
         <div class="grid-content">
           <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
@@ -1151,14 +1152,53 @@
           placeholder="<%= __('Search by kennel name') %>"
           clearable/>
       </div>
-
+      <!--v-if="kennel.imageSrc && kennel.action"-->
       <% /* ФОТО ПИТОМНИКОВ */ %>
       <div class="scrollbar" id="style-1">
         <el-row :gutter="2" class="flex-container wrap">
-          <el-col class="flex-item"
-                  v-for="(kennel, index) in objFilter()" :key="kennel.id"
+          <el-col class="flex-item" v-for="(kennel, index) in objFilter()" :key="kennel.id"
                   :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-            <el-link type="danger" class="px-2" @click="goTo2(kennel.detail)" :underline="false"
+            <div @mouseenter="showMenu(kennel.id)" @mouseleave="showOut()"
+                 style="position: relative;" class="ell-image-flex">
+              <transition-group appear name="el-fade-in">
+                <div v-show="show && (showObject === kennel.id)" class="transition-box blue-dark" :class="{death:kennel.dateDeath}" :key="kennel.id">
+                  <% /* Кнопки управления собакой */ %>
+                  <div class="menu-center-v">
+                    <div class="py-3">
+                      <el-link type="info" :underline="false">{{kennel.country.label}}</el-link><br>
+
+                      <el-link class="link" @click="goTo2(kennel.detail)" :underline="false">
+
+                        <div :class="{deathColor:kennel.dateDeath}"> {{kennel.label}}</div>
+
+                        <div class="date" :class="{deathColor:kennel.dateDeath}">{{kennel.dateBirth | getAge(me.preferredLocale,
+                          kennel.dateDeath)}}
+                        </div>
+                      </el-link>
+                      <el-row class="mt-2">
+                        <!--<el-button icon="el-icon-search" circle></el-button>-->
+                        <!--<el-button type="primary" icon="el-icon-picture" circle></el-button>-->
+                        <el-button v-if="_.isObject(kennel.breeder)" @click="goTo2(kennel.detail)"  size="mini" type="success" round>
+                         {{kennel.breeder.fullName}}</el-button>
+                        <!--<el-button type="info" icon="el-icon-message" circle></el-button>-->
+                        <!--<el-button type="warning" icon="el-icon-star-off" circle></el-button>-->
+                        <!--<el-button type="danger" icon="el-icon-delete" circle></el-button>-->
+                      </el-row>
+                    </div>
+                  </div>
+                </div>
+              </transition-group>
+
+              <el-image
+                :src="kennel.imageSrc"
+                :key="kennel.id"
+                :fit="'cover'"
+                :scroll-container="'#style-1'"
+                lazy
+               >
+              </el-image>
+            </div>
+          <!--  <el-link type="danger" class="px-2" @click="goTo2(kennel.detail)" :underline="false"
                      :title="kennel.label">
               <el-image
                 :src="kennel.imageSrc"
@@ -1168,14 +1208,12 @@
                 lazy
               >
               </el-image>
-            </el-link>
-
+            </el-link>-->
           </el-col>
         </el-row>
       </div>
     </div>
   </section>
-
 </div>
 
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
