@@ -2,289 +2,7 @@
   <p class="text-danger"
      v-if="cloudError === 'dogAlreadyInUse'"><%= __('There is already an account using that email address') %>.
   </p>
-  <% /* Диалоговое окно. ВЛАДЕЛЕЦ */ %>
-  <el-dialog
-    width="30%"
-    top="3vh"
-    title="<%= __('Who can be a owner') %>"
-    :visible.sync="innerVisibleCo"
-    append-to-body>
-    <div class="justify-content-center">
-      <%= __('You can add a owner of the kennel, if one exists.') %>
-      <br> <%= __('Owner may be registered user with a valid email. Start typing username and select the person you want from the list provided.') %>
-      <br><%= __('If the owner has not been selected, the owner of the dog automatically becomes the current user who added the dog to the database.') %>
-      <br> <%= __('The case of letters does not matter.') %>
-    </div>
-  </el-dialog>
-  <% /* Диалоговое окно. Редактор картинок. */ %>
-  <el-dialog
-    :title="`${i19p.photoEditor} ${photos.fullName}`"
-    :visible.sync="centerDialogVisiblePhotos"
-    width="100vw"
-    custom-class="dialog-images-editor"
-    center>
-    <el-dialog
-      width="80vw"
-      title="<%= __('Photo Description') %>"
-      :visible.sync="photoDesc.innerVisiblePhotoDescription"
-      append-to-body>
-      <el-form ref="photoDesc" :model="photoDesc" label-width="120px">
-        <el-form-item label="<%= __('Decription') %>">
-          <el-input type="textarea" v-model="photoDesc.description"></el-input>
-        </el-form-item>
 
-        <el-form-item v-if="!photoDescUpdate" label="<%= __('Date taken') %>" prop="dateTaken">
-          <el-row :gutter="2">
-            <el-col :span="11">
-              <el-date-picker
-                v-model="photoDesc.dateTaken"
-                type="datetime"
-                placeholder="<%= __('Select date and time') %>"
-                default-time="12:00:00">
-              </el-date-picker>
-            </el-col>
-          </el-row>
-        </el-form-item>
-      </el-form>
-
-      <el-form-item v-if="photoDescUpdate" label="<%= __('Date taken') %>" prop="dateTakenUpdate">
-        <el-row :gutter="2">
-          <el-col :span="11">
-            <el-date-picker
-              v-model="dateTakenUpdate"
-              type="datetime"
-              placeholder="<%= __('Select date and time') %>"
-              default-time="12:00:00">
-            </el-date-picker>
-          </el-col>
-        </el-row>
-      </el-form-item>
-      <span slot="footer" class="dialog-footer">
-    <el-button @click="photoDesc.innerVisiblePhotoDescription = false">Cancel</el-button>
-    <el-button type="primary" @click="updateDescriptionPhoto">Save</el-button>
-  </span>
-    </el-dialog>
-    <div class="container">
-      <div class="menu-between">
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
-          <%= __('Select all') %></el-checkbox>
-        <span>
-          <span class="mx-3">  <%= __('All files') %>:  {{_.isArray(photos.images)? photos.images.length : 0}}</span>
-         <span class="mx-3"> <%= __('Marked') %>:  {{checkedPhoto.length}}</span>
-        <el-link v-if="checkedPhoto.length > 0" type="danger" class="mx-3" :underline="false" @click="removePhotos"
-                 class="mx-3"
-                 title="<%= __('Remove') %>"
-                 icon="el-icon-delete"></el-link>
-          <!--<el-link v-else disabled :underline="false" class="mx-3" title="<%= __('Remove') %>"
-                 icon="el-icon-delete"></el-link>-->
-          </span>
-      </div>
-
-      <el-checkbox-group v-model="checkedPhoto" @change="handleCheckedPhotosChange">
-        <div class="photo-editor">
-
-          <el-card shadow="hover" :body-style="{ padding: '0px'}"
-                   v-for="(img, index, key) in photos.images"
-                   :key="index + '-photo'">
-
-            <template v-if="me.isSuperAdmin">
-              <div class="ell-relation" v-if="photos.cover === index">
-                <el-button type="warning" size="mini" title="<%= __("Album's cover") %>"
-                           class="ell-position-button check" icon="el-icon-star-off"
-                           circle></el-button>
-              </div>
-              <div class="ell-relation" v-else>
-                <el-button size="mini" title="<%= __('Make an album cover') %>"
-                           class="ell-position-button" @click="coverPhoto(photos.id,index)"
-                           icon="el-icon-document" circle></el-button>
-              </div>
-            </template>
-
-            <img :src="img.imageSrc" class="image">
-
-
-            <div style="padding: 14px;">
-              <el-row :gutter="2">
-                <el-col :span="11">
-                  <el-link
-                    @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description;  photoDesc.innerVisiblePhotoDescription=true"
-                    :underline="false"
-                    type="primary"><%= __('Date taken') %>:
-                  </el-link>
-                </el-col>
-                <el-col :span="13">
-                  <el-link :underline="false" type="danger"> {{img.dateTaken | getCreate(me.preferredLocale, 'lll')}}</el-link>
-                </el-col>
-              </el-row>
-              <el-row :gutter="2">
-                <el-col :span="16">
-                  <el-link :underline="false" type="primary"><%= __('File') %>:</el-link>
-                </el-col>
-                <el-col :span="8">
-                  <el-link :title="img.name" :underline="false" type="primary"> {{_.trunc(img.name,10)}}</el-link>
-                </el-col>
-              </el-row>
-              <el-row :gutter="2">
-                <el-col :span="16">
-                  <el-link :underline="false" type="primary"><%= __('Type') %>:</el-link>
-                </el-col>
-                <el-col :span="8">
-                  <el-link :underline="false" type="primary"> {{img.type}}</el-link>
-                </el-col>
-              </el-row>
-              <el-row :gutter="2">
-                <el-col :span="16">
-                  <el-link :underline="false" type="primary"><%= __('Size') %>:</el-link>
-                </el-col>
-                <el-col :span="8">
-                  <el-link :underline="false" type="danger"> {{_.ceil(img.size/1024,2)}} Kb</el-link>
-                </el-col>
-              </el-row>
-
-
-              <el-row :gutter="2">
-                <el-col :span="16">
-                  <el-link
-                    @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description; photoDesc.innerVisiblePhotoDescription=true"
-                    :underline="false"
-                    type="primary"><%= __('Description') %>:
-                  </el-link>
-                </el-col>
-                <el-col :span="8">
-                  <el-link :underline="false" type="danger"> {{_.trunc(img.description, 10)}}</el-link>
-                </el-col>
-              </el-row>
-
-
-              <div class="bottom clearfix ">
-                <div class="menu-center-2">
-                  <el-checkbox :label="img.id" :key="img.id"></el-checkbox>
-                  <el-link :href="img.detail" title="<%= __('More') %>" type="success" :underline="false"><i
-                      class="el-icon-right"></i></el-link>
-                </div>
-              </div>
-            </div>
-          </el-card>
-        </div>
-      </el-checkbox-group>
-    </div>
-    <span slot="footer" class="dialog-footer">
-    <el-button @click="centerDialogVisiblePhotos = false">Cancel</el-button>
-  </span>
-  </el-dialog>
-  <% /* Диалоговое окно. Feedback about this page?. */ %>
-  <modal v-if="dialogFormVisible" v-cloak key="delete"
-         @close="closeDeleteThingModal()">
-    <ajax-form action="deliverContactFormMessage" :syncing.sync="syncing" :cloud-error.sync="cloudError"
-               :handle-parsing="handleParsingDeleteThingForm"
-               @submitted="submittedDeleteThingForm()">
-      <div class="modal-body">
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline-secondary mr-1" @click="dialogFormVisible=false"><%= __('Cancel') %></button>
-        <button type="submit" class="btn btn-danger ml-1"><%= __('Send feedback') %></button>
-      </div>
-    </ajax-form>
-  </modal>
-  <% /* Выезжающая вкладка чата с покупателем*/ %>
-  <el-drawer
-    title="<%= __('Chat') %>"
-    :visible.sync="drawer"
-    :direction="direction"
-    :before-close="handleClose2">
-    <el-row type="flex" class="row-bg" justify="space-around">
-      <el-col :span="1">
-        <div class="grid-content bg-purple"></div>
-      </el-col>
-      <el-col :span="18">
-        <div class="grid-content bg-purple-light">
-          <h4><%= __('Welcome') %>, {{me.fullName}}!</h4>
-          <p>{{i19p.startOfNegotiations}} {{this.fullNameDogNegotiations}}.</p>
-          <p>{{i19p.startOfNegotiations2}}</p>
-        </div>
-      </el-col>
-      <el-col :span="1">
-        <div class="grid-content bg-purple"></div>
-      </el-col>
-    </el-row>
-    <el-row type="flex" class="row-bg" justify="space-around">
-      <el-col :span="1">
-        <div class="grid-content bg-purple"></div>
-      </el-col>
-      <el-col :span="18">
-        <div class="mt-4">
-          <% /* Поле ввода комментария */ %>
-          <el-form @submit.native.prevent>
-            <el-form-item>
-              <el-input @keyup.enter.native="addComment('negotiation')"
-                        class="lb mt-2"
-                        maxLength="1000"
-                        clearable
-                        placeholder="<%= __('Write a message') %>"
-                        v-model="comment">
-                <i slot="prefix" class="el-input__icon el-icon-chat-line-round"></i>
-                <template slot="prepend">
-                  <el-avatar :size="35" :src="me[me.defaultIcon]"></el-avatar>
-                </template>
-              </el-input>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-col>
-      <el-col :span="1">
-        <div class="grid-content bg-purple"></div>
-      </el-col>
-    </el-row>
-  </el-drawer>
-  <% /* Диалоговое окно "В ПРОДАЖЕ" (SALE)*/ %>
-  <el-dialog
-    title="<%= __('Buy puppy chinese crested') %>"
-    :visible.sync="dialogPedigreeVisible"
-    :fullscreen="true"
-    top="1vh"
-    center
-    custom-class="sale-dogs"
-    :before-close="handlerCloseDialogSlider"
-    v-if="virtualPageSlug==='sale'"
-  >
-
-    <section>
-      <div class="showcase">
-        <el-card shadow="hover" v-for="(o, index) in dogs" :key="o.id" class="my-2 "
-                 v-if="!_.isEmpty(o.images)  && o.price > 0 && o.sale && !_.isEmpty(o.currency)"
-                 :body-style="{ padding: '0px' }">
-          <el-image
-            :src="o.images[o.cover].imageSrc"
-            :key="o.id"
-            :fit="'cover'"
-            lazy
-            :preview-src-list="o.imagesArrUrl">
-          </el-image>
-          <div class="text-center">
-            <div><%= __('Litter') %> {{o.letter}} / {{o.dateBirth.split('-')[0]}}</div>
-            <h5>
-              <el-link @click="goTo2(o.detail)" type="primary">{{o.fullName}}</el-link>
-            </h5>
-            <div>
-              <em><strong><i class="el-icon-present"></i> <%= __('Dob') %>:</strong></em>
-              <time class="time"> {{ o.dateBirth | getCreate(me.preferredLocale,'L') }}</time>
-              <el-tooltip content="<%= __('Start negotiations') %>" placement="bottom" effect="light">
-                <el-button type="text" @click="openDialogNegotiations(o.fullName)" class="button"
-                           icon="el-icon-right"></el-button>
-              </el-tooltip>
-            </div>
-            <div style="color:green; font-size: 2vh;">
-              <span v-if="o.currency === 'рубль'"> {{o.price}} &#8381; </span>
-              <span v-else> {{o.currency === 'euro' ? '€' : '$'}} {{o.price}} </span>
-            </div>
-          </div>
-          <el-divider><i class="el-icon-star-on"></i></el-divider>
-          <div class="px-5 py-4 text">{{o.saleDescription}}</div>
-        </el-card>
-      </div>
-    </section>
-  </el-dialog>
   <% /* Диалоговое окно Редактор собак. Список собак*/ %>
   <el-dialog title="<%= __('Dog editor') %>. <%= __('List') %>."
              custom-class="dialog-kennel-add"
@@ -292,7 +10,7 @@
     <template>
       <el-table
         ref="filterTable"
-        :data="dogs.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))"
+        :data="dogsEditList.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))"
         :default-sort="{prop: 'fullName', order: 'descending'}"
         max-height="650"
         style="width: 100%">
@@ -1264,7 +982,7 @@
         <div class="my-3 pt-4 text-center hidden-xs-only">
           <el-form-item>
 
-            <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+            <el-button v-if="!buttonUpdate" @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
             <el-button @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
             <el-button v-if="!buttonUpdate" type="primary"
                        @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
@@ -1274,7 +992,7 @@
         </div>
         <div class="text-center hidden-sm-and-up">
           <el-button-group>
-            <el-button @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
+            <el-button v-if="!buttonUpdate" @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
             <el-button @click="buttonUpdate = false; centerDialogAdded = false" icon="el-icon-close"></el-button>
             <el-button v-if="!buttonUpdate" type="primary"
                        @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
@@ -1285,6 +1003,293 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
   </span>
+  </el-dialog>
+
+  <% /* Диалоговое окно. Редактор картинок. */ %>
+  <el-dialog
+    :title="`${i19p.photoEditor} ${photos.fullName}`"
+    :visible.sync="centerDialogVisiblePhotos"
+    width="100vw"
+    custom-class="dialog-images-editor"
+    center>
+    <el-dialog
+      width="80vw"
+      title="<%= __('Photo Description') %>"
+      :visible.sync="photoDesc.innerVisiblePhotoDescription"
+      append-to-body>
+      <el-form ref="photoDesc" :model="photoDesc" label-width="120px">
+        <el-form-item label="<%= __('Decription') %>">
+          <el-input type="textarea" v-model="photoDesc.description"></el-input>
+        </el-form-item>
+
+        <el-form-item v-if="!photoDescUpdate" label="<%= __('Date taken') %>" prop="dateTaken">
+          <el-row :gutter="2">
+            <el-col :span="11">
+              <el-date-picker
+                v-model="photoDesc.dateTaken"
+                type="datetime"
+                placeholder="<%= __('Select date and time') %>"
+                default-time="12:00:00">
+              </el-date-picker>
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
+
+      <el-form-item v-if="photoDescUpdate" label="<%= __('Date taken') %>" prop="dateTakenUpdate">
+        <el-row :gutter="2">
+          <el-col :span="11">
+            <el-date-picker
+              v-model="dateTakenUpdate"
+              type="datetime"
+              placeholder="<%= __('Select date and time') %>"
+              default-time="12:00:00">
+            </el-date-picker>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="photoDesc.innerVisiblePhotoDescription = false">Cancel</el-button>
+    <el-button type="primary" @click="updateDescriptionPhoto">Save</el-button>
+  </span>
+    </el-dialog>
+    <div class="container">
+      <div class="menu-between">
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
+          <%= __('Select all') %></el-checkbox>
+        <span>
+          <span class="mx-3">  <%= __('All files') %>:  {{_.isArray(photos.images)? photos.images.length : 0}}</span>
+         <span class="mx-3"> <%= __('Marked') %>:  {{checkedPhoto.length}}</span>
+        <el-link v-if="checkedPhoto.length > 0" type="danger" class="mx-3" :underline="false"
+                 @click="removePhotos"
+                 class="mx-3"
+                 title="<%= __('Remove') %>"
+                 icon="el-icon-delete"></el-link>
+          <!--<el-link v-else disabled :underline="false" class="mx-3" title="<%= __('Remove') %>"
+                 icon="el-icon-delete"></el-link>-->
+          </span>
+      </div>
+
+      <el-checkbox-group v-model="checkedPhoto" @change="handleCheckedPhotosChange">
+        <div class="photo-editor">
+
+          <el-card shadow="hover" :body-style="{ padding: '0px'}"
+                   v-for="(img, index, key) in photos.images"
+                   :key="index + '-photo'">
+
+            <template v-if="me.isSuperAdmin || isOwner">
+              <div class="ell-relation" v-if="photos.cover === index">
+                <el-button type="warning" size="mini" title="<%= __("Album's cover") %>"
+                           class="ell-position-button check" icon="el-icon-star-off"
+                           circle></el-button>
+              </div>
+              <div class="ell-relation" v-else>
+                <el-button size="mini" title="<%= __('Make an album cover') %>"
+                           class="ell-position-button" @click="coverPhoto(photos.id,index)"
+                           icon="el-icon-document" circle></el-button>
+              </div>
+            </template>
+
+            <img :src="img.imageSrc" class="image">
+
+
+            <div style="padding: 14px;">
+              <el-row :gutter="2">
+                <el-col :span="11">
+                  <el-link
+                    @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description;  photoDesc.innerVisiblePhotoDescription=true"
+                    :underline="false"
+                    type="primary"><%= __('Date taken') %>:
+                  </el-link>
+                </el-col>
+                <el-col :span="13">
+                  <el-link :underline="false" type="danger"> {{img.dateTaken | getCreate(me.preferredLocale, 'lll')}}</el-link>
+                </el-col>
+              </el-row>
+              <el-row :gutter="2">
+                <el-col :span="16">
+                  <el-link :underline="false" type="primary"><%= __('File') %>:</el-link>
+                </el-col>
+                <el-col :span="8">
+                  <el-link :title="img.name" :underline="false" type="primary"> {{_.trunc(img.name,10)}}</el-link>
+                </el-col>
+              </el-row>
+              <el-row :gutter="2">
+                <el-col :span="16">
+                  <el-link :underline="false" type="primary"><%= __('Type') %>:</el-link>
+                </el-col>
+                <el-col :span="8">
+                  <el-link :underline="false" type="primary"> {{img.type}}</el-link>
+                </el-col>
+              </el-row>
+              <el-row :gutter="2">
+                <el-col :span="16">
+                  <el-link :underline="false" type="primary"><%= __('Size') %>:</el-link>
+                </el-col>
+                <el-col :span="8">
+                  <el-link :underline="false" type="danger"> {{_.ceil(img.size/1024,2)}} Kb</el-link>
+                </el-col>
+              </el-row>
+
+
+              <el-row :gutter="2">
+                <el-col :span="16">
+                  <el-link
+                    @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description; photoDesc.innerVisiblePhotoDescription=true"
+                    :underline="false"
+                    type="primary"><%= __('Description') %>:
+                  </el-link>
+                </el-col>
+                <el-col :span="8">
+                  <el-link :underline="false" type="danger"> {{_.trunc(img.description, 10)}}</el-link>
+                </el-col>
+              </el-row>
+
+
+              <div class="bottom clearfix ">
+                <div class="menu-center-2">
+                  <el-checkbox :label="img.id" :key="img.id"></el-checkbox>
+                  <el-link :href="img.detail" title="<%= __('More') %>" type="success" :underline="false"><i
+                      class="el-icon-right"></i></el-link>
+                </div>
+              </div>
+            </div>
+          </el-card>
+        </div>
+      </el-checkbox-group>
+    </div>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisiblePhotos = false">Cancel</el-button>
+  </span>
+  </el-dialog>
+
+  <% /* Диалоговое окно. ВЛАДЕЛЕЦ */ %>
+  <el-dialog
+    width="30%"
+    top="3vh"
+    title="<%= __('Who can be a owner') %>"
+    :visible.sync="innerVisibleCo"
+    append-to-body>
+    <div class="justify-content-center">
+      <%= __('You can add a owner of the kennel, if one exists.') %>
+      <br> <%= __('Owner may be registered user with a valid email. Start typing username and select the person you want from the list provided.') %>
+      <br><%= __('If the owner has not been selected, the owner of the dog automatically becomes the current user who added the dog to the database.') %>
+      <br> <%= __('The case of letters does not matter.') %>
+    </div>
+  </el-dialog>
+
+  <% /* Диалоговое окно. Feedback about this page?. */ %>
+  <modal v-if="dialogFormVisible" v-cloak key="delete"
+         @close="closeDeleteThingModal()">
+    <ajax-form action="deliverContactFormMessage" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingDeleteThingForm"
+               @submitted="submittedDeleteThingForm()">
+      <div class="modal-body">
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" @click="dialogFormVisible=false"><%= __('Cancel') %></button>
+        <button type="submit" class="btn btn-danger ml-1"><%= __('Send feedback') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+  <% /* Выезжающая вкладка чата с покупателем*/ %>
+  <el-drawer
+    title="<%= __('Chat') %>"
+    :visible.sync="drawer"
+    :direction="direction"
+    :before-close="handleClose2">
+    <el-row type="flex" class="row-bg" justify="space-around">
+      <el-col :span="1">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+      <el-col :span="18">
+        <div class="grid-content bg-purple-light">
+          <h4><%= __('Welcome') %>, {{me.fullName}}!</h4>
+          <p>{{i19p.startOfNegotiations}} {{this.fullNameDogNegotiations}}.</p>
+          <p>{{i19p.startOfNegotiations2}}</p>
+        </div>
+      </el-col>
+      <el-col :span="1">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+    </el-row>
+    <el-row type="flex" class="row-bg" justify="space-around">
+      <el-col :span="1">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+      <el-col :span="18">
+        <div class="mt-4">
+          <% /* Поле ввода комментария */ %>
+          <el-form @submit.native.prevent>
+            <el-form-item>
+              <el-input @keyup.enter.native="addComment('negotiation')"
+                        class="lb mt-2"
+                        maxLength="1000"
+                        clearable
+                        placeholder="<%= __('Write a message') %>"
+                        v-model="comment">
+                <i slot="prefix" class="el-input__icon el-icon-chat-line-round"></i>
+                <template slot="prepend">
+                  <el-avatar :size="35" :src="me[me.defaultIcon]"></el-avatar>
+                </template>
+              </el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-col>
+      <el-col :span="1">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+    </el-row>
+  </el-drawer>
+  <% /* Диалоговое окно "В ПРОДАЖЕ" (SALE)*/ %>
+  <el-dialog
+    title="<%= __('Buy puppy chinese crested') %>"
+    :visible.sync="dialogPedigreeVisible"
+    :fullscreen="true"
+    top="1vh"
+    center
+    custom-class="sale-dogs"
+    :before-close="handlerCloseDialogSlider"
+    v-if="virtualPageSlug==='sale'"
+  >
+
+    <section>
+      <div class="showcase">
+        <el-card shadow="hover" v-for="(o, index) in dogs" :key="o.id" class="my-2 "
+                 v-if="!_.isEmpty(o.images)  && o.price > 0 && o.sale && !_.isEmpty(o.currency)"
+                 :body-style="{ padding: '0px' }">
+          <el-image
+            :src="o.images[o.cover].imageSrc"
+            :key="o.id"
+            :fit="'cover'"
+            lazy
+            :preview-src-list="o.imagesArrUrl">
+          </el-image>
+          <div class="text-center">
+            <div><%= __('Litter') %> {{o.letter}} / {{o.dateBirth.split('-')[0]}}</div>
+            <h5>
+              <el-link @click="goTo2(o.detail)" type="primary">{{o.fullName}}</el-link>
+            </h5>
+            <div>
+              <em><strong><i class="el-icon-present"></i> <%= __('Dob') %>:</strong></em>
+              <time class="time"> {{ o.dateBirth | getCreate(me.preferredLocale,'L') }}</time>
+              <el-tooltip content="<%= __('Start negotiations') %>" placement="bottom" effect="light">
+                <el-button type="text" @click="openDialogNegotiations(o.fullName)" class="button"
+                           icon="el-icon-right"></el-button>
+              </el-tooltip>
+            </div>
+            <div style="color:green; font-size: 2vh;">
+              <span v-if="o.currency === 'рубль'"> {{o.price}} &#8381; </span>
+              <span v-else> {{o.currency === 'euro' ? '€' : '$'}} {{o.price}} </span>
+            </div>
+          </div>
+          <el-divider><i class="el-icon-star-on"></i></el-divider>
+          <div class="px-5 py-4 text">{{o.saleDescription}}</div>
+        </el-card>
+      </div>
+    </section>
   </el-dialog>
 
 
@@ -1556,8 +1561,7 @@
       <% /* ФОТО СОБАК */ %>
       <div class="scrollbar" id="style-1">
         <el-row :gutter="2" class="flex-container wrap">
-          <el-col v-if="dog.images[dog.cover] && dog.see" class="flex-item"
-                  v-for="(dog, index) in objFilter()" :key="dog.id"
+          <el-col  class="flex-item"  v-for="(dog, index) in objFilter()" :key="dog.id"
                   :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
 
             <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
