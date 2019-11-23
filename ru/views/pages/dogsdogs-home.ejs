@@ -1576,8 +1576,7 @@
 
                         <div :class="{deathColor:dog.dateDeath}"> {{dog.fullName}}</div>
 
-                        <div class="date" :class="{deathColor:dog.dateDeath}">{{dog.dateBirth | getAge(me.preferredLocale,
-                          dog.dateDeath)}}
+                        <div class="date" :class="{deathColor:dog.dateDeath}">{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}
                         </div>
                       </el-link>
                       <el-row class="mt-2">
