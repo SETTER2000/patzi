@@ -222,9 +222,6 @@ module.exports = {
     // Если пароль не указан генерируем пароль самостоятельно
     let password = _.isEmpty(inputs.password) || _.isEmpty(inputs.checkPass) ? await sails.helpers.strings.random('alphanumeric', 8) : inputs.password;
 
-    console.log('inputs.emailAddress::: ', inputs.emailAddress);
-    console.log('emailAddress::: ', emailAddress);
-    console.log('fullName::: ', fullName);
     let data = {
       fullName: fullName,
       fullNameEn: await sails.helpers.translitWord.with({str: fullName}),
@@ -252,7 +249,6 @@ module.exports = {
     //   emailStatus: 'unconfirmed'
     // } : {});
 
-    console.log('DATA created: ', data);
     // Создаём пользователя
     let newUser = await User.create(data)
       .intercept('E_UNIQUE', conflictingEmail)
@@ -277,14 +273,11 @@ module.exports = {
       sails.log.info('Skipping new account email verification... (since `verifyEmailAddresses` is disabled)');
     }
 
-    console.log('inputs.groups::: ', inputs.groups);
     // Добавить нового пользователя alexFox.id в группу 'admin'
     !_.isEmpty(inputs.groups) > 0 ? await User.addToCollection(newUser.id, 'groups', inputs.groups) : '';
 
-
     // Устанавливаем ссылку на аватар
     images.length > 0 ? await User.updateOne(newUser).set({avatar: url.resolve(sails.config.custom.baseUrl, `/api/v1/account/${newUser.id}`)}) : '';
-
 
     /**
      * Для собаки с id 23 добавить родителя с  id 12
@@ -302,7 +295,6 @@ module.exports = {
        parents = _.pluck(parentFind, 'id');
        parents.length > 0 ? await User.addToCollection(newUser.id, 'parents').members(parents) : '';
    */
-    // console.log('DATA USER::: ', data);
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
     await sails.sockets.broadcast('user', 'list-user');

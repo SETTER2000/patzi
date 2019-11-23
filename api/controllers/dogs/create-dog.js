@@ -351,7 +351,6 @@ console.log('conflictingDog:::: ' , conflictingDog);
 
     let owner = inputs.owner ? inputs.owner : this.req.me.id;
 
-    console.log('Пользователь::: ' , inputs.owner);
     /**
      * Добавить питомца в коллекцию пользователя: "User.dogs",
      * где у пользователя есть идентификатор 10 и питомец имеет идентификатор 300.

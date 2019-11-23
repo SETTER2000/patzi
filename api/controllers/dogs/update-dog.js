@@ -245,11 +245,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    // Бибилиотека Node.js
     const req = this.req;
-    // const moment = require('moment');
-    // const tz = require('moment-timezone');
-    // moment.locale('en');
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
@@ -257,62 +253,20 @@ module.exports = {
     let dog = await Dog.findOne(inputs.id);
     let images = inputs.images ? inputs.images : dog.images;
     let imagesNew = [];
-    // Have the socket which made the request join the "kennel" room.
+
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
-
-    // console.log('sale;;;', inputs.sale);
-    console.log('images;;;', images);
-    // console.log('imagesArrUrl;;;', inputs.imagesArrUrl);
-
-    // Удаляем название питомника из имени собаки
-    // let kennel = await Kennel.find({id: inputs.kennel}).limit(1);
-    // inputs.label = inputs.label.replace(kennel.label, '');
-
-
-    /*// Проверка существования такой же собаки.
-    let conflictingDog = await Dog.findOne({
-      kennel: inputs.kennel,
-      label: inputs.label
-    });
-
-    if (conflictingDog) {
-      throw (req.me.preferredLocale === 'ru') ? 'dogAlreadyInUseRU' : 'dogAlreadyInUse';
-    }*/
-
-
     let label = _.startCase(inputs.label.toString().toLowerCase());
-    // let rightFullName = _.startCase(label + ' ' + kennel.label);
-    // let leftFullName = _.startCase(kennel.label + ' ' + label);
-    // let dateBirth = inputs.dateBirth.replace(/"([^"]+(?="))"/g, '$1');
-    // let dateDeath = inputs.dateDeath.replace(/"([^"]+(?="))"/g, '$1');
-
-    //
-    // console.log('inputs.dateDeath}: ${_.isEmpty(inputs.dateDeath)}::: ',
-    //   `${inputs.dateDeath}: ${_.isEmpty(inputs.dateDeath)}`);
-    //
-    // dateDeath = !_.isEmpty(dateDeath) ? moment.tz(dateDeath, 'Europe/Moscow').format() : '';
-
-    console.log('inputs.letter::: ', inputs.letter);
-    console.log('inputs.bite::: ', inputs.bite);
-    console.log('inputs.teethCountBottom::: ', inputs.teethCountBottom);
-    console.log('inputs.teethCountTop::: ', inputs.teethCountTop);
-    console.log('inputs.canine::: ', inputs.canine);
     let letter = inputs.letter ? inputs.letter : label[0];
     let updateObj = {
       label: label,
-      // kennel: inputs.kennel,
       gender: inputs.gender,
       see: inputs.see,
       currency: inputs.currency,
       price: inputs.price,
       saleDescription: inputs.saleDescription,
-      // dateBirth: inputs.dateBirth,
-      // dateDeath: inputs.dateDeath,
-      // born: moment.tz(dateBirth, 'Europe/Moscow').format(),
       dateBirth: await sails.helpers.dateFix(inputs.dateBirth),
       dateDeath: await sails.helpers.dateFix(inputs.dateDeath),
-      // dateBirth: moment.tz(dateBirth, 'Europe/Moscow').format(),
       nickname: inputs.nickname,
       subtitle: inputs.subtitle,
       weight: inputs.weight,
@@ -332,7 +286,6 @@ module.exports = {
     };
 
 
-    // console.log('inputs.fileList DOG-update: ', inputs.fileList);
     if (inputs.fileList) {
       imagesNew = inputs.fileList.filter(o => !_.isNull(o));
       _.each(imagesNew, img => {
@@ -344,11 +297,9 @@ module.exports = {
         delete img.field;
       });
     }
-    console.log('ListPhoto imagesNew: ', imagesNew);
-    // console.log('ListPhoto fileList isEmpty?: ', _.isEmpty(fileList));
 
     !_.isEmpty(images) || !_.isEmpty(imagesNew) ? updateObj.images = [...images, ...imagesNew] : '';
-    // console.log('После обработки List photo:: ' ,   updateObj.images);
+
     // Создаём собаку
     let updateDog = await Dog.updateOne({id: inputs.id})
       .set(updateObj);
@@ -378,7 +329,6 @@ module.exports = {
 
     let owner = inputs.owner ? inputs.owner : this.req.me.id;
 
-    console.log('Пользователь::: ' , inputs.owner);
     /**
      * Добавить питомца в коллекцию пользователя: "User.dogs",
      * где у пользователя есть идентификатор 10 и питомец имеет идентификатор 300.
@@ -387,15 +337,9 @@ module.exports = {
      */
     // await User.addToCollection(owner, 'dogs', newDog.id);
     await Dog.replaceCollection(updateDog.id, 'owners').members(owner);
-
-    console.log('UPDATE DOGGG::: ', updateDog);
     let year = _.trim(inputs.dateBirth.split('-')[0], '"');
-    console.log('year:::::' , year);
     // Рассылаем данные всем подписанным на событие forSale-dog данной комнаты.
     await sails.sockets.broadcast('dog', 'forSale-dog', await sails.helpers.forSaleDog.with({letter:inputs.letter, year:year}));
-
     return exits.success();
   }
-
-
 };

@@ -56,8 +56,6 @@ module.exports = {
     };
 
 
-console.log('DDD::: ' , dog.owners);
-
     let litter = await sails.helpers.srcImagePreparation.with(
       {
         letter: dog.letter,
@@ -65,10 +63,9 @@ console.log('DDD::: ' , dog.owners);
         preferredLocale: this.req.me.preferredLocale
       });
 
-    console.log('HOOOOO:::', litter);
+
     // Проверяем наличие помёта
     dog.isPedigree = litter.letter;
-
     dog.parents = await sails.helpers.cloudFrontUrl.with({
       collection: dog.parents,
       collectionName: 'dog',

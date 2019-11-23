@@ -59,6 +59,10 @@ module.exports.bootstrap = async function () {
   for (let identity in sails.models) {
     await sails.models[identity].destroy({});
   }//∞
+
+
+
+
   // By convention, this is a good place to set up fake data during development.
   // По общему мнению, это хорошее место для настройки поддельных данных во время разработки.
   let ryanDahl = await User.create(
