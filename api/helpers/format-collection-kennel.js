@@ -36,7 +36,6 @@ module.exports = {
     let format = 'LL HH:mm';
 
 
-
     // Выбираем весь список объектов данной коллекции.
     let kennels = await Kennel.find()
       .populate('dogs')
@@ -56,7 +55,7 @@ module.exports = {
       kennel.yourKennel = kennel.breeder ? (kennel.breeder.id === inputs.req.me.id) : false;
       // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
       kennel.createdAtFormat = moment(kennel.createdAt).format(format);
-
+      // kennel.breeder = kennel.breeder ? kennel.breeder : {fullName:''};
       // Столбец: Дата регистрации. Формат фильтра.
       kennel.createdAtFormatFilter = moment(kennel.createdAt).format(format);
       // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве

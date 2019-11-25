@@ -7,7 +7,7 @@ parasails.registerPage('kennels-home', {
     test: '',
     kennelsEditList: [],
     citys: [],
-    kennelId:'',
+    kennelId: '',
     row: {},
     coownerId: '',
     city: '',
@@ -65,7 +65,7 @@ parasails.registerPage('kennels-home', {
       country: {label: '', id: null},
       region: {label: '', id: null},
       city: {},
-      breeder: {},
+      breeder: {fullName: '', id: null},
       phones: [{
         key: 1,
         value: '',
@@ -325,7 +325,7 @@ parasails.registerPage('kennels-home', {
       });
 
       await io.socket.get(`/api/v1/kennels/list`, function gotResponse(body, response) {
-        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+        console.log('Сервер 1 ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
 
       // Принимаем данные по событию list-*
@@ -333,6 +333,7 @@ parasails.registerPage('kennels-home', {
         console.log('DATA обновлённые данные: ', data);
         this.kennels = this.kennelsEditList = this.filterObjects = _.isNull(data.kennels) ? [] : data;
         // Ограничевает видимость только собственным питомником владельца
+        this.$forceUpdate();
         this.dialogEditors();
       });
 
@@ -384,7 +385,6 @@ parasails.registerPage('kennels-home', {
 
 
     async submitForm(formName) {
-      console.log(formName);
       this.$refs[formName].validate((valid) => {
         if (valid && !this.buttonUpdate) {
           this.addKennel();
@@ -465,10 +465,12 @@ parasails.registerPage('kennels-home', {
 
 
     async updateKennel() {
-      console.log('this.breederId::: ',this.breederId);
-      console.log('updateForm.breeder::: ' , this.updateForm.breeder);
+      console.log('this.breederId::: ', this.breederId);
+      console.log('updateForm.breeder::: ', this.updateForm.breeder);
       this.openFullScreen();
       let data = this.updateForm;
+      data.breeder = this.breederId ? this.breederId : this.updateForm.breeder ? this.updateForm.breeder.id : {};
+
       data.phones = _.isNull(data.phones) ? [{
         key: 1,
         value: '',
@@ -478,8 +480,7 @@ parasails.registerPage('kennels-home', {
       data.country = this.updateForm.country.id;
       data.region = this.updateForm.region.id;
       data.coOwner = this.coOwnerId;
-      data.breeder = this.breederId ? this.breederId :
-        this.updateForm.breeder ? this.updateForm.breeder.id : null;
+
       data.cityId = this.cityId ? this.cityId :
         this.updateForm.city ? this.updateForm.city.id : null;
       data.dateCreate = JSON.stringify(this.updateForm.dateCreate);
@@ -613,13 +614,13 @@ parasails.registerPage('kennels-home', {
 
 
     querySearchFoo(queryString, cb) {
-      if (_.isUndefined(this.users)) return;
+      if (_.isUndefined(this.users) || _.isUndefined(queryString)) return;
       // let users = this.users;
       let results = queryString ? this.users.filter(this.createFilterOwner(queryString)) : this.users;
 
       /* clearTimeout(this.timeout);
        this.timeout = setTimeout(() => {*/
-      console.log('results:: ' , results);
+      console.log('results:: ', results);
       cb(results);
       /*      }, 3000 * Math.random());*/
     },
@@ -640,13 +641,10 @@ parasails.registerPage('kennels-home', {
       this.breederId = e.id ? e.id : undefined;
     },
 
-
-    async handleSelect(e) {
-      console.log('handleSelect::: ', e);
-      this.cityId = _.isNumber(e.id) ? e.id : undefined;
-      this.city = _.isString(e.value) ? e.value : '';
+    async clearInputBreeder() {
+      this.updateForm.breeder = {fullName: '', id: ''};
+      console.log('clearInputBreeder::: ', this.updateForm.breeder);
     },
-
 
     mesSuccess(text = '') {
       this.$notify({
@@ -704,7 +702,7 @@ parasails.registerPage('kennels-home', {
 
     handleAvatarSuccess(res, file) {
       this.files.push(file.response);
-      console.log('file.response::: ' , file.response);
+      console.log('file.response::: ', file.response);
       this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
       this.updateForm.imageUrl = URL.createObjectURL(file.raw);
       this.ruleForm.file = file.response;
@@ -812,6 +810,13 @@ parasails.registerPage('kennels-home', {
     },
 
 
+    async handleSelect(e) {
+      console.log('handleSelect::: ', e);
+      this.cityId = _.isNumber(e.id) ? e.id : undefined;
+      this.city = _.isString(e.value) ? e.value : '';
+    },
+
+
     goBack() {
       console.log('go back');
     },
@@ -904,22 +909,19 @@ parasails.registerPage('kennels-home', {
 
     handleEdit(index, row) {
       console.log('ROW input ::: ', row);
-      row.breeder =  row.breeder ? row.breeder : {};
-      row.city =  row.city ? row.city : {};
+      row.breeder = row.breeder ? row.breeder : {};
+      row.city = row.city ? row.city : {};
       row.coOwner = '';
       this.updateForm = row;
-      // this.updateForm = Object.assign({}, this.updateForm, row);
       this.updateForm.dateCreate = moment(row.dateCreate);
 
-      // console.log('this.test.getTime ::: ', this.test.getTime());
-      // this.updateForm.city = row.city ? row.city.value : null;
-      // this.updateForm.breeder = row.breeder ? row.breeder : {};
-      // this.updateForm.yourKennel = (row.yourKennel && row.yourKennel.id) ? (this.me.id === row.yourKennel.id) : false;
       console.log('ROW this.updateForm ::: ', this.updateForm);
       this.centerDialogAdded = false;
       this.centerDialogUpdate = true;
       this.buttonUpdate = true;
     },
+
+
     errorHandler(e) {
       return true;
     },

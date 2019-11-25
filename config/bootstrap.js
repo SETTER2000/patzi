@@ -69,6 +69,7 @@ module.exports.bootstrap = async function () {
     {
       emailAddress: sails.config.custom.friendEmailAddress,
       fullName: 'Ryan Dahl',
+      fullNameEn: 'Ryan Dahl',
       isAdmin: false,
       avatar:sails.config.custom.avatar,
       password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
@@ -78,6 +79,7 @@ module.exports.bootstrap = async function () {
   let alexFox = await User.create({
     emailAddress: sails.config.custom.internalEmailAddress,
     fullName: 'Alex Fox',
+    fullNameEn: 'Alex Fox',
     isAdmin: false,
     defaultIcon:'gravatar',
     // getFullName: function(){return  `${this.fullName} ${this.emailAddress}`;},
@@ -90,6 +92,7 @@ module.exports.bootstrap = async function () {
   let star = await User.create({
     emailAddress: 'vasef@mail.ru',
     fullName: 'Ольга Петрова',
+    fullNameEn:await sails.helpers.translitWord.with({str: 'Ольга Петрова'}) ,
     isAdmin: false,
     // getFullName: function(){return  `${this.fullName} ${this.emailAddress}`;},
     isSuperAdmin: false,
@@ -100,7 +103,8 @@ module.exports.bootstrap = async function () {
   // console.log('alexFox::: ID' , alexFox);
   let adam = await User.create({
     emailAddress: 'administrator.f@mail.ru',
-    fullName: 'SETTER Петров',
+    fullName: 'Александр Петров',
+    fullNameEn:await sails.helpers.translitWord.with({str: 'Александр Петров'}) ,
     isAdmin: false,
     preferredLocale: 'en',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
@@ -110,6 +114,7 @@ module.exports.bootstrap = async function () {
   let elena_sova = await User.create({
     emailAddress: 'elena_sova@poaleell.com',
     fullName: 'Елена Сова',
+    fullNameEn:await sails.helpers.translitWord.with({str: 'Елена Сова'}) ,
     isAdmin: false,
     preferredLocale: 'ru',
     avatar:'https://d3a1wbnh2r1l7y.cloudfront.net/sova.jpg',
@@ -119,6 +124,7 @@ module.exports.bootstrap = async function () {
   let bob = await User.create({
     emailAddress: 'kremotory@mail.ru',
     fullName: 'Bob Scott',
+    fullNameEn: 'Bob Scott',
     isAdmin: false,
     isSuperAdmin: true,
     preferredLocale: 'en',

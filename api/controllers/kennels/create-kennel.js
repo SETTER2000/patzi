@@ -18,7 +18,8 @@ module.exports = {
 
     breeder: {
       type: 'string',
-      description: 'Идентификатор хозяина питомника.'
+      description: 'Идентификатор хозяина питомника.',
+      defaultsTo:''
     },
 
     file: {

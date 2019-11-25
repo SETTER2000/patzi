@@ -143,6 +143,12 @@ module.exports = {
         imageSrc: 'string'
       },
     },
+    notFound: {
+      responseType: 'notFound'
+    },
+    forbidden: {
+      responseType: 'forbidden'
+    },
     badRequest: {
       description: 'No image upload was provided.',
       responseType: 'badRequest'
@@ -197,6 +203,8 @@ module.exports = {
       phones: inputs.phones
     };
 
+    console.log('Перед обновлением объект:::: ', obj);
+
     let update = await Kennel.updateOne({id: inputs.id}).set(obj);
 
     /**
@@ -218,6 +226,9 @@ module.exports = {
      */
 
     let kennel = await Kennel.find({id: inputs.id}).populate('owners');
+    if(!kennel){
+      throw 'notFound';
+    }
     let ownersId = _.pluck(kennel.owners, 'id');
     inputs.coOwner ? ownersId.push(inputs.coOwner) : '';
 
@@ -276,9 +287,9 @@ module.exports = {
 
 
     // Если не создан возвращаем ошибку.
-    // if (!update) {
-    //   throw 'badRequest';
-    // }
+    if (!update) {
+      throw 'forbidden';
+    }
 
     return exits.success();
 
