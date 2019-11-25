@@ -3,9 +3,9 @@ module.exports = async function (req, res, proceed) {
   let isUser = false;
   if (!req.me) {
     if (req.wantsJSON) {
-      return res.forbidden('isUser: Вам не разрешено выполнять это действие.');
+      return res.forbidden('isUser: Вам не разрешено выполнять это действие #1.');
     }
-    sails.log('isUser: Вам не разрешено выполнять это действие.');
+    sails.log('isUser: Вам не разрешено выполнять это действие #2.');
     return res.redirect('/');
   }
 
@@ -13,7 +13,7 @@ module.exports = async function (req, res, proceed) {
 
   if (!foundUser) {
     if (req.wantsJSON) {
-      return res.forbidden('isUser: Вам не разрешено выполнять это действие.');
+      return res.forbidden('isUser: Вам не разрешено выполнять это действие #3.');
     }
     return res.redirect('/');
   }
