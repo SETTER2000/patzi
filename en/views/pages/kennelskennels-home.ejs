@@ -433,6 +433,7 @@
                 @select="handleBreederSelected"
                 style="width: 58%;"
                 clearable
+                @clear="clearInputBreeder"
               >
                 <template slot-scope="{ item }">
                   <span class="value">{{ item.fullName }}</span>
@@ -945,8 +946,6 @@
   </span>
   </el-dialog>
 
-
-
   <% /* Диалоговое окно. Логотип питомника. */ %>
   <el-dialog
     :title="objOne.label"
@@ -1160,11 +1159,13 @@
             <div @mouseenter="showMenu(kennel.id)" @mouseleave="showOut()"
                  style="position: relative;" class="ell-image-flex">
               <transition-group appear name="el-fade-in">
-                <div v-show="show && (showObject === kennel.id)" class="transition-box blue-dark" :class="{death:kennel.dateDeath}" :key="kennel.id">
+                <div v-show="show && (showObject === kennel.id)" class="transition-box blue-dark" :class="{death:kennel.dateDeath}"
+                     :key="kennel.id">
                   <% /* Кнопки управления собакой */ %>
                   <div class="menu-center-v">
                     <div class="py-3">
-                      <el-link type="info" :underline="false">{{kennel.country.label}}</el-link><br>
+                      <el-link type="info" :underline="false">{{kennel.country.label}}</el-link>
+                      <br>
 
                       <el-link class="link" @click="goTo2(kennel.detail)" :underline="false">
 
@@ -1177,8 +1178,9 @@
                       <el-row class="mt-2">
                         <!--<el-button icon="el-icon-search" circle></el-button>-->
                         <!--<el-button type="primary" icon="el-icon-picture" circle></el-button>-->
-                        <el-button v-if="_.isObject(kennel.breeder)" @click="goTo2(kennel.detail)"  size="mini" type="success" round>
-                         {{kennel.breeder.fullName}}</el-button>
+                        <el-button v-if="_.isObject(kennel.breeder)" @click="goTo2(kennel.detail)" size="mini" type="success" round>
+                          {{kennel.breeder.fullName}}
+                        </el-button>
                         <!--<el-button type="info" icon="el-icon-message" circle></el-button>-->
                         <!--<el-button type="warning" icon="el-icon-star-off" circle></el-button>-->
                         <!--<el-button type="danger" icon="el-icon-delete" circle></el-button>-->
@@ -1194,20 +1196,20 @@
                 :fit="'cover'"
                 :scroll-container="'#style-1'"
                 lazy
-               >
-              </el-image>
-            </div>
-          <!--  <el-link type="danger" class="px-2" @click="goTo2(kennel.detail)" :underline="false"
-                     :title="kennel.label">
-              <el-image
-                :src="kennel.imageSrc"
-                :key="kennel.id"
-                :fit="'cover'"
-                :scroll-container="'#style-1'"
-                lazy
               >
               </el-image>
-            </el-link>-->
+            </div>
+            <!--  <el-link type="danger" class="px-2" @click="goTo2(kennel.detail)" :underline="false"
+                       :title="kennel.label">
+                <el-image
+                  :src="kennel.imageSrc"
+                  :key="kennel.id"
+                  :fit="'cover'"
+                  :scroll-container="'#style-1'"
+                  lazy
+                >
+                </el-image>
+              </el-link>-->
           </el-col>
         </el-row>
       </div>
