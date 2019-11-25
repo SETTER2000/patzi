@@ -276,9 +276,9 @@ module.exports = {
 
 
     // Если не создан возвращаем ошибку.
-    if (!update) {
-      throw 'badRequest';
-    }
+    // if (!update) {
+    //   throw 'badRequest';
+    // }
 
     return exits.success();
 
