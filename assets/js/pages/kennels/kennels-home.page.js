@@ -62,10 +62,10 @@ parasails.registerPage('kennels-home', {
     uploadModalOpen: false,
     updateForm: {
       continent: {label: '', id: null},
-      country: {label: '', id: null},
+      country: {},
       region: {label: '', id: null},
       city: {},
-      breeder: {fullName: '', id: null},
+      breeder: {},
       phones: [{
         key: 1,
         value: '',
@@ -466,23 +466,26 @@ parasails.registerPage('kennels-home', {
 
     async updateKennel() {
       console.log('this.breederId::: ', this.breederId);
+      console.log('this.regionId::: ', this.regionId);
       console.log('updateForm.breeder::: ', this.updateForm.breeder);
+      console.log('this.updateForm::: ', this.updateForm);
       this.openFullScreen();
       let data = this.updateForm;
-      data.breeder = this.breederId ? this.breederId : this.updateForm.breeder ? this.updateForm.breeder.id : {};
-
+      if(this.breederId){
+        data.breeder = this.breederId;
+      }
+      // data.breeder = this.breederId ? this.breederId : _.isNull(this.updateForm.breeder)  ? '' : this.updateForm.breeder;
+      data.cityId = this.cityId ? this.cityId : _.isNull(this.updateForm.city) ? '' : this.updateForm.city;
+      data.region = this.regionId ? this.regionId : _.isNull(this.updateForm.region) ? '' : this.updateForm.region;
       data.phones = _.isNull(data.phones) ? [{
         key: 1,
         value: '',
         fullName: '',
       }] : data.phones;
       data.continent = this.updateForm.continent.id;
-      data.country = this.updateForm.country.id;
-      data.region = this.updateForm.region.id;
+      // data.country = this.updateForm.country.id;
+      // data.region = this.updateForm.region.id;
       data.coOwner = this.coOwnerId;
-
-      data.cityId = this.cityId ? this.cityId :
-        this.updateForm.city ? this.updateForm.city.id : null;
       data.dateCreate = JSON.stringify(this.updateForm.dateCreate);
 
       console.log('DATA перед отправкой::: ', data);
@@ -551,9 +554,9 @@ parasails.registerPage('kennels-home', {
 
 
     changeSelectContinent() {
-      this.updateForm.country.id = null;
-      this.updateForm.region.id = null;
-      this.updateForm.city = null;
+      this.updateForm.country = '';
+      this.updateForm.region = '';
+      this.updateForm.city = '';
       this.ruleForm.country = null;
       this.ruleForm.region = null;
       this.ruleForm.city = null;
@@ -561,15 +564,15 @@ parasails.registerPage('kennels-home', {
 
 
     changeSelectCountry() {
-      this.updateForm.region.id = null;
-      this.updateForm.city = null;
+      this.updateForm.region = '';
+      this.updateForm.city = '';
       this.ruleForm.region = null;
       this.ruleForm.city = null;
     },
 
 
     changeSelectRegion() {
-      this.updateForm.city = {};
+      this.updateForm.city = '';
       this.ruleForm.city = null;
     },
 
@@ -598,7 +601,7 @@ parasails.registerPage('kennels-home', {
 
     getPullRegion() {
       let t = this.countrys.filter(country => {
-        return country.id === this.ruleForm.country || country.id === this.updateForm.country.id;
+        return country.id === this.ruleForm.country || country.id === this.updateForm.country;
       });
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
       return !_.isEmpty(t) ? _.sortBy(t[0].regions, field) : '';
@@ -641,10 +644,61 @@ parasails.registerPage('kennels-home', {
       this.breederId = e.id ? e.id : undefined;
     },
 
+    /**
+     * Отвязать владельца от питомника
+     * @returns {Promise<void>}
+     */
     async clearInputBreeder() {
-      this.updateForm.breeder = {fullName: '', id: ''};
+      this.updateForm.breeder = '';
+      console.log('ПЕРЕДОК::: ' , this.updateForm.id);
       console.log('clearInputBreeder::: ', this.updateForm.breeder);
+      io.socket.post('/api/v1/kennels/destroy-one-breeder', {'id': this.updateForm.id}, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successDel)) :
+          (jwRes.statusCode === 400 && jwRes.headers['x-exit'] === 'badRequestDog') ? this.mesError(this.i19p.badRequestDog) :
+            (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrDel) :
+              (jwRes.statusCode === 403) ? this.mesError(this.i19p.text403ErrForbd) :
+                (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
+                  (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
+                    (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+        /*
+        * jwRes.headers:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}
+        * */
+
+        // console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+      });
     },
+    /**
+     * Отвязать город питомника
+     * @returns {Promise<void>}
+     */
+    async clearInputCity() {
+      this.updateForm.city = '';
+      console.log('ПЕРЕДОК city::: ' , this.updateForm.id);
+      console.log('clearInputBreeder city::: ', this.updateForm.breeder);
+      io.socket.post('/api/v1/kennels/destroy-one-city', {'id': this.updateForm.id}, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successDel)) :
+          (jwRes.statusCode === 400 && jwRes.headers['x-exit'] === 'badRequestDog') ? this.mesError(this.i19p.badRequestDog) :
+            (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrDel) :
+              (jwRes.statusCode === 403) ? this.mesError(this.i19p.text403ErrForbd) :
+                (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
+                  (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
+                    (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+        /*
+        * jwRes.headers:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}
+        * */
+
+        // console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+      });
+    },
+
+    async clearInputCountry() {
+      this.updateForm.country = '';
+    },
+
+
+
+
+
 
     mesSuccess(text = '') {
       this.$notify({
@@ -812,8 +866,15 @@ parasails.registerPage('kennels-home', {
 
     async handleSelect(e) {
       console.log('handleSelect::: ', e);
-      this.cityId = _.isNumber(e.id) ? e.id : undefined;
+      this.cityId = _.isNumber(e.id) ? e.id : null;
       this.city = _.isString(e.value) ? e.value : '';
+    },
+
+
+    async handleSelectRegion(e) {
+      console.log('handleSelectRegion::: ', e);
+      this.regionId = _.isNumber(e.id) ? e.id : null;
+      this.region = _.isString(e.value) ? e.value : '';
     },
 
 
@@ -909,8 +970,9 @@ parasails.registerPage('kennels-home', {
 
     handleEdit(index, row) {
       console.log('ROW input ::: ', row);
-      row.breeder = row.breeder ? row.breeder : {};
-      row.city = row.city ? row.city : {};
+      row.breeder = row.breeder ? row.breeder.fullName : null;
+      row.city = row.city ? row.city.id : '';
+      row.country = row.country ? row.country.id : '';
       row.coOwner = '';
       this.updateForm = row;
       this.updateForm.dateCreate = moment(row.dateCreate);

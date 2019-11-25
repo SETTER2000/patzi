@@ -73,7 +73,7 @@ module.exports = {
     });
 
 
-    console.log('DATA groups:::: ' , groups);
+    // console.log('DATA groups:::: ' , groups);
     await sails.sockets.broadcast('group', 'group-form', groups);
     // Respond with view.
     return exits.success();

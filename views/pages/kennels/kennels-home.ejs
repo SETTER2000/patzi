@@ -278,10 +278,12 @@
           <% /* СТРАНА */ %>
           <template v-if="updateForm.continent.id">
             <el-form-item label="<%= __('Country') %>" prop="country">
-              <el-select v-model="updateForm.country.id"
+              <el-select v-model="updateForm.country"
                          placeholder="<%= __('Where is the kennel registered?') %>"
                          style="width: 58%;"
                          @visible-change="changeSelectCountry"
+                         clearable
+                         @clear="clearInputCountry"
               >
                 <el-option v-for="item in getPullCountry()"
                            :key="item.id"
@@ -293,16 +295,17 @@
               </el-select>
             </el-form-item>
           </template>
-
+          updateForm.country::{{updateForm.country}}
           <% /* ОБЛАСТЬ, РЕГИОН */ %>
-          <template v-if="updateForm.country.id">
+          <template v-if="updateForm.country">
             <!--<template >-->
             <el-form-item label="<%= __('Region') %>" prop="region">
-              <el-select v-model="updateForm.region.id"
+              <el-select v-model="updateForm.region"
                          placeholder="<%= __('Where is the kennel registered?') %>"
                          style="width: 58%;"
                          :clearable="true"
                          @visible-change="changeSelectRegion"
+                         @select="handleSelectRegion"
                          @change="changeRegion">
                 <el-option v-for="item in getPullRegion()"
                            :key="item.id"
@@ -318,14 +321,15 @@
           <% /* ГОРОД */ %>
           <template v-if="updateForm.country">
             <el-form-item label="<%= __('City') %>" prop="city">
-              <el-autocomplete v-model="updateForm.city.value"
-                               clearable
+              <el-autocomplete v-model="updateForm.city"
                                popper-class="my-autocomplete"
                                :fetch-suggestions="querySearchUpdate"
                                placeholder="<%= __('Please Input City') %>"
                                :trigger-on-focus="false"
                                @select="handleSelect"
                                @visible-change="changeSelectCity"
+                               clearable
+                               @clear="clearInputCity"
                                style="width: 58%;">
                 <template slot-scope="{ item}">
                   <span class="value">{{ item.labelRu  }}</span>
@@ -426,7 +430,7 @@
             <el-form-item label="<%= __('Breeder') %>" prop="breeder">
               <el-autocomplete
                 class="inline-input"
-                v-model="updateForm.breeder.fullName"
+                v-model="updateForm.breeder"
                 :fetch-suggestions="querySearchFoo"
                 placeholder="<%= __('Please set the owner of the kennel') %>"
                 :trigger-on-focus="false"

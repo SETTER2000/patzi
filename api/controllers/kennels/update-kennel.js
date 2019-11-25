@@ -272,7 +272,7 @@ module.exports = {
         ids.push(_.pluck(otk.owners, 'id'));
       });
 
-      console.log('_.flatten(ids).includes(req.me.id)::: ' , _.flatten(ids).includes(req.me.id));
+      // console.log('_.flatten(ids).includes(req.me.id)::: ' , _.flatten(ids).includes(req.me.id));
 
       /**
        * Если пользователь не найден в качестве совладельца в других питомниках,
