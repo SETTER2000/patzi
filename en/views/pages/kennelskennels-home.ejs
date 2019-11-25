@@ -318,7 +318,7 @@
           <% /* ГОРОД */ %>
           <template v-if="updateForm.country">
             <el-form-item label="<%= __('City') %>" prop="city">
-              <el-autocomplete v-model="updateForm.city"
+              <el-autocomplete v-model="updateForm.city.value"
                                clearable
                                popper-class="my-autocomplete"
                                :fetch-suggestions="querySearchUpdate"
@@ -426,7 +426,7 @@
             <el-form-item label="<%= __('Breeder') %>" prop="breeder">
               <el-autocomplete
                 class="inline-input"
-                v-model="updateForm.breeder"
+                v-model="updateForm.breeder.fullName"
                 :fetch-suggestions="querySearchFoo"
                 placeholder="<%= __('Please set the owner of the kennel') %>"
                 :trigger-on-focus="false"
@@ -434,7 +434,6 @@
                 style="width: 58%;"
                 clearable
               >
-
                 <template slot-scope="{ item }">
                   <span class="value">{{ item.fullName }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fullName }}</span>
