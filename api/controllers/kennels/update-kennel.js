@@ -59,7 +59,7 @@ module.exports = {
       description: 'Идентификатор города где находится питомник.'
     },
 
-    breeder: {
+    breederId: {
       type: 'string',
       description: 'Идентификатор хозяина питомника.'
     },
@@ -188,7 +188,7 @@ module.exports = {
        * если питомник не ваш и вы есть суперадмин или админ, то видно поле
        * добавления владельца (breeder)
        */
-      breeder: (inputs.yourKennel) ? this.req.me.id : inputs.breeder ? inputs.breeder : null,
+      breeder: (inputs.yourKennel) ? this.req.me.id : inputs.breederId ? inputs.breederId : null,
       action: inputs.action,
       rightName: inputs.rightName,
       registerNumber: _.trim(inputs.registerNumber),

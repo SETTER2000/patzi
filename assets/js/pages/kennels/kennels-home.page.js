@@ -472,7 +472,7 @@ parasails.registerPage('kennels-home', {
       this.openFullScreen();
       let data = this.updateForm;
       if(this.breederId){
-        data.breeder = this.breederId;
+        data.breederId = this.breederId;
       }
       // data.breeder = this.breederId ? this.breederId : _.isNull(this.updateForm.breeder)  ? '' : this.updateForm.breeder;
       data.cityId = this.cityId ? this.cityId : _.isNull(this.updateForm.city) ? '' : this.updateForm.city;
