@@ -64,8 +64,8 @@ parasails.registerPage('kennels-home', {
       continent: {label: '', id: null},
       country: {label: '', id: null},
       region: {label: '', id: null},
-      city: '',
-      breeder: '',
+      city: {},
+      breeder: {},
       phones: [{
         key: 1,
         value: '',
@@ -465,6 +465,8 @@ parasails.registerPage('kennels-home', {
 
 
     async updateKennel() {
+      console.log('this.breederId::: ',this.breederId);
+      console.log('updateForm.breeder::: ' , this.updateForm.breeder);
       this.openFullScreen();
       let data = this.updateForm;
       data.phones = _.isNull(data.phones) ? [{
@@ -476,8 +478,10 @@ parasails.registerPage('kennels-home', {
       data.country = this.updateForm.country.id;
       data.region = this.updateForm.region.id;
       data.coOwner = this.coOwnerId;
-      data.breeder = this.breederId;
-      data.cityId = this.cityId;
+      data.breeder = this.breederId ? this.breederId :
+        this.updateForm.breeder ? this.updateForm.breeder.id : null;
+      data.cityId = this.cityId ? this.cityId :
+        this.updateForm.city ? this.updateForm.city.id : null;
       data.dateCreate = JSON.stringify(this.updateForm.dateCreate);
 
       console.log('DATA перед отправкой::: ', data);
@@ -564,7 +568,7 @@ parasails.registerPage('kennels-home', {
 
 
     changeSelectRegion() {
-      this.updateForm.city = null;
+      this.updateForm.city = {};
       this.ruleForm.city = null;
     },
 
@@ -615,6 +619,7 @@ parasails.registerPage('kennels-home', {
 
       /* clearTimeout(this.timeout);
        this.timeout = setTimeout(() => {*/
+      console.log('results:: ' , results);
       cb(results);
       /*      }, 3000 * Math.random());*/
     },
@@ -634,6 +639,14 @@ parasails.registerPage('kennels-home', {
       console.log('handleBreederSelected::: ', e);
       this.breederId = e.id ? e.id : undefined;
     },
+
+
+    async handleSelect(e) {
+      console.log('handleSelect::: ', e);
+      this.cityId = _.isNumber(e.id) ? e.id : undefined;
+      this.city = _.isString(e.value) ? e.value : '';
+    },
+
 
     mesSuccess(text = '') {
       this.$notify({
@@ -799,13 +812,6 @@ parasails.registerPage('kennels-home', {
     },
 
 
-    async handleSelect(e) {
-      console.log('handleSelect::: ', e);
-      this.cityId = _.isNumber(e.id) ? e.id : undefined;
-      this.city = _.isString(e.value) ? e.value : '';
-    },
-
-
     goBack() {
       console.log('go back');
     },
@@ -897,17 +903,19 @@ parasails.registerPage('kennels-home', {
 
 
     handleEdit(index, row) {
-      console.log('ROW::: ', row);
-      // this.updateForm = row;
+      console.log('ROW input ::: ', row);
+      row.breeder =  row.breeder ? row.breeder : {};
+      row.city =  row.city ? row.city : {};
       row.coOwner = '';
-      this.updateForm = Object.assign({}, this.updateForm, row);
+      this.updateForm = row;
+      // this.updateForm = Object.assign({}, this.updateForm, row);
       this.updateForm.dateCreate = moment(row.dateCreate);
 
       // console.log('this.test.getTime ::: ', this.test.getTime());
-      this.updateForm.city = row.city ? row.city.value : null;
-      this.updateForm.breeder = row.breeder ? row.breeder.fullName : null;
+      // this.updateForm.city = row.city ? row.city.value : null;
+      // this.updateForm.breeder = row.breeder ? row.breeder : {};
       // this.updateForm.yourKennel = (row.yourKennel && row.yourKennel.id) ? (this.me.id === row.yourKennel.id) : false;
-
+      console.log('ROW this.updateForm ::: ', this.updateForm);
       this.centerDialogAdded = false;
       this.centerDialogUpdate = true;
       this.buttonUpdate = true;

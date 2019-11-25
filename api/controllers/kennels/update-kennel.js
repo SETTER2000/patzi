@@ -172,7 +172,7 @@ module.exports = {
       imageUploadMime: inputs.file.type,
       filename: inputs.file.filename,
       // label: _.startCase(inputs.label.toString().toLowerCase()).replace(/Fci\b/g, '(FCI)'),
-      whoCreate: this.req.me.id,
+      // whoCreate: this.req.me.id,
       yourKennel: inputs.yourKennel,
       /**
        * Здесь устанавливаем владельца питомника.

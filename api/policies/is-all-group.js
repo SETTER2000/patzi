@@ -4,6 +4,7 @@ module.exports = async function (req, res, proceed) {
   let isOwner = false;
   let isBreeder = false;
   let isAdmin = false;
+  let isSuperAdmin = false;
 
   if (!req.me) {
     if (req.wantsJSON) {
