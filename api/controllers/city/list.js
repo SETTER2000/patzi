@@ -39,44 +39,20 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-console.log('inputs.regionId::' , inputs.regionId);
+
+
     // Бибилиотека Node.js
-    const url = require('url');
     const moment = require('moment');
-    let query = (inputs.regionId !== 'undefined') ? {region: inputs.regionId} : {region:0};
+    let query = (!_.isUndefined(inputs.regionId) && !_.isObject(inputs.regionId)) ? {region: +inputs.regionId} : {region: 0};
     // Устанавливаем соответствующую локаль для даты, установленую пользователем.
     moment.locale(this.req.me.preferredLocale);
 
-    // Формат отображаемой даты
-    // let format = 'LL HH:mm';
-console.log('QUERY::; ' , query);
     // Have the socket which made the request join the "city" room.
     // Подключить сокет, который сделал запрос, к комнате «city».
     await sails.sockets.join(req, 'city');
-
+// console.log('QUERY::: ' , _.isNaN(query.region));
     // Выбираем весь список объектов данной коллекции.
-    let citys = await City.find(query);
-
-    // _.each(citys, (city) => {
-      // Устанавливаем свойство источника изображения
-      // Первый аргумент, базовый url
-      // city.imageSrc = city.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/citys/${city.id}`) : '';
-
-      // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
-      // city.createdAtFormat = moment(city.createdAt).format(format);
-      //
-      // // Столбец: Дата регистрации. Формат фильтра.
-      // city.createdAtFormatFilter = moment(city.createdAt).format(format);
-      // Выбирает поле id и возвращает массив айдишников, из каждого объекта в массиве
-      // [{id: ..., fullName: ...,},{id: ..., fullName: ...,},{id: ..., fullName: ...,}]
-      // city.groups = _.pluck(city.groups, 'id'); // friendIds: [id,id,id...]
-
-      // Удаляем файловый дескриптор
-      // delete city.imageUploadFD;
-
-      // ... удаляем MIME тип, так как внешнему интерфейсу не нужно знать эту информацию и т.д....
-      // delete city.imageUploadMime;
-    // });
+    let citys =  _.isNaN(query.region) ? [] : await City.find(query);
 
 
     // Рассылаем данные всем подписанным на событие list данной комнаты.

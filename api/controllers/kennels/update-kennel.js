@@ -21,31 +21,38 @@ module.exports = {
 
     },
 
-    continent: {
+    continentId: {
       type: 'string',
       required: true,
       description: 'Континент где находится питомник.'
     },
 
 
-    country: {
+    countryId: {
       type: 'string',
       required: true,
       description: 'Страна где находится питомник.'
     },
 
 
-    region: {
+    regionId: {
       type: 'string',
-      required: true,
+      // required: true,
       description: 'Край, область где находится питомник.'
     },
 
-    dateCreate: {
+
+    cityId: {
       type: 'string',
-      required: true,
-      description: 'Дата создания питомника.'
+      description: 'Идентификатор города где находится питомник.'
     },
+
+
+    city: {
+      type: 'ref',
+      description: 'Идентификатор города где находится питомник.'
+    },
+
 
     registerNumber: {
       type: 'string',
@@ -53,10 +60,10 @@ module.exports = {
       description: 'Регистрационный номер.'
     },
 
-
-    cityId: {
+    dateCreate: {
       type: 'string',
-      description: 'Идентификатор города где находится питомник.'
+      required: true,
+      description: 'Дата создания питомника.'
     },
 
     breederId: {
@@ -195,12 +202,12 @@ module.exports = {
       dateCreate: await sails.helpers.dateFix(inputs.dateCreate),
       subtitle: inputs.subtitle,
       site: _.trim(inputs.site),
-      city: _.isUndefined(inputs.cityId) ? null : inputs.cityId,
-      country: inputs.country,
-      continent: inputs.continent,
-      region: inputs.region,
       address: inputs.address,
-      phones: inputs.phones
+      phones: inputs.phones,
+      continent: inputs.continentId,
+      country: inputs.countryId,
+      region: inputs.regionId,
+      city: inputs.cityId,
     };
 
     console.log('Перед обновлением объект:::: ', obj);
@@ -226,7 +233,7 @@ module.exports = {
      */
 
     let kennel = await Kennel.find({id: inputs.id}).populate('owners');
-    if(!kennel){
+    if (!kennel) {
       throw 'notFound';
     }
     let ownersId = _.pluck(kennel.owners, 'id');

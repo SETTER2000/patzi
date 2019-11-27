@@ -69,7 +69,6 @@ module.exports = {
       _.get(inputs, 'query') ? {'fullName': {contains: inputs.query}, emailStatus:'confirmed'} : {emailStatus:'confirmed'};
 
 
-    console.log(' inputs.query::::: ' ,  inputs.query);
 
     // Формат отображаемой даты
     let format = 'LL HH:mm';
