@@ -13,6 +13,7 @@ parasails.registerPage('kennels-home', {
     regionId: '',
     breederId: '',
     coOwnerId: '',
+    cowner: '',
     cityId: '',
     row: {},
     coownerId: '',
@@ -494,7 +495,7 @@ parasails.registerPage('kennels-home', {
       data.breederId = this.breederId ? this.breederId :
         this.updateForm.breeder ? this.updateForm.breeder.id : null;
       data.coOwnerId = this.coOwnerId ? this.coOwnerId :
-        this.updateForm.coOwner ? this.updateForm.coOwner.id : null;
+        this.updateForm.coOwner ? this.updateForm.coOwner.id : {};
       data.cityId = this.cityId ? this.cityId :
         this.updateForm.city ? this.updateForm.city.id : null;
       // data.cityId = this.updateForm.city.id;
@@ -641,7 +642,7 @@ parasails.registerPage('kennels-home', {
       if (_.isUndefined(this.users) || _.isUndefined(queryString)) return;
       // let users = this.users;
       let results = queryString ? this.users.filter(this.createFilterOwner(queryString)) : this.users;
-
+console.log('RESULT SEARCH:::; ' , results);
       /* clearTimeout(this.timeout);
        this.timeout = setTimeout(() => {*/
       // console.log('results:: ', results);
@@ -667,7 +668,7 @@ parasails.registerPage('kennels-home', {
 
     async handleCoOwnerSelected(e) {
       console.log('handleBreederSelected::: ', e);
-      this.coOwnerId = e.id ? e.id : undefined;
+      this.coOwnerId = e.id ? e.id : null;
     },
 
     /**
@@ -998,8 +999,10 @@ parasails.registerPage('kennels-home', {
 
     handleEdit(index, row) {
       console.log('ROW input ::: ', row);
+      row.coOwnerId='';
+      row.cowner='';
       row.breeder = _.isNull(row.breeder) ? {} : row.breeder;
-      row.coOwner = _.isUndefined(row.coOwner) ? {} : row.coOwner;
+      // row.coOwner = _.isUndefined(row.coOwner) ? {fullName:''} : row.coOwner;
       row.city = _.isNull(row.city) ? {} : row.city;
       row.continentId = row.continent ? row.continent.id : row.continentId;
       row.countryId = row.country ? row.country.id : row.countryId;
@@ -1121,6 +1124,7 @@ parasails.registerPage('kennels-home', {
         if (jwRes.statusCode === 200) {
           this.updateForm.owners = this.updateForm.owners.filter(owner => owner.id !== this.coownerId);
           console.log('OWWW::: ', this.updateForm.owners);
+          this.cowner='';
           this.getList();
           this.$forceUpdate();
           this.centerDialogConfirmDeleteCoOwner = false;

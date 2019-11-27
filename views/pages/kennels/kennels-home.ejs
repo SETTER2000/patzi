@@ -459,11 +459,12 @@
             <el-form-item label="<%= __('Co-owner') %>" prop="coOwnerId">
               <el-autocomplete
                 class="inline-input"
-                v-model="updateForm.coOwner.fullName"
+                v-model="cowner"
                 :fetch-suggestions="querySearchFoo"
                 placeholder="<%= __('Please Input co-owner') %>"
                 :trigger-on-focus="false"
                 @select="handleCoOwnerSelected"
+                clearable
                 style="width: 58%;"
               >
 
