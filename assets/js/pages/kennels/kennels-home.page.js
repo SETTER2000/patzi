@@ -906,11 +906,7 @@ console.log('RESULT SEARCH:::; ' , results);
       this.regionId = _.isNumber(e.id) ? e.id : null;
       this.region = _.isString(e.value) ? e.value : '';
     },
-
-
-    goBack() {
-      console.log('go back');
-    },
+    
 
     confirmDeletion() {
       this.centerDialogVisibleConfirm = false;
