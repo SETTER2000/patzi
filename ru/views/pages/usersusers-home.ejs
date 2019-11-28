@@ -1043,7 +1043,7 @@
   <el-dialog
     title="ВНИМАНИЕ!"
     :visible.sync="centerDialogVisibleConfirm"
-    width="30%"
+    custom-class="dialog-win"
     center>
     <span>{{text}}</span>
     <span slot="footer" class="dialog-footer">
@@ -1281,7 +1281,7 @@
             </template>-->
             <!--<template slot-scope="scope"  >{{ scope.row.emailAddress }}</template>-->
           </el-table-column>
-          <el-table-column label="Группы" width="160">
+          <el-table-column label="Группы" width="160" >
             <template slot-scope="scope">
               <el-select
                 v-model="scope.row.groups"
