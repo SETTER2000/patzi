@@ -756,8 +756,7 @@
                          placeholder="<%= __('Where is the kennel registered?') %>"
                          style="width: 58%;"
                          :clearable="true"
-                         @visible-change="changeSelectRegion"
-                         @change="changeRegion">
+                         @change="changeSelectRegion(ruleForm.region)">
                 <el-option v-for="item in getPullRegion()"
                            :key="item.id"
                            :label="item.label"
