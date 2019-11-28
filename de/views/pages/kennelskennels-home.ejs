@@ -254,11 +254,12 @@
 
           <% /* КОНТИНЕНТ */ %>
           <template>
-            <el-form-item label="<%= __('Continent') %>" prop="continent">
+            <el-form-item label="<%= __('Continent') %>" prop="continentId">
               <el-select v-model="updateForm.continent.id"
-                         @change="changeSelectContinent()"
                          placeholder="<%= __('Where is the nursery registered?') %>"
-                         style="width: 58%;">
+                         style="width: 58%;"
+                         @change="changeSelectContinent()"
+              >
                 <el-option v-for="item in continents"
                            :key="item.id"
                            :label="item.label"
@@ -277,11 +278,11 @@
 
           <% /* СТРАНА */ %>
           <template v-if="updateForm.continent.id">
-            <el-form-item label="<%= __('Country') %>" prop="country">
+            <el-form-item label="<%= __('Country') %>" prop="countryId">
               <el-select v-model="updateForm.country.id"
                          placeholder="<%= __('Where is the kennel registered?') %>"
                          style="width: 58%;"
-                         @visible-change="changeSelectCountry"
+                         @change="changeSelectCountry()"
               >
                 <el-option v-for="item in getPullCountry()"
                            :key="item.id"
@@ -295,15 +296,12 @@
           </template>
 
           <% /* ОБЛАСТЬ, РЕГИОН */ %>
-          <template v-if="updateForm.country.id">
-            <!--<template >-->
-            <el-form-item label="<%= __('Region') %>" prop="region">
+          <template v-if="updateForm.country && updateForm.country.id">
+            <el-form-item label="<%= __('Region') %>" prop="regionId">
               <el-select v-model="updateForm.region.id"
                          placeholder="<%= __('Where is the kennel registered?') %>"
                          style="width: 58%;"
-                         :clearable="true"
-                         @visible-change="changeSelectRegion"
-                         @change="changeRegion">
+                         @change="changeSelectRegion(updateForm.region.id)">
                 <el-option v-for="item in getPullRegion()"
                            :key="item.id"
                            :label="item.label"
@@ -316,25 +314,26 @@
           </template>
 
           <% /* ГОРОД */ %>
-          <template v-if="updateForm.country">
-            <el-form-item label="<%= __('City') %>" prop="city">
+          <template v-if="updateForm.region && updateForm.region.id">
+            <el-form-item label="<%= __('City') %>" prop="cityId">
               <el-autocomplete v-model="updateForm.city.value"
-                               clearable
                                popper-class="my-autocomplete"
                                :fetch-suggestions="querySearchUpdate"
                                placeholder="<%= __('Please Input City') %>"
                                :trigger-on-focus="false"
                                @select="handleSelect"
                                @visible-change="changeSelectCity"
+                               clearable
+                               @clear="clearInputCity"
                                style="width: 58%;">
                 <template slot-scope="{ item}">
                   <span class="value">{{ item.labelRu  }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
                 </template>
               </el-autocomplete>
-              <!--<el-tooltip effect="dark" content="<%= __('English search') %>" placement="top-start">-->
-              <!--<div size="mini" round class="el-icon-question ml-3"></div>-->
-              <!--</el-tooltip>-->
+              <el-tooltip effect="dark" content="<%= __('English search') %>" placement="top-start">
+                <div size="mini" round class="el-icon-question ml-3"></div>
+              </el-tooltip>
             </el-form-item>
           </template>
 
@@ -423,7 +422,7 @@
           <% /* BREEDER */ %>
           <template v-if="!updateForm.yourKennel && (me.isAdmin || me.isSuperAdmin)">
             <!--<template >-->
-            <el-form-item label="<%= __('Breeder') %>" prop="breeder">
+            <el-form-item label="<%= __('Breeder') %>" prop="breederId">
               <el-autocomplete
                 class="inline-input"
                 v-model="updateForm.breeder.fullName"
@@ -457,14 +456,15 @@
           <% /* добавить CO-OWNER */ %>
           <template v-if="updateForm.yourKennel">
             <!--<template >-->
-            <el-form-item label="<%= __('Co-owner') %>" prop="coOwner">
+            <el-form-item label="<%= __('Co-owner') %>" prop="coOwnerId">
               <el-autocomplete
                 class="inline-input"
-                v-model="updateForm.coOwner"
+                v-model="cowner"
                 :fetch-suggestions="querySearchFoo"
                 placeholder="<%= __('Please Input co-owner') %>"
                 :trigger-on-focus="false"
-                @select="handleSelected"
+                @select="handleCoOwnerSelected"
+                clearable
                 style="width: 58%;"
               >
 
@@ -885,7 +885,7 @@
                 :fetch-suggestions="querySearchFoo"
                 placeholder="<%= __('Please Input co-owner') %>"
                 :trigger-on-focus="false"
-                @select="handleSelected"
+                @select="handleCoOwnerSelected"
                 style="width: 58%;"
               >
                 <template slot-scope="{ item }">
