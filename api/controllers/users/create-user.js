@@ -46,7 +46,7 @@ module.exports = {
       type: 'string',
       // required: true,
       // unique: true,
-      isEmail: true,
+      // isEmail: true,
       maxLength: 200,
       example: 'mary.sue@example.com'
     },
@@ -176,6 +176,9 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+
+    console.log('INPUTS user add before::: ' , inputs);
+
     // Бибилиотека Node.js
     const url = require('url');
     const req = this.req;
@@ -248,7 +251,7 @@ module.exports = {
     //   emailProofTokenExpiresAt: Date.now() + sails.config.custom.emailProofTokenTTL,
     //   emailStatus: 'unconfirmed'
     // } : {});
-
+console.log('Данные перед созданием user:  ', data);
     // Создаём пользователя
     let newUser = await User.create(data)
       .intercept('E_UNIQUE', conflictingEmail)

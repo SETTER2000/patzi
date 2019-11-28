@@ -43,10 +43,11 @@ module.exports = {
 
 
     let breeder = dog.kennel.breeder ? await User.findOne({id: dog.kennel.breeder}) : '';
-    dog.breeder = {
-      fullName: breeder.fullName,
-      avatar: breeder.defaultIcon === 'avatar' ? breeder.avatar : breeder.gravatar
-    };
+    dog.breeder = breeder ?
+      {
+        fullName: breeder.fullName,
+        avatar: breeder.defaultIcon === 'avatar' ? breeder.avatar : breeder.gravatar
+      } : {};
 
     dog.owners = {
       fullName: _.last(_.pluck(dog.owners, 'fullName')),

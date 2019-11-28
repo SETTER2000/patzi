@@ -436,7 +436,7 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
     city: {
       model: 'city',
       description: `Питомник может принадлежать только одноу городу. One to Many.`
-    },
+    }
   },
 
   // methods: {
