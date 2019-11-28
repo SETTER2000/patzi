@@ -428,6 +428,7 @@ parasails.registerPage('kennels-home', {
     },
 
     addKennel: async function () {
+      console.log('this.cityId::: ' , this.cityId);
       this.openFullScreen();
       let data = {
         file: this.ruleForm.file,
@@ -437,7 +438,7 @@ parasails.registerPage('kennels-home', {
         country: this.ruleForm.country,
         region: this.ruleForm.region,
         action: this.ruleForm.action,
-        city: this.cityId,
+        city : this.cityId ? this.cityId :  '',
         coOwner: this.coOwnerId,
         breeder: this.breederId,
         rightName: this.ruleForm.rightName,
@@ -593,13 +594,16 @@ parasails.registerPage('kennels-home', {
 
     // Реагирует на событие change в поле города|city
     changeSelectRegion(regionId) {
-      // console.log('REGGG:: ' , regionId);
+      console.log('REGGG:: ' , regionId);
       this.regionId = regionId;
       this.cityList();
+      this.cityListAdd();
       this.updateForm.city = {};
       this.ruleForm.city = null;
       console.log('changeSelectCountry::::;', this.updateForm);
     },
+
+
 
 
     changeSelectCity() {
@@ -817,6 +821,22 @@ console.log('RESULT SEARCH:::; ' , results);
       });
     },
 
+    async cityListAdd() {
+      console.log('this.regionId:::: ', this.regionId);
+      console.log('this.updateForm.regionId:::: ', this.updateForm.regionId);
+      // if (!this.regionId && !this.updateForm.regionId) return this.citys = [];
+      let region = this.regionId ? this.regionId : this.updateForm.regionId;
+      console.log('REGION ID:::: ', region);
+      await io.socket.get(`/api/v1/city/list/${region}`, function gotResponse(body, response) {
+        // console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      // Принимаем данные по событию list-*
+      await io.socket.on('list-city', (data) => {
+        console.log('ГОРОДА: ', data);
+        this.citys = data;
+      });
+    },
+
 
     /*  // Реагирует на событие change в поле континент|continent
       async changeContinent(continentId) {
@@ -867,7 +887,9 @@ console.log('RESULT SEARCH:::; ' , results);
     },
 
     /* Авто поиск по городам */
-    querySearch(queryString, cb) {
+  async  querySearch(queryString, cb) {
+      console.log('Строка поиска города: ', queryString);
+      this.cityListAdd();
       let links = this.citys;
       console.log('ГОРОДА для выбора: ', links);
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
@@ -906,7 +928,7 @@ console.log('RESULT SEARCH:::; ' , results);
       this.regionId = _.isNumber(e.id) ? e.id : null;
       this.region = _.isString(e.value) ? e.value : '';
     },
-    
+
 
     confirmDeletion() {
       this.centerDialogVisibleConfirm = false;

@@ -212,7 +212,7 @@ module.exports = {
 
     console.log('Перед обновлением объект:::: ', obj);
 
-    let update = await Kennel.updateOne({id: inputs.id}).set(obj);
+    let update = await Kennel.update({id: inputs.id}).set(obj);
 
     /**
      * Если в поле inputs.breeder есть значение, то добавляем этого пользователя в группу breeder

@@ -16,6 +16,42 @@ module.exports = {
 
     },
 
+    registerNumber: {
+      type: 'string',
+      required: true,
+      description: 'Регистрационный номаер.'
+    },
+    dateCreate: {
+      type: 'string',
+      required: true,
+      description: 'Дата создания питомника.'
+    },
+
+
+
+
+    continent: {
+      type: 'string',
+      required: true,
+      description: 'Континент где находится питомник.'
+    },
+
+
+    country: {
+      type: 'string',
+      required: true,
+      description: 'Страна где находится питомник.'
+    },
+
+
+    region: {
+      type: 'string',
+      required: true,
+      description: 'Край, область где находится питомник.'
+    },
+
+
+
     breeder: {
       type: 'string',
       description: 'Идентификатор хозяина питомника.',
@@ -70,36 +106,9 @@ module.exports = {
       defaultsTo: false
     },
 
-    registerNumber: {
-      type: 'string',
-      required: true,
-      description: 'Регистрационный номаер.'
-    },
-
     site: {
       type: 'string',
       description: 'Сайт.'
-    },
-
-
-    continent: {
-      type: 'string',
-      required: true,
-      description: 'Континент где находится питомник.'
-    },
-
-
-    country: {
-      type: 'string',
-      required: true,
-      description: 'Страна где находится питомник.'
-    },
-
-
-    region: {
-      type: 'string',
-      required: true,
-      description: 'Край, область где находится питомник.'
     },
 
 
@@ -118,13 +127,6 @@ module.exports = {
     address: {
       type: 'string',
       description: 'Адрес где находится питомник.'
-    },
-
-
-    dateCreate: {
-      type: 'string',
-      required: true,
-      description: 'Дата создания питомника.'
     },
 
     rightName: {
@@ -164,7 +166,7 @@ module.exports = {
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'kennel');
     console.log('INPUTS:::: ', inputs);
-
+console.log('CITY:' , _.isEmpty(inputs.city));
     inputs.file = (_.get(inputs.file, 'fd')) ? inputs.file : '';
 
     let newKennel = await Kennel.create({
@@ -180,7 +182,7 @@ module.exports = {
       dateCreate: await sails.helpers.dateFix(inputs.dateCreate),
       subtitle: inputs.subtitle,
       site: _.trim(inputs.site),
-      city: inputs.city,
+      city: _.isEmpty(inputs.city) ? null : inputs.city,
       country: inputs.country,
       continent: inputs.continent,
       region: inputs.region,

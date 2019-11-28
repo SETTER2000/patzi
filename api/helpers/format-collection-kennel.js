@@ -24,7 +24,7 @@ module.exports = {
   },
 
 
-  fn: async function (inputs, exits) {
+  fn: async function (inputs) {
 
     const url = require('url');
     const moment = require('moment');
@@ -70,7 +70,7 @@ module.exports = {
 
 
     data.collection = kennels;
-    return exits.success(data);
+    return data;
   }
 
 

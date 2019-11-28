@@ -26,14 +26,14 @@ module.exports = {
   },
 
 
-  fn: async function (inputs, exits) {
+  fn: async function (inputs) {
     // Выбираем весь список объектов данной коллекции.
     let kennel = await Kennel.findOne({id: inputs.id});
     if (!kennel) {
       throw 'noKennelFound';
     }
-    let fullNameKennel = kennel.label;
-    return exits.success(fullNameKennel);
+    return  kennel.label;
+
   }
 };
 

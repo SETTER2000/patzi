@@ -23,7 +23,7 @@ module.exports = {
   },
 
 
-  fn: async function (inputs,exits) {
+  fn: async function (inputs) {
 
     // console.log('HELPER inputs:::' , inputs);
     const moment = require('moment');
@@ -35,7 +35,7 @@ module.exports = {
 // console.log('dateNew после replace::: ' , dateNew);
     dateNew = !_.isEmpty(dateNew) && dateNew !== '""' && dateNew !== 'Invalid date' && dateNew !== 'null' ? moment.tz(dateNew, 'Europe/Moscow').format() : '';
 
-    return exits.success(dateNew);
+    return dateNew;
   }
 
 

@@ -1311,12 +1311,9 @@ parasails.registerPage('dogs-home', {
       let checkedCount = value.length;
       this.checkAll = checkedCount === _.pluck(this.photos.images, 'id').length;
       this.isIndeterminate = checkedCount > 0 && checkedCount < _.pluck(this.photos.images, 'id').length;
-      console.log('this.checkedPhoto-22:: ', this.checkedPhoto);
     },
 
     async updateDescriptionPhoto() {
-      console.log('photoDesc:::: ', this.photoDesc);
-      console.log('PHOTOSS:::: ', this.photos);
       this.photoDesc.id = this.photos.id;
       this.photoDesc.innerVisiblePhotoDescription = false;
       await io.socket.put('/api/v1/dogs/update-description-img', this.photoDesc, (data, jwRes) => {
@@ -1399,8 +1396,6 @@ parasails.registerPage('dogs-home', {
 
 
     async coverPhoto(id, index) {
-      /*console.log('id:: ', id);
-      console.log('index:: ', index);*/
       await io.socket.put(`/api/v1/files/update-cover-album`, {
         id: id,
         cover: index,
@@ -1433,7 +1428,6 @@ parasails.registerPage('dogs-home', {
 
 
     querySearchFoo(queryString, cb) {
-      console.log('this.users:::: ', this.users);
       if (_.isUndefined(this.users)) return;
       let users = this.users;
       let results = queryString ? users.filter(this.createFilterOwner(queryString)) : users;
@@ -1455,7 +1449,6 @@ parasails.registerPage('dogs-home', {
     },
 
     async handleSelected(e) {
-      console.log('handleSelected::: ', e);
       this.ownerId = e.id ? e.id : undefined;
     },
 
@@ -1463,19 +1456,15 @@ parasails.registerPage('dogs-home', {
       this.dogsEditList = (this.me.isAdmin || this.me.isSuperAdmin) ? this.dogs :
         this.isOwner ? this.dogs.filter(data => _.isObject(data.kennel) ? (data.kennel.breeder === this.me.id) : false) : [];
 
-      console.log('dogsEditList::: ', this.dogsEditList);
       this.dialogEditorList = true;
     },
 
     async isOwnerCheck() {
       await io.socket.get(`/api/v1/groups/is-owner`, (body, response) => {
-        console.log('Сервер (is-breeder) ответил кодом  ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервер (is-breeder) ответил кодом  ' + response.statusCode + ' и данными: ', body);
         this.isOwner = (response.statusCode === 200);
       });
     },
 
-
-
   }
-})
-;
+});
