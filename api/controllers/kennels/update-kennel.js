@@ -154,6 +154,7 @@ module.exports = {
       responseType: 'notFound'
     },
     forbidden: {
+      description: 'Access is denied.',
       responseType: 'forbidden'
     },
     badRequest: {
@@ -291,12 +292,8 @@ module.exports = {
       }) : '';
 
     }
+console.log('UPDATE:::: ' , update);
 
-
-    // Если не создан возвращаем ошибку.
-    if (!update) {
-      throw 'forbidden';
-    }
 
     return exits.success();
 
