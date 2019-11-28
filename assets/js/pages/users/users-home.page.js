@@ -773,12 +773,11 @@ parasails.registerPage('users-home', {
     // Create User
     async add() {
       this.openFullScreen();
-      console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
       let data = {
         fullName: this.ruleForm.label,
         fileList: this.ruleForm.fileList,
-        dateBirth: JSON.stringify(this.ruleForm.dateBirth),
-        dateDeath: JSON.stringify(this.ruleForm.dateDeath),
+        dateBirth: this.ruleForm.dateBirth,
+        dateDeath: this.ruleForm.dateDeath,
         emailAddress: this.ruleForm.emailAddress,
         emailStatus: this.ruleForm.emailStatus,
         see: this.ruleForm.see,
@@ -947,7 +946,7 @@ parasails.registerPage('users-home', {
       let t = this.continents.filter(continent => {
         return continent.id === this.ruleForm.continent;
       });
-      console.log('TTTTT::: ' , t);
+      console.log('getPullCountry::: ' , t);
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
       return _.sortBy(t[0].countrys, field);
     },
@@ -972,6 +971,7 @@ parasails.registerPage('users-home', {
     async changeRegion(regionId) {
       this.regionId = regionId;
       console.log('this.ruleForm.city:', this.ruleForm.city);
+      console.log('this.regionId:', this.regionId);
       await this.cityList();
     },
 
@@ -984,6 +984,7 @@ parasails.registerPage('users-home', {
       await io.socket.on('list-city', (data) => {
         this.citys = data;
       });
+      console.log('this.citys::: ', this.citys);
     },
 
 

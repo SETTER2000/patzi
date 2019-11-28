@@ -43,12 +43,12 @@ module.exports = {
     },
 
     emailAddress: {
-      type: 'string',
+      type: 'string'
       // required: true,
       // unique: true,
       // isEmail: true,
-      maxLength: 200,
-      example: 'mary.sue@example.com'
+      // maxLength: 200,
+      // example: 'mary.sue@example.com'
     },
 
     groups: {
@@ -66,7 +66,7 @@ module.exports = {
       type: 'string',
       isIn: ['unconfirmed', 'confirmed'],
       defaultsTo: 'confirmed',
-      description: 'Отправить письмо с данными авторизации на email.',
+      description: 'Отправить письмо с данными авторизации на email.'
     },
 
     emailStatus: {
@@ -94,9 +94,9 @@ module.exports = {
       // required: true,
       /* minLength: 8,
        maxLength: 30,*/
-      description: 'Надежно хешируется представление пароля пользователя для входа.',
+      description: 'Надежно хешируется представление пароля пользователя для входа.'
       // protect: true,
-      example: '2$28a8eabna301089103-13948134nad'
+      // example: '2$28a8eabna301089103-13948134nad'
     },
 
     checkPass: {
@@ -129,7 +129,7 @@ module.exports = {
       type: 'string',
       maxLength: 1700,
       description: `Описание пользователя.`
-    },
+    }
 
   },
 
@@ -242,7 +242,7 @@ module.exports = {
       images: images,
       dateBirth: inputs.dateBirth ? await sails.helpers.dateFix(inputs.dateBirth) : '',
       dateDeath: inputs.dateDeath ? await sails.helpers.dateFix(inputs.dateDeath) : '',
-      emailAddress: emailAddress,
+      emailAddress: emailAddress
     };
 
     // Если установлен флаг отправки подтверждения email, то добавляются временные отметки
@@ -268,7 +268,7 @@ console.log('Данные перед созданием user:  ', data);
         templateData: {
           fullName: inputs.fullName,
           login: emailAddress,
-          pass: password,
+          pass: password
           // token: newUser.emailProofToken
         }
       });
