@@ -1,4 +1,27 @@
 <div id="kennel" class="content" v-cloak>
+  <% /* ДИАЛОГОВОЕ ОКНО. ФОТО ЗАВОДЧИКА*/ %>
+  <el-dialog
+    :title="kennel.breeder.fullName"
+    :visible.sync="centerDialogVisible"
+    width="30%"
+    center>
+    <img class="img-fluid" :src="kennel.breeder.avatar" :alt="kennel.label">
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible = false"><%= __('Close') %></el-button>
+  </span>
+  </el-dialog>
+  <% /* ДИАЛОГОВОЕ ОКНО. ФОТО Совладельца*/ %>
+  <el-dialog
+    :title="coOwnerFullName"
+    :visible.sync="centerDialogVisibleOwner"
+    width="30%"
+    center>
+    <img class="img-fluid" :src="photoOwner" :alt="kennel.label">
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisibleOwner = false; photoOwner='';coOwnerFullName=''"><%= __('Close') %></el-button>
+  </span>
+  </el-dialog>
+
   <% /* Шапка страницы */ %>
   <section class="banner-area relative">
     <div class="container">
@@ -21,17 +44,191 @@
           </div>
           <h1 class="text-white">{{kennel.label}}</h1>
           <p>{{kennel.dateCreate | getAge}}</p>
-          <el-tooltip class="item" effect="dark" content="<%= __('Country') %>" placement="bottom">
-          <H3  class="text-gold">
+          <!--<el-tooltip class="item" effect="dark" content="<%= __('Country') %>" placement="bottom">-->
+          <H3 class="text-gold">
 
             <!--<i  class="ti-world"></i>-->
             {{kennel.country.label}}
 
           </H3>
-          </el-tooltip>
+          <!--</el-tooltip>-->
+          <small v-if="kennel.city.value">({{kennel.city.value}})</small>
         </div>
       </div>
     </div>
   </section>
+
+
+  <!-- Start About Area -->
+
+  <section class="about-area mb-5">
+    <div class="container">
+      <div class="row  align-items-top justify-content-start">
+        <% /* Хлебные крошки */ %>
+        <div class="col-md-6 my-5">
+          <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item><a href="/"><%= __('Home-menu') %></a></el-breadcrumb-item>
+            <el-breadcrumb-item><a href="/kennels"><%= __('Kennels') %></a></el-breadcrumb-item>
+            <el-breadcrumb-item> {{kennel.label}}</el-breadcrumb-item>
+            <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
+          </el-breadcrumb>
+        </div>
+      </div>
+      <div class="row">
+        <div class="demo-basic--circle">
+          <div class="block">
+            <el-tooltip class="item" effect="dark" placement="left-start">
+              <div slot="content"><%= __('Cattery owner') %>: {{kennel.breeder.fullName}}</div>
+              <el-button type="text" @click="centerDialogVisible = true" circle>
+                <el-avatar :size="'small'" :src="kennel.breeder.avatar"></el-avatar>
+              </el-button>
+            </el-tooltip>
+          </div>
+          <div class="block" v-for="owner in kennel.owners" :key="owner.id" v-if="kennel.owners">
+            <el-tooltip class="item" effect="dark" placement="left-start">
+              <div slot="content"><%= __('Co-owner') %>: {{owner.fullName}}</div>
+              <el-button type="text" @click="centerDialogVisibleOwner = true; coOwnerFullName=owner.fullName;photoOwner=owner.avatar"
+                         circle>
+                <el-avatar :size="'small'" :src="owner.avatar"></el-avatar>
+              </el-button>
+            </el-tooltip>
+          </div>
+        </div>
+        <div class="col-lg-5 about-left">
+          <img class="img-fluid" :src="kennel.imageSrc" :alt="kennel.label">
+          <div class="row py-3">
+            <div  :class="[_.isEmpty(kennel.owners) ? 'col-12' : '','col-6']">
+              <div class="mr-3" v-if="kennel.breeder">
+                <span><i
+                    class="el-icon-user-solid"></i><strong> {{kennel.breeder.fullNameEn}} ({{kennel.breeder.fullName}})</strong></span>
+                <br><span v-if="kennel.breeder.emailAddress"><i class="el-icon-message"></i> {{kennel.breeder.emailAddress}}</span>
+                <br><span v-if="kennel.address"><i class="el-icon-office-building"></i> {{kennel.address}}</span>
+                <br><span v-if="kennel.site"><i class="el-icon-location-outline"></i> {{kennel.site}}</span>
+                <br><span v-if="kennel.phones" v-for="(phone , index) in kennel.phones" :key="phone.value">
+                       <p> <i class="el-icon-phone-outline"></i> {{phone.value}} {{phone.fullName}}</p>
+                   </span>
+              </div>
+            </div>
+            <div class="col" v-if="kennel.owners">
+              <div class="" v-for="(owner, index) in kennel.owners" :key="owner.id">
+                <span><i class="el-icon-user-solid"></i><strong> {{owner.fullNameEn}} ({{owner.fullName}})</strong></span>
+                <br><span v-if="owner.emailAddress"><i class="el-icon-message"></i> {{owner.emailAddress}}</span>
+                <br><span v-if="owner.address"><i class="el-icon-office-building"></i> {{owner.address}}</span>
+                <br><span v-if="owner.site"><i class="el-icon-location-outline"></i> {{owner.site}}</span>
+                <br><span v-if="owner.phones" v-for="(phone , index) in owner.phones" :key="phone.value"> <br><i
+                    class="el-icon-phone-outline"></i> {{phone.value}} {{phone.fullName}}
+            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="offset-lg-1 col-lg-5 col-md-12 about-right">
+          <div class="section-title">
+            <h2 class="mb-4">
+              {{kennel.label}}</h2>
+          </div>
+          <div class="mb-35 wow fadeIn text-justify" data-wow-duration=".8s" data-wow-delay=".3s">
+
+            <p>{{kennel.subtitle}}</p>
+
+            <h4 v-if="kennel.manufacturers"> <%= __('Our Manufacturers') %></h4>
+            <p> {{kennel.manufacturers}}</p>
+            <!--<p><strong> <%= __('ATTENTION OF BEGINNERS!') %></strong>-->
+            <!--<br><%= __('Dogs of this breed have an uncontrollable ability to breed. This state of affairs has not yet been explained. (mystery of nature)') %>-->
+            <!--</p>-->
+            <footer v-if="kennel.manufacturers | kennel.subtitle" class="blockquote-footer text-right"><cite title="Source Title">{{kennel.label}} Kennel</cite></footer>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End About Area -->
+
+  <!-- Start Service Area -->
+  <section class="service-area section-gap-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3>{{kennel.label}}</h3>
+            <h2><span><%= __('Kennel dogs') %> </span></h2>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-6" v-for="(dog, index) in kennel.dogs" :key="dog.id">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+            <div class="d-flex align-items-center mb-3">
+              <template v-if="dog.gender==='sire'">
+              <i class="el-icon-male"></i>
+              </template>
+              <template v-else>
+                <i class="el-icon-female"></i>
+              </template>
+              <h4 class="ml-3">
+                <el-link :underline="false" @click="goTo2(dog.detail)" type="danger">{{dog.fullName}}</el-link>
+              </h4>
+            </div>
+            <div class="demo-image__preview">
+              <el-image
+                style="width: 100px; height: 100px"
+                :src="dog.images[dog.cover].fd"
+                :preview-src-list="dog.images">
+              </el-image>
+            </div>
+          </div>
+        </div>
+       <!-- <div class="col-lg-4 col-md-6">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
+            <div class="d-flex align-items-center mb-3">
+              <i class="flaticon-water"></i>
+              <h4 class="ml-3"><%= __('Natural Nutrition') %></h4>
+            </div>
+            <p><%= __('All dogs of the kennel eat only natural food. Meat, vegetables, fruits. Individual approach.') %></p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+            <div class="d-flex align-items-center mb-3">
+              <i class="flaticon-ring"></i>
+              <h4 class="ml-3"><%= __('Return of the Dog') %></h4>
+            </div>
+            <p><%= __('Always ready to take back our dog, if for some reason you do not have the opportunity to continue to contain a pet.') %></p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+            <div class="d-flex align-items-center mb-3">
+              <i class="flaticon-art"></i>
+              <h4 class="ml-3"><%= __('Dog Show') %></h4>
+            </div>
+            <p><%= __('Promising dogs, with the consent of the owner - display at exhibitions at the expense of the kennel.') %></p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.0s">
+            <div class="d-flex align-items-center mb-3">
+              &lt;!&ndash;<i class="flaticon-shirt"></i>&ndash;&gt;
+              <i class="groom"></i>
+              <h4 class="ml-3"><%= __('Dog Grooming') %></h4>
+            </div>
+            <p><%= __('Fashionable, haircut. The washing up. Cleaning the ears, claws, hair removal. Use of professional cosmetics.') %></p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+            <div class="d-flex align-items-center mb-3">
+              <i class="flaticon-content"></i>
+              <h4 class="ml-3"><%= __('Event Coverage') %></h4>
+            </div>
+            <p><%= __('Permanent support of the owners, discounts on the purchase of medicines, consumables, feed, etc.') %></p>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  </section>
+  <!-- End Service Area -->
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
