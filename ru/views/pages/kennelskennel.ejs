@@ -1,6 +1,8 @@
 <div id="kennel" class="content" v-cloak>
   <% /* ДИАЛОГОВОЕ ОКНО. ФОТО ЗАВОДЧИКА*/ %>
+
   <el-dialog
+    v-if="kennel.breeder"
     :title="kennel.breeder.fullName"
     :visible.sync="centerDialogVisible"
     width="30%"
@@ -52,7 +54,7 @@
 
           </H3>
           <!--</el-tooltip>-->
-          <small v-if="kennel.city.value">({{kennel.city.value}})</small>
+          <small v-if="kennel.city">({{kennel.city.value}})</small>
         </div>
       </div>
     </div>
@@ -74,10 +76,11 @@
           </el-breadcrumb>
         </div>
       </div>
+
       <div class="row">
         <div class="demo-basic--circle">
           <div class="block">
-            <el-tooltip class="item" effect="dark" placement="left-start">
+            <el-tooltip v-if="kennel.breeder" class="item" effect="dark" placement="left-start">
               <div slot="content"><%= __('Cattery owner') %>: {{kennel.breeder.fullName}}</div>
               <el-button type="text" @click="centerDialogVisible = true" circle>
                 <el-avatar :size="'small'" :src="kennel.breeder.avatar"></el-avatar>
@@ -156,7 +159,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-4 col-md-6" v-for="(dog, index) in kennel.dogs" :key="dog.id">
+        <div class="col-md-6" v-for="(dog, index) in kennel.dogs" :key="dog.id">
           <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
             <div class="d-flex align-items-center mb-3">
               <template v-if="dog.gender==='sire'">
@@ -170,11 +173,27 @@
               </h4>
             </div>
             <div class="demo-image__preview">
-              <el-image
-                style="width: 100px; height: 100px"
-                :src="dog.images[dog.cover].fd"
-                :preview-src-list="dog.images">
-              </el-image>
+              <div v-if="dog.images">
+                <template>
+                  <el-carousel class="menu-center" trigger="click" :autoplay="false" indicator-position="none">
+                    <el-carousel-item v-for="(img, index) of dog.imagesMin" :key="img.id" >
+                      <!--<p class="medium">{{ dog.description }}</p>-->
+                      <img :src="img.imageSrc" style="margin: 0 auto; width: auto; height: 100%; " alt="">
+                    </el-carousel-item>
+                  </el-carousel>
+                </template>
+                <!--children: {{dog.parents.parents}}-->
+                <div class="block" v-for="parent in dog.parents.parents" :key="parent.id" v-if="dog.parents">
+                  <el-tooltip class="item" effect="dark" placement="left-start">
+                    <div slot="content"><%= __('Co-owner') %>: {{parent.fullName}}</div>
+                    <el-button type="text" @click="centerDialogVisibleOwner = true; coOwnerFullName=parent.fullName;photoOwner=parent.avatar"
+                               circle>
+                      <el-avatar :size="'small'" :src="parent.avatar"></el-avatar>
+                    </el-button>
+                  </el-tooltip>
+                  {{parent.gender}}
+                </div>
+              </div>
             </div>
           </div>
         </div>
