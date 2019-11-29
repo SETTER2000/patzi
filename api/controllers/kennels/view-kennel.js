@@ -58,17 +58,50 @@ module.exports = {
     kennel.imageSrc = kennel.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/kennels/${kennel.id}`) : '';
     delete kennel.imageUploadFD;
 
+    let colDogsJpg = kennel.dogs;
 
-    await kennel.dogs.map(async (dog) => {
+    kennel.dogs = await sails.helpers.cloudFrontUrlMin.with({
+      collection: colDogsJpg,
+      collectionName: 'dog',
+      field: 'images',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        "resize": {
+          "width": 310,
+          // "height": 160,
+          "fit": "inside",
+          "background": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "alpha": 1
+          }
+        },
+        "flatten": {
+          "background": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "alpha": null
+          }
+        }
+      }
+    });
+
+    let dogsId = _.pluck(kennel.dogs, 'id');
+    console.log('dogsId::: ', dogsId);
+    let parent = await Dog.find({id:dogsId}).populate('parents');
+    console.log('PARENT:: ', parent);
+
+    await kennel.dogs.map(dog => {
       dog.kennelName = kennel.label;
+      dog.parents = parent ? _.find(parent,{id:dog.id}) : 'No children';
       dog.fullName = kennel.right ? `${dog.label} ${dog.kennelName}` : `${dog.kennelName} ${dog.label}`;
       dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
       dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
       // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
       return dog;
     });
-
-
 
 
     /**
@@ -157,7 +190,7 @@ module.exports = {
     });
 
 
-    // console.log('DOGG::: ', kennel);
+    console.log('DOGG::: ', kennel);
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
 
     // Respond with view.
