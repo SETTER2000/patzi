@@ -44,7 +44,11 @@
           label="<%= __('Name') %>"
           sortable
           prop="label">
+          <template slot-scope="scope">
+            <el-link @click="goTo2(scope.row.detail)" type="primary">{{scope.row.label}}</el-link>
+          </template>
         </el-table-column>
+
         <el-table-column
           label="<%= __('Country') %>"
           sortable
@@ -360,10 +364,10 @@
             <el-col :span="6">
               <el-button-group>
                 <el-tooltip effect="dark" content="<%= __('Add phone') %>" placement="top-end">
-                  <el-button @click="addDomain" size="mini" round icon="el-icon-circle-plus-outline"></el-button>
+                  <el-button @click="addPhone" size="mini" round icon="el-icon-circle-plus-outline"></el-button>
                 </el-tooltip>
                 <el-tooltip effect="dark" v-if="index > 0" content="<%= __('Remove phone') %>" placement="top-start">
-                  <el-button @click.prevent="removeDomain(phone)" size="mini" round icon="el-icon-delete"></el-button>
+                  <el-button @click.prevent="removePhone(phone)" size="mini" round icon="el-icon-delete"></el-button>
                 </el-tooltip>
               </el-button-group>
 
@@ -451,6 +455,13 @@
             <el-input minlength="10" maxlength="300" show-word-limit
                       placeholder="<%= __('Tell us about the kennel') %>" type="textarea"
                       v-model="updateForm.subtitle"></el-input>
+          </el-form-item>
+
+          <% /* АБЗАЦ О ПРОИЗВОДИТЕЛЯХ ПИТОМНИКА */ %>
+          <el-form-item v-if="updateForm.yourKennel" label="<%= __('Our Manufacturers') %>" prop="manufacturers">
+            <el-input minlength="10" maxlength="300" show-word-limit
+                      placeholder="<%= __('The paragraph about the dogs of the kennel') %>" type="textarea"
+                      v-model="updateForm.manufacturers"></el-input>
           </el-form-item>
 
           <% /* добавить CO-OWNER */ %>
@@ -916,6 +927,14 @@
               placeholder="<%= __('Tell us about the kennel') %>" type="textarea"
               v-model="ruleForm.subtitle"></el-input>
           </el-form-item>
+
+          <% /* АБЗАЦ О ПРОИЗВОДИТЕЛЯХ ПИТОМНИКА */ %>
+          <el-form-item v-if="ruleForm.yourKennel" label="<%= __('Our Manufacturers') %>" prop="manufacturers">
+            <el-input minlength="10" maxlength="300" show-word-limit
+                      placeholder="<%= __('The paragraph about the dogs of the kennel') %>" type="textarea"
+                      v-model="ruleForm.manufacturers"></el-input>
+          </el-form-item>
+
 
           <el-divider></el-divider>
           <% /* КНОПКИ УПРАВЛЕНИЯ ФОРМОЙ ОТПРАВКИ */ %>
