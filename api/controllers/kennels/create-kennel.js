@@ -71,6 +71,12 @@ module.exports = {
     },
 
 
+    manufacturers: {
+      type: 'string',
+      maxLength: 300,
+      description: 'Описание производителей питомника. Абзац о собаках питомника.'
+    },
+
     phones: {
       description: 'Массив телефонов для связи.',
       // Тип массив словарей
@@ -181,6 +187,7 @@ console.log('CITY:' , _.isEmpty(inputs.city));
       registerNumber: _.trim(inputs.registerNumber),
       dateCreate: await sails.helpers.dateFix(inputs.dateCreate),
       subtitle: inputs.subtitle,
+      manufacturers: inputs.manufacturers,
       site: _.trim(inputs.site),
       city: _.isEmpty(inputs.city) ? null : inputs.city,
       country: inputs.country,

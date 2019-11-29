@@ -104,6 +104,15 @@ module.exports = {
 
 
 
+    manufacturers: {
+      type: 'string',
+      defaultsTo: '',
+      description: 'Описание производителей питомника. Абзац о собаках питомника.'
+    },
+
+
+
+
     location: {
       type: 'string',
       defaultsTo: ''

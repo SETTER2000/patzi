@@ -148,7 +148,11 @@ module.exports = {
       responseType: 'badRequest'
     },
     invalid: {
-      responseType: 'badRequest',
+      description: 'The provided full name, password and / or email address are not valid.',
+      extendedDescription: 'If this request was sent from a graphical user interface, the request ' +
+      'parameters should have been validated/coerced _before_ they were sent.'
+    },
+    invalidRu: {
       description: 'Предоставленные полное имя, пароль и / или адрес электронной почты являются недействительными.',
       extendedDescription: 'If this request was sent from a graphical user interface, the request ' +
       'parameters should have been validated/coerced _before_ they were sent.'
@@ -213,6 +217,7 @@ module.exports = {
 
     let emailAddress = await sails.helpers.genEmail.with({email: inputs.emailAddress, fullName: inputs.fullName});
     let conflictingEmail = (req.me.preferredLocale === 'ru') ? 'userAlreadyInUseRU' : 'userAlreadyInUse';
+    let errInvalid = (req.me.preferredLocale === 'ru') ? 'invalidRu' : 'invalid';
     let confirmedAccount = (req.me.preferredLocale === 'ru') ? 'Подтвердите ваш аккаунт' : 'Please confirm your account';
     let fullName = await sails.helpers.startLetter.with({str: inputs.fullName});
 
@@ -254,8 +259,8 @@ module.exports = {
 console.log('Данные перед созданием user:  ', data);
     // Создаём пользователя
     let newUser = await User.create(data)
-      .intercept('E_UNIQUE', conflictingEmail)
-      .intercept({name: 'UsageError'}, 'invalid')
+      .intercept('E_UNIQUE', ()=>conflictingEmail)
+      .intercept({name: 'UsageError'}, ()=>errInvalid)
       .fetch();
 
     // console.log('inputs.sendCodEmail', inputs.sendCodEmail);

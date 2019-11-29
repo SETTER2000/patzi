@@ -40,6 +40,7 @@ module.exports = {
     let kennel = await Kennel.findOne({'label': label})
       .populate('dogs')
       .populate('owners')
+      .populate('breeder')
       .populate('whoCreate')
       .populate('continent')
       .populate('country')
@@ -52,6 +53,24 @@ module.exports = {
     if (!kennel.action) {
       throw 'temporarilyNotAvailable';
     }
+
+    // Создаём ссылку на логотип
+    kennel.imageSrc = kennel.imageUploadFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/kennels/${kennel.id}`) : '';
+    delete kennel.imageUploadFD;
+
+
+    await kennel.dogs.map(async (dog) => {
+      dog.kennelName = kennel.label;
+      dog.fullName = kennel.right ? `${dog.label} ${dog.kennelName}` : `${dog.kennelName} ${dog.label}`;
+      dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
+      dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
+      // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
+      return dog;
+    });
+
+
+
+
     /**
      * Генерирует ссылки с параметрами изображения,
      * которое должен вернуть S3 для данного модуля.

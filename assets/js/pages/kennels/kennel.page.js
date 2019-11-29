@@ -4,6 +4,10 @@ parasails.registerPage('kennel', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     dialogFormAwards: false,
+    centerDialogVisible: false,
+    centerDialogVisibleOwner : false,
+    photoOwner:'',
+    coOwnerFullName:'',
     direction: 'ttb',
     comment: '',
     circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
@@ -75,7 +79,7 @@ parasails.registerPage('kennel', {
     moment().locale(this.me.preferredLocale);
 
 
-    console.log('DOGGG ', this.kennel);
+    console.log('KENNEL SAILS_LOCALS', this.kennel);
 
 
   },
@@ -292,7 +296,15 @@ parasails.registerPage('kennel', {
       // }
       // this.$message('Нажат элемент: ' + command);
     },
-
+    goTo(path) {
+      window.location = `/${path}`;
+    },
+    goTo2(path) {
+      this.goto(path);
+    },
+    // goDogSale() {
+    //   this.goTo2(this.pathDogSale);
+    // },
 
   }
 });

@@ -795,10 +795,11 @@ parasails.registerPage('users-home', {
       console.log('DATA перед отправкой::: ', data);
       await io.socket.post('/api/v1/users/create-user', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (jwRes.statusCode === 400) ? this.mesError(`${this.i19p.text400Err} ${jwRes.headers['x-exit-description']}`) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+            (jwRes.statusCode === 401) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+              (jwRes.statusCode >= 500) ? this.mesError(`${this.i19p.text500Err} ${jwRes.headers['x-exit-description']}`) : '';
         this.centerDialogAdded = false;
         this.loading.close();
         if (jwRes.statusCode === 200) {

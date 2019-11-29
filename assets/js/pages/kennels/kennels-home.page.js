@@ -29,6 +29,7 @@ parasails.registerPage('kennels-home', {
     searchObjects: '',
     rightName: '',
     subtitle: '',
+    manufacturers: '',
     registerNumber: '',
     search: '',
     objOne: {},
@@ -101,7 +102,8 @@ parasails.registerPage('kennels-home', {
       rightName: true,
       registerNumber: '',
       dateCreate: '',
-      subtitle: ''
+      subtitle: '',
+      manufacturers: ''
     },
     outerVisible: false,
     innerVisible: false,
@@ -133,6 +135,10 @@ parasails.registerPage('kennels-home', {
       subtitle: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
         {min: 10, max: 300, message: 'Length should be 10 to 100', trigger: 'blur'}
+      ],
+      manufacturers: [
+        {message: 'Please tell us about the manufacturers of your nursery. It is very interesting', trigger: 'change'},
+        {min: 10, max: 300, message: 'Length should be 10 to 100', trigger: 'blur'}
       ]
     },
     uprows: {
@@ -158,6 +164,10 @@ parasails.registerPage('kennels-home', {
       ],
       subtitle: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
+        {min: 10, max: 300, message: 'Length should be 10 to 100', trigger: 'blur'}
+      ],
+      manufacturers: [
+        {message: 'Please tell us about the manufacturers of your nursery. It is very interesting', trigger: 'change'},
         {min: 10, max: 300, message: 'Length should be 10 to 100', trigger: 'blur'}
       ]
     },
@@ -409,8 +419,23 @@ parasails.registerPage('kennels-home', {
       }
     },
 
+
+    removePhone(item) {
+      let index = this.updateForm.phones.indexOf(item);
+      if (index !== -1) {
+        this.updateForm.phones.splice(index, 1);
+      }
+    },
+
     addDomain() {
       this.ruleForm.phones.push({
+        key: Date.now(),
+        value: ''
+      });
+    },
+
+    addPhone() {
+      this.updateForm.phones.push({
         key: Date.now(),
         value: ''
       });
@@ -428,7 +453,7 @@ parasails.registerPage('kennels-home', {
     },
 
     addKennel: async function () {
-      console.log('this.cityId::: ' , this.cityId);
+      console.log('this.cityId::: ', this.cityId);
       this.openFullScreen();
       let data = {
         file: this.ruleForm.file,
@@ -438,13 +463,14 @@ parasails.registerPage('kennels-home', {
         country: this.ruleForm.country,
         region: this.ruleForm.region,
         action: this.ruleForm.action,
-        city : this.cityId ? this.cityId :  '',
+        city: this.cityId ? this.cityId : '',
         coOwner: this.coOwnerId,
         breeder: this.breederId,
         rightName: this.ruleForm.rightName,
         site: this.ruleForm.site,
         registerNumber: this.ruleForm.registerNumber,
         subtitle: this.ruleForm.subtitle,
+        manufacturers: this.ruleForm.manufacturers,
         yourKennel: this.ruleForm.yourKennel,
         address: this.ruleForm.address,
         phones: this.ruleForm.phones
@@ -499,8 +525,6 @@ parasails.registerPage('kennels-home', {
         this.updateForm.coOwner ? this.updateForm.coOwner.id : {};
       data.cityId = this.cityId ? this.cityId :
         this.updateForm.city ? this.updateForm.city.id : null;
-      // data.cityId = this.updateForm.city.id;
-
 
       data.coOwner = this.coOwnerId;
       data.dateCreate = this.updateForm.dateCreate;
@@ -594,7 +618,7 @@ parasails.registerPage('kennels-home', {
 
     // Реагирует на событие change в поле города|city
     changeSelectRegion(regionId) {
-      console.log('REGGG:: ' , regionId);
+      console.log('REGGG:: ', regionId);
       this.regionId = regionId;
       this.cityList();
       this.cityListAdd();
@@ -602,8 +626,6 @@ parasails.registerPage('kennels-home', {
       this.ruleForm.city = null;
       console.log('changeSelectCountry::::;', this.updateForm);
     },
-
-
 
 
     changeSelectCity() {
@@ -646,7 +668,7 @@ parasails.registerPage('kennels-home', {
       if (_.isUndefined(this.users) || _.isUndefined(queryString)) return;
       // let users = this.users;
       let results = queryString ? this.users.filter(this.createFilterOwner(queryString)) : this.users;
-console.log('RESULT SEARCH:::; ' , results);
+      console.log('RESULT SEARCH:::; ', results);
       /* clearTimeout(this.timeout);
        this.timeout = setTimeout(() => {*/
       // console.log('results:: ', results);
@@ -887,7 +909,7 @@ console.log('RESULT SEARCH:::; ' , results);
     },
 
     /* Авто поиск по городам */
-  async  querySearch(queryString, cb) {
+    async querySearch(queryString, cb) {
       console.log('Строка поиска города: ', queryString);
       this.cityListAdd();
       let links = this.citys;
@@ -1017,8 +1039,8 @@ console.log('RESULT SEARCH:::; ' , results);
 
     handleEdit(index, row) {
       console.log('ROW input ::: ', row);
-      row.coOwnerId='';
-      row.cowner='';
+      row.coOwnerId = '';
+      row.cowner = '';
       row.breeder = _.isNull(row.breeder) ? {} : row.breeder;
       // row.coOwner = _.isUndefined(row.coOwner) ? {fullName:''} : row.coOwner;
       row.city = _.isNull(row.city) ? {} : row.city;
@@ -1142,7 +1164,7 @@ console.log('RESULT SEARCH:::; ' , results);
         if (jwRes.statusCode === 200) {
           this.updateForm.owners = this.updateForm.owners.filter(owner => owner.id !== this.coownerId);
           console.log('OWWW::: ', this.updateForm.owners);
-          this.cowner='';
+          this.cowner = '';
           this.getList();
           this.$forceUpdate();
           this.centerDialogConfirmDeleteCoOwner = false;

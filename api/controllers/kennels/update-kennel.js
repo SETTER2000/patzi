@@ -103,6 +103,13 @@ module.exports = {
     },
 
 
+    manufacturers: {
+      type: 'string',
+      maxLength: 300,
+      description: 'Описание производителей питомника. Абзац о собаках питомника.'
+    },
+
+
     site: {
       type: 'string',
       description: 'Сайт.'
@@ -202,6 +209,7 @@ module.exports = {
       registerNumber: _.trim(inputs.registerNumber),
       dateCreate: await sails.helpers.dateFix(inputs.dateCreate),
       subtitle: inputs.subtitle,
+      manufacturers: inputs.manufacturers,
       site: _.trim(inputs.site),
       address: inputs.address,
       phones: inputs.phones,
