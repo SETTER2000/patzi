@@ -183,16 +183,19 @@
                   </el-carousel>
                 </template>
                 <!--children: {{dog.parents.parents}}-->
-                <div class="block" v-for="parent in dog.parents.parents" :key="parent.id" v-if="dog.parents">
+
+                <div class="block" v-for="parent in dog.parents" :key="parent.id" v-if="dog.parents">
+                 {{parent.gender}}:  {{parent.fullName}}
                   <el-tooltip class="item" effect="dark" placement="left-start">
                     <div slot="content"><%= __('Co-owner') %>: {{parent.fullName}}</div>
-                    <el-button type="text" @click="centerDialogVisibleOwner = true; coOwnerFullName=parent.fullName;photoOwner=parent.avatar"
+                    <el-button v-if="parent.images" type="text" @click="centerDialogVisibleOwner = true; coOwnerFullName=parent.fullName;photoOwner=parent.avatar"
                                circle>
-                      <el-avatar :size="'small'" :src="parent.avatar"></el-avatar>
+                      <!--<el-avatar :size="'small'" :src="parent.images[parent.cover].imageSrc"></el-avatar>-->
                     </el-button>
                   </el-tooltip>
-                  {{parent.gender}}
+
                 </div>
+
               </div>
             </div>
           </div>
