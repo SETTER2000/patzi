@@ -89,13 +89,48 @@ module.exports = {
     });
 
     let dogsId = _.pluck(kennel.dogs, 'id');
-    console.log('dogsId::: ', dogsId);
-    let parent = await Dog.find({id:dogsId}).populate('parents');
-    console.log('PARENT:: ', parent);
+    // console.log('dogsId::: ', dogsId);
+    // Получаем всех собак питомника и их родителей
+    let dogs = await Dog.find({id:dogsId}).populate('parents');
+
+    if(dogs){
+      dogs= await sails.helpers.cloudFrontUrlMin.with({
+        collection: dogs,
+        collectionName: 'dog',
+        field: 'images',
+        createField:'imgI7',
+        subfolder:'parents',
+        collectionToCollection:true,
+        // Этот объект обязателен, хотя может быть и пустой.
+        edits: {
+          "resize": {
+            "width": 414,
+            // "height": 160,
+            "fit": "inside",
+            "background": {
+              "r": 255,
+              "g": 255,
+              "b": 255,
+              "alpha": 1
+            }
+          },
+          "flatten": {
+            "background": {
+              "r": 255,
+              "g": 255,
+              "b": 255,
+              "alpha": null
+            }
+          }
+        }
+      });
+    }
+
+    // console.log('PARENT:: ', dogs);
 
     await kennel.dogs.map(dog => {
       dog.kennelName = kennel.label;
-      dog.parents = parent ? _.find(parent,{id:dog.id}) : 'No children';
+      dog.parents = dogs ? _.find(dogs,{id:dog.id}).parents : 'No children';
       dog.fullName = kennel.right ? `${dog.label} ${dog.kennelName}` : `${dog.kennelName} ${dog.label}`;
       dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
       dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере

@@ -30,6 +30,10 @@ module.exports = {
       description: 'Название коллекции. Устанавливается в путь к файлу фотографии.',
       required: true
     },
+    collectionToCollection: {
+      type: 'boolean',
+      defaultsTo: false
+    },
     collection: {
       type: 'ref',
       description: 'Объекты коллекции со всеми данными',
@@ -75,6 +79,7 @@ module.exports = {
 
   fn: async function (inputs) {
     const btoa = require('btoa');
+    let resultCollection = '';
 
     /* resize = {
         fit: 'inside',
@@ -82,7 +87,49 @@ module.exports = {
         height:800
       }*/
 
-
+    /**
+     * Рекурсивная функция. обавляет свойство imagesSrc все объекты где есть свойство fd.
+     * Св-во imagesSrc формируется из сроки fd.
+     */
+    const sumSalaries = (collection, options) => {
+      console.log('Inpput:::: ', collection);
+      if (_.isArray(collection)) {
+        for (let o of collection) {
+          console.log('FOR:', o);
+          if (_.isObject(o)) {
+            console.log('ARR-2:', o);
+            console.log('options:::: ', options);
+            // let collectionId = inputs.collection.id ? inputs.collection.id : inputs.collectionId;
+            // let subfolder = inputs.subfolder ? inputs.subfolder : inputs.field;
+            // o.fd ? o.imageSrc = url.resolve(sails.config.custom.baseUrl, `/download/${options.collectionName}/${options.collectionId}/${options.subfolder}/${id}`) : '';
+            console.log('Объект перед return::: ', o);
+            //if(o.src) return o;
+            sumSalaries(o, options);
+          } else {
+            console.log('Else return::: ', o);
+            return o;
+          }
+        }
+      } else {
+        let s = [];
+        for (let o of Object.values(collection)) {
+          console.log('else::: ', o);
+          if (_.isArray(o)) {
+            let ret = sumSalaries(o, options);
+            if (!_.isUndefined(ret)) s.push(ret);
+          }
+          if (!_.isUndefined(o)) s.push(o);
+        }
+        return s;
+      }
+    };
+    resultCollection = sumSalaries(inputs.collection, {collectionName: inputs.collectionName});
+    console.log('Recursia - resultCollection:::: ', resultCollection);
+    if (_.isArray(inputs.collection) && inputs.collectionToCollection) {
+      // resultCollection = sumSalaries(inputs.collection, {collectionName: 'dog'});
+      console.log('Recursia - resultCollection:::: ', resultCollection);
+      inputs.collection[inputs.createField] = resultCollection;
+    }
     /**
      * Переработать коллекцию в другую коллекцию
      * @param object - объект который содержит в одном из свойств коллекцию для переработки
@@ -148,7 +195,8 @@ module.exports = {
               return img;
             }) : '';
           obj[inputs.createField] = im;
-        } else {
+        }
+        else {
           // console.log('Collections Many Location');
           obj[inputs.createField] = (!_.isEmpty(obj[inputs.field])) ? await obj[inputs.field].map((image, i) => {
             i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
