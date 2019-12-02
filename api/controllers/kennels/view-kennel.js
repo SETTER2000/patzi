@@ -36,7 +36,6 @@ module.exports = {
     const url = require('url');
 
     let label = _.startCase(inputs.label);
-    console.log('kennelName::: ', label);
     let kennel = await Kennel.findOne({'label': label})
       .populate('dogs')
       .populate('owners')
@@ -225,7 +224,7 @@ module.exports = {
     });
 
 
-    console.log('DOGG::: ', kennel);
+    // console.log('DOGG::: ', kennel);
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
 
     // Respond with view.

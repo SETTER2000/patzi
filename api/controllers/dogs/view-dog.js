@@ -31,7 +31,6 @@ module.exports = {
   fn: async function (inputs, exits) {
     const moment = require('moment');
     let fullName = _.startCase(inputs.fullName);
-    console.log('dogName::: ', fullName);
     let dog = await Dog.findOne({'fullName': fullName})
       .populate('parents')
       .populate('children')
@@ -213,15 +212,13 @@ module.exports = {
     });
 
     dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc');
-    console.log('DOGG::: ', dog);
-    // Рассылаем данные всем подписанным на событие list-* данной комнаты.
+    // console.log('DOGG::: ', dog);
+
 
     // Respond with view.
     return exits.success({
       currentSection: 'dog',
       dog
     });
-
   }
-
 };

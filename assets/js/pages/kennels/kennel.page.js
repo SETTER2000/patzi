@@ -7,6 +7,7 @@ parasails.registerPage('kennel', {
     centerDialogVisible: false,
     centerDialogVisibleOwner : false,
     photoOwner:'',
+    linkDog:'',
     coOwnerFullName:'',
     direction: 'ttb',
     comment: '',
@@ -80,8 +81,6 @@ parasails.registerPage('kennel', {
 
 
     console.log('KENNEL SAILS_LOCALS', this.kennel);
-
-
   },
 
 
@@ -120,15 +119,7 @@ parasails.registerPage('kennel', {
       moment.locale(l);
       let formatNew = (!format) ? 'LLL' : format;
       let now = moment.parseZone();
-      /*  let event = moment.parseZone(value, ["DD.MM.YYYY"]);
-         let a=moment.preciseDiff(now, event);
-        console.log('now: ', now);
-        console.log('EVENT: ', event);
-        console.log('a: ', a);*/
       return moment(value).preciseDiff(now);
-      // return moment.parseZone(value).toNow(true);
-      // return moment(value).toNow(true);
-      // (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
   },
 
@@ -140,12 +131,6 @@ parasails.registerPage('kennel', {
         return new Map(this.dic).get(this.me.preferredLocale);
       }
     },
-  /*  winner: {
-      get: function () {
-        // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
-        return this.kennel.winner;
-      }
-    },*/
 
     indexSlide: {
       get: function () {
@@ -246,55 +231,8 @@ parasails.registerPage('kennel', {
         case 'c':
           this.goto('/kennels/chinese-crested');
           break;
-        /* case 'f':
-           window.location = '/litters/new';
-           break;
-         case 'g':
-           this.setAddedPresentation(command);
-           break;
-         case 'dl':
-           this.clickDeleteLitter();
-           break;
-         case 'allView':
-           this.allViewed(command);
-           break;
-         case 'like':
-           this.addLike(command);
-           break;
-         case 'super':
-           this.addLike(command);
-           break;
-         case 'wow':
-           this.addLike(command);
-           break;
-         case 'haha':
-           this.addLike(command);
-           break;
-         case 'commentLike':
-           this.commentLike(command);
-           break;
-         case 'commentSuper':
-           this.commentLike(command);
-           break;
-         case 'commentWow':
-           this.commentLike(command);
-           break;
-         case 'commentHaha':
-           this.commentLike(command);
-           break;
-         case 'link':
-           window.location = '/litters';
-           break;
-         case 'deleteComment':
-           this.deleteComment(command);
-           break;
-         case 'changeComment':
-           this.changeOpenComment(command);
-           break;*/
         //default:  this.setIndexPhotoSet(command);
       }
-      // }
-      // this.$message('Нажат элемент: ' + command);
     },
     goTo(path) {
       window.location = `/${path}`;
@@ -302,9 +240,11 @@ parasails.registerPage('kennel', {
     goTo2(path) {
       this.goto(path);
     },
-    // goDogSale() {
-    //   this.goTo2(this.pathDogSale);
-    // },
+
+    getLinkDetailDog(nameDog){
+      if(!nameDog) return;
+      return `/chinese-crested/${nameDog.split(" ").join('-')}`;
+    },
 
   }
 });

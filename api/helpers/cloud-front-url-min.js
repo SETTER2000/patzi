@@ -79,7 +79,7 @@ module.exports = {
 
   fn: async function (inputs) {
     const btoa = require('btoa');
-    let resultCollection = '';
+    let resultImgRecursion = '';
 
     /* resize = {
         fit: 'inside',
@@ -87,49 +87,56 @@ module.exports = {
         height:800
       }*/
 
-    /**
-     * Рекурсивная функция. обавляет свойство imagesSrc все объекты где есть свойство fd.
-     * Св-во imagesSrc формируется из сроки fd.
-     */
-    const sumSalaries = (collection, options) => {
-      console.log('Inpput:::: ', collection);
-      if (_.isArray(collection)) {
-        for (let o of collection) {
-          console.log('FOR:', o);
-          if (_.isObject(o)) {
-            console.log('ARR-2:', o);
-            console.log('options:::: ', options);
-            // let collectionId = inputs.collection.id ? inputs.collection.id : inputs.collectionId;
-            // let subfolder = inputs.subfolder ? inputs.subfolder : inputs.field;
-            // o.fd ? o.imageSrc = url.resolve(sails.config.custom.baseUrl, `/download/${options.collectionName}/${options.collectionId}/${options.subfolder}/${id}`) : '';
-            console.log('Объект перед return::: ', o);
-            //if(o.src) return o;
-            sumSalaries(o, options);
-          } else {
-            console.log('Else return::: ', o);
-            return o;
-          }
-        }
-      } else {
-        let s = [];
-        for (let o of Object.values(collection)) {
-          console.log('else::: ', o);
-          if (_.isArray(o)) {
-            let ret = sumSalaries(o, options);
-            if (!_.isUndefined(ret)) s.push(ret);
-          }
-          if (!_.isUndefined(o)) s.push(o);
-        }
-        return s;
-      }
-    };
-    resultCollection = sumSalaries(inputs.collection, {collectionName: inputs.collectionName});
-    console.log('Recursia - resultCollection:::: ', resultCollection);
+
     if (_.isArray(inputs.collection) && inputs.collectionToCollection) {
-      // resultCollection = sumSalaries(inputs.collection, {collectionName: 'dog'});
-      console.log('Recursia - resultCollection:::: ', resultCollection);
-      inputs.collection[inputs.createField] = resultCollection;
+      /**
+       * Рекурсивная функция. обновляет свойство imagesSrc все объекты где есть свойство fd.
+       * Св-во imagesSrc формируется из строки fd.
+       */
+      const imgRecursion = (collection, options) => {
+        if (_.isArray(collection)) {
+          for (let o of collection) {
+            if (_.isObject(o)) {
+              if (sails.config.environment === 'production' && o.fd) {
+                let imageRequest = JSON.stringify({
+                  bucket: sails.config.uploads.bucket,
+                  key: o.fd,
+                  edits: inputs.edits
+                });
+                o.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+              }else{
+                o.imageSrc = o.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${options.collectionName}/${options.objectCollectionId}/${options.field}/0`) : '';
+              }
+              imgRecursion(o, options);
+            } else {
+              return o;
+            }
+          }
+        } else {
+          let s = [];
+          options.objectCollectionId = collection.id ? collection.id : '';
+          for (let o of Object.values(collection)) {
+            if (_.isArray(o)) {
+              let ret = imgRecursion(o, options);
+              if (!_.isUndefined(ret)) s.push(ret);
+            }
+            if (!_.isUndefined(o)) s.push(o);
+          }
+          return s;
+        }
+      };
+
+      let options = {
+        collectionName: inputs.collectionName,
+        collectionId: inputs.collection.id ? inputs.collection.id : inputs.collectionId,
+        subfolder: inputs.subfolder ? inputs.subfolder : inputs.field,
+        field: inputs.field,
+      };
+      resultImgRecursion = imgRecursion(inputs.collection, options);
+      // console.log('Recursia - resultImgRecursion:::: ', resultImgRecursion);
+      inputs.collection[inputs.createField] = resultImgRecursion;
     }
+
     /**
      * Переработать коллекцию в другую коллекцию
      * @param object - объект который содержит в одном из свойств коллекцию для переработки
@@ -147,27 +154,26 @@ module.exports = {
       return a;
     }
 
+    let getCloudFrontImg = im => {
+     return im.map(img => {
+        let imageRequest = JSON.stringify({
+          bucket: sails.config.uploads.bucket,
+          key: img.fd,
+          edits: inputs.edits
+        });
+        img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+        return img;
+      })
+    };
     if (!_.isArray(inputs.collection)) {
-      // console.log('Collections One:');
       if (sails.config.environment === 'production') {
-        // console.log('Collections One Production');
         let im = reprocessedObj(inputs.collection[inputs.field], 'fd');
         (!_.isEmpty(inputs.collection[inputs.field]) && !_.isUndefined(inputs.collection[inputs.field][0])) ?
-          im.map(img => {
-            let imageRequest = JSON.stringify({
-              bucket: sails.config.uploads.bucket,
-              key: img.fd,
-              edits: inputs.edits
-            });
-            img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-            return img;
-          }) : '';
+          getCloudFrontImg(im) : '';
         inputs.collection[inputs.createField] = im;
-      } else {
-        // console.log('Collections One Locale');
-        // console.log('Входящая коллекцияЖЖЖ ', inputs.collection);
+      }
+      else {
         let im = reprocessedObj(inputs.collection[inputs.field], 'name');
-        // console.log('I:::', im);
         let collectionId = inputs.collection.id ? inputs.collection.id : inputs.collectionId;
         let subfolder = inputs.subfolder ? inputs.subfolder : inputs.field;
         (!_.isEmpty(inputs.collection[inputs.field])) ? im.map((image, i) => {
@@ -179,21 +185,12 @@ module.exports = {
       }
     }
     else {
-      // console.log('Collections Many:');
       await _.each(inputs.collection, async (obj) => {
-        console.log('Collections Many Production');
+        // console.log('Collections Many Production');
         if (sails.config.environment === 'production') {
           let im = reprocessedObj(obj[inputs.field], 'fd');
           (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ?
-            im.map(img => {
-              let imageRequest = JSON.stringify({
-                bucket: sails.config.uploads.bucket,
-                key: img.fd,
-                edits: inputs.edits
-              });
-              img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-              return img;
-            }) : '';
+           getCloudFrontImg(im) : '';
           obj[inputs.createField] = im;
         }
         else {
@@ -206,6 +203,17 @@ module.exports = {
         }
       });
     }
+
+    /*im.map(img => {
+      let imageRequest = JSON.stringify({
+        bucket: sails.config.uploads.bucket,
+        key: img.fd,
+        edits: inputs.edits
+      });
+      img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+      return img;
+    })*/
+
     /*  console.log('Выходная коллекция One:::: ', inputs.collection);
       console.log(`Выходная коллекция Many 1 из ${inputs.collection.length} :::: `, inputs.collection[0]);*/
     return inputs.collection;
