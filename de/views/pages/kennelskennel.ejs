@@ -14,10 +14,14 @@
   </el-dialog>
   <% /* ДИАЛОГОВОЕ ОКНО. ФОТО Совладельца*/ %>
   <el-dialog
-    :title="coOwnerFullName"
     :visible.sync="centerDialogVisibleOwner"
     width="30%"
     center>
+    <div slot="title" class="dialog-title">
+      <el-link v-if="linkDog" :underline="false" @click="goTo2(linkDog)" type="danger">{{coOwnerFullName}}</el-link>
+      <span v-else>{{coOwnerFullName}}</span>
+    </div>
+
     <img class="img-fluid" :src="photoOwner" :alt="kennel.label">
     <span slot="footer" class="dialog-footer">
     <el-button @click="centerDialogVisibleOwner = false; photoOwner='';coOwnerFullName=''"><%= __('Close') %></el-button>
@@ -98,9 +102,11 @@
           </div>
         </div>
         <div class="col-lg-5 about-left">
+          <% /* Фото питомника */ %>
           <img class="img-fluid" :src="kennel.imageSrc" :alt="kennel.label">
           <div class="row py-3">
-            <div  :class="[_.isEmpty(kennel.owners) ? 'col-12' : '','col-6']">
+            <% /* Информация о владельце питомника */ %>
+            <div :class="[_.isEmpty(kennel.owners) ? 'col-12' : '','col-6']">
               <div class="mr-3" v-if="kennel.breeder">
                 <span><i
                     class="el-icon-user-solid"></i><strong> {{kennel.breeder.fullNameEn}} ({{kennel.breeder.fullName}})</strong></span>
@@ -112,6 +118,7 @@
                    </span>
               </div>
             </div>
+            <% /* Информация о совладельце питомника */ %>
             <div class="col" v-if="kennel.owners">
               <div class="" v-for="(owner, index) in kennel.owners" :key="owner.id">
                 <span><i class="el-icon-user-solid"></i><strong> {{owner.fullNameEn}} ({{owner.fullName}})</strong></span>
@@ -127,11 +134,11 @@
         </div>
         <div class="offset-lg-1 col-lg-5 col-md-12 about-right">
           <div class="section-title">
-            <h2 class="mb-4">
-              {{kennel.label}}</h2>
+            <% /* Название питомника */ %>
+            <h2 class="mb-4"> {{kennel.label}}</h2>
           </div>
+          <% /* Описание питомника */ %>
           <div class="mb-35 wow fadeIn text-justify" data-wow-duration=".8s" data-wow-delay=".3s">
-
             <p>{{kennel.subtitle}}</p>
 
             <h4 v-if="kennel.manufacturers"> <%= __('Our Manufacturers') %></h4>
@@ -139,7 +146,8 @@
             <!--<p><strong> <%= __('ATTENTION OF BEGINNERS!') %></strong>-->
             <!--<br><%= __('Dogs of this breed have an uncontrollable ability to breed. This state of affairs has not yet been explained. (mystery of nature)') %>-->
             <!--</p>-->
-            <footer v-if="kennel.manufacturers | kennel.subtitle" class="blockquote-footer text-right"><cite title="Source Title">{{kennel.label}} Kennel</cite></footer>
+            <footer v-if="kennel.manufacturers | kennel.subtitle" class="blockquote-footer text-right"><cite title="Source Title">{{kennel.label}}
+                Kennel</cite></footer>
           </div>
         </div>
       </div>
@@ -149,6 +157,7 @@
 
   <!-- Start Service Area -->
   <section class="service-area section-gap-top">
+    <% /* Собаки питомника */ %>
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
@@ -163,7 +172,7 @@
           <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
             <div class="d-flex align-items-center mb-3">
               <template v-if="dog.gender==='sire'">
-              <i class="el-icon-male"></i>
+                <i class="el-icon-male"></i>
               </template>
               <template v-else>
                 <i class="el-icon-female"></i>
@@ -173,34 +182,38 @@
               </h4>
             </div>
             <div class="demo-image__preview">
-              <div v-if="dog.images">
+              <div v-if="dog.images" style="position: relative">
                 <template>
                   <el-carousel class="menu-center" trigger="click" :autoplay="false" indicator-position="none">
-                    <el-carousel-item v-for="(img, index) of dog.imagesMin" :key="img.id" >
+                    <el-carousel-item v-for="(img, index) of dog.imagesMin" :key="img.id">
                       <!--<p class="medium">{{ dog.description }}</p>-->
                       <img :src="img.imageSrc" style="margin: 0 auto; width: auto; height: 100%; " alt="">
                     </el-carousel-item>
                   </el-carousel>
                 </template>
                 <!--children: {{dog.parents.parents}}-->
-
-                <div class="block" v-for="parent in dog.parents" :key="parent.id" v-if="dog.parents">
-                 {{parent.gender}}:  {{parent.fullName}}
-                  <el-tooltip class="item" effect="dark" placement="left-start">
-                    <div slot="content"><%= __('Co-owner') %>: {{parent.fullName}}</div>
-                    <el-button v-if="parent.images" type="text" @click="centerDialogVisibleOwner = true; coOwnerFullName=parent.fullName;photoOwner=parent.avatar"
-                               circle>
-                      <!--<el-avatar :size="'small'" :src="parent.images[parent.cover].imageSrc"></el-avatar>-->
-                    </el-button>
-                  </el-tooltip>
-
+                <div class="flex menu-center" style="position: absolute; right:5px;top:5px; z-index:10;">
+                  <div v-for="parent in dog.parents" :key="parent.id" v-if="dog.parents">
+                    <!--{{parent.gender}}: {{parent.fullName}}-->
+                    <el-tooltip class="item" effect="dark" placement="top">
+                      <div slot="content">{{parent.gender}}: {{parent.fullName}}</div>
+                      <el-button v-if="parent.images" type="text" circle
+                                 @click="centerDialogVisibleOwner = true;linkDog=getLinkDetailDog(parent.fullName); coOwnerFullName=parent.fullName;photoOwner=parent.images[parent.cover].imageSrc"
+                      >
+                        <div class="demo-basic--circle">
+                          <div class="block">
+                            <el-avatar :size="18" :src="parent.images[parent.cover].imageSrc"></el-avatar>
+                          </div>
+                      </el-button>
+                    </el-tooltip>
+                  </div>
                 </div>
 
               </div>
             </div>
           </div>
         </div>
-       <!-- <div class="col-lg-4 col-md-6">
+        <!-- <div class="col-lg-4 col-md-6">
           <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
             <div class="d-flex align-items-center mb-3">
               <i class="flaticon-water"></i>
