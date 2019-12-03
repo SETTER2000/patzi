@@ -5,21 +5,21 @@ parasails.registerPage('kennel', {
   data: {
     dialogFormAwards: false,
     centerDialogVisible: false,
-    centerDialogVisibleOwner : false,
-    photoOwner:'',
-    linkDog:'',
-    coOwnerFullName:'',
+    centerDialogVisibleOwner: false,
+    photoOwner: '',
+    linkDog: '',
+    coOwnerFullName: '',
     direction: 'ttb',
     comment: '',
     circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
     squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
     sizeList: ["large", "medium", "small"],
-    worldWinner: [ {
+    worldWinner: [{
       year: '2013',
       address: 'Hungary, Budapest',
-      description:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
+      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
     }],
-    dic: [
+    dic:[
       ['en', {
         textOneErr: `An error has occurred`,
         textTwoErr: `No comment added.`,
@@ -102,14 +102,14 @@ parasails.registerPage('kennel', {
       if (!value) {
         return '';
       }
-     return (value * 0.393700).toFixed(1);
+      return (value * 0.393700).toFixed(1);
     },
     //Киллограммы в фунты
     getFunt: function (value, l, format) {
       if (!value) {
         return '';
       }
-     return (value/1000 * 2.20462).toFixed(1);
+      return (value / 1000 * 2.20462).toFixed(1);
     },
 
     getAge: function (value, l, format) {
@@ -241,8 +241,8 @@ parasails.registerPage('kennel', {
       this.goto(path);
     },
 
-    getLinkDetailDog(nameDog){
-      if(!nameDog) return;
+    getLinkDetailDog(nameDog) {
+      if (!nameDog) return;
       return `/chinese-crested/${nameDog.split(" ").join('-')}`;
     },
 

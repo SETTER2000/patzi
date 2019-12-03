@@ -294,7 +294,7 @@ $(document).ready(function () {
 
         $("html, body").animate(
           {
-            scrollTop: $(window.location.hash).offset().top - 108
+            // scrollTop: $(window.location.hash).offset().top - 108
           },
           1000
         );

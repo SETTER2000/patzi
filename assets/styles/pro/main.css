@@ -1346,7 +1346,7 @@ th {
 }
 
 b, sup, sub, u, del {
-  color: #f81c1c;
+  /*color: #f81c1c;*/
 }
 
 h1 {
@@ -2464,7 +2464,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: all 0.5s;
   z-index: 997;
   background: #fff;
-  margin-bottom: 31px;
+  /*margin-bottom: 31px;*/
 }
 
 @media (max-width: 1665px) {
