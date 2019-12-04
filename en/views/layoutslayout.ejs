@@ -397,7 +397,7 @@
         </nav>
       </div>
     </header>-->
-    <header class="u-align-right-xs u-border-no-bottom u-border-no-left u-border-no-right u-border-no-top u-clearfix u-header" id="sec-599b">
+    <header class="u-align-right-xs u-border-no-bottom u-border-no-left u-border-no-right u-border-no-top u-clearfix u-header u-white u-header" id="sec-599b">
       <div class="u-clearfix u-sheet u-sheet-1">
         <a href="/" class="u-border-no-bottom u-border-no-left u-border-no-right u-border-no-top u-image u-logo u-image-1" title="Poale Ell Kennel" data-image-width="141" data-image-height="34">
           <img src="/images/logo.png" class="u-logo-image u-logo-image-1" data-image-width="130">
@@ -425,11 +425,11 @@
                 <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" href="/about" style="padding: 10px 16px;"><%= __('About') %></a>
               </li>
               <li class="u-nav-item">
-                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 16px;"><%= __('Pages') %></a>
+                <a href="#" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 16px;"><%= __('Pages') %></a>
                 <div class="u-nav-popup">
                   <ul class="u-h-spacing-42 u-nav u-unstyled u-v-spacing-20 u-nav-2">
                     <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-hover-palette-1-base u-white" href="/dogs"><%= __('Dogs') %></a>
+                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-hover-palette-1-base u-white" href="/dogs/chinese-crested"><%= __('Dogs') %></a>
                     </li>
                     <li class="u-nav-item">
                       <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-hover-palette-1-base u-white" href="/portfolio"><%= __('Portfolio') %></a>
@@ -447,20 +447,34 @@
                 </div>
               </li>
               <li class="u-nav-item">
-                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 16px;">Account</a>
+                <a href="#" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 16px;"><%= __('Account') %></a>
                 <div class="u-nav-popup">
                   <ul class="u-h-spacing-42 u-nav u-unstyled u-v-spacing-20 u-nav-3">
                     <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-hover-palette-1-base u-white" href="settings">Settings</a>
+                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-hover-palette-1-base u-white" href="/account"><%= __('Settings') %></a>
                     </li>
                     <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-hover-palette-1-base u-white" href="logout">Log Out</a>
+                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-hover-palette-1-base u-white" href="/logout"><%= __('Log Out') %></a>
                     </li>
                   </ul>
                 </div>
               </li>
               <li class="u-nav-item">
-                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 16px;"><%= __('Settings') %></a>
+                <a id="language" href="#"
+                   class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 20px;"
+                   data-language="<%= me.preferredLocale === 'ru' ? 'en' : 'ru' %>"><%= me.preferredLocale === 'ru' ? 'English' : 'Русский' %>
+                </a>
+                <div class="u-nav-popup">
+                  <ul class="u-custom-font u-font-oswald u-h-spacing-33 u-nav u-unstyled u-v-spacing-13 u-nav-4">
+                    <li class="u-nav-item">
+                      <a href="#" class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-palette-5-light-3 u-text-hover-palette-1-light-1" data-language="<%= me.preferredLocale === 'ru' ? 'en' : 'ru' %>"><%= me.preferredLocale === 'ru' ? 'Русский' : 'English' %>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="u-nav-item">
+                <a href="#" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 16px;"><%= __('Settings') %></a>
                 <div class="u-nav-popup">
                   <ul class="u-h-spacing-42 u-nav u-unstyled u-v-spacing-20 u-nav-4">
                     <li class="u-nav-item">
@@ -1126,7 +1140,6 @@
 <script src="/dependencies/hoverIntent.js"></script>
 <script src="/dependencies/imagesloaded.pkgd.js"></script>
 <script src="/dependencies/isotope.pkgd.js"></script>
-<script src="/dependencies/jquery_191.js"></script>
 <script src="/dependencies/jquery-imagefill.js"></script>
 <script src="/dependencies/jquery-ui/jquery-ui.js"></script>
 <script src="/dependencies/jquery-ui/ui/i18n/datepicker-de.js"></script>
