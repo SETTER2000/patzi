@@ -155,15 +155,15 @@ $(document).ready(function () {
       });
     });
 
-    if (document.getElementById("work")) {
-      var $grid = $(".grid").isotope({
-        itemSelector: ".grid-item",
-        percentPosition: true,
-        masonry: {
-          columnWidth: ".grid-sizer"
-        }
-      });
-    }
+    // if (document.getElementById("work")) {
+    //   // var $grid = $(".grid").isotope({
+    //   //   itemSelector: ".grid-item",
+    //   //   percentPosition: true,
+    //   //   masonry: {
+    //   //     columnWidth: ".grid-sizer"
+    //   //   }
+    //   // });
+    // }
   });
 
   //------- Accordion  js --------//
