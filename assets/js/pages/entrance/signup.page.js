@@ -59,21 +59,42 @@ parasails.registerPage('signup', {
       // Validate full name:
       if(!argins.fullName) {
         this.formErrors.fullName = true;
+        this.$message({
+          showClose: true,
+          message: 'Бумс! Пожалуйста введите Ваше ФИО.',
+          type: 'error'
+        });
       }
 
       // Validate email:
       if(!argins.emailAddress || !parasails.util.isValidEmailAddress(argins.emailAddress)) {
         this.formErrors.emailAddress = true;
+        this.$message({
+          showClose: true,
+          message: 'Бумс! Пожалуйста введите правильный email.',
+          type: 'error'
+        });
       }
 
       // Validate password:
       if(!argins.password) {
         this.formErrors.password = true;
+
+        this.$message({
+          showClose: true,
+          message: 'Ошибка. Вы не указали пароль.',
+          type: 'error'
+        });
       }
 
       // Подтвердите подтверждение пароля:
       if(argins.password && argins.password !== argins.confirmPassword) {
         this.formErrors.confirmPassword = true;
+        this.$message({
+          showClose: true,
+          message: 'Ошибка. Пороли не совпадают.',
+          type: 'error'
+        });
       }
 
       // Подтвердить соглашение ToS:
