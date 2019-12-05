@@ -81,11 +81,11 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
   <!-- import JavaScript -->
 
 </head>
-<body   data-home-page-name='Homepage' class="u-body u-overlap">
+<body   data-home-page-name='Homepage' class="u-body u-overlap" v-cloak>
 
 <% if(!me){ %>
-<div class="content">
-  <div id="page-wrap">
+<!--<div class="content">-->
+  <!--<div id="page-wrap">-->
     <% } %>
 
     <!-- Start Preloader Area -->
@@ -230,173 +230,6 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
       </div>
     </header>-->
     <!--sec-599b | header-->
-<!--    <header class="u-clearfix u-header u-header" id="sec-599b">
-      <div class="u-clearfix u-sheet u-sheet-1">
-        <a href="" class="u-image u-logo u-image-1">
-          <img src="/images/logo.png" class="u-logo-image u-logo-image-1">
-        </a>
-        <nav class="u-dropdown-icon u-menu u-menu-dropdown u-offcanvas u-menu-1">
-          <div class="menu-collapse u-custom-font u-font-oswald" style="font-size: 1.125rem; letter-spacing: 0; font-weight: 500;">
-            <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-text-hover-color u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
-              <svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#menu-hamburger"></use></svg>
-              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><symbol id="menu-hamburger" viewBox="0 0 16 16" style="width: 16px; height: 16px;"><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
-                  </symbol>
-                </defs></svg>
-            </a>
-          </div>
-          <div class="u-custom-menu u-nav-container">
-            <ul class="u-custom-font u-font-oswald u-nav u-unstyled u-nav-1">
-              <li class="u-nav-item">
-                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" href="/" style="padding: 10px 20px;"><i class="el-icon-s-home"></i></a>
-              </li>
-              <li class="u-nav-item">
-                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" href="/about" style="padding: 10px 20px;"><%= __('About') %></a>
-              </li>
-              <li class="u-nav-item">
-                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" href="/litters" style="padding: 10px 20px;"><%= __('Litters') %></a>
-              </li>
-              <li class="u-nav-item">
-                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 20px;"><%= __('Pages') %></a>
-                <div class="u-nav-popup">
-                  <ul class="u-h-spacing-33 u-nav u-unstyled u-v-spacing-13 u-nav-2">
-                    <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-palette-5-light-3 u-text-hover-palette-1-base" href="/dogs/chinese-crested"><%= __('Dogs') %></a>
-                    </li>
-                    <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-palette-5-light-3 u-text-hover-palette-1-base" href="/portfolio"><%= __('Portfolio') %></a>
-                    </li>
-                    <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-palette-5-light-3 u-text-hover-palette-1-base" href="/contact"><%= __('Contact') %></a>
-                    </li>
-                    <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-palette-5-light-3 u-text-hover-palette-1-base" href="/pricing"><%= __('Pricing') %></a>
-                    </li>
-                    <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-palette-5-light-3 u-text-hover-palette-1-base" href="/kennels"><%= __('Kennels') %></a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li class="u-nav-item">
-                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 20px;"><%= __('Account') %></a>
-                <div class="u-nav-popup">
-                  <ul class="u-h-spacing-33 u-nav u-unstyled u-v-spacing-13 u-nav-3">
-                    <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-palette-5-light-3 u-text-hover-palette-1-base" href="/account"><%= __('Settings') %></a>
-                    </li>
-                    <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-palette-5-light-3 u-text-hover-palette-1-base" href="/logout"><%= __('Sign Out') %></a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li class="u-nav-item">
-                <a id="language"
-                   class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 20px;"
-                   data-language="<%= me.preferredLocale === 'ru' ? 'en' : 'ru' %>"><%= me.preferredLocale === 'ru' ? 'English' : 'Русский' %>
-                </a>
-                <div class="u-nav-popup">
-                  <ul class="u-custom-font u-font-oswald u-h-spacing-33 u-nav u-unstyled u-v-spacing-13 u-nav-4">
-                    <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-palette-5-light-3 u-text-hover-palette-1-light-1" data-language="<%= me.preferredLocale === 'ru' ? 'en' : 'ru' %>"><%= me.preferredLocale === 'ru' ? 'Русский' : 'English' %>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li class="u-nav-item">
-                <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 20px;"><%= __('Settings') %></a>
-                <div class="u-nav-popup">
-                  <ul class="u-h-spacing-33 u-nav u-unstyled u-v-spacing-13 u-nav-5">
-                    <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-palette-5-light-3 u-text-hover-palette-1-base" href="/users"><%= __('Users') %></a>
-                    </li>
-                    <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-palette-5-light-3 u-text-hover-palette-1-base" href="/groups"><%= __('Groups') %></a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="u-custom-menu u-nav-container-collapse">
-            <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
-              <div class="u-menu-close"></div>
-              <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-6">
-                <li class="u-nav-item">
-                  <a class="u-button-style u-nav-link" href="/" style="padding: 10px 20px;"><i class="el-icon-s-home"></i></a>
-                </li>
-                <li class="u-nav-item">
-                  <a class="u-button-style u-nav-link" href="/about" style="padding: 10px 20px;"><%= __('About') %></a>
-                </li>
-                <li class="u-nav-item">
-                  <a class="u-button-style u-nav-link" href="/litters" style="padding: 10px 20px;"><%= __('Litters') %></a>
-                </li>
-                <li class="u-nav-item">
-                  <a class="u-button-style u-nav-link" style="padding: 10px 20px;"><%= __('Pages') %></a>
-                  <div class="u-nav-popup">
-                    <ul class="u-h-spacing-33 u-nav u-unstyled u-v-spacing-13 u-nav-7">
-                      <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-hover-palette-1-base" href="/dogs/chinese-crested"><%= __('Dogs') %></a>
-                      </li>
-                      <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-hover-palette-1-base" href="/portfolio"><%= __('Portfolio') %></a>
-                      </li>
-                      <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-hover-palette-1-base" href="/contact"><%= __('Contact') %></a>
-                      </li>
-                      <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-hover-palette-1-base" href="/pricing"><%= __('Pricing') %></a>
-                      </li>
-                      <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-hover-palette-1-base" href="/logout"><%= __('Kennels') %></a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="u-nav-item">
-                  <a class="u-button-style u-nav-link" style="padding: 10px 20px;"><%= __('Account') %></a>
-                  <div class="u-nav-popup">
-                    <ul class="u-h-spacing-33 u-nav u-unstyled u-v-spacing-13 u-nav-8">
-                      <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-hover-palette-1-base" href="/account"><%= __('Settings') %></a>
-                      </li>
-                      <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-hover-palette-1-base" href="/logout"><%= __('Sign Out') %></a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="u-nav-item">
-                  <a class="u-button-style u-nav-link" style="padding: 10px 20px;">English</a>
-                  <div class="u-nav-popup">
-                    <ul class="u-h-spacing-33 u-nav u-unstyled u-v-spacing-13 u-nav-9">
-                      <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-hover-palette-1-base" href="ru">Русский</a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="u-nav-item">
-                  <a class="u-button-style u-nav-link" style="padding: 10px 20px;"><%= __('Settings') %></a>
-                  <div class="u-nav-popup">
-                    <ul class="u-h-spacing-33 u-nav u-unstyled u-v-spacing-13 u-nav-10">
-                      <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-hover-palette-1-base" href="/users"><%= __('Users') %></a>
-                      </li>
-                      <li class="u-nav-item">
-                        <a class="u-button-style u-nav-link u-text-hover-palette-1-base" href="/groups"><%= __('Groups') %></a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
-          </div>
-        </nav>
-      </div>
-    </header>-->
     <header class="u-align-right-xs u-border-no-bottom u-border-no-left u-border-no-right u-border-no-top u-clearfix u-header u-white u-header" id="sec-599b">
       <div class="u-clearfix u-sheet u-sheet-1">
         <a href="/" class="u-border-no-bottom u-border-no-left u-border-no-right u-border-no-top u-image u-logo u-image-1" title="Poale Ell Kennel" data-image-width="141" data-image-height="34">
@@ -447,17 +280,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
                 </div>
               </li>
               <li class="u-nav-item">
-                <a href="#" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 16px;"><%= __('Account') %></a>
-                <div class="u-nav-popup">
-                  <ul class="u-h-spacing-42 u-nav u-unstyled u-v-spacing-20 u-nav-3">
-                    <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-hover-palette-1-base u-white" href="/account"><%= __('Settings') %></a>
-                    </li>
-                    <li class="u-nav-item">
-                      <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-hover-palette-1-base u-white" href="/logout"><%= __('Log Out') %></a>
-                    </li>
-                  </ul>
-                </div>
+                <a href="/account" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 16px;"><%= __('Account') %></a>
               </li>
               <li class="u-nav-item">
                 <a id="language" href="#"
@@ -485,6 +308,11 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
                     </li>
                   </ul>
                 </div>
+              </li>
+              <li class="u-nav-item">
+
+
+                  <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-hover-palette-1-base u-white" href="/logout"><i class="el-icon-right"></i></a>
               </li>
             </ul>
           </div>
@@ -697,8 +525,16 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
     <%- body %>
     <!-- start footer Area -->
     <% if(me){ %>
+<footer class="top-margin-for-add-section-widget-small u-align-left u-clearfix u-footer u-white u-footer" id="sec-6004">
+  <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+    <p class="u-small-text u-text u-text-variant u-text-1">Copyright &copy; 2019 <a target="_blank" href="/">Poale Ell.</a> All rights reserved.</p>
+<!--    <a href="/legal/privacy" class="u-align-left u-link u-link-1"><%= __('Privacy policy') %></a>
+    <a href="/legal/terms" class="u-align-left u-link u-link-2"><%= __('Terms of use') %></a>
+    <a href="/contact" class="u-hidden-md u-link u-link-3"><%= __('Contact') %></a>-->
+  </div>
+</footer>
     < % / * */ %>
-    <footer class="footer-area section-gap">
+    <footer v-cloak class="footer-area section-gap">
       <div class="container">
         <div class="row hidden-md-and-down">
           <div class="col-lg-5 col-md-6 col-sm-6">
@@ -756,10 +592,11 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
     <% } %>
     <!-- End footer Area -->
     <% if(!me){ %>
-  </div>
+  <!--</div>-->
   <% /* Faible */ %>
-</div>
-<footer class="footer  ">
+<!--</div>-->
+<!--OLD Footer-->
+<!--<footer class="footer  ">
   <div class="navbar navbar-light justify-content-between flex-row-reverse">
     <div class="nav">
       <small class="nav-item"><a class="nav-link text-info" href="/contact"><%= __('Contact') %><span
@@ -776,6 +613,15 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
     <small class="copy">Copyright &copy; 2019 <a target="_blank" href="/">Poale Ell.</a> All rights
       reserved.
     </small>
+  </div>
+</footer>-->
+
+<footer class="top-margin-for-add-section-widget-small u-align-left u-clearfix u-footer u-white u-footer" id="sec-6004">
+  <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+    <p class="u-small-text u-text u-text-variant u-text-1">Copyright &copy; 2019 <a target="_blank" href="/">Poale Ell.</a> All rights reserved.</p>
+    <a href="/legal/privacy" class="u-align-left u-link u-link-1"><%= __('Privacy policy') %></a>
+    <a href="/legal/terms" class="u-align-left u-link u-link-2"><%= __('Terms of use') %></a>
+    <a href="/contact" class="u-hidden-md u-link u-link-3"><%= __('Contact') %></a>
   </div>
 </footer>
 <% } %>
