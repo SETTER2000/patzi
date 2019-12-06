@@ -367,20 +367,20 @@
           <% /* Кнопки: Отец, Мать*/ %>
           <div class="flex-container buttons wrap  mt-3">
             <el-tooltip class="item" effect="dark" content="<%= __('Dam') %>" placement="top">
-              <el-link  v-if="litter.dam[1]" class="mr-lg-3"  :underline="false" type="danger" icon="el-icon-female"
+              <el-button v-if="litter.dam[1]" class="mr-lg-3 "  type="text" :underline="false" icon="el-icon-female"
                        @click="goDog(litter.dam[1])">
-                {{litter.dam[1]}}
-              </el-link>
+               {{litter.dam[1]}}
+              </el-button>
               <el-link v-else disabled class="mr-lg-3 px-1"  :underline="false" type="danger" icon="el-icon-female">
                 {{noBase}}
               </el-link>
             </el-tooltip>
             &nbsp;
             <el-tooltip class="item" effect="dark" content="<%= __('Sire') %>" placement="top">
-              <el-link  v-if="litter.sire[1]" class="mr-lg-3 px-1" type="danger"  :underline="false" icon="el-icon-male"
+              <el-button  v-if="litter.sire[1]" class="mr-lg-3 px-1"  type="text"   :underline="false" icon="el-icon-male"
                        @click="goDog(litter.sire[1])">
                 {{litter.sire[1]}}
-              </el-link>
+              </el-button>
               <el-link v-else disabled class="mr-lg-3" type="danger"  :underline="false" icon="el-icon-male">
                 {{noBase}}
               </el-link>
