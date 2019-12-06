@@ -4733,8 +4733,25 @@ p.footer-text a:hover {
   color: #cccccc;
 }
 
-/*.footer-text i {*/
-/*color: #f81c1c; }*/
+/*Выезжающее меню*/
+header#sec-599b.afterload {
+  transform: translate(0, -95%);
+  transition: .75s;
+  transition-delay: 3s;
+  position: fixed;
+  /*background-color: rgba(255, 255, 255,.8);*/
+}
 
-/*# sourceMappingURL=main.css.map */
+header#sec-599b.afterload:hover {
+  transform: translate(0%, 0%);
+  transition: .75s;
+
+}
+
+header#sec-599b {
+  transform: translate(0%, 0%);
+  transition: .75s;
+  transition-delay: 2s;
+  position: fixed;
+}
 
