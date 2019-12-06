@@ -6,7 +6,7 @@
     :visible.sync="photoVisible"
     :before-close="handleCloseDialog">
     <div class="menu-center" v-if="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)">
-      <img :src="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)" style="width: 100%"
+      <img :src="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)" style="width: 100%;"
            :alt="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)">
     </div>
     <!--<div class="block">
