@@ -504,14 +504,14 @@
                       width="200"
                       trigger="hover"
                       :content="owner.emailAddress">
-                      <el-link slot="reference" @click="centerDialogConfirmDeleteCoOwner = true; coownerId=owner.id" :underline="false">
+                      <el-button slot="reference" type="text"  @click="centerDialogConfirmDeleteCoOwner=true;coownerId=owner.id" :underline="false">
                         <template v-if="owner.defaultIcon === 'gravatar'">
                           <el-avatar :size="50" :src="owner.gravatar"></el-avatar>
                         </template>
                         <template v-else>
                           <el-avatar :size="50" :src="owner.avatar"></el-avatar>
                         </template>
-                      </el-link>
+                      </el-button>
                     </el-popover>
                   </template>
                   <template v-else>
@@ -1130,7 +1130,7 @@
         <div class="grid-content">
           <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
-                              <el-link :underline="false"> <i class="el-icon-more el-icon&#45;&#45;right"></i></el-link>
+                             <i  class="el-icon-more el-icon&#45;&#45;right pointer" ></i>
                             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-if="_.some(kennels, 'sale', true)" icon="el-icon-money"
