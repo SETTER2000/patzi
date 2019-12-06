@@ -1083,7 +1083,11 @@
 <!--SCRIPTS END-->
 
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=sails.config.custom.googleMapKey%>&callback=initMap"></script>
-
+<script>
+  $(function(){
+    setTimeout(function(){  $('header').addClass('afterload'); }, 10000)
+  })
+</script>
 <% /* Display an overlay if the current browser is not supported.
     (Relies on `bowser`, which is loaded inline above.)
     Отображение наложения, если текущий браузер не поддерживается.
