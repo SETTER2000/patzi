@@ -4755,3 +4755,9 @@ header#sec-599b {
   position: fixed;
 }
 
+.el-button--text,.el-button--text:hover {
+  color: #de4640;
+  background: 0 0;
+  padding-left: 0;
+  padding-right: 0;
+}
