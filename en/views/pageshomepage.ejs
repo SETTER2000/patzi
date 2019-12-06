@@ -10,9 +10,9 @@
         <b style="">Chinese Crested Dog</b>
       </h1>
       <h2 class="u-text u-text-3" data-animation-name="bounceIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">Your Eternal Companion</h2>
-      <p class="u-text u-text-4" data-animation-name="pulse" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">Китайская хохлатая собака удивительно честный и верный спутник. Комапьон с большой буквы, с огромным сердцем, с весёлым, озорным характером и тёплым тельцем. Мы много знаем о породе и готовы поделиться нашими знаниями со всеми, кто, как и
-        мы, любит эту замечательную породу и готов навсегда разделить с ними свою жизнь.</p>
-      <a href="dogs/chinese-crested" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1" data-animation-name="flipIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="X">Каталог собак</a>
+      <p class="u-text u-text-4" data-animation-name="pulse" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
+        <%= __('Chinese Crested Dog is surprisingly honest and faithful companion. A capitalion with a huge heart, a cheerful, mischievous character and a warm little body. We know a lot about the breed and are ready to share our knowledge with everyone who, like us, loves this wonderful breed and is ready to share his life with them forever') %>.</p>
+      <a href="dogs/chinese-crested" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1" data-animation-name="flipIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="X"><%= __('Dog catalog') %></a>
       <div class="u-clearfix u-gutter-0 u-layout-wrap u-layout-wrap-1">
         <div class="u-layout">
           <div class="u-layout-row">
@@ -92,7 +92,7 @@
                     <p class="u-align-center-md u-text u-text-1" data-animation-name="bounceIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">1 декабря 2019 г</p>
                     <h2 class="u-align-center-md u-text u-text-2">Первый раз в хендлинг зале</h2>
                     <p class="u-align-center-md u-text u-text-3">Сегодня мы первый раз в хендлинг зале. Дети в восторге. Старательно занимались. Чену уж сильно понравился тот, кто живет в этом окошке. Ребенок был занят-занят.</p>
-                    <a href="#" class="u-btn u-button-style u-btn-1">подробнее</a>
+                    <a href="#" class="u-btn u-button-style u-btn-1"><%= __('More') %></a>
                   </div>
                 </div>
               </div>
@@ -137,7 +137,7 @@
               <div class="u-layout-col">
                 <div class="u-align-left u-container-style u-layout-cell u-left-cell u-size-60 u-layout-cell-1">
                   <div class="u-container-layout u-container-layout-1">
-                    <img src="images/20191101port463.jpg" class="u-align-left u-border-4 u-border-white u-expanded-width u-image u-image-1" data-image-width="1600" data-image-height="1066" data-animation-name="flipIn" data-animation-duration="1000"
+                    <img src="/images/new/20191101port463.jpg" class="u-align-left u-border-4 u-border-white u-expanded-width u-image u-image-1" data-image-width="1600" data-image-height="1066" data-animation-name="flipIn" data-animation-duration="1000"
                          data-animation-delay="0" data-animation-direction="X">
                     <span class="u-icon u-icon-circle u-text-palette-1-base u-icon-1" data-animation-name="pulse" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
                         <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 50 50" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-3fc3"></use></svg>
@@ -156,7 +156,7 @@
                     </div>
                     <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-30 u-layout-cell-3">
                       <div class="u-container-layout u-valign-bottom u-container-layout-3">
-                        <img src="images/20191201DSCF0772.jpg" class="u-border-4 u-border-white u-expanded-width u-image u-image-3" data-image-width="1600" data-image-height="1067" data-animation-name="rollIn" data-animation-duration="1000"
+                        <img src="/images/new/20191201DSCF0772.jpg" class="u-border-4 u-border-white u-expanded-width u-image u-image-3" data-image-width="1600" data-image-height="1067" data-animation-name="rollIn" data-animation-duration="1000"
                              data-animation-delay="0" data-animation-direction="">
                       </div>
                     </div>
@@ -197,7 +197,7 @@
         <br>Дата рождения:&nbsp;
         <b>12 июля 2019 года</b>
       </p>
-      <a href="###" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">Подробнее</a>
+      <a href="###" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('More') %></a>
     </div>
   </section>
   <section class="u-align-center-md u-align-center-sm u-align-center-xs u-clearfix u-palette-3-light-3 u-section-6" id="sec-ef55">
@@ -212,11 +212,9 @@
             </div>
             <div class="u-align-center-sm u-align-center-xs u-align-left-lg u-align-left-md u-align-left-xl u-container-style u-layout-cell u-right-cell u-size-37 u-layout-cell-2">
               <div class="u-container-layout u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-container-layout-2">
-                <h2 class="u-text u-text-1">Заводчик Ольга Петрова</h2>
-                <p class="u-text u-text-2">В породе с 2004 года. Официально, питомник Poale Ell (читается: Поале Элл), был зарегистрирован в международном реестре федерации FCI в 2016 году, свидетельство № 18431 от 26.02.2016 года, владелец Ольга Петрова. Питомник
-                  активно работает с польскими, британскими и американскими производителями. Специализируется на разведении китайских хохлатых собак стандартного размера. В питомнике собраны блестящие родословные с линиями лучших специализированных
-                  питомников мира.</p>
-                <a href="about" class="u-btn u-button-style u-btn-1" data-animation-name="lightSpeedIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">Подробнее</a>
+                <h2 class="u-text u-text-1"><%= __('Breeder') %> <%= __('Olga Petrova') %></h2>
+                <p class="u-text u-text-2"><%= __('In the breed since 2004. Officially, the kennel Poale Ell, was registered in the international registry of the FCI federation in 2016, certificate No. 18431 dated 02.26.2016, owner Olga Petrova. The nursery is actively working with Polish, British and American manufacturers. Specializes in breeding Chinese crested dogs of standard size. In kennel dogs there are brilliant pedigrees with lines of the best specialized kennels in the world.') %></p>
+                <a href="about" class="u-btn u-button-style u-btn-1" data-animation-name="lightSpeedIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction=""><%= __('More') %></a>
               </div>
             </div>
           </div>
@@ -282,10 +280,10 @@
                 </div>
                 <div class="u-align-left u-container-style u-layout-cell u-size-20 u-layout-cell-2">
                   <div class="u-container-layout u-valign-bottom u-container-layout-2">
-                    <h3 class="u-text u-text-1">Кобель для вязок&nbsp;</h3>
+                    <h3 class="u-text u-text-1"><%= __('Dog for mating') %>&nbsp;</h3>
                     <p class="u-text u-text-2">Очень красивый кобель, с отличной родословной и вохитительным характером. 2.5 года.&nbsp;
                       <br>
-                      <b>Юный Чемпион России.</b>
+                      <b><%= __('Junior Champion of Russia') %>.</b>
                     </p>
                     <a href="chinese-crested/Poale-Ell-Bazhen" class="u-btn u-button-style u-btn-1" data-animation-name="flipIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="X">Poale Ell Bazhen</a>
                   </div>
@@ -337,8 +335,8 @@
                 </div>
                 <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-36 u-layout-cell-3">
                   <div class="u-container-layout">
-                    <img src="images/52e5dc4a4f57a514f6da8c7dda79367d1d38d6ed5b586c4870287ed19449c25abe_1280.jpg" alt="" class="u-align-left u-image u-image-2" data-image-width="1280" data-image-height="853">
-                    <img src="images/DSC_7645.jpg" alt="" class="u-align-left u-border-8 u-border-white u-image u-image-3">
+                    <img src="/images/new/52e5dc4a4f57a514f6da8c7dda79367d1d38d6ed5b586c4870287ed19449c25abe_1280.jpg" alt="" class="u-align-left u-image u-image-2" data-image-width="1280" data-image-height="853">
+                    <img src="/images/new/DSC_7645.jpg" alt="" class="u-align-left u-border-8 u-border-white u-image u-image-3">
                   </div>
                 </div>
               </div>
@@ -346,7 +344,7 @@
           </div>
         </div>
       </div>
-      <a href="#" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">Подробнее</a>
+      <a href="#" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('More') %></a>
     </div>
   </section>
   <section class="skrollable skrollable-between u-align-center u-border-no-bottom u-border-no-left u-border-no-right u-border-no-top u-clearfix u-image u-shading u-section-9" id="sec-608a">
@@ -423,7 +421,7 @@
   <section class="u-align-center u-clearfix u-section-12" id="sec-2849">
     <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
       <h3 class="u-text u-text-1">Вы ещё не с нами?</h3>
-      <a href="signup.html" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-btn-1">Регистрация</a>
+      <a href="signup.html" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-btn-1"><%= __('Sign Up') %></a>
     </div>
   </section>
 
