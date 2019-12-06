@@ -25445,6 +25445,8 @@ p:not(.u-text-variant) {
 .u-btn {
   margin-top: 20px;
   margin-bottom: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 blockquote {
@@ -25538,9 +25540,7 @@ color: #000000; }
 @media (max-width: 991px){ .u-header .u-sheet-1 {min-height: 78px}
 .u-header .u-image-1 {width: auto; margin-top: 19px; margin-bottom: 0}
 .u-header .u-menu-1 {margin-top: -32px; margin-bottom: 26px} }
-@media (max-width: 767px){ .u-header .u-sheet-1 {min-height: 73px}
-.u-header .u-image-1 {margin-top: 16px}
-.u-header .u-menu-1 {margin-bottom: 23px} }
+
 @media (max-width: 575px){ .u-header .u-sheet-1 {min-height: 66px}
 .u-header .u-image-1 {margin-top: 13px}
 .u-header .u-logo-image-1 {max-width: 130px; max-height: 130px}
@@ -25558,9 +25558,11 @@ color: #000000; }
 @media (max-width: 991px){ .u-footer .u-text-1 {margin-right: 303px}
 .u-footer .u-link-2 {margin-right: 0}
 .u-footer .u-link-3 {margin-right: 62px} }
-@media (max-width: 767px){ .u-footer .u-text-1 {margin-right: 123px}
-.u-footer .u-link-3 {margin-right: 0} }
-@media (max-width: 575px){ .u-footer .u-text-1 {margin-right: 0} }
+
+@media (max-width: 575px){ .u-footer .u-text-1 {margin-top: 20px; margin-left: 52px; margin-right: 103px}
+.u-footer .u-link-1 {margin-top: 20px}
+.u-footer .u-link-2 {margin-top: 20px}
+.u-footer .u-link-3 {margin-top: 20px; margin-right: 0} }
 
  /*begin-variables base-font-size*/ 
  html { font-size: 16px; }
