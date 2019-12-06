@@ -1083,7 +1083,11 @@ sur le pipeline des actifs entre les "SCRIPTS" et "SCRIPTS END", ou les deux.
 <!--SCRIPTS END-->
 
 <script src="https://maps.googleapis.com/maps/api/js?key=<%=sails.config.custom.googleMapKey%>&callback=initMap"></script>
-
+<script>
+  $(function(){
+    setTimeout(function(){  $('header').addClass('afterload'); }, 10000)
+  })
+</script>
 <% /* Display an overlay if the current browser is not supported.
     (Relies on `bowser`, which is loaded inline above.)
     L'affichage de la superposition, si le navigateur n'est pas pris en charge.
