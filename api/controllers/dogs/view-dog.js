@@ -40,10 +40,19 @@ module.exports = {
       throw 'notFound';
     }
 
+    let kennel = await Kennel.findOne({id:dog.kennel.id})
+      .populate('continent')
+      .populate('country')
+      .populate('city');
+    console.log('KENNEL:::: ' , kennel);
+
 
     let breeder = dog.kennel.breeder ? await User.findOne({id: dog.kennel.breeder}) : '';
     dog.breeder = breeder ?
       {
+        continent: kennel.continent.label,
+        country: kennel.country.label,
+        city: kennel.city.label,
         fullName: breeder.fullName,
         avatar: breeder.defaultIcon === 'avatar' ? breeder.avatar : breeder.gravatar
       } : {};
