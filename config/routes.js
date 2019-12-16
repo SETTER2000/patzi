@@ -38,6 +38,7 @@ module.exports.routes = {
   'GET /account/avatar': {action: 'account/view-edit-avatar'},
   'GET /portfolio/:virtualPageSlug?': {action: 'things/view-available-things'},
 
+  'GET /blog/post/:postId?': { action: 'blog/view-blog' },
   'GET /blog/:virtualPageSlug?': {action: 'blog/view-blog-home'},
 
 

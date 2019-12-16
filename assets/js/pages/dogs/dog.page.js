@@ -324,7 +324,11 @@ parasails.registerPage('dog', {
           });
         }*/
       });
-    }
+    },
+
+    getLinkKennel(kennelName){
+      return kennelName ? `/kennel/${kennelName.split(" ").join('-')}` : ''
+    },
 // Выбираем заводчика
   /*  async getBreeder() {
       await io.socket.get(`/api/v1/comments/list-comment/${this.litter.id}/${field}`, function gotResponse(body, response) {

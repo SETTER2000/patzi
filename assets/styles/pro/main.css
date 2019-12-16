@@ -1031,7 +1031,7 @@ th {
   bottom: 13px;
   width: 66px;
   height: 12px;
-  background: #f81c1c;
+  /*background: #f81c1c;*/
   z-index: -1;
 }
 
@@ -4731,6 +4731,7 @@ p.footer-text a {
 
 p.footer-text a:hover {
   color: #cccccc;
+  text-decoration: none;
 }
 
 /*Выезжающее меню*/
