@@ -504,7 +504,8 @@
                       width="200"
                       trigger="hover"
                       :content="owner.emailAddress">
-                      <el-button slot="reference" type="text"  @click="centerDialogConfirmDeleteCoOwner=true;coownerId=owner.id" :underline="false">
+                      <el-button slot="reference" type="text" @click="centerDialogConfirmDeleteCoOwner=true;coownerId=owner.id"
+                                 :underline="false">
                         <template v-if="owner.defaultIcon === 'gravatar'">
                           <el-avatar :size="50" :src="owner.gravatar"></el-avatar>
                         </template>
@@ -1130,7 +1131,7 @@
         <div class="grid-content">
           <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
-                             <i  class="el-icon-more el-icon&#45;&#45;right pointer" ></i>
+                             <i class="el-icon-more el-icon&#45;&#45;right pointer"></i>
                             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-if="_.some(kennels, 'sale', true)" icon="el-icon-money"
@@ -1176,34 +1177,25 @@
             <div @mouseenter="showMenu(kennel.id)" @mouseleave="showOut()"
                  style="position: relative;" class="ell-image-flex">
               <transition-group appear name="el-fade-in">
-                <div v-show="show && (showObject === kennel.id)" class="transition-box blue-dark" :class="{death:kennel.dateDeath}"
+                <div v-show="show && (showObject === kennel.id)" class="transition-box blue-dark menu-center-v"
                      :key="kennel.id">
-                  <% /* Кнопки управления собакой */ %>
-                  <div class="menu-center-v">
-                    <div class="py-3">
-                      <el-link type="info" :underline="false">{{kennel.country.label}}</el-link>
-                      <br>
+                  <% /* Кнопки управления питомником */ %>
 
-                      <el-link class="link" @click="goTo2(kennel.detail)" :underline="false">
+                    <p style="font-size: .8rem; color:#C0C4CC"> {{kennel.country.label}} </p>
 
-                        <div :class="{deathColor:kennel.dateDeath}"> {{kennel.label}}</div>
+                    <el-link class="link" :href="kennel.detail" :underline="false">
 
-                        <div class="date" :class="{deathColor:kennel.dateDeath}">{{kennel.dateBirth | getAge(me.preferredLocale,
-                          kennel.dateDeath)}}
-                        </div>
-                      </el-link>
-                      <el-row class="mt-2">
-                        <!--<el-button icon="el-icon-search" circle></el-button>-->
-                        <!--<el-button type="primary" icon="el-icon-picture" circle></el-button>-->
-                        <el-button v-if="_.isObject(kennel.breeder)" @click="goTo2(kennel.detail)" size="mini" type="success" round>
-                          {{kennel.breeder.fullName}}
-                        </el-button>
-                        <!--<el-button type="info" icon="el-icon-message" circle></el-button>-->
-                        <!--<el-button type="warning" icon="el-icon-star-off" circle></el-button>-->
-                        <!--<el-button type="danger" icon="el-icon-delete" circle></el-button>-->
-                      </el-row>
-                    </div>
-                  </div>
+                      <div :class="{deathColor:kennel.dateDeath}"> {{kennel.label}}</div>
+
+                      <div class="date" :class="{deathColor:kennel.dateDeath}">{{kennel.dateBirth | getAge(me.preferredLocale,
+                        kennel.dateDeath)}}
+                      </div>
+                    </el-link>
+                    <el-button v-if="_.isObject(kennel.breeder)" @click="goTo2(kennel.detail)" size="mini" type="success" round>
+                      {{kennel.breeder.fullName}}
+                    </el-button>
+
+
                 </div>
               </transition-group>
 
