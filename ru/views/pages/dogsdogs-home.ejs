@@ -1572,7 +1572,7 @@
                   <% /* Кнопки управления собакой */ %>
                   <div class="menu-center-v">
                     <div class="py-4">
-                      <el-link class="link" @click="goTo2(dog.detail)" :underline="false">
+                      <el-link :href="dog.detail" class="link"  :underline="false">
 
                         <div :class="{deathColor:dog.dateDeath}"> {{dog.fullName}}</div>
 
