@@ -118,8 +118,8 @@
             <% /* Хлебные крошки */ %>
             <div class="col-md-6">
               <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item><a href="/"><%= __('Home-menu') %></a></el-breadcrumb-item>
-                <el-breadcrumb-item><a href="/dogs/chinese-crested"><%= __('Dogs') %></a></el-breadcrumb-item>
+                <el-breadcrumb-item><a style="text-decoration: none" href="/"><%= __('Home-menu') %></a></el-breadcrumb-item>
+                <el-breadcrumb-item><a style="text-decoration: none" href="/dogs/chinese-crested"><%= __('Dogs') %></a></el-breadcrumb-item>
                 <el-breadcrumb-item> {{dog.fullName}}</el-breadcrumb-item>
                 <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
               </el-breadcrumb>
@@ -148,11 +148,11 @@
                 </el-col>
 
                 <% /* Кнопки управления */ %>
-                <el-col :span="1">
-                  <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
+                <el-col :span="1" class="menu-center-v">
+                  <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content">
                     <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
-                              <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
+                              <i class="el-icon-more el-icon--right"></i>
                             </span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
@@ -247,9 +247,9 @@
           <% /* ЗАВОДЧИК BREEDER*/ %>
           <el-card class="box-card">
             <div slot="header" class="clearfix">
-              <span>Breeder: {{dog.breeder.fullName}} (<a href="#">{{dog.kennel.label}})</a> {{dog.breeder.country}}</span>
+              <span>Breeder: {{dog.breeder.fullName}} (<el-link :underline="false" type="info" :href="getLinkKennel(dog.kennel.label)">{{dog.kennel.label}}</el-link>) {{dog.breeder.country}}</span>
               <el-button style="float: right; padding: 3px 0" v-if="me.isAdmin || me.isSuperAdmin" type="text">
-                <el-link icon="el-icon-edit"></el-link>
+                <el-link href="" icon="el-icon-edit"></el-link>
               </el-button>
             </div>
             <div class="menu-center">
