@@ -44,7 +44,7 @@ module.exports = {
       .populate('continent')
       .populate('country')
       .populate('city');
-    console.log('KENNEL:::: ' , kennel);
+    // console.log('KENNEL:::: ' , kennel);
 
 
     let breeder = dog.kennel.breeder ? await User.findOne({id: dog.kennel.breeder}) : '';
@@ -52,7 +52,7 @@ module.exports = {
       {
         continent: kennel.continent.label,
         country: kennel.country.label,
-        city: kennel.city.label,
+        city: (kennel.city && kennel.city.label) ? kennel.city.label : '',
         fullName: breeder.fullName,
         avatar: breeder.defaultIcon === 'avatar' ? breeder.avatar : breeder.gravatar
       } : {};
