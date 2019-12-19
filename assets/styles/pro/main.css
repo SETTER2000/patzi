@@ -1345,6 +1345,29 @@ th {
   }
 }
 
+@media (min-width: 767px) {
+  /*Выезжающее меню*/
+  header#sec-599b.afterload {
+  transform: translate(0, -95%);
+  transition: .75s;
+  transition-delay: 3s; /* Задержка перед сокрытием меню */
+  position: fixed;
+  /*background-color: rgba(255, 255, 255,.8);*/
+  }
+
+  header#sec-599b.afterload:hover {
+  transform: translate(0, 0);
+  transition: .75s;
+  }
+
+  header#sec-599b {
+  transform: translate(0, 0);
+  transition: .75s;
+  transition-delay: 2s;  /* Задержка перед открытием меню */
+  position: fixed;
+  }
+}
+
 b, sup, sub, u, del {
   /*color: #f81c1c;*/
 }
@@ -4734,27 +4757,8 @@ p.footer-text a:hover {
   text-decoration: none;
 }
 
-/*Выезжающее меню*/
-header#sec-599b.afterload {
-  transform: translate(0, -95%);
-  transition: .75s;
-  transition-delay: 3s;
-  position: fixed;
-  /*background-color: rgba(255, 255, 255,.8);*/
-}
 
-header#sec-599b.afterload:hover {
-  transform: translate(0%, 0%);
-  transition: .75s;
 
-}
-
-header#sec-599b {
-  transform: translate(0%, 0%);
-  transition: .75s;
-  transition-delay: 2s;
-  position: fixed;
-}
 
 .el-button--text,.el-button--text:hover {
   color: #de4640;
