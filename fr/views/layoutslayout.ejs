@@ -103,6 +103,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
 <!--// sec-599b-->
 <% if(me) { %>
 <!--sec-599b | header-->
+<!--OLD-->
 <header class="u-clearfix u-header u-header" id="sec-599b">
   <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-xl u-sheet-1">
     <a href="/" class="u-image u-logo u-image-1">
@@ -128,7 +129,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
                 <%= __('Litters') %></a>
             </li>
             <li class="u-nav-item">
-              <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white" href="/about" style="padding: 4px 20px;"><%= __('About') %></a>
+              <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white" href="/about" style="padding: 16px 20px;"><%= __('About') %></a>
             </li>
             <li class="u-nav-item">
               <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white" style="padding: 16px 20px;" href=""><%= __('Pages') %></a>
@@ -155,8 +156,6 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
                 </ul>
               </div>
             </li>
-
-          <!--Language-->
             <li class="u-nav-item">
               <a href="" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white "
                  style="padding: 16px 20px;"
@@ -193,7 +192,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
       <div class="u-custom-menu u-nav-container-collapse">
         <div class="u-align-center u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
           <div class="u-menu-close"></div>
-          <ul class="u-align-left u-nav u-popupmenu-items u-unstyled u-nav-5">
+          <ul class="u-align-left u-nav u-popupmenu-items u-spacing-16 u-unstyled u-nav-5">
             <li class="u-nav-item">
               <a class="u-button-style u-nav-link" href="/" style="padding: 4px 20px;"><i class="el-icon-s-home"></i></a>
             </li>
@@ -211,7 +210,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
                     <a class="u-active-palette-1-base u-button-style u-nav-link u-text-active-white" href="/dogs/chinese-crested">Dogs</a>
                   </li>
                   <li class="u-nav-item">
-                    <a lass="u-active-palette-1-base u-button-style u-nav-link u-text-active-white" href="/portfolio">Portfolio</a>
+                    <a class="u-active-palette-1-base u-button-style u-nav-link u-text-active-white" href="/portfolio">Portfolio</a>
                   </li>
                   <li class="u-nav-item">
                     <a class="u-active-palette-1-base u-button-style u-nav-link u-text-active-white" href="/contact">Contact</a>
@@ -229,9 +228,9 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
               </div>
             </li>
             <li class="u-nav-item">
-              <a class="u-button-style u-nav-link" href="/settings" style="padding: 4px 20px;">Account</a>
+              <a class="u-button-style u-nav-link" href="/account" style="padding: 4px 20px;">Account</a>
             </li>
-            <!--Language-->
+            &lt;!&ndash;Language&ndash;&gt;
             <li class="u-nav-item">
               <a href="" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white "
                  style="padding: 16px 20px;"
@@ -246,8 +245,9 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
                 </ul>
               </div>
             </li>
+            <% if(me.isAdmin || me.isSuperAdmin){ %>
             <li class="u-nav-item">
-              <a class="u-button-style u-nav-link" href="" style="padding: 4px 20px;">Settings</a>
+              <a class="u-button-style u-nav-link" href="" style="padding: 4px 20px;"><%= __('Settings') %></a>
               <div class="u-nav-popup">
                 <ul class="u-h-spacing-45 u-nav u-unstyled u-v-spacing-20 u-nav-8">
                   <li class="u-nav-item">
@@ -259,6 +259,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
                 </ul>
               </div>
             </li>
+            <%} %>
             <li class="u-nav-item">
               <a class="u-button-style u-nav-link" href="/logout" style="padding: 4px 20px;">Log Out</a>
             </li>
@@ -269,6 +270,8 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
     </nav>
   </div>
 </header>
+
+
 <% } else { %>
 <header class="u-clearfix u-header u-header" id="sec-599b">
   <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-sheet-1">
