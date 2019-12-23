@@ -666,7 +666,7 @@
                       </div>
                       <!--// Показатели рейтингов-->
                       <el-row class="sv" :gutter="2">
-                        <el-col :xs="8" :sm="12" :md="12" :lg="16" :xl="18">
+                        <el-col :xs="12" :sm="12" :md="12" :lg="16" :xl="18">
                           <div class="menu-left icos" v-if="photoSet.countLike>0">
                             <!--// like-->
                             <el-tooltip v-if="photoSet.countRatLike > 0" class="item" effect="dark" placement="top-start">
@@ -761,16 +761,16 @@
                             </el-tooltip>
                           </div>
                         </el-col>
-                        <el-col :xs="8" :sm="6" :md="6" :lg="4" :xl="3" class="text-right">
+                        <el-col :xs="12" :sm="6" :md="6" :lg="4" :xl="3" class="text-right">
                           <div class="grid-content bg-purple text-right">
                             <%= __('Comments') %>: {{photoSet.comments ? photoSet.comments.length : 0}}
                           </div>
                         </el-col>
-                        <el-col :xs="8" :sm="6" :md="6" :lg="4" :xl="3" class="text-right">
+                     <!--   <el-col :xs="8" :sm="6" :md="6" :lg="4" :xl="3" class="text-right">
                           <div class="grid-content bg-purple-light text-right"><%= __('Shared') %>: {{photoSet.shared ?
                             photoSet.shared.length : 0}}
                           </div>
-                        </el-col>
+                        </el-col>-->
                       </el-row>
 
 
