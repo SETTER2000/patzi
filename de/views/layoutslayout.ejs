@@ -68,9 +68,9 @@
   <link rel="stylesheet" href="/styles/pro/font-awesome.min.css">
   <link rel="stylesheet" href="/styles/pro/linearicons.css">
   <link rel="stylesheet" href="/styles/pro/magnific-popup.css">
-  <link rel="stylesheet" href="/styles/pro/main.css">
   <link rel="stylesheet" href="/styles/pro/nice-select.css">
   <link rel="stylesheet" href="/styles/pro/nicepage.css">
+  <link rel="stylesheet" href="/styles/pro/omain.css">
   <link rel="stylesheet" href="/styles/pro/owl.carousel.css">
   <link rel="stylesheet" href="/styles/pro/themify-icons.css">
   <!--STYLES END-->
@@ -144,12 +144,12 @@
         <ul class="u-custom-font u-font-oswald u-nav u-unstyled u-nav-1">
           <li class="u-nav-item">
             <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white" href="/"
-               style="padding: 4px 20px;">
+               style="padding: 16px 20px;">
               <i class="el-icon-s-home"></i></a>
           </li>
           <li class="u-nav-item">
             <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white" href="/litters"
-               style="padding: 4px 0;">
+               style="padding: 16px 20px;">
 
               <%= __('Litters') %></a>
           </li>
@@ -159,7 +159,7 @@
           </li>
           <li class="u-nav-item">
             <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white"
-               style="padding: 16px 20px;" href=""><%= __('Pages') %></a>
+               style="padding: 16px 20px;" ><%= __('Pages') %></a>
             <div class="u-nav-popup">
               <ul class="u-h-spacing-45 u-nav u-unstyled u-v-spacing-20 u-nav-2">
                 <li class="u-nav-item">
@@ -195,6 +195,25 @@
               </ul>
             </div>
           </li>
+
+          <% if(me[me.defaultIcon]) { %>
+          <li class="u-nav-item">
+            <a href="/account" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 0 20px;">
+              <img class="rounded-circle" width="28px" height="28px" src="<%=me[me.defaultIcon]%> "alt=""></a>
+          </li>
+          <%} else{%>
+          <li class="u-nav-item">
+            <el-popover
+              placement="bottom"
+              title="Title"
+              width="200"
+              trigger="hover"
+              content="this is content, this is content, this is content">
+              <el-button href="/account" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 16px;"><%= __('Account') %></el-button>
+            </el-popover>
+          </li>
+          <%}%>
+
           <li class="u-nav-item">
             <a href="" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white "
                style="padding: 16px 20px;"
@@ -231,7 +250,7 @@
           <% } %>
           <li class="u-nav-item">
             <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white" href="/logout"
-               style="padding: 4px 20px;"><%= __('Log Out') %></a>
+               style="padding: 16px 20px;"><%= __('Log Out') %></a>
           </li>
         </ul>
       </div>
@@ -249,7 +268,7 @@
               <a class="u-button-style u-nav-link" href="/about" style="padding: 4px 20px;">About</a>
             </li>
             <li class="u-nav-item">
-              <a class="u-button-style u-nav-link" href="" style="padding: 4px 20px;">Pages</a>
+              <a class="u-button-style u-nav-link"  style="padding: 4px 20px;">Pages</a>
               <div class="u-nav-popup">
                 <ul class="u-h-spacing-45 u-nav u-unstyled u-v-spacing-20 u-nav-6">
                   <li class="u-nav-item">
@@ -276,16 +295,15 @@
             <li class="u-nav-item">
               <a class="u-button-style u-nav-link" href="/account" style="padding: 4px 20px;">Account</a>
             </li>
-            &lt;!&ndash;Language&ndash;&gt;
             <li class="u-nav-item">
-              <a href="" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white "
-                 style="padding: 16px 20px;"
+              <a href="" class="u-button-style u-nav-link"
+                 style="padding: 4px 20px;"
               ><%= me.preferredLocale === 'ru' ? 'Ru' : 'En' %> </a>
               <div class="u-nav-popup">
-                <ul class="u-h-spacing-45 u-nav u-unstyled u-v-spacing-20 u-nav-3">
-                  <li class="u-nav-item pointer">
+                <ul class="u-h-spacing-45 u-nav u-unstyled u-v-spacing-20 u-nav-6">
+                  <li class="u-nav-item">
                     <a id="language"
-                       class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-hover-palette-1-base u-white "
+                       class="u-active-palette-1-base u-button-style u-nav-link u-text-active-white"
                        data-language="<%= me.preferredLocale === 'ru' ? 'en' : 'ru' %>"> <%= me.preferredLocale === 'ru' ? 'English' : 'Русский' %></a>
                   </li>
                 </ul>
@@ -903,7 +921,6 @@
 <script src="/dependencies/hoverIntent.js"></script>
 <script src="/dependencies/imagesloaded.pkgd.js"></script>
 <script src="/dependencies/isotope.pkgd.js"></script>
-<script src="/dependencies/jquery_191.js"></script>
 <script src="/dependencies/jquery-imagefill.js"></script>
 <script src="/dependencies/jquery-ui/jquery-ui.js"></script>
 <script src="/dependencies/jquery-ui/ui/i18n/datepicker-de.js"></script>
