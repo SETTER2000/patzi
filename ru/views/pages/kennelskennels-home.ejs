@@ -1111,7 +1111,7 @@
     </div>
   </section>-->
 
-  <% /*Фильтр и блоки фото NEW.*/ %>
+  <% /*Фильтр и блоки фото.*/ %>
   <section class="about-area">
     <div class="container">
       <% /* Фильтры. */ %>
@@ -1171,18 +1171,17 @@
       <!--v-if="kennel.imageSrc && kennel.action"-->
       <% /* ФОТО ПИТОМНИКОВ */ %>
       <div class="scrollbar" id="style-1">
-        <el-row :gutter="2" class="flex-container wrap">
+        <el-row :gutter="7" class="flex-container wrap">
           <el-col class="flex-item" v-for="(kennel, index) in objFilter()" :key="kennel.id"
                   :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
             <div @mouseenter="showMenu(kennel.id)" @mouseleave="showOut()"
                  style="position: relative;" class="ell-image-flex">
               <transition-group appear name="el-fade-in">
-                <div v-show="show && (showObject === kennel.id)" class="transition-box blue-dark menu-center-v"
+                <div v-show="show && (showObject === kennel.id)"
+                     class="transition-box blue-dark menu-center-v"
                      :key="kennel.id">
                   <% /* Кнопки управления питомником */ %>
-
-                    <p style="font-size: .8rem; color:#C0C4CC"> {{kennel.country.label}} </p>
-
+                    <div style="font-size: .8rem; color:#C0C4CC"> {{kennel.country.label}} </div>
                     <el-link class="link" :href="kennel.detail" :underline="false">
 
                       <div :class="{deathColor:kennel.dateDeath}"> {{kennel.label}}</div>
@@ -1191,11 +1190,10 @@
                         kennel.dateDeath)}}
                       </div>
                     </el-link>
-                    <el-button v-if="_.isObject(kennel.breeder)" @click="goTo2(kennel.detail)" size="mini" type="success" round>
+                    <el-button v-if="_.isObject(kennel.breeder)" @click="goTo2(kennel.detail)"
+                               size="mini" type="success" round>
                       {{kennel.breeder.fullName}}
                     </el-button>
-
-
                 </div>
               </transition-group>
 
