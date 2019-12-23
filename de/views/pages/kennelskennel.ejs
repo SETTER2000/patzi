@@ -197,7 +197,7 @@
                   </el-carousel>
                 </template>
                 <% /* Аватарки родителей собаки. Круглые. */ %>
-                <div class="flex menu-center" style="position: absolute; right:5px;top:5px; z-index:10;">
+                <div class="flex menu-center" style="position: absolute; right:12px;top:3px; z-index:10;">
                   <div v-for="parent in dog.parents" :key="parent.id" v-if="dog.parents">
                     <el-button v-if="parent.images" type="text"
                                @click="centerDialogVisibleOwner = true;linkDog=getLinkDetailDog(parent.fullName); coOwnerFullName=parent.fullName;photoOwner=parent.images[parent.cover].imageSrc"
