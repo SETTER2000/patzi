@@ -247,7 +247,7 @@
           <% /* ЗАВОДЧИК BREEDER*/ %>
           <el-card class="box-card">
             <div slot="header" class="clearfix">
-              <span>Breeder: {{dog.breeder.fullName}} (<el-link :underline="false" type="info" :href="getLinkKennel(dog.kennel.label)">{{dog.kennel.label}}</el-link>) {{dog.breeder.country}}</span>
+              <span><%= __('Breeder') %>: {{dog.breeder.fullName}} (<el-link :underline="false" type="info" :href="getLinkKennel(dog.kennel.label)">{{dog.kennel.label}}</el-link>) {{dog.breeder.country}}</span>
               <el-button style="float: right; padding: 3px 0" v-if="me.isAdmin || me.isSuperAdmin" type="text">
                 <el-link href="" icon="el-icon-edit"></el-link>
               </el-button>
@@ -265,7 +265,7 @@
           <% /* ВЛАДЕЛЕЦ OWNER*/ %>
           <el-card class="box-card">
             <div slot="header" class="clearfix">
-              <span>Owner: {{dog.owners.fullName}} Страна: {{dog.owners.country}}</span>
+              <span><%= __('Owner') %>: {{dog.owners.fullName}} <template v-if="dog.owners.country">({{dog.owners.country.label}})</template></span>
               <el-button style="float: right; padding: 3px 0" v-if="me.isAdmin || me.isSuperAdmin" type="text">
                 <el-link icon="el-icon-edit"></el-link>
               </el-button>
