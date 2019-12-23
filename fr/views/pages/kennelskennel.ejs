@@ -104,7 +104,7 @@
             </el-button>
           </div>
         </div>
-        <div class="col-lg-5 about-left">
+        <div class="col">
           <% /* Фото питомника */ %>
           <img class="img-fluid" :src="kennel.imageSrc" :alt="kennel.label">
           <div class="row py-3">
@@ -140,6 +140,7 @@
             <% /* Название питомника */ %>
             <h2 class="mb-4"> {{kennel.label}}</h2>
           </div>
+
           <% /* Описание питомника */ %>
           <div class="mb-35 wow fadeIn text-justify" data-wow-duration=".8s" data-wow-delay=".3s">
             <p>{{kennel.subtitle}}</p>
