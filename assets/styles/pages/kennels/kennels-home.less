@@ -60,7 +60,19 @@
       cursor: pointer;
     }
   }
+  .ell-image-flex {
+    //  float: left;
+    width: 100%;
+    //  margin: 0 30px 20px 0;
 
+    &:nth-child(2n) {
+      clear: left;
+    }
+
+    &:nth-child(2n+1) {
+      margin-right: 0;
+    }
+  }
   .flx {
     display: flex;
     flex-flow: row-reverse nowrap;
@@ -516,7 +528,7 @@
       // line-height: 100px;
       color: white;
       font-weight: bold;
-      font-size: 2em;
+      //font-size: 2em;
       text-align: center;
       .el-button {
         margin: 2px;
@@ -563,19 +575,20 @@
   }
   .transition-box {
     display: flex;
-    //line-height: 0;
-    //flex-grow: 1;
-    //align-self: flex-end;
+    line-height: 1rem;
+    flex-grow: 1;
+    align-self: flex-end;
     //flex-wrap: nowrap;
     //flex-direction: row;
     font-family: "Oswald", sans-serif;
-
+padding: 30px;
     //background-color: #0D1E2F;
     //align-content: space-evenly;
     justify-content: center;
-    //margin-bottom: 10px;
-    width: 100%;
-    min-height: 50%;
+    margin-bottom: 7px;
+    min-width: 100%;
+    //bottom: 10px;
+   // min-height: 50%;
     .link {
       color: #e0e2e6;
       font-size: 1.3rem;
@@ -588,7 +601,7 @@
         font-size: 1.3rem;
         font-style: normal;
         font-weight: 400;
-        line-height: 36px;
+       // line-height: 36px;
       }
 
       .deathColor{

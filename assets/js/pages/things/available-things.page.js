@@ -225,7 +225,7 @@ parasails.registerPage('available-things', {
       this.centerDialogVisible = true;
     },
     clickPhotoVisible(id, index) {
-      console.log('id: ', id);
+      // console.log('id: ', id);
       this.photoVisible = true;
       this.objID = id;
     }

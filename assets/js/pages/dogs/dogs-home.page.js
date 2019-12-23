@@ -7,11 +7,12 @@ parasails.registerPage('dogs-home', {
     owner: false,
     searchObjects: '',
     ranks: [{
+      id:'1',
       label: 'Russian Junior Champion',
       abbr: 'RUSJCH',
       labelRu: 'Юный чемпион России',
       value: 1
-    }, {label: 'Hungarian Junior Champion', abbr: 'HJCH', labelRu: 'Юный чемпион Болгарии', value: 2}],
+    }, {id:'2',label: 'Hungarian Junior Champion', abbr: 'HJCH', labelRu: 'Юный чемпион Болгарии', value: 2}],
     filterDogs: [],
     filterName: '',
     dogsEditList: [],
@@ -321,8 +322,8 @@ parasails.registerPage('dogs-home', {
     // Принимаем данные по событию list-*
     io.socket.on('list-dog', (data) => {
       this.dogs = this.dogsEditList = this.filterDogs = _.isNull(data) ? [] : data;
-      console.log('this.dogs: ', this.dogs);
-      console.log('this.filterDogs: ', this.filterDogs);
+      // console.log('this.dogs: ', this.dogs);
+      // console.log('this.filterDogs: ', this.filterDogs);
     });
     // Подключаемся к комнате kennel
     io.socket.get(`/api/v1/kennels/list`, function gotResponse(body, response) {
@@ -333,7 +334,7 @@ parasails.registerPage('dogs-home', {
     this.filterName = this.i19p.all;
     // Подключаемся к комнате color
     io.socket.get(`/api/v1/colors/list`, function gotResponse(body, response) {
-      console.log('Сервер color ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // console.log('Сервер color ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
     // Принимаем данные по событию list-*
@@ -349,12 +350,12 @@ parasails.registerPage('dogs-home', {
 
     // Запрос данных
     io.socket.get(`/sockets/users/list-form`, function gotResponse(body, response) {
-      console.log('Сервер User-Form ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // console.log('Сервер User-Form ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Принимаем данные по событию list
     io.socket.on('list-form', (data) => {
       this.users = data.users;
-      console.log(' this.users::: ', this.users);
+      // console.log(' this.users::: ', this.users);
     });
 
     /* Весь список*/
@@ -383,7 +384,7 @@ parasails.registerPage('dogs-home', {
       if (!value) {
         return '';
       }
-      console.log('format::: ', format);
+      // console.log('format::: ', format);
       moment.locale(l);
       let formatNew = _.isEmpty(format) ? 'LLL' : format;
       return (moment(value).format(formatNew)) ? moment(value).format(formatNew) : value;
@@ -502,8 +503,8 @@ parasails.registerPage('dogs-home', {
       // Принимаем данные по событию list-*
       await io.socket.on('list-dog', (data) => {
         this.dogs = this.dogsEditList = this.filterDogs = _.isNull(data) ? [] : data;
-        console.log('this.dogs: ', this.dogs);
-        console.log('this.filterDogs: ', this.filterDogs);
+        // console.log('this.dogs: ', this.dogs);
+        // console.log('this.filterDogs: ', this.filterDogs);
         this.dialogEditors();
       });
       // Принимаем данные по событию list-*
@@ -587,7 +588,7 @@ parasails.registerPage('dogs-home', {
     // Create Dog
     async addDog() {
       this.openFullScreen();
-      console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
+      // console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
       let data = {
         fileList: this.ruleForm.fileList,
         label: this.ruleForm.label,
@@ -621,7 +622,7 @@ parasails.registerPage('dogs-home', {
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
       };
-      console.log('DATA before send: ', data);
+      // console.log('DATA before send: ', data);
       await io.socket.post('/api/v1/dogs/create-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -772,7 +773,7 @@ parasails.registerPage('dogs-home', {
     // Выбираем всех кобелей
     async sireList() {
       await io.socket.get(`/api/v1/dogs/list-sire`, function gotResponse(body, response) {
-        console.log('Сервис Dogs sire ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервис Dogs sire ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-sire', (data) => {
@@ -782,7 +783,7 @@ parasails.registerPage('dogs-home', {
     // Выбираем всех сук
     async damList() {
       await io.socket.get(`/api/v1/dogs/list-dam`, function gotResponse(body, response) {
-        console.log('Сервис Dogs dam ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервис Dogs dam ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-dam', (data) => {
@@ -794,7 +795,7 @@ parasails.registerPage('dogs-home', {
     querySearchSires(queryString, cb) {
       this.sireList();
       let links = this.sires;
-      console.log('LINKS querySearchSires: ', links);
+      // console.log('LINKS querySearchSires: ', links);
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
       cb(results);
     },
@@ -803,7 +804,7 @@ parasails.registerPage('dogs-home', {
     querySearchDams(queryString, cb) {
       this.damList();
       let links = this.dams;
-      console.log('LINKS querySearchDams: ', links);
+      // console.log('LINKS querySearchDams: ', links);
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
       cb(results);
     },
@@ -838,7 +839,6 @@ parasails.registerPage('dogs-home', {
 
 
     feedback(e) {
-      console.log('CLICK^ ', e);
       this.dialogFormVisible = true;
     }
     ,
@@ -928,7 +928,6 @@ parasails.registerPage('dogs-home', {
     ,
 
     handleSuccess(res, file) {
-      console.log('RWSPONNN::: ', res);
       _.isArray(this.ruleForm.fileList) ? this.ruleForm.fileList.push(res) :
         this.ruleForm.fileList = [res];
     },
@@ -958,10 +957,8 @@ parasails.registerPage('dogs-home', {
       if (_.isEmpty(command.com)) return false;
       let newDogs = [];
       this.dogs = this.filterDogs;
-      console.log('1::', this.filterDogs);
       this.filterName = this.i19p[command.com];
       this.dogs = command.com !== 'all' ? this.dogs.filter(d => d.gender === command.com) : this.filterDogs;
-      console.log('2::', this.dogs);
       this.$forceUpdate();
       // return this.dogs ;
     },
@@ -1054,7 +1051,7 @@ parasails.registerPage('dogs-home', {
     ,
 
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     },
     handleCloseDialog(done) {
       done();
@@ -1067,7 +1064,7 @@ parasails.registerPage('dogs-home', {
     },
 
     handleClose(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     },
 
 
@@ -1086,7 +1083,7 @@ parasails.registerPage('dogs-home', {
       let data = {
         id: this.removeDogId,
       };
-      console.log('Перед отправкой data DOG: ', data);
+      // console.log('Перед отправкой data DOG: ', data);
       io.socket.post('/api/v1/dogs/destroy-one-dog', data, (dataRes, jwRes) => {
         this.errorMessages(jwRes, this.i19p.successDelete);
         this.dialogDeletePhotoSession = false;
@@ -1104,8 +1101,6 @@ parasails.registerPage('dogs-home', {
     openDialogNegotiations(fullNameDog) {
       this.drawer = true;
       this.fullNameDogNegotiations = fullNameDog;
-      console.log('fullNameDog::: ', fullNameDog);
-      console.log('fullNameUser::: ', this.me.fullName);
 
     },
 
@@ -1141,7 +1136,7 @@ parasails.registerPage('dogs-home', {
 
     async destroyManyPhotos() {
       let removeImage = _.remove(this.photos.images, img => _.indexOf(this.checkedPhoto, img.id) > -1);
-      console.log('Удалённые картинки: ', removeImage);
+      // console.log('Удалённые картинки: ', removeImage);
       let data = this.photos;
       data['removeImage'] = _.pluck(removeImage, 'id');
       // Если картинок нет закрываем окно редактора
@@ -1174,7 +1169,7 @@ parasails.registerPage('dogs-home', {
       // data['imagesArrUrl'] = newArrPhotos;
       // data['kennel'] = data.kennel.id;
       data['fileList'] = '';
-      console.log('this.photos ПЕРЕД ОТПРАВКОЙ fixPhotos:::: ', data);
+      // console.log('this.photos ПЕРЕД ОТПРАВКОЙ fixPhotos:::: ', data);
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
@@ -1222,7 +1217,7 @@ parasails.registerPage('dogs-home', {
       }
       let sel = this;
       let idDog = this.dogs.filter(dog => dog.fullName === this.fullNameDogNegotiations);
-      console.log('fullNameDogNegotiations:::: ', _.last(idDog).id);
+      // console.log('fullNameDogNegotiations:::: ', _.last(idDog).id);
       let data = {
         instanceModuleId: _.last(idDog).id,
         comment: this.comment ? this.comment : this.commentChild,
@@ -1233,7 +1228,7 @@ parasails.registerPage('dogs-home', {
         indexPhotoSet: 0,
         parent: parentId
       };
-      console.log('Перед отправкой data: ', data);
+      // console.log('Перед отправкой data: ', data);
       await io.socket.post('/api/v1/comments/add-comment', data, (dataRes, response) => {
         // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
         (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -1259,7 +1254,7 @@ parasails.registerPage('dogs-home', {
 
 
     handleEdit(index, row) {
-      console.log('ROWWW::: ', row);
+      // console.log('ROWWW::: ', row);
       this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
       this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
       this.owner = _.last(_.pluck(row.owners, 'fullName'));
@@ -1276,13 +1271,13 @@ parasails.registerPage('dogs-home', {
 
     handleEditPhotos(index, row) {
       this.photos = row;
-      console.log('Собака::: ', row);
+      // console.log('Собака::: ', row);
       this.centerDialogVisiblePhotos = true;
     },
 
     handleDelete(index, row) {
       this.innerVisible = true;
-      console.log(index, row);
+      // console.log(index, row);
     },
     clearFilter() {
       this.$refs.filterTable.clearFilter();
@@ -1295,10 +1290,10 @@ parasails.registerPage('dogs-home', {
     clickShowPhoto(index, row) {
 
       this.photoVisible = true;
-      console.log('row:', row);
+      // console.log('row:', row);
       // this.objOne = row;
       this.objOne = Object.assign({}, this.objOne, row);
-      console.log('this.objOne:', this.objOne);
+      // console.log('this.objOne:', this.objOne);
     },
 
 
@@ -1379,15 +1374,15 @@ parasails.registerPage('dogs-home', {
       if (!_.isArray(collectionObj[field])) return collectionObj;
       let n = collectionObj;
       n.imagesArrUrl = '';
-      console.log('::::::::::::::::::::FUNCTION::::::::::');
-      console.log('Индекс картинки которую нужно переместить:: ', cover);
-      console.log('Должен быть наверху: ', n[field][cover]);
+      // console.log('::::::::::::::::::::FUNCTION::::::::::');
+      // console.log('Индекс картинки которую нужно переместить:: ', cover);
+      // console.log('Должен быть наверху: ', n[field][cover]);
       let itemIndex = _.findIndex(n[field], n[field][cover]);
-      console.log('itemIndex:::: ', itemIndex);
+      // console.log('itemIndex:::: ', itemIndex);
 // новый индекс, без удаления, отсоединить элемент и вернуть его
       n[field].splice(0, 0, n[field].splice(cover, 1)[0]);
       // collectionObj[field].splice(0, 0, collectionObj[field].splice(itemIndex, 1)[0]);
-      console.log('dog.images::: ', n[field]);
+      // console.log('dog.images::: ', n[field]);
       n.imagesArrUrl = _.pluck(n[field], prop); // Массив url картинок для просмотра в слайдере
 
 
@@ -1404,20 +1399,20 @@ parasails.registerPage('dogs-home', {
       }, (body, response) => {
         this.dogs.map(dog => {
           if (dog.id === id) {
-            console.log('INDEX: ', index);
+            // console.log('INDEX: ', index);
             // let field = 'images';
             let cut = dog['images'].splice(index, 1);
-            console.log('Вырезали этот объект: ', cut);
+            // console.log('Вырезали этот объект: ', cut);
             // dog['images'].unshift(cut);
             dog['images'] = [...cut, ...dog['images']];
             // dog['images'].splice( 0,0,cut);
-            console.log('Объеденённый массив::: ', dog['images']);
+            // console.log('Объеденённый массив::: ', dog['images']);
             dog.imagesArrUrl = _.pluck(dog['images'], 'imageSrc');
           }
           this.$forceUpdate();
         });
 
-        console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервер files/set-album-cover ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
     },
 

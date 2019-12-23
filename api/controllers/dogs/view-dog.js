@@ -56,12 +56,15 @@ module.exports = {
         fullName: breeder.fullName,
         avatar: breeder.defaultIcon === 'avatar' ? breeder.avatar : breeder.gravatar
       } : {};
-
+console.log('dog.owners::: ' , dog.owners);
+let countryId = _.last(_.pluck(dog.owners,'country'));
+    console.log("countryId::: " , countryId);
     dog.owners = {
       fullName: _.last(_.pluck(dog.owners, 'fullName')),
       avatar: _.last(_.pluck(dog.owners, 'avatar')),
       gravatar: _.last(_.pluck(dog.owners, 'gravatar')),
-      defaultIcon: _.last(_.pluck(dog.owners, 'defaultIcon'))
+      defaultIcon: _.last(_.pluck(dog.owners, 'defaultIcon')),
+      country:await Country.findOne({id:countryId})
     };
 
 

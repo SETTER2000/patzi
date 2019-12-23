@@ -909,7 +909,7 @@
 
                   <el-select v-model="federation.value" slot="prepend" class="wds" placeholder="Select">
                     <el-option :label="ob.abbr" :title="me.preferredLocale==='ru'?ob.labelRu:ob.label" :value="ob.value"
-                               v-for="(ob, index) in ranks"></el-option>
+                               v-for="(ob, index) in ranks" :key="ob.id"></el-option>
                     <!--   <el-option label="RKF" value="2"></el-option>
                        <el-option label="BCU" value="3"></el-option>
                        <el-option label="UKU" value="4"></el-option>
@@ -1685,7 +1685,7 @@
 
       <% /* ФОТО СОБАК */ %>
       <div class="scrollbar" id="style-1">
-        <el-row :gutter="2" class="flex-container wrap">
+        <el-row :gutter="7" class="flex-container wrap">
           <el-col class="flex-item" v-for="(dog, index) in objFilter()" :key="dog.id"
                   :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
 

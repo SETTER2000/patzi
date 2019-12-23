@@ -76,8 +76,8 @@ parasails.registerPage('dog', {
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
 
-
-    console.log('DOGGG ', this.dog);
+console.log('DOG SAILS_LOCALE::: ', this.dog);
+    // console.log('DOGGG ', this.dog);
 
 
   },
@@ -209,7 +209,7 @@ parasails.registerPage('dog', {
 
     // Получить все награды собаки
     getAwards(command) {
-      console.log('command::: ', command);
+      // console.log('command::: ', command);
     },
     handlerSetActiveSlider(i) {
       // console.log('Нажали по слайду: ', i);
@@ -308,10 +308,10 @@ parasails.registerPage('dog', {
     clickShowPhoto(row) {
 
       this.photoVisible = true;
-      console.log('row:', row);
+      // console.log('row:', row);
       // this.objOne = row;
       this.objOne = Object.assign({}, this.objOne, row);
-      console.log('this.objOne:', this.objOne);
+      // console.log('this.objOne:', this.objOne);
     },
 
     open() {

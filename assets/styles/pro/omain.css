@@ -129,19 +129,19 @@ a:hover {
   background: #f9f9ff;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Oswald", sans-serif;
-  color: #242429;
-  line-height: 1.2em;
-  margin-bottom: 0;
-  margin-top: 0;
-  font-weight: 600;
-}
+/*h1,*/
+/*h2,*/
+/*h3,*/
+/*h4,*/
+/*h5,*/
+/*h6 {*/
+  /*font-family: "Oswald", sans-serif;*/
+  /*color: #242429;*/
+  /*line-height: 1.2em;*/
+  /*margin-bottom: 0;*/
+  /*margin-top: 0;*/
+  /*font-weight: 600;*/
+/*}*/
 
 .h1,
 .h2,
@@ -3222,7 +3222,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .single-service {
-  padding: 45px 39px;
+  padding: 5px 39px 45px;
   background: #fff;
   margin-bottom: 30px;
   -webkit-transition: all 0.3s ease 0s;
@@ -3526,6 +3526,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 @media (max-width: 767px) {
   .about-content h1 {
     font-size: 35px;
+    margin-top: 60px;
   }
 }
 
@@ -4766,3 +4767,6 @@ p.footer-text a:hover {
   padding-left: 0;
   padding-right: 0;
 }
+
+/*Menu правка высоты*/
+.u-header .u-menu-1 {margin: -40px 0 20px auto;}

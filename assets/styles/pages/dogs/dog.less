@@ -122,7 +122,7 @@
   //background-position: 100px 150px;
   .gender {
     .el-icon-male, .el-icon-female {
-      font-size: 3vw;
+      //font-size: 3vw;
       padding-top: 12px;
     }
   }
@@ -235,10 +235,18 @@
     }
   }
 
+  @media (min-width: 666px) {
+    .gender {
+      .el-icon-male, .el-icon-female {
+        font-size: 3vw;
+      }
+    }
+  }
   @media (min-width: 991px) {
     .box-card {
       width: 50%;
     }
+
 
     .portrait {
       object-fit: cover;
