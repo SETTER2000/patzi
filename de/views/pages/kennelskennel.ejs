@@ -88,21 +88,20 @@
       <div class="row">
         <div class="demo-basic--circle">
           <div class="block">
-            <el-tooltip v-if="kennel.breeder" class="item" effect="dark" placement="left-start">
-              <div slot="content"><%= __('Cattery owner') %>: {{kennel.breeder.fullName}}</div>
-              <el-button type="text" @click="centerDialogVisible = true" circle>
-                <el-avatar :size="'small'" :src="kennel.breeder.avatar"></el-avatar>
-              </el-button>
-            </el-tooltip>
+            <el-button type="text" @click="centerDialogVisible = true">
+              <el-tooltip v-if="kennel.breeder" class="item" effect="dark" placement="left-start">
+                <div slot="content"><%= __('Cattery owner') %>: {{kennel.breeder.fullName}}</div>
+                <el-avatar :size="'large'" :src="kennel.breeder.avatar"></el-avatar>
+              </el-tooltip>
+            </el-button>
           </div>
           <div class="block" v-for="owner in kennel.owners" :key="owner.id" v-if="kennel.owners">
-            <el-tooltip class="item" effect="dark" placement="left-start">
-              <div slot="content"><%= __('Co-owner') %>: {{owner.fullName}}</div>
-              <el-button type="text" @click="centerDialogVisibleOwner = true; coOwnerFullName=owner.fullName;photoOwner=owner.avatar"
-                         circle>
-                <el-avatar :size="'small'" :src="owner.avatar"></el-avatar>
-              </el-button>
-            </el-tooltip>
+            <el-button type="text" @click="centerDialogVisibleOwner = true; coOwnerFullName=owner.fullName;photoOwner=owner.avatar">
+              <el-tooltip class="item" effect="dark" placement="left-start">
+                <div slot="content"><%= __('Co-owner') %>: {{owner.fullName}}</div>
+                <el-avatar :size="'large'" :src="owner.avatar"></el-avatar>
+              </el-tooltip>
+            </el-button>
           </div>
         </div>
         <div class="col-lg-5 about-left">
@@ -118,7 +117,7 @@
                 <br><span v-if="kennel.address"><i class="el-icon-office-building"></i> {{kennel.address}}</span>
                 <br><span v-if="kennel.site"><i class="el-icon-location-outline"></i> {{kennel.site}}</span>
                 <br><span v-if="kennel.phones" v-for="(phone , index) in kennel.phones" :key="phone.value">
-                       <p> <i class="el-icon-phone-outline"></i> {{phone.value}} {{phone.fullName}}</p>
+                       <p v-if="phone.value"> <i class="el-icon-phone-outline"></i> {{phone.value}} {{phone.fullName}}</p>
                    </span>
               </div>
             </div>
@@ -160,8 +159,8 @@
   <!-- End About Area -->
 
   <!-- Start Service Area -->
+  <% /* Собаки питомника */ %>
   <section class="service-area section-gap-top">
-    <% /* Собаки питомника */ %>
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
@@ -174,7 +173,8 @@
       <div class="row">
         <div class="col-md-6" v-for="(dog, index) in kennel.dogs" :key="dog.id">
           <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
-            <div class="d-flex align-items-center mb-3">
+            <% /* Имя собаки с иконкой */ %>
+            <div class="d-flex align-items-center">
               <template v-if="dog.gender==='sire'">
                 <i class="el-icon-male"></i>
               </template>
@@ -185,34 +185,32 @@
                 <el-button :underline="false" @click="goTo2(dog.detail)" type="text">{{dog.fullName}}</el-button>
               </h4>
             </div>
+            <% /* Фото собаки */ %>
             <div class="demo-image__preview">
               <div v-if="dog.images" style="position: relative">
                 <template>
                   <el-carousel class="menu-center" trigger="click" :autoplay="false" indicator-position="none">
                     <el-carousel-item v-for="(img, index) of dog.imagesMin" :key="img.id">
-                      <!--<p class="medium">{{ dog.description }}</p>-->
+                      <% /* Главное фото собаки */ %>
                       <img :src="img.imageSrc" style="margin: 0 auto; width: auto; height: 100%; " alt="">
                     </el-carousel-item>
                   </el-carousel>
                 </template>
-                <!--children: {{dog.parents.parents}}-->
+                <% /* Аватарки родителей собаки. Круглые. */ %>
                 <div class="flex menu-center" style="position: absolute; right:5px;top:5px; z-index:10;">
                   <div v-for="parent in dog.parents" :key="parent.id" v-if="dog.parents">
-                    <!--{{parent.gender}}: {{parent.fullName}}-->
-                    <el-tooltip class="item" effect="dark" placement="top">
-                      <div slot="content">{{parent.gender}}: {{parent.fullName}}</div>
-                      <el-button v-if="parent.images" type="text" circle
-                                 @click="centerDialogVisibleOwner = true;linkDog=getLinkDetailDog(parent.fullName); coOwnerFullName=parent.fullName;photoOwner=parent.images[parent.cover].imageSrc"
-                      >
-                        <div class="demo-basic--circle">
-                          <div class="block" v-if="parent.images.length>0">
-                            <el-avatar :size="18" :src="parent.images[parent.cover].imageSrc"></el-avatar>
-                          </div>
-                      </el-button>
-                    </el-tooltip>
+                    <el-button v-if="parent.images" type="text"
+                               @click="centerDialogVisibleOwner = true;linkDog=getLinkDetailDog(parent.fullName); coOwnerFullName=parent.fullName;photoOwner=parent.images[parent.cover].imageSrc"
+                    >
+                      <div v-if="parent.images.length>0">
+                        <el-tooltip class="item" effect="dark" placement="top">
+                          <div slot="content">{{parent.gender}}: {{parent.fullName}}</div>
+                          <el-avatar  :src="parent.images[parent.cover].imageSrc"></el-avatar>
+                        </el-tooltip>
+                      </div>
+                    </el-button>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
