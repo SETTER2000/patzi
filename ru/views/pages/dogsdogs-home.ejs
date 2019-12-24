@@ -136,8 +136,6 @@
     <el-button autofocus type="primary" @click="ruleForm.errInputDogName = false; ruleForm.label=''">Ok</el-button>
   </span>
     </el-dialog>
-
-
     <template v-if="!ruleForm.see">
       <el-popover
         ref="popover"
@@ -160,8 +158,6 @@
           :class="classObject"
       >{{ruleForm.fullName}}</h1>
     </template>
-
-
     <div v-if="ruleForm.imageUrl">
       <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
     </div>
@@ -845,7 +841,7 @@
           <div style="border-left: 2px dashed rgb(220, 224, 228); padding-left: 50px" class="col col-lg-5">
 
             <% /* ВЛАДЕЛЕЦ. OWNER */ %>
-            <template v-if="me.isAdmin | me.isSuperAdmin">
+            <template v-if="me.isAdmin | me.isSuperAdmin ">
               <!--<template >-->
               <el-form-item label="<%= __('Owner') %>" prop="owner">
                 <el-autocomplete
@@ -853,7 +849,7 @@
                   class="inline-input"
                   v-model="ruleForm.owner"
                   :fetch-suggestions="querySearchFoo"
-                  placeholder="<%= __('Please Input co-owner') %>"
+                  placeholder="<%= __('Please Input owner') %>"
                   :trigger-on-focus="false"
                   @select="handleSelected"
                   style="width: 58%;"
