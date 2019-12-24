@@ -240,6 +240,17 @@ module.exports = {
       statusCode: 409,
       description: 'Указанное имя собаки уже используется.',
     },
+
+    dogAddedUse: {
+      statusCode: 409,
+      description: `You do not have the right to add a dog to this kennel, 
+      because you are not the owner or co-owner of this nursery.`,
+    },
+    dogAddedUseRU: {
+      statusCode: 409,
+      description: `У вас нет права на добавления собаки в данный питомник, 
+      т.к. вы не являетесь владельцем или совладельцем этого питомника.`,
+    },
   },
 
 
@@ -257,6 +268,9 @@ module.exports = {
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
+
+
+    // Проверяем есть ли фото
     if (inputs.fileList) {
       images = inputs.fileList.filter(o => !_.isNull(o));
       _.each(images, img => {
@@ -271,8 +285,24 @@ module.exports = {
     }
 
 
+    // Получаем объект питомника
+    let kennel = await Kennel.findOne({id: inputs.kennel})
+      .populate('breeder')
+      .populate('owners');
+
+    // Если ты не админ и не суперадмин, то проверяем являешься ли ты
+    // владельцем питомника или совладельцем.
+    if (!req.me.isAdmin && !req.me.isSuperAdmin) {
+      console.log('1 - one');
+      if (kennel.breeder.id !== req.me.id || !_.sample(kennel.owners,{'id':req.me.id})) {
+
+        console.log('2 - one');
+        throw (req.me.preferredLocale === 'ru') ? 'dogAddedUseRU' : 'dogAddedUse';
+      }
+    }
+
+
     // Удаляем название питомника из имени собаки
-    let kennel = await Kennel.findOne({id: inputs.kennel});
     inputs.label = inputs.label.replace(kennel.label, '');
 
 
