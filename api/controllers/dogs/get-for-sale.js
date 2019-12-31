@@ -21,7 +21,7 @@ module.exports = {
 
   exits: {
     success: {
-      anyData: 'Вы подключились к комнате dog и слушаете событие list'
+      anyData: 'Вы подключились к комнате dog и слушаете событие forSale-dog'
     },
     notFound: {
       description: 'No dogs on sale from this litter.',

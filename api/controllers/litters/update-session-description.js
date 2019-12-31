@@ -75,7 +75,7 @@ module.exports = {
     const req = this.req;
     let moment = require('moment');
     const tz = require('moment-timezone');
-    let dateShooting = inputs.dateShooting.replace(/"([^"]+(?="))"/g, '$1');
+    let dateShooting = inputs.dateShooting ? inputs.dateShooting.replace(/"([^"]+(?="))"/g, '$1') : '';
     moment.locale('en');
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
