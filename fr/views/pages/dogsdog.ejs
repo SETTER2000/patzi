@@ -245,7 +245,8 @@
           <% /* ЗАВОДЧИК BREEDER*/ %>
           <el-card class="box-card">
             <div slot="header" class="clearfix">
-              <span><%= __('Breeder') %>: {{dog.breeder.fullName}}</span>
+              <span><%= __('Breeder') %>: {{dog.breeder.fullName}} </span>
+
             </div>
             <div class="menu-center">
               <div class="block">
@@ -256,6 +257,7 @@
                 </a>
               </div>
             </div>
+
             <div class="menu-center">
               <el-link :underline="false" type="info" :href="getLinkKennel(dog.kennel.label)">{{dog.kennel.label}} <span v-if="dog.breeder.country">({{dog.breeder.country}})</span></el-link>
             </div>
