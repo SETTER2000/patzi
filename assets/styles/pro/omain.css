@@ -1350,7 +1350,7 @@ th {
   header#sec-599b.afterload {
   transform: translate(0, -95%);
   transition: .75s;
-  transition-delay: 3000s; /* Задержка перед сокрытием меню */
+  transition-delay: 3s; /* Задержка перед сокрытием меню */
   position: fixed;
   /*background-color: rgba(255, 255, 255,.8);*/
   }
