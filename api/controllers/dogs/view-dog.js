@@ -229,6 +229,11 @@ let countryId = _.last(_.pluck(dog.owners,'country'));
 
     // Respond with view.
     return exits.success({
+      seo: {
+        description: `${dog.fullName} - ${dog.subtitle}`,
+        title: `${dog.fullName} ${dog.gender} ${moment(dog.dateBirth).format('LL')}`,
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },
       currentSection: 'dog',
       dog
     });

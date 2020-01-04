@@ -11,7 +11,8 @@ module.exports = {
 
     success: {
       viewTemplatePath: 'pages/dashboard/welcome',
-      description: 'Display the welcome page for authenticated users.'
+      description: 'Display the welcome page for authenticated users.',
+
     },
 
   },
@@ -20,7 +21,12 @@ module.exports = {
   fn: async function () {
 
     // true - включить красный spinner на главной, false - выключить
-    return {spinner: true};
+    return {spinner: true,
+      seo: {
+        description: 'Питомник Poale Ell занимается разведением собак породы "Китайская Хохлатая Собака". В питомники можно купить щенка. Мы ответственны за продаваемых собак.',
+        title: 'Питомник Poale Ell. Китайская Хохлатая Собака',
+        canonical:'https://poaleell.com/welcome'
+      }};
 
   }
 

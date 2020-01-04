@@ -88,6 +88,11 @@ module.exports = {
 
     // Respond with view.
     return exits.success({
+      seo: {
+        description: 'Все помёты собак питомника.',
+        title: 'Помёты',
+        canonical:'https://poaleell.com/litters'
+      },
       litters,
       currentSection: 'litters-home'
     });

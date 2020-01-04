@@ -19,7 +19,11 @@ module.exports = {
   fn: async function () {
 
     // Respond with view.
-    return {};
+    return {seo: {
+        description: `Блог - посвящён собакам питомника, как они живут, гуляют, развиваются и становятся победителями выставок.`,
+        title: `Блог "Мир Собак"`,
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },};
 
   }
 

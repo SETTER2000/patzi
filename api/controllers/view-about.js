@@ -20,7 +20,11 @@ module.exports = {
   fn: async function () {
 
     // Respond with view.
-    return {};
+    return {seo: {
+        description: `Информация по питомнику Poale Ell.`,
+        title: `О нас`,
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },};
 
   }
 

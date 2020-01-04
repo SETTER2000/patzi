@@ -229,6 +229,11 @@ module.exports = {
 
     // Respond with view.
     return exits.success({
+      seo: {
+        description: `${kennel.label} - ${kennel.subtitle}`,
+        title: `${kennel.label} Kennel`,
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },
       currentSection: 'kennel',
       kennel
     });

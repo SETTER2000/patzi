@@ -75,6 +75,11 @@ module.exports = {
 
     // Respond with view.
     return exits.success({
+      seo: {
+        description: `База данных породы Китайская Хохлатая Собака.`,
+        title: `Каталог собак`,
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },
       currentSection: 'dog',
       dogs
     });

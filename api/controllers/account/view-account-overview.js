@@ -31,6 +31,11 @@ module.exports = {
 
     // Respond with view.
     return exits.success({
+      seo: {
+        description: `Аккаунт`,
+        title: `Аккаунт`,
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },
       account,
       currentSection: 'account',
       stripePublishableKey: sails.config.custom.enableBillingFeatures? sails.config.custom.stripePublishableKey : undefined,

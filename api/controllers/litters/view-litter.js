@@ -22,7 +22,7 @@ module.exports = {
 
   exits: {
     success: {
-      viewTemplatePath: 'pages/litters/litter'
+      viewTemplatePath: 'pages/litters/litter',
     },
     forbidden: {
       responseType: 'forbidden'
@@ -99,6 +99,11 @@ module.exports = {
 
     // Respond with view.
     return exits.success({
+      seo: {
+        description: `Год рождения помёта ${litter.letter} ${litter.year} г.`,
+        title: `Помёт ${litter.letter}`,
+        canonical:`https://poaleell.com/litter/${litter.letter}/${litter.year}/photo`
+      },
       currentSection: 'litter',
       litter
     });

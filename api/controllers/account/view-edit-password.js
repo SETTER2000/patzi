@@ -18,7 +18,11 @@ module.exports = {
 
   fn: async function () {
 
-    return {};
+    return {seo: {
+        description: `Аккаунт`,
+        title: `Аккаунт`,
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },};
 
   }
 

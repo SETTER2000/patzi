@@ -21,12 +21,15 @@ module.exports.routes = {
   // Not authorized
   'GET /faq': {action: 'entrance/view-faq'},
   // 'GET /faq': {view: 'pages/faq', locals: {currentSection: 'faq'}},
-  'GET /legal/terms': {view: 'pages/legal/terms'},
-  'GET /legal/privacy': {view: 'pages/legal/privacy'},
+  'GET /legal/terms': {action: 'entrance/view-terms'},
+  // 'GET /legal/terms': {view: 'pages/legal/terms'},
+  'GET /legal/privacy': {action: 'entrance/view-privacy'},
+  // 'GET /legal/privacy': {view: 'pages/legal/privacy'},
 
   'GET /signup': {action: 'entrance/view-signup'},
   'GET /email/confirm': {action: 'entrance/confirm-email'},
-  'GET /email/confirmed': {view: 'pages/entrance/confirmed-email'},
+  // 'GET /email/confirmed': {view: 'pages/entrance/confirmed-email'},
+  'GET /email/confirmed': {action: 'entrance/confirmed-email'},
 
   'GET /login': {action: 'entrance/view-login'},
   'GET /password/forgot': {action: 'entrance/view-forgot-password'},

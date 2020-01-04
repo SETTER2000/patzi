@@ -90,6 +90,11 @@ module.exports = {
 
     // Respond with view.
     return exits.success({
+      seo: {
+        description: 'Пользователи сайта.',
+        title: 'Пользователи',
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },
       dateFilter
     });
 

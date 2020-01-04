@@ -19,7 +19,11 @@ module.exports = {
   fn: async function () {
 
     // Respond with view.
-    return {};
+    return {seo: {
+        description: `Аккаунт`,
+        title: `Аккаунт`,
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },};
 
   }
 

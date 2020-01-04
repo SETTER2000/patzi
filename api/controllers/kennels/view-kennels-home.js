@@ -37,6 +37,11 @@ module.exports = {
 
     // Respond with view.
     return exits.success({
+      seo: {
+        description: 'Питомники, которые занесены в базу собак.',
+        title: 'Питомники',
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },
       kennels
     });
   }

@@ -60,6 +60,11 @@ module.exports = {
 
     // Respond with view.
     return exits.success({
+      seo: {
+        description: 'Группы пользователей сайта.',
+        title: 'Группы',
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },
       groups
     });
 

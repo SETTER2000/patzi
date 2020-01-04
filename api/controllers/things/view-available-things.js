@@ -62,6 +62,11 @@ module.exports = {
 
     // Respond with view.
     return exits.success({
+      seo: {
+        description: `Лучшие фотографии собак нашего питомника Poale Ell. Собаки которыми мы гордимся.`,
+        title: `Портфолио`,
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },
       currentSection: 'portfolio',
       things
     });

@@ -28,7 +28,13 @@ module.exports = {
       throw {redirect: '/'};
     }
 
-    return {};
+    return {
+      seo: {
+        description: 'Подтвердить пароль.',
+        title: 'Подтвердить пароль',
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },
+    };
 
   }
 

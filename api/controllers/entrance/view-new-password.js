@@ -48,6 +48,11 @@ module.exports = {
 
     // Grab token and include it in view locals
     return {
+      seo: {
+        description: 'Изменить пароль.',
+        title: 'Пароль',
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+      },
       token: inputs.token
     };
 
