@@ -20,7 +20,11 @@ module.exports = {
   fn: async function () {
 
     // Respond with view.
-    return {};
+    return { seo: {
+        description: 'Питомник Poale Ell занимается разведением собак породы "Китайская Хохлатая Собака". В питомники можно купить щенка. Мы ответственны за продаваемых собак.',
+        title: 'Питомник Poale Ell. Китайская Хохлатая Собака',
+        canonical:'https://poaleell.com'
+      }};
 
   }
 

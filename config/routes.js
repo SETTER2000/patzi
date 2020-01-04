@@ -19,7 +19,8 @@ module.exports.routes = {
   'GET /': {action: 'view-homepage-or-redirect'},
   'GET /welcome/:unused?': {action: 'dashboard/view-welcome'},
   // Not authorized
-  'GET /faq': {view: 'pages/faq', locals: {currentSection: 'faq'}},
+  'GET /faq': {action: 'entrance/view-faq'},
+  // 'GET /faq': {view: 'pages/faq', locals: {currentSection: 'faq'}},
   'GET /legal/terms': {view: 'pages/legal/terms'},
   'GET /legal/privacy': {view: 'pages/legal/privacy'},
 

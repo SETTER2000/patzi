@@ -27,7 +27,13 @@ module.exports = {
       throw {redirect: '/'};
     }
 
-    return { currentSection: 'signup'};
+    return { currentSection: 'signup',
+      seo: {
+        description: 'Регистрация пользователей сайта. Используйте свой email и придумайте пароль для регистрации на сайте.',
+        title: 'Регистрация.',
+        canonical:'https://poaleell.com/faq'
+      }
+    };
 
   }
 

@@ -27,7 +27,12 @@ module.exports = {
       throw {redirect: '/'};
     }
 
-    return {currentSection: 'login'};
+    return {currentSection: 'login',
+      seo: {
+        description: 'Вход для зарегистрированных пользователей сайта. Введите свой email и пароль для входа.',
+        title: 'Вход. Авторизация.',
+        canonical:'https://poaleell.com/login'
+      }};
 
   }
 
