@@ -801,5 +801,9 @@
 	"Not yet with us?": "Вы ещё не с нами?",
 	"What is this page for?": "Для чего эта страница?",
 	"On this page you will find answers to frequently asked questions about the application": "На этой странице вы найдёте ответы на часто задаваемые вопросы по приложению",
-	"This page will be updated and updated with new questions and answers as the application grows older.": "Эта страница будет обновляться и дополняться новыми вопросами и ответами, по мере взросления приложения."
+	"This page will be updated and updated with new questions and answers as the application grows older.": "Эта страница будет обновляться и дополняться новыми вопросами и ответами, по мере взросления приложения.",
+	"Log in to your account": "Войдите в свой аккаунт",
+	"Restore password": "Восстановить пароль",
+	"We've sent you a link to update your password.": "Мы отправили вам ссылку для обновления вашего пароля.",
+	"If the email doesn’t arrive after a few minutes, try checking your spam folder.  If you still can’t find it, please try again, or": "Если письмо не приходит через несколько минут, попробуйте проверить папку со спамом. Если вы все еще не можете его найти, попробуйте еще раз или"
 }
