@@ -140,7 +140,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
 <!--sec-599b | header-->
 <!--OLD-->
 <header class="u-clearfix u-header u-header" id="sec-599b">
-  <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-xl u-sheet-1">
+  <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-sheet-1">
     <a href="/" class="u-image u-logo u-image-1">
       <img src="/images/logo_w.svg" class="u-logo-image u-logo-image-1" data-image-width="100">
     </a>
@@ -179,22 +179,22 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
         <ul class="u-custom-font u-font-oswald u-nav u-unstyled u-nav-1">
           <li class="u-nav-item">
             <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white" href="/"
-               style="padding: 16px 20px;">
+               style="padding: 4px 20px;">
               <i class="el-icon-s-home"></i></a>
           </li>
           <li class="u-nav-item">
             <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white" href="/litters"
-               style="padding: 16px 20px;">
+               style="padding: 4px 20px;">
 
               <%= __('Litters') %></a>
           </li>
           <li class="u-nav-item">
             <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white" href="/about"
-               style="padding: 16px 20px;"><%= __('About') %></a>
+               style="padding: 4px 20px;"><%= __('About') %></a>
           </li>
           <li class="u-nav-item">
             <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white"
-               style="padding: 16px 20px;" ><%= __('Pages') %></a>
+               style="padding: 4px 20px;" ><%= __('Pages') %></a>
             <div class="u-nav-popup">
               <ul class="u-h-spacing-45 u-nav u-unstyled u-v-spacing-20 u-nav-2">
                 <li class="u-nav-item">
@@ -244,14 +244,14 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
               width="200"
               trigger="hover"
               content="this is content, this is content, this is content">
-              <el-button href="/account" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 10px 16px;"><%= __('Account') %></el-button>
+              <el-button href="/account" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-grey-80 u-text-hover-palette-1-base" style="padding: 4px 16px;"><%= __('Account') %></el-button>
             </el-popover>
           </li>
           <%}%>
 
           <li class="u-nav-item">
             <a href="" class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white "
-               style="padding: 16px 20px;"
+               style="padding: 4px 16px;"
             ><%= me.preferredLocale === 'ru' ? 'Ru' : 'En' %> </a>
             <div class="u-nav-popup">
               <ul class="u-h-spacing-45 u-nav u-unstyled u-v-spacing-20 u-nav-3">
@@ -266,7 +266,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
           <% if(me.isAdmin || me.isSuperAdmin){ %>
           <li class="u-nav-item">
             <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white"
-               style="padding: 16px 20px;" href=""><%= __('Settings') %></a>
+               style="padding: 4px 20px;" href=""><%= __('Settings') %></a>
             <div class="u-nav-popup">
               <ul class="u-h-spacing-45 u-nav u-unstyled u-v-spacing-20 u-nav-6">
                 <li class="u-nav-item">
@@ -285,7 +285,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
           <% } %>
           <li class="u-nav-item">
             <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-base u-text-white" href="/logout"
-               style="padding: 16px 20px;"><%= __('Log Out') %></a>
+               style="padding: 4px 20px;"><%= __('Log Out') %></a>
           </li>
         </ul>
       </div>
@@ -478,7 +478,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
 <% if(me){ %>
 <footer class="top-margin-for-add-section-widget-small u-align-left u-clearfix u-footer u-white u-footer" id="sec-6004">
   <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-    <p class="u-small-text u-text u-text-variant u-text-1">Copyright &copy; 2019 <a target="_blank" href="/">Poale Ell.</a> All rights
+    <p class="u-small-text u-text u-text-variant u-text-1">Copyright &copy; 2019-<%= new Date().getFullYear() %> <a target="_blank" href="/">Poale Ell.</a> All rights
       reserved.</p>
     <!--    <a href="/legal/privacy" class="u-align-left u-link u-link-1"><%= __('Privacy policy') %></a>
     <a href="/legal/terms" class="u-align-left u-link u-link-2"><%= __('Terms of use') %></a>
@@ -487,11 +487,6 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
 </footer>
 
 <% } else { %>
-
-<% } %>
-<!-- End footer Area -->
-<% if(!me){ %>
-
 <footer
   class="top-margin-for-add-section-widget-small u-align-center-lg u-align-center-md u-align-center-sm u-align-center-xs u-align-left-xl u-clearfix u-footer u-white u-footer"
   id="sec-6004">
@@ -502,7 +497,7 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
           <div
             class="u-align-center u-container-style u-layout-cell u-left-cell u-size-22-lg u-size-22-sm u-size-22-xl u-size-22-xs u-size-59-md u-layout-cell-1">
             <div class="u-container-layout u-valign-middle u-container-layout-1">
-              <p class="u-small-text u-text u-text-variant u-text-1">Copyright &copy; 2019 Poale Ell. All rights reserved.</p>
+              <p class="u-small-text u-text u-text-variant u-text-1">Copyright &copy; 2019-<%= new Date().getFullYear() %> Poale Ell. All rights reserved.</p>
             </div>
           </div>
           <div
@@ -530,8 +525,9 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
     </div>
   </div>
 </footer>
-
 <% } %>
+<!-- End footer Area -->
+
 <!-- ####################### Start Scroll to Top Area ####################### -->
 <div id="back-top">
   <a title="Go to Top" href="#"> <i class="ti-angle-double-up"></i> </a>
@@ -953,14 +949,14 @@ sur le pipeline des actifs entre les "SCRIPTS" et "SCRIPTS END", ou les deux.
 <script src="/js/pages/entrance/forgot-password.page.js"></script>
 <script src="/js/pages/entrance/login.page.js"></script>
 <script src="/js/pages/entrance/new-password.page.js"></script>
+<script src="/js/pages/entrance/privacy.page.js"></script>
 <script src="/js/pages/entrance/signup.page.js"></script>
+<script src="/js/pages/entrance/terms.page.js"></script>
 <script src="/js/pages/faq.page.js"></script>
 <script src="/js/pages/group/group-home.page.js"></script>
 <script src="/js/pages/homepage.page.js"></script>
 <script src="/js/pages/kennels/kennel.page.js"></script>
 <script src="/js/pages/kennels/kennels-home.page.js"></script>
-<script src="/js/pages/legal/privacy.page.js"></script>
-<script src="/js/pages/legal/terms.page.js"></script>
 <script src="/js/pages/litters/litter.page.js"></script>
 <script src="/js/pages/litters/litters-home.page.js"></script>
 <script src="/js/pages/message/message-home.page.js"></script>
