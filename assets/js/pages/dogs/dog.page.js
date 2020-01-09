@@ -76,8 +76,8 @@ parasails.registerPage('dog', {
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
 
-console.log('DOG SAILS_LOCALE::: ', this.dog);
-    // console.log('DOGGG ', this.dog);
+
+
 
 
   },
