@@ -806,5 +806,7 @@
 	"Restore password": "Восстановить пароль",
 	"We've sent you a link to update your password.": "Мы отправили вам ссылку для обновления вашего пароля.",
 	"If the email doesn’t arrive after a few minutes, try checking your spam folder.  If you still can’t find it, please try again, or": "Если письмо не приходит через несколько минут, попробуйте проверить папку со спамом. Если вы все еще не можете его найти, попробуйте еще раз или",
-	"Registration": "Registration"
+	"Registration": "Registration",
+	"Why should I register?": "Зачем мне регистрироваться?",
+	"Registration gives you more options. On the main page is not complete information, but only excerpts from sections of the site. Some sections are not represented at all, such as catalogs of dogs, kennels, prices, etc.": "Регистрация даёт больше возможностей. На главной странице не полная информация, а лишь выдержки из разделов сайта. Некоторые разделы не представлены совсем, например каталоги собак, питомников, цены и т.д.."
 }
