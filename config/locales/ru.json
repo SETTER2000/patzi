@@ -810,5 +810,8 @@
 	"Why should I register?": "Зачем мне регистрироваться?",
 	"Registration gives you more options. On the main page is not complete information, but only excerpts from sections of the site. Some sections are not represented at all, such as catalogs of dogs, kennels, prices, etc.": "Регистрация даёт больше возможностей. На главной странице не полная информация, а лишь выдержки из разделов сайта. Некоторые разделы не представлены совсем, например каталоги собак, питомников, цены и т.д..",
 	"If you have not registered before, then": "Если вы не регистрировались ранее, то вам",
-	" here": " сюда"
+	" here": " сюда",
+	"Carts": "Графики",
+	"Graphical representation of some generalized data": "Графическое представление некоторых обобщённых данных",
+	"The number of dogs in the world": "Количество собак в странах мира"
 }

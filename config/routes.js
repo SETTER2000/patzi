@@ -54,6 +54,7 @@ module.exports.routes = {
   'GET /dogs/:breed/:virtualPageSlug?': {action: 'dogs/view-dogs-home', locals: {currentSection: 'dogs'}},
   'GET /chinese-crested/:fullName': {action: 'dogs/view-dog'},
   'GET /kennel/:label': {action: 'kennels/view-kennel'},
+  'GET /charts/:virtualPageSlug?': { action: 'charts/view-chart-home' },
 
 
   'GET /contact': {action: 'view-contact', locals: {currentSection: 'contact'}},
@@ -196,6 +197,11 @@ module.exports.routes = {
   'POST   /api/v1/dogs/destroy-one-dog': {action: 'dogs/destroy-one-dog', csrf: false},
   'PUT    /api/v1/dogs/update-dog': {action: 'dogs/update-dog', csrf: false},
   'DELETE /api/v1/dogs/destroy-many-img': {action: 'dogs/destroy-many-img', csrf: false},
+
+
+
+
+
 
   'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},
   'PUT    /api/v1/files/update-cover-album': {action: 'files/update-cover-album', csrf: false},
