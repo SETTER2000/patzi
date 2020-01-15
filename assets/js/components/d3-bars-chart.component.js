@@ -139,6 +139,7 @@ parasails.registerComponent('d3BarsChart', {
       ;
       const gY = gMerge.select('g.y-right');
       gY.transition()
+        .delay((d,i)=>i*20)
         .duration(this.duration)
         .call(d3.axisRight(y).tickSizeOuter(0).tickSizeInner(innerWidth))
       ;
@@ -168,6 +169,7 @@ parasails.registerComponent('d3BarsChart', {
       const rectMerge = rectData.merge(rectEnter); // указатель на элемент rect
       rectMerge
         .transition()
+        .delay((d,i)=>i*20)
         .duration(this.duration)
         .attr('y', (d) => y(d.total))
         // .attr('y', (d) => innerHeight - d)
@@ -184,6 +186,7 @@ parasails.registerComponent('d3BarsChart', {
 
       gMerge.select('g.y-left')
         .transition()
+        .delay((d,i)=>i*20)
         .duration(this.duration)
         .call(d3.axisLeft(y));
 
@@ -194,6 +197,7 @@ parasails.registerComponent('d3BarsChart', {
       gMerge.select('g.x')
         .attr('transform', `translate(0,${innerHeight})`)
         .transition()
+        .delay((d,i)=>i*20)
         .duration(this.duration)
         .call(d3.axisBottom(x));
 

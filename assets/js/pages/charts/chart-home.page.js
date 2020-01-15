@@ -72,6 +72,7 @@ parasails.registerPage('chart-home', {
       colorChart: ['#8a0000', '#8ab200'],
       durationChart: '1000',
       widthSvg: window.innerWidth,
+      rightTitle:true,
       heightSvg: '500',
       data: [
         {label: 'USA',        total: 1560},
