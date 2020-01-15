@@ -12,11 +12,12 @@
   </section>
   <!-- End banner Area -->
   <section class="work-area">
-    <div class="container">
-      <h2><%= __('The number of dogs in the world') %>.</h2>
-      <d3-bars-chart :d3-data="series" :d3-width="widthSvg" :d3-height="heightSvg" :d3-duration="duration" :color-chart="colorCharts.dogsWorld"></d3-bars-chart>
-      <d3-bars-chart :d3-data="series" :d3-width="widthSvg" :d3-height="heightSvg" :d3-duration="duration" :color-chart="colorCharts.dogsWorld"></d3-bars-chart>
-    </div>
+
+      <h3 class="flex justify-content-center" v-cloak><%= __('The number of CCD in the world') %>.</h3>
+      <d3-bars-chart :d3-data="dogsWorld" ></d3-bars-chart>
+    <h3 class="flex justify-content-center" ><%= __('The number of kennels in the world') %>.</h3>
+      <d3-bars-chart :d3-data="dogsWorld2"></d3-bars-chart>
+
   </section>
   <!-- End Portfolio Details Area -->
   <!--<router-view></router-view>-->
