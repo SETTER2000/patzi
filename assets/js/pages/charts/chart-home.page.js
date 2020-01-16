@@ -7,7 +7,7 @@ parasails.registerPage('chart-home', {
       colorChart: ['#03c4b2', '#d308d1'], // градация цвета столбцов от...до
       strokeDashColor: '#ee22ee', // цвет пунктирных параллелей
       durationChart: '1000',
-      widthSvg: window.innerWidth,
+      // widthSvg: '800' ,
       rightTitle:true,
       heightSvg: '500',
       data: [
@@ -71,7 +71,7 @@ parasails.registerPage('chart-home', {
     dogsWorld2: {
       colorChart: ['#8a0000', '#8ab200'],
       durationChart: '1000',
-      widthSvg: window.innerWidth,
+      // widthSvg: window.innerWidth,
       rightTitle:true,
       heightSvg: '500',
       data: [

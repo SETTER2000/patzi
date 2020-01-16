@@ -27,8 +27,8 @@ parasails.registerComponent('d3BarsChart', {
       styleObjType: Object,
 
       // В основном все значения действуют поумолчанию, если нет таких же входящих данных
-      width: 500, // ширина svg
-      height: 500, // высота svg
+      width: window.innerWidth, // ширина svg
+      height: window.innerHeight, // высота svg
       duration: 1000, // длительность перехода роста столбцов
       innerWidth: 400,
       innerHeight: 400,
@@ -200,9 +200,6 @@ parasails.registerComponent('d3BarsChart', {
         .delay((d,i)=>i*20)
         .duration(this.duration)
         .call(d3.axisBottom(x));
-
-
-
     }
 
   }
