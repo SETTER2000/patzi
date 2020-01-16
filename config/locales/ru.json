@@ -748,7 +748,7 @@
 	"powderpuff dam": "пуховая сука",
 	"hairless sire": "голый кобель",
 	"Signup": "Регистрация",
-	"Your Eternal Companion": "Your Eternal Companion",
+	"Your Eternal Companion": "ваш вечный спутник",
 	"We are here": "Мы находимся здесь",
 	"A more detailed place is the position when verbally coordinating the meeting": "Более детальное место положение при устном согласовании встречи",
 	"Puppy show": "Показ щенков",
@@ -783,7 +783,7 @@
 	"Left, right - you can choose an interesting topic for yourself, thereby limiting the choice of posts only to this topic": "Влево, вправо - вы можете выбрать интересную тему для себя, тем самым ограничив выбор постов только данной тематикой",
 	"Puppies that have already grown up often realize that an exhibition is not just a lot of tasty smells, but also 5, 6, 7, etc. pieces of delicious, fragrant goodies": "Уже подросшие щенки, часто понимают, что выставка - это не просто много вкусных запахов, но и 5, 6, 7 и т.д. кусочков вкусного, ароматного лакомства",
 	"The first day": "Первый день",
-	"Chinese Crested Puppies. On sale.": "Щенки китайской хохлатой. В продаже.",
+	"Chinese Crested Puppies. On sale.": "Щенки китайской хохлатой. Продажа.",
 	"On sale there are puppies of the Chinese Crested Dogs of show class. Parented, in good physical shape, very active, playful. All documents are in order. We draw up a sales contract. A lot of bonuses.": "В продаже есть щенки Китайской Хохлатой Собаки шоу класса. Подрощенные, в прекрасной физической форме, очень активные, игривые. Все документы в порядке. Оформляем договор продажи. Много бонусов.",
 	"Date of Birth:": "Дата рождения:",
 	"Chinese Crested Dog is surprisingly honest and faithful companion. A capitalion with a huge heart, a cheerful, mischievous character and a warm little body. We know a lot about the breed and are ready to share our knowledge with everyone who, like us, loves this wonderful breed and is ready to share his life with them forever.": "Китайская хохлатая собака удивительно честный и верный спутник. Комапьон с большой буквы, с огромным сердцем, с весёлым, озорным характером и тёплым тельцем. Мы много знаем о породе и готовы поделиться нашими знаниями со всеми, кто, как и мы, любит эту замечательную породу и готов навсегда разделить с ними свою жизнь.",
@@ -814,5 +814,7 @@
 	"Carts": "Графики",
 	"Graphical representation of some generalized data": "Графическое представление некоторых обобщённых данных",
 	"The number of CCD in the world": "Количество КХС в странах мира",
-	"The number of kennels in the world": "Количество питомников в мире"
+	"The number of kennels in the world": "Количество питомников в мире",
+	"kennel": "питомник",
+	"Call": "Звоните"
 }
