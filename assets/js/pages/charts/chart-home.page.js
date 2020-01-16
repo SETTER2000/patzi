@@ -119,15 +119,15 @@ parasails.registerPage('chart-home', {
 
   },
   mounted: async function () {
-      this.intervalId = setInterval(() => {
-        this.dogsWorld.generateData();
-        // this.updateChart(this.$refs.$wrapper, this.d3Data);
-      }, 5000);
-
-    this.intervalId2 = setInterval(() => {
-      this.dogsWorld2.generateData();
-      // this.updateChart(this.$refs.$wrapper, this.d3Data);
-    }, 8000);
+    //   this.intervalId = setInterval(() => {
+    //     this.dogsWorld.generateData();
+    //     // this.updateChart(this.$refs.$wrapper, this.d3Data);
+    //   }, 5000);
+    //
+    // this.intervalId2 = setInterval(() => {
+    //   this.dogsWorld2.generateData();
+    //   // this.updateChart(this.$refs.$wrapper, this.d3Data);
+    // }, 8000);
   },
   beforeDestroy: function () {
     clearInterval(this.intervalId);
