@@ -62,14 +62,14 @@ parasails.registerComponent('d3BarsChart', {
     if (this.d3Data.data === undefined) {
       throw new Error('Neither `:d3-data`  was passed in to <d3-bars-chart>, but one or the other must be provided.');
     }
-
+    this.updateChart(this.$refs.$wrapper, _.sortBy(this.d3Data.data,'label'));
 
     // this.generateData();
     // this.updateChart(this.$refs.$wrapper, this.d3Data, this.colorChart);
-    this.intervalId = setInterval(() => {
+  /*  this.intervalId = setInterval(() => {
       // this.generateData();
       this.updateChart(this.$refs.$wrapper, _.sortBy(this.d3Data.data,'label'));
-    }, 1000);
+    }, 1000);*/
     // console.log('DDD#:: ', d3.selectAll('p'));
   },
   beforeDestroy: function () {
