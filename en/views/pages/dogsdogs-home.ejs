@@ -99,10 +99,17 @@
     </template>
     <span slot="footer" class="dialog-footer">
       <span class="flex justify-content-between">
-         <el-button @click="clearFilter"><%= __('reset all filters') %></el-button>
-        <span>
-            <el-button @click="buttonUpdate = false; dialogEditorList = false"><%= __('Close') %></el-button>
-        </span>
+        <div>
+         <el-button @click="clearFilter" class="btn btn-outline-info" ><%= __('Reset filters') %></el-button>
+</div>
+        <div v-if="me.hasBillingCard || me.isSuperAdmin || me.isAdmin" >
+            <el-button @click="clickAddButton()" class="btn btn-outline-success"
+                   icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
+
+        </div>
+        <div>
+            <el-button @click="buttonUpdate = false; dialogEditorList = false" class="btn btn-outline-info"><%= __('Close') %></el-button>
+        </div>
       </span>
     </span>
   </el-dialog>
@@ -1254,38 +1261,41 @@
             data-animation-direction=""><%= __('Your Eternal Companion') %></h2>
         <p class="u-text u-text-3" data-animation-name="pulse" data-animation-duration="1000" data-animation-delay="0"
            data-animation-direction=""><%= __('This page contains all the puppies and dogs that the kennel currently sells. You can contact us in any way convenient for you. All prices are preliminary and can be changed individually during communication.') %></p>
-        <a href="/dogs/chinese-crested" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('Dog catalog') %></a>
+        <a href="/dogs/chinese-crested"
+           class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('Dog catalog') %></a>
       </div>
 
     </section>
     <template v-if="_.some(dogs, 'sale', true)">
-    <section v-for="(o, index) in dogs"
-             v-if="!_.isEmpty(o.images)  && o.price > 0 && o.sale && !_.isEmpty(o.currency)"
-             :key="o.id" class="u-align-center u-clearfix u-section-2" id="sec-1e4d">
-      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <h2 v-if="o.currency === 'рубль'" class="u-text u-text-1">{{o.price}} &#8381;</h2>
-        <h2 v-else class="u-text u-text-1">{{o.currency === 'euro' ? '€' : '$'}} {{o.price}}</h2>
-        <p class="u-text u-text-2"><%= __('Litter') %> {{o.letter}} / {{o.dateBirth.split('-')[0]}}</p>
-        <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
-          <div class="u-gutter-0 u-layout">
-            <div class="u-layout-row">
-              <div class="u-align-left u-container-style u-layout-cell u-left-cell u-size-20 u-size-20-md u-layout-cell-1" src="">
-                <div class="u-container-layout u-container-layout-1" src="">
-                  <el-image
-                    :src="o.images[o.cover].imageSrc"
-                    :key="o.id"
-                    :fit="'cover'"
-                    class="u-expanded-width u-image u-image-default u-image-1"
-                    :preview-src-list="o.imagesArrUrl">
-                  </el-image>
+      <section v-for="(o, index) in dogs"
+               v-if="!_.isEmpty(o.images)  && o.price > 0 && o.sale && !_.isEmpty(o.currency)"
+               :key="o.id" class="u-align-center u-clearfix u-section-2" id="sec-1e4d">
+        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+          <h2 v-if="o.currency === 'рубль'" class="u-text u-text-1">{{o.price}} &#8381;</h2>
+          <h2 v-else class="u-text u-text-1">{{o.currency === 'euro' ? '€' : '$'}} {{o.price}}</h2>
+          <p class="u-text u-text-2"><%= __('Litter') %> {{o.letter}} / {{o.dateBirth.split('-')[0]}}</p>
+          <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
+            <div class="u-gutter-0 u-layout">
+              <div class="u-layout-row">
+                <div class="u-align-left u-container-style u-layout-cell u-left-cell u-size-20 u-size-20-md u-layout-cell-1" src="">
+                  <div class="u-container-layout u-container-layout-1" src="">
+                    <el-image
+                      :src="o.images[o.cover].imageSrc"
+                      :key="o.id"
+                      :fit="'cover'"
+                      class="u-expanded-width u-image u-image-default u-image-1"
+                      :preview-src-list="o.imagesArrUrl">
+                    </el-image>
+                  </div>
                 </div>
-              </div>
-              <div class="u-container-style u-layout-cell u-size-20 u-size-20-md u-layout-cell-2">
-                <div class="u-border-1 u-border-grey-30 u-container-layout u-container-layout-2">
-                  <h2 class="u-align-center u-text u-text-3"><el-link :underline="false"  :href="o.detail" type="primary">{{o.fullName}}</el-link></h2>
-                  <p class="u-align-center u-text u-text-4">{{o.saleDescription}}</p>
-                  <p class="u-align-center u-text u-text-5"><%= __('Dob') %>: {{ o.dateBirth | getCreate(me.preferredLocale,'L') }}</p>
-                  <span class="u-icon u-icon-circle u-text-palette-1-base u-icon-1">
+                <div class="u-container-style u-layout-cell u-size-20 u-size-20-md u-layout-cell-2">
+                  <div class="u-border-1 u-border-grey-30 u-container-layout u-container-layout-2">
+                    <h2 class="u-align-center u-text u-text-3">
+                      <el-link :underline="false" :href="o.detail" type="primary">{{o.fullName}}</el-link>
+                    </h2>
+                    <p class="u-align-center u-text u-text-4">{{o.saleDescription}}</p>
+                    <p class="u-align-center u-text u-text-5"><%= __('Dob') %>: {{ o.dateBirth | getCreate(me.preferredLocale,'L') }}</p>
+                    <span class="u-icon u-icon-circle u-text-palette-1-base u-icon-1">
                   <el-tooltip content="<%= __('Start negotiations') %>" placement="bottom" effect="light">
                     <el-button type="text" @click="openDialogNegotiations(o.fullName)" class="button">
                     <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 512 512" style=""><use
@@ -1306,72 +1316,74 @@
                     </el-button>
                   </el-tooltip>
                   </span>
+                  </div>
                 </div>
-              </div>
-              <div class="u-align-left u-container-style u-expand-resize u-layout-cell u-right-cell u-size-20 u-size-20-md u-layout-cell-3" src="">
-                <div class="u-container-layout u-container-layout-3" src="" v-if="o.images[(o.cover+1)]">
-                  <!--<img :src="o.images[1].imageSrc" alt="" class="u-expanded-width u-image u-image-default u-image-2" data-image-width="1600" data-image-height="1067">-->
-                  <el-image
-                    :src="o.images[(o.cover+1)].imageSrc"
-                    :key="o.id"
-                    :fit="'cover'"
-                    class="u-expanded-width u-image u-image-default u-image-2"
-                    :preview-src-list="o.imagesArrUrl">
-                  </el-image>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="u-align-center u-clearfix u-grey-5 u-section-5" id="sec-cabe">
-      <div class="u-clearfix u-sheet u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-sheet-1">
-        <h2 class="u-text u-text-1"><%= __('We are here') %></h2>
-        <p class="u-text u-text-2"><%= __('A more detailed place is the position when verbally coordinating the meeting') %>.</p>
-        <div class="u-align-left u-expanded-width u-grey-10 u-map u-map-1">
-          <div class="embed-responsive">
-            <iframe class="embed-responsive-item"
-                    src="//maps.google.com/maps?output=embed&amp;q=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%20%D0%9E%D1%81%D1%82%D1%80%D0%BE%D0%B2%D0%B8%D1%82%D1%8F%D0%BD%D0%BE%D0%B2%D0%B0%20%D0%B4.%2027&amp;t=m&amp;hl=ru"
-                    data-map="JTdCJTIycG9zaXRpb25UeXBlJTIyJTNBJTIybWFwLWFkZHJlc3MlMjIlMkMlMjJhZGRyZXNzJTIyJTNBJTIyJUQwJTlDJUQwJUJFJUQxJTgxJUQwJUJBJUQwJUIyJUQwJUIwJTIwJUQwJTlFJUQxJTgxJUQxJTgyJUQxJTgwJUQwJUJFJUQwJUIyJUQwJUI4JUQxJTgyJUQxJThGJUQwJUJEJUQwJUJFJUQwJUIyJUQwJUIwJTIwJUQwJUI0LiUyMDI3JTIyJTJDJTIyem9vbSUyMiUzQW51bGwlMkMlMjJ0eXBlSWQlMjIlM0ElMjJyb2FkJTIyJTJDJTIybGFuZyUyMiUzQSUyMnJ1JTIyJTJDJTIyYXBpS2V5JTIyJTNBbnVsbCUyQyUyMm1hcmtlcnMlMjIlM0ElNUIlNUQlN0Q="></iframe>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="u-align-center u-clearfix u-image u-section-6" id="sec-dcba" data-image-width="150" data-image-height="112">
-      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-        <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
-          <div class="u-layout">
-            <div class="u-layout-row">
-              <div class="u-container-style u-layout-cell u-left-cell u-size-24 u-layout-cell-1">
-                <div class="u-container-layout u-valign-middle u-container-layout-1">
-                  <h1 class="u-text u-text-palette-4-base u-text-1"><%= __('Are you ready to meet?') %></h1>
-                </div>
-              </div>
-              <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-36 u-layout-cell-2">
-                <div class="u-container-layout u-valign-middle-lg u-valign-middle-md u-valign-middle-xl u-container-layout-2">
-                  <p class="u-text u-text-palette-4-base u-text-2">
-                    <br>
-                    <br><%= __('Puppy show') %>.
-                    <br><%= __('We are waiting for everyone to visit us') %>.
-                    <br><%= __('We conclude a sales contract') %>.
-                    <br>
-                    <br> <%= __('Moscow') %>,&nbsp;
-                    <br><%= __('st. Ostrovityanova Building 27 Bldg. 3') %>
-                    <br>+ 7 (910) 406-7-406
-                  </p>
+                <div
+                  class="u-align-left u-container-style u-expand-resize u-layout-cell u-right-cell u-size-20 u-size-20-md u-layout-cell-3"
+                  src="">
+                  <div class="u-container-layout u-container-layout-3" src="" v-if="o.images[(o.cover+1)]">
+                    <!--<img :src="o.images[1].imageSrc" alt="" class="u-expanded-width u-image u-image-default u-image-2" data-image-width="1600" data-image-height="1067">-->
+                    <el-image
+                      :src="o.images[(o.cover+1)].imageSrc"
+                      :key="o.id"
+                      :fit="'cover'"
+                      class="u-expanded-width u-image u-image-default u-image-2"
+                      :preview-src-list="o.imagesArrUrl">
+                    </el-image>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <section class="u-align-center u-clearfix u-grey-5 u-section-5" id="sec-cabe">
+        <div class="u-clearfix u-sheet u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-sheet-1">
+          <h2 class="u-text u-text-1"><%= __('We are here') %></h2>
+          <p class="u-text u-text-2"><%= __('A more detailed place is the position when verbally coordinating the meeting') %>.</p>
+          <div class="u-align-left u-expanded-width u-grey-10 u-map u-map-1">
+            <div class="embed-responsive">
+              <iframe class="embed-responsive-item"
+                      src="//maps.google.com/maps?output=embed&amp;q=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%20%D0%9E%D1%81%D1%82%D1%80%D0%BE%D0%B2%D0%B8%D1%82%D1%8F%D0%BD%D0%BE%D0%B2%D0%B0%20%D0%B4.%2027&amp;t=m&amp;hl=ru"
+                      data-map="JTdCJTIycG9zaXRpb25UeXBlJTIyJTNBJTIybWFwLWFkZHJlc3MlMjIlMkMlMjJhZGRyZXNzJTIyJTNBJTIyJUQwJTlDJUQwJUJFJUQxJTgxJUQwJUJBJUQwJUIyJUQwJUIwJTIwJUQwJTlFJUQxJTgxJUQxJTgyJUQxJTgwJUQwJUJFJUQwJUIyJUQwJUI4JUQxJTgyJUQxJThGJUQwJUJEJUQwJUJFJUQwJUIyJUQwJUIwJTIwJUQwJUI0LiUyMDI3JTIyJTJDJTIyem9vbSUyMiUzQW51bGwlMkMlMjJ0eXBlSWQlMjIlM0ElMjJyb2FkJTIyJTJDJTIybGFuZyUyMiUzQSUyMnJ1JTIyJTJDJTIyYXBpS2V5JTIyJTNBbnVsbCUyQyUyMm1hcmtlcnMlMjIlM0ElNUIlNUQlN0Q="></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="u-align-center u-clearfix u-image u-section-6" id="sec-dcba" data-image-width="150" data-image-height="112">
+        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+          <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
+            <div class="u-layout">
+              <div class="u-layout-row">
+                <div class="u-container-style u-layout-cell u-left-cell u-size-24 u-layout-cell-1">
+                  <div class="u-container-layout u-valign-middle u-container-layout-1">
+                    <h1 class="u-text u-text-palette-4-base u-text-1"><%= __('Are you ready to meet?') %></h1>
+                  </div>
+                </div>
+                <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-36 u-layout-cell-2">
+                  <div class="u-container-layout u-valign-middle-lg u-valign-middle-md u-valign-middle-xl u-container-layout-2">
+                    <p class="u-text u-text-palette-4-base u-text-2">
+                      <br>
+                      <br><%= __('Puppy show') %>.
+                      <br><%= __('We are waiting for everyone to visit us') %>.
+                      <br><%= __('We conclude a sales contract') %>.
+                      <br>
+                      <br> <%= __('Moscow') %>,&nbsp;
+                      <br><%= __('st. Ostrovityanova Building 27 Bldg. 3') %>
+                      <br>+ 7 (910) 406-7-406
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </template>
     <template v-else>
-      <section >
+      <section>
         <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-          <h3 ><%= __('There are currently no dogs for sale in the kennel.') %></h3>
+          <h3><%= __('There are currently no dogs for sale in the kennel.') %></h3>
           <!--<a href="/dogs/chinese-crested" class="u-border-1 u-border-palette-1-base u-border-radius-0 u-btn u-btn-rectangle u-button-style u-custom-font u-font-oswald u-text-black u-btn-1"
              data-animation-direction=""><%= __('Dog catalog') %></a>-->
         </div>
