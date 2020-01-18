@@ -3,7 +3,7 @@ parasails.registerPage('privacy', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-    NEW_APP_CREATION_CALENDAR_DATE:moment(['2019','02','20']).format('LL')
+    NEW_APP_CREATION_CALENDAR_DATE:moment(['2020','01','18']).format('LL')
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
