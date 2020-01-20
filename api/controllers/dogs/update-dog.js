@@ -25,6 +25,14 @@ module.exports = {
       description: `Флаг видимости блока собаки. Видна или нет. По умолчанию не видна.`
     },
 
+
+    allowEdit: {
+      type: 'boolean',
+      description: `Флаг. При установки заводчиком в true, даёт возможность владельцу 
+      редактировать собаку.`
+    },
+
+
     gender: {
       type: 'string',
       required: true,
@@ -113,6 +121,7 @@ module.exports = {
       defaultsTo: false,
       description: `Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
     },
+
 
 
     currency: {
@@ -262,6 +271,7 @@ module.exports = {
       label: label,
       gender: inputs.gender,
       see: inputs.see,
+      allowEdit: inputs.allowEdit,
       currency: inputs.currency,
       price: inputs.price,
       saleDescription: inputs.saleDescription,

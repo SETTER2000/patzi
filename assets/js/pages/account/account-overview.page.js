@@ -38,7 +38,6 @@ parasails.registerPage('account-overview', {
 
     this.isBillingEnabled = !!this.stripePublishableKey;
     this.formData.defaultIcon = this.me.defaultIcon;
-    this.status();
     // Determine whether there is billing info for this user.
     this.me.hasBillingCard = (
       this.me.billingCardBrand &&
@@ -56,19 +55,7 @@ parasails.registerPage('account-overview', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    // Получить статус пользователя
-    async status() {
-      await io.socket.get(`/api/v1/users/status`, function gotResponse(body, response) {
-        console.log('Сервис User List ответил кодом ' + response.statusCode + ' и данными: ', body);
-      });
-      // Принимаем данные по событию list-*
-      await io.socket.on('list-status', (data) => {
-        console.log('list-status: ', data);
-        this.group = data;
-      });
-    },
     clickStripeCheckoutButton: async function () {
-
       // Prevent double-posting if it's still loading.
       if (this.syncingUpdateCard) {
         return;
@@ -81,7 +68,7 @@ parasails.registerPage('account-overview', {
       this.cloudError = false;
 
       // Open Stripe Checkout.
-      var billingCardInfo = await parasails.util.openStripeCheckout(this.stripePublishableKey, this.me.emailAddress);
+      let billingCardInfo = await parasails.util.openStripeCheckout(this.stripePublishableKey, this.me.emailAddress);
       // Clear the loading state for opening checkout.
       this.syncingOpenCheckout = false;
       if (!billingCardInfo) {

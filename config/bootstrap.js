@@ -66,16 +66,16 @@ module.exports.bootstrap = async function () {
 
   // By convention, this is a good place to set up fake data during development.
   // По общему мнению, это хорошее место для настройки поддельных данных во время разработки.
-  let ryanDahl = await User.create(
-    {
-      emailAddress: sails.config.custom.friendEmailAddress,
-      fullName: 'Ryan Dahl',
-      fullNameEn: 'Ryan Dahl',
-      isAdmin: false,
-      avatar:sails.config.custom.avatar,
-      password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
-      preferredLocale: 'en'
-    }).fetch();
+  // let ryanDahl = await User.create(
+  //   {
+  //     emailAddress: sails.config.custom.friendEmailAddress,
+  //     fullName: 'Ryan Dahl',
+  //     fullNameEn: 'Ryan Dahl',
+  //     isAdmin: false,
+  //     avatar:sails.config.custom.avatar,
+  //     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
+  //     preferredLocale: 'en'
+  //   }).fetch();
 
   let alexFox = await User.create({
     emailAddress: sails.config.custom.internalEmailAddress,
@@ -97,20 +97,12 @@ module.exports.bootstrap = async function () {
     isAdmin: false,
     // getFullName: function(){return  `${this.fullName} ${this.emailAddress}`;},
     isSuperAdmin: false,
-    preferredLocale: 'en',
+    preferredLocale: 'ru',
+    avatar:'https://d3a1wbnh2r1l7y.cloudfront.net/avatar_olga.jpg',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
     gravatar: await sails.helpers.gravatar.getAvatarUrl('vasef@mail.ru')
   }).fetch();
-  // console.log('alexFox::: ID' , alexFox);
-  let adam = await User.create({
-    emailAddress: 'administrator.f@mail.ru',
-    fullName: 'Александр Петров',
-    fullNameEn:await sails.helpers.translitWord.with({str: 'Александр Петров'}) ,
-    isAdmin: false,
-    preferredLocale: 'en',
-    password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
-    gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
-  }).fetch();
+
 
   let elena_sova = await User.create({
     emailAddress: 'elena_sova@poaleell.com',
@@ -122,21 +114,11 @@ module.exports.bootstrap = async function () {
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin)
   }).fetch();
 
-  let bob = await User.create({
-    emailAddress: 'kremotory@mail.ru',
-    fullName: 'Bob Scott',
-    fullNameEn: 'Bob Scott',
-    isAdmin: false,
-    isSuperAdmin: true,
-    preferredLocale: 'en',
-    password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
-    gravatar: await sails.helpers.gravatar.getAvatarUrl(sails.config.custom.internalEmailAddress)
-  }).fetch();
 
   // Добавить Райана Даля , как одного из друзей Алекса Фокса
   // и добавить Алекса Фокса в друзья Райану Далю
-  await User.addToCollection(alexFox.id, 'friends', ryanDahl.id);
-  await User.addToCollection(ryanDahl.id, 'friends', alexFox.id);
+  // await User.addToCollection(alexFox.id, 'friends', ryanDahl.id);
+  // await User.addToCollection(ryanDahl.id, 'friends', alexFox.id);
 
   // Создаём группу пользователей admin
 
@@ -154,22 +136,9 @@ module.exports.bootstrap = async function () {
   }).fetch();
   // Добавить пользователя alexFox.id в группу 'admin'
   await User.addToCollection(alexFox.id, 'groups', group.id);
+  await User.addToCollection(star.id, 'groups', [group2.id,group3.id,group4.id,]);
+  await User.addToCollection(elena_sova.id, 'groups', [group2.id,group3.id,group4.id,]);
 
-  // генерация пользователей
-  /*let ar = [];
-  for (let y = 0; y < 5; y++) {
-    let nm = await sails.helpers.strings.random('alphanumeric', 6);
-    await ar.push({
-      emailAddress: `${nm}@mail.ru`,
-      fullName: nm,
-      kennelAddress: nm,
-      phone: await sails.helpers.strings.random('alphanumeric', 5),
-      password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
-      preferredLocale: 'en'
-    });
-  }
-  let createdUsers = await User.createEach(ar).fetch();
-  sails.log(`Created ${createdUsers.length} user${createdUsers.length === 1 ? '' : 's'}.`);*/
 
 
   let kennelsArr = [
@@ -183,16 +152,6 @@ module.exports.bootstrap = async function () {
       country: 1,
       region: 1000001,
     },
-    /*{
-      label: `Zlato Dinastii`,
-      rightName: true,
-      dateCreate: '2010-09-13T00:00:00+04:00',
-      registerNumber: '000000',
-      whoCreate: alexFox.id,
-      continent: 1,
-      country: 1,
-      region: 1000001,
-    },*/
     {
       label: `Poale Ell`,
       rightName: true,
@@ -223,16 +182,7 @@ module.exports.bootstrap = async function () {
       country: 1,
       region: 1000001,
     },
-/*    {
-      label: `Laisand Island`,
-      rightName: true,
-      dateCreate: '2017-11-02T21:00:00.000Z',
-      registerNumber: '000000',
-      whoCreate: alexFox.id,
-      continent: 1,
-      country: 1,
-      region: 1000001,
-    },*/
+
   ];
   let createdKennels = await Kennel.createEach(kennelsArr).fetch();
   sails.log(`Created ${createdKennels.length} kennel${createdKennels.length === 1 ? '' : 's'}.`);

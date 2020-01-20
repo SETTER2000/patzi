@@ -697,5 +697,12 @@
 	"Graphical representation of some generalized data": "Graphical representation of some generalized data",
 	"The number of CCD in the world": "The number of CCD in the world",
 	"The number of kennels in the world": "The number of kennels in the world",
-	"Reset filters": "Reset filters"
+	"Reset filters": "Reset filters",
+	"allow edit": "allow edit",
+	"allow": "allow",
+	"edit": "edit",
+	"The first photo in this download will become the album cover. Later in the editor you can change these settings.": "The first photo in this download will become the album cover. Later in the editor you can change these settings.",
+	"not allow": "not allow",
+	"Allow Edit Dog": "Allow Edit Dog",
+	"Allow - this means that you allow the owner to edit the dog, otherwise he will not see his dog in the editor window.": "Allow - this means that you allow the owner to edit the dog, otherwise he will not see his dog in the editor window."
 }

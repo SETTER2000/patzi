@@ -17,9 +17,13 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+    let req = this.req;
     // Бибилиотека Node.js
     const url = require('url');
-    let account = await User.findOne({id:this.req.me.id});
+    let account = await User.findOne(req.me.id).populate('groups');
+
+      account.groups = _.pluck(account.groups,'label').toString();
+
 
     account.imageSrc = url.resolve(sails.config.custom.baseUrl, `/api/v1/account/${account.id}`);
     // ... затем мы удаляем наш файловый дескриптор
@@ -28,17 +32,16 @@ module.exports = {
     delete account.imageUploadMime;
 
 
-
     // Respond with view.
     return exits.success({
       seo: {
         description: `Аккаунт`,
         title: `Аккаунт`,
-        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+        canonical: `https://${this.req.headers.host}${this.req.originalUrl}`
       },
       account,
       currentSection: 'account',
-      stripePublishableKey: sails.config.custom.enableBillingFeatures? sails.config.custom.stripePublishableKey : undefined,
+      stripePublishableKey: sails.config.custom.enableBillingFeatures ? sails.config.custom.stripePublishableKey : undefined,
 
     });
     // If billing features are enabled, include our configured Stripe.js

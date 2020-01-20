@@ -23,6 +23,7 @@ parasails.registerPage('dogs-home', {
     users: [],
     error: null,
     innerVisibleCo: false,
+    innerVisibleDogEditor: false,
     isCollapse: true,
     dialogEditor: false,
     photoDescUpdate: false,
@@ -178,6 +179,7 @@ parasails.registerPage('dogs-home', {
       errInputDogName: false,
       sale: false,
       see: true,
+      allowEdit: true,
       dateBirth: '',
       // dateBirthUpdate: '',
       dateDeath: '',
@@ -322,7 +324,7 @@ parasails.registerPage('dogs-home', {
     // Принимаем данные по событию list-*
     io.socket.on('list-dog', (data) => {
       this.dogs = this.dogsEditList = this.filterDogs = _.isNull(data) ? [] : data;
-      // console.log('this.dogs: ', this.dogs);
+      console.log('DOGS:::: ', this.dogs);
       // console.log('this.filterDogs: ', this.filterDogs);
     });
     // Подключаемся к комнате kennel
@@ -613,6 +615,7 @@ parasails.registerPage('dogs-home', {
         sire: this.ruleForm.sire,
         sale: this.ruleForm.sale,
         see: this.ruleForm.see,
+        allowEdit: this.ruleForm.allowEdit,
         price: +this.ruleForm.price,
         saleDescription: this.ruleForm.saleDescription,
         currency: this.ruleForm.currency,
@@ -665,6 +668,7 @@ parasails.registerPage('dogs-home', {
         type: this.ruleForm.type,
         sale: this.ruleForm.sale,
         see: this.ruleForm.see,
+        allowEdit: this.ruleForm.allowEdit,
         price: +this.ruleForm.price,
         saleDescription: this.ruleForm.saleDescription,
         currency: this.ruleForm.currency,
@@ -1447,11 +1451,23 @@ parasails.registerPage('dogs-home', {
       this.ownerId = e.id ? e.id : undefined;
     },
 
+    // Выбирает собак только принадлежащих данному заводчику, или выводит всех для админа
     dialogEditors() {
-      this.dogsEditList = (this.me.isAdmin || this.me.isSuperAdmin) ? this.dogs :
-        this.isOwner ? this.dogs.filter(data => _.isObject(data.kennel) ? (data.kennel.breeder === this.me.id) : false) : [];
+      let breederDogs = (this.me.isAdmin || this.me.isSuperAdmin) ? this.dogs :
+        this.isOwner ? this.dogs.filter(dog => _.isObject(dog.kennel) ? (dog.kennel.breeder === this.me.id) : false) : [];
 
+      let ownerDogs = (this.me.isAdmin || this.me.isSuperAdmin) ? this.dogs :
+        this.isOwner ? this.dogs.filter(dog => _.isArray(dog.owners) ? (_.some(dog.owners,{id: this.me.id}) && dog.allowEdit): false) : [];
+
+
+      this.dogsEditList = _.uniq([...breederDogs, ...ownerDogs],'fullName');
+
+      console.log(' this.dogsEditList::: ' ,  this.dogsEditList);
       this.dialogEditorList = true;
+    },
+
+    getDogsOwner(){
+
     },
 
     async isOwnerCheck() {

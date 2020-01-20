@@ -1120,11 +1120,11 @@
         </el-col>
         <el-col :xs="24" :sm="8">
           <el-card shadow="hover" :body-style="{padding:'13px'}">
-            <div v-if="me.isSuperAdmin || me.isAdmin" class="menu-center">
+            <p v-if="me.isSuperAdmin || me.isAdmin" class="menu-center">
               <el-button @click="clickAddButton()" class="btn btn-outline-info"
                          icon="el-icon-circle-plus-outline"><%= __('Add') %></el-button>
 
-            </div>
+            </p>
           </el-card>
         </el-col>
         <el-col :xs="24" :sm="8">

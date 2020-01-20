@@ -59,6 +59,11 @@ module.exports = {
       description: `Флаг видимости собаки. Видна или нет. По умолчанию не видна.`
     },
 
+    allowEdit: {
+      type: 'boolean',
+      description: `Флаг. При установки заводчиком в true, даёт возможность владельцу 
+      редактировать собаку.`
+    },
 
     sire: {
       type: 'string',
@@ -335,6 +340,7 @@ module.exports = {
       nickname: inputs.nickname,
       subtitle: inputs.subtitle,
       see: inputs.see,
+      allowEdit: inputs.allowEdit,
       weight: inputs.weight,
       growth: inputs.growth,
       type: inputs.type,

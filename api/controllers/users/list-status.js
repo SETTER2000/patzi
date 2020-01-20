@@ -7,9 +7,7 @@ module.exports = {
   description: 'Status users.',
 
 
-  inputs: {
-
-  },
+  inputs: {},
 
 
   exits: {
@@ -50,12 +48,11 @@ module.exports = {
     await sails.sockets.join(req, 'user');
 
 
-    let foundUser = await User.findOne(req.me).populate('groups');
+    let foundUser = await User.findOne(req.me.id).populate('groups');
 
+    let status = _.last(_.pluck(foundUser.groups, 'label'));
 
-   let  status = _.last(_.pluck(foundUser.groups, 'label'));
-
-   console.log('STATUS: ', status);
+    console.log('STATUS: ', status);
 
     // await sails.sockets.broadcast('user', 'list-status', status);
     // Respond with view.
