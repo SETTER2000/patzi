@@ -70,7 +70,7 @@
             <el-input
               v-model="search"
               size="small"
-              placeholder="Type to search"
+              placeholder="Input dog name"
               clearable/>
           </template>
           <template slot-scope="scope">
@@ -100,11 +100,11 @@
     <span slot="footer" class="dialog-footer">
       <span class="flex justify-content-between">
         <div>
-         <el-button @click="clearFilter" class="btn btn-outline-info" ><%= __('Reset filters') %></el-button>
+         <el-button @click="clearFilter" class="btn btn-outline-info"><%= __('Reset filters') %></el-button>
 </div>
-        <div v-if="me.hasBillingCard || me.isSuperAdmin || me.isAdmin" >
+        <div v-if="me.hasBillingCard || me.isSuperAdmin || me.isAdmin">
             <el-button @click="clickAddButton()" class="btn btn-outline-success"
-                   icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
+                       icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
 
         </div>
         <div>
@@ -170,7 +170,7 @@
     </div>
     <h5><%= __('Multiple upload photos') %></h5>
     <label v-if="!ruleForm.imageUrl">
-      <%= __('Make albums, dividing by event or by time group of photos. Describe events, tell about the photo, thereby structuring your memories and events.') %>
+      <%= __('The first photo in this download will become the album cover. Later in the editor you can change these settings.') %>
     </label>
     <div class="my-2">
       <el-divider content-position="left"><%= __('Add photo') %></el-divider>
@@ -217,27 +217,16 @@
           <div class="col col-lg-6">
 
             <% /* ВИДНА СОБАКА ИЛИ НЕТ */ %>
-            <template>
-              <!-- <el-form-item label="<%= __('Visibility') %>" prop="see">
-              <el-checkbox v-model="ruleForm.see"></el-checkbox>
-            </el-form-item>-->
-              <el-form-item prop="see">
-                <!--    <el-switch
-                      v-model="ruleForm.see"
-                      active-color="#13ce66"
-                      inactive-color="#ff4949">
-                    </el-switch>-->
-
-                <el-switch
-                  style="display: block"
-                  v-model="ruleForm.see"
-                  active-color="#13ce66"
-                  inactive-color="#ff4949"
-                  active-text="<%= __('visible') %>"
-                  inactive-text="<%= __('not visible') %>">
-                </el-switch>
-              </el-form-item>
-            </template>
+            <el-form-item prop="see">
+              <el-switch
+                style="display: block"
+                v-model="ruleForm.see"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                active-text="<%= __('visible') %>"
+                inactive-text="<%= __('not visible') %>">
+              </el-switch>
+            </el-form-item>
 
             <% /* ПИТОМНИК */ %>
             <el-form-item v-if="!buttonUpdate" label="<%= __('Kennel') %>" prop="kennel">
@@ -848,8 +837,9 @@
           <div style="border-left: 2px dashed rgb(220, 224, 228); padding-left: 50px" class="col col-lg-5">
 
             <% /* ВЛАДЕЛЕЦ. OWNER */ %>
-            <template v-if="me.isAdmin | me.isSuperAdmin ">
-              <!--<template >-->
+            <template>
+              <!--<template v-if="me.isAdmin | me.isSuperAdmin">-->
+
               <el-form-item label="<%= __('Owner') %>" prop="owner">
                 <el-autocomplete
                   v-if="!buttonUpdate"
@@ -886,16 +876,29 @@
                   <el-button @click="innerVisibleCo=true" size="mini" round icon="el-icon-question"></el-button>
                 </el-tooltip>
               </el-form-item>
+            </template>
 
+            <% /* РАЗРЕШИТЬ РЕДАКТИРОВАТЬ BREEDER|OWNER */ %>
+            <template>
+              <!--<template v-if="me.isAdmin | me.isSuperAdmin ">-->
+              <el-form-item prop="allowEdit">
 
-              <!--     <el-popover
-                     placement="bottom"
-                     title="Title"
-                     width="200"
-                     trigger="click"
-                     content="this is content, this is content, this is content">
-                     <el-button slot="reference">Click to activate</el-button>
-                   </el-popover>-->
+                <el-switch
+                  v-model="ruleForm.allowEdit"
+                  active-color="#13ce66"
+                  class="inline-input"
+                  inactive-color="#ff4949"
+                  active-text="<%= __('allow') %>"
+                  inactive-text="<%= __('not allow') %>">
+                </el-switch>
+
+                <el-tooltip class="ml-3" effect="dark" content="<%= __('Allow Edit Dog') %>"
+                            placement="top-start">
+                  <el-button @click="innerVisibleDogEditor=true" size="mini" round icon="el-icon-question"></el-button>
+                </el-tooltip>
+
+              </el-form-item>
+
             </template>
 
             <% /* ЗВАНИЯ */ %>
@@ -1163,7 +1166,7 @@
     <el-button @click="centerDialogVisiblePhotos = false">Cancel</el-button>
   </span>
   </el-dialog>
-  <% /* Диалоговое окно. ВЛАДЕЛЕЦ */ %>
+  <% /* HELP/Диалоговое окно. ВЛАДЕЛЕЦ */ %>
   <el-dialog
     width="30%"
     top="3vh"
@@ -1171,10 +1174,24 @@
     :visible.sync="innerVisibleCo"
     append-to-body>
     <div class="justify-content-center">
-      <%= __('You can add a owner of the kennel, if one exists.') %>
-      <br> <%= __('Owner may be registered user with a valid email. Start typing username and select the person you want from the list provided.') %>
+      <%= __('Owner may be registered user with a valid email. Start typing username and select the person you want from the list provided.') %>
       <br><%= __('If the owner has not been selected, the owner of the dog automatically becomes the current user who added the dog to the database.') %>
       <br> <%= __('The case of letters does not matter.') %>
+      <el-divider content-position="left"><i class="el-icon-warning"></i> <%= __('Attention') %></el-divider>
+      <strong> <%= __('If you are the owner of this dog, then if you enter another owner in this field, you thereby transfer the editing rights of the dog to the new owner. As a result, you can no longer see this dog in the editor window. Therefore, you cannot edit it.') %></strong>
+    </div>
+  </el-dialog>
+
+  <% /* HELP/Диалоговое окно. Разрешить редактировать собаку. */ %>
+  <el-dialog
+    width="30%"
+    top="3vh"
+    title="<%= __('Allow Edit Dog') %>"
+    :visible.sync="innerVisibleDogEditor"
+    append-to-body>
+    <div class="justify-content-center">
+      <%= __('Allow - this means that you allow the owner to edit the dog, otherwise he will not see his dog in the editor window.') %>
+
     </div>
   </el-dialog>
   <% /* Диалоговое окно. Feedback about this page?. */ %>
