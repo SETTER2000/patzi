@@ -37,16 +37,16 @@
           <!--<small v-if="group" class="text-success">(status: {{group}})</small>-->
           <!--<small v-else class="text-success">(status: {{group}})</small>-->
         </h1></div>
-      <div class="col-sm-2 ">
-        <div v-if="group" class="alert  text-center"
-             :class="[group === 'user'  ? 'alert-secondary' : group === 'breeder' ? 'alert-success' : group === 'owner' ? 'alert-warning' : '']"
+      <div class="col-sm-6  flex justify-content-end">
+        <div v-if="account.groups" class="alert"
+             :class="[account.groups === 'user'  ? 'alert-secondary' : account.groups === 'breeder' ? 'alert-success' : account.groups === 'owner' ? 'alert-warning' : '']"
              role="alert">
           <h4
-            :class="[group === 'user'  ? 'text-secondary' : group === 'breeder' ? 'text-success' : group === 'owner' ? 'text-warning' : group === 'admin' ? 'text-warning' : '']"><%= __('Status') %>
-            : {{group}}</h4>
+            :class="[account.groups === 'user'  ? 'text-secondary' : account.groups === 'breeder' ? 'text-success' : account.groups === 'owner' ? 'text-warning' : account.groups === 'admin' ? 'text-warning' : '']"><%= __('Status') %>
+            : {{account.groups}}</h4>
         </div>
-        <div v-else class="alertalert-light text-center" role="alert">
-          status: {{group}}
+        <div v-else class="alert alert-light" role="alert">
+          status: {{account.groups}}
         </div>
       </div>
     </div>
