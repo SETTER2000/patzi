@@ -123,7 +123,7 @@ and exposed as req.me.)`
     // Изменить экземпляр активного сеанса.
     // (Это будет сохраняться при отправке ответа.)
     this.req.session.userId = userRecord.id;
-
+    await sails.helpers.onlineUser.with({userId:this.req.session.userId, online:true});
   }
 
 };

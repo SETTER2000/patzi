@@ -33,7 +33,7 @@ actually logged in.  (If they weren't, then this action is just a no-op.)`,
 
 
   fn: async function () {
-
+    await sails.helpers.onlineUser.with({userId:this.req.session.userId, online:false});
     // Clear the `userId` property from this session.
     delete this.req.session.userId;
 

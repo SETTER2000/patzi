@@ -78,7 +78,9 @@ the account verification message.)
   fn: async function (inputs) {
 
     let newEmailAddress = inputs.emailAddress.toLowerCase();
-
+// Подключить сокет, который сделал запрос, к комнате «user».
+    await sails.sockets.join(this.req, 'user');
+    let fullName = await sails.helpers.startLetter.with({str: inputs.fullName});
     // Build up data for the new user record and save it to the database.
     // (Also use `fetch` to retrieve the new ID so that we can use it below.)
     // Создаем данные для новой пользовательской записи и сохраняем их в базе данных.
@@ -87,7 +89,8 @@ the account verification message.)
     let newUserRecord = await User.create(_.extend({
       emailAddress: newEmailAddress,
       password: await sails.helpers.passwords.hashPassword(inputs.password),
-      fullName: inputs.fullName,
+      fullName:fullName,
+      fullNameEn: await sails.helpers.translitWord.with({str: fullName}),
       tosAcceptedByIp: this.req.ip
     }, sails.config.custom.verifyEmailAddresses ? {
       emailProofToken: await sails.helpers.strings.random('url-friendly'),
@@ -112,13 +115,15 @@ the account verification message.)
 
     //Сохраните новый идентификатор пользователя в его сеансе.
     this.req.session.userId = newUserRecord.id;
+// User.find()
+    // data.users = _.sortByOrder(users,['updatedAt'], ['desc']);
 
 
     if (sails.config.custom.verifyEmailAddresses) {
       // Send "confirm account" email
       await sails.helpers.sendTemplateEmail.with({
         to: newEmailAddress,
-        subject: 'Please confirm your account',
+        subject: 'Пожалуйста, подтвердите свой аккаунт',
         template: 'email-verify-account',
         templateData: {
           fullName: inputs.fullName,
@@ -126,9 +131,16 @@ the account verification message.)
         }
       });
     } else {
-      sails.log.info('Skipping new account email verification... (since `verifyEmailAddresses` is disabled)');
+      sails.log.info('Пропуск подтверждения электронной почты для новой учетной записи ... (так как `verifyEmailAddresses` отключено)');
     }
+    let data =  await sails.helpers.listUser.with({
+      count: 20,
+      query: '',
+      req:  this.req,
+    });
 
+    // Рассылаем данные всем подписанным на событие list-* данной комнаты.
+    await sails.sockets.broadcast('user', 'list',data);
   }
 
 };

@@ -20,6 +20,27 @@ module.exports = {
       description: `Флаг видимости пользователя. Виден или нет. По умолчанию не виден.`
     },
 
+    online: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: `Флаг. Показывает онлайн ли пользователь.`
+    },
+
+    onlineDate: {
+      type: 'ref',
+      description: ``
+    },
+
+    onlineDateIn: {
+      type: 'ref',
+      description: `Время входа пользователя на сайт.`
+    },
+
+    onlineDateOut: {
+      type: 'ref',
+      description: `Время выхода пользователя с сайта.`
+    },
+
     fullName: {
       type: 'string',
       required: true,

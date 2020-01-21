@@ -181,7 +181,6 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
-    console.log('INPUTS user add before::: ' , inputs);
 
     // Бибилиотека Node.js
     const url = require('url');
@@ -194,8 +193,8 @@ module.exports = {
     }
     let images = [];
 
-    // Have the socket which made the request join the "kennel" room.
-    // Подключить сокет, который сделал запрос, к комнате «kennel».
+    // Have the socket which made the request join the "user" room.
+    // Подключить сокет, который сделал запрос, к комнате «user».
     await sails.sockets.join(req, 'user');
     // console.log('inputs.fileList DOG-create: ', inputs.fileList);
     if (inputs.fileList) {
@@ -256,7 +255,7 @@ module.exports = {
     //   emailProofTokenExpiresAt: Date.now() + sails.config.custom.emailProofTokenTTL,
     //   emailStatus: 'unconfirmed'
     // } : {});
-console.log('Данные перед созданием user:  ', data);
+
     // Создаём пользователя
     let newUser = await User.create(data)
       .intercept('E_UNIQUE', ()=>conflictingEmail)
@@ -305,7 +304,7 @@ console.log('Данные перед созданием user:  ', data);
    */
 
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    await sails.sockets.broadcast('user', 'list-user');
+    await sails.sockets.broadcast('user', 'list');
 
     return exits.success();
   }

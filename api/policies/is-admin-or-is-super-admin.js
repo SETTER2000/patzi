@@ -1,4 +1,4 @@
-module.exports = function isAdminOrIsSuperAdmin(req, res, next) {
+module.exports = async function (req, res, next) {
 
     if (!req.me) {
         if (req.wantsJSON) {
@@ -8,7 +8,7 @@ module.exports = function isAdminOrIsSuperAdmin(req, res, next) {
         return res.redirect('/');
     }
 
-   User.findOne({id:req.me.id}).exec(function (err, foundUser) {
+   await User.findOne({id:req.me.id}).exec(function (err, foundUser) {
 
         if (err) return res.negotiate(err);
 

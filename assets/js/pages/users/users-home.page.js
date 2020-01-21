@@ -289,9 +289,7 @@ parasails.registerPage('users-home', {
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
-    // Использование .get('/user') извлечет список текущих пользовательских моделей,
-    // подписываем этот сокет на эти модели, И подписываем этот сокет
-    // для уведомлений о новых моделях пользователей при их создании.
+    moment().locale(this.me.preferredLocale);
     io.socket.get(`/sockets/user/list/${this.count}`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
@@ -318,6 +316,7 @@ parasails.registerPage('users-home', {
     io.socket.on('list', (data) => {
       this.users = _.get(data, 'users') ? data.users : this.users;
       console.log(' this.users::: ', this.users);
+      console.log(' data.users::: ', data);
       // this.count = _.get(data, 'count') ?  data.count : this.count;
     });
 
@@ -338,7 +337,6 @@ parasails.registerPage('users-home', {
     });
 
     io.socket.on('group-form', (data) => {
-      console.log('GFRUPSS::: ', data);
       this.groups = data;
       this.groupAction();
     });
@@ -361,11 +359,11 @@ parasails.registerPage('users-home', {
 
 
   filters: {
-    getCreate: function (value, l, format) {
+    getCreate: function (value,  format) {
       if (!value) {
         return '';
       }
-      moment.locale(l);
+      // moment.locale(l);
       let formatNew = (!format) ? 'LLL' : format;
       return (moment(value).format(formatNew)) ? moment(value).format(formatNew) : value;
       // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
@@ -499,7 +497,8 @@ parasails.registerPage('users-home', {
       if (query !== '') {
         this.arrSearch = query;
         this.loadingSearch = true;
-        console.log('this.arrSearch: ', this.arrSearch);
+        console.log('this.arrSearch:::: ', this.arrSearch);
+        console.log('this.count::: ', this.count);
         await  io.socket.get(`/sockets/user/list/${this.count}/${this.arrSearch}`, function gotResp(body, response) {
           console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
         });
@@ -517,7 +516,7 @@ parasails.registerPage('users-home', {
 
     async changeSelectSearch(e) {
       this.arrSearch = e;
-
+console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
       await  io.socket.put('/api/v1/users/update-search', {
         'count': this.count,
         'query': this.arrSearch

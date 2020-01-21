@@ -87,6 +87,17 @@ parasails.registerPage('signup', {
         });
       }
 
+      // Length password:
+      if(argins.password.length<7) {
+        this.formErrors.password = true;
+
+        this.$message({
+          showClose: true,
+          message: 'Ошибка. длина пароля не менее 7 знаков.',
+          type: 'error'
+        });
+      }
+
       // Подтвердите подтверждение пароля:
       if(argins.password && argins.password !== argins.confirmPassword) {
         this.formErrors.confirmPassword = true;
