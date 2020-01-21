@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Get kennel user',
 
 
-  description: 'ВОзвращает название питомника по id пользователя',
+  description: 'Возвращает название питомника по id пользователя',
 
 
   inputs: {

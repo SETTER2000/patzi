@@ -171,8 +171,7 @@ module.exports = {
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'kennel');
-    console.log('INPUTS:::: ', inputs);
-console.log('CITY:' , _.isEmpty(inputs.city));
+
     inputs.file = (_.get(inputs.file, 'fd')) ? inputs.file : '';
 
     let newKennel = await Kennel.create({
@@ -216,6 +215,8 @@ console.log('CITY:' , _.isEmpty(inputs.city));
     let ownerFind = await Kennel.find({fullName: owners});
     // Обновляет данные о совладельцах питомника
     owners.length > 0 ? await Kennel.addToCollection(newKennel.id, 'owners').members(owners) : '';
+
+    // inputs.yourKennel ? await User.addToCollection(req.me.id, 'kennels', newKennel.id): '';
 
 
     let addGroup = await sails.helpers.addGroup.with({

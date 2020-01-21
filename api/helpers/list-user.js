@@ -41,6 +41,7 @@ module.exports = {
     const moment = require('moment');
 
     // await sails.helpers.onlineUser.with({userId:inputs.req.session.userId, online:true});
+    //
     // Устанавливаем для пользователя его локаль. Для соответствующего отображения даты.
     // moment.locale(inputs.req.me.preferredLocale);
     moment.locale(inputs.preferredLocale);
@@ -61,7 +62,6 @@ module.exports = {
       .populate('groups')
       .populate('kennels')
     ;
-
 
 
     // Получить список групп, которые существуют в системе. Для вывода в select
@@ -86,14 +86,14 @@ module.exports = {
      * 1. В цикле
      * 2. С библиотекой Lodash
      */
-    _.each(users, (user) => {
+    _.each(users,async (user) => {
       // Устанавливаем свойство источника изображения
       // Первый аргумент, базовый url
       user.imageSrc = user.avatarFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/users/${user.id}`) : '';
 
       // Добавляем массив групп для каждого пользователя
       user.allGroups = allGroups;
-
+      user.kennelName = await sails.helpers.getKennelUser.with({id:'5e258b20f38cd205ec54a5af'});
       // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
       user.createdAtFormat = moment(user.createdAt).format(format);
 
@@ -118,7 +118,7 @@ module.exports = {
 
     });
 
-
+// console.log('FFFFF:::: ' , await sails.helpers.getKennelUser.with({id:'5e258b20f38cd205ec54a5af'}));
     data.users = _.sortByOrder(users, ['createdAt'], ['desc']);
     // data.users = _.sortByOrder(users,['createdAt', 'updatedAt'], ['desc','asc']);
     data.count = inputs.count;

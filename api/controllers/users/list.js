@@ -59,7 +59,7 @@ module.exports = {
       preferredLocale:  req.me.preferredLocale,
     });
 
-
+console.log('DASSSS:::: ' , data);
     await sails.sockets.broadcast('user', 'list', data);
     // Respond with view.
     return exits.success();
