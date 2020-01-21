@@ -1143,23 +1143,23 @@
   <div class="whole-wrap mb-5">
     <div class="container">
       <div class="row">
-        <div class="col mb-5">
+        <div class="col mb-5 flex justify-content-between">
 
           <% /* Кол-во строк в таблице. */ %>
-          <template>
-            <el-input-number v-model="count" :step="5" :min="5" :max="50" size="small" step-strictly></el-input-number>
-          </template>
 
-        </div>
-        <div class="col-lg-6 ">
+            <el-input-number v-model="count" :step="20" :min="20" :max="50" size="small" step-strictly></el-input-number>
+
+
+
 
           <% /* Удалённый поиск по полю fullName. Поиск на сервере. */ %>
-          <template>
+
             <el-select
               v-model="value"
-              style="width: 100%"
+              style="width: 100%; margin-left: 35px;"
               multiple
               filterable
+              clearable
               remote
               clearable
               size="small"
@@ -1175,19 +1175,19 @@
                 :value="item.fullName">
               </el-option>
             </el-select>
-          </template>
+
 
 
         </div>
       </div>
 
       <% /* __('TABLE')  height="650" */ %>
+      <%/*:default-sort="{prop: ['createdAt'], order: 'descending'}"*/%>
       <template v-cloak>
         <el-table
           ref="multipleTable"
           :data="getUsers.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()) || data.emailAddress.includes(search.toLowerCase()))"
           style="width: 100%"
-          :default-sort="{prop: ['createdAt','emailStatus','fullName','emailAddress'], order: 'descending'}"
           highlight-current-row
           @current-change="handleCurrentChange"
           @selection-change="handleSelectionChange"
@@ -1250,8 +1250,10 @@
             :filter-method="filterHandler"
           >
             <template slot-scope="scope">
-              <i class="el-icon-time"></i>
-              {{ scope.row.createdAtFormat}}
+           <i class="el-icon-time " :class="{'text-danger':scope.row.online }"></i>
+                {{ scope.row.createdAtFormat}}
+              <br><i class="el-icon-right"></i> {{scope.row.onlineDateIn | getCreate('llll')}}
+              <br><i class="el-icon-back" v-if="scope.row.onlineDateOut"></i> {{scope.row.onlineDateOut | getCreate('llll')}}
             </template>
           </el-table-column>
           <el-table-column
@@ -1314,12 +1316,12 @@
             align="right"
             fixed="right"
             width="140">
-            <template slot="header" slot-scope="scope">
+          <!--  <template slot="header" slot-scope="scope">
               <el-input
                 v-model="search"
                 size="mini"
                 placeholder="Email, ФИО"/>
-            </template>
+            </template>-->
             <template slot-scope="scope">
               <el-button @click="handleMessage(scope.$index, scope.row)" type="info" icon="el-icon-message" circle></el-button>
               <!--<el-button-->
