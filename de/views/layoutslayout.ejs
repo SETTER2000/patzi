@@ -258,7 +258,10 @@
                 <li class="u-nav-item pointer">
                   <a id="language"
                      class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-hover-palette-1-base u-white "
-                     data-language="<%= me.preferredLocale === 'ru' ? 'en' : 'ru' %>"> <%= me.preferredLocale === 'ru' ? 'English' : 'Русский' %></a>
+                     data-language="<%= me.preferredLocale === 'ru' ? 'en' : 'ru' %>">
+                    <i class="el-icon-refresh"></i>
+                    <%= me.preferredLocale === 'ru' ? 'English' : 'Русский' %>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -272,12 +275,17 @@
                 <li class="u-nav-item">
                   <a
                     class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-active-white u-text-hover-palette-1-base u-white"
-                    href="/users"><%= __('Users') %></a>
+                    href="/users"><i class="el-icon-user-solid mr-1"> </i><%= __('Users') %></a>
                 </li>
                 <li class="u-nav-item">
                   <a
                     class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-active-white u-text-hover-palette-1-base u-white"
-                    href="groups"><%= __('Groups') %></a>
+                    href="groups"><i class="el-icon-menu"></i> <%= __('Groups') %></a>
+                </li>
+
+                <li class="u-nav-item">
+                  <a class="u-active-palette-1-base u-button-style u-hover-grey-5 u-nav-link u-text-active-white u-text-hover-palette-1-base u-white"
+                    href="/topics"><i class="el-icon-chat-line-square"></i> <%= __('Topics') %></a>
                 </li>
               </ul>
             </div>
@@ -966,6 +974,7 @@
 <script src="/js/pages/pedigree/pedigree-home.page.js"></script>
 <script src="/js/pages/pricing.page.js"></script>
 <script src="/js/pages/things/available-things.page.js"></script>
+<script src="/js/pages/topics/topics-home.page.js"></script>
 <script src="/js/pages/users/users-home.page.js"></script>
 <!--SCRIPTS END-->
 
