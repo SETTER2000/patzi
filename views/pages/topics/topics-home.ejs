@@ -1,0 +1,330 @@
+<div id="topics-home" class="content pb-5" v-cloak>
+  <% /* Диалоговое окно. Добавить тему. */ %>
+  <el-dialog title="<%= __('Add topic') %>"
+             :visible.sync="centerDialogAdded"
+             custom-class="dialog-add"
+             center>
+    <!-- <el-dialog
+       width="80%"
+       :title="dialog.header"
+       :visible.sync="innerVisible"
+       append-to-body>
+       <div class="text-center"><p>{{dialog.description}}</p></div>
+       <el-image :src="dialog.src" style="width: 100%">
+         <div slot="placeholder" class="image-slot">
+           Loading<span class="dot">...</span>
+         </div>
+
+       </el-image>
+     </el-dialog>-->
+    <% /* Диалоговое окно. Не верный язык ввода. Только для английского */ %>
+    <el-dialog
+      title="<%= __('Error') %>"
+      width="30%"
+      :visible.sync="ruleForm.errInputLang"
+      :show-close=false
+      append-to-body>
+      <span><%= __('This field is only filled') %>
+        <%= __('english') %>
+        <%= __('letters. Switch the keyboard to the correct layout.') %></span>
+      <span slot="footer" class="dialog-footer">
+          <el-button type="primary"
+                     @click="ruleForm.errInputLang=false; ruleForm.label=''">
+            Ok</el-button>
+      </span>
+    </el-dialog>
+    <% /* Диалоговое окно. Не верный язык ввода. Только для русского */ %>
+    <el-dialog
+      title="<%= __('Error') %>"
+      width="30%"
+      :visible.sync="ruleForm.errInputLangRu"
+      :show-close=false
+      append-to-body>
+      <span><%= __('This field is only filled') %>
+        <%= __('russians') %>
+        <%= __('letters. Switch the keyboard to the correct layout.') %></span>
+      <span slot="footer" class="dialog-footer">
+          <el-button type="primary"
+                     @click="ruleForm.errInputLangRu=false; ruleForm.labelRu=''">
+            Ok</el-button>
+      </span>
+    </el-dialog>
+    <% /* Диалоговое окно. Подсказка о использование поля пароля. */ %>
+    <!--  <el-dialog
+        title="Установка пароля"
+        :visible.sync="dialogVisiblePass"
+        custom-class="dia"
+        :before-close="handleClose"
+        append-to-body>
+        <p>1. Если вы не устанавливаете пароль, то он генерируется автоматически. Это удобно использовать когда Вам нет необходимости заходить
+          на сайт под именем данного пользователя, т.к. пароль вы не будете знать. В то же время при нажатие кнопки "Отправить пароль на
+          email"
+          вы отправите сгенерированный пароль реальному пользователю данного Email.<br>
+          <i class="el-icon-warning-outline"></i> Используйте эту процедуру когда вас попросили создать чужой аккаунт и вы знаете реальный
+          емайл пользователя.</p>
+        <p class="pt-2" style="word-break: break-all">2. Если вы устанавливаете пароль, то его следует вписать в оба поля одинаково.
+          <br> <i class="el-icon-warning-outline"></i> Используйте эту процедуру когда вам нужно войти от имени данного пользователя в
+          систему, чтобы произвести какие-то действия от его имени. Например создать питомник и добавить собак.</p>
+        <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisiblePass = false">Cancel</el-button>
+    </span>
+      </el-dialog>-->
+
+    <% /* Диалоговое окно. Подсказка о использование поля Email. */ %>
+    <!--  <el-dialog
+        title="Установка Email пользователя"
+        :visible.sync="dialogVisibleEmail"
+        custom-class="dia"
+        :before-close="handleClose"
+        append-to-body>
+        <p>1. Если вы не устанавливаете Email, то он генерируется автоматически. За основу берётся полное имя пользователя.
+          <br>
+          <i class="el-icon-warning-outline"></i> Используйте эту процедуру чтобы создать пользователя в системе к которому нужно привязать
+          данные например питомник, но вы не знаете его контактных данных или вам не важны его контактные данные.</p>
+        <p class="pt-2" style="word-break: break-all">
+          2. Если вы устанавливаете Email, то с помощью кнопок "Да" и "Нет" вы можете определить будет ли email подтверждён или нет.
+          Для правильной связи с пользователем требуется проверенный контакт, в данном случае адрес электронной почты.
+          Если этот контакт не был подтверждён пользователем из письма, которое отправляется ему при регистрации, то возможны ошибки
+          в написании email или не идентифицированные пользователи в системе. Этого нельзя допускать.
+          <br>Если email не подтверждён, некоторые возможности работы в системе будут не доступны, например не
+          возможно будет привязать этого пользователя к питомнику в качестве совладельца.
+          <br> <i class="el-icon-warning-outline"></i>
+          Рекомендуется активировать кнопку "Да".
+        </p>
+        <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisibleEmail = false">Cancel</el-button>
+    </span>
+      </el-dialog>-->
+
+    <% /* Диалоговое окно. Подсказка о использование поля Группы. */ %>
+    <!--<el-dialog
+      title="Установка Email пользователя"
+      :visible.sync="dialogVisibleGroup"
+      custom-class="dia"
+      :before-close="handleClose"
+      append-to-body>
+      <p>
+        Обязательно установите группу "user" если Email стоит "Да".
+      </p>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisibleGroup = false">Cancel</el-button>
+  </span>
+    </el-dialog>-->
+
+
+    <template v-if="!ruleForm.see">
+      <el-popover
+        ref="popover"
+        placement="top"
+        title="<%= __('Visibility') %>"
+        width="275"
+        trigger="hover"
+        content="<%= __('At the moment, the topic is hidden, that is, it will not be visible in the system and therefore articles on this topic are also hidden. Set the visibility.') %>">
+      </el-popover>
+      <div class="flex justify-content-center">
+        <h1 v-if="buttonUpdate" class="flex justify-content-center"
+            :class="classObject"
+        >{{ruleForm.fullName}}
+        </h1>
+        <el-button class="not-border text-danger" icon="el-icon-warning-outline" size="mini" v-popover:popover circle></el-button>
+      </div>
+    </template>
+
+    <template v-else>
+      <h1 v-if="buttonUpdate" class="flex justify-content-center"
+          :class="classObject"
+      >{{ruleForm.fullName}}</h1>
+    </template>
+
+
+    <div v-if="ruleForm.imageUrl">
+      <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
+    </div>
+    <h5><%= __('Multiple upload photos') %></h5>
+    <label v-if="!ruleForm.imageUrl">
+      <%= __('Download right before') %> {{limit}} <%= __('photos for this module.') %>
+      <%= __('Please note that the weight of the photo file should not exceed') %> {{sizeLess}}M.
+      <%= __('You can download whatever you want without selecting photos, the system itself will produce the result of those images that have been selected by restrictions.') %>
+
+    </label>
+    <div class="my-2">
+      <el-divider content-position="left"><%= __('Add photo') %></el-divider>
+    </div>
+
+    <!---------------------------------------------------------------------------------------->
+    <% /*Загрузка фото NEW*/ %>
+    <el-row type="flex" class="row-bg" justify="center">
+      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+        <el-upload
+          action="/api/v1/files/upload"
+          list-type="picture-card"
+          drag
+          multiple
+          ref="upload"
+          :on-preview="handlePictureCardPreview"
+          :before-upload="beforeUpload"
+          :limit="limit"
+          :on-success="handleSuccess"
+          :on-exceed="handleExceed"
+          :on-remove="handleRemove"
+        >
+          <i class="el-icon-plus"></i>
+          <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
+            {{sizeLess}}<%= __('MB') %></div>
+        </el-upload>
+        <br>
+        <el-dialog :visible.sync="dialogVisible">
+          <img :src="dialogImageUrl" alt="">
+        </el-dialog>
+      </el-col>
+    </el-row>
+    <!---------------------------------------------------------------------------------------->
+
+
+    <el-row type="flex" class="row-bg" justify="center">
+      <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+          <% /* ВИДНА ТЕМА ИЛИ НЕТ */ %>
+          <el-form-item prop="see">
+            <el-switch
+              style="display: block"
+              v-model="ruleForm.see"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="<%= __('visible') %>"
+              inactive-text="<%= __('not visible') %>">
+            </el-switch>
+          </el-form-item>
+
+          <% /* НАЗВАНИЕ ТЕМЫ на английском*/ %>
+          <template v-if="!buttonUpdate">
+
+            <el-form-item label="<%= __('Topic Title') %> (En)" prop="label">
+              <el-input show-word-limit
+                        style="width:80%;"
+                        size="small"
+                        :keyup="ruleForm.label | abcEn(ruleForm)"
+                        placeholder="<%= __('Topic Title') %>"
+                        v-model="ruleForm.label"></el-input>
+            </el-form-item>
+          </template>
+
+          <% /* НАЗВАНИЕ ТЕМЫ на русском*/ %>
+          <template v-if="!buttonUpdate">
+
+            <el-form-item label="<%= __('Topic Title') %> (Ru)" prop="labelRu">
+              <el-input show-word-limit
+                        style="width:80%;"
+                        size="small"
+                        :keyup="ruleForm.labelRu | abcRu(ruleForm)"
+                        placeholder="<%= __('Topic Title') %>"
+                        v-model="ruleForm.labelRu"></el-input>
+            </el-form-item>
+          </template>
+
+          <% /* ОПИСАНИЕ */ %>
+          <template>
+            <el-form-item label="<%= __('Description') %>" prop="subtitle">
+              <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+                <el-input
+                  type="textarea"
+                  :rows="3"
+                  autosize
+                  placeholder="Please input"
+                  v-model="ruleForm.subtitle"
+                  maxlength="1700"
+                  show-word-limit>
+                </el-input>
+              </el-col>
+            </el-form-item>
+          </template>
+
+
+          <div class="my-3 pt-4 text-center hidden-xs-only">
+            <el-form-item>
+              <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+              <el-button @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
+              <el-button v-if="!buttonUpdate" type="primary"
+                         @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+              <el-button v-else type="primary" @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
+
+            </el-form-item>
+          </div>
+          <div class="text-center hidden-sm-and-up">
+            <el-button-group>
+              <el-button @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
+              <el-button @click="buttonUpdate = false; centerDialogAdded = false" icon="el-icon-close"></el-button>
+              <el-button v-if="!buttonUpdate" type="primary"
+                         @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+              <el-button v-else type="primary" @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+            </el-button-group>
+          </div>
+        </el-form>
+      </el-col>
+    </el-row>
+
+    <span slot="footer" class="dialog-footer">
+  </span>
+  </el-dialog>
+
+
+  <!-- start banner Area -->
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white"><%= __('Topics') %> </h1>
+          <p>Все темы системы</p>
+        </div>
+      </div>
+
+      <!--{{options}}-->
+    </div>
+  </section>
+  <!-- End banner Area -->
+
+
+  <!-- Start Sample Area -->
+  <section class="sample-text-area">
+    <div class="container">
+      <h3 class="text-heading">Темы статей</h3>
+      <p class="sample-text">
+        В данном разделе содержится вся информация о темах статей, блога и других подобных модулей.
+        Создавая здесь тему вы тем самым можете её выбрать при написании статьи в разделе статей или
+        при добавлении поста в блоге. Это обобщающая информация под которой пишутся статьи.
+        Например: Выставки, Грумминг, Аптека и т.д.
+      </p>
+      <!--<p><button @click="sayHello()">Подключиться к сокету</button></p>-->
+      <el-divider><i class="el-icon-star-on"></i></el-divider>
+
+      <el-row :gutter="5">
+        <el-col :xs="24" :sm="8">
+          <el-card shadow="hover">
+            <p class="text-center">Всего: {{counts}}</p>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :sm="8">
+          <el-card shadow="hover" :body-style="{padding:'13px'}">
+            <p v-if="me.isSuperAdmin || me.isAdmin" class="flex justify-content-center">
+              <el-button @click="clickAddButton()" class="btn btn-outline-info"
+                         icon="el-icon-circle-plus-outline"><%= __('Add') %></el-button>
+
+            </p>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :sm="8">
+          <el-card shadow="hover">
+            <p class="text-center"> Заблокировано: {{hidden}}</p>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
+  </section>
+  <!-- End Sample Area -->
+
+
+
+
+
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

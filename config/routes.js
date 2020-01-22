@@ -45,6 +45,7 @@ module.exports.routes = {
   'GET /blog/post/:postId?': { action: 'blog/view-blog' },
   'GET /blog/:virtualPageSlug?': {action: 'blog/view-blog-home'},
 
+  'GET /topics/:virtualPageSlug?': { action: 'topics/view-topics-home' },
 
   // 'GET /litters/litter/:id': {action: 'litters/view-litter'},
   'GET /litter/:letter/:year/:virtualPageSlug?': {action: 'litters/view-litter'},
@@ -173,6 +174,12 @@ module.exports.routes = {
   'POST   /api/v1/users/update-ratio': {action: 'users/update-ratio', csrf: false},
   'GET    /api/v1/users/status': {action: 'users/list-status'},
   // 'POST   /api/v1/users/looked-comment': {action: 'users/looked-comment', csrf: false},
+  'GET    /api/v1/topics/list': { action: 'topics/list' },
+  'GET    /api/v1/topics/topic-count': {action: 'topics/topic-count'},
+  'GET    /api/v1/topics/topic-hidden': {action: 'topics/topic-hidden'},
+  'POST   /api/v1/topics/create-topic': { action: 'topics/create-topic', csrf: false },
+  'PUT    /api/v1/topics/update-topic': { action: 'topics/update-topic', csrf: false },
+
 
   'GET    /api/v1/continents/list': {action: 'continents/list'},
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},

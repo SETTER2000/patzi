@@ -876,5 +876,21 @@
 	"The first photo in this download will become the album cover. Later in the editor you can change these settings.": "Первая фотография в этой загрузке, станет обложкой альбома. В последствие в редакторе вы сможете изменить эти установки.",
 	"not allow": "не разрешать",
 	"Allow - this means that you allow the owner to edit the dog, otherwise he will not see his dog in the editor window.": "Разрешить - это значит, что вы разрешаете редактировать собаку владельцу, в противном случае он не увидит свою собаку в окне редактора.",
-	"If you are the owner of this dog, then if you enter another owner in this field, you thereby transfer the editing rights of the dog to the new owner. As a result, you can no longer see this dog in the editor window. Therefore, you cannot edit it.": "Если вы являетесь владельцем данной собаки, то в случае введения друго владельца в данное поле, вы тем самым передаёте права редактирования собакой новому владельцу. Как следствие, вы не сможете больше видеть данную собаку в окне редактора. Следовательно не можете её редактировать."
+	"If you are the owner of this dog, then if you enter another owner in this field, you thereby transfer the editing rights of the dog to the new owner. As a result, you can no longer see this dog in the editor window. Therefore, you cannot edit it.": "Если вы являетесь владельцем данной собаки, то в случае введения друго владельца в данное поле, вы тем самым передаёте права редактирования собакой новому владельцу. Как следствие, вы не сможете больше видеть данную собаку в окне редактора. Следовательно не можете её редактировать.",
+	"Add post": "Добавить пост",
+	"Your post is not currently visible on the blog. Until you turn on visibility, no one can see it.": "Ваш пост в данный момент не виден в блоге. Пока вы не включите видимость, никто не сможет его увидеть.",
+	"Post": "Post",
+	"Topics": "Темы",
+	"At the moment, the topic is hidden, that is, it will not be visible in the system and therefore articles on this topic are also hidden. Set the visibility.": "На данный момент тема скрыта, то есть она не будет видна в системе и следовательно статьи по данной теме тоже будут скрыты. Установите видимость.",
+	"Add topic": "Добавить тему",
+	"topic": "тема",
+	"Download right before": "Загрузите сразу до ",
+	"photos for this module.": "фотографий для данного модуля.",
+	"Please note that the weight of the photo file should not exceed": "Обратите внимание, вес файла фотографии не должен превышать",
+	"You can download whatever you want without selecting photos, the system itself will produce the result of those images that have been selected by restrictions.": "Вы можете загрузить все что хотите, не отбирая фотографии, система сама выдаст результат тех картинок, которые прошли отбор по ограничениям.",
+	"Topic Title": "Название",
+	"This field is only filled": "Это поле заполняется только ",
+	"letters. Switch the keyboard to the correct layout.": "буквами. Переключите клавиатуру на правильную раскладку.",
+	"russians": "русскими",
+	"english": "английскими"
 }

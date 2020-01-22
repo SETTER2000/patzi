@@ -236,6 +236,10 @@ parasails.registerPage('dogs-home', {
 
     dic: [
       ['en', {
+        files: `files`,
+        limitExceededText: `The limit is: `,
+        limitExceededText2: `you selected `,
+        limitExceededText3: `Total: `,
         warnNoKennel: `At the moment there is no nursery in the database.
          You should create at least one kennel to start with to add a dog.`,
         warnRemove: 'This will permanently delete the object. Continue?',
@@ -265,6 +269,10 @@ parasails.registerPage('dogs-home', {
         startOfNegotiations2: '. Ready to answer your questions.',
       }],
       ['ru', {
+        files: `файлов`,
+        limitExceededText: `Лимит`,
+        limitExceededText2: `вы выбрали`,
+        limitExceededText3: `Всего`,
         warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         warnRemove: 'Это навсегда удалит объект. Продолжить?',
@@ -317,6 +325,7 @@ parasails.registerPage('dogs-home', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
 
+    // Запрос для события list-*
     io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
@@ -344,38 +353,25 @@ parasails.registerPage('dogs-home', {
       this.kennels = data;
     });
 
-
     // Получаем данные для селектов в форме
     io.socket.on('list-color', (data) => {
       this.colors = data.colors;
     });
 
-    // Запрос данных
     io.socket.get(`/sockets/users/list-form`, function gotResponse(body, response) {
       // console.log('Сервер User-Form ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
+
     // Принимаем данные по событию list
     io.socket.on('list-form', (data) => {
       this.users = data.users;
-      // console.log(' this.users::: ', this.users);
     });
-
-    /* Весь список*/
-    // this.getList();
-
 
     // Кобели
     this.sireList();
 
     // Суки
     this.damList();
-    // Подключаемся к комнате kennel
-    // io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
-    //   console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-    // });
-    //
-    // // Принимаем данные по событию list-*
-    // io.socket.on('list-kennel', data => {this.kennels = data});
 
     // Является ли пользователь владельцем
     this.isOwnerCheck();
@@ -409,6 +405,7 @@ parasails.registerPage('dogs-home', {
       let now = moment.parseZone();
       return end ? moment(value).preciseDiff(end) : moment(value).fromNow(true);
     },
+
     abc(value, ruleForm) {
       if (!value) {
         return '';
@@ -422,30 +419,6 @@ parasails.registerPage('dogs-home', {
       // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
 
-
-    // countAll: function (value, lakes) {
-    //   if (!value) {
-    //     return '';
-    //   }
-    //
-    //   // console.log('value::::', this.countCommentAll.push(value).length);
-    //   return lakes.length;
-    //   value === 'like' ? this.countCommentLike++ :
-    //     value === 'wow' ? this.countCommentWow++ :
-    //       value === 'haha' ? this.countCommentHaha++ :
-    //         value === 'super' ? this.countCommentSuper++ : 0;
-    //
-    //
-    //   // this.countCommentLike = _.pluck(likes, 'like').length;
-    //   // this.countCommentWow = _.pluck(likes, 'wow').length;
-    //   // this.countCommentSuper = _.pluck(likes, 'super').length;
-    //   // this.countCommentHaha = _.pluck(likes, 'haha').length;
-    //   // this.likeId = _.last(_.uniq(_.pluck(likes, 'comment')));
-    //   // console.log(' this.likeId:::', this.likeId);
-    //   // this.countCommentAll = likes.length;
-    //   // return (likes.length > 0);
-    //
-    // }
   },
 
   mounted: async function () {

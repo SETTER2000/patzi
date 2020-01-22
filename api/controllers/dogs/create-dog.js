@@ -320,6 +320,7 @@ module.exports = {
     if (conflictingDog) {
       throw (req.me.preferredLocale === 'ru') ? 'dogAlreadyInUseRU' : 'dogAlreadyInUse';
     }
+    // с заглавной буквы
     let label = _.startCase(inputs.label.toString().toLowerCase());
     let rightFullName = _.startCase(label + ' ' + kennel.label);
     let leftFullName = _.startCase(kennel.label + ' ' + label);

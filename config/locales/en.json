@@ -704,5 +704,7 @@
 	"The first photo in this download will become the album cover. Later in the editor you can change these settings.": "The first photo in this download will become the album cover. Later in the editor you can change these settings.",
 	"not allow": "not allow",
 	"Allow Edit Dog": "Allow Edit Dog",
-	"Allow - this means that you allow the owner to edit the dog, otherwise he will not see his dog in the editor window.": "Allow - this means that you allow the owner to edit the dog, otherwise he will not see his dog in the editor window."
+	"Allow - this means that you allow the owner to edit the dog, otherwise he will not see his dog in the editor window.": "Allow - this means that you allow the owner to edit the dog, otherwise he will not see his dog in the editor window.",
+	"If you are the owner of this dog, then if you enter another owner in this field, you thereby transfer the editing rights of the dog to the new owner. As a result, you can no longer see this dog in the editor window. Therefore, you cannot edit it.": "If you are the owner of this dog, then if you enter another owner in this field, you thereby transfer the editing rights of the dog to the new owner. As a result, you can no longer see this dog in the editor window. Therefore, you cannot edit it.",
+	"Topics": "Topics"
 }
