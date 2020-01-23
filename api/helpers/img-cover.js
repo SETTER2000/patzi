@@ -68,9 +68,16 @@ module.exports = {
         break;
       case 'Dog':
         obj = await Dog.findOne(inputs.id);
-        console.log('OBJ::: ' , obj);
+        console.log('OBJ::: ', obj);
         if (!obj) return false;
         data = await Dog.updateOne(inputs.id).set(await f());
+        break;
+      case 'Topic':
+        obj = await Topic.findOne(inputs.id);
+        console.log('OBJ::: ', obj);
+        if (!obj) return false;
+        data = await Topic.updateOne(inputs.id).set(await f());
+        break;
     }
 
 

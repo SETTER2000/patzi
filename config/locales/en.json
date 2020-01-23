@@ -706,5 +706,8 @@
 	"Allow Edit Dog": "Allow Edit Dog",
 	"Allow - this means that you allow the owner to edit the dog, otherwise he will not see his dog in the editor window.": "Allow - this means that you allow the owner to edit the dog, otherwise he will not see his dog in the editor window.",
 	"If you are the owner of this dog, then if you enter another owner in this field, you thereby transfer the editing rights of the dog to the new owner. As a result, you can no longer see this dog in the editor window. Therefore, you cannot edit it.": "If you are the owner of this dog, then if you enter another owner in this field, you thereby transfer the editing rights of the dog to the new owner. As a result, you can no longer see this dog in the editor window. Therefore, you cannot edit it.",
-	"Topics": "Topics"
+	"Topics": "Topics",
+	"Add post": "Add post",
+	"Your post is not currently visible on the blog. Until you turn on visibility, no one can see it.": "Your post is not currently visible on the blog. Until you turn on visibility, no one can see it.",
+	"Post": "Post"
 }

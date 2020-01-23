@@ -14,14 +14,14 @@ module.exports = {
 
   exits: {
     success: {
-      anyData: 'Вы подключились к комнате dog и слушаете событие list'
+      anyData: 'Вы подключились к комнате topic и слушаете событие list'
     },
     notFound: {
       description: 'There is no such object with such ID.',
       responseType: 'notFound' // как раньше res.notFound(), сейчас это встроеная функция sails
     },
     forbidden: {
-      description: 'The dog who makes this request does not have permission to delete this entry.',
+      description: 'The topic who makes this request does not have permission to delete this entry.',
       responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
     },
     badRequest: {
@@ -37,7 +37,7 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-    // Have the socket which made the request join the "dog" room.
+    // Have the socket which made the request join the "topic" room.
     // Подключить сокет, который сделал запрос, к комнате «topic».
     await sails.sockets.join(req, 'topic');
 
@@ -47,8 +47,30 @@ module.exports = {
         // .populate('owners')
     ;
 
-    console.log('TOPICS::: ' , topics);
-    await sails.sockets.broadcast('topic', 'list-topic', topics);
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    topics = await sails.helpers.cloudFrontUrl.with({
+      collection: topics,
+      collectionName:'topic',
+      edits: {
+        resize: {}
+      }
+    });
+
+
+    await topics.map(async (topic) => {
+      // topic.detail = topic.fullName ? `/chinese-crested/${topic.fullName.split(" ").join('-')}` : '';
+      topic.imagesArrUrl = _.pluck(topic.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
+      // topic.cover = topic.imagesArrUrl[0]; // Обложка альбома
+      return topic;
+    });
+
+
+
+    await sails.sockets.broadcast('topic', 'list-topic', _.sortBy(topics,'labelRu'));
     // Respond with view.
     return exits.success();
 

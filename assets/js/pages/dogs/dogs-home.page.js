@@ -560,7 +560,7 @@ parasails.registerPage('dogs-home', {
       });
     },
 
-    // Create Dog
+    // Create
     async addDog() {
       this.openFullScreen();
       // console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
@@ -619,7 +619,7 @@ parasails.registerPage('dogs-home', {
       });
     },
 
-
+    // Update
     async updateDog() {
       this.openFullScreen();
       let data = {

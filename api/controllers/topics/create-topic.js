@@ -31,7 +31,10 @@ module.exports = {
       description: 'Дополнительная информация. Описание темы.',
       maxLength: 700
     },
-
+    see: {
+      type: 'boolean',
+      description: `Флаг видимости темы. Видна или нет. По умолчанию видна.`
+    },
   },
 
 
@@ -70,7 +73,7 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-    let images;
+    let images=[];
     // Have the socket which made the request join the "dog" room.
     // Подключить сокет, который сделал запрос, к комнате «topic».
     await sails.sockets.join(req, 'topic');
@@ -101,7 +104,8 @@ module.exports = {
       label:inputs.label,
       labelRu:inputs.labelRu,
       images: images,
-      subtitle:inputs.subtitle
+      subtitle:inputs.subtitle,
+      see:inputs.see
     });
 
 

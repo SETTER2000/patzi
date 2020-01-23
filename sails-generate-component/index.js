@@ -34,32 +34,39 @@ module.exports = {
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // // scope.args are the raw command line arguments.
+    // scope.args - это необработанные аргументы командной строки.
     // //
     // // e.g. if someone runs:
+    // // например если кто-то запускает:
     // // $ sails generate component user find create update
+    // // то scope.args - содержит `['user', 'find', 'create', 'update']`
     // // then `scope.args` would be `['user', 'find', 'create', 'update']`
-    // if (_.isUndefined(scope.args[0])) {
-    //   return done(new Error('Please provide a name for this component.'));
-    // }
+    if (_.isUndefined(scope.args[0])) {
+      return done(new Error('Пожалуйста, укажите имя для этого компонента (Please provide a name for this component).'));
+    }
     if (!_.isString(scope.args[0])) {
       return done(new Error('Expected a string for `scope.args[0]`, but instead got: ' + util.inspect(scope.args[0], {depth: null})));
     }
     //
     // // Provide defaults for the scope.
-    // _.defaults(scope, {
-    //   createdAt: new Date()
-    // });
+    // Укажите значения по умолчанию для области.
+    _.defaults(scope, {
+      createdAt: new Date()
+    });
     //
     // // Decide the output filename for use in targets below:
-    // scope.filename = scope.args[0];
+    // Определите имя выходного файла для использования в целях ниже
+    scope.filename = scope.args[0];
     //
     // // Add other stuff to the scope for use in our templates:
-    // scope.whatIsThis = 'an example file created at '+scope.createdAt;
+    // Добавьте другие вещи в область для использования в ваших шаблонах
+    scope.whatIsThis = 'an example file created at '+scope.createdAt;
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     // When finished, trigger the `done` callback to begin generating
     // files/folders as specified by the `targets` below.
-    //
+    // Когда закончим, запускаем обратный вызов `done` для начала генерации
+    // файлы / папки, как указано в `target` ниже.
     // > Or call `done()` with an Error for first argument to signify a fatal error
     // > and halt generation of all targets.
     return done();
@@ -80,12 +87,18 @@ module.exports = {
     //
     // • e.g. create a dynamically-named file relative to `scope.rootPath`
     // (defined by the `filename` scope variable).
+    // Например, создать файл с динамическим именем относительно `scope.rootPath`
+    // (определяется переменной области имени файла).
     //
     // The `template` helper reads the specified template, making the
     // entire scope available to it (uses underscore/JST/ejs syntax).
     // Then the file is copied into the specified destination (on the left).
+    // Помощник `template` читает указанный шаблон, делая
+    // вся доступная ему область (использует синтаксис подчеркивания / JST / ejs).
+    // Затем файл копируется в указанное место назначения (слева).
     // ```
     // './:filename': { template: 'example.template.js' },
+    './assets/js/components/:filename.component.js' : {template: {templatePath: 'component.template', force: false } },
     // ```
     //
     // • See https://sailsjs.com/docs/concepts/extending-sails/generators for more documentation.

@@ -91,7 +91,12 @@ module.exports = {
       seo: {
         description: 'Все помёты собак питомника.',
         title: 'Помёты',
-        canonical:'https://poaleell.com/litters'
+        canonical:'https://poaleell.com/litters',
+        header:{ru:'Помёты',en:'Litters'},
+        subTitle:{ru:'Все помёты питомника',en:'All litter kennel'},
+        preferredLocale:this.req.me.preferredLocale,
+        h2: {ru: 'Проверьте Нашу Работу', en: 'Check Our Work'},
+        h3: {ru: 'Рождённые в Poale Ell', en: 'Born In Poale Ell'},
       },
       litters,
       currentSection: 'litters-home'

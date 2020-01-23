@@ -268,7 +268,7 @@ module.exports = {
       throw 'badRequest';
     }
 
-    let images;
+    let images=[];
 
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».

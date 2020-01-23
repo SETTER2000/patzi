@@ -36,7 +36,7 @@ module.exports = {
 
     dogAlreadyInUse: {
       statusCode: 409,
-      description: 'The specified dog name is already in use.',
+      description: 'The specified topic name is already in use.',
     },
 
     dogAlreadyInUseRU: {
@@ -54,17 +54,15 @@ module.exports = {
     }
 
 
-
-    let dog = await Dog.findOne(inputs.id);
+    let topic = await Topic.findOne(inputs.id);
     console.log('IN:: ', inputs.removeImage);
-    let removeImage = _.remove(dog.images, img => _.indexOf(inputs.removeImage, img.id) > -1);
+    let removeImage = _.remove(topic.images, img => _.indexOf(inputs.removeImage, img.id) > -1);
     console.log('Картинки для удаления removeImage::: ', removeImage);
-    console.log('dog.images::: ', dog.images);
+    console.log('topic.images::: ', topic.images);
 
-    let update = await Dog.updateOne({id: inputs.id})
-      .set({images: dog.images});
-    // console.log('Обновлённый Dog::: ', updateDog);
-
+    let update = await Topic.updateOne({id: inputs.id})
+      .set({images: topic.images});
+    // console.log('Обновлённый Topic::: ', updateDog);
 
 
     await sails.helpers.removeImgS3(removeImage);
@@ -72,6 +70,4 @@ module.exports = {
     return exits.success();
   }
 
-
-}
-;
+};

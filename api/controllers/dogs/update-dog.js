@@ -310,7 +310,7 @@ module.exports = {
 
     !_.isEmpty(images) || !_.isEmpty(imagesNew) ? updateObj.images = [...images, ...imagesNew] : '';
 
-    // Создаём собаку
+    // Обновляем
     let updateDog = await Dog.updateOne({id: inputs.id})
       .set(updateObj);
 

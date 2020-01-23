@@ -60,13 +60,20 @@ module.exports = {
       throw 'badRequest';
     }
 
+    await sails.sockets.join(req, 'files');
+
+      console.log('1',inputs.id);
+      console.log('2',inputs.cover);
+      console.log('3',inputs.field);
+      console.log('4',inputs.collectionName);
+
     let updateObject =  await sails.helpers.imgCover.with({
       id: inputs.id,
       cover: inputs.cover,
       field: 'images',
       collectionName: inputs.collectionName
     });
-
+    await sails.sockets.broadcast('files', 'update-cover');
 
     return exits.success();
 

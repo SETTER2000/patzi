@@ -73,7 +73,17 @@ module.exports = {
       seo: {
         description: 'Пользователи сайта.',
         title: 'Пользователи',
-        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`,
+        header:{ru:'Пользователи',en:'Users'},
+        subTitle:{ru:'Все пользователи системы',en:'All users of the system'},
+        preferredLocale:this.req.me.preferredLocale,
+        // Первый H3 на странице
+        h3: {ru: 'Пользователи системы', en: 'System users'},
+        // Текст параграфа под заголовко H3 в начале страницы
+        textUnderHeading: {
+          ru: 'В данном разделе содержится вся информация о пользователях системы. Тех кто зарегистрировался и подтвердил свой email и тех кто ещё не подтвердил. Информация актуальна на данную секунду, так как обновление данных происходит мгновенно в реальном времени и не нуждается в перезагрузке страницы.',
+          en: 'This section contains all the information about system users. Those who have registered and confirmed their email and those who have not yet confirmed. The information is current for this second, as the data is updated instantly in real time and does not need to reload the page.'
+        },
       },
       dateFilter
     });

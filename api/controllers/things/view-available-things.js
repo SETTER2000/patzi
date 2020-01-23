@@ -65,7 +65,12 @@ module.exports = {
       seo: {
         description: `Лучшие фотографии собак нашего питомника Poale Ell. Собаки которыми мы гордимся.`,
         title: `Портфолио`,
-        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`,
+        header:{ru:'Портфолио',en:'Portfolio'},
+        subTitle:{ru:'Собаки питомника Poale Ell',en:'Dogs of Kennel Poale Ell'},
+        preferredLocale:this.req.me.preferredLocale,
+        h2: {ru: 'Прекрасные Моменты', en: 'Beautiful Moments'},
+        h3: {ru: 'Наше Портфолио', en: 'Our Portfolio'},
       },
       currentSection: 'portfolio',
       things

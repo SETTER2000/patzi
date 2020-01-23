@@ -174,13 +174,15 @@ module.exports.routes = {
   'POST   /api/v1/users/update-ratio': {action: 'users/update-ratio', csrf: false},
   'GET    /api/v1/users/status': {action: 'users/list-status'},
   // 'POST   /api/v1/users/looked-comment': {action: 'users/looked-comment', csrf: false},
+
+
   'GET    /api/v1/topics/list': { action: 'topics/list' },
   'GET    /api/v1/topics/topic-count': {action: 'topics/topic-count'},
   'GET    /api/v1/topics/topic-hidden': {action: 'topics/topic-hidden'},
   'POST   /api/v1/topics/create-topic': { action: 'topics/create-topic', csrf: false },
   'PUT    /api/v1/topics/update-topic': { action: 'topics/update-topic', csrf: false },
-
-
+  'DELETE /api/v1/topics/destroy-many-img': { action: 'topics/destroy-many-img', csrf: false  },
+  'DELETE /api/v1/topics/destroy-one-topic': { action: 'topics/destroy-one-topic', csrf: false  },
   'GET    /api/v1/continents/list': {action: 'continents/list'},
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},
   'POST   /api/v1/continents/create-continent': {action: 'continents/create-continent', csrf: false},

@@ -60,12 +60,22 @@ module.exports = {
 
     // Respond with view.
     return exits.success({
+      groups,
       seo: {
         description: 'Группы пользователей сайта.',
         title: 'Группы',
-        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`,
+        header:{ru:'Группы',en:'Groups'},
+        subTitle:{ru:'Установите к какой группе доступа пренадлежит пользователь приложения',en:'Set which access group the application user belongs to.'},
+        preferredLocale:this.req.me.preferredLocale,
+        // Первый H3 на странице
+        h3: {ru: 'Группы доступа. Роли пользователей.', en: 'Access groups. User roles'},
+        // Текст параграфа под заголовко H3 в начале страницы
+        textUnderHeading: {
+          ru: 'Принадлежность пользователя к той или иной группе обуславливает его права доступа к документам, папкам и другим объектам системы сайта Poale Ell и функциональные возможности при работе с ними. Каждый пользователь Системы может принадлежать к нескольким группам доступа. Все группы доступа, существующие в Системе, можно просмотреть на данной страницы. Здесь так же можно создать новую группу и редактировать уже созданные.',
+          en: 'The user\'s membership in a particular group determines their access rights to documents, folders and other objects of the Poale Ell site system and their functionality when working with them. Each user of the System can belong to several access groups. All access groups existing in the System can be viewed on this page. Here you can also create a new group and edit already created ones.'
+        },
       },
-      groups
     });
 
   }

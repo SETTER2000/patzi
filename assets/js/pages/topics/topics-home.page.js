@@ -6,9 +6,27 @@ parasails.registerPage('topics-home', {
     topics:[],
     counts: 0,
     hidden: 0,
+    searchObjects: '',
+    search: '',
+    checkAll: false,
+    checkedPhoto: [],
+    photoVisible: false,
+    centerDialogVisiblePhotos: false,
+    photos: {},
+    isIndeterminate: true,
     limit: 4,
     sizeLess: 5, // MB
+    photoDesc: {
+      innerVisiblePhotoDescription: false,
+      photoId: '',
+      description: '',
+      dateTaken: ''
+    },
+    photoDescUpdate: false,
+    objOne: {},
     centerDialogAdded: false,
+    dialogEditorList: false,
+    editorList:[],
     lang: '',
     dialogVisiblePass: false,
     buttonUpdate: false,
@@ -44,7 +62,7 @@ parasails.registerPage('topics-home', {
         {required: true, message: 'Please select Activity zone', trigger: 'change'}
       ],
       gender: [
-        {required: true, message: 'Please select a dog gender.', trigger: 'change'}
+        {required: true, message: 'Please select a topic gender.', trigger: 'change'}
       ],
       description: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
@@ -58,7 +76,7 @@ parasails.registerPage('topics-home', {
         limitExceededText2: `you selected `,
         limitExceededText3: `Total: `,
         warnNoKennel: `At the moment there is no nursery in the database.
-         You should create at least one kennel to start with to add a dog.`,
+         You should create at least one kennel to start with to add a topic.`,
         warnRemove: 'This will permanently delete the object. Continue?',
         warning: 'Warning',
         delCancel: 'Delete canceled',
@@ -73,14 +91,14 @@ parasails.registerPage('topics-home', {
         success: 'Congratulations! Object successfully created. ',
         successUpdate: 'Object updated successfully.',
         successDelete: 'Object deleted successfully. ',
-        selectGender: 'Please select a dog gender.',
-        growth: 'How to measure a dog\'s height?',
-        hairless: 'What is a down or naked dog?',
-        infoColor: 'Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of topics by color, but rather an attempt to provide more information on the appearance of the dog. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding topics.',
+        selectGender: 'Please select a topic gender.',
+        growth: 'How to measure a topic\'s height?',
+        hairless: 'What is a down or naked topic?',
+        infoColor: 'Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of topics by color, but rather an attempt to provide more information on the appearance of the topic. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding topics.',
         whyColor: 'Why determine the color.',
         priceTitle: 'Selling price.',
-        priceText: 'You can set the price at any time, but until the price is set, the dog will not appear on the sales page. Remember to set the selling currency.',
-        recommendationsSale: 'Recommendations for the sale of topics. Describe the main advantages and benefits of the dog. This information will be posted on the dog’s card on the sales page.',
+        priceText: 'You can set the price at any time, but until the price is set, the topic will not appear on the sales page. Remember to set the selling currency.',
+        recommendationsSale: 'Recommendations for the sale of topics. Describe the main advantages and benefits of the topic. This information will be posted on the topic’s card on the sales page.',
         areYouClose: 'Are you sure you want to close chat?',
         startOfNegotiations: 'My name is Olga, I am a breeder and owner of the nursery Poale Ell. I see your choice fell on a puppy by name ',
         startOfNegotiations2: '. Ready to answer your questions.',
@@ -135,7 +153,6 @@ parasails.registerPage('topics-home', {
     });
     // Кол-во всех тем
     io.socket.on('topic-count', (data) => {
-      console.log('data:: ', data);
       this.counts = data;
     });
 
@@ -144,8 +161,14 @@ parasails.registerPage('topics-home', {
     });
     // Кол-во всех тем
     io.socket.on('topic-hidden', (data) => {
-      console.log('data:: ', data);
       this.hidden = data;
+    });
+
+   // Обновление темы
+    io.socket.on('update-topic', (data) => {
+      console.log('UPDATEEE');
+      this.getList();
+      this.$forceUpdate();
     });
 
 
@@ -155,8 +178,8 @@ parasails.registerPage('topics-home', {
     });
     // Все темы
     io.socket.on('list-topic', (data) => {
-      console.log('data:: ', data);
-      this.topics = data;
+      console.log('TOPICS all:: ', data);
+      this.topics = this.editorList = data;
     });
 
 
@@ -217,7 +240,7 @@ parasails.registerPage('topics-home', {
         return '';
       }
       this.lang = 'ru';
-      const regex = /[ а-я]+/i;
+      const regex = /[ а-яё]+/i;
       let r = regex.exec(value);
       return ruleForm.errInputLangRu = !_.isArray(r);
     },
@@ -345,7 +368,8 @@ parasails.registerPage('topics-home', {
         fileList: this.ruleForm.fileList,
         label: this.ruleForm.label,
         labelRu: this.ruleForm.labelRu,
-        subtitle: this.ruleForm.subtitle
+        subtitle: this.ruleForm.subtitle,
+        see: this.ruleForm.see
       };
 
       console.log('DATA перед отправкой::: ', data);
@@ -375,39 +399,12 @@ parasails.registerPage('topics-home', {
         id: this.ruleForm.id,
         fileList: this.ruleForm.fileList,
         label: this.ruleForm.label,
-        dateBirth: JSON.stringify(this.dateBirthUpdate),
-        dateDeath: JSON.stringify(this.dateDeathUpdate),
-        gender: this.ruleForm.gender,
-        continent: this.ruleForm.continent,
-        country: this.ruleForm.country,
-        kennel: this.ruleForm.kennel,
-        dam: this.dam,
-        region: this.region,
-        city: this.city,
-        sire: this.sire,
-        // nickname: this.ruleForm.nickname,
-        // federation: this.ruleForm.federation,
-        // weight: this.ruleForm.weight,
-        // growth: this.ruleForm.growth,
-        // type: this.ruleForm.type,
-        // sale: this.ruleForm.sale,
+        labelRu: this.ruleForm.labelRu,
         see: this.ruleForm.see,
-        // price: +this.ruleForm.price,
-        // saleDescription: this.ruleForm.saleDescription,
-        // currency: this.ruleForm.currency,
-        // color: this.ruleForm.color,
-        // stamp: this.ruleForm.stamp,
-        // canine: this.ruleForm.canine,
-        // bite: this.ruleForm.bite,
-        // letter: this.ruleForm.letter,
-        // dogTests: this.ruleForm.dogTests,
-        // teethCountTop: this.ruleForm.teethCountTop,
-        // teethCountBottom: this.ruleForm.teethCountBottom,
-        // registerNumber: this.ruleForm.registerNumber,
-        description: this.ruleForm.description,
-        // yourKennel: this.ruleForm.yourKennel,
+        subtitle: this.ruleForm.subtitle
+
       };
-      // console.log('DATA перед отправкой::: ', data);
+      console.log('DATA UPDATE перед отправкой ::: ', data);
 
       io.socket.put('/api/v1/topics/update-topic', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
@@ -425,6 +422,7 @@ parasails.registerPage('topics-home', {
           this.ruleForm.imageUrl = '';
           this.ruleForm.federations = this.resetFederation;
           this.getList();
+          this.$forceUpdate();
         }
       });
     },
@@ -437,25 +435,23 @@ parasails.registerPage('topics-home', {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       await io.socket.get(`/api/v1/topics/topic-count`, function gotResponse(body, response) {
-        console.log('Сервер topic-count ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервер topic-count ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
 
-      // Принимаем данные по событию list-*
-      await io.socket.on('list-topic', (data) => {
-        this.topics = this.editList = this.filterDogs = _.isNull(data) ? [] : data;
-        // console.log('this.topics: ', this.topics);
-        // console.log('this.filterDogs: ', this.filterDogs);
-        // this.dialogEditors();
-      });
+      // // Принимаем данные по событию list-*
+      // await io.socket.on('list-topic', (data) => {
+      //   console.log('data TOPICS all:: ', data);
+      //   this.topics = this.editList = this.filterDogs = _.isNull(data) ? [] : data;
+      // });
       // Принимаем данные по событию list-*
       await  io.socket.on('topic-hidden', (data) => {
         this.hidden = data;
       });
-      // Принимаем данные по событию list-*
-      await  io.socket.on('topic-count', (data) => {
-        console.log("DDDDDDASAAAA:::: " ,data);
-        this.counts = data;
-      });
+      // // Принимаем данные по событию list-*
+      // await  io.socket.on('topic-count', (data) => {
+      //   console.log("DDDDDDASAAAA:::: " ,data);
+      //   this.counts = data;
+      // });
     },
 
     openFullScreen() {
@@ -507,5 +503,312 @@ parasails.registerPage('topics-home', {
         offset: 100,
       });
     },
+
+    /* Открывает диалоговое окно редактирования*/
+    handleCommand(command) {
+      switch (command.com) {
+        case 'c':
+          this.goDogSale();
+          break;
+        case 'e':
+          this.dialogEditors();
+          // this.ruleForm.description =  this.litter.description;
+          break;
+        case 'dam':
+          this.gender(command);
+          break;
+        case 'sire':
+          this.gender(command);
+          break;
+        case 'all':
+          this.gender(command);
+          break;
+
+        /*
+           case 'a':
+          this.setIndexPhotoSet(command);
+          this.dialogFormVisible = true;
+          break;
+          case 'b':
+          this.setValueEditPhotoSet(command);
+          break;
+           case 'd':
+           this.setIndexPhotoSet(command);
+           this.dialogDeletePhotoSession = true;
+           this.nameSessionPhoto = command.name;
+           // this.ruleForm.description =  this.litter.description;
+           break;
+           case 'f':
+               window.location = '/litters/new';
+               break;
+                case 'g':
+                  this.setAddedPresentation(command);
+                  break;
+                case 'dl':
+                  this.clickDeleteLitter();
+                  break;
+                   case 'allView':
+                   this.allViewed(command);
+                   break;
+                  case 'like':
+                     this.addLike(command);
+                     break;
+                   case 'super':
+                     this.addLike(command);
+                     break;
+                   case 'wow':
+                     this.addLike(command);
+                     break;
+                   case 'haha':
+                     this.addLike(command);
+                     break;
+                   case 'commentLike':
+                     this.commentLike(command);
+                     break;
+                   case 'commentSuper':
+                     this.commentLike(command);
+                     break;
+                   case 'commentWow':
+                     this.commentLike(command);
+                     break;
+                   case 'commentHaha':
+                     this.commentLike(command);
+                     break;
+                   case 'link':
+                     window.location = '/litters';
+                     break;
+                   case 'deleteComment':
+                     this.deleteComment(command);
+                     break;
+                   case 'changeComment':
+                     this.changeOpenComment(command);
+                     break;*/
+
+        //default:  this.setIndexPhotoSet(command);
+      }
+      // }
+      // this.$message('Нажат элемент: ' + command);
+    },
+
+
+    // Выбирает темы для редактирования
+    dialogEditors() {
+      this.editorList = (this.me.isAdmin || this.me.isSuperAdmin) ? this.topics : '';
+
+      // console.log(' this.editorList::: ' ,  this.editorList);
+      this.dialogEditorList = true;
+    },
+
+    errorHandler() {
+      return true;
+    },
+
+    clearFilter() {
+      this.$refs.filterTable.clearFilter();
+      this.search = '';
+    },
+
+    clickShowPhoto(index, row) {
+      this.photoVisible = true;
+      this.objOne = Object.assign({}, this.objOne, row);
+    },
+
+    handleCloseDialog(done) {
+      done();
+      /*  this.$confirm('Are you sure to close this dialog?')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {
+          });*/
+    },
+
+    handleEdit(index, row) {
+      // console.log('ROWWW::: ', row);
+      this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
+      this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
+      this.owner = _.last(_.pluck(row.owners, 'fullName'));
+      this.ownerId = _.last(_.pluck(row.owners, 'id'));
+      this.ruleForm = row;
+      this.dateBirthUpdate = row.dateBirth;
+      this.dateDeathUpdate = row.dateDeath;
+      // this.ruleForm.kennel = row.kennel.id;
+      this.dialogEditor = true;
+      this.centerDialogAdded = true;
+      this.buttonUpdate = true;
+    },
+
+    handleEditPhotos(index, row) {
+      this.photos = row;
+      // console.log('Собака::: ', row);
+      this.centerDialogVisiblePhotos = true;
+    },
+
+    async updateDescriptionPhoto() {
+      this.photoDesc.id = this.photos.id;
+      this.photoDesc.innerVisiblePhotoDescription = false;
+      await io.socket.put('/api/v1/topics/update-description-img', this.photoDesc, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        // this.loading.close();
+        if (jwRes.statusCode === 200) {
+          // this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          this.checkedPhoto = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+          this.$forceUpdate();
+        }
+      });
+    },
+
+    handleCheckAllChange(val) {
+      this.checkedPhoto = val ? _.pluck(this.photos.images, 'id') : [];
+      this.isIndeterminate = false;
+      // console.log('this.checkedPhoto:: ', this.checkedPhoto);
+    },
+    handleCheckedPhotosChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === _.pluck(this.photos.images, 'id').length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < _.pluck(this.photos.images, 'id').length;
+    },
+    async coverPhoto(id, index) {
+      await io.socket.put(`/api/v1/files/update-cover-album`, {
+        id: id,
+        cover: index,
+        field: 'images',
+        collectionName: 'Topic'
+      }, (body, response) => {
+        this.topics.map(topic => {
+          if (topic.id === id) {
+            // console.log('INDEX: ', index);
+            // let field = 'images';
+            let cut = topic['images'].splice(index, 1);
+            // console.log('Вырезали этот объект: ', cut);
+            // topic['images'].unshift(cut);
+            topic['images'] = [...cut, ...topic['images']];
+            // topic['images'].splice( 0,0,cut);
+            // console.log('Объеденённый массив::: ', topic['images']);
+            topic.imagesArrUrl = _.pluck(topic['images'], 'imageSrc');
+          }
+          this.getList();
+          this.$forceUpdate();
+        });
+      });
+
+      // Принимаем данные по событию list-*
+      await  io.socket.on('update-cover', (data) => {
+        // this.counts = data;
+      });
+
+    },
+
+    removePhotos() {
+      this.checkAll = false;
+      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
+        confirmButtonText: 'OK',
+        cancelButtonText: this.i19p.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.destroyManyPhotos();
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.i19p.delCancel
+        });
+      });
+    },
+
+    async destroyManyPhotos() {
+      let removeImage = _.remove(this.photos.images, img => _.indexOf(this.checkedPhoto, img.id) > -1);
+      // console.log('Удалённые картинки: ', removeImage);
+      let data = this.photos;
+      data['removeImage'] = _.pluck(removeImage, 'id');
+      // Если картинок нет закрываем окно редактора
+      _.isEmpty(this.photos.images) ? this.centerDialogVisiblePhotos = false : '';
+      io.socket.delete('/api/v1/topics/destroy-many-img', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        // this.loading.close();
+        if (jwRes.statusCode === 200) {
+          // this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          this.checkedPhoto = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+        }
+      });
+    },
+
+    // Вы можете выделить содержимое таблицы,
+    // чтобы различать «успех, информация, предупреждение, опасность» и другие состояния.
+    tableRowClassName({row, rowIndex}) {
+      if (!row.see) {
+        return 'warning-row';
+      }
+      // else if (rowIndex === 3) {
+      //   return 'success-row';
+      // }
+      return '';
+    },
+
+    openRemoveDialog(id) {
+      this.removeDogId = id;
+      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
+        confirmButtonText: 'OK',
+        cancelButtonText: this.i19p.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.deleteDog();
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.i19p.delCancel
+        });
+      });
+    },
+
+    deleteDog: async function () {
+      let data = {
+        id: this.removeDogId,
+      };
+      // console.log('Перед отправкой data DOG: ', data);
+      io.socket.post('/api/v1/topics/destroy-one-topic', data, (dataRes, jwRes) => {
+        this.errorMessages(jwRes, this.i19p.successDelete);
+        this.dialogDeletePhotoSession = false;
+        if (jwRes.statusCode === 200) {
+          // this.$message({
+          //   type: 'success',
+          //   message: this.i19p.success
+          // });
+          this.getList();
+          this.$forceUpdate();
+        }
+      });
+    },
+
+    errorMessages(jwRes, successText) {
+      (jwRes.statusCode === 200) ? (this.mesSuccess(successText)) :
+        (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+    }
+
+
   }
 });

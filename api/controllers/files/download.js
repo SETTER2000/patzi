@@ -87,6 +87,9 @@ module.exports = {
       case 'Thing':
         collectionObject = await Thing.findOne(inputs.id);
         break;
+      case 'Topic':
+        collectionObject = await Topic.findOne(inputs.id);
+        break;
     }
 
     if (!collectionObject) {
@@ -154,7 +157,7 @@ module.exports = {
 // console.log('skp.read(arr[0].cloudFrontUrl)::: ' , await sails.startDownload(arr[0].cloudFrontUrl));
 // console.log('await sails.startDownload(arr[0].fd)::: ' , await sails.startDownload(arr[0].fd));
 
-/**
+    /**
      * startDownload - функция от модуля sails-hook-uploads
      * мы будем использовать этот метод для загрузки файла
      * Этот метод стартует загрузку в поток байтов файла, после
@@ -163,6 +166,6 @@ module.exports = {
      * Ответ о благополучном завершении отдачи файла
      */
     // return await sails.startDownload(arr[0].fd);
-    return  await sails.startDownload(arr[0].fd);
+    return await sails.startDownload(arr[0].fd);
   }
 };
