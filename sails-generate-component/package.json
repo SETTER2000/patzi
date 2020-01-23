@@ -1,0 +1,32 @@
+{
+  "name": "sails-generate-component",
+  "version": "1.0.0",
+  "description": "sails generate component",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'No further automated tests have been implemented for this generator yet.'",
+    "pretest": "npm run lint",
+    "lint": "node ./node_modules/eslint/bin/eslint . --max-warnings=0"
+  },
+  "keywords": [
+    "component",
+    "generator",
+    "sails",
+    "generate",
+    "plugin"
+  ],
+  "author": "a node.js/sails user",
+  "license": "MIT",
+  "dependencies": {
+    "@sailshq/lodash": "^3.10.3"
+  },
+  "devDependencies": {
+    "eslint": "3.19.0"
+  },
+  "repository": {"type":"git","url":"git://github.com//sails-generate-component.git"},
+  "sailsGenerator": {
+    "type": "component",
+    "behavior": "Implements or overrides `sails generate component`",
+    "sailsVersion": "^1.0.0"
+  }
+}
