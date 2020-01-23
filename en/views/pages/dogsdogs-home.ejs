@@ -1058,19 +1058,18 @@
   </span>
     </el-dialog>
     <div class="container">
-      <div class="menu-between">
+      <div class=" mb-3 menu-between">
         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
           <%= __('Select all') %></el-checkbox>
         <span>
           <span class="mx-3">  <%= __('All files') %>:  {{_.isArray(photos.images)? photos.images.length : 0}}</span>
          <span class="mx-3"> <%= __('Marked') %>:  {{checkedPhoto.length}}</span>
-        <el-link v-if="checkedPhoto.length > 0" type="danger" class="mx-3" :underline="false"
+        <el-button type="danger" v-if="checkedPhoto.length > 0" type="danger" class="mx-3" :underline="false"
                  @click="removePhotos"
                  class="mx-3"
                  title="<%= __('Remove') %>"
-                 icon="el-icon-delete"></el-link>
-          <!--<el-link v-else disabled :underline="false" class="mx-3" title="<%= __('Remove') %>"
-                 icon="el-icon-delete"></el-link>-->
+                 icon="el-icon-delete" circle></el-button>
+
           </span>
       </div>
 
@@ -1606,38 +1605,22 @@
   </span>
   </el-dialog>
 
-  <!-- start banner Area -->
-  <section class="banner-area relative">
-    <div class="container">
-      <div class="row d-flex align-items-center justify-content-center">
-        <div class="about-content col-lg-12">
-          <h1 class="text-white"><%= __('Chinese Crested Dog') %></h1>
-          <p class="text-white"><%= __('Dog catalog') %></p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- End banner Area -->
-  <!-- Start Sample Area -->
-  <section class="sample-text-area">
-    <div class="container">
-      <h3 class="text-heading"><%= __('Dog Catalog World') %></h3>
-      <p class="sample-text">
-        <%= __('The page presents dogs of the Chinese Crested Dog. This is a database of dogs of this breed can not claim to be complete information, like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on known dogs grows and improves, this database will collect, maintain and update the actual information that appears in open access to other sites in automatic mode. Generating a complete list of dogs of the world in the Chinese Crested Dog breed.') %>
-      </p>
-      <div v-if="me.hasBillingCard || me.isSuperAdmin || me.isAdmin" class="mt-5  text-center">
-        <el-button @click="clickAddButton()" class="btn btn-outline-info"
-                   icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
+  <patzi-section-header :obj-data="seo"></patzi-section-header>
 
-      </div>
-      <div class="mt-5  text-center" v-else>
-        <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"
-                   class="btn btn-outline-info"><%= __('Add dog') %></el-button>
-      </div>
+  <patzi-row-h3-p :obj-data="seo"></patzi-row-h3-p>
 
+
+  <template>
+    <div v-if="me.hasBillingCard || me.isSuperAdmin || me.isAdmin" class="mt-5  text-center">
+      <el-button @click="clickAddButton()" class="btn btn-outline-info"
+                 icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
     </div>
-  </section>
-  <!-- End Sample Area -->
+    <div class="mt-5  text-center" v-else>
+      <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"
+                 class="btn btn-outline-info"><%= __('Add dog') %></el-button>
+    </div>
+  </template>
+
 
   <section class="work-area">
     <div class="container">
