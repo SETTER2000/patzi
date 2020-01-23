@@ -1008,108 +1008,26 @@
   </span>
   </el-dialog>
 
-  <% /* Главный банер, с названием страницы. */ %>
-  <section class="banner-area relative">
-    <div class="container">
-      <div class="row d-flex align-items-center justify-content-center">
-        <div class="about-content col-lg-12">
-          <h1 class="text-white"><%= __('Kennels') %></h1>
-          <p><%= __('Chinese Crested kennel. Catalog of nurseries of the world.') %> </p>
 
-        </div>
-      </div>
-    </div>
-  </section>
+  <patzi-section-header :obj-data="seo"></patzi-section-header>
+
+  <patzi-row-h3-p :obj-data="seo"></patzi-row-h3-p>
+
+
+
+
 
   <% /*Описание страницы. Первый блок текста.*/ %>
-  <section class="sample-text-area">
-    <div class="container">
-      <h3 class="text-heading"><%= __('World Kennel Catalog') %></h3>
-      <p class="sample-text">
-        <%= __('The page presents the Chinese Crested kennel Kennels created around the world. This nursery database cannot claim to be complete, just like any other database in the world. The only question is who uses it. As the mechanism for updating and collecting data on well-known nurseries grows and improves, this database will collect, maintain, and update relevant information that appears in open access to other sites automatically. Generating a complete list of Chinese Crested kennel kennels in the world.') %>
-      </p>
-      <div v-if="me.hasBillingCard || me.isSuperAdmin" class="mt-5 section-title text-center">
-        <el-button @click="add()" icon="el-icon-circle-plus-outline"
-                   class="btn btn-outline-info"><%= __('Add kennel') %></el-button>
-      </div>
-      <div class="mt-5 section-title text-center" v-else>
-        <el-button @click="add()" icon="el-icon-circle-plus-outline"
-                   class="btn btn-outline-info"><%= __('Add kennel') %></el-button>
-      </div>
-    </div>
-  </section>
-
-  <% /*Фильтр и блоки фото.*/ %>
-  <!-- <section class="about-area ">
-    <div class="container">
-
-      <% /*ФИЛЬТР ПИТОМНИКОВ*/ %>
-      &lt;!&ndash;<span class="demonstration">Display all tags (default)</span>&ndash;&gt;
-      &lt;!&ndash;      <div v-if="kennels" class="pb-5">
-        <el-cascader
-          :options="optionsTest"
-          :props="props"
-          placeholder="<%= __('Select kennel') %>"
-          clearable>
-        </el-cascader>
-      </div>&ndash;&gt;
-
-      &lt;!&ndash;     <nav class="product-filter">
-        <h2><%= __('Kennels') %></h2>
-        <% /*Фильтры*/ %>
-        <div class="sort">
-          <div class="collection-sort">
-            <label>Filter by:</label>
-            <select>
-              <option value="/">All Jackets</option>
-            </select>
-          </div>
-          <div class="collection-sort">
-            <label>Sort by:</label>
-            <select>
-              <option value="/">Featured</option>
-            </select>
-          </div>
-
-        </div>
-      </nav>&ndash;&gt;
-
-      <% /*ФОТО*/ %>
-      <section class="products">
-        &lt;!&ndash; It's likely you'll need to link the card somewhere. You could add a button in the info, link the titles, or even wrap the entire card in an <a href="..."> &ndash;&gt;
-        <div class="product-card" v-for="item of kennels">
-          <transition name="collapse">
-            <div class="product-image">
-              <img :src="item.imageSrc">
 
 
-              <div class="flx">
-                <% /* КНОПКА Редактирования питомника */ %>
-                &lt;!&ndash;<div class="fixButton">&ndash;&gt;
-                &lt;!&ndash;<a class="p-button" href="#"&ndash;&gt;
-                &lt;!&ndash;@click="clickEditKennel(item.id)">&ndash;&gt;
-                &lt;!&ndash;<i class="el-icon-edit"></i>&ndash;&gt;
-                &lt;!&ndash;</a>&ndash;&gt;
-                &lt;!&ndash;</div>&ndash;&gt;
-                <% /* КНОПКА Удаления питомника */ %>
-                <div v-if="item.whoCreate.id===me.id" class="fixButton">
-                  <a class="p-button" href="#"
-                     @click="clickDeleteObject(item.id)">
-                    <i class="el-icon-delete"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </transition>
-          <div class="product-info">
-            <h5 v-if="item.label"><%= __('Kennel') %>: {{item.label}}</h5>
-            <h6 v-if="item.country"><%= __('Country') %>: {{item.country.label}}</h6>
-          </div>
-        </div>
-        &lt;!&ndash; more products &ndash;&gt;
-      </section>
-    </div>
-  </section>-->
+  <div v-if="me.hasBillingCard || me.isSuperAdmin" class="mt-5 section-title text-center">
+    <el-button @click="add()" icon="el-icon-circle-plus-outline"
+               class="btn btn-outline-info"><%= __('Add kennel') %></el-button>
+  </div>
+  <div class="mt-5 section-title text-center" v-else>
+    <el-button @click="add()" icon="el-icon-circle-plus-outline"
+               class="btn btn-outline-info"><%= __('Add kennel') %></el-button>
+  </div>
 
   <% /*Фильтр и блоки фото.*/ %>
   <section class="about-area">
