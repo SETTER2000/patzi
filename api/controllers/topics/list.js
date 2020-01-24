@@ -7,9 +7,7 @@ module.exports = {
   description: 'List topics.',
 
 
-  inputs: {
-
-  },
+  inputs: {},
 
 
   exits: {
@@ -31,7 +29,7 @@ module.exports = {
   },
 
 
-  fn: async function (inputs,exits) {
+  fn: async function (inputs, exits) {
     let req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
@@ -43,8 +41,10 @@ module.exports = {
 
     // Выбираем весь список объектов данной коллекции.
     let topics = await Topic.find()
-        .sort([{labelRu:'DESC'}])
-        // .populate('owners')
+      .sort([
+        {createdAt: 'DESC'}
+      ]);
+    // .populate('owners')
     ;
 
     /**
@@ -54,7 +54,7 @@ module.exports = {
      */
     topics = await sails.helpers.cloudFrontUrl.with({
       collection: topics,
-      collectionName:'topic',
+      collectionName: 'topic',
       edits: {
         resize: {}
       }
@@ -69,8 +69,7 @@ module.exports = {
     });
 
 
-
-    await sails.sockets.broadcast('topic', 'list-topic', _.sortBy(topics,'labelRu'));
+    await sails.sockets.broadcast('topic', 'list-topic', topics);
     // Respond with view.
     return exits.success();
 

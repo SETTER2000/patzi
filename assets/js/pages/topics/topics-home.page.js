@@ -20,14 +20,14 @@ parasails.registerPage('topics-home', {
       innerVisiblePhotoDescription: false,
       photoId: '',
       description: '',
-      dateTaken: ''
+      dateTaken: '',
     },
     photoDescUpdate: false,
     objOne: {},
     centerDialogAdded: false,
     dialogEditorList: false,
     editorList:[],
-    lang: '',
+
     dialogVisiblePass: false,
     buttonUpdate: false,
     centerDialogVisible: false,
@@ -35,13 +35,15 @@ parasails.registerPage('topics-home', {
     dialogVisible: false,
     dialogImageUrl: '',
     editList: [],
+    lang: '',
     ruleForm: {
       see: true,
       errInputLang: false,
-      errInputLangRu: false,
       label: '',
       labelRu: '',
       subtitle: '',
+      // gender: '',
+      subtitleRu: '',
     },
     rules: {
       label: [
@@ -213,39 +215,20 @@ parasails.registerPage('topics-home', {
       return end ? moment(value).preciseDiff(end) : moment(value).fromNow(true);
     },
 
-    /*    abc(value, ruleForm, lang) {
-          if (!value) {
-            return '';
-          }
-          this.lang = lang;
-          let regex = lang && lang==='ru' ? /[ а-я]+/i : /[ a-z]+/i;
-          let r = regex.exec(value);
-         return (_.isArray(r) && lang==='ru') ? ruleForm.errInputLangRu = !_.isArray(r):
-           (_.isArray(r) && lang==='en') ? ruleForm.errInputLang = !_.isArray(r):'';
-        },*/
 
+    abc(value, obj, field, lang) {
+      if (!value) return '';
+      let r ='';
+      const regex = /[ a-z]+/i;
+      const regexRu = /[ а-яё]+/i;
 
-    abcEn(value, ruleForm) {
-      if (!value) {
-        return '';
+      obj['lang'] = lang ? lang : 'en';
+       r =  lang ==='ru' ? regexRu.exec(value) : regex.exec(value) ;
+      if(!_.isArray(r)){
+        obj.errInputLang = true;
+        obj[field] = '';
       }
-      this.lang = 'en';
-      let regex = /[ a-z]+/i;
-      let r = regex.exec(value);
-      return ruleForm.errInputLang = !_.isArray(r);
     },
-
-    abcRu(value, ruleForm) {
-      if (!value) {
-        return '';
-      }
-      this.lang = 'ru';
-      const regex = /[ а-яё]+/i;
-      let r = regex.exec(value);
-      return ruleForm.errInputLangRu = !_.isArray(r);
-    },
-
-
   },
 
   mounted: async function () {
@@ -280,6 +263,10 @@ parasails.registerPage('topics-home', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+
+    clear(){
+      this.ruleForm.errInputLang=false;
+    },
     // Если массив kennel пустой, выводим сообщение.
     clickAddButton() {
       this.centerDialogAdded = true
@@ -369,6 +356,7 @@ parasails.registerPage('topics-home', {
         label: this.ruleForm.label,
         labelRu: this.ruleForm.labelRu,
         subtitle: this.ruleForm.subtitle,
+        subtitleRu: this.ruleForm.subtitleRu,
         see: this.ruleForm.see
       };
 
@@ -401,8 +389,8 @@ parasails.registerPage('topics-home', {
         label: this.ruleForm.label,
         labelRu: this.ruleForm.labelRu,
         see: this.ruleForm.see,
-        subtitle: this.ruleForm.subtitle
-
+        subtitle: this.ruleForm.subtitle,
+        subtitleRu: this.ruleForm.subtitleRu,
       };
       console.log('DATA UPDATE перед отправкой ::: ', data);
 
@@ -512,7 +500,6 @@ parasails.registerPage('topics-home', {
           break;
         case 'e':
           this.dialogEditors();
-          // this.ruleForm.description =  this.litter.description;
           break;
         case 'dam':
           this.gender(command);
@@ -523,79 +510,13 @@ parasails.registerPage('topics-home', {
         case 'all':
           this.gender(command);
           break;
-
-        /*
-           case 'a':
-          this.setIndexPhotoSet(command);
-          this.dialogFormVisible = true;
-          break;
-          case 'b':
-          this.setValueEditPhotoSet(command);
-          break;
-           case 'd':
-           this.setIndexPhotoSet(command);
-           this.dialogDeletePhotoSession = true;
-           this.nameSessionPhoto = command.name;
-           // this.ruleForm.description =  this.litter.description;
-           break;
-           case 'f':
-               window.location = '/litters/new';
-               break;
-                case 'g':
-                  this.setAddedPresentation(command);
-                  break;
-                case 'dl':
-                  this.clickDeleteLitter();
-                  break;
-                   case 'allView':
-                   this.allViewed(command);
-                   break;
-                  case 'like':
-                     this.addLike(command);
-                     break;
-                   case 'super':
-                     this.addLike(command);
-                     break;
-                   case 'wow':
-                     this.addLike(command);
-                     break;
-                   case 'haha':
-                     this.addLike(command);
-                     break;
-                   case 'commentLike':
-                     this.commentLike(command);
-                     break;
-                   case 'commentSuper':
-                     this.commentLike(command);
-                     break;
-                   case 'commentWow':
-                     this.commentLike(command);
-                     break;
-                   case 'commentHaha':
-                     this.commentLike(command);
-                     break;
-                   case 'link':
-                     window.location = '/litters';
-                     break;
-                   case 'deleteComment':
-                     this.deleteComment(command);
-                     break;
-                   case 'changeComment':
-                     this.changeOpenComment(command);
-                     break;*/
-
-        //default:  this.setIndexPhotoSet(command);
       }
-      // }
-      // this.$message('Нажат элемент: ' + command);
     },
 
 
     // Выбирает темы для редактирования
     dialogEditors() {
       this.editorList = (this.me.isAdmin || this.me.isSuperAdmin) ? this.topics : '';
-
-      // console.log(' this.editorList::: ' ,  this.editorList);
       this.dialogEditorList = true;
     },
 
@@ -765,13 +686,13 @@ parasails.registerPage('topics-home', {
     },
 
     openRemoveDialog(id) {
-      this.removeDogId = id;
+      this.removeId = id;
       this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
         confirmButtonText: 'OK',
         cancelButtonText: this.i19p.cancel,
         type: 'warning'
       }).then(() => {
-        this.deleteDog();
+        this.deleteObj();
 
       }).catch(() => {
         this.$message({
@@ -781,12 +702,12 @@ parasails.registerPage('topics-home', {
       });
     },
 
-    deleteDog: async function () {
+    deleteObj: async function () {
       let data = {
-        id: this.removeDogId,
+        id: this.removeId,
       };
-      // console.log('Перед отправкой data DOG: ', data);
-      io.socket.post('/api/v1/topics/destroy-one-topic', data, (dataRes, jwRes) => {
+      console.log('Перед удалением data Topic: ', data);
+      io.socket.delete('/api/v1/topics/destroy-one-topic', data, (dataRes, jwRes) => {
         this.errorMessages(jwRes, this.i19p.successDelete);
         this.dialogDeletePhotoSession = false;
         if (jwRes.statusCode === 200) {
@@ -807,7 +728,22 @@ parasails.registerPage('topics-home', {
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-    }
+    },
+
+
+    /**
+     * Фильтр по свойству gender
+     * @param command
+     */
+    // gender(command) {
+    //   if (_.isEmpty(command.com)) return false;
+    //   let newDogs = [];
+    //   this.dogs = this.filterDogs;
+    //   this.filterName = this.i19p[command.com];
+    //   this.dogs = command.com !== 'all' ? this.dogs.filter(d => d.gender === command.com) : this.filterDogs;
+    //   this.$forceUpdate();
+    //   // return this.dogs ;
+    // },
 
 
   }

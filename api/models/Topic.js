@@ -41,6 +41,17 @@ module.exports = {
       description: `FD загруженных фотографий родителей`
     },
 
+    subtitle: {
+      type: 'string',
+      description: 'Дополнительная информация. Описание темы на английском языке.',
+      maxLength: 700
+    },
+
+    subtitleRu: {
+      type: 'string',
+      description: 'Дополнительная информация. Описание темы на русском языке.',
+      maxLength: 700
+    },
 
     cover: {
       type: 'number',

@@ -33,9 +33,16 @@ module.exports = {
 
     subtitle: {
       type: 'string',
-      description: 'Дополнительная информация. Описание темы.',
+      description: 'Дополнительная информация. Описание темы на английском языке.',
       maxLength: 700
     },
+
+    subtitleRu: {
+      type: 'string',
+      description: 'Дополнительная информация. Описание темы на русском языке.',
+      maxLength: 700
+    },
+
 
     see: {
       type: 'boolean',
@@ -64,12 +71,13 @@ module.exports = {
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'topic');
 
-
+console.log('IMMM::: ' ,images);
     let updateObj = {
       label: inputs.label,
       labelRu: inputs.labelRu,
       see: inputs.see,
-      subtitle: inputs.subtitle,
+      subtitle:inputs.subtitle,
+      subtitleRu:inputs.subtitleRu,
 
     };
 

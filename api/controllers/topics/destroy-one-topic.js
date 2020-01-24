@@ -46,7 +46,13 @@ module.exports = {
   fn: async function (inputs, exits) {
     const req = this.req;
 
-
+    // Убедитесь, что это запрос сокета (не традиционный HTTP)
+    if (!req.isSocket) {
+      throw 'badRequest';
+    }
+    // Have the socket which made the request join the "topic" room.
+    // Подключить сокет, который сделал запрос, к комнате «topic».
+    await sails.sockets.join(req, 'topic');
     // let litter = await Litter.findOne({id:inputs.id});
     // if(litter){
     //   throw 'forbiddenLitter';

@@ -25,10 +25,15 @@ module.exports = {
       description: 'Массив с файлами данных о загруженных файлах.'
     },
 
-
     subtitle: {
       type: 'string',
-      description: 'Дополнительная информация. Описание темы.',
+      description: 'Дополнительная информация. Описание темы на английском языке.',
+      maxLength: 700
+    },
+
+    subtitleRu: {
+      type: 'string',
+      description: 'Дополнительная информация. Описание темы на русском языке.',
       maxLength: 700
     },
     see: {
@@ -105,6 +110,7 @@ module.exports = {
       labelRu:inputs.labelRu,
       images: images,
       subtitle:inputs.subtitle,
+      subtitleRu:inputs.subtitleRu,
       see:inputs.see
     });
 
