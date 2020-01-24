@@ -4,101 +4,22 @@
              :visible.sync="centerDialogAdded"
              custom-class="dialog-add"
              center>
-    <% /* Диалоговое окно. Не верный язык ввода. Только для английского */ %>
+    <% /* Диалоговое окно. Не верный язык ввода. */ %>
     <el-dialog
       title="<%= __('Error') %>"
       width="30%"
       :visible.sync="ruleForm.errInputLang"
       :show-close=false
-      append-to-body>
+      append-to-body> Lang: {{ruleForm.lang}}
       <span><%= __('This field is only filled') %>
-        <%= __('english') %>
+        <span v-if="ruleForm.lang === 'ru'"> <%= __('russians') %></span><span v-else><%= __('english') %></span>
         <%= __('letters. Switch the keyboard to the correct layout.') %></span>
       <span slot="footer" class="dialog-footer">
-          <el-button type="primary"
-                     @click="ruleForm.errInputLang=false; ruleForm.label=''">
+          <el-button type="primary" autofocus
+                     @click="clear()">
             Ok</el-button>
       </span>
     </el-dialog>
-    <% /* Диалоговое окно. Не верный язык ввода. Только для русского */ %>
-    <el-dialog
-      title="<%= __('Error') %>"
-      width="30%"
-      :visible.sync="ruleForm.errInputLangRu"
-      :show-close=false
-      append-to-body>
-      <span><%= __('This field is only filled') %>
-        <%= __('russians') %>
-        <%= __('letters. Switch the keyboard to the correct layout.') %></span>
-      <span slot="footer" class="dialog-footer">
-          <el-button type="primary"
-                     @click="ruleForm.errInputLangRu=false; ruleForm.labelRu=''">
-            Ok</el-button>
-      </span>
-    </el-dialog>
-    <% /* Диалоговое окно. Подсказка о использование поля пароля. */ %>
-    <!--  <el-dialog
-        title="Установка пароля"
-        :visible.sync="dialogVisiblePass"
-        custom-class="dia"
-        :before-close="handleClose"
-        append-to-body>
-        <p>1. Если вы не устанавливаете пароль, то он генерируется автоматически. Это удобно использовать когда Вам нет необходимости заходить
-          на сайт под именем данного пользователя, т.к. пароль вы не будете знать. В то же время при нажатие кнопки "Отправить пароль на
-          email"
-          вы отправите сгенерированный пароль реальному пользователю данного Email.<br>
-          <i class="el-icon-warning-outline"></i> Используйте эту процедуру когда вас попросили создать чужой аккаунт и вы знаете реальный
-          емайл пользователя.</p>
-        <p class="pt-2" style="word-break: break-all">2. Если вы устанавливаете пароль, то его следует вписать в оба поля одинаково.
-          <br> <i class="el-icon-warning-outline"></i> Используйте эту процедуру когда вам нужно войти от имени данного пользователя в
-          систему, чтобы произвести какие-то действия от его имени. Например создать питомник и добавить собак.</p>
-        <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisiblePass = false">Cancel</el-button>
-    </span>
-      </el-dialog>-->
-
-    <% /* Диалоговое окно. Подсказка о использование поля Email. */ %>
-    <!--  <el-dialog
-        title="Установка Email пользователя"
-        :visible.sync="dialogVisibleEmail"
-        custom-class="dia"
-        :before-close="handleClose"
-        append-to-body>
-        <p>1. Если вы не устанавливаете Email, то он генерируется автоматически. За основу берётся полное имя пользователя.
-          <br>
-          <i class="el-icon-warning-outline"></i> Используйте эту процедуру чтобы создать пользователя в системе к которому нужно привязать
-          данные например питомник, но вы не знаете его контактных данных или вам не важны его контактные данные.</p>
-        <p class="pt-2" style="word-break: break-all">
-          2. Если вы устанавливаете Email, то с помощью кнопок "Да" и "Нет" вы можете определить будет ли email подтверждён или нет.
-          Для правильной связи с пользователем требуется проверенный контакт, в данном случае адрес электронной почты.
-          Если этот контакт не был подтверждён пользователем из письма, которое отправляется ему при регистрации, то возможны ошибки
-          в написании email или не идентифицированные пользователи в системе. Этого нельзя допускать.
-          <br>Если email не подтверждён, некоторые возможности работы в системе будут не доступны, например не
-          возможно будет привязать этого пользователя к питомнику в качестве совладельца.
-          <br> <i class="el-icon-warning-outline"></i>
-          Рекомендуется активировать кнопку "Да".
-        </p>
-        <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisibleEmail = false">Cancel</el-button>
-    </span>
-      </el-dialog>-->
-
-    <% /* Диалоговое окно. Подсказка о использование поля Группы. */ %>
-    <!--<el-dialog
-      title="Установка Email пользователя"
-      :visible.sync="dialogVisibleGroup"
-      custom-class="dia"
-      :before-close="handleClose"
-      append-to-body>
-      <p>
-        Обязательно установите группу "user" если Email стоит "Да".
-      </p>
-      <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisibleGroup = false">Cancel</el-button>
-  </span>
-    </el-dialog>-->
-
-
     <template v-if="!ruleForm.see">
       <el-popover
         ref="popover"
@@ -126,111 +47,143 @@
     <div v-if="ruleForm.imageUrl">
       <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
     </div>
-    <div class="flex justify-content-center">
-        <el-image v-if="ruleForm.imagesArrUrl"
-          style="width: 200px; height: 200px"
-          :src="ruleForm.imagesArrUrl[0]"
-          :preview-src-list="ruleForm.imagesArrUrl">
-        </el-image>
-      </div>
-    <h5><%= __('Multiple upload photos') %></h5>
-    <label v-if="!ruleForm.imageUrl">
-      <%= __('Download right before') %> {{limit}} <%= __('photos for this module.') %>
-      <%= __('Please note that the weight of the photo file should not exceed') %> {{sizeLess}}M.
-      <%= __('You can download whatever you want without selecting photos, the system itself will produce the result of those images that have been selected by restrictions.') %>
-
-    </label>
-    <div class="my-2">
-      <el-divider content-position="left"><%= __('Add photo') %></el-divider>
+    <div v-if="ruleForm.imagesArrUrl" class="flex justify-content-center">
+      <el-image v-if="ruleForm.imagesArrUrl.length"
+                style="width: 200px; height: 200px"
+                :src="ruleForm.imagesArrUrl[0]"
+                :preview-src-list="ruleForm.imagesArrUrl">
+      </el-image>
     </div>
 
-    <!---------------------------------------------------------------------------------------->
-    <% /*Загрузка фото NEW*/ %>
-    <el-row type="flex" class="row-bg" justify="center">
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <el-upload
-          action="/api/v1/files/upload"
-          list-type="picture-card"
-          drag
-          multiple
-          ref="upload"
-          :on-preview="handlePictureCardPreview"
-          :before-upload="beforeUpload"
-          :limit="limit"
-          :on-success="handleSuccess"
-          :on-exceed="handleExceed"
-          :on-remove="handleRemove"
-        >
-          <i class="el-icon-plus"></i>
-          <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
-            {{sizeLess}}<%= __('MB') %></div>
-        </el-upload>
-        <br>
-        <el-dialog :visible.sync="dialogVisible">
-          <img :src="dialogImageUrl" alt="">
-        </el-dialog>
-      </el-col>
-    </el-row>
-    <!---------------------------------------------------------------------------------------->
+    <el-collapse accordion>
+      <el-collapse-item name="1">
+        <template slot="title">
+          <h5><%= __('Multiple upload photos') %></h5>  <i class="ml-1 header-icon el-icon-info"></i>
+        </template>
+        <label v-if="!ruleForm.imageUrl">
+          <%= __('Download right before') %> {{limit}} <%= __('photos for this module.') %>
+          <%= __('Please note that the weight of the photo file should not exceed') %> {{sizeLess}}M.
+          <%= __('You can download whatever you want without selecting photos, the system itself will produce the result of those images that have been selected by restrictions.') %>
+
+        </label>
+
+        <div class="my-2">
+          <el-divider content-position="left"><%= __('Add photo') %></el-divider>
+        </div>
+
+        <!---------------------------------------------------------------------------------------->
+        <% /*Загрузка фото NEW*/ %>
+        <el-row type="flex" class="row-bg" justify="center">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+            <el-upload
+              action="/api/v1/files/upload"
+              list-type="picture-card"
+              drag
+              multiple
+              ref="upload"
+              :on-preview="handlePictureCardPreview"
+              :before-upload="beforeUpload"
+              :limit="limit"
+              :on-success="handleSuccess"
+              :on-exceed="handleExceed"
+              :on-remove="handleRemove"
+            >
+              <i class="el-icon-plus"></i>
+              <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
+                {{sizeLess}}<%= __('MB') %></div>
+            </el-upload>
+            <br>
+            <el-dialog :visible.sync="dialogVisible">
+              <img :src="dialogImageUrl" alt="">
+            </el-dialog>
+          </el-col>
+        </el-row>
+        <!---------------------------------------------------------------------------------------->
+      </el-collapse-item>
+    </el-collapse>
 
 
-    <el-row type="flex" class="row-bg" justify="center">
+    <el-row type="flex" class="row-bg mt-3" justify="center">
       <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-          <% /* ВИДНА ТЕМА ИЛИ НЕТ */ %>
-          <el-form-item prop="see">
-            <el-switch
-              style="display: block"
-              v-model="ruleForm.see"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              active-text="<%= __('visible') %>"
-              inactive-text="<%= __('not visible') %>">
-            </el-switch>
-          </el-form-item>
 
           <% /* НАЗВАНИЕ ТЕМЫ на английском*/ %>
           <template>
-
             <el-form-item label="<%= __('Topic Title') %> (En)" prop="label">
               <el-input show-word-limit
                         style="width:80%;"
+                        clearable
+                        maxlength="70"
                         size="small"
-                        :keyup="ruleForm.label | abcEn(ruleForm)"
+                        :keyup="ruleForm.label | abc(ruleForm,'label','en')"
                         placeholder="<%= __('Topic Title') %>"
                         v-model="ruleForm.label"></el-input>
             </el-form-item>
           </template>
-
+          <% /* ОПИСАНИЕ ТЕМЫ на английском */ %>
+          <template>
+            <el-form-item label="<%= __('Description') %> (En)" prop="subtitle">
+              <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+                <el-input
+                  type="textarea"
+                  :rows="3"
+                  clearable
+                  autosize
+                  :keyup="ruleForm.subtitle | abc(ruleForm,'subtitle','en')"
+                  placeholder="Please input"
+                  v-model="ruleForm.subtitle "
+                  maxlength="300"
+                  show-word-limit>
+                </el-input>
+              </el-col>
+            </el-form-item>
+          </template>
           <% /* НАЗВАНИЕ ТЕМЫ на русском*/ %>
           <template>
             <el-form-item label="<%= __('Topic Title') %> (Ru)" prop="labelRu">
               <el-input show-word-limit
                         style="width:80%;"
+                        clearable
+                        maxlength="70"
                         size="small"
-                        :keyup="ruleForm.labelRu | abcRu(ruleForm)"
+                        :keyup="ruleForm.labelRu | abc(ruleForm,'labelRu','ru')"
                         placeholder="<%= __('Topic Title') %>"
                         v-model="ruleForm.labelRu"></el-input>
             </el-form-item>
           </template>
 
-          <% /* ОПИСАНИЕ */ %>
+          <% /* ОПИСАНИЕ ТЕМЫ на русском */ %>
           <template>
-            <el-form-item label="<%= __('Description') %>" prop="subtitle">
+            <el-form-item label="<%= __('Description') %> (Ru)" prop="subtitleRu">
               <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
                 <el-input
                   type="textarea"
                   :rows="3"
+                  clearable
                   autosize
+                  :keyup="ruleForm.subtitleRu | abc(ruleForm,'subtitleRu','ru')"
                   placeholder="Please input"
-                  v-model="ruleForm.subtitle"
-                  maxlength="1700"
+                  v-model="ruleForm.subtitleRu"
+                  maxlength="300"
                   show-word-limit>
                 </el-input>
               </el-col>
             </el-form-item>
           </template>
 
+          <% /* ВИДНА ТЕМА ИЛИ НЕТ */ %>
+          <div class="flex justify-content-center">
+            <el-form-item prop="see">
+              <el-switch
+                style="display: block"
+                v-model="ruleForm.see"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                active-text="<%= __('visible') %>"
+                inactive-text="<%= __('not visible') %>">
+              </el-switch>
+            </el-form-item>
+          </div>
 
           <div class="my-3 pt-4 text-center hidden-xs-only">
             <el-form-item>
@@ -254,12 +207,11 @@
         </el-form>
       </el-col>
     </el-row>
-
     <span slot="footer" class="dialog-footer">
   </span>
   </el-dialog>
   <% /* Диалоговое окно Редактор тем. Список тем*/ %>
-  <el-dialog title="<%= __('Dog editor') %>. <%= __('List') %>."
+  <el-dialog title="<%= __('Theme Editor') %>. <%= __('List') %>."
              custom-class="dialog-kennel-add"
              :visible.sync="dialogEditorList">
     <template>
@@ -316,7 +268,7 @@
           sortableв
           prop="label"
           width="80">
-          <template slot-scope="scope" >
+          <template slot-scope="scope">
 
             <el-popover
               placement="right-end"
@@ -324,7 +276,8 @@
               width="300"
               trigger="hover"
               :content="scope.row.label">
-              <el-button  @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit" slot="reference" circle></el-button>
+              <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit" slot="reference"
+                         circle></el-button>
             </el-popover>
           </template>
         </el-table-column>
@@ -333,7 +286,7 @@
             <el-input
               v-model="search"
               size="small"
-              placeholder="Input dog name"
+              placeholder="Input topic name"
               clearable/>
           </template>
           <template slot-scope="scope">
@@ -589,7 +542,7 @@
       <% /* Кнопки управления, фильтры */ %>
       <div class="menu-between mb-1">
         <div><span class=" font-weight-bold">
-            <%= __('Dogs') %>: Holl</span></div>
+            <%= __('Topics') %>: Holl</span></div>
 
         <div class="grid-content">
           <el-dropdown @command="handleCommand">
@@ -597,7 +550,7 @@
                               <i class="el-icon-more el-icon--right pointer"></i>
                             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-female" :command="{com:'dam'}">
+              <!-- <el-dropdown-item icon="el-icon-female" :command="{com:'dam'}">
                 <%= __('Dam') %>
               </el-dropdown-item>
 
@@ -606,7 +559,7 @@
               </el-dropdown-item>
               <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'all'}">
                 <%= __('All') %>
-              </el-dropdown-item>
+              </el-dropdown-item>-->
 
               <!--   <el-dropdown-item v-if="_.some(dogs, 'sale', true)" icon="el-icon-money"
                                 :command="{com:'c'}">
