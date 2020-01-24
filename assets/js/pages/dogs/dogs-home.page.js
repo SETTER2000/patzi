@@ -1439,9 +1439,6 @@ parasails.registerPage('dogs-home', {
       this.dialogEditorList = true;
     },
 
-    getDogsOwner(){
-
-    },
 
     async isOwnerCheck() {
       await io.socket.get(`/api/v1/groups/is-owner`, (body, response) => {
@@ -1449,6 +1446,16 @@ parasails.registerPage('dogs-home', {
         this.isOwner = (response.statusCode === 200);
       });
     },
-
+    // Вы можете выделить содержимое таблицы,
+    // чтобы различать «успех, информация, предупреждение, опасность» и другие состояния.
+    tableRowClassName({row, rowIndex}) {
+      if (!row.see) {
+        return 'warning-row';
+      }
+      // else if (rowIndex === 3) {
+      //   return 'success-row';
+      // }
+      return '';
+    },
   }
 });

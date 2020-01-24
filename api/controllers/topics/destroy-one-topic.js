@@ -79,7 +79,7 @@ module.exports = {
     // Remove photos
     let removeImage = (_.isArray(topic.images) && topic.images.length > 0 ) ? topic.images : [];
     // let removeImage = [...litter.images, ...puppies];
-    console.log('Для удаления::: ', removeImage);
+    // console.log('Для удаления::: ', removeImage);
     await sails.helpers.removeImgS3(removeImage);
 
     // Вызываем помощника сформировать правильно данные для ответа.

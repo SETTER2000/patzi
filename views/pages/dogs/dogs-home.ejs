@@ -9,6 +9,7 @@
     <template>
       <el-table
         ref="filterTable"
+        :row-class-name="tableRowClassName"
         :data="dogsEditList.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))"
         :default-sort="{prop: 'fullName', order: 'descending'}"
         max-height="650"
@@ -25,7 +26,6 @@
           fixed="left"
           width="90">
           <template slot="header" slot-scope="scope">
-
             <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
           </template>
           <template slot-scope="scope">
@@ -101,11 +101,10 @@
       <span class="flex justify-content-between">
         <div>
          <el-button @click="clearFilter" class="btn btn-outline-info"><%= __('Reset filters') %></el-button>
-</div>
+        </div>
         <div v-if="me.hasBillingCard || me.isSuperAdmin || me.isAdmin">
             <el-button @click="clickAddButton()" class="btn btn-outline-success"
                        icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
-
         </div>
         <div>
             <el-button @click="buttonUpdate = false; dialogEditorList = false" class="btn btn-outline-info"><%= __('Close') %></el-button>
@@ -1065,10 +1064,10 @@
           <span class="mx-3">  <%= __('All files') %>:  {{_.isArray(photos.images)? photos.images.length : 0}}</span>
          <span class="mx-3"> <%= __('Marked') %>:  {{checkedPhoto.length}}</span>
         <el-button type="danger" v-if="checkedPhoto.length > 0" type="danger" class="mx-3" :underline="false"
-                 @click="removePhotos"
-                 class="mx-3"
-                 title="<%= __('Remove') %>"
-                 icon="el-icon-delete" circle></el-button>
+                   @click="removePhotos"
+                   class="mx-3"
+                   title="<%= __('Remove') %>"
+                   icon="el-icon-delete" circle></el-button>
 
           </span>
       </div>
