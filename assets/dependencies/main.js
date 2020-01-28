@@ -179,12 +179,12 @@ $(document).ready(function () {
 
   //------- Superfist nav menu  js --------//
 
-  $(".nav-menu").superfish({
-    animation: {
-      opacity: "show"
-    },
-    speed: 400
-  });
+  // $(".nav-menu").superfish({
+  //   animation: {
+  //     opacity: "show"
+  //   },
+  //   speed: 400
+  // });
 
   //------- Mobile Nav  js --------//
 
