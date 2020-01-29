@@ -129,7 +129,7 @@
                   :rows="3"
                   clearable
                   autosize
-                  :keyup="ruleForm.subtitle | abc(ruleForm,'subtitle','en')"
+                  :keyup="ruleForm.subtitle "
                   placeholder="Please input"
                   v-model="ruleForm.subtitle "
                   maxlength="300"
@@ -161,7 +161,7 @@
                   :rows="3"
                   clearable
                   autosize
-                  :keyup="ruleForm.subtitleRu | abc(ruleForm,'subtitleRu','ru')"
+                  :keyup="ruleForm.subtitleRu "
                   placeholder="Please input"
                   v-model="ruleForm.subtitleRu"
                   maxlength="300"
@@ -258,7 +258,7 @@
           sortable
           prop="labelRu">
           <template slot-scope="scope">
-            {{scope.row.labelRu}}
+            <el-link :underline="false" :href="scope.row.detail" type="primary">{{scope.row.labelRu}}</el-link>
           </template>
         </el-table-column>
 
@@ -542,7 +542,7 @@
       <% /* Кнопки управления, фильтры */ %>
       <div class="menu-between mb-1">
         <div><span class=" font-weight-bold">
-            <%= __('Topics') %>: Holl</span></div>
+            <%= __('Topics') %>: Все</span></div>
 
         <div class="grid-content">
           <el-dropdown @command="handleCommand">
@@ -561,7 +561,7 @@
                 <%= __('All') %>
               </el-dropdown-item>-->
 
-              <!--   <el-dropdown-item v-if="_.some(dogs, 'sale', true)" icon="el-icon-money"
+              <!--   <el-dropdown-item v-if="_.some(topics, 'sale', true)" icon="el-icon-money"
                                 :command="{com:'c'}">
                 <%= __('For Sale') %>
               </el-dropdown-item>-->
@@ -579,9 +579,59 @@
       <div class="menu-center my-3">
         <el-input
           v-model="searchObjects"
-          placeholder="<%= __('Search by dog name') %>"
+          placeholder="<%= __('Search by topic name') %>"
           clearable/>
       </div>
+
+      <% /* ФОТО TOPICS */ %>
+      <div class="scrollbar" id="style-1">
+        <el-row :gutter="7" class="flex-container wrap">
+          <el-col class="flex-item" v-for="(topic, index) in objFilter()" :key="topic.id"
+                  :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
+
+            <div @mouseenter="showMenu(topic.id)" @mouseleave="showOut()"
+                 style="position: relative;" class="ell-image-flex"
+                 v-if="!_.isEmpty(topic.imagesArrUrl)">
+              <transition-group appear name="el-fade-in">
+                <div v-show="show && (showTopic === topic.id)" class="transition-box blue-dark" :class="{death:topic.dateDeath}" :key="topic.id">
+                  <% /* Кнопки управления собакой */ %>
+                  <div class="menu-center-v">
+                    <div class="py-4">
+                      <el-link :href="topic.detail" class="link" :underline="false">
+
+                        <div :class="{deathColor:topic.dateDeath}"> {{me.preferredLocale==='ru' ? topic.labelRu : topic.label}}</div>
+
+                        <div class="date" :class="{deathColor:topic.dateDeath}">{{topic.dateBirth | getAge(me.preferredLocale, topic.dateDeath)}}
+                        </div>
+                      </el-link>
+                      <el-row class="mt-2">
+                        <!--<el-button icon="el-icon-search" circle></el-button>-->
+                        <!--<el-button type="primary" icon="el-icon-picture" circle></el-button>-->
+                        <el-button v-if="topic.price>0 & topic.sale" @click="goTo2('/topics/chinese-crested/sale')" type="success" round>
+                          <%= __('For sale') %></el-button>
+                        <!--<el-button type="info" icon="el-icon-message" circle></el-button>-->
+                        <!--<el-button type="warning" icon="el-icon-star-off" circle></el-button>-->
+                        <!--<el-button type="danger" icon="el-icon-delete" circle></el-button>-->
+                      </el-row>
+                    </div>
+                  </div>
+                </div>
+
+              </transition-group>
+
+              <el-image
+                :src="topic.images[topic.cover].imageSrc"
+                :key="topic.id"
+                :fit="'cover'"
+                :scroll-container="'#style-1'"
+                lazy
+                :preview-src-list="topic.imagesArrUrl">
+              </el-image>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+
     </div>
   </section>
 
