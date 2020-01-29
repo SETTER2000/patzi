@@ -1,0 +1,107 @@
+<div id="topic" v-cloak>
+  <patzi-section-header :obj-data="seo"></patzi-section-header>
+
+
+  <% /* Главное Фото */ %>
+  <section class="service-area section-gap">
+    <div class="container">
+      <div class="portfolio_details_inner ">
+        <div class="row">
+          <% /* Хлебные крошки */ %>
+          <div class="col-md-6">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+              <el-breadcrumb-item><a style="text-decoration: none" href="/"><%= __('Home-menu') %></a></el-breadcrumb-item>
+              <el-breadcrumb-item><a style="text-decoration: none" href="/topics"><%= __('Topics') %></a></el-breadcrumb-item>
+              <el-breadcrumb-item> {{topic.labelRu}}</el-breadcrumb-item>
+              <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
+            </el-breadcrumb>
+          </div>
+    <!--      <div class="col-md-6">
+            <el-row type="flex" class="row-bg  mt-5 mt-sm-0" justify="end">
+              <el-col :span="21">
+                <el-row type="flex" class="row-bg" justify="end">
+                  <% /* Заводчик */ %>
+                  <el-col :span="11">
+                    <h5 class="text-center">
+                      <small>breeder:</small>
+                      {{topic.label}}
+                    </h5>
+                  </el-col>
+
+                  <% /* Владелец  */ %>
+                  <el-col :span="11">
+                    <h5 class="text-center">
+                      <small>owner:</small>
+                      {{topic.owners.label}}
+                    </h5>
+                  </el-col>
+                </el-row>
+
+              </el-col>
+
+              <% /* Кнопки управления */ %>
+              <el-col :span="1" class="menu-center-v">
+                <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content">
+                  <el-dropdown @command="handleCommand">
+                            <span class="el-dropdown-link">
+                              <i class="el-icon-more el-icon&#45;&#45;right"></i>
+                            </span>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
+                        <%= __('Add photo') %>
+                      </el-dropdown-item>
+                      <el-dropdown-item icon="ti-medall" :command="{com:'a'}">
+                        <%= __('Awards') %>
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </div>
+              </el-col>
+            </el-row>
+          </div>-->
+        </div>
+        <patzi-row-h3-p :obj-data="seo"></patzi-row-h3-p>
+
+        <div class="demo-image flex justify-content-center">
+          <div class="m-1" v-for="img in topic.imagesMin" :key="img.fd" >
+            <el-image
+            style=" height: 300px;"
+              :src="img.imageSrc"
+              :fit="'cover'"
+            :scroll-container="'#style-1'"
+            :preview-src-list="topic.imagesArrUrl"
+            >
+          </div>
+        </div>
+        <% /*ГЛАВНАЯ КАРТИНКА */ %>
+<!--        <div class="menu-center " style="position: relative; overflow:hidden ">
+
+          <el-tooltip v-if="topic.sale & topic.price>0" class="item" effect="dark" content="<%= __('For sale') %>" placement="left">
+            <el-button class="lenta pointer" @click="goTo2('/dogs/chinese-crested/sale')">
+              <div style="color: white;">{{topic.currency | getCurrency()}}{{topic.price}}</div>
+            </el-button>
+          </el-tooltip>
+          &lt;!&ndash;<div><img src="/images/crown.png" alt=""></div>&ndash;&gt;
+          &lt;!&ndash;<img :src="topic.images[topic.cover].imageSrc" class="img-fluid" alt="topic.images[topic.cover].name">&ndash;&gt;
+
+          <el-image
+            :src="rootImg()"
+            :key="topic.id"
+            :fit="'cover'"
+            :class="{deathColor:topic.dateDeath}"
+            :scroll-container="'#style-1'"
+            :preview-src-list="topic.imagesArrUrl">
+            <div slot="placeholder" class="image-slot" style="height:500px;">
+              Loading<span class="dot">...</span>
+            </div>
+            <div slot="error" class="image-slot">
+              <i class="el-icon-picture-outline"></i> <%= __('not found') %>
+            </div>
+          </el-image>
+        </div>-->
+
+      </div>
+    </div>
+  </section>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
