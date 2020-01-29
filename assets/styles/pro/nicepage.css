@@ -12919,7 +12919,7 @@ section.u-image,
 }
 .u-nav-container-collapse .u-nav-popup {
   overflow: hidden;
-  visibility: hidden;
+  /*visibility: hidden;*/
   pointer-events: none;
   max-height: 0;
 }

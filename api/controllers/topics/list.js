@@ -62,7 +62,7 @@ module.exports = {
 
 
     await topics.map(async (topic) => {
-      // topic.detail = topic.fullName ? `/chinese-crested/${topic.fullName.split(" ").join('-')}` : '';
+      topic.detail = topic.label ? `/topic/${topic.id}` : '';
       topic.imagesArrUrl = _.pluck(topic.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
       // topic.cover = topic.imagesArrUrl[0]; // Обложка альбома
       return topic;

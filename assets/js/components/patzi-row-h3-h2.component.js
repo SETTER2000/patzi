@@ -47,7 +47,7 @@ parasails.registerComponent('patziRowH3H2', {
 
 
   mounted: async function () {
-    if (this.d3Data.h2 === undefined) {
+    if (this.objData.h2 === undefined) {
       throw new Error('Neither `:d3-data`  was passed in to <patzi-row-h3-h2>, but one or the other must be provided.');
     }
   },

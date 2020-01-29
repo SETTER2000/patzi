@@ -79,7 +79,8 @@
     "Commentary": true,
     "Category": true,
     "Like": true,
-    "Image": true
+    "Image": true,
+    "Topic": true
 
     // …and any others.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

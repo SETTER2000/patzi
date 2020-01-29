@@ -3,12 +3,16 @@ parasails.registerPage('topics-home', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-    topics:[],
+    topics: [],
     counts: 0,
     hidden: 0,
     searchObjects: '',
     search: '',
     checkAll: false,
+    show: false,
+    topicId: undefined,
+    dialog: {},
+    showTopic: undefined,
     checkedPhoto: [],
     photoVisible: false,
     centerDialogVisiblePhotos: false,
@@ -26,7 +30,7 @@ parasails.registerPage('topics-home', {
     objOne: {},
     centerDialogAdded: false,
     dialogEditorList: false,
-    editorList:[],
+    editorList: [],
 
     dialogVisiblePass: false,
     buttonUpdate: false,
@@ -166,7 +170,7 @@ parasails.registerPage('topics-home', {
       this.hidden = data;
     });
 
-   // Обновление темы
+    // Обновление темы
     io.socket.on('update-topic', (data) => {
       console.log('UPDATEEE');
       this.getList();
@@ -218,13 +222,13 @@ parasails.registerPage('topics-home', {
 
     abc(value, obj, field, lang) {
       if (!value) return '';
-      let r ='';
+      let r = '';
       const regex = /[ a-z]+/i;
       const regexRu = /[ а-яё]+/i;
 
       obj['lang'] = lang ? lang : 'en';
-       r =  lang ==='ru' ? regexRu.exec(value) : regex.exec(value) ;
-      if(!_.isArray(r)){
+      r = lang === 'ru' ? regexRu.exec(value) : regex.exec(value);
+      if (!_.isArray(r)) {
         obj.errInputLang = true;
         obj[field] = '';
       }
@@ -264,8 +268,8 @@ parasails.registerPage('topics-home', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
 
-    clear(){
-      this.ruleForm.errInputLang=false;
+    clear() {
+      this.ruleForm.errInputLang = false;
     },
     // Если массив kennel пустой, выводим сообщение.
     clickAddButton() {
@@ -376,7 +380,7 @@ parasails.registerPage('topics-home', {
           // this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
           this.ruleForm.federations = this.resetFederation;
-       this.getList();
+          this.getList();
         }
       });
     },
@@ -738,13 +742,34 @@ parasails.registerPage('topics-home', {
     // gender(command) {
     //   if (_.isEmpty(command.com)) return false;
     //   let newDogs = [];
-    //   this.dogs = this.filterDogs;
+    //   this.topics = this.filterDogs;
     //   this.filterName = this.i19p[command.com];
-    //   this.dogs = command.com !== 'all' ? this.dogs.filter(d => d.gender === command.com) : this.filterDogs;
+    //   this.topics = command.com !== 'all' ? this.topics.filter(d => d.gender === command.com) : this.filterDogs;
     //   this.$forceUpdate();
-    //   // return this.dogs ;
+    //   // return this.topics ;
     // },
+    objFilter() {
+      // topics.filter(topic=>topic.see)
+      return this.topics.filter(data => (!this.searchObjects || data.labelRu.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & !_.isEmpty(data.images[data.cover]));
+    },
+    showMenu(id) {
+      this.topicId = id;
+      this.show = true;
+      this.showTopic = id;
+    },
 
+    showOut() {
+      this.show = false;
+    },
+    async handleSelect(e) {
+      this.topicId = (_.isNumber(e.id)) ? e.id : undefined;
+    },
 
+    goTo(path) {
+      window.location = `/${path}`;
+    },
+    goTo2(path) {
+      this.goto(path);
+    },
   }
 });
