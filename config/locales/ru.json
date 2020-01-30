@@ -895,5 +895,11 @@
 	"english": "английскими",
 	"Theme Editor": "Редактор тем",
 	"Chinese Crested - buy": "Китайская хохлатая - купить",
-	"Search by topic name": "Search by topic name"
+	"Search by topic name": "Поиск по названию темы",
+	"Theme Background": "Фон темы",
+	"jpg/png files with a size less than 500kb": "файлы jpg / png размером менее 500 КБ",
+	"The background will be the first file": "Фоном будет первый файл",
+	"upload": "загрузить",
+	"The background will be the last file": "Фоном будет всегда последний загруженный файл.",
+	"The last topic is not deleted.": "Последняя тема не удаляется."
 }

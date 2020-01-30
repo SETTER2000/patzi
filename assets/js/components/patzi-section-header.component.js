@@ -42,7 +42,7 @@ parasails.registerComponent('patziSectionHeader', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
   <!-- start banner Area -->
-  <section class="banner-area relative" ref="$wrapper">
+  <section class="banner-area relative" ref="wrapper">
     <div class="container">
       <div class="row d-flex align-items-center justify-content-center">
         <div class="about-content col-lg-12">
@@ -60,19 +60,35 @@ parasails.registerComponent('patziSectionHeader', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function () {},
+  beforeMount: function () {
+  },
 
 
   mounted: async function () {
     if (this.objData.header === undefined) {
-      throw new Error('Neither `:d3-data`  was passed in to <patzi-section-header>, but one or the other must be provided.');
+      throw new Error('Neither `:header`  was passed in to <patzi-section-header>, but one or the other must be provided.');
     }
+    console.log('this.objData.topicBackground::: ', this.objData.topicBackground);
+    this.updateStyle(this.$refs.wrapper, this.objData.topicBackground);
   },
 
-  beforeDestroy: function () {},
+  beforeDestroy: function () {
+  },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
-  methods: {}
+  methods: {
+    updateStyle(wrapper, objData) {
+      if (!wrapper) {
+        return;
+      }
+      console.log('objData:: ', objData);
+      let img = _.last(_.pluck(objData, 'imageSrc') );
+      console.log('imm:', img);
+
+      (img && img.length) >0 ?  $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
+
+    }
+  }
 });

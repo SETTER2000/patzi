@@ -41,6 +41,12 @@ module.exports = {
       description: `FD загруженных фотографий родителей`
     },
 
+    topicBackground: {
+      type: 'ref',
+      example: {},
+      description: `Объект файла данных о загруженном файле. Фон темы.`
+    },
+
     subtitle: {
       type: 'string',
       description: 'Дополнительная информация. Описание темы на английском языке.',

@@ -6,6 +6,7 @@ parasails.registerPage('topics-home', {
     topics: [],
     counts: 0,
     hidden: 0,
+    imageUrl: '',
     searchObjects: '',
     search: '',
     checkAll: false,
@@ -173,7 +174,7 @@ parasails.registerPage('topics-home', {
     // Обновление темы
     io.socket.on('update-topic', (data) => {
       console.log('UPDATEEE');
-      this.getList();
+      // this.getList();
       this.$forceUpdate();
     });
 
@@ -185,7 +186,7 @@ parasails.registerPage('topics-home', {
     // Все темы
     io.socket.on('list-topic', (data) => {
       console.log('TOPICS all:: ', data);
-      this.topics = this.editorList = data;
+      this.topics = this.editorList = data ? data : this.editorList;
     });
 
 
@@ -316,6 +317,12 @@ parasails.registerPage('topics-home', {
     handleRemove(file, fileList) {
       this.fileList = fileList;
     },
+  // Срабатывает перед удалением одного файла
+    handleRemoveFile(file, fileList) {
+      console.log('REMOVE BACKground ::: ' , fileList);
+      this.ruleForm.topicBackground =fileList;
+      // this.ruleForm.topicBackground = this.ruleForm.topicBackground.length > 1 ? this.ruleForm.topicBackground.filter(file=>file.id !== fileList[0].id):[];
+    },
 
     resetForm(formName) {
       this.$refs.upload ? this.$refs.upload.clearFiles() : '';
@@ -357,6 +364,7 @@ parasails.registerPage('topics-home', {
       this.openFullScreen();
       let data = {
         fileList: this.ruleForm.fileList,
+        topicBackground: this.ruleForm.topicBackground,
         label: this.ruleForm.label,
         labelRu: this.ruleForm.labelRu,
         subtitle: this.ruleForm.subtitle,
@@ -390,6 +398,7 @@ parasails.registerPage('topics-home', {
       let data = {
         id: this.ruleForm.id,
         fileList: this.ruleForm.fileList,
+        topicBackground: this.ruleForm.topicBackground,
         label: this.ruleForm.label,
         labelRu: this.ruleForm.labelRu,
         see: this.ruleForm.see,
@@ -548,15 +557,16 @@ parasails.registerPage('topics-home', {
           });*/
     },
 
-    handleEdit(index, row) {
-      // console.log('ROWWW::: ', row);
-      this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
-      this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
-      this.owner = _.last(_.pluck(row.owners, 'fullName'));
-      this.ownerId = _.last(_.pluck(row.owners, 'id'));
+    async handleEdit(index, row) {
+      row.topicBackground =_.isArray(row.topicBackground) ? await _.each(row.topicBackground, bg => {
+        bg.url = bg.imageSrc;
+        return bg;
+      }) : [];
       this.ruleForm = row;
-      this.dateBirthUpdate = row.dateBirth;
-      this.dateDeathUpdate = row.dateDeath;
+      console.log("this.ruleForm:::: ", this.ruleForm);
+
+      // this.dateBirthUpdate = row.dateBirth;
+      // this.dateDeathUpdate = row.dateDeath;
       // this.ruleForm.kennel = row.kennel.id;
       this.dialogEditor = true;
       this.centerDialogAdded = true;
@@ -771,5 +781,20 @@ parasails.registerPage('topics-home', {
     goTo2(path) {
       this.goto(path);
     },
+
+
+    handlePreview(file) {
+      console.log(file);
+    },
+
+
+    handleBackgroundSuccess(res, file) {
+      res.url =  URL.createObjectURL(file.raw);
+      console.log('RES topicBackground::: ', res);
+      // this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
+      _.isArray(this.ruleForm.topicBackground) ? this.ruleForm.topicBackground.push(res) :
+        this.ruleForm.topicBackground = [res];
+    },
+
   }
 });

@@ -22,13 +22,7 @@ module.exports = {
       type: 'number',
       description:`Индекс фотосессии`
     },
-/*
-    create: {
-      type: 'boolean',
-      description: `Если true, то создаётся свойство imagesMin
-       с массивом миниатур картинок из заказанного поля.`,
-      defaultsTo: false
-    },*/
+
     edits: {
       type: 'ref',
       description: `Объект преобразования картинки.

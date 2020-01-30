@@ -29,6 +29,10 @@ module.exports = {
       type: 'ref',
       description: 'Массив с объектами данных о новых загруженных файлах.'
     },
+    topicBackground: {
+      type: 'ref',
+      description: 'Объект файла данных о загруженном файле. Фон темы.'
+    },
 
 
     subtitle: {
@@ -64,14 +68,16 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-    console.log('IDDD::: ' ,inputs.id);
+
     let topic = await Topic.findOne(inputs.id);
     let images = inputs.images ? inputs.images : topic.images;
+    let topicBackground = inputs.topicBackground ? inputs.topicBackground : topic.topicBackground;
     let imagesNew = [];
+    let topicBackgroundNew = [];
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'topic');
 
-console.log('IMMM::: ' ,images);
+
     let updateObj = {
       label: inputs.label,
       labelRu: inputs.labelRu,
@@ -93,7 +99,20 @@ console.log('IMMM::: ' ,images);
       });
     }
 
+    if (inputs.topicBackground) {
+      topicBackgroundNew = inputs.topicBackground.filter(o => !_.isNull(o));
+      _.each(topicBackgroundNew, img => {
+        img.id = _.isString(img.fd) ? _.first(_.last(img.fd.split('\\')).split('.')) : '';
+        img.description = '';
+        img.dateTaken = '';
+        delete img.filename;
+        delete img.status;
+        delete img.field;
+      });
+    }
+
     !_.isEmpty(images) || !_.isEmpty(imagesNew) ? updateObj.images = [...images, ...imagesNew] : '';
+    !_.isEmpty(topicBackground) || !_.isEmpty(topicBackgroundNew) ? updateObj.topicBackground = _.uniq([...topicBackground, ...topicBackgroundNew], 'uid') : '';
 
     // Обновляем
     let updateTopic = await Topic.updateOne({id: inputs.id})

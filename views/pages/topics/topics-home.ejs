@@ -170,6 +170,34 @@
               </el-col>
             </el-form-item>
           </template>
+          <% /* ЗАГРУЗКА ФОНА ДИЗАНА ТЕМЫ */ %>
+          <template>
+            <!--<p><%= __('Theme Background') %></p>-->
+            <el-upload
+              class="upload-demo"
+              action="/api/v1/files/upload"
+              :on-preview="handlePreview"
+              :on-remove="handleRemoveFile"
+              :file-list="ruleForm.topicBackground"
+              :limit="limit"
+              :on-success="handleBackgroundSuccess"
+              :on-exceed="handleExceed"
+              list-type="picture">
+              <el-button size="small" type="primary"><%= __('Theme Background') %> <%= __('upload') %></el-button>
+              <div slot="tip" class="el-upload__tip"><%= __('jpg/png files with a size less than ') %>
+                {{sizeLess}}<%= __('MB') %>. <%= __('The background will be the last file') %> <%= __('The last topic is not deleted.') %></div>
+            </el-upload>
+
+            <!--<el-upload-->
+              <!--class="avatar-uploader"-->
+              <!--action="/api/v1/files/upload"-->
+              <!--:show-file-list="false"-->
+              <!--:on-success="handleAvatarSuccess"-->
+              <!--:before-upload="beforeAvatarUpload">-->
+              <!--<img v-if="imageUrl" :src="imageUrl" class="avatar">-->
+              <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+            <!--</el-upload>-->
+          </template>
 
           <% /* ВИДНА ТЕМА ИЛИ НЕТ */ %>
           <div class="flex justify-content-center">
@@ -353,11 +381,10 @@
   <el-dialog
     :title="`${i19p.photoEditor} ${photos.fullName}`"
     :visible.sync="centerDialogVisiblePhotos"
-    width="100vw"
+    width="100%"
     custom-class="dialog-images-editor"
     center>
     <el-dialog
-      width="80vw"
       title="<%= __('Photo Description') %>"
       :visible.sync="photoDesc.innerVisiblePhotoDescription"
       append-to-body>
@@ -593,7 +620,8 @@
                  style="position: relative;" class="ell-image-flex"
                  v-if="!_.isEmpty(topic.imagesArrUrl)">
               <transition-group appear name="el-fade-in">
-                <div v-show="show && (showTopic === topic.id)" class="transition-box blue-dark" :class="{death:topic.dateDeath}" :key="topic.id">
+                <div v-show="show && (showTopic === topic.id)" class="transition-box blue-dark" :class="{death:topic.dateDeath}"
+                     :key="topic.id">
                   <% /* Кнопки управления собакой */ %>
                   <div class="menu-center-v">
                     <div class="py-4">
@@ -601,7 +629,8 @@
 
                         <div :class="{deathColor:topic.dateDeath}"> {{me.preferredLocale==='ru' ? topic.labelRu : topic.label}}</div>
 
-                        <div class="date" :class="{deathColor:topic.dateDeath}">{{topic.dateBirth | getAge(me.preferredLocale, topic.dateDeath)}}
+                        <div class="date" :class="{deathColor:topic.dateDeath}">{{topic.dateBirth | getAge(me.preferredLocale,
+                          topic.dateDeath)}}
                         </div>
                       </el-link>
                       <el-row class="mt-2">

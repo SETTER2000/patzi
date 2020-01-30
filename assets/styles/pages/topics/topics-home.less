@@ -5,7 +5,40 @@
   @color-text: #afb1b7;
   @deathColor: #55413c;
   @Cormorant: 'Cormorant', serif;
-  .el-form-item__error{
+
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .el-dialog__body {
+    background: white;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+
+  .dialog-images-editor {
+    margin-top: 0 !important;
+    height: 100% !important;
+  }
+
+  .el-form-item__error {
     left: 90px;
   }
   .el-table .warning-row {
@@ -50,7 +83,6 @@
     background: deepskyblue;
   }
 
-
   .ell-image-flex {
     //  float: left;
     width: 100%;
@@ -70,13 +102,23 @@
       width: auto;
     }
   }
+.upload-demo{
+    //width: 360px;
+  .el-upload{
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
 
+  }
+  }
   .ell-relation {
     position: relative;
     .ell-position-button {
       opacity: .5;
       position: absolute;
-      right: 0;
+      right: 5px;
+      top: 5px;
       &.check {
         opacity: 1;
       }
@@ -186,7 +228,7 @@
         line-height: 36px;
       }
 
-      .deathColor{
+      .deathColor {
         .pointer;
         color: @deathColor !important;
       }
@@ -305,11 +347,10 @@
 
   .dialog-add {
     margin-top: 2vh !important;
-    height: 100%;
+    min-height: 100%;
     //font-size: 3rem;
     //width: 40vw;
   }
-
 
   .el-upload-dragger {
     width: 146px;
@@ -365,6 +406,7 @@
     .dialog-kennel-add {
       width: 60vw;
       height: 100vh;
+      margin-top: 0 !important;
     }
 
   }
@@ -372,6 +414,7 @@
     .dialog-kennel-add {
       width: 80vw;
       height: 100vh;
+      margin-top: 0 !important;
     }
 
     .single-gallery-image {
@@ -386,7 +429,7 @@
 
   @media (max-width: 1200px) {
     .el-dialog {
-      width: 100vw;
+      width: 100%;
       height: 100vh;
     }
 
@@ -406,6 +449,7 @@
     .dialog-kennel-add {
       width: 80vw;
       height: 100vh;
+      margin-top: 0 !important;
     }
 
     .single-gallery-image {
@@ -429,14 +473,12 @@
 
     .dialog-kennel-add {
       width: 90vw;
-          height: 100vh;
-
-
+      height: 100vh;
       margin-top: 0 !important;
     }
 
     .el-dialog {
-      width: 100vw;
+      width: 100%;
       //height: 100%;
     }
 
@@ -451,15 +493,15 @@
 
   }
 
-
   @media (min-width: 300px) {
     .dialog-add {
       margin-top: 0 !important;
       //width: 40vw;
-      height: 100%;
+      min-height: 100%;
     }
+
     .dialog-win {
-      width :70vw;
+      width: 70vw;
 
       //height: 30vh;
       font-size: 1.2rem;
@@ -469,13 +511,12 @@
   @media (min-width: 600px) {
 
     .dialog-win {
-      width :30vw;
+      width: 30vw;
       height: 100vh;
       //height: 250px;
       //height: 30vh;
       //font-size: 1.2rem;
     }
   }
-
 
 }

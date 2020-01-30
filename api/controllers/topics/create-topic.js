@@ -25,6 +25,11 @@ module.exports = {
       description: 'Массив с файлами данных о загруженных файлах.'
     },
 
+    topicBackground: {
+      type: 'ref',
+      description: 'Объект файла данных о загруженном файле. Фон темы.'
+    },
+
     subtitle: {
       type: 'string',
       description: 'Дополнительная информация. Описание темы на английском языке.',
@@ -70,7 +75,7 @@ module.exports = {
   },
 
 
-  fn: async function (inputs,exits) {
+  fn: async function (inputs, exits) {
     let req = this.req;
     const moment = require('moment');
     moment.locale('en');
@@ -78,7 +83,8 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-    let images=[];
+    let images = [];
+    let topicBackground = [];
     // Have the socket which made the request join the "dog" room.
     // Подключить сокет, который сделал запрос, к комнате «topic».
     await sails.sockets.join(req, 'topic');
@@ -96,8 +102,19 @@ module.exports = {
         delete img.field;
       });
     }
-
-
+    // Проверяем есть файлы для фона
+    if (inputs.topicBackground) {
+      topicBackground = await inputs.topicBackground.filter(o => !_.isNull(o));
+      await _.each(images, img => {
+        console.log('ВФЫЫ:::', img);
+        img.id = _.first(_.last(img.fd.split('\\')).split('.'));
+        img.description = '';
+        img.dateTaken = '';
+        delete img.filename;
+        delete img.status;
+        delete img.field;
+      });
+    }
     // Проверка существования такой же темы.
     let conflicting = await Topic.findOne({labelRu: inputs.labelRu});
     if (conflicting) {
@@ -106,14 +123,14 @@ module.exports = {
 
 //
     let newTopic = await Topic.create({
-      label:inputs.label,
-      labelRu:inputs.labelRu,
+      label: inputs.label,
+      labelRu: inputs.labelRu,
       images: images,
-      subtitle:inputs.subtitle,
-      subtitleRu:inputs.subtitleRu,
-      see:inputs.see
+      topicBackground: topicBackground,
+      subtitle: inputs.subtitle,
+      subtitleRu: inputs.subtitleRu,
+      see: inputs.see
     });
-
 
 
     // Выбираем весь список объектов данной коллекции.
@@ -122,7 +139,7 @@ module.exports = {
       // .populate('owners')
     ;
 
-    await sails.sockets.broadcast('topic', 'list-topic', topics);
+    await sails.sockets.broadcast('topic', 'list-topic');
     // Respond with view.
     return exits.success();
 

@@ -13,6 +13,8 @@ parasails.registerPage('topic', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
+
+    console.log('TOPIC::: ' , this.topic);
   },
   mounted: async function() {
     //…

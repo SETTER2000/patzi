@@ -73,7 +73,7 @@ parasails.registerComponent('d3BarsChart', {
     // console.log('DDD#:: ', d3.selectAll('p'));
   },
   beforeDestroy: function () {
-    clearInterval(this.intervalId)
+    clearInterval(this.intervalId);
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -96,8 +96,7 @@ parasails.registerComponent('d3BarsChart', {
       const margin = {top: 50, right: 50, bottom: 50, left: 50};
       const innerWidth = this.width - margin.left - margin.right;
       const innerHeight = this.height - margin.top - margin.bottom;
-      const svgData = d3.select(wrapper).selectAll('svg')
-        .data(['dummy data']);
+      const svgData = d3.select(wrapper).selectAll('svg').data(['dummy data']);
       // enter
       const svgEnter = svgData.enter()
         .append('svg')
