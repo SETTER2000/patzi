@@ -3,9 +3,11 @@ parasails.registerPage('blog-home', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
+    topics:[],
     centerDialogVisible:false,
     centerDialogAdded: false,
     limit: 50,
+    posts:[{name:'sadf',label:'sdfsd'}],
     dialog: {},
     sizeLess: 5, // MB
     dialogVisible: false,
@@ -85,12 +87,24 @@ parasails.registerPage('blog-home', {
     _.extend(this, SAILS_LOCALS);
 
     // Запрос для события list-*
-    io.socket.get(`/api/v1//list`, function gotResponse(body, response) {
+    io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Принимаем данные по событию list-*
-    io.socket.on('list-kennel', data => {
-      this.kennels = data;
+    io.socket.on('list-topic', data => {
+     // this.dataAll = this.seo;
+      this.topics = _.each(data, async (t, ind) => {
+        t.uSectionClass = `u-section-3-${ind + 1}`;
+        t.active = (ind === 0);
+        t.images = await _.each(t.images, (im,ind)=>{
+          im.uContainerLayout = `u-container-layout-${ind + 1}`;
+          im.uImage = `u-image-${ind + 1}`;
+        });
+      });
+
+     // this.dataAll.data = this.posts;
+
+      console.log('BBB Seo topics::: ' , this.topics);
     });
   },
   mounted: async function() {
@@ -103,6 +117,7 @@ parasails.registerPage('blog-home', {
         return new Map(this.dic).get(this.me.preferredLocale);
       }
     },
+
   },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
@@ -150,7 +165,7 @@ parasails.registerPage('blog-home', {
     // Если массив тем постов пустой, выводим сообщение.
     clickAddButton() {
       this.warning = this.i19p.warnNoArr;
-      (this.kennels.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
+      (this.topics.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
     },
 
   }

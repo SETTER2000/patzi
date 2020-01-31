@@ -9,14 +9,14 @@ parasails.registerPage('topic', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function() {
+  beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
-
-    console.log('TOPIC::: ' , this.topic);
+    this.seo.topic = this.topic;
+    console.log('TOPIC::: ', this.topic);
   },
-  mounted: async function() {
+  mounted: async function () {
     //…
   },
 

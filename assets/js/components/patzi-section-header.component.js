@@ -16,6 +16,7 @@ parasails.registerComponent('patziSectionHeader', {
   props: [
     'styleObj',
     'objData',
+    'label',
 
   ],
 
@@ -25,8 +26,6 @@ parasails.registerComponent('patziSectionHeader', {
   data: function () {
     return {
       styleObjType: Object,
-      // objData: Object,
-
       /**
        * В основном все значения действуют поумолчанию, если нет таких же входящих данных.
        * Например как color в beforeMount
@@ -46,7 +45,7 @@ parasails.registerComponent('patziSectionHeader', {
     <div class="container">
       <div class="row d-flex align-items-center justify-content-center">
         <div class="about-content col-lg-12">
-          <h1 class="text-white"> {{objData.preferredLocale === 'ru' ? objData.header.ru : objData.header.en}}</h1>
+          <h1 class="text-white"> {{objData.preferredLocale === 'ru' ? objData.header.ru : objData.header.en}}{{label ? ': ' : ''}}{{!label ? '' : objData.preferredLocale === 'ru' ? objData.topic.labelRu :  objData.title }}</h1>
           <p>{{objData.preferredLocale === 'ru' ? objData.subTitle.ru : objData.subTitle.en}}</p>
         </div>
       </div>
@@ -68,7 +67,7 @@ parasails.registerComponent('patziSectionHeader', {
     if (this.objData.header === undefined) {
       throw new Error('Neither `:header`  was passed in to <patzi-section-header>, but one or the other must be provided.');
     }
-    console.log('this.objData.topicBackground::: ', this.objData.topicBackground);
+    console.log('this.objData+++::: ', this.objData);
     this.updateStyle(this.$refs.wrapper, this.objData.topicBackground);
   },
 
@@ -84,10 +83,10 @@ parasails.registerComponent('patziSectionHeader', {
         return;
       }
       console.log('objData:: ', objData);
-      let img = _.last(_.pluck(objData, 'imageSrc') );
+      let img = _.last(_.pluck(objData, 'imageSrc'));
       console.log('imm:', img);
 
-      (img && img.length) >0 ?  $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
+      (img && img.length) > 0 ? $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
 
     }
   }
