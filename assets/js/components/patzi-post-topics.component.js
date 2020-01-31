@@ -23,6 +23,10 @@ parasails.registerComponent('patziPostTopics', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: function () {
     return {
+      styleObject: {
+        color: '#ff080f',
+        // fontSize: '103px'
+      }
     };
   },
 
@@ -30,7 +34,7 @@ parasails.registerComponent('patziPostTopics', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: ` 
- <section  class="u-carousel  u-slide u-valign-middle u-block-fbe7-1" src="" id="carousel_c5ca" data-interval="5000" data-u-ride="carousel">
+ <section  :style="styleObject" class="u-carousel  u-slide u-valign-middle u-block-fbe7-1" src="" id="carousel_c5ca" data-interval="5000" data-u-ride="carousel">
     <ol class="u-absolute-hcenter u-carousel-indicators u-block-fbe7-5">
     <template v-for="(i) in topics.length">
       <li data-u-target="#carousel_c5ca" class="u-grey-30"  :data-u-slide-to="i"></li>
@@ -50,8 +54,12 @@ parasails.registerComponent('patziPostTopics', {
           <div class="u-clearfix u-expanded-widatah u-gutter-30 u-layout-wrap u-layout-wrap-1">
             <div class="u-layout">
               <div class="u-layout-row">
-                <div v-for="(im,ind) in d.images" :key="im.id" class="u-align-left u-container-style u-image u-layout-cell u-left-cell u-size-15 u-size-30-md " :class="im.uImage" src="">
-                  <div class="u-container-layout " :class="im.uContainerLayout" src=""></div>
+                <div v-for="(im,ind) in d.images" :key="im.id" class="u-align-left u-container-style u-image u-layout-cell u-left-cell u-size-15 u-size-30-md " 
+                :class="im.uImage" src="" :style="{'backgroundImage':im.imageSrc}">
+              
+                  <div class="u-container-layout " :style="{'backgroundImage':im.imageSrc}" :class="im.uContainerLayout" src="">
+                
+</div>
                 </div>   
                 <!-- <div class="u-align-left u-container-style u-image u-layout-cell u-left-cell u-size-15 u-size-30-md u-image-1" src="">
                   <div class="u-container-layout u-container-layout-2" src=""></div>
