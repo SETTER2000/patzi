@@ -174,7 +174,7 @@ module.exports.routes = {
   'POST   /api/v1/users/update-ratio': {action: 'users/update-ratio', csrf: false},
   'GET    /api/v1/users/status': {action: 'users/list-status'},
   // 'POST   /api/v1/users/looked-comment': {action: 'users/looked-comment', csrf: false},
-
+  'DELETE /api/v1/files/remove-picture-from-s3': { action: 'files/remove-picture-from-s3', csrf: false  },
 
   'GET    /api/v1/topics/list': { action: 'topics/list' },
   'GET    /api/v1/topics/topic-count': {action: 'topics/topic-count'},

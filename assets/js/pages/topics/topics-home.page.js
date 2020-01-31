@@ -87,6 +87,7 @@ parasails.registerPage('topics-home', {
         warnRemove: 'This will permanently delete the object. Continue?',
         warning: 'Warning',
         delCancel: 'Delete canceled',
+        delCancelOverload: 'Delete canceled. Reload the page.',
         all: 'All',
         sire: 'Sire',
         dam: 'Dam',
@@ -121,6 +122,7 @@ parasails.registerPage('topics-home', {
         photoEditor: 'Редактор фотографий',
         warning: 'Внимание',
         delCancel: 'Удаление отменено',
+        delCancelOverload: 'Удаление отменено. Перегрузите страницу.',
         all: 'Все',
         sire: 'Sire',
         dam: 'Dam',
@@ -222,7 +224,7 @@ parasails.registerPage('topics-home', {
 
 
     abc(value, obj, field, lang) {
-      if (!value) return '';
+      if (!value) {return '';}
       let r = '';
       const regex = /[ a-z]+/i;
       const regexRu = /[ а-яё]+/i;
@@ -248,9 +250,8 @@ parasails.registerPage('topics-home', {
     },
     letters: {
       get: function () {
-        let alphabet = [...new Set('ABCDEFGHIJKLMNOPQRSTUVWXYZ')]
-          , ar = []
-        ;
+        let alphabet = [...new Set('ABCDEFGHIJKLMNOPQRSTUVWXYZ')];
+        let ar = [];
         alphabet.map(y => y === y ? ar.push({value: y, label: y}) : '');
         return ar;
       }
@@ -260,7 +261,7 @@ parasails.registerPage('topics-home', {
       return {
         // 'actionH1': this.ruleForm.see ,
         'text-danger': !this.ruleForm.see
-      }
+      };
     }
   },
 
@@ -274,7 +275,7 @@ parasails.registerPage('topics-home', {
     },
     // Если массив kennel пустой, выводим сообщение.
     clickAddButton() {
-      this.centerDialogAdded = true
+      this.centerDialogAdded = true;
     },
 
     handlePictureCardPreview(file) {
@@ -317,10 +318,15 @@ parasails.registerPage('topics-home', {
     handleRemove(file, fileList) {
       this.fileList = fileList;
     },
-  // Срабатывает перед удалением одного файла
+    // Срабатывает перед удалением одного файла
     handleRemoveFile(file, fileList) {
-      console.log('REMOVE BACKground ::: ' , fileList);
-      this.ruleForm.topicBackground =fileList;
+      console.log('FILLL::: ', file);
+      //объект-картинка, который следует удалить из хранилища s3
+      let data = {pictures: [file]};
+      this.warningRemovePhotosS3(data,fileList);
+      console.log('Массив после удаления ::: ', fileList);
+      // массив объектов картинок, которые остались после удаления
+
       // this.ruleForm.topicBackground = this.ruleForm.topicBackground.length > 1 ? this.ruleForm.topicBackground.filter(file=>file.id !== fileList[0].id):[];
     },
 
@@ -558,12 +564,12 @@ parasails.registerPage('topics-home', {
     },
 
     async handleEdit(index, row) {
-      row.topicBackground =_.isArray(row.topicBackground) ? await _.each(row.topicBackground, bg => {
+      row.topicBackground = _.isArray(row.topicBackground) ? await _.each(row.topicBackground, bg => {
         bg.url = bg.imageSrc;
         return bg;
       }) : [];
       this.ruleForm = row;
-      console.log("this.ruleForm:::: ", this.ruleForm);
+      console.log('this.ruleForm:::: ', this.ruleForm);
 
       // this.dateBirthUpdate = row.dateBirth;
       // this.dateDeathUpdate = row.dateDeath;
@@ -660,12 +666,30 @@ parasails.registerPage('topics-home', {
       });
     },
 
+    warningRemovePhotosS3(d,fileList) {
+      this.checkAll = false;
+      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
+        confirmButtonText: 'OK',
+        cancelButtonText: this.i19p.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.deletePhotoS3(d);
+        this.ruleForm.topicBackground = fileList;
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.i19p.delCancelOverload
+        });
+      });
+    },
+
     async destroyManyPhotos() {
       let removeImage = _.remove(this.photos.images, img => _.indexOf(this.checkedPhoto, img.id) > -1);
       // console.log('Удалённые картинки: ', removeImage);
       let data = this.photos;
       data['removeImage'] = _.pluck(removeImage, 'id');
       // Если картинок нет закрываем окно редактора
+      console.log('REMOVE DATA перед отправкой::', data);
       _.isEmpty(this.photos.images) ? this.centerDialogVisiblePhotos = false : '';
       io.socket.delete('/api/v1/topics/destroy-many-img', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
@@ -686,6 +710,30 @@ parasails.registerPage('topics-home', {
         }
       });
     },
+
+
+    deletePhotoS3(data) {
+      console.log('DATA remove picture перед отправкой: ' , data);
+      io.socket.delete('/api/v1/files/remove-picture-from-s3', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        // this.buttonUpdate = false;
+        // this.centerDialogAdded = false;
+        // this.loading.close();
+        if (jwRes.statusCode === 200) {
+          // this.resetForm('ruleForm');
+          // this.ruleForm.fileList = [];
+          // this.checkedPhoto = [];
+          // this.ruleForm.imageUrl = '';
+          // this.ruleForm.federations = this.resetFederation;
+          // this.getList();
+        }
+      });
+    },
+
 
     // Вы можете выделить содержимое таблицы,
     // чтобы различать «успех, информация, предупреждение, опасность» и другие состояния.
@@ -789,7 +837,7 @@ parasails.registerPage('topics-home', {
 
 
     handleBackgroundSuccess(res, file) {
-      res.url =  URL.createObjectURL(file.raw);
+      res.url = URL.createObjectURL(file.raw);
       console.log('RES topicBackground::: ', res);
       // this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
       _.isArray(this.ruleForm.topicBackground) ? this.ruleForm.topicBackground.push(res) :

@@ -64,7 +64,32 @@ module.exports = {
       .set({images: topic.images});
     // console.log('Обновлённый Topic::: ', updateDog);
 
+    console.log('removeImage::: ', removeImage);
+    /*
+    * removeImage:::  [
+      {
+        fd: 'D:\\__PROJECTS\\Sails\\patzi\\.tmp\\uploads\\d9ab177b-796e-46e5-8fec-ad1358c2685
+    3.jpg',
+        size: 57174,
+        type: 'image/jpeg',
+        name: '6b3d04ab963e5fb73e33fca56578bc0d.jpg',
+        id: 'd9ab177b-796e-46e5-8fec-ad1358c26853',
+        description: '',
+        dateTaken: ''
+      },
+      {
+        fd: 'D:\\__PROJECTS\\Sails\\patzi\\.tmp\\uploads\\f39b832f-5d83-4016-b629-3ec2dac2e08
+    2.jpg',
+        size: 57004,
+        type: 'image/jpeg',
+        name: '8ceddff291c216ca3b7bf46e0e236957.jpg',
+        id: 'f39b832f-5d83-4016-b629-3ec2dac2e082',
+        description: '',
+        dateTaken: ''
+      }
+    ]
 
+    * */
     await sails.helpers.removeImgS3(removeImage);
 
     return exits.success();
