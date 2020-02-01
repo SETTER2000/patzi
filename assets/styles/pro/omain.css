@@ -4770,3 +4770,14 @@ p.footer-text a:hover {
 
 /*Menu правка высоты*/
 /*.u-header .u-menu-1 {margin: -40px 0 20px auto;}*/
+
+
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Required to make elements draggable in old WebKit */
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}

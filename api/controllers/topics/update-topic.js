@@ -34,6 +34,11 @@ module.exports = {
       description: 'Объект файла данных о загруженном файле. Фон темы.'
     },
 
+    backgroundPosition: {
+      type: 'string',
+      description: 'Дополнительная информация. Описание темы на английском языке.',
+      maxLength: 30
+    },
 
     subtitle: {
       type: 'string',
@@ -81,6 +86,7 @@ module.exports = {
     let updateObj = {
       label: inputs.label,
       labelRu: inputs.labelRu,
+      backgroundPosition: inputs.backgroundPosition,
       see: inputs.see,
       subtitle:inputs.subtitle,
       subtitleRu:inputs.subtitleRu,

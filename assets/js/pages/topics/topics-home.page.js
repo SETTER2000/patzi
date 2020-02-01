@@ -47,7 +47,7 @@ parasails.registerPage('topics-home', {
       label: '',
       labelRu: '',
       subtitle: '',
-      // gender: '',
+      backgroundPosition: '',
       subtitleRu: '',
     },
     rules: {
@@ -339,6 +339,7 @@ parasails.registerPage('topics-home', {
       this.ruleForm.federations = this.resetFederation;
       this.fuleForm = {
         label: '',
+        backgroundPosition:'',
         registerNumber: '',
         dateCreate: undefined,
         site: '',
@@ -372,6 +373,7 @@ parasails.registerPage('topics-home', {
         fileList: this.ruleForm.fileList,
         topicBackground: this.ruleForm.topicBackground,
         label: this.ruleForm.label,
+        backgroundPosition: this.ruleForm.backgroundPosition,
         labelRu: this.ruleForm.labelRu,
         subtitle: this.ruleForm.subtitle,
         subtitleRu: this.ruleForm.subtitleRu,
@@ -406,6 +408,7 @@ parasails.registerPage('topics-home', {
         fileList: this.ruleForm.fileList,
         topicBackground: this.ruleForm.topicBackground,
         label: this.ruleForm.label,
+        backgroundPosition: this.ruleForm.backgroundPosition,
         labelRu: this.ruleForm.labelRu,
         see: this.ruleForm.see,
         subtitle: this.ruleForm.subtitle,

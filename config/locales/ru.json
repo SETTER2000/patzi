@@ -901,5 +901,6 @@
 	"The background will be the first file": "Фоном будет первый файл",
 	"upload": "загрузить",
 	"The background will be the last file": "Фоном будет всегда последний загруженный файл.",
-	"The last background for the theme is not deleted.": "Последний фон для темы не удаляется."
+	"The last background for the theme is not deleted.": "Последний фон для темы не удаляется.",
+	"Background position": "Позиция фона"
 }
