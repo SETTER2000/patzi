@@ -198,6 +198,18 @@
               <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
             <!--</el-upload>-->
           </template>
+          <% /* Позиция фона */ %>
+          <template>
+            <el-form-item label="<%= __('Background position') %> (Ru)" prop="backgroundPosition">
+              <el-input show-word-limit
+                        style="width:35%;"
+                        clearable
+                        maxlength="70"
+                        size="small"
+                        placeholder="50% 55%"
+                        v-model="ruleForm.backgroundPosition"></el-input>
+            </el-form-item>
+          </template>
 
           <% /* ВИДНА ТЕМА ИЛИ НЕТ */ %>
           <div class="flex justify-content-center">
