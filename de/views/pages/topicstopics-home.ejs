@@ -41,6 +41,11 @@
       <h1 v-if="buttonUpdate" class="flex justify-content-center"
           :class="classObject"
       >{{ruleForm.labelRu}}</h1>
+      <div class="flex justify-content-between text-secondary">
+        <div class="font-italic text-capitalize" v-if="ruleForm.createdAt"><small><%= __('created') %>: {{ruleForm.createdAt | getCreate}}</small></div>
+        <div class="font-italic text-capitalize" v-if="ruleForm.updatedAt"><small><%= __('edited') %>: {{ruleForm.updatedAt | getCreate}}</small></div>
+      </div>
+
     </template>
 
 
