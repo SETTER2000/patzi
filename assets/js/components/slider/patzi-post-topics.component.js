@@ -34,50 +34,15 @@ parasails.registerComponent('patziPostTopics', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: ` 
- <section  :style="styleObject" class="u-carousel  u-slide u-valign-middle u-block-fbe7-1" src="" id="carousel_c5ca" data-interval="5000" data-u-ride="carousel">
+ <section   class="u-carousel  u-slide u-valign-middle u-block-fbe7-1" src="" id="carousel_c5ca" data-interval="5000" data-u-ride="carousel">
     <ol class="u-absolute-hcenter u-carousel-indicators u-block-fbe7-5">
     <template v-for="(i) in topics.length">
-      <li data-u-target="#carousel_c5ca" class="u-grey-30"  :data-u-slide-to="i"></li>
+      <li data-u-target="#carousel_c5ca" class="u-grey-30"  :data-u-slide-to="i - 1"></li>
       </template>
     </ol>
-    <div ref="$wrapper" class="u-carousel-inner" role="listbox">
-
-      <div  v-for="(d,ind) in topics" :key="d.id"  class="-lg -sm -xl -xs u-align-center u-carousel-item u-clearfix u-image u-shading" :class="[{'u-active':d.active},d.uSectionClass]" src="" data-image-widatah="1148" data-image-height="678">
-        <div class="u-clearfix u-sheet u-sheet-1">
-          <div class="u-align-left u-container-style u-expanded-widatah u-group u-group-1">
-            <div class="u-container-layout u-container-layout-1">
-              <h1 class="u-text u-title u-text-1">{{objData.preferredLocale === 'ru' ? d.labelRu : d.label}}</h1>
-              <p class="u-large-text u-text u-text-variant u-text-2">{{objData.preferredLocale === 'ru' ? d.subtitleRu : d.subtitle}}</p>
-              <a href="#" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">{{objData.preferredLocale === 'ru' ? 'Выбрать' : 'Select'}}</a>
-            </div>
-          </div>
-          <div class="u-clearfix u-expanded-widatah u-gutter-30 u-layout-wrap u-layout-wrap-1">
-            <div class="u-layout">
-              <div class="u-layout-row">
-                <div v-for="(im,ind) in d.images" :key="im.id" class="u-align-left u-container-style u-image u-layout-cell u-left-cell u-size-15 u-size-30-md " 
-                :class="im.uImage" src="" :style="{'backgroundImage':im.imageSrc}">
-              
-                  <div class="u-container-layout " :style="{'backgroundImage':im.imageSrc}" :class="im.uContainerLayout" src="">
-                
-</div>
-                </div>   
-                <!-- <div class="u-align-left u-container-style u-image u-layout-cell u-left-cell u-size-15 u-size-30-md u-image-1" src="">
-                  <div class="u-container-layout u-container-layout-2" src=""></div>
-                </div>
-                <div class="u-align-center u-container-style u-image u-layout-cell u-size-15 u-size-30-md u-image-2" src="" data-image-widatah="1600" data-image-height="1067">
-                  <div class="u-container-layout u-container-layout-3" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-image u-layout-cell u-size-15 u-size-30-md u-image-3" src="">
-                  <div class="u-container-layout u-container-layout-4" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-image u-layout-cell u-right-cell u-size-15 u-size-30-md u-image-4" src="">
-                  <div class="u-container-layout u-container-layout-5" src=""></div>
-                </div>-->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="u-carousel-inner" role="listbox">
+  <!--<slot name="default"></slot>-->
+     <patzi-post-topic-item v-for="(topic,ind) of topics" :obj-data="objData" :topic="topic" :key="topic.id" ></patzi-post-topic-item>
 
      <!-- <div class="-lg -sm -xl -xs u-carousel-item u-clearfix u-image u-shading u-section-3-2" src="" data-image-widatah="1200" data-image-height="799">
         <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">

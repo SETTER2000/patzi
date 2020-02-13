@@ -36,6 +36,12 @@ module.exports = {
       maxLength: 700
     },
 
+    backgroundPosition:{
+      type: 'string',
+      description: 'Дополнительная информация. Описание темы на английском языке.',
+      maxLength: 30
+    },
+
     subtitleRu: {
       type: 'string',
       description: 'Дополнительная информация. Описание темы на русском языке.',
@@ -128,6 +134,7 @@ module.exports = {
       images: images,
       topicBackground: topicBackground,
       subtitle: inputs.subtitle,
+      backgroundPosition: inputs.backgroundPosition,
       subtitleRu: inputs.subtitleRu,
       see: inputs.see
     });
