@@ -1,41 +1,15 @@
-parasails.registerPage('topics-home', {
+parasails.registerPage('titles-home', {
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-    topics: [],
+    titles: [],
     counts: 0,
     hidden: 0,
-    imageUrl: '',
-    searchObjects: '',
-    search: '',
-    checkAll: false,
-    show: false,
-    topicId: undefined,
-    dialog: {},
-    showTopic: undefined,
-    checkedPhoto: [],
-    photoVisible: false,
-    centerDialogVisiblePhotos: false,
-    photos: {},
-    isIndeterminate: true,
     limit: 4,
     sizeLess: 5, // MB
-    photoDesc: {
-      innerVisiblePhotoDescription: false,
-      photoId: '',
-      description: '',
-      dateTaken: '',
-    },
-    photoDescUpdate: false,
-    objOne: {},
-    centerDialogAdded: false,
-    dialogEditorList: false,
-    editorList: [],
-
-    dialogVisiblePass: false,
     buttonUpdate: false,
-    centerDialogVisible: false,
+    centerDialogAdded: false,
     centerDialogVisibleConfirm: false,
     dialogVisible: false,
     dialogImageUrl: '',
@@ -69,7 +43,7 @@ parasails.registerPage('topics-home', {
         {required: true, message: 'Please select Activity zone', trigger: 'change'}
       ],
       gender: [
-        {required: true, message: 'Please select a topic gender.', trigger: 'change'}
+        {required: true, message: 'Please select a title gender.', trigger: 'change'}
       ],
       description: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
@@ -83,7 +57,7 @@ parasails.registerPage('topics-home', {
         limitExceededText2: `you selected `,
         limitExceededText3: `Total: `,
         warnNoKennel: `At the moment there is no nursery in the database.
-         You should create at least one kennel to start with to add a topic.`,
+         You should create at least one kennel to start with to add a title.`,
         warnRemove: 'This will permanently delete the object. Continue?',
         warning: 'Warning',
         delCancel: 'Delete canceled',
@@ -99,14 +73,14 @@ parasails.registerPage('topics-home', {
         success: 'Congratulations! Object successfully created. ',
         successUpdate: 'Object updated successfully.',
         successDelete: 'Object deleted successfully. ',
-        selectGender: 'Please select a topic gender.',
-        growth: 'How to measure a topic\'s height?',
-        hairless: 'What is a down or naked topic?',
-        infoColor: 'Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of topics by color, but rather an attempt to provide more information on the appearance of the topic. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding topics.',
+        selectGender: 'Please select a title gender.',
+        growth: 'How to measure a title\'s height?',
+        hairless: 'What is a down or naked title?',
+        infoColor: 'Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of titles by color, but rather an attempt to provide more information on the appearance of the title. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding titles.',
         whyColor: 'Why determine the color.',
         priceTitle: 'Selling price.',
-        priceText: 'You can set the price at any time, but until the price is set, the topic will not appear on the sales page. Remember to set the selling currency.',
-        recommendationsSale: 'Recommendations for the sale of topics. Describe the main advantages and benefits of the topic. This information will be posted on the topic’s card on the sales page.',
+        priceText: 'You can set the price at any time, but until the price is set, the title will not appear on the sales page. Remember to set the selling currency.',
+        recommendationsSale: 'Recommendations for the sale of titles. Describe the main advantages and benefits of the title. This information will be posted on the title’s card on the sales page.',
         areYouClose: 'Are you sure you want to close chat?',
         startOfNegotiations: 'My name is Olga, I am a breeder and owner of the nursery Poale Ell. I see your choice fell on a puppy by name ',
         startOfNegotiations2: '. Ready to answer your questions.',
@@ -156,42 +130,6 @@ parasails.registerPage('topics-home', {
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
-
-    io.socket.get('/api/v1/topics/topic-count', function gotResp(body, response) {
-      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-    });
-    // Кол-во всех тем
-    io.socket.on('topic-count', (data) => {
-      this.counts = data;
-    });
-
-    io.socket.get('/api/v1/topics/topic-hidden', function gotResp(body, response) {
-      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-    });
-    // Кол-во всех тем
-    io.socket.on('topic-hidden', (data) => {
-      this.hidden = data;
-    });
-
-    // Обновление темы
-    io.socket.on('update-topic', (data) => {
-      console.log('UPDATEEE');
-      // this.getList();
-      this.$forceUpdate();
-    });
-
-
-    // Запрос для события list-*
-    io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
-      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-    });
-    // Все темы
-    io.socket.on('list-topic', (data) => {
-      console.log('TOPICS all:: ', data);
-      this.topics = this.editorList = data ? data : this.editorList;
-    });
-
-
   },
   filters: {
     getCreate: function (value, l, format) {
@@ -224,7 +162,9 @@ parasails.registerPage('topics-home', {
 
 
     abc(value, obj, field, lang) {
-      if (!value) {return '';}
+      if (!value) {
+        return '';
+      }
       let r = '';
       const regex = /[ a-z]+/i;
       const regexRu = /[ а-яё]+/i;
@@ -237,7 +177,6 @@ parasails.registerPage('topics-home', {
       }
     },
   },
-
   mounted: async function () {
     //…
   },
@@ -264,23 +203,20 @@ parasails.registerPage('topics-home', {
       };
     }
   },
-
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-
-    clear() {
-      this.ruleForm.errInputLang = false;
-    },
-
     clickAddButton() {
       this.centerDialogAdded = true;
     },
-
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+
+    handlePreview(file) {
+      console.log(file);
     },
 
     beforeUpload(file) {
@@ -323,11 +259,11 @@ parasails.registerPage('topics-home', {
       console.log('FILLL::: ', file);
       //объект-картинка, который следует удалить из хранилища s3
       let data = {pictures: [file]};
-      this.warningRemovePhotosS3(data,fileList);
+      this.warningRemovePhotosS3(data, fileList);
       console.log('Массив после удаления ::: ', fileList);
       // массив объектов картинок, которые остались после удаления
 
-      // this.ruleForm.topicBackground = this.ruleForm.topicBackground.length > 1 ? this.ruleForm.topicBackground.filter(file=>file.id !== fileList[0].id):[];
+      // this.ruleForm.titleBackground = this.ruleForm.titleBackground.length > 1 ? this.ruleForm.titleBackground.filter(file=>file.id !== fileList[0].id):[];
     },
 
     resetForm(formName) {
@@ -350,6 +286,19 @@ parasails.registerPage('topics-home', {
       };
     },
 
+    handleBackgroundSuccess(res, file) {
+      res.url = URL.createObjectURL(file.raw);
+      console.log('RES titleBackground::: ', res);
+      // this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
+      _.isArray(this.ruleForm.titleBackground) ? this.ruleForm.titleBackground.push(res) :
+        this.ruleForm.titleBackground = [res];
+    },
+
+    clear() {
+      this.ruleForm.errInputLang = false;
+    },
+
+
     async submitForm(formName) {
       this.$refs[formName].validate((valid) => {
 
@@ -370,7 +319,7 @@ parasails.registerPage('topics-home', {
       this.openFullScreen();
       let data = {
         fileList: this.ruleForm.fileList,
-        topicBackground: this.ruleForm.topicBackground,
+        titleBackground: this.ruleForm.titleBackground,
         label: this.ruleForm.label,
         labelRu: this.ruleForm.labelRu,
         subtitle: this.ruleForm.subtitle,
@@ -379,7 +328,7 @@ parasails.registerPage('topics-home', {
       };
 
       console.log('DATA перед отправкой::: ', data);
-      await io.socket.post('/api/v1/topics/create-topic', data, (data, jwRes) => {
+      await io.socket.post('/api/v1/titles/create-title', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(`${this.i19p.text400Err} ${jwRes.headers['x-exit-description']}`) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
@@ -404,7 +353,7 @@ parasails.registerPage('topics-home', {
       let data = {
         id: this.ruleForm.id,
         fileList: this.ruleForm.fileList,
-        topicBackground: this.ruleForm.topicBackground,
+        titleBackground: this.ruleForm.titleBackground,
         label: this.ruleForm.label,
         labelRu: this.ruleForm.labelRu,
         see: this.ruleForm.see,
@@ -413,7 +362,7 @@ parasails.registerPage('topics-home', {
       };
       console.log('DATA UPDATE перед отправкой ::: ', data);
 
-      io.socket.put('/api/v1/topics/update-topic', data, (data, jwRes) => {
+      io.socket.put('/api/v1/titles/update-title', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
@@ -433,34 +382,6 @@ parasails.registerPage('topics-home', {
         }
       });
     },
-
-    async getList() {
-      await io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
-        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-      });
-      await io.socket.get(`/api/v1/topics/topic-hidden`, function gotResponse(body, response) {
-        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-      });
-      await io.socket.get(`/api/v1/topics/topic-count`, function gotResponse(body, response) {
-        // console.log('Сервер topic-count ответил кодом ' + response.statusCode + ' и данными: ', body);
-      });
-
-      // // Принимаем данные по событию list-*
-      // await io.socket.on('list-topic', (data) => {
-      //   console.log('data TOPICS all:: ', data);
-      //   this.topics = this.editList = this.filterDogs = _.isNull(data) ? [] : data;
-      // });
-      // Принимаем данные по событию list-*
-      await  io.socket.on('topic-hidden', (data) => {
-        this.hidden = data;
-      });
-      // // Принимаем данные по событию list-*
-      // await  io.socket.on('topic-count', (data) => {
-      //   console.log("DDDDDDASAAAA:::: " ,data);
-      //   this.counts = data;
-      // });
-    },
-
     openFullScreen() {
       this.loading = this.$loading({
         lock: true,
@@ -532,317 +453,32 @@ parasails.registerPage('topics-home', {
       }
     },
 
-
-    // Выбирает темы для редактирования
-    dialogEditors() {
-      this.editorList = (this.me.isAdmin || this.me.isSuperAdmin) ? this.topics : '';
-      this.dialogEditorList = true;
-    },
-
-    errorHandler() {
-      return true;
-    },
-
-    clearFilter() {
-      this.$refs.filterTable.clearFilter();
-      this.search = '';
-    },
-
-    clickShowPhoto(index, row) {
-      this.photoVisible = true;
-      this.objOne = Object.assign({}, this.objOne, row);
-    },
-
-    handleCloseDialog(done) {
-      done();
-      /*  this.$confirm('Are you sure to close this dialog?')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {
-          });*/
-    },
-
-    async handleEdit(index, row) {
-      row.topicBackground = _.isArray(row.topicBackground) ? await _.each(row.topicBackground, bg => {
-        bg.url = bg.imageSrc;
-        return bg;
-      }) : [];
-      this.ruleForm = row;
-      console.log('this.ruleForm:::: ', this.ruleForm);
-
-      // this.dateBirthUpdate = row.dateBirth;
-      // this.dateDeathUpdate = row.dateDeath;
-      // this.ruleForm.kennel = row.kennel.id;
-      this.dialogEditor = true;
-      this.centerDialogAdded = true;
-      this.buttonUpdate = true;
-    },
-
-    handleEditPhotos(index, row) {
-      this.photos = row;
-      // console.log('Собака::: ', row);
-      this.centerDialogVisiblePhotos = true;
-    },
-
-    async updateDescriptionPhoto() {
-      this.photoDesc.id = this.photos.id;
-      this.photoDesc.innerVisiblePhotoDescription = false;
-      await io.socket.put('/api/v1/topics/update-description-img', this.photoDesc, (data, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
-            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
-        this.buttonUpdate = false;
-        this.centerDialogAdded = false;
-        // this.loading.close();
-        if (jwRes.statusCode === 200) {
-          // this.resetForm('ruleForm');
-          this.ruleForm.fileList = [];
-          this.checkedPhoto = [];
-          this.ruleForm.imageUrl = '';
-          this.ruleForm.federations = this.resetFederation;
-          this.getList();
-          this.$forceUpdate();
-        }
+    async getList() {
+      await io.socket.get(`/api/v1/titles/list`, function gotResponse(body, response) {
+        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-    },
-
-    handleCheckAllChange(val) {
-      this.checkedPhoto = val ? _.pluck(this.photos.images, 'id') : [];
-      this.isIndeterminate = false;
-      // console.log('this.checkedPhoto:: ', this.checkedPhoto);
-    },
-    handleCheckedPhotosChange(value) {
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === _.pluck(this.photos.images, 'id').length;
-      this.isIndeterminate = checkedCount > 0 && checkedCount < _.pluck(this.photos.images, 'id').length;
-    },
-    async coverPhoto(id, index) {
-      await io.socket.put(`/api/v1/files/update-cover-album`, {
-        id: id,
-        cover: index,
-        field: 'images',
-        collectionName: 'Topic'
-      }, (body, response) => {
-        this.topics.map(topic => {
-          if (topic.id === id) {
-            // console.log('INDEX: ', index);
-            // let field = 'images';
-            let cut = topic['images'].splice(index, 1);
-            // console.log('Вырезали этот объект: ', cut);
-            // topic['images'].unshift(cut);
-            topic['images'] = [...cut, ...topic['images']];
-            // topic['images'].splice( 0,0,cut);
-            // console.log('Объеденённый массив::: ', topic['images']);
-            topic.imagesArrUrl = _.pluck(topic['images'], 'imageSrc');
-          }
-          this.getList();
-          this.$forceUpdate();
-        });
+      await io.socket.get(`/api/v1/titles/title-hidden`, function gotResponse(body, response) {
+        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      await io.socket.get(`/api/v1/titles/title-count`, function gotResponse(body, response) {
+        // console.log('Сервер title-count ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
 
+      // // Принимаем данные по событию list-*
+      // await io.socket.on('list-title', (data) => {
+      //   console.log('data TOPICS all:: ', data);
+      //   this.titles = this.editList = this.filterDogs = _.isNull(data) ? [] : data;
+      // });
       // Принимаем данные по событию list-*
-      await  io.socket.on('update-cover', (data) => {
-        // this.counts = data;
+      await  io.socket.on('title-hidden', (data) => {
+        this.hidden = data;
       });
-
+      // // Принимаем данные по событию list-*
+      // await  io.socket.on('title-count', (data) => {
+      //   console.log("DDDDDDASAAAA:::: " ,data);
+      //   this.counts = data;
+      // });
     },
-
-    removePhotos() {
-      this.checkAll = false;
-      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
-        confirmButtonText: 'OK',
-        cancelButtonText: this.i19p.cancel,
-        type: 'warning'
-      }).then(() => {
-        this.destroyManyPhotos();
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: this.i19p.delCancel
-        });
-      });
-    },
-
-    warningRemovePhotosS3(d,fileList) {
-      this.checkAll = false;
-      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
-        confirmButtonText: 'OK',
-        cancelButtonText: this.i19p.cancel,
-        type: 'warning'
-      }).then(() => {
-        this.deletePhotoS3(d);
-        this.ruleForm.topicBackground = fileList;
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: this.i19p.delCancelOverload
-        });
-      });
-    },
-
-    async destroyManyPhotos() {
-      let removeImage = _.remove(this.photos.images, img => _.indexOf(this.checkedPhoto, img.id) > -1);
-      // console.log('Удалённые картинки: ', removeImage);
-      let data = this.photos;
-      data['removeImage'] = _.pluck(removeImage, 'id');
-      // Если картинок нет закрываем окно редактора
-      console.log('REMOVE DATA перед отправкой::', data);
-      _.isEmpty(this.photos.images) ? this.centerDialogVisiblePhotos = false : '';
-      io.socket.delete('/api/v1/topics/destroy-many-img', data, (data, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
-            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
-        this.buttonUpdate = false;
-        this.centerDialogAdded = false;
-        // this.loading.close();
-        if (jwRes.statusCode === 200) {
-          // this.resetForm('ruleForm');
-          this.ruleForm.fileList = [];
-          this.checkedPhoto = [];
-          this.ruleForm.imageUrl = '';
-          this.ruleForm.federations = this.resetFederation;
-          this.getList();
-        }
-      });
-    },
-
-
-    deletePhotoS3(data) {
-      console.log('DATA remove picture перед отправкой: ' , data);
-      io.socket.delete('/api/v1/files/remove-picture-from-s3', data, (data, jwRes) => {
-        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
-          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
-            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
-        // this.buttonUpdate = false;
-        // this.centerDialogAdded = false;
-        // this.loading.close();
-        if (jwRes.statusCode === 200) {
-          // this.resetForm('ruleForm');
-          // this.ruleForm.fileList = [];
-          // this.checkedPhoto = [];
-          // this.ruleForm.imageUrl = '';
-          // this.ruleForm.federations = this.resetFederation;
-          // this.getList();
-        }
-      });
-    },
-
-
-    // Вы можете выделить содержимое таблицы,
-    // чтобы различать «успех, информация, предупреждение, опасность» и другие состояния.
-    tableRowClassName({row, rowIndex}) {
-      if (!row.see) {
-        return 'warning-row';
-      }
-      // else if (rowIndex === 3) {
-      //   return 'success-row';
-      // }
-      return '';
-    },
-
-    openRemoveDialog(id) {
-      this.removeId = id;
-      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
-        confirmButtonText: 'OK',
-        cancelButtonText: this.i19p.cancel,
-        type: 'warning'
-      }).then(() => {
-        this.deleteObj();
-
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: this.i19p.delCancel
-        });
-      });
-    },
-
-    deleteObj: async function () {
-      let data = {
-        id: this.removeId,
-      };
-      console.log('Перед удалением data Topic: ', data);
-      io.socket.delete('/api/v1/topics/destroy-one-topic', data, (dataRes, jwRes) => {
-        this.errorMessages(jwRes, this.i19p.successDelete);
-        this.dialogDeletePhotoSession = false;
-        if (jwRes.statusCode === 200) {
-          // this.$message({
-          //   type: 'success',
-          //   message: this.i19p.success
-          // });
-          this.getList();
-          this.$forceUpdate();
-        }
-      });
-    },
-
-    errorMessages(jwRes, successText) {
-      (jwRes.statusCode === 200) ? (this.mesSuccess(successText)) :
-        (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
-          (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
-            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-    },
-
-
-    /**
-     * Фильтр по свойству gender
-     * @param command
-     */
-    // gender(command) {
-    //   if (_.isEmpty(command.com)) return false;
-    //   let newDogs = [];
-    //   this.topics = this.filterDogs;
-    //   this.filterName = this.i19p[command.com];
-    //   this.topics = command.com !== 'all' ? this.topics.filter(d => d.gender === command.com) : this.filterDogs;
-    //   this.$forceUpdate();
-    //   // return this.topics ;
-    // },
-    objFilter() {
-      // topics.filter(topic=>topic.see)
-      return this.topics.filter(data => (!this.searchObjects || data.labelRu.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & !_.isEmpty(data.images[data.cover]));
-    },
-    showMenu(id) {
-      this.topicId = id;
-      this.show = true;
-      this.showTopic = id;
-    },
-
-    showOut() {
-      this.show = false;
-    },
-    async handleSelect(e) {
-      this.topicId = (_.isNumber(e.id)) ? e.id : undefined;
-    },
-
-    goTo(path) {
-      window.location = `/${path}`;
-    },
-    goTo2(path) {
-      this.goto(path);
-    },
-
-
-    handlePreview(file) {
-      console.log(file);
-    },
-
-
-    handleBackgroundSuccess(res, file) {
-      res.url = URL.createObjectURL(file.raw);
-      console.log('RES topicBackground::: ', res);
-      // this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
-      _.isArray(this.ruleForm.topicBackground) ? this.ruleForm.topicBackground.push(res) :
-        this.ruleForm.topicBackground = [res];
-    },
-
   }
+
 });

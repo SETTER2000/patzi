@@ -630,7 +630,7 @@
 	"Recommendations": "Рекомендации",
 	"please select your currency": "пожалуйста, выберите вашу валюту",
 	"Sale currency": "Валюта продажи",
-	"title": "title",
+	"title": "титул",
 	"Is it obligatory to set a price now?": "Обязательно ли ставить цену сейчас?",
 	"you have not uploaded any presentation yet": "Вы еще не загрузили ни одной презентации",
 	"Born In Poale Ell": "Рожденные в Poale Ell",
@@ -901,5 +901,10 @@
 	"The background will be the first file": "Фоном будет первый файл",
 	"upload": "загрузить",
 	"The background will be the last file": "Фоном будет всегда последний загруженный файл.",
-	"The last background for the theme is not deleted.": "Последний фон для темы не удаляется."
+	"The last background for the theme is not deleted.": "Последний фон для темы не удаляется.",
+	"Add Title": "Добавить титул",
+	"Add|Edit Dog Titles": "Добавить|Редактировать титулы",
+	"Titles": "Титулы",
+	"created": "создано",
+	"edited": "изменено"
 }

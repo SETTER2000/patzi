@@ -5,6 +5,7 @@ parasails.registerPage('dogs-home', {
   data: {
     dogs: [],
     owner: false,
+    addTitleDog: false,
     searchObjects: '',
     ranks: [{
       id:'1',
@@ -175,7 +176,7 @@ parasails.registerPage('dogs-home', {
       delivery: false,
       resource: '',
       desc: '',
-      //
+      addTitleDog: false,
       errInputDogName: false,
       sale: false,
       see: true,
@@ -248,6 +249,8 @@ parasails.registerPage('dogs-home', {
         all: 'All',
         sire: 'Sire',
         dam: 'Dam',
+        editDogTitles: 'Add|Edit Dog Titles',
+        addDogTitles: 'Add Dog Titles',
         photoEditor: 'Photo editor',
         cancel: 'Cancel',
         text400Err: 'Error. Could not create! ',
@@ -282,6 +285,8 @@ parasails.registerPage('dogs-home', {
         all: 'Все',
         sire: 'Sire',
         dam: 'Dam',
+        editDogTitles: 'Добавить|Редактировать титулы собаки',
+        addDogTitles: 'Добавить титулы собаки',
         cancel: 'Отменить',
         text400Err: 'Ошибка. Не смог создать!',
         text400ErrUpdate: 'Ошибка. Не смог обновить!',
@@ -431,6 +436,11 @@ parasails.registerPage('dogs-home', {
       get: function () {
         // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
         return new Map(this.dic).get(this.me.preferredLocale);
+      }
+    },
+    titleAdd:{
+      get: function () {
+        return !this.buttonUpdate ? this.i19p.addDogTitles : this.i19p.editDogTitles;
       }
     },
     letters: {

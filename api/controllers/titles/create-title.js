@@ -1,23 +1,24 @@
 module.exports = {
 
 
-  friendlyName: 'Create topic',
+  friendlyName: 'Create title',
 
 
-  description: 'Создать тему для блога',
+
+  description: 'Создать титул для собаки',
 
 
   inputs: {
     label: {
       type: 'string',
       required: true,
-      description: `Официальное имя темы на английском. Поле обязательно для заполнения.`
+      description: `Официальное имя титула на английском. Поле обязательно для заполнения.`
     },
 
     labelRu: {
       type: 'string',
       required: true,
-      description: `Официальное имя темы на русском. Поле обязательно для заполнения.`
+      description: `Официальное имя титула на русском. Поле обязательно для заполнения.`
     },
 
     fileList: {
@@ -27,23 +28,23 @@ module.exports = {
 
     topicBackground: {
       type: 'ref',
-      description: 'Объект файла данных о загруженном файле. Фон темы.'
+      description: 'Объект файла данных о загруженном файле. Фон титула.'
     },
 
     subtitle: {
       type: 'string',
-      description: 'Дополнительная информация. Описание темы на английском языке.',
+      description: 'Дополнительная информация. Описание титула на английском языке.',
       maxLength: 700
     },
 
     subtitleRu: {
       type: 'string',
-      description: 'Дополнительная информация. Описание темы на русском языке.',
+      description: 'Дополнительная информация. Описание титула на русском языке.',
       maxLength: 700
     },
     see: {
       type: 'boolean',
-      description: `Флаг видимости темы. Видна или нет. По умолчанию видна.`
+      description: `Флаг видимости титула. Видна или нет. По умолчанию видна.`
     },
   },
 
@@ -69,7 +70,7 @@ module.exports = {
 
     alreadyInUseRU: {
       statusCode: 409,
-      description: 'Указанное имя темы уже используется.',
+      description: 'Указанное имя титула уже используется.',
     },
 
   },
@@ -115,14 +116,14 @@ module.exports = {
         delete img.field;
       });
     }
-    // Проверка существования такой же темы.
-    let conflicting = await Topic.findOne({labelRu: inputs.labelRu});
+    // Проверка существования такой же титула.
+    let conflicting = await Title.findOne({labelRu: inputs.labelRu});
     if (conflicting) {
       throw (req.me.preferredLocale === 'ru') ? 'alreadyInUseRU' : 'alreadyInUse';
     }
 
 //
-    let newTopic = await Topic.create({
+    let newTopic = await Title.create({
       label: inputs.label,
       labelRu: inputs.labelRu,
       images: images,
@@ -134,7 +135,7 @@ module.exports = {
 
 
     // Выбираем весь список объектов данной коллекции.
-    let topics = await Topic.find()
+    let topics = await Title.find()
         .sort([{labelRu: 'DESC'}])
       // .populate('owners')
     ;
@@ -144,6 +145,7 @@ module.exports = {
     return exits.success();
 
   }
+
 
 
 };

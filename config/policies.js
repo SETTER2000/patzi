@@ -19,6 +19,7 @@ module.exports.policies = {
   'groups/*':'is-super-admin',
   'users/*':'is-admin-or-is-super-admin',
   'topics/*':'is-admin-or-is-super-admin',
+  'titles/*':'is-admin-or-is-super-admin',
   // 'users/*':'is-super-admin',
   'users/list-form/*':'is-all-group',
   'users/update-ratio':'is-all-group',

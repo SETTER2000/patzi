@@ -47,6 +47,10 @@ module.exports.routes = {
 
   'GET /topics/:virtualPageSlug?': { action: 'topics/view-topics-home' },
   'GET /topic/:id': { action: 'topics/view-topic' },
+
+  'GET /titles/:virtualPageSlug?': { action: 'titles/view-titles-home' },
+
+
   // 'GET /litters/litter/:id': {action: 'litters/view-litter'},
   'GET /litter/:letter/:year/:virtualPageSlug?': {action: 'litters/view-litter'},
   'GET /litters/:virtualPageSlug?': {action: 'litters/view-litters-home'},
@@ -183,6 +187,14 @@ module.exports.routes = {
   'PUT    /api/v1/topics/update-topic': { action: 'topics/update-topic', csrf: false },
   'DELETE /api/v1/topics/destroy-many-img': { action: 'topics/destroy-many-img', csrf: false  },
   'DELETE /api/v1/topics/destroy-one-topic': { action: 'topics/destroy-one-topic', csrf: false  },
+
+  'GET    /api/v1/titles/list': { action: 'titles/list' },
+  'GET    /api/v1/titles/count-title': { action: 'titles/count-title' },
+  'POST   /api/v1/titles/create-title': { action: 'titles/create-title', csrf: false },
+  'PUT    /api/v1/titles/update-title': { action: 'titles/update-title', csrf: false  },
+  'DELETE /api/v1/titles/destroy-one-title': { action: 'titles/destroy-one-title', csrf: false   },
+
+
   'GET    /api/v1/continents/list': {action: 'continents/list'},
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},
   'POST   /api/v1/continents/create-continent': {action: 'continents/create-continent', csrf: false},
