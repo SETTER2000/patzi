@@ -18,9 +18,9 @@ module.exports = {
       description: 'Объекты коллекции со всеми данными',
       required: true
     },
-    photoSet:{
+    photoSet: {
       type: 'number',
-      description:`Индекс фотосессии`
+      description: `Индекс фотосессии`
     },
 
     edits: {
@@ -30,10 +30,10 @@ module.exports = {
       `,
       required: true
     },
-    field:{
-      type:'string',
-      defaultsTo:'images',
-      description:`Название свойства в объекте коллекции, которое содержит массив фотосессий.`
+    field: {
+      type: 'string',
+      defaultsTo: 'images',
+      description: `Название свойства в объекте коллекции, которое содержит массив фотосессий.`
     }
   },
 
@@ -49,15 +49,14 @@ module.exports = {
 
   fn: async function (inputs) {
     const btoa = require('btoa');
-    let imageSrc = ''
-      , objId = ''
-      , resize = {
+    let imageSrc = '',
+      objId = '',
+      resize = {
         fit: 'inside',
         width: 1424,
-        height:800
-      }
-    ;
-// Если не передан объект resize, то устанавливаем размер по умолчанию.
+        height: 800
+      };
+    // Если не передан объект resize, то устанавливаем размер по умолчанию.
     inputs.edits.resize = inputs.edits.resize ? inputs.edits.resize : resize;
     // console.log('inputs.collection::: ', inputs.collection);
     if (!_.isArray(inputs.collection)) {
@@ -108,7 +107,6 @@ module.exports = {
         }) : '';
       });
     }
-
 
 
     return inputs.collection;

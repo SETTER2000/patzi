@@ -1,10 +1,11 @@
 module.exports = {
 
 
-  friendlyName: 'View topic',
+  friendlyName: 'View title',
 
 
-  description: 'Display "Topic" page.',
+  description: 'Display "Title" page.',
+
 
   inputs: {
     id: {
@@ -18,7 +19,7 @@ module.exports = {
   exits: {
 
     success: {
-      viewTemplatePath: 'pages/topics/topic'
+      viewTemplatePath: 'pages/titles/title'
     },
     forbidden: {
       responseType: 'forbidden'
@@ -31,7 +32,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    let data = await Topic.findOne({'id': inputs.id});
+    let data = await Title.findOne({'id': inputs.id});
     if (!data) {
       throw 'notFound';
     }
@@ -42,8 +43,8 @@ module.exports = {
      */
     data = await sails.helpers.cloudFrontUrl.with({
       collection: data,
-      collectionName: 'topic',
-      field:'topicBackground',
+      collectionName: 'title',
+      field:'titleBackground',
       edits: {
         resize: {}
       }
@@ -51,7 +52,7 @@ module.exports = {
 
     data = await sails.helpers.cloudFrontUrlMin.with({
       collection: data,
-      collectionName: 'topic',
+      collectionName: 'title',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
         // grayscale: true,
@@ -66,17 +67,17 @@ module.exports = {
 
     data.imagesArrUrl = _.pluck(data.imagesMin, 'imageSrc');
 
-    console.log('topic::::', data);
+    console.log('title::::', data);
     // Respond with view.
     return exits.success({
       seo: {
         description: `${data.labelRu}`,
         title: `${data.labelRu}`,
         canonical: `https://${this.req.headers.host}${this.req.originalUrl}`,
-        header: {ru: 'Тема', en: 'Topic'},
+        header: {ru: 'Титул', en: 'Title'},
         subTitle: {
-          ru: 'Тема статьи, блога и т.д. где можно использовать данную тему.',
-          en: 'The topic of an article, blog, or other similar module associated with text in which you can use this topic.'
+          ru: 'Титул статьи, блога и т.д. где можно использовать данную тему.',
+          en: 'The title of an article, blog, or other similar module associated with text in which you can use this title.'
         },
         preferredLocale: this.req.me.preferredLocale,
         // Первый H3 на странице
@@ -86,10 +87,10 @@ module.exports = {
           ru: data.subtitleRu,
           en: data.subtitle
         },
-        topicBackground: data.topicBackground,
-        // topicBackground:topic.topicBackground ? topic.topicBackground : [],
+        titleBackground: data.titleBackground,
+        // titleBackground:title.titleBackground ? title.titleBackground : [],
       },
-      currentSection: 'topic',
+      currentSection: 'title',
       data
     });
 

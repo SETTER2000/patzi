@@ -49,11 +49,11 @@ module.exports = {
           secret: sails.config.uploads.secret
         }
       );
-console.log('inputs.removeImage::: ' , inputs.removeImage);
+
       _.each(inputs.removeImage, img => {
         skp.rm(img.fd, (err, res) => {
           if (err) console.log(`Ошибка при удаление файла ${img.fd}::`, err);
-          console.log('Response::: ', res);
+          // console.log('Response::: ', res);
         });
       });
     }

@@ -58,12 +58,6 @@ module.exports = {
 
 
   fn: async function (inputs) {
-    /*const btoa = require('btoa');
-    const resizeX = 1424
-      , resizeY = 800
-      , gravity = 'Center'// NorthWest, North, NorthEast, West, Center, East, SouthWest, South, SouthEast
-      , Q = 45 // Качество изображения (100 - 0) http://www.graphicsmagick.org/GraphicsMagick.html#details-compress
-    ;*/
     let collection = _.capitalize(inputs.collection);
     let collectionObject = '';
     inputs.photoSet = inputs.photoSet ? inputs.photoSet : 0;
@@ -90,19 +84,15 @@ module.exports = {
       case 'Topic':
         collectionObject = await Topic.findOne(inputs.id);
         break;
+      case 'Title':
+        collectionObject = await Title.findOne(inputs.id);
+        break;
     }
 
     if (!collectionObject) {
       // console.log('Не найдено!' + collectionObject);
       throw 'notFound';
     }
-
-    // if (_.isArray(collectionObject[folder][inputs.photoSet]['photos'])) {
-    //   // console.log('ARRRAY!', collectionObject[folder][inputs.photoSet]['photos']);
-    // }
-    // else {
-    //   // console.log('NE ARRAY!', collectionObject[folder][inputs.photoSet]['photos']);
-    // }
 
 
     let arr = _.isArray(collectionObject[folder][inputs.photoSet]['photos']) ?
@@ -111,20 +101,6 @@ module.exports = {
     if (!arr) {
       throw 'notFound';
     }
-
-
-    // console.log('Выходной массив arr:', arr);
-
-
-    /**
-     * ПЕРЕВЕРНУЛИ: === -> !== , || -> &&,  _.any -> !_.any
-     * Так что теперь мы говорим:
-     * "Если вы не являетесь владельцем фото и не один из ваших друзей тоже,
-     * то это означает, что вам запрещено видеть эту вещь.
-     */
-    // if (this.req.me.id !== kennel.owner && !_.any(kennel.friends, {id: kennel.owner})) {
-    //   throw 'forbidden';
-    // }
 
 
     //************************************//
@@ -136,26 +112,6 @@ module.exports = {
       throw 'notFound';
     }
     this.res.type(arr[0].type);
-
-
-    // const imageRequest = JSON.stringify({
-    //   bucket: 'paltos',
-    //   key: arr[0].name,
-    //   edits: {
-    //     grayscale: true,
-    //     resize: {
-    //       width: resizeX,
-    //       height: resizeY
-    //     }
-    //   }
-    // });
-    // arr[0].fd = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-
-// console.log('arr[0].cloudFrontUrl:::: ' , arr[0].cloudFrontUrl);
-// console.log('arr[0].fd:::: ' , arr[0].fd);
-
-// console.log('skp.read(arr[0].cloudFrontUrl)::: ' , await sails.startDownload(arr[0].cloudFrontUrl));
-// console.log('await sails.startDownload(arr[0].fd)::: ' , await sails.startDownload(arr[0].fd));
 
     /**
      * startDownload - функция от модуля sails-hook-uploads

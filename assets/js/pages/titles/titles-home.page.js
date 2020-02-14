@@ -7,11 +7,33 @@ parasails.registerPage('titles-home', {
     counts: 0,
     hidden: 0,
     limit: 4,
+    objOne: {},
+    show: false,
+    titleId: undefined,
+    dialog: {},
+    showTitle: undefined,
+    photoVisible: false,
+    checkAll: false,
+    searchObjects: '',
+    photos: {},
+    checkedPhoto: [],
+    isIndeterminate: true,
+    centerDialogVisiblePhotos: false,
+    search: '',
+    editorList: [],
+    photoDesc: {
+      innerVisiblePhotoDescription: false,
+      photoId: '',
+      description: '',
+      dateTaken: '',
+    },
+    photoDescUpdate: false,
     sizeLess: 5, // MB
     buttonUpdate: false,
     centerDialogAdded: false,
     centerDialogVisibleConfirm: false,
     dialogVisible: false,
+    dialogEditorList: false,
     dialogImageUrl: '',
     editList: [],
     lang: '',
@@ -29,10 +51,10 @@ parasails.registerPage('titles-home', {
         {required: true, message: 'Пожалуйста введите название на английском', trigger: 'blur'},
         {min: 3, max: 200, message: 'Длинна от 3 до 200 знаков', trigger: 'blur'},
       ],
-      labelRu: [
-        {required: true, message: 'Пожалуйста введите название на русском', trigger: 'blur'},
-        {min: 3, max: 200, message: 'Длинна от 3 до 200 знаков', trigger: 'blur'},
-      ],
+      // labelRu: [
+      //   {required: true, message: 'Пожалуйста введите название на русском', trigger: 'blur'},
+      //   {min: 3, max: 200, message: 'Длинна от 3 до 200 знаков', trigger: 'blur'},
+      // ],
       continent: [
         {required: true, message: 'Please select your continent', trigger: 'change'}
       ],
@@ -130,7 +152,39 @@ parasails.registerPage('titles-home', {
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
+    io.socket.get('/api/v1/titles/count-title', function gotResp(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Запрос для события list-*
+    io.socket.get(`/api/v1/titles/list`, function gotResponse(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // получаем кол-во скрытых элементов
+    io.socket.get('/api/v1/titles/title-hidden', function gotResp(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Кол-во всех тем
+    io.socket.on('count-title', (data) => {
+      this.counts = data;
+    });
+    // Кол-во всех тем
+    io.socket.on('title-hidden', (data) => {
+      this.hidden = data;
+    });
+    // Обновление темы
+    io.socket.on('update-title', (data) => {
+      console.log('UPDATEEE');
+      // this.getList();
+      this.$forceUpdate();
+    });
+    // Все темы
+    io.socket.on('list-title', (data) => {
+      console.log('Titles all:: ', data);
+      this.titles = this.editorList = data ? data : this.editorList;
+    });
   },
+
+
   filters: {
     getCreate: function (value, l, format) {
       if (!value) {
@@ -314,7 +368,7 @@ parasails.registerPage('titles-home', {
     },
 
 
-    // Create Topic
+    // Create Title
     async add() {
       this.openFullScreen();
       let data = {
@@ -347,7 +401,7 @@ parasails.registerPage('titles-home', {
         }
       });
     },
-    // Update Topic
+    // Update Title
     update() {
       this.openFullScreen();
       let data = {
@@ -382,6 +436,11 @@ parasails.registerPage('titles-home', {
         }
       });
     },
+
+
+
+
+
     openFullScreen() {
       this.loading = this.$loading({
         lock: true,
@@ -460,25 +519,260 @@ parasails.registerPage('titles-home', {
       await io.socket.get(`/api/v1/titles/title-hidden`, function gotResponse(body, response) {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-      await io.socket.get(`/api/v1/titles/title-count`, function gotResponse(body, response) {
-        // console.log('Сервер title-count ответил кодом ' + response.statusCode + ' и данными: ', body);
+      await io.socket.get(`/api/v1/titles/count-title`, function gotResponse(body, response) {
+        // console.log('Сервер count-title ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-
-      // // Принимаем данные по событию list-*
-      // await io.socket.on('list-title', (data) => {
-      //   console.log('data TOPICS all:: ', data);
-      //   this.titles = this.editList = this.filterDogs = _.isNull(data) ? [] : data;
-      // });
       // Принимаем данные по событию list-*
-      await  io.socket.on('title-hidden', (data) => {
+      await io.socket.on('title-hidden', (data) => {
         this.hidden = data;
       });
-      // // Принимаем данные по событию list-*
-      // await  io.socket.on('title-count', (data) => {
-      //   console.log("DDDDDDASAAAA:::: " ,data);
-      //   this.counts = data;
-      // });
-    },
-  }
 
+    },
+
+    // Выбирает темы для редактирования
+    dialogEditors() {
+      this.editorList = (this.me.isAdmin || this.me.isSuperAdmin) ? this.titles : '';
+      this.dialogEditorList = true;
+    },
+
+    errorHandler() {
+      return true;
+    },
+
+    clearFilter() {
+      this.$refs.filterTable.clearFilter();
+      this.search = '';
+    },
+    // Вы можете выделить содержимое таблицы,
+    // чтобы различать «успех, информация, предупреждение, опасность» и другие состояния.
+    tableRowClassName({row, rowIndex}) {
+      if (!row.see) {
+        return 'warning-row';
+      }
+      // else if (rowIndex === 3) {
+      //   return 'success-row';
+      // }
+      return '';
+    },
+
+    openRemoveDialog(id) {
+      this.removeId = id;
+      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
+        confirmButtonText: 'OK',
+        cancelButtonText: this.i19p.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.deleteObj();
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.i19p.delCancel
+        });
+      });
+    },
+    objFilter() {
+      // titles.filter(title=>title.see)
+      return this.titles.filter(data => (!this.searchObjects || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & !_.isEmpty(data.images[data.cover]));
+    },
+    deleteObj: async function () {
+      let data = {
+        id: this.removeId,
+      };
+      console.log('Перед удалением data Title: ', data);
+      io.socket.delete('/api/v1/titles/destroy-one-title', data, (dataRes, jwRes) => {
+        this.errorMessages(jwRes, this.i19p.successDelete);
+        this.dialogDeletePhotoSession = false;
+        if (jwRes.statusCode === 200) {
+          // this.$message({
+          //   type: 'success',
+          //   message: this.i19p.success
+          // });
+          this.getList();
+          this.$forceUpdate();
+        }
+      });
+    },
+
+    errorMessages(jwRes, successText) {
+      (jwRes.statusCode === 200) ? (this.mesSuccess(successText)) :
+        (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+          (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
+    },
+
+    async coverPhoto(id, index) {
+      await io.socket.put(`/api/v1/files/update-cover-album`, {
+        id: id,
+        cover: index,
+        field: 'images',
+        collectionName: 'Title'
+      }, (body, response) => {
+        this.titles.map(title => {
+          if (title.id === id) {
+            // console.log('INDEX: ', index);
+            // let field = 'images';
+            let cut = title['images'].splice(index, 1);
+            // console.log('Вырезали этот объект: ', cut);
+            // title['images'].unshift(cut);
+            title['images'] = [...cut, ...title['images']];
+            // title['images'].splice( 0,0,cut);
+            // console.log('Объеденённый массив::: ', title['images']);
+            title.imagesArrUrl = _.pluck(title['images'], 'imageSrc');
+          }
+          this.getList();
+          this.$forceUpdate();
+        });
+      });
+
+      // Принимаем данные по событию list-*
+      await  io.socket.on('update-cover', (data) => {
+        // this.counts = data;
+      });
+
+    },
+
+    async handleEdit(index, row) {
+      row.titleBackground = _.isArray(row.titleBackground) ? await _.each(row.titleBackground, bg => {
+        bg.url = bg.imageSrc;
+        return bg;
+      }) : [];
+      this.ruleForm = row;
+      console.log('this.ruleForm:::: ', this.ruleForm);
+
+      // this.dateBirthUpdate = row.dateBirth;
+      // this.dateDeathUpdate = row.dateDeath;
+      // this.ruleForm.kennel = row.kennel.id;
+      this.dialogEditor = true;
+      this.centerDialogAdded = true;
+      this.buttonUpdate = true;
+    },
+
+    handleEditPhotos(index, row) {
+      this.photos = row;
+      // console.log('Собака::: ', row);
+      this.centerDialogVisiblePhotos = true;
+    },
+
+    async updateDescriptionPhoto() {
+      this.photoDesc.id = this.photos.id;
+      this.photoDesc.innerVisiblePhotoDescription = false;
+      await io.socket.put('/api/v1/titles/update-description-img', this.photoDesc, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        // this.loading.close();
+        if (jwRes.statusCode === 200) {
+          // this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          this.checkedPhoto = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+          this.$forceUpdate();
+        }
+      });
+    },
+
+    handleCheckAllChange(val) {
+      this.checkedPhoto = val ? _.pluck(this.photos.images, 'id') : [];
+      this.isIndeterminate = false;
+      // console.log('this.checkedPhoto:: ', this.checkedPhoto);
+    },
+    handleCheckedPhotosChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === _.pluck(this.photos.images, 'id').length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < _.pluck(this.photos.images, 'id').length;
+    },
+    clickShowPhoto(index, row) {
+      this.photoVisible = true;
+      this.objOne = Object.assign({}, this.objOne, row);
+    },
+
+    async destroyManyPhotos() {
+      let removeImage = _.remove(this.photos.images, img => _.indexOf(this.checkedPhoto, img.id) > -1);
+      // console.log('Удалённые картинки: ', removeImage);
+      let data = this.photos;
+      data['removeImage'] = _.pluck(removeImage, 'id');
+      // Если картинок нет закрываем окно редактора
+      console.log('REMOVE DATA перед отправкой::', data);
+      _.isEmpty(this.photos.images) ? this.centerDialogVisiblePhotos = false : '';
+      io.socket.delete('/api/v1/titles/destroy-many-img', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        // this.loading.close();
+        if (jwRes.statusCode === 200) {
+          // this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          this.checkedPhoto = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+        }
+      });
+    },
+
+
+    removePhotos() {
+      this.checkAll = false;
+      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
+        confirmButtonText: 'OK',
+        cancelButtonText: this.i19p.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.destroyManyPhotos();
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.i19p.delCancel
+        });
+      });
+    },
+    showMenu(id) {
+      this.titleId = id;
+      this.show = true;
+      this.showTitle = id;
+    },
+
+    showOut() {
+      this.show = false;
+    },
+    warningRemovePhotosS3(d,fileList) {
+      this.checkAll = false;
+      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
+        confirmButtonText: 'OK',
+        cancelButtonText: this.i19p.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.deletePhotoS3(d);
+        this.ruleForm.titleBackground = fileList;
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.i19p.delCancelOverload
+        });
+      });
+    },
+    handleCloseDialog(done) {
+      done();
+      /*  this.$confirm('Are you sure to close this dialog?')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {
+          });*/
+    },
+
+  }
 });

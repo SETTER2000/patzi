@@ -42,13 +42,14 @@ module.exports.routes = {
   'GET /account/avatar': {action: 'account/view-edit-avatar'},
   'GET /portfolio/:virtualPageSlug?': {action: 'things/view-available-things'},
 
-  'GET /blog/post/:postId?': { action: 'blog/view-blog' },
+  'GET /blog/post/:postId?': {action: 'blog/view-blog'},
   'GET /blog/:virtualPageSlug?': {action: 'blog/view-blog-home'},
 
-  'GET /topics/:virtualPageSlug?': { action: 'topics/view-topics-home' },
-  'GET /topic/:id': { action: 'topics/view-topic' },
+  'GET /topics/:virtualPageSlug?': {action: 'topics/view-topics-home'},
+  'GET /topic/:id': {action: 'topics/view-topic'},
 
-  'GET /titles/:virtualPageSlug?': { action: 'titles/view-titles-home' },
+  'GET /titles/:virtualPageSlug?': {action: 'titles/view-titles-home'},
+  'GET /title/:id': {action: 'titles/view-title'},
 
 
   // 'GET /litters/litter/:id': {action: 'litters/view-litter'},
@@ -59,7 +60,7 @@ module.exports.routes = {
   'GET /dogs/:breed/:virtualPageSlug?': {action: 'dogs/view-dogs-home', locals: {currentSection: 'dogs'}},
   'GET /chinese-crested/:fullName': {action: 'dogs/view-dog'},
   'GET /kennel/:label': {action: 'kennels/view-kennel'},
-  'GET /charts/:virtualPageSlug?': { action: 'charts/view-chart-home' },
+  'GET /charts/:virtualPageSlug?': {action: 'charts/view-chart-home'},
 
 
   'GET /contact': {action: 'view-contact', locals: {currentSection: 'contact'}},
@@ -178,21 +179,23 @@ module.exports.routes = {
   'POST   /api/v1/users/update-ratio': {action: 'users/update-ratio', csrf: false},
   'GET    /api/v1/users/status': {action: 'users/list-status'},
   // 'POST   /api/v1/users/looked-comment': {action: 'users/looked-comment', csrf: false},
-  'DELETE /api/v1/files/remove-picture-from-s3': { action: 'files/remove-picture-from-s3', csrf: false  },
+  'DELETE /api/v1/files/remove-picture-from-s3': {action: 'files/remove-picture-from-s3', csrf: false},
 
-  'GET    /api/v1/topics/list': { action: 'topics/list' },
+  'GET    /api/v1/topics/list': {action: 'topics/list'},
   'GET    /api/v1/topics/topic-count': {action: 'topics/topic-count'},
   'GET    /api/v1/topics/topic-hidden': {action: 'topics/topic-hidden'},
-  'POST   /api/v1/topics/create-topic': { action: 'topics/create-topic', csrf: false },
-  'PUT    /api/v1/topics/update-topic': { action: 'topics/update-topic', csrf: false },
-  'DELETE /api/v1/topics/destroy-many-img': { action: 'topics/destroy-many-img', csrf: false  },
-  'DELETE /api/v1/topics/destroy-one-topic': { action: 'topics/destroy-one-topic', csrf: false  },
+  'POST   /api/v1/topics/create-topic': {action: 'topics/create-topic', csrf: false},
+  'PUT    /api/v1/topics/update-topic': {action: 'topics/update-topic', csrf: false},
+  'DELETE /api/v1/topics/destroy-many-img': {action: 'topics/destroy-many-img', csrf: false},
+  'DELETE /api/v1/topics/destroy-one-topic': {action: 'topics/destroy-one-topic', csrf: false},
 
-  'GET    /api/v1/titles/list': { action: 'titles/list' },
-  'GET    /api/v1/titles/count-title': { action: 'titles/count-title' },
-  'POST   /api/v1/titles/create-title': { action: 'titles/create-title', csrf: false },
-  'PUT    /api/v1/titles/update-title': { action: 'titles/update-title', csrf: false  },
-  'DELETE /api/v1/titles/destroy-one-title': { action: 'titles/destroy-one-title', csrf: false   },
+  'GET    /api/v1/titles/list': {action: 'titles/list'},
+  'GET    /api/v1/titles/count-title': {action: 'titles/count-title'},
+  'GET    /api/v1/titles/title-hidden': {action: 'titles/title-hidden'},
+  'POST   /api/v1/titles/create-title': {action: 'titles/create-title', csrf: false},
+  'PUT    /api/v1/titles/update-title': {action: 'titles/update-title', csrf: false},
+  'DELETE /api/v1/titles/destroy-one-title': {action: 'titles/destroy-one-title', csrf: false},
+  'DELETE /api/v1/titles/destroy-many-img': {action: 'titles/destroy-many-img', csrf: false},
 
 
   'GET    /api/v1/continents/list': {action: 'continents/list'},
@@ -218,10 +221,6 @@ module.exports.routes = {
   'POST   /api/v1/dogs/destroy-one-dog': {action: 'dogs/destroy-one-dog', csrf: false},
   'PUT    /api/v1/dogs/update-dog': {action: 'dogs/update-dog', csrf: false},
   'DELETE /api/v1/dogs/destroy-many-img': {action: 'dogs/destroy-many-img', csrf: false},
-
-
-
-
 
 
   'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},

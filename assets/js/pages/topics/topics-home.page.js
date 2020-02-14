@@ -156,43 +156,38 @@ parasails.registerPage('topics-home', {
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
-
     io.socket.get('/api/v1/topics/topic-count', function gotResp(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Запрос для события list-*
+    io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // получаем кол-во скрытых элементов
+    io.socket.get('/api/v1/topics/topic-hidden', function gotResp(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Кол-во всех тем
     io.socket.on('topic-count', (data) => {
       this.counts = data;
     });
-
-    io.socket.get('/api/v1/topics/topic-hidden', function gotResp(body, response) {
-      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-    });
     // Кол-во всех тем
     io.socket.on('topic-hidden', (data) => {
       this.hidden = data;
     });
-
     // Обновление темы
     io.socket.on('update-topic', (data) => {
       console.log('UPDATEEE');
       // this.getList();
       this.$forceUpdate();
     });
-
-
-    // Запрос для события list-*
-    io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
-      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-    });
     // Все темы
     io.socket.on('list-topic', (data) => {
       console.log('TOPICS all:: ', data);
       this.topics = this.editorList = data ? data : this.editorList;
     });
-
-
   },
+
   filters: {
     getCreate: function (value, l, format) {
       if (!value) {
@@ -457,11 +452,6 @@ parasails.registerPage('topics-home', {
       await  io.socket.on('topic-hidden', (data) => {
         this.hidden = data;
       });
-      // // Принимаем данные по событию list-*
-      // await  io.socket.on('topic-count', (data) => {
-      //   console.log("DDDDDDASAAAA:::: " ,data);
-      //   this.counts = data;
-      // });
     },
 
     openFullScreen() {
@@ -846,6 +836,10 @@ parasails.registerPage('topics-home', {
       _.isArray(this.ruleForm.topicBackground) ? this.ruleForm.topicBackground.push(res) :
         this.ruleForm.topicBackground = [res];
     },
+
+
+
+
 
   }
 });

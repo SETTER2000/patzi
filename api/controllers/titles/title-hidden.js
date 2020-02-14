@@ -1,13 +1,19 @@
 module.exports = {
 
-  friendlyName: 'Count all',
+
+  friendlyName: 'Title hidden',
 
 
-  description: 'Количество титулов в системе',
+  description: 'Количество титулов скрытых в системе',
+
+  inputs: {
+
+  },
+
 
   exits: {
     success: {
-      anyData: 'Вы подключились к комнате title и слушаете событие count-all'
+      anyData: 'Вы подключились к комнате title и слушаете событие is-hidden'
     },
     notFound: {
       description: 'There is no such object with such ID.',
@@ -36,9 +42,8 @@ module.exports = {
     await sails.sockets.join(req, 'title');
 
     // let count = await User.find();
-    let count = await Title.count();
-
-    await sails.sockets.broadcast('title', 'count-title', count);
+    let hidden = await Title.find({'see':false});
+    await sails.sockets.broadcast('title', 'title-hidden', hidden.length);
     // Respond with view.
     return exits.success();
 

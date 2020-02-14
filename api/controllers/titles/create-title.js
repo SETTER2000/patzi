@@ -4,7 +4,6 @@ module.exports = {
   friendlyName: 'Create title',
 
 
-
   description: 'Создать титул для собаки',
 
 
@@ -17,7 +16,6 @@ module.exports = {
 
     labelRu: {
       type: 'string',
-      required: true,
       description: `Официальное имя титула на русском. Поле обязательно для заполнения.`
     },
 
@@ -94,7 +92,6 @@ module.exports = {
     if (inputs.fileList) {
       images = await inputs.fileList.filter(o => !_.isNull(o));
       await _.each(images, img => {
-        console.log('FDDDk:::', img);
         img.id = _.first(_.last(img.fd.split('\\')).split('.'));
         img.description = '';
         img.dateTaken = '';
@@ -107,7 +104,6 @@ module.exports = {
     if (inputs.topicBackground) {
       topicBackground = await inputs.topicBackground.filter(o => !_.isNull(o));
       await _.each(images, img => {
-        console.log('ВФЫЫ:::', img);
         img.id = _.first(_.last(img.fd.split('\\')).split('.'));
         img.description = '';
         img.dateTaken = '';
@@ -117,18 +113,17 @@ module.exports = {
       });
     }
     // Проверка существования такой же титула.
-    let conflicting = await Title.findOne({labelRu: inputs.labelRu});
+    let conflicting = await Title.findOne({label: inputs.label});
     if (conflicting) {
       throw (req.me.preferredLocale === 'ru') ? 'alreadyInUseRU' : 'alreadyInUse';
     }
 
-//
-    let newTopic = await Title.create({
-      label: inputs.label,
+    let newObj = await Title.create({
+      label: inputs.label.toUpperCase(),
       labelRu: inputs.labelRu,
       images: images,
       topicBackground: topicBackground,
-      subtitle: inputs.subtitle,
+      subtitle: _.startCase(inputs.subtitle.toString().toLowerCase()),
       subtitleRu: inputs.subtitleRu,
       see: inputs.see
     });
@@ -136,16 +131,10 @@ module.exports = {
 
     // Выбираем весь список объектов данной коллекции.
     let topics = await Title.find()
-        .sort([{labelRu: 'DESC'}])
-      // .populate('owners')
-    ;
+      .sort([{labelRu: 'DESC'}]);
 
     await sails.sockets.broadcast('topic', 'list-topic');
     // Respond with view.
     return exits.success();
-
   }
-
-
-
 };

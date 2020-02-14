@@ -45,7 +45,7 @@ parasails.registerComponent('patziSectionHeader', {
     <div class="container">
       <div class="row d-flex align-items-center justify-content-center">
         <div class="about-content col-lg-12">
-          <h1 class="text-white"> {{objData.preferredLocale === 'ru' ? objData.header.ru : objData.header.en}}{{label ? ': ' : ''}}{{!label ? '' : objData.preferredLocale === 'ru' ? objData.topic.labelRu :  objData.title }}</h1>
+          <h1 class="text-white"> {{objData.preferredLocale === 'ru' ? objData.header.ru : objData.header.en}}{{label ? ': ' : ''}}{{!label ? '' : objData.preferredLocale === 'ru' ? objData.data.labelRu :  objData.title }}</h1>
           <p>{{objData.preferredLocale === 'ru' ? objData.subTitle.ru : objData.subTitle.en}}</p>
         </div>
       </div>
