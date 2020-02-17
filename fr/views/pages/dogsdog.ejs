@@ -1,359 +1,622 @@
 <div id="dog" class="content" v-cloak>
-  <% /* Диалоговое окно. Аватар пользователя, картинка собаки. */ %>
-  <el-dialog
-    :title="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)"
-    custom-class="dialog-kennel-add"
-    :visible.sync="photoVisible"
-    :before-close="handleCloseDialog">
-    <div class="menu-center" v-if="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)">
-      <img :src="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)" style="width: 100%;"
-           :alt="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)">
-    </div>
-    <!--<div class="block">
-      <el-image :src="objOne.img" class="cov">
-        <div slot="placeholder" class="image-slot">
-          Loading<span class="dot">...</span>
+    <% /* Диалоговое окно. Аватар пользователя, картинка собаки. */ %>
+    <el-dialog
+            :title="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)"
+            custom-class="dialog-kennel-add"
+            :visible.sync="photoVisible"
+            :before-close="handleCloseDialog">
+        <div class="menu-center" v-if="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)">
+            <img :src="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)" style="width: 100%;"
+                 :alt="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)">
         </div>
-      </el-image>
-    </div>-->
-    <span slot="footer" class="dialog-footer">
+        <!--<div class="block">
+          <el-image :src="objOne.img" class="cov">
+            <div slot="placeholder" class="image-slot">
+              Loading<span class="dot">...</span>
+            </div>
+          </el-image>
+        </div>-->
+        <span slot="footer" class="dialog-footer">
     <el-button type="primary" @click="objOne={};photoVisible = false"><%= __('Close') %></el-button>
   </span>
-  </el-dialog>
-  <% /*Выезжающая вкладка НАГРАДЫ */ %>
-  <el-drawer
-    title="<%= __('Awards') %> <%= (dog.fullName) %>"
-    :visible.sync="dialogFormAwards"
-    :direction="direction"
-    custom-class="awards"
-  >
-    <el-row type="flex" class="row-bg" justify="space-around">
-      <el-col :span="1">
-        <div class="grid-content bg-purple"></div>
-      </el-col>
-      <el-col :span="18">
-        <div class="grid-content bg-purple-light">
-          <!-- <h4><%= __('Welcome') %>, {{me.fullName}}!</h4>
-          <p>{{i19p.startOfNegotiations}} {{this.fullNameDogNegotiations}}.</p>
-          <p>{{i19p.startOfNegotiations2}}</p>-->
-        </div>
-      </el-col>
-      <el-col :span="1">
-        <div class="grid-content bg-purple"></div>
-      </el-col>
-    </el-row>
-    <el-row type="flex" class="row-bg" justify="space-around">
-      <el-col :span="1">
-        <div class="grid-content bg-purple"></div>
-      </el-col>
-      <el-col :span="18">
-        <div class="mt-4">
-          <% /* Поле ввода комментария */ %>
-          <!--<el-form @submit.native.prevent>
-            <el-form-item>
-              <el-input @keyup.enter.native="addComment('negotiation')"
-                        class="lb mt-2"
-                        maxLength="1000"
-                        clearable
-                        placeholder="<%= __('Write a message') %>"
-                        v-model="comment">
-                <i slot="prefix" class="el-input__icon el-icon-chat-line-round"></i>
-                <template slot="prepend">
-                  <el-avatar :size="35" :src="me[me.defaultIcon]"></el-avatar>
-                </template>
-              </el-input>
-            </el-form-item>
-          </el-form>-->
-        </div>
-      </el-col>
-      <el-col :span="1">
-        <div class="grid-content bg-purple"></div>
-      </el-col>
-    </el-row>
-  </el-drawer>
-
-
-  <div :class="{ winner: dog.winner }">
-    <% /* Шапка страницы */ %>
-    <section class="banner-area relative" :class="{deathColor:dog.dateDeath}">
-      <div class="container">
-        <div class="row d-flex align-items-center justify-content-center">
-          <div class="about-content col-lg-12">
-            <div v-if="dog.winner" class="menu-center">
-              <el-popover
-                placement="right-start"
-                trigger="hover"
-                width="320">
-                <div class="menu-center"><h4><%= __('World Winner') %></h4>
-                  <el-table :data="worldWinner">
-                    <el-table-column width="70" property="year" label="<%= __('year') %>"></el-table-column>
-                    <el-table-column width="150" property="address" label="<%= __('address') %>"></el-table-column>
-                    <el-table-column width="600" property="description" label="<%= __('description') %>"></el-table-column>
-                  </el-table>
+    </el-dialog>
+    <% /*Диалоговое окно. ТИТУЛЫ */ %>
+    <el-dialog
+            :visible.sync="dialogFormAwards"
+            :direction="direction"
+            fullscreen
+            top="0"
+            custom-class="awards"
+            center
+            :show-close="false"
+    >
+        <section class="u-clearfix u-section-1" id="carousel_e299">
+            <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
+                <div class="u-layout">
+                    <div class="u-layout-row">
+                        <div class="u-container-style u-image u-layout-cell u-left-cell u-size-28 u-image-1">
+                            <div class="u-container-layout u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs">
+                                <div class="u-align-left u-border-7 u-border-grey-15 u-container-style u-group u-group-1">
+                                    <div class="u-container-layout u-valign-middle u-container-layout-2">
+                                        <h1 class="u-text u-title u-text-1"><%= __('I have') %><br><%= __('titles') %></h1>
+                                        <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div>
+                                        <a :href="dog.fullName" class="u-border-0 u-link u-no-underline u-link-1">{{dog.fullName}} &gt;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="u-container-style u-layout-cell u-right-cell u-size-32 u-layout-cell-2">
+                            <div class="u-container-layout">
+                                <img class="u-expand-resize u-expanded-height u-image u-image-2" src="/images/lux1.jpg">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <i slot="reference" style="font-size: 2em" class="ti-crown"></i>
-              </el-popover>
             </div>
-            <h1 class="text-white">{{dog.fullName}}</h1>
-            <p>{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</p>
-            <H2 v-if="dog.nickname" class="text-gold">
-              <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
-              <i v-else class="el-icon-female"></i>
-              {{dog.nickname}}
-            </H2>
-            <p v-else class="gender">
-              <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
-              <i v-else class="el-icon-female"></i>
-            </p>
-          </div>
+        </section>
+        <section class="u-align-center u-clearfix u-section-2" id="carousel_4c08">
+            <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-xl u-sheet-1">
+                <template>
+                    <div v-if="me.isSuperAdmin || me.isAdmin" class="mt-5  text-center">
+                        <el-button @click="clickAddButton()" class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"
+                                   icon="el-icon-circle-plus-outline"><%= __('add me title') %></el-button>
+                    </div>
+                    <!-- <div class="mt-5  text-center" v-else>
+                        <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"
+                                   class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('add me title') %></el-button>
+
+                    </div>-->
+                </template>
+                <!--                <a href="#" class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">add me title</a>-->
+            </div>
+        </section>
+        <section class="u-clearfix u-white u-section-3" id="carousel_8bf4">
+            <div class="u-clearfix u-sheet u-sheet-1">
+                <div class="u-clearfix u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xl u-gutter-40 u-layout-wrap u-layout-wrap-1">
+                    <div class="u-layout">
+                        <div class="u-layout-row">
+                            <div class="u-align-left u-container-style u-expand-resize u-image u-layout-cell u-left-cell u-size-27 u-image-1">
+                                <div class="u-container-layout"></div>
+                            </div>
+                            <div class="u-container-style u-expand-resize u-layout-cell u-right-cell u-size-33 u-layout-cell-2">
+                                <div class="u-container-layout">
+                                    <img class="u-expanded-height-sm u-expanded-height-xs u-image u-image-2" src="/images/RUSJCH.jpg"
+                                         data-image-width="573" data-image-height="800">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="u-align-right u-container-style u-expanded-width-lg u-expanded-width-xl u-expanded-width-xs u-group u-group-1">
+                    <div class="u-container-layout u-valign-middle-sm u-valign-middle-xs u-container-layout-3">
+                        <h2 class="u-text u-text-1">young champion of Russia</h2>
+                        <a href="#" class="u-border-0 u-link u-no-underline u-link-1">22 февраля 2019</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="u-clearfix u-white u-section-4" id="carousel_1ded">
+            <div class="u-clearfix u-sheet u-sheet-1">
+                <div class="u-clearfix u-expanded-width-xl u-gutter-40 u-layout-wrap u-layout-wrap-1">
+                    <div class="u-layout">
+                        <div class="u-layout-row">
+                            <div class="u-container-style u-expand-resize u-layout-cell u-right-cell u-size-33 u-layout-cell-1">
+                                <div class="u-container-layout">
+                                    <img class="u-expanded-height-sm u-expanded-height-xs u-image u-image-1" src="/images/RUSCH.jpg">
+                                    <div class="u-align-left u-container-style u-group u-group-1">
+                                        <div class="u-container-layout u-valign-middle-lg u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs u-container-layout-2">
+                                            <h2 class="u-text u-text-1">champion of Russia</h2>
+                                            <a href="#" class="u-border-0 u-link u-no-underline u-link-1">10 january 2020</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="u-container-style u-expand-resize u-image u-layout-cell u-left-cell u-size-27 u-image-2"
+                                 data-image-width="1163" data-image-height="1600">
+                                <div class="u-container-layout"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="u-clearfix u-section-5" id="sec-1f68">
+            <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
+                <div class="u-layout">
+                    <div class="u-layout-row">
+                        <div class="u-container-style u-image u-layout-cell u-left-cell u-size-28 u-image-1">
+                            <div class="u-container-layout"></div>
+                        </div>
+                        <div class="u-container-style u-image u-layout-cell u-right-cell u-size-32 u-image-2">
+                            <div class="u-container-layout u-valign-middle-sm u-valign-middle-xs">
+                                <div class="u-align-left u-border-7 u-border-grey-15 u-container-style u-group u-group-1">
+                                    <div class="u-container-layout u-valign-middle u-container-layout-3">
+                                        <h1 class="u-text u-title u-text-1">world winner 2018
+                                            <br>
+                                        </h1>
+                                        <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div>
+                                        <a href="#" class="u-border-0 u-link u-no-underline u-link-1">16 april 2018&nbsp;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormAwards = false"><%= __('Close') %></el-button>
+        </span>
+    </el-dialog>
+    <% /* Диалоговое окно. Добавить | Редактировать титулы. */ %>
+    <el-dialog title="<%= __('Add me titles') %>"
+               :visible.sync="centerDialogAdded"
+               custom-class="dialog-kennel-add-dog"
+               center>
+        <el-dialog
+                width="60%"
+                :title="dialog.header"
+                :visible.sync="innerVisible"
+                append-to-body>
+            <div class="text-center"><p>{{dialog.description}}</p></div>
+            <el-image :src="dialog.src" style="width: 100%">
+                <div slot="placeholder" class="image-slot">
+                    Loading<span class="dot">...</span>
+                </div>
+
+            </el-image>
+        </el-dialog>
+
+        <% /* Диалоговое окно. Не верный текст имени собаки. */ %>
+        <!--<el-dialog
+                title="<%= __('Error') %>"
+                width="30%"
+                :visible.sync="ruleForm.errInputDogName"
+                :show-close=false
+                append-to-body>
+            <span><%= __('The name of the dog is written only in English letters. Switch the keyboard to the correct layout.') %></span>
+            <span slot="footer" class="dialog-footer">
+    <el-button autofocus type="primary" @click="ruleForm.errInputDogName = false; ruleForm.label=''">Ok</el-button>
+  </span>
+        </el-dialog>-->
+
+        <template v-if="!ruleForm.see">
+            <el-popover
+                    ref="popover"
+                    placement="top-start"
+                    title="<%= __('Visibility') %>"
+                    width="270"
+                    trigger="hover"
+                    content="<%= __('Your dog is currently not visible in the catalog. Until you turn on the visibility no one can see it.') %>">
+            </el-popover>
+            <div class="menu-center">
+                <h1 v-if="buttonUpdate" class="flex justify-content-center"
+                    :class="classObject"
+                >{{ruleForm.fullName}}
+                </h1>
+                <el-button class="not-border" icon="el-icon-warning-outline" size="mini" v-popover:popover circle></el-button>
+            </div>
+        </template>
+        <template v-else>
+            <h1 v-if="buttonUpdate" class="flex justify-content-center"
+                :class="classObject"
+            >{{ruleForm.fullName}}</h1>
+        </template>
+        <div v-if="ruleForm.imageUrl">
+            <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
         </div>
-      </div>
-    </section>
-
-    <% /* Главное Фото */ %>
-    <section class="service-area section-gap">
-      <div class="container">
-        <div class="portfolio_details_inner ">
-          <div class="row">
-            <% /* Хлебные крошки */ %>
-            <div class="col-md-6">
-              <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item><a style="text-decoration: none" href="/"><%= __('Home-menu') %></a></el-breadcrumb-item>
-                <el-breadcrumb-item><a style="text-decoration: none" href="/dogs/chinese-crested"><%= __('Dogs') %></a></el-breadcrumb-item>
-                <el-breadcrumb-item> {{dog.fullName}}</el-breadcrumb-item>
-                <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
-              </el-breadcrumb>
+        <h5><%= __('Multiple upload photos') %></h5>
+        <label v-if="!ruleForm.imageUrl">
+            <%= __('The first photo in this download will become the album cover. Later in the editor you can change these settings.') %>
+        </label>
+        <div class="my-2">
+            <el-divider content-position="left"><%= __('Add photo') %></el-divider>
+        </div>
+        <!---------------------------------------------------------------------------------------->
+        <% /*Загрузка фото NEW*/ %>
+        <!--  <el-row type="flex" class="row-bg" justify="center">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">-->
+        <div class="container-fluid ">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <el-upload
+                            action="/api/v1/files/upload"
+                            list-type="picture-card"
+                            drag
+                            multiple
+                            ref="upload"
+                            :on-preview="handlePictureCardPreview"
+                            :before-upload="beforeUpload"
+                            :limit="limit"
+                            :on-success="handleSuccess"
+                            :on-exceed="handleExceed"
+                            :on-remove="handleRemove"
+                    >
+                        <i class="el-icon-plus"></i>
+                        <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
+                            {{sizeLess}}<%= __('MB') %></div>
+                    </el-upload>
+                    <br>
+                    <el-dialog :visible.sync="dialogVisible" style="z-index: 10000">
+                        <img :src="dialogImageUrl" alt="">
+                    </el-dialog>
+                </div>
             </div>
-            <div class="col-md-6">
-              <el-row type="flex" class="row-bg  mt-5 mt-sm-0" justify="end">
-                <el-col :span="21">
-                  <el-row type="flex" class="row-bg" justify="end">
-                    <% /* Заводчик */ %>
-                    <el-col :span="11">
-                      <h5 class="text-center">
-                        <small>breeder:</small>
-                        {{dog.breeder.fullName}}
-                      </h5>
-                    </el-col>
+        </div>
+        <!--     </el-col>
+           </el-row>-->
+        <!---------------------------------------------------------------------------------------->
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+            <!--  <el-row type="flex" class="row-bg" justify="center">
+               <el-col :xs="24" :sm="24" :md="24" :lg="12" :offset="2" :xl="12">-->
+            <div class="container-fluid ">
+                <div class="row ">
+                    <div class="col col-lg-6">
 
-                    <% /* Владелец  */ %>
-                    <el-col :span="11">
-                      <h5 class="text-center">
-                        <small>owner:</small>
-                        {{dog.owners.fullName}}
-                      </h5>
-                    </el-col>
-                  </el-row>
+                        <% /* DIVIDER*/ %>
+                        <div>
+                            <el-divider content-position="left"><%= __('Titles') %></el-divider>
+                        </div>
+                        <% /* ТИТУЛЫ. Добавить | убрать */ %>
+                        <el-form-item
+                                v-for="(federation, index) in ruleForm.federations"
+                                :label="'№ ' + (index + 1)"
+                                :key="federation.key"
+                                :prop="'federations.' + index + '.registerNumber'"
+                                :rules="{required: false, message: 'Federation can not be null', trigger: 'blur'}">
+                            <el-col :xs="14" :sm="18" :md="18" :lg="17" :xl="16">
+                                <%= __('Dignity') %>
+                                <el-input placeholder="<%= __("Dog's registration number") %>" v-model="federation.registerNumber"
+                                          class="input-with-select">
 
-                </el-col>
+                                    <el-select v-model="federation.value" slot="prepend" class="wds" placeholder="Select">
+                                        <el-option :label="ob.abbr" :title="me.preferredLocale==='ru'?ob.labelRu:ob.label" :value="ob.value"
+                                                   v-for="(ob, index) in ranks" :key="ob.id"></el-option>
+                                        <el-option label="ob.abbr" value="ob.value"></el-option>
+                                    </el-select>
+                                    <el-button slot="append" @click="copyElement" icon="el-icon-copy-document"></el-button>
+                                    <el-button slot="append" @click.prevent="removeElement(federation)"
+                                               icon="el-icon-delete"></el-button>
+                                </el-input>
+                            </el-col>
 
-                <% /* Кнопки управления */ %>
-                <el-col :span="1" class="menu-center-v">
-                  <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content">
-                    <el-dropdown @command="handleCommand">
+                        </el-form-item>
+                    </div>
+                </div>
+                <% /* ВИДЕН ТИТУЛ ИЛИ НЕТ */ %>
+                <div class="flex justify-content-center my-5" >
+                    <el-form-item prop="see">
+                        <el-switch
+                                style="display: block"
+                                v-model="ruleForm.see"
+                                active-color="#13ce66"
+                                inactive-color="#ff4949"
+                                active-text="<%= __('visible') %>"
+                                inactive-text="<%= __('not visible') %>">
+                        </el-switch>
+                    </el-form-item>
+                </div>
+            </div>
+            <el-divider></el-divider>
+
+            <el-row type="flex" justify="center">
+                <div class="my-3 pt-4 text-center hidden-xs-only">
+                    <el-form-item>
+
+                        <!--                        <el-button v-if="!buttonUpdate" @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>-->
+                        <el-button @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
+                        <el-button v-if="!buttonUpdate" type="primary"
+                                   @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+                        <el-button v-else type="primary" @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
+
+                    </el-form-item>
+                </div>
+                <div class="text-center hidden-sm-and-up">
+                    <el-button-group>
+                        <!--                        <el-button v-if="!buttonUpdate" @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>-->
+                        <el-button @click="buttonUpdate = false; centerDialogAdded = false" icon="el-icon-close"></el-button>
+                        <el-button v-if="!buttonUpdate" type="primary"
+                                   @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+                        <el-button v-else type="primary" @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+                    </el-button-group>
+                </div>
+            </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+  </span>
+    </el-dialog>
+
+
+    <div :class="{ winner: dog.winner }">
+        <% /* Шапка страницы */ %>
+        <section class="banner-area relative" :class="{deathColor:dog.dateDeath}">
+            <div class="container">
+                <div class="row d-flex align-items-center justify-content-center">
+                    <div class="about-content col-lg-12">
+                        <div v-if="dog.winner" class="menu-center">
+                            <el-popover
+                                    placement="right-start"
+                                    trigger="hover"
+                                    width="320">
+                                <div class="menu-center"><h4><%= __('World Winner') %></h4>
+                                    <el-table :data="worldWinner">
+                                        <el-table-column width="70" property="year" label="<%= __('year') %>"></el-table-column>
+                                        <el-table-column width="150" property="address" label="<%= __('address') %>"></el-table-column>
+                                        <el-table-column width="600" property="description"
+                                                         label="<%= __('description') %>"></el-table-column>
+                                    </el-table>
+                                </div>
+                                <i slot="reference" style="font-size: 2em" class="ti-crown"></i>
+                            </el-popover>
+                        </div>
+                        <h1 class="text-white">{{dog.fullName}}</h1>
+                        <p>{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</p>
+                        <H2 v-if="dog.nickname" class="text-gold">
+                            <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
+                            <i v-else class="el-icon-female"></i>
+                            {{dog.nickname}}
+                        </H2>
+                        <p v-else class="gender">
+                            <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
+                            <i v-else class="el-icon-female"></i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <% /* Главное Фото */ %>
+        <section class="service-area section-gap">
+            <div class="container">
+                <div class="portfolio_details_inner ">
+                    <div class="row">
+                        <% /* Хлебные крошки */ %>
+                        <div class="col-md-6">
+                            <el-breadcrumb separator-class="el-icon-arrow-right">
+                                <el-breadcrumb-item><a style="text-decoration: none" href="/"><%= __('Home-menu') %></a>
+                                </el-breadcrumb-item>
+                                <el-breadcrumb-item><a style="text-decoration: none" href="/dogs/chinese-crested"><%= __('Dogs') %></a>
+                                </el-breadcrumb-item>
+                                <el-breadcrumb-item> {{dog.fullName}}</el-breadcrumb-item>
+                                <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
+                            </el-breadcrumb>
+                        </div>
+                        <div class="col-md-6">
+                            <el-row type="flex" class="row-bg  mt-5 mt-sm-0" justify="end">
+                                <el-col :span="21">
+                                    <el-row type="flex" class="row-bg" justify="end">
+                                        <% /* Заводчик */ %>
+                                        <el-col :span="11">
+                                            <h5 class="text-center">
+                                                <small>breeder:</small>
+                                                {{dog.breeder.fullName}}
+                                            </h5>
+                                        </el-col>
+
+                                        <% /* Владелец  */ %>
+                                        <el-col :span="11">
+                                            <h5 class="text-center">
+                                                <small>owner:</small>
+                                                {{dog.owners.fullName}}
+                                            </h5>
+                                        </el-col>
+                                    </el-row>
+
+                                </el-col>
+
+                                <% /* Кнопки управления */ %>
+                                <el-col :span="1" class="menu-center-v">
+                                    <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content">
+                                        <el-dropdown @command="handleCommand">
                             <span class="el-dropdown-link">
                               <i class="el-icon-more el-icon--right"></i>
                             </span>
-                      <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
-                          <%= __('Add photo') %>
-                        </el-dropdown-item>
-                        <el-dropdown-item icon="ti-medall" :command="{com:'a'}">
-                          <%= __('Awards') %>
-                        </el-dropdown-item>
-                      </el-dropdown-menu>
-                    </el-dropdown>
-                  </div>
-                </el-col>
-              </el-row>
-            </div>
-          </div>
-          <% /*ГЛАВНАЯ КАРТИНКА */ %>
-          <div class="menu-center " style="position: relative; overflow:hidden ">
+                                            <el-dropdown-menu slot="dropdown">
+                                                <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
+                                                    <%= __('Add photo') %>
+                                                </el-dropdown-item>
+                                                <el-dropdown-item icon="ti-medall" :command="{com:'a'}">
+                                                    <%= __('Titles') %>
+                                                </el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </el-dropdown>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                        </div>
+                    </div>
+                    <% /*ГЛАВНАЯ КАРТИНКА */ %>
+                    <div class="menu-center " style="position: relative; overflow:hidden ">
 
-            <el-tooltip v-if="dog.sale & dog.price>0" class="item" effect="dark" content="<%= __('For sale') %>" placement="left">
-              <el-button class="lenta pointer" @click="goTo2('/dogs/chinese-crested/sale')">
-                <div style="color: white;">{{dog.currency | getCurrency()}}{{dog.price}}</div>
-              </el-button>
-            </el-tooltip>
-            <!--<div><img src="/images/crown.png" alt=""></div>-->
-            <!--<img :src="dog.images[dog.cover].imageSrc" class="img-fluid" alt="dog.images[dog.cover].name">-->
+                        <el-tooltip v-if="dog.sale & dog.price>0" class="item" effect="dark" content="<%= __('For sale') %>"
+                                    placement="left">
+                            <el-button class="lenta pointer" @click="goTo2('/dogs/chinese-crested/sale')">
+                                <div style="color: white;">{{dog.currency | getCurrency()}}{{dog.price}}</div>
+                            </el-button>
+                        </el-tooltip>
+                        <!--<div><img src="/images/crown.png" alt=""></div>-->
+                        <!--<img :src="dog.images[dog.cover].imageSrc" class="img-fluid" alt="dog.images[dog.cover].name">-->
 
-            <el-image
-              :src="rootImg()"
-              :key="dog.id"
-              :fit="'cover'"
-           :class="{deathColor:dog.dateDeath}"
-              :scroll-container="'#style-1'"
-              :preview-src-list="dog.imagesArrUrl">
-              <div slot="placeholder" class="image-slot" style="height:500px;">
-                Loading<span class="dot">...</span>
-              </div>
-              <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline"></i> <%= __('not found') %>
-              </div>
-            </el-image>
-            </div>
+                        <el-image
+                                :src="rootImg()"
+                                :key="dog.id"
+                                :fit="'cover'"
+                                :class="{deathColor:dog.dateDeath}"
+                                :scroll-container="'#style-1'"
+                                :preview-src-list="dog.imagesArrUrl">
+                            <div slot="placeholder" class="image-slot" style="height:500px;">
+                                Loading<span class="dot">...</span>
+                            </div>
+                            <div slot="error" class="image-slot">
+                                <i class="el-icon-picture-outline"></i> <%= __('not found') %>
+                            </div>
+                        </el-image>
+                    </div>
 
-        </div>
-      </div>
-    </section>
+                </div>
+            </div>
+        </section>
 
-    <% /* ИНФОРМАЦИЯ о СОБАКЕ */ %>
-    <section class="service-area ">
-      <div class="container">
-        <h2 class="text-center text-uppercase"><%= __('Dog description') %></h2>
-        <div class="menu-between mb-5">
-        <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()" round><%= __('Pedigree') %></el-button>
-        </div>
-        <div class="menu-center">
-          <% /* ЦИТАТА, ЗАМЕТКА о СОБАКЕ */ %>
-          <div v-if="dog.subtitle" class="card  mb-4">
-            <div class="card-header">
-              <%= __('Quote') %>
-            </div>
-            <div class="card-body">
-              <blockquote class="blockquote mb-0">
-                <p>{{dog.subtitle}}</p>
-                <footer class="blockquote-footer">{{dog.breeder.fullName}} <cite :title="dog.kennel.label">{{dog.kennel.label}}</cite></footer>
-              </blockquote>
-            </div>
-          </div>
-          <% /* СОБАКА */ %>
-          <el-card class="box-card ">
-            <div slot="header" class="clearfix">
-              <span><%= __('Dog') %> ({{dog.gender}})</span>
+        <% /* ИНФОРМАЦИЯ о СОБАКЕ */ %>
+        <section class="service-area ">
+            <div class="container">
+                <h2 class="text-center text-uppercase"><%= __('Dog description') %></h2>
+                <div class="menu-between mb-5">
+                    <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()" round><%= __('Pedigree') %></el-button>
+                </div>
+                <div class="menu-center">
+                    <% /* ЦИТАТА, ЗАМЕТКА о СОБАКЕ */ %>
+                    <div v-if="dog.subtitle" class="card  mb-4">
+                        <div class="card-header">
+                            <%= __('Quote') %>
+                        </div>
+                        <div class="card-body">
+                            <blockquote class="blockquote mb-0">
+                                <p>{{dog.subtitle}}</p>
+                                <footer class="blockquote-footer">{{dog.breeder.fullName}} <cite :title="dog.kennel.label">{{dog.kennel.label}}</cite>
+                                </footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                    <% /* СОБАКА */ %>
+                    <el-card class="box-card ">
+                        <div slot="header" class="clearfix">
+                            <span><%= __('Dog') %> ({{dog.gender}})</span>
 
-            </div>
-            <div class="menu-between-v">
-              <div class="menu-between">
-                <span><%= __('DoB') %>:</span> <span>{{dog.dateBirth | getCreate(me.preferredLocale)}}</span>
-              </div>
-              <div class="menu-between" v-if="dog.color">
-                <span><%= __('Color') %>:</span> <span> {{dog.color}}</span>
-              </div>
-              <div class="menu-between" v-if="dog.type">
-                <span><%= __('Variety') %>:</span> <span>{{dog.type}}</span>
-              </div>
-              <div class="menu-between" v-if="dog.growth">
-                <span><%= __('Size') %>: </span> <span>{{dog.growth}}<%= __('cm') %>
+                        </div>
+                        <div class="menu-between-v">
+                            <div class="menu-between">
+                                <span><%= __('DoB') %>:</span> <span>{{dog.dateBirth | getCreate(me.preferredLocale)}}</span>
+                            </div>
+                            <div class="menu-between" v-if="dog.color">
+                                <span><%= __('Color') %>:</span> <span> {{dog.color}}</span>
+                            </div>
+                            <div class="menu-between" v-if="dog.type">
+                                <span><%= __('Variety') %>:</span> <span>{{dog.type}}</span>
+                            </div>
+                            <div class="menu-between" v-if="dog.growth">
+                                <span><%= __('Size') %>: </span> <span>{{dog.growth}}<%= __('cm') %>
                   ({{dog.growth | getDin}}") / {{dog.weight/1000}}<%= __('kg') %> ({{dog.weight | getFunt}}#)</span>
-              </div>
-            </div>
-          </el-card>
+                            </div>
+                        </div>
+                    </el-card>
 
-          <% /* ЗАВОДЧИК BREEDER*/ %>
-          <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span><%= __('Breeder') %>: {{dog.breeder.fullName}} </span>
+                    <% /* ЗАВОДЧИК BREEDER*/ %>
+                    <el-card class="box-card">
+                        <div slot="header" class="clearfix">
+                            <span><%= __('Breeder') %>: {{dog.breeder.fullName}} </span>
 
-            </div>
-            <div class="menu-center">
-              <div class="block">
-                <a href="#" @click="clickShowPhoto(dog.breeder)" class="flex justify-content-center">
-                  <el-avatar :size="100" :src="dog.breeder.avatar"  @error="errorHandler">
-                    <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
-                  </el-avatar>
-                </a>
-              </div>
-            </div>
+                        </div>
+                        <div class="menu-center">
+                            <div class="block">
+                                <a href="#" @click="clickShowPhoto(dog.breeder)" class="flex justify-content-center">
+                                    <el-avatar :size="100" :src="dog.breeder.avatar" @error="errorHandler">
+                                        <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                                    </el-avatar>
+                                </a>
+                            </div>
+                        </div>
 
-            <div class="menu-center">
-              <el-link :underline="false" type="info" :href="getLinkKennel(dog.kennel.label)">{{dog.kennel.label}} <span v-if="dog.breeder.country">({{dog.breeder.country}})</span></el-link>
-            </div>
-          </el-card>
-          <% /* ВЛАДЕЛЕЦ OWNER*/ %>
-          <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span><%= __('Owner') %>: {{dog.owners.fullName}} <template v-if="dog.owners.country">({{dog.owners.country.label}})</template></span>
+                        <div class="menu-center">
+                            <el-link :underline="false" type="info" :href="getLinkKennel(dog.kennel.label)">{{dog.kennel.label}} <span
+                                        v-if="dog.breeder.country">({{dog.breeder.country}})</span></el-link>
+                        </div>
+                    </el-card>
+                    <% /* ВЛАДЕЛЕЦ OWNER*/ %>
+                    <el-card class="box-card">
+                        <div slot="header" class="clearfix">
+                            <span><%= __('Owner') %>: {{dog.owners.fullName}} <template v-if="dog.owners.country">({{dog.owners.country.label}})</template></span>
 
-            </div>
-            <div class="menu-center">
-              <div class="block">
-                <a href="#" @click="clickShowPhoto(dog.owners)" class="flex justify-content-center">
-                  <el-avatar :size="100" :src="dog.owners | getFoto()"  @error="errorHandler">
-                    <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
-                  </el-avatar>
-                </a>
-              </div>
-            </div>
-          </el-card>
+                        </div>
+                        <div class="menu-center">
+                            <div class="block">
+                                <a href="#" @click="clickShowPhoto(dog.owners)" class="flex justify-content-center">
+                                    <el-avatar :size="100" :src="dog.owners | getFoto()" @error="errorHandler">
+                                        <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                                    </el-avatar>
+                                </a>
+                            </div>
+                        </div>
+                    </el-card>
 
-          <% /* РОДИТЕЛИ PARENTS */ %>
-          <el-card class="box-card " v-for="(parent, index) of dog.parents" :key="'p-' + index">
-            <div slot="header" class="clearfix">
-              <span><i :class="[parent.gender==='sire' ? 'el-icon-male':'', 'el-icon-female']"></i> {{parent.gender}}:</span> <span
-                @click="goTo2(parent.detail)" class="pointer">{{parent.fullName}}</span>
+                    <% /* РОДИТЕЛИ PARENTS */ %>
+                    <el-card class="box-card " v-for="(parent, index) of dog.parents" :key="'p-' + index">
+                        <div slot="header" class="clearfix">
+                            <span><i :class="[parent.gender==='sire' ? 'el-icon-male':'', 'el-icon-female']"></i> {{parent.gender}}:</span>
+                            <span
+                                    @click="goTo2(parent.detail)" class="pointer">{{parent.fullName}}</span>
 
-            </div>
-            <div class="menu-between">
-              <span><%= __('Size') %>: </span> <span>{{parent.growth}}<%= __('cm') %>
+                        </div>
+                        <div class="menu-between">
+                            <span><%= __('Size') %>: </span> <span>{{parent.growth}}<%= __('cm') %>
                 ({{parent.growth | getDin}}") / {{parent.weight/1000}}<%= __('kg') %> ({{parent.weight | getFunt}}#)</span>
-            </div>
-            <div v-if="parent">
-              <template>
-                <el-carousel trigger="click" :autoplay="false" indicator-position="none">
-                  <el-carousel-item v-for="(img, index) of parent.imgI7" :key="img.id" class="menu-center">
-                    <p class="medium">{{ parent.description }}</p>
-                    <img :src="img.imageSrc" style="width: auto; height: 300px; " alt="">
-                  </el-carousel-item>
-                </el-carousel>
-              </template>
-            </div>
-          </el-card>
+                        </div>
+                        <div v-if="parent">
+                            <template>
+                                <el-carousel trigger="click" :autoplay="false" indicator-position="none">
+                                    <el-carousel-item v-for="(img, index) of parent.imgI7" :key="img.id" class="menu-center">
+                                        <p class="medium">{{ parent.description }}</p>
+                                        <img :src="img.imageSrc" style="width: auto; height: 300px; " alt="">
+                                    </el-carousel-item>
+                                </el-carousel>
+                            </template>
+                        </div>
+                    </el-card>
 
-          <% /* ЗУБЫ */ %>
-          <el-card class="box-card " v-if="dog.showTeeth">
-            <div slot="header" class="clearfix">
-              <span><%= __('Teeth') %></span>
+                    <% /* ЗУБЫ */ %>
+                    <el-card class="box-card " v-if="dog.showTeeth">
+                        <div slot="header" class="clearfix">
+                            <span><%= __('Teeth') %></span>
 
-            </div>
-            <div class="menu-between-v">
-              <div class="menu-between">
-                <span><%= __('Bite') %>:</span> <span>{{dog.bite}}</span>
-              </div>
-              <div class="menu-between" v-if="dog.teethCount">
-                <span><%= __('Number of teeth') %>:</span>
-                <el-tooltip content="?"  placement="top" effect="light">
-                <el-link :underline="false" @click="open" type="info">
-                  {{dog.teethCount}}
-                </el-link>
-                </el-tooltip>
-              </div>
+                        </div>
+                        <div class="menu-between-v">
+                            <div class="menu-between">
+                                <span><%= __('Bite') %>:</span> <span>{{dog.bite}}</span>
+                            </div>
+                            <div class="menu-between" v-if="dog.teethCount">
+                                <span><%= __('Number of teeth') %>:</span>
+                                <el-tooltip content="?" placement="top" effect="light">
+                                    <el-link :underline="false" @click="open" type="info">
+                                        {{dog.teethCount}}
+                                    </el-link>
+                                </el-tooltip>
+                            </div>
 
+                        </div>
+                    </el-card>
+                </div>
             </div>
-          </el-card>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <% /* Content */ %>
-    <section class="portfolio_details_area ">
-      <div class="container">
-        <div class="portfolio_details_inner ">
-          <div class="row">
-            <% /* КАРТИНКИ СОБАКИ */ %>
-            <div class="col menu-center">
-              <div v-for="(img ,index, key) in dog.images" :key="index + '-DOGS'">
-                <picture @click="clickShowPhoto(img)" class="pointer">
-                  <source media="(min-width: 1240px)" :srcset="dog.imagesMin[index].imageSrc">
-                  <source media="(max-width: 414px)" :srcset="dog.imgI7[index].imageSrc">
-                  <img :src="img.imageSrc" class="portrait" :alt="img.name">
-                </picture>
-              </div>
-            </div>
-          </div>
-          <div class="row ">
-            <% /* Полное описание собаки */ %>
-            <div class="col ">
-              {{dog.description}}
-            </div>
-          </div>
+        <% /* Content */ %>
+        <section class="portfolio_details_area ">
+            <div class="container">
+                <div class="portfolio_details_inner ">
+                    <div class="row">
+                        <% /* КАРТИНКИ СОБАКИ */ %>
+                        <div class="col menu-center">
+                            <div v-for="(img ,index, key) in dog.images" :key="index + '-DOGS'">
+                                <picture @click="clickShowPhoto(img)" class="pointer">
+                                    <source media="(min-width: 1240px)" :srcset="dog.imagesMin[index].imageSrc">
+                                    <source media="(max-width: 414px)" :srcset="dog.imgI7[index].imageSrc">
+                                    <img :src="img.imageSrc" class="portrait" :alt="img.name">
+                                </picture>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <% /* Полное описание собаки */ %>
+                        <div class="col ">
+                            {{dog.description}}
+                        </div>
+                    </div>
 
-        </div>
-      </div>
-    </section>
-    <!--<router-view></router-view>-->
-  </div>
+                </div>
+            </div>
+        </section>
+        <!--<router-view></router-view>-->
+    </div>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
