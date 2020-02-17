@@ -131,33 +131,6 @@
       </el-image>
     </el-dialog>
 
-
-    <% /* Диалоговое окно. Редактор титулов собак. */ %>
-    <el-dialog
-            width="100%"
-            custom-class="dialog-title-add-dog"
-            :title="titleAdd"
-            :visible.sync="addTitleDog"
-            :show-close=false
-            append-to-body
-    >
-      <el-form :model="ruleForm">
-        <el-form-item label="Promotion name" :label-width="formLabelWidth">
-          <el-input v-model="ruleForm.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="Zones" :label-width="formLabelWidth">
-          <el-select v-model="ruleForm.region" placeholder="Please select a zone">
-            <el-option label="Zone No.1" value="shanghai"></el-option>
-            <el-option label="Zone No.2" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-    <el-button @click="addTitleDog = false">Cancel</el-button>
-    <el-button type="primary" @click="addTitleDog = false"><%= __('Save') %></el-button>
-  </span>
-    </el-dialog>
-
     <% /* Диалоговое окно. Не верный текст имени собаки. */ %>
     <el-dialog
       title="<%= __('Error') %>"
@@ -1040,6 +1013,31 @@
       </el-row>
     </el-form>
     <span slot="footer" class="dialog-footer">
+  </span>
+  </el-dialog>
+  <% /* Диалоговое окно. Редактор титулов собак. */ %>
+  <el-dialog
+          width="100%"
+          :title="titleAdd"
+          :visible.sync="addTitleDog"
+          :show-close=false
+          custom-class="dialog-images-editor"
+          center
+  >
+    <el-form :model="ruleForm">
+      <el-form-item label="Promotion name" :label-width="formLabelWidth">
+        <el-input v-model="ruleForm.name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="Zones" :label-width="formLabelWidth">
+        <el-select v-model="ruleForm.region" placeholder="Please select a zone">
+          <el-option label="Zone No.1" value="shanghai"></el-option>
+          <el-option label="Zone No.2" value="beijing"></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="addTitleDog = false">Cancel</el-button>
+    <el-button type="primary" @click="addTitleDog = false"><%= __('Save') %></el-button>
   </span>
   </el-dialog>
   <% /* Диалоговое окно. Редактор картинок. */ %>

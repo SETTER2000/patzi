@@ -913,5 +913,11 @@
 	"Title Editor": "Редактор титулов",
 	"At the moment, the title is hidden, that is, it will not be visible in the system and therefore articles on this title are also hidden. Set the visibility.": "На данный момент заголовок скрыт, то есть он не будет виден в системе, и поэтому статьи по этому заголовку также скрыты. Установите видимость.",
 	"Add title": "Добавить титул",
-	"Search by title name": "Поиск по титулу"
+	"Search by title name": "Поиск по титулу",
+	"I have titles": "Я имею титулы",
+	"I have": "Я имею",
+	"titles": "титулы",
+	"my profile": "мой профиль",
+	"Add me titles": "Добавь мне титул",
+	"add me title": "add me title"
 }

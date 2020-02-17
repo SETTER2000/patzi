@@ -23,11 +23,11 @@ module.exports = {
 
     return exits.success({
       seo: {
-        description: `Титулы собак. Редактировавани, добавления титулов собак для всего сайта.`,
+        description: `Титулы собак. Редактировавание титулов собак для всего сайта.`,
         title: `Титулы`,
         canonical: `https://${this.req.headers.host}${this.req.originalUrl}`,
         header: {ru: 'Титулы', en: 'Dog Titles'},
-        subTitle: {ru: 'Титулы собак. Редактировавани, добавления титулов собак для всего сайта.', en: 'Dog titles. Editing, adding dog titles for the entire site.'},
+        subTitle: {ru: 'Титулы собак. Редактировавание титулов собак для всего сайта.', en: 'Dog titles. Editing, adding dog titles for the entire site.'},
         preferredLocale: this.req.me.preferredLocale,
         // Первый H3 на странице
         h3: {ru: 'Титулы собак', en: 'Dog titles'},

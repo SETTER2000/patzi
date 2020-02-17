@@ -4,13 +4,121 @@ parasails.registerPage('dog', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     dialogFormAwards: false,
+    centerDialogAdded: false,
+    dialogImageUrl: '',
+    ranks: [{
+      id: '1',
+      label: 'Russian Junior Champion',
+      abbr: 'RUSJCH',
+      labelRu: 'Юный чемпион России',
+      value: 1
+    },
+      {id: '2', label: 'Hungarian Junior Champion', abbr: 'HJCH', labelRu: 'Юный чемпион Болгарии', value: 2}
+    ],
     direction: 'ttb',
+    dialogVisible: false,
     comment: '',
+    sizeLess: 5, // MB
     objOne: {},
+    limit: 50,
+    buttonUpdate: false,
+    dialog: {},
+    innerVisible: false,
     photoVisible: false,
     circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
     squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
     sizeList: ["large", "medium", "small"],
+    ruleForm: {
+      //
+      name: '',
+      region: '',
+      date1: '',
+      date2: '',
+      delivery: false,
+      resource: '',
+      desc: '',
+      addTitleDog: false,
+      errInputDogName: false,
+      sale: false,
+      see: true,
+      allowEdit: true,
+      dateBirth: '',
+      // dateBirthUpdate: '',
+      dateDeath: '',
+      // dateDeathUpdate: '',
+      currency: '',
+      price: 0,
+      saleDescription: '',
+      file: [],
+      federations: [{
+        key: 1,
+        value: 'FCI',
+        registerNumber: ''
+      }],
+      sire: '',
+      fileList: [],
+      color: '',
+      dam: '',
+      owner: '',
+      gender: '',
+      label: '',
+      nickname: '',
+      stamp: '',
+      /*  canine: '',
+        bite: '',
+        letter: '',
+        dogTests: this.ruleForm.dogTests,
+        teethCountTop: this.ruleForm.teethCountTop,
+        teethCountBottom: this.ruleForm.teethCountBottom,*/
+      federation: '1',
+      imageUrl: '',
+      previewImageSrc: '',
+      continent: null,
+      dialogImageUrl: '',
+      dialogVisible: false,
+      kennel: null,
+      registerNumber: '',
+      subtitle: '',
+      weight: 10,
+      growth: 20,
+      type: '',
+    },
+    rules: {
+      kennel: [
+        {required: true, message: 'Please select kennel name', trigger: 'change'}
+      ],
+      label: [
+        {required: true, message: 'Please input dog name', trigger: 'blur'},
+        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
+      ],
+      gender: [
+        {required: true, message: 'Please select a dog gender.', trigger: 'change'}
+      ],
+      dateBirth: [
+        {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
+      ],
+      // dateBirthUpdate: [
+      //   { type:'string',required: true, message: 'Please pick a date', trigger: 'change'}
+      // ],
+      /*  registerNumber: [
+         {required: true, message: 'Please input register number', trigger: 'blur'},
+         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
+       ],
+       region: [
+         {required: true, message: 'Please select Activity zone', trigger: 'change'}
+       ],
+       continent: [
+         {required: true, message: 'Please select your continent', trigger: 'change'}
+       ],
+      kennel: [
+         {required: true, message: 'Please select your kennel', trigger: 'change'}
+       ],
+       */
+      subtitle: [
+        {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
+        {max: 700, message: 'Length should be 10 to 100', trigger: 'blur'}
+      ]
+    },
     worldWinner: [{
       year: '2013',
       address: 'Hungary, Budapest',
@@ -105,7 +213,7 @@ parasails.registerPage('dog', {
       if (!value) {
         return '';
       }
-      return (value.defaultIcon === 'gravatar') ? value.gravatar :value.avatar;
+      return (value.defaultIcon === 'gravatar') ? value.gravatar : value.avatar;
     },
     //Сантиметры в дюймы
     getDin: function (value, l, format) {
@@ -173,8 +281,16 @@ parasails.registerPage('dog', {
         // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
         this.indexPhoto = i;
       },
-
-    }
+    },
+    letters: {
+      get: function () {
+        let alphabet = [...new Set('ABCDEFGHIJKLMNOPQRSTUVWXYZ')]
+          , ar = []
+        ;
+        alphabet.map(y => y === y ? ar.push({value: y, label: y}) : '');
+        return ar;
+      }
+    },
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -275,18 +391,18 @@ parasails.registerPage('dog', {
       // this.$message('Нажат элемент: ' + command);
     },
     handleCloseDialog(done) {
-      this.objOne={};
+      this.objOne = {};
       done();
-     /* this.$confirm('Are you sure to close this dialog?')
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {
-        });*/
+      /* this.$confirm('Are you sure to close this dialog?')
+         .then(_ => {
+           done();
+         })
+         .catch(_ => {
+         });*/
     },
-    rootImg(){
+    rootImg() {
       return _.isEmpty(this.dog.images) ? '' :
-        _.isString(this.dog.images[this.dog.cover].imageSrc) ? this.dog.images[this.dog.cover].imageSrc:'';
+        _.isString(this.dog.images[this.dog.cover].imageSrc) ? this.dog.images[this.dog.cover].imageSrc : '';
     },
     goTo(path) {
       window.location = `/${path}`;
@@ -312,31 +428,118 @@ parasails.registerPage('dog', {
     open() {
       this.$alert('Клыки x Верхние резцы x Нижние резцы', '', {
         confirmButtonText: 'OK',
-       /* callback: action => {
-          this.$message({
-            type: 'info',
-            message: `action: ${ action }`
-          });
-        }*/
+        /* callback: action => {
+           this.$message({
+             type: 'info',
+             message: `action: ${ action }`
+           });
+         }*/
       });
     },
 
-    getLinkKennel(kennelName){
+    getLinkKennel(kennelName) {
       return kennelName ? `/kennel/${kennelName.split(" ").join('-')}` : ''
     },
-// Выбираем заводчика
-  /*  async getBreeder() {
-      await io.socket.get(`/api/v1/comments/list-comment/${this.litter.id}/${field}`, function gotResponse(body, response) {
-        // console.log('Сервис Comment List ответил кодом ' + response.statusCode + ' и данными: ', body);
+
+    // Если массив kennel пустой, выводим сообщение.
+    clickAddButton() {
+      this.centerDialogAdded = true;
+    },
+
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+
+
+    mesSuccess(text = '') {
+      this.$notify({
+        title: 'Success',
+        message: text,
+        offset: 100,
+        type: 'success'
       });
-      // Принимаем данные по событию list-*
-      await io.socket.get(`/api/v1/breeders/${this.dog.}`, function gotResponse(body, response) {
-        console.log('Сервис Dogs sire ответил кодом ' + response.statusCode + ' и данными: ', body);
+    },
+
+
+    mesWarning(text = '') {
+      this.$notify({
+        title: 'Warning',
+        message: text,
+        offset: 100,
+        type: 'warning'
       });
-      // Принимаем данные по событию list-*
-      await io.socket.on('list-sire', (data) => {
-        this.sires = data;
+    },
+
+
+    mesInfo(text = '') {
+      this.$notify.info({
+        title: 'Info',
+        message: text,
+        offset: 100,
       });
-    },*/
+    },
+
+
+    mesError(text = '') {
+      this.$notify.error({
+        title: 'Error',
+        message: text,
+        offset: 100,
+      });
+    },
+
+    beforeUpload(file) {
+      // Проверка размера входящего файла картинки не более (MB)
+
+      const isJPG = file.type === 'image/jpeg';
+      const isLt2M = file.size / 1024 / 1024 < this.sizeLess;
+
+      if (!isJPG) {
+        this.$message.error('Picture must be JPG format!');
+      }
+
+      if (!isLt2M) {
+        this.$message.error(`Picture size can not exceed ${this.sizeLess}MB!`);
+      }
+
+      return isJPG && isLt2M;
+    }
+    ,
+
+    handleSuccess(res, file) {
+      _.isArray(this.ruleForm.fileList) ? this.ruleForm.fileList.push(res) :
+        this.ruleForm.fileList = [res];
+    },
+// функция перехвата при превышении лимита
+    handleExceed(files, fileList) {
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      ${files.length + fileList.length} ${this.i19p.files}`);
+    },
+
+    // Срабатывает перед удалением одного файла
+    handleRemove(file, fileList) {
+      this.fileList = fileList;
+    },
+    getPullKennel() {
+      return this.kennels;
+    },
+    copyElement() {
+      this.ruleForm.federations.push({
+        key: Date.now(),
+        value: ''
+      });
+    },
+    getPullColor() {
+      let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'value';
+      return _.sortBy(this.colors, field);
+    },
+    removeElement(item) {
+      var index = this.ruleForm.federations.indexOf(item);
+      if (index !== -1) {
+        this.ruleForm.federations.splice(index, 1);
+      }
+    },
   }
 });
