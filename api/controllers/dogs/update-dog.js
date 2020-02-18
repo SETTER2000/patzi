@@ -15,8 +15,27 @@ module.exports = {
       type: 'string',
       required: true,
       description: `Официальное имя собаки. Поле обязательно для заполнения.
-      В рамках всей коллекции это поле не может быть сделано уникальным, только проверка имени вместе 
+      В рамках всей коллекции это поле не может быть уникальным, только проверка имени вместе 
       с названием питомника может однозначно установить уникальность собаки в базе.`
+    },
+
+    gender: {
+      type: 'string',
+      required: true,
+      example: 'sire, dam',
+      description: 'Пол собак. В смысле не пол собаки, а конец есть или нет.'
+    },
+
+
+    dateBirth: {
+      type: 'string',
+      required: true,
+      description: 'Дата рождения.'
+    },
+
+    titleDog: {
+      type: 'ref',
+      description: `Титула собаки.`
     },
 
 
@@ -33,24 +52,9 @@ module.exports = {
     },
 
 
-    gender: {
-      type: 'string',
-      required: true,
-      example: 'sire, dam',
-      description: 'Пол собак. В смысле не пол собаки, а конец есть или нет.'
-    },
-
-
     owner: {
       type: 'string',
       description: 'Идентификатор владельца собаки.'
-    },
-
-
-    dateBirth: {
-      type: 'string',
-      required: true,
-      description: 'Дата рождения.'
     },
 
 
@@ -71,6 +75,11 @@ module.exports = {
     fileList: {
       type: 'ref',
       description: 'Массив с объектами данных о новых загруженных файлах.'
+    },
+
+    titleScan: {
+      type: 'ref',
+      description: 'Массив с объектами данных о новых загруженных файлах картинок титулов.'
     },
 
 
@@ -121,7 +130,6 @@ module.exports = {
       defaultsTo: false,
       description: `Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
     },
-
 
 
     currency: {
@@ -259,14 +267,17 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
+
     let dog = await Dog.findOne(inputs.id);
     let images = inputs.images ? inputs.images : dog.images;
     let imagesNew = [];
+
 
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'dog');
     let label = _.startCase(inputs.label.toString().toLowerCase());
     let letter = inputs.letter ? inputs.letter : label[0];
+
     let updateObj = {
       label: label,
       gender: inputs.gender,
@@ -308,11 +319,32 @@ module.exports = {
       });
     }
 
+
+    if (inputs.titleDog.fileList) {
+      inputs.titleDog.fileList = inputs.titleDog.fileList.filter(o => !_.isNull(o));
+      _.each(inputs.titleDog.fileList, img => {
+        img.id = _.isString(img.fd) ? _.first(_.last(img.fd.split('\\')).split('.')) : '';
+        img.description = '';
+        img.dateTaken = '';
+        delete img.filename;
+        delete img.status;
+        delete img.field;
+      });
+    }
+
+    // console.log('inputs.titleDog::: ', inputs.titleDog);
+    // console.log('dog.titleDog::: ', dog.titleDog);
+    // console.log('dog::: ', dog);
+
+
+
     !_.isEmpty(images) || !_.isEmpty(imagesNew) ? updateObj.images = [...images, ...imagesNew] : '';
 
+    updateObj.titleDog = _.uniq([...dog.titleDog, ...[inputs.titleDog]]);
+
+
     // Обновляем
-    let updateDog = await Dog.updateOne({id: inputs.id})
-      .set(updateObj);
+    let updateDog = await Dog.updateOne({id: inputs.id}).set(updateObj);
 
 
     /**
@@ -349,7 +381,7 @@ module.exports = {
     await Dog.replaceCollection(updateDog.id, 'owners').members(owner);
     let year = _.trim(inputs.dateBirth.split('-')[0], '"');
     // Рассылаем данные всем подписанным на событие forSale-dog данной комнаты.
-    await sails.sockets.broadcast('dog', 'forSale-dog', await sails.helpers.forSaleDog.with({letter:inputs.letter, year:year}));
+    await sails.sockets.broadcast('dog', 'forSale-dog', await sails.helpers.forSaleDog.with({letter: inputs.letter, year: year}));
     return exits.success();
   }
 };

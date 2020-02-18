@@ -6,15 +6,8 @@ parasails.registerPage('dog', {
     dialogFormAwards: false,
     centerDialogAdded: false,
     dialogImageUrl: '',
-    ranks: [{
-      id: '1',
-      label: 'Russian Junior Champion',
-      abbr: 'RUSJCH',
-      labelRu: 'Юный чемпион России',
-      value: 1
-    },
-      {id: '2', label: 'Hungarian Junior Champion', abbr: 'HJCH', labelRu: 'Юный чемпион Болгарии', value: 2}
-    ],
+    titles: [],
+    titlesDog:[],
     direction: 'ttb',
     dialogVisible: false,
     comment: '',
@@ -29,65 +22,11 @@ parasails.registerPage('dog', {
     squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
     sizeList: ["large", "medium", "small"],
     ruleForm: {
-      //
-      name: '',
-      region: '',
-      date1: '',
-      date2: '',
-      delivery: false,
-      resource: '',
-      desc: '',
-      addTitleDog: false,
-      errInputDogName: false,
-      sale: false,
-      see: true,
-      allowEdit: true,
-      dateBirth: '',
-      // dateBirthUpdate: '',
-      dateDeath: '',
-      // dateDeathUpdate: '',
-      currency: '',
-      price: 0,
-      saleDescription: '',
-      file: [],
-      federations: [{
-        key: 1,
-        value: 'FCI',
-        registerNumber: ''
-      }],
-      sire: '',
-      fileList: [],
-      color: '',
-      dam: '',
-      owner: '',
-      gender: '',
-      label: '',
-      nickname: '',
-      stamp: '',
-      /*  canine: '',
-        bite: '',
-        letter: '',
-        dogTests: this.ruleForm.dogTests,
-        teethCountTop: this.ruleForm.teethCountTop,
-        teethCountBottom: this.ruleForm.teethCountBottom,*/
-      federation: '1',
-      imageUrl: '',
-      previewImageSrc: '',
-      continent: null,
-      dialogImageUrl: '',
-      dialogVisible: false,
-      kennel: null,
-      registerNumber: '',
-      subtitle: '',
-      weight: 10,
-      growth: 20,
-      type: '',
+      titleId:'',
     },
     rules: {
-      kennel: [
-        {required: true, message: 'Please select kennel name', trigger: 'change'}
-      ],
-      label: [
+
+      titleId: [
         {required: true, message: 'Please input dog name', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
       ],
@@ -183,6 +122,27 @@ parasails.registerPage('dog', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
+    console.log('DOG::: ', this.dog);
+    // Запрос для события list-*
+    io.socket.get(`/api/v1/titles/list`, function gotResponse(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    io.socket.get(`/api/v1/titles/${this.dog.id}`, function gotResponse(body, response) {
+      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+
+    // Принимаем данные по событию list-*
+    io.socket.on('list-titlesDog', (data) => {
+      this.titlesDog = data;
+      console.log('titlesDog:::: ', this.titlesDog);
+      // console.log('this.filterDogs: ', this.filterDogs);
+    });
+    // Принимаем данные по событию list-*
+    io.socket.on('list-title', (data) => {
+      this.titles = data;
+      console.log('titles:::: ', this.titles);
+      // console.log('this.filterDogs: ', this.filterDogs);
+    });
   },
 
 
@@ -340,65 +300,11 @@ parasails.registerPage('dog', {
         case 'c':
           this.goto('/dogs/chinese-crested');
           break;
-        /* case 'f':
-           window.location = '/litters/new';
-           break;
-         case 'g':
-           this.setAddedPresentation(command);
-           break;
-         case 'dl':
-           this.clickDeleteLitter();
-           break;
-         case 'allView':
-           this.allViewed(command);
-           break;
-         case 'like':
-           this.addLike(command);
-           break;
-         case 'super':
-           this.addLike(command);
-           break;
-         case 'wow':
-           this.addLike(command);
-           break;
-         case 'haha':
-           this.addLike(command);
-           break;
-         case 'commentLike':
-           this.commentLike(command);
-           break;
-         case 'commentSuper':
-           this.commentLike(command);
-           break;
-         case 'commentWow':
-           this.commentLike(command);
-           break;
-         case 'commentHaha':
-           this.commentLike(command);
-           break;
-         case 'link':
-           window.location = '/litters';
-           break;
-         case 'deleteComment':
-           this.deleteComment(command);
-           break;
-         case 'changeComment':
-           this.changeOpenComment(command);
-           break;*/
-        //default:  this.setIndexPhotoSet(command);
       }
-      // }
-      // this.$message('Нажат элемент: ' + command);
     },
     handleCloseDialog(done) {
       this.objOne = {};
       done();
-      /* this.$confirm('Are you sure to close this dialog?')
-         .then(_ => {
-           done();
-         })
-         .catch(_ => {
-         });*/
     },
     rootImg() {
       return _.isEmpty(this.dog.images) ? '' :
@@ -411,18 +317,14 @@ parasails.registerPage('dog', {
       this.goto(path);
     },
     errorHandler() {
-      return true
+      return true;
     },
     clickPedigree() {
       this.goto(`/litter/${this.dog.letter}/${moment(this.dog.dateBirth).format("YYYY")}/pedigree`);
     },
     clickShowPhoto(row) {
-
       this.photoVisible = true;
-      // console.log('row:', row);
-      // this.objOne = row;
       this.objOne = Object.assign({}, this.objOne, row);
-      // console.log('this.objOne:', this.objOne);
     },
 
     open() {
@@ -504,14 +406,13 @@ parasails.registerPage('dog', {
       }
 
       return isJPG && isLt2M;
-    }
-    ,
+    },
 
     handleSuccess(res, file) {
       _.isArray(this.ruleForm.fileList) ? this.ruleForm.fileList.push(res) :
         this.ruleForm.fileList = [res];
     },
-// функция перехвата при превышении лимита
+    // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
@@ -526,9 +427,9 @@ parasails.registerPage('dog', {
       return this.kennels;
     },
     copyElement() {
-      this.ruleForm.federations.push({
+      this.ruleForm.emptyObj.push({
         key: Date.now(),
-        value: ''
+        id: ''
       });
     },
     getPullColor() {
@@ -536,10 +437,81 @@ parasails.registerPage('dog', {
       return _.sortBy(this.colors, field);
     },
     removeElement(item) {
-      var index = this.ruleForm.federations.indexOf(item);
+      var index = this.ruleForm.emptyObj.indexOf(item);
       if (index !== -1) {
-        this.ruleForm.federations.splice(index, 1);
+        this.ruleForm.emptyObj.splice(index, 1);
       }
     },
+
+
+    submitForm: async function (formName) {
+      this.$refs[formName].validate((valid) => {
+
+        if (_.isEmpty(this.ruleForm.titleId)) {
+          this.mesError('Error. Не выбран титул.');
+        } else if (valid) {
+          this.updateDog();
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+
+
+    // Update
+    async updateDog() {
+      this.openFullScreen();
+      let data = {
+        id: this.dog.id,
+        dateBirth: this.dog.dateBirth,
+        label: this.dog.label,
+        gender: this.dog.gender,
+        // titleScan:this.ruleForm.fileList,
+        titleDog: this.ruleForm,
+      };
+      console.log('DATA перед отправкой::: ', data);
+
+      await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        this.loading.close();
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          // this.ruleForm.file = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          // this.getList();
+        }
+      });
+    },
+
+    openFullScreen() {
+      this.loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+      // setTimeout(() => {
+      //   loading.close();
+      // }, 2000);
+    },
+
+    resetForm(formName) {
+      this.$refs.upload ? this.$refs.upload.clearFiles() : '';
+      this.$refs[formName].resetFields();
+      this.ruleForm.fileList = [];
+      this.ruleForm.imageUrl = '';
+      this.ruleForm.price = 0;
+      this.ruleForm.federations = this.resetFederation;
+    },
+
   }
 });

@@ -213,6 +213,13 @@ module.exports = {
       description: `FD загруженных фотографий родителей`
     },
 
+    titleDog: {
+      type: 'ref',
+      defaultsTo: [],
+      example: [{},{}],
+      description: `FD загруженных фотографий родителей`
+    },
+
     // weight: this.ruleForm.weight,
     // growth: this.ruleForm.growth,
     // type: this.ruleForm.type,

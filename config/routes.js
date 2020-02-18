@@ -191,6 +191,7 @@ module.exports.routes = {
 
   'GET    /api/v1/titles/list': {action: 'titles/list'},
   'GET    /api/v1/titles/count-title': {action: 'titles/count-title'},
+  'GET    /api/v1/titles/:id': { action: 'titles/get-dog-titles' },
   'GET    /api/v1/titles/title-hidden': {action: 'titles/title-hidden'},
   'POST   /api/v1/titles/create-title': {action: 'titles/create-title', csrf: false},
   'PUT    /api/v1/titles/update-title': {action: 'titles/update-title', csrf: false},
