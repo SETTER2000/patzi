@@ -47,7 +47,7 @@
                         </div>
                         <div class="u-container-style u-layout-cell u-right-cell u-size-32 u-layout-cell-2">
                             <div class="u-container-layout">
-                                <img class="u-expand-resize u-expanded-height u-image u-image-2" src="/images/lux1.jpg">
+                                <img class="u-expand-resize u-expanded-height u-image u-image-2" :src="dog.images[0].imageSrc">
                             </div>
                         </div>
                     </div>
@@ -247,46 +247,47 @@
         </div>
         <!--     </el-col>
            </el-row>-->
+
         <!---------------------------------------------------------------------------------------->
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
             <!--  <el-row type="flex" class="row-bg" justify="center">
                <el-col :xs="24" :sm="24" :md="24" :lg="12" :offset="2" :xl="12">-->
             <div class="container-fluid ">
                 <div class="row ">
-                    <div class="col col-lg-6">
-
+                    <div class="col col-sm-12 col-lg-10">
                         <% /* DIVIDER*/ %>
                         <div>
-                            <el-divider content-position="left"><%= __('Titles') %></el-divider>
+                            <el-divider content-position="left">*</el-divider>
                         </div>
-                        <% /* ТИТУЛЫ. Добавить | убрать */ %>
-                        <el-form-item
-                                v-for="(federation, index) in ruleForm.federations"
-                                :label="'№ ' + (index + 1)"
-                                :key="federation.key"
-                                :prop="'federations.' + index + '.registerNumber'"
-                                :rules="{required: false, message: 'Federation can not be null', trigger: 'blur'}">
-                            <el-col :xs="14" :sm="18" :md="18" :lg="17" :xl="16">
-                                <%= __('Dignity') %>
-                                <el-input placeholder="<%= __("Dog's registration number") %>" v-model="federation.registerNumber"
-                                          class="input-with-select">
-
-                                    <el-select v-model="federation.value" slot="prepend" class="wds" placeholder="Select">
-                                        <el-option :label="ob.abbr" :title="me.preferredLocale==='ru'?ob.labelRu:ob.label" :value="ob.value"
-                                                   v-for="(ob, index) in ranks" :key="ob.id"></el-option>
-                                        <el-option label="ob.abbr" value="ob.value"></el-option>
-                                    </el-select>
-                                    <el-button slot="append" @click="copyElement" icon="el-icon-copy-document"></el-button>
-                                    <el-button slot="append" @click.prevent="removeElement(federation)"
-                                               icon="el-icon-delete"></el-button>
-                                </el-input>
-                            </el-col>
-
+                        <% /* ТИТУЛЫ. Добавить */ %>
+                        <el-form-item label="Титул" prop="titleId">
+                            <el-select v-model="ruleForm.titleId" placeholder="Select">
+                                <el-option v-for="(ob, index) in titles"
+                                           :label="ob.label"
+                                           :title="ob.label"
+                                           :value="ob.id"
+                                           :key="ob.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </div>
                 </div>
+                <div class="row my-5">
+                    <div class="col col-sm-12 col-lg-10">
+                        <% /* ДАТА ПОЛУЧЕНИЯ */ %>
+                        <el-form-item  label="<%= __('Date') %>" prop="dateDeath">
+                                    <el-date-picker
+                                            v-model="ruleForm.dateReceiving"
+                                            type="datetime"
+                                            placeholder="<%= __('Select date and time') %>"
+                                            default-time="12:00:00">
+                                    </el-date-picker>
+                        </el-form-item>
+
+                    </div>
+                </div>
                 <% /* ВИДЕН ТИТУЛ ИЛИ НЕТ */ %>
-                <div class="flex justify-content-center my-5" >
+                <div class="flex justify-content-center my-5">
                     <el-form-item prop="see">
                         <el-switch
                                 style="display: block"
@@ -298,6 +299,8 @@
                         </el-switch>
                     </el-form-item>
                 </div>
+
+
             </div>
             <el-divider></el-divider>
 
@@ -367,6 +370,7 @@
             </div>
         </section>
 
+
         <% /* Главное Фото */ %>
         <section class="service-area section-gap">
             <div class="container">
@@ -427,6 +431,11 @@
                             </el-row>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            <% /* Титулы */ %>
+                            <span class="pointer" v-for="(title, index) of titlesDog" :key="'t-' + index" :title="title.subtitleRu">{{title.label}} </span>
+                        </div></div>
                     <% /*ГЛАВНАЯ КАРТИНКА */ %>
                     <div class="menu-center " style="position: relative; overflow:hidden ">
 
