@@ -33,16 +33,16 @@
          <el-carousel-item v-for="(item, key, index) in photos" :key="index">
            <h3 class="small text-center">{{ item.label }}</h3>
            <div class="my-flex-cont">
-             &lt;!&ndash;<div class="my-flex-box">&ndash;&gt;
+             <div class="my-flex-box">
              <el-image
                :src="item.imageSrc"
                :fit="fit"></el-image>
-             &lt;!&ndash;<div class="my-flex-cont">&ndash;&gt;
-             &lt;!&ndash;<div class="my-flex-box">&ndash;&gt;
-             &lt;!&ndash;<img :src="item.imageSrc" class="gallery" alt="">&ndash;&gt;
-             &lt;!&ndash;</div>&ndash;&gt;
+             <div class="my-flex-cont">
+             <div class="my-flex-box">
+             <img :src="item.imageSrc" class="gallery" alt="">
+             </div>
            </div>
-           &lt;!&ndash;</div>&ndash;&gt;
+           </div>
          </el-carousel-item>
        </el-carousel>-->
     </div>
@@ -168,49 +168,56 @@
     <el-button type="primary" @click="deleteForm('ruleForm')"><%= __('Confirm') %></el-button>
   </span>
   </el-dialog>
+
+
+
   <% /* Диалоговое окно Слайдер картинок NEW*/ %>
   <el-dialog
-    :title="<%= __(`title`) %>"
-    :visible.sync="dialogTableVisible"
-    :fullscreen="true"
-    top="1vh"
-    :close="handlerCloseDialogSlider"
-    center>
-    <div class="d-flex justify-content-end">
+          title=""
+          :visible.sync="dialogTableVisible"
+          :fullscreen="true"
+          top="1vh"
+          :close="handlerCloseDialogSlider"
+          center>
+    <div class="d-flex justify-content-start">
       <el-switch
-        style="display: block"
-        v-model="autoplay"
-        active-color="#13ce66"
-        inactive-color="#ff4949"
-        active-text="Autoplay"
-        inactive-text="Disable ">
+              style="display: block"
+              v-model="autoplay"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="Autoplay"
+              inactive-text="Disable ">
       </el-switch>
     </div>
     <div class="block" v-if="dialogTableVisible">
       <el-carousel
-        :autoplay="autoplay"
-        trigger="click"
-        height="80vh"
-        setActiveItem
-        :initial-index="indexSlide"
-        :next="handlerSetActiveSlider(indexSlide)"
+              :autoplay="autoplay"
+              trigger="click"
+              height="80vh"
+              setActiveItem
+              :initial-index="indexSlide"
+              :next="handlerSetActiveSlider(indexSlide)"
       >
         <el-carousel-item v-for="(item, key, index) in photos"
                           :key="index">
           <h3 class="small text-center">{{ item.label }}</h3>
           <div class="my-flex-cont">
             <el-image
-              :src="item.imageSrc"
-              :fit="fit">
-              <!--<div slot="placeholder" class="image-slot" style="height:500px;">-->
-              <!--Loading<span class="dot">...</span>-->
-              <!--</div>-->
+                    :src="item.imageSrc"
+                    :fit="fit">
+              <div slot="placeholder" class="image-slot" style="height:500px;">
+              Loading<span class="dot">...</span>
+            </div>
             </el-image>
           </div>
         </el-carousel-item>
       </el-carousel>
     </div>
   </el-dialog>
+
+
+
+
   <% /* Диалоговое окно Редактор названия фотосессии*/ %>
   <el-dialog title="<%= __('Photo Shoot Editor') %>" :visible.sync="dialogFormVisible">
     <el-form :label-position="'top'"
@@ -241,9 +248,9 @@
       <% /* Дата съёмки фотосессии*/ %>
       <el-form-item label="<%= __('Date taken') %>" prop="dateShooting">
         <el-date-picker
-          v-model="ruleFormEdit.dateShooting"
-          type="date"
-          placeholder="<%= __('Pick a day') %>">
+                v-model="ruleFormEdit.dateShooting"
+                type="date"
+                placeholder="<%= __('Pick a day') %>">
         </el-date-picker>
       </el-form-item>
       <% /* Показывать или нет дату съёмки*/ %>
@@ -256,6 +263,9 @@
     <el-button type="primary" @click="updatePhotoSetDescription('ruleFormEdit')"><%= __('Save') %></el-button>
   </span>
   </el-dialog>
+
+
+
   <% /* Диалоговое окно Редактор помёта*/ %>
   <el-dialog title="<%= __('Litter Editor') %>" :visible.sync="dialogEditor">
     <el-form :label-position="'top'"
@@ -278,10 +288,10 @@
       <% /* Дата помёта NEW */ %>
       <el-form-item label="<%= __('Date of litter') %>" prop="born">
         <el-date-picker
-          v-model="ruleForm.born"
-          type="date"
-          :format="i19p.getFormatDateLocale"
-          placeholder="<%= __('Select date and time') %>"
+                v-model="ruleForm.born"
+                type="date"
+                :format="i19p.getFormatDateLocale"
+                placeholder="<%= __('Select date and time') %>"
         >
         </el-date-picker>
       </el-form-item>
@@ -320,7 +330,7 @@
         <p class="text-danger" v-if="cloudError">
           <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
             <a
-              href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+                    href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
           </small>
         </p>
       </div>
@@ -351,7 +361,7 @@
         <p class="text-danger" v-if="cloudError">
           <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
             <a
-              href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+                    href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
           </small>
         </p>
       </div>
@@ -361,6 +371,10 @@
       </div>
     </ajax-form>
   </modal>
+
+
+
+
 
   <% /* Шапка страницы */ %>
   <section class="banner-area relative">
@@ -891,7 +905,7 @@
                                                 <!-- <li>
                                                   <el-dropdown placement="top" @command="handleCommand">
                                                     <span class="el-dropdown-link pointer" style="color:#385898;">
-                                                      &lt;!&ndash;<i class="ti-thumb-up"></i>&ndash;&gt;
+                                                      <i class="ti-thumb-up"></i>
                                                       <%= __('Like') %>
                                                     </span>
                                                     <el-dropdown-menu slot="dropdown">
@@ -1065,7 +1079,7 @@
                                                       <!--<li>
                                                     <el-dropdown placement="top" @command="handleCommand">
                                                     <span class="el-dropdown-link pointer" style="color:#385898;">
-                                                      &lt;!&ndash;<i class="ti-thumb-up"></i>&ndash;&gt;
+                                                      <i class="ti-thumb-up"></i>
                                                       <%= __('Like') %>
                                                     </span>
                                                       <el-dropdown-menu slot="dropdown">
