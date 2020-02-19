@@ -28,6 +28,10 @@ module.exports = {
       minLength: 2,
       maxLength: 200
     },
+    flag: {
+      type: 'string',
+      description: `ССылка на флаг страны. Из Википедии можно взять. SVG`
+    },
     see: {
       type: 'boolean',
       defaultsTo: true,

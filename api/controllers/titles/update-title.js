@@ -17,7 +17,10 @@ module.exports = {
       required: true,
       description: `Официальное имя темы на английском. Поле обязательно для заполнения.`
     },
-
+    flag: {
+      type: 'string',
+      description: `ССылка на флаг страны. Из Википедии можно взять. SVG`
+    },
     labelRu: {
       type: 'string',
       description: `Официальное имя темы на русском. Поле обязательно для заполнения.`
@@ -84,6 +87,7 @@ module.exports = {
     let updateObj = {
       label: inputs.label.toUpperCase(),
       labelRu: inputs.labelRu,
+      flag: inputs.flag,
       backgroundPosition: inputs.backgroundPosition,
       see: inputs.see,
       subtitle:_.startCase(inputs.subtitle.toString().toLowerCase()),

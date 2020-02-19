@@ -160,6 +160,8 @@ module.exports = {
       description: 'Дата смерти.'
     },
 
+
+
     nickname: {
       type: 'string',
       description: 'Кличка, ласковое имя.'

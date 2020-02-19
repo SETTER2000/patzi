@@ -8,6 +8,7 @@ parasails.registerPage('dog', {
     dialogImageUrl: '',
     titles: [],
     titlesDog:[],
+    obj:{},
     direction: 'ttb',
     dialogVisible: false,
     comment: '',
@@ -22,16 +23,17 @@ parasails.registerPage('dog', {
     squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
     sizeList: ["large", "medium", "small"],
     ruleForm: {
-      titleId:'',
+      id:'',
+      dateReceiving:'',
     },
     rules: {
 
-      titleId: [
+      id: [
         {required: true, message: 'Please input dog name', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
       ],
-      gender: [
-        {required: true, message: 'Please select a dog gender.', trigger: 'change'}
+      dateReceiving: [
+        {required: true, message: 'Please input date receiving.', trigger: 'change'}
       ],
       dateBirth: [
         {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
@@ -132,12 +134,15 @@ parasails.registerPage('dog', {
     });
 
     // Принимаем данные по событию list-*
+    // получаем титулы собаки
     io.socket.on('list-titlesDog', (data) => {
-      this.titlesDog = data;
+      this.titlesDog = this.obj.data = data;
+
       console.log('titlesDog:::: ', this.titlesDog);
       // console.log('this.filterDogs: ', this.filterDogs);
     });
     // Принимаем данные по событию list-*
+    // получаем все титулы в системе
     io.socket.on('list-title', (data) => {
       this.titles = data;
       console.log('titles:::: ', this.titles);
@@ -446,9 +451,11 @@ parasails.registerPage('dog', {
 
     submitForm: async function (formName) {
       this.$refs[formName].validate((valid) => {
-
-        if (_.isEmpty(this.ruleForm.titleId)) {
+// console.log('FFF this.ruleForm ::: ' , this.ruleForm);
+        if (_.isEmpty(this.ruleForm.id)) {
           this.mesError('Error. Не выбран титул.');
+        } else if(!_.isObject(this.ruleForm.dateReceiving)){
+          this.mesError('Error. Не указана дата получения титула.');
         } else if (valid) {
           this.updateDog();
         } else {

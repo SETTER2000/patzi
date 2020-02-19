@@ -9,7 +9,7 @@ parasails.registerPage('titles-home', {
     limit: 4,
     objOne: {},
     show: false,
-    titleId: undefined,
+    id: undefined,
     dialog: {},
     showTitle: undefined,
     photoVisible: false,
@@ -41,6 +41,7 @@ parasails.registerPage('titles-home', {
       see: true,
       errInputLang: false,
       label: '',
+      flag: '',
       labelRu: '',
       subtitle: '',
       // gender: '',
@@ -329,6 +330,7 @@ parasails.registerPage('titles-home', {
       this.ruleForm.federations = this.resetFederation;
       this.fuleForm = {
         label: '',
+        flag: '',
         registerNumber: '',
         dateCreate: undefined,
         site: '',
@@ -375,6 +377,7 @@ parasails.registerPage('titles-home', {
         fileList: this.ruleForm.fileList,
         titleBackground: this.ruleForm.titleBackground,
         label: this.ruleForm.label,
+        flag: this.ruleForm.flag,
         labelRu: this.ruleForm.labelRu,
         subtitle: this.ruleForm.subtitle,
         subtitleRu: this.ruleForm.subtitleRu,
@@ -409,6 +412,7 @@ parasails.registerPage('titles-home', {
         fileList: this.ruleForm.fileList,
         titleBackground: this.ruleForm.titleBackground,
         label: this.ruleForm.label,
+        flag: this.ruleForm.flag,
         labelRu: this.ruleForm.labelRu,
         see: this.ruleForm.see,
         subtitle: this.ruleForm.subtitle,
@@ -740,7 +744,7 @@ parasails.registerPage('titles-home', {
       });
     },
     showMenu(id) {
-      this.titleId = id;
+      this.id = id;
       this.show = true;
       this.showTitle = id;
     },

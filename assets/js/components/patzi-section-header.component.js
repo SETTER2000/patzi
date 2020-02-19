@@ -67,7 +67,7 @@ parasails.registerComponent('patziSectionHeader', {
     if (this.objData.header === undefined) {
       throw new Error('Neither `:header`  was passed in to <patzi-section-header>, but one or the other must be provided.');
     }
-    console.log('this.objData+++::: ', this.objData);
+
     this.updateStyle(this.$refs.wrapper, this.objData.topicBackground);
   },
 

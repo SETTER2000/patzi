@@ -111,6 +111,20 @@
         <el-row type="flex" class="row-bg mt-3" justify="center">
             <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+
+                    <% /* ССЫЛКА НА ФЛАГ СТРАНЫ*/ %>
+                    <template>
+                        <el-form-item label="<%= __('Flag link') %>" prop="flag">
+                            <el-input show-word-limit
+                                      style="width:80%;"
+                                      clearable
+                                      maxlength="470"
+                                      size="small"
+                                      placeholder="<%= __('link to flag country') %>"
+                                      v-model="ruleForm.flag"></el-input>
+                        </el-form-item>
+                    </template>
+
                     <el-divider content-position="left">English</el-divider>
                     <% /* НАЗВАНИЕ ТИТУЛА на английском*/ %>
                     <template>
@@ -125,6 +139,7 @@
                                       v-model="ruleForm.label"></el-input>
                         </el-form-item>
                     </template>
+
                     <% /* ОПИСАНИЕ ТИТУЛА на английском */ %>
                     <template>
                         <el-form-item label="<%= __('Description') %> (En)" prop="subtitle">
@@ -222,7 +237,7 @@
         <span slot="footer" class="dialog-footer">
   </span>
     </el-dialog>
-    <% /* Диалоговое окно Редактор тем. Список тем*/ %>
+    <% /* Диалоговое окно Редактор титулов. Список титулов*/ %>
     <el-dialog title="<%= __('Title Editor') %>. <%= __('List') %>."
                custom-class="dialog-kennel-add"
                :visible.sync="dialogEditorList">
@@ -246,13 +261,15 @@
                         fixed="left"
                         width="90">
                     <template slot="header" slot-scope="scope">
-
                         <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
                     </template>
                     <template slot-scope="scope">
                         <div v-if="!_.isEmpty(scope.row.images)">
                             <a href="#" @click="clickShowPhoto(scope.$index,scope.row)" class="flex justify-content-center">
-                                <el-avatar :size="38" @error="errorHandler">
+                                <el-avatar :size="38" @error="errorHandler" v-if="scope.row.flag">
+                                    <img :src="scope.row.flag"/>
+                                </el-avatar>
+                                <el-avatar :size="38" @error="errorHandler" v-else>
                                     <img :src="scope.row.images[scope.row.cover].imageSrc"/>
                                 </el-avatar>
                             </a>
@@ -633,7 +650,15 @@
 
                             </transition-group>
 
-                            <el-image
+                            <el-image v-if="title.flag"
+                                    :src="title.flag"
+                                    :key="title.id"
+                                    :fit="'cover'"
+                                    :scroll-container="'#style-1'"
+                                    lazy
+                                   >
+                            </el-image>
+                            <el-image v-else
                                     :src="title.images[title.cover].imageSrc"
                                     :key="title.id"
                                     :fit="'cover'"

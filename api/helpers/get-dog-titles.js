@@ -15,18 +15,7 @@ module.exports = {
   },
 
 
-  exits: {},
-
-
-  fn: async function (inputs, exits) {
-    let req = this.req;
-    // Убедитесь, что это запрос сокета (не традиционный HTTP)
-    if (!req.isSocket) {
-      throw 'badRequest';
-    }
-    // Have the socket which made the request join the "title" room.
-    // Подключить сокет, который сделал запрос, к комнате «title».
-    await sails.sockets.join(req, 'title');
+  fn: async function (inputs) {
 
     let dog = await Dog.findOne(inputs.id);
     let tileIds = _.pluck(dog.titleDog, 'id');
@@ -52,9 +41,8 @@ module.exports = {
     console.log('DOG::; ', tileIds);
     console.log('titles::; ', titles);
 
-    await sails.sockets.broadcast('title', 'list-titlesDog', titles);
     // Respond with view.
-    return exits.success();
+    return titles;
 
   }
 

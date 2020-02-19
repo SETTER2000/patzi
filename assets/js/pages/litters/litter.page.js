@@ -9,6 +9,7 @@ parasails.registerPage('litter', {
     size: 5, // Mb input img
     likeId: '',
     elWow: '',
+    // титул:'',
     showLike: false,
     pathDogSale: '/dogs/chinese-crested/sale',
     pathDogs: '/dogs/chinese-crested',
@@ -656,6 +657,8 @@ parasails.registerPage('litter', {
       this.dialogTableVisible = true;
       this.litterId = this.litter.id;
       this.photos = this.litter.images;
+      
+      console.log('photos:::: ' , this.photos);
       this.title = this.i19p.titlechilds;
       this.indexSlide = indexPhoto;
       this.handlerSetActiveSlider();

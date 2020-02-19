@@ -63,6 +63,7 @@ module.exports = {
       description: 'Дата смерти.'
     },
 
+
     letter: {
       type: 'string',
       description: `Буква помёта к которому пренадлежит собака. 
@@ -267,7 +268,7 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-
+    console.log('TITLE DOG:: ', inputs.titleDog);
     let dog = await Dog.findOne(inputs.id);
     let images = inputs.images ? inputs.images : dog.images;
     let imagesNew = [];
@@ -288,6 +289,7 @@ module.exports = {
       saleDescription: inputs.saleDescription,
       dateBirth: await sails.helpers.dateFix(inputs.dateBirth),
       dateDeath: await sails.helpers.dateFix(inputs.dateDeath),
+      dateReceiving: await sails.helpers.dateFix(inputs.dateReceiving),
       nickname: inputs.nickname,
       subtitle: inputs.subtitle,
       weight: inputs.weight,
@@ -320,9 +322,9 @@ module.exports = {
     }
 
 
-    if (inputs.titleDog.fileList) {
-      inputs.titleDog.fileList = inputs.titleDog.fileList.filter(o => !_.isNull(o));
-      _.each(inputs.titleDog.fileList, img => {
+    if (inputs.titleDog && inputs.titleDog.fileList) {
+      inputs.titleDog.images = inputs.titleDog.fileList.filter(o => !_.isNull(o));
+      _.each(inputs.titleDog.images, img => {
         img.id = _.isString(img.fd) ? _.first(_.last(img.fd.split('\\')).split('.')) : '';
         img.description = '';
         img.dateTaken = '';
@@ -337,10 +339,9 @@ module.exports = {
     // console.log('dog::: ', dog);
 
 
-
     !_.isEmpty(images) || !_.isEmpty(imagesNew) ? updateObj.images = [...images, ...imagesNew] : '';
-
-    updateObj.titleDog = _.uniq([...dog.titleDog, ...[inputs.titleDog]]);
+    let t = _.uniq([...dog.titleDog, ...[inputs.titleDog]]);
+    updateObj.titleDog = !_.isNull(t) ? t : '';
 
 
     // Обновляем

@@ -40,7 +40,7 @@ module.exports = {
       throw 'notFound';
     }
 
-    let kennel = await Kennel.findOne({id:dog.kennel.id})
+    let kennel = await Kennel.findOne({id: dog.kennel.id})
       .populate('continent')
       .populate('country')
       .populate('city');
@@ -57,14 +57,14 @@ module.exports = {
         avatar: breeder.defaultIcon === 'avatar' ? breeder.avatar : breeder.gravatar
       } : {};
 
-let countryId = _.last(_.pluck(dog.owners,'country'));
+    let countryId = _.last(_.pluck(dog.owners, 'country'));
 
     dog.owners = {
       fullName: _.last(_.pluck(dog.owners, 'fullName')),
       avatar: _.last(_.pluck(dog.owners, 'avatar')),
       gravatar: _.last(_.pluck(dog.owners, 'gravatar')),
       defaultIcon: _.last(_.pluck(dog.owners, 'defaultIcon')),
-      country:await Country.findOne({id:countryId})
+      country: await Country.findOne({id: countryId})
     };
 
 
@@ -91,7 +91,15 @@ let countryId = _.last(_.pluck(dog.owners,'country'));
       }
     });
 
-
+    // получить все титулы собаки
+    let titlesDog = await sails.helpers.getDogTitles.with({id: dog.id});
+    // console.log('TITLES DOGGG:: ', titlesDog);
+    // console.log('dog.titleDog:::: ', dog.titleDog);
+    // соединяем два объекта титула
+    _.each(dog.titleDog, tit => {
+      tit.title = titlesDog.filter(td => tit.id === td.id)[0];
+    });
+    // console.log('Собачий собраный титул:: ', dog.titleDog);
     /**
      * Генерирует ссылки с параметрами изображения,
      * которое должен вернуть S3 для данного модуля.
@@ -126,6 +134,54 @@ let countryId = _.last(_.pluck(dog.owners,'country'));
         }
       }
     });
+    console.log('dog.titleDog::: yyy', dog.titleDog);
+    /**
+     * Генерируем фото скринов для титулов собаки
+     */
+    dog.titleDog = await sails.helpers.cloudFrontUrlMin.with({
+      collection: dog.titleDog,
+      collectionName: 'dog',
+      field: 'images',
+      createField: 'imgTit',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        // grayscale: true,
+        /*    resize: {
+              width: resizeX,
+              height: resizeY
+            }*/
+      }
+    });
+    /* dog= await sails.helpers.cloudFrontUrlMin.with({
+       collection: dog,
+       collectionName: 'dog',
+       field: 'titleDog',
+       createField:'imgTit',
+       subfolder:'fileList',
+       collectionToCollection:true,
+       // Этот объект обязателен, хотя может быть и пустой.
+       edits: {
+         "resize": {
+           "width": 414,
+           // "height": 160,
+           "fit": "inside",
+           "background": {
+             "r": 255,
+             "g": 255,
+             "b": 255,
+             "alpha": 1
+           }
+         },
+         "flatten": {
+           "background": {
+             "r": 255,
+             "g": 255,
+             "b": 255,
+             "alpha": null
+           }
+         }
+       }
+     });*/
 
 
     // console.log('breeder::: ', breeder);
@@ -213,6 +269,14 @@ let countryId = _.last(_.pluck(dog.owners,'country'));
         }
       }
     });
+    // Обработка фото титулов собаки
+    // dog = await sails.helpers.cloudFrontUrlMin.with({
+    //   collection: dog,
+    //   collectionName: 'dog',
+    //   field: 'fieldList',
+    //   // Этот объект обязателен, хотя может быть и пустой.
+    //   edits: {}
+    // });
 
     await dog.parents.map(async (dog) => {
       dog.kennelName = dog.kennel.label;
@@ -232,7 +296,7 @@ let countryId = _.last(_.pluck(dog.owners,'country'));
       seo: {
         description: `${dog.fullName} - ${dog.subtitle}`,
         title: `${dog.fullName} ${dog.gender} ${moment(dog.dateBirth).format('LL')}`,
-        canonical:`https://${this.req.headers.host}${this.req.originalUrl}`
+        canonical: `https://${this.req.headers.host}${this.req.originalUrl}`
       },
       currentSection: 'dog',
       dog
