@@ -9,13 +9,6 @@
             <img :src="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)" style="width: 100%;"
                  :alt="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)">
         </div>
-        <!--<div class="block">
-          <el-image :src="objOne.img" class="cov">
-            <div slot="placeholder" class="image-slot">
-              Loading<span class="dot">...</span>
-            </div>
-          </el-image>
-        </div>-->
         <span slot="footer" class="dialog-footer">
     <el-button type="primary" @click="objOne={};photoVisible = false"><%= __('Close') %></el-button>
   </span>
@@ -70,31 +63,10 @@
                 <!--                <a href="#" class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">add me title</a>-->
             </div>
         </section>
-        <section class="u-clearfix u-white u-section-3" id="carousel_8bf4">
-            <div class="u-clearfix u-sheet u-sheet-1">
-                <div class="u-clearfix u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xl u-gutter-40 u-layout-wrap u-layout-wrap-1">
-                    <div class="u-layout">
-                        <div class="u-layout-row">
-                            <div class="u-align-left u-container-style u-expand-resize u-image u-layout-cell u-left-cell u-size-27 u-image-1">
-                                <div class="u-container-layout"></div>
-                            </div>
-                            <div class="u-container-style u-expand-resize u-layout-cell u-right-cell u-size-33 u-layout-cell-2">
-                                <div class="u-container-layout">
-                                    <img class="u-expanded-height-sm u-expanded-height-xs u-image u-image-2" src="/images/RUSJCH.jpg"
-                                         data-image-width="573" data-image-height="800">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="u-align-right u-container-style u-expanded-width-lg u-expanded-width-xl u-expanded-width-xs u-group u-group-1">
-                    <div class="u-container-layout u-valign-middle-sm u-valign-middle-xs u-container-layout-3">
-                        <h2 class="u-text u-text-1">young champion of Russia</h2>
-                        <a href="#" class="u-border-0 u-link u-no-underline u-link-1">22 февраля 2019</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+
+<!--        -->
+        <patzi-photo-list :obj-data="obj"></patzi-photo-list>
+
         <section class="u-clearfix u-white u-section-4" id="carousel_1ded">
             <div class="u-clearfix u-sheet u-sheet-1">
                 <div class="u-clearfix u-expanded-width-xl u-gutter-40 u-layout-wrap u-layout-wrap-1">
@@ -189,7 +161,7 @@
                     title="<%= __('Visibility') %>"
                     width="270"
                     trigger="hover"
-                    content="<%= __('Your dog is currently not visible in the catalog. Until you turn on the visibility no one can see it.') %>">
+                    content="<%= __('Your title is currently not visible in the catalog. Until you turn on the visibility no one can see it.') %>">
             </el-popover>
             <div class="menu-center">
                 <h1 v-if="buttonUpdate" class="flex justify-content-center"
@@ -209,7 +181,7 @@
         </div>
         <h5><%= __('Multiple upload photos') %></h5>
         <label v-if="!ruleForm.imageUrl">
-            <%= __('The first photo in this download will become the album cover. Later in the editor you can change these settings.') %>
+            <%= __('Download the scans of the diploma, which indicates the presence of this title in the dog.') %>
         </label>
         <div class="my-2">
             <el-divider content-position="left"><%= __('Add photo') %></el-divider>
@@ -260,8 +232,8 @@
                             <el-divider content-position="left">*</el-divider>
                         </div>
                         <% /* ТИТУЛЫ. Добавить */ %>
-                        <el-form-item label="Титул" prop="titleId">
-                            <el-select v-model="ruleForm.titleId" placeholder="Select">
+                        <el-form-item label="Титул" prop="id">
+                            <el-select v-model="ruleForm.id" placeholder="Select">
                                 <el-option v-for="(ob, index) in titles"
                                            :label="ob.label"
                                            :title="ob.label"
@@ -272,16 +244,17 @@
                         </el-form-item>
                     </div>
                 </div>
+                {{ruleForm}}
                 <div class="row my-5">
                     <div class="col col-sm-12 col-lg-10">
                         <% /* ДАТА ПОЛУЧЕНИЯ */ %>
-                        <el-form-item  label="<%= __('Date') %>" prop="dateDeath">
-                                    <el-date-picker
-                                            v-model="ruleForm.dateReceiving"
-                                            type="datetime"
-                                            placeholder="<%= __('Select date and time') %>"
-                                            default-time="12:00:00">
-                                    </el-date-picker>
+                        <el-form-item label="<%= __('Date') %>" prop="dateReceiving">
+                            <el-date-picker
+                                    v-model="ruleForm.dateReceiving"
+                                    type="datetime"
+                                    placeholder="<%= __('Select date and time') %>"
+                                    default-time="12:00:00">
+                            </el-date-picker>
                         </el-form-item>
 
                     </div>
@@ -365,30 +338,37 @@
                             <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
                             <i v-else class="el-icon-female"></i>
                         </p>
+                        <p>
+                            <% /* Титулы */ %>
+                            <span class="pointer" v-for="(title, index) of titlesDog" :key="'t-' + index" :title="title.subtitleRu">{{title.label}}{{ index < titlesDog.length - 1 ? ', ' : '' }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
-
 
         <% /* Главное Фото */ %>
         <section class="service-area section-gap">
             <div class="container">
                 <div class="portfolio_details_inner ">
                     <div class="row">
-                        <% /* Хлебные крошки */ %>
-                        <div class="col-md-6">
-                            <el-breadcrumb separator-class="el-icon-arrow-right">
-                                <el-breadcrumb-item><a style="text-decoration: none" href="/"><%= __('Home-menu') %></a>
-                                </el-breadcrumb-item>
-                                <el-breadcrumb-item><a style="text-decoration: none" href="/dogs/chinese-crested"><%= __('Dogs') %></a>
-                                </el-breadcrumb-item>
-                                <el-breadcrumb-item> {{dog.fullName}}</el-breadcrumb-item>
-                                <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
-                            </el-breadcrumb>
+
+                        <div class="col pt-4">
+
+                                    <% /* Хлебные крошки */ %>
+                                    <el-breadcrumb separator-class="el-icon-arrow-right">
+                                        <el-breadcrumb-item><a style="text-decoration: none" href="/"><%= __('Home-menu') %></a>
+                                        </el-breadcrumb-item>
+                                        <el-breadcrumb-item><a style="text-decoration: none"
+                                                               href="/dogs/chinese-crested"><%= __('Dogs') %></a>
+                                        </el-breadcrumb-item>
+                                        <el-breadcrumb-item> {{dog.fullName}}</el-breadcrumb-item>
+                                        <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
+                                    </el-breadcrumb>
+
                         </div>
                         <div class="col-md-6">
-                            <el-row type="flex" class="row-bg  mt-5 mt-sm-0" justify="end">
+                            <el-row type="flex" class="row-bg  mt-sm-0" justify="end">
                                 <el-col :span="21">
                                     <el-row type="flex" class="row-bg" justify="end">
                                         <% /* Заводчик */ %>
@@ -431,11 +411,7 @@
                             </el-row>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <% /* Титулы */ %>
-                            <span class="pointer" v-for="(title, index) of titlesDog" :key="'t-' + index" :title="title.subtitleRu">{{title.label}} </span>
-                        </div></div>
+
                     <% /*ГЛАВНАЯ КАРТИНКА */ %>
                     <div class="menu-center " style="position: relative; overflow:hidden ">
 
@@ -467,11 +443,11 @@
                 </div>
             </div>
         </section>
-
+        <h2 class="text-center text-uppercase"><%= __('Dog description') %></h2>
         <% /* ИНФОРМАЦИЯ о СОБАКЕ */ %>
         <section class="service-area ">
             <div class="container">
-                <h2 class="text-center text-uppercase"><%= __('Dog description') %></h2>
+
                 <div class="menu-between mb-5">
                     <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()" round><%= __('Pedigree') %></el-button>
                 </div>
