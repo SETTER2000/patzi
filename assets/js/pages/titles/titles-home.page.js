@@ -50,7 +50,7 @@ parasails.registerPage('titles-home', {
     rules: {
       label: [
         {required: true, message: 'Пожалуйста введите название на английском', trigger: 'blur'},
-        {min: 3, max: 200, message: 'Длинна от 3 до 200 знаков', trigger: 'blur'},
+        {min: 2, max: 200, message: 'Длинна от 3 до 200 знаков', trigger: 'blur'},
       ],
       // labelRu: [
       //   {required: true, message: 'Пожалуйста введите название на русском', trigger: 'blur'},

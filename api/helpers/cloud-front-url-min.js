@@ -80,7 +80,7 @@ module.exports = {
   fn: async function (inputs) {
     const btoa = require('btoa');
     let resultImgRecursion = '';
-
+    const url = require('url');
     /* resize = {
         fit: 'inside',
         width: 1424,
@@ -176,6 +176,10 @@ module.exports = {
         let im = reprocessedObj(inputs.collection[inputs.field], 'name');
         let collectionId = inputs.collection.id ? inputs.collection.id : inputs.collectionId;
         let subfolder = inputs.subfolder ? inputs.subfolder : inputs.field;
+
+        console.log('collectionId++++++++++::: ', collectionId);
+        console.log('subfolder+::: ', subfolder);
+
         (!_.isEmpty(inputs.collection[inputs.field])) ? im.map((image, i) => {
           let id = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${collectionId}/${subfolder}/${id}`) : '';
@@ -204,18 +208,6 @@ module.exports = {
       });
     }
 
-    /*im.map(img => {
-      let imageRequest = JSON.stringify({
-        bucket: sails.config.uploads.bucket,
-        key: img.fd,
-        edits: inputs.edits
-      });
-      img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-      return img;
-    })*/
-
-    /*  console.log('Выходная коллекция One:::: ', inputs.collection);
-      console.log(`Выходная коллекция Many 1 из ${inputs.collection.length} :::: `, inputs.collection[0]);*/
     return inputs.collection;
   }
 };

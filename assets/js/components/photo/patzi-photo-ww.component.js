@@ -1,5 +1,5 @@
 /**
- * <patzi-photo-right>
+ * <patzi-photo-ww>
  * -----------------------------------------------------------------------------
  * Начальный пример возможного построения компонента.
  *
@@ -9,7 +9,7 @@
  * -----------------------------------------------------------------------------
  */
 
-parasails.registerComponent('patziPhotoRight', {
+parasails.registerComponent('patziPhotoWw', {
   //  ╔═╗╦═╗╔═╗╔═╗╔═╗
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╩╚═╚═╝╩  ╚═╝
@@ -32,33 +32,31 @@ parasails.registerComponent('patziPhotoRight', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
 
-
-<section class="u-clearfix u-white u-section-4" id="carousel_1ded">
-      <div class="u-clearfix u-sheet u-sheet-1">
-        <div class="u-clearfix u-expanded-width-xl u-gutter-40 u-layout-wrap u-layout-wrap-1">
-          <div class="u-layout">
-            <div class="u-layout-row">
-              <div class="u-container-style u-expand-resize u-layout-cell u-right-cell u-size-33 u-layout-cell-1" >
-                <div class="u-container-layout">
-                  <img class="u-expanded-height-sm u-expanded-height-xs u-image u-image-1" :src="dataPhoto.photos[0].imageSrc">
-                  <div class="u-align-left u-container-style u-group u-group-1">
-                    <div
-                      class="u-container-layout u-valign-middle-lg u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs u-container-layout-2">
-                      <h2 class="u-text u-text-1">{{dataPhoto.title.subtitleRu}}</h2>
-                      <a href="#" class="u-border-0 u-link u-no-underline u-link-1">{{dataPhoto.dateReceiving | getCreate}}</a>
-                    </div>
+    <section class="u-clearfix u-section-5 mt-5 " id="sec-1f68">
+      <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
+        <div class="u-layout">
+          <div class="u-layout-row">
+            <div ref="wrapper" class="u-container-style u-image u-layout-cell u-left-cell u-size-28 u-image-1">
+              <div class="u-container-layout"></div>
+            </div>
+            <div class="u-container-style u-image u-layout-cell u-right-cell u-size-32 u-image-2">
+              <div class="u-container-layout u-valign-middle-sm u-valign-middle-xs">
+                <div class="u-align-left u-border-7 u-border-grey-15 u-container-style u-group u-group-1">
+                  <div class="u-container-layout u-valign-middle u-container-layout-3">
+                    <h1 class="u-text u-title u-text-1">world winner {{dataPhoto.dateReceiving | getCreate('YYYY')}}
+                      <br>
+                    </h1>
+                    <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div>
+                    <a href="#" class="u-border-0 u-link u-no-underline u-link-1">{{dataPhoto.dateReceiving | getCreate}}&nbsp;</a>
                   </div>
                 </div>
-              </div>
-              <div ref="wrapper" class="u-container-style u-expand-resize u-image u-layout-cell u-left-cell u-size-27 u-image-2"
-                   data-image-width="1163" data-image-height="1600">
-                <div class="u-container-layout"></div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+
 `,
 
 
@@ -74,7 +72,7 @@ parasails.registerComponent('patziPhotoRight', {
     // console.log('this.objData--999:: ', this.objData);
 
     if (this.dataPhoto === undefined) {
-      throw new Error('Neither `:data`  was passed in to <patzi-photo-right>, but one or the other must be provided.');
+      throw new Error('Neither `:data`  was passed in to <patzi-photo-ww>, but one or the other must be provided.');
     }
 
     this.updateStyle(this.$refs.wrapper, this.dataPhoto);
@@ -85,7 +83,7 @@ parasails.registerComponent('patziPhotoRight', {
   },
 
   filters: {
-    getCreate: function (value, l, format) {
+    getCreate: function (value, format,l ) {
       if (!value) {
         return '';
       }

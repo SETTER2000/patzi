@@ -15,7 +15,7 @@ parasails.registerComponent('patziPhotoList', {
   //  ╩  ╩╚═╚═╝╩  ╚═╝
   props: [
     'styleObj',
-    'objData'
+    'collectionTitles'
   ],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -31,9 +31,18 @@ parasails.registerComponent('patziPhotoList', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-                <div>
-                    <template   v-for="(title, i) in objData.data">
-                        <patzi-photo-left v-if="i%2" :data-photo="title"></patzi-photo-left>
+                <div class="mb-5">
+                    <template   v-for="(title, i) in collectionTitles">
+
+                        <template v-if="title.title.label !== 'WW'">
+                            <patzi-photo-right v-if="i%2" :data-photo="title"></patzi-photo-right>
+                            <patzi-photo-left v-else :data-photo="title"></patzi-photo-left>
+                        </template>
+                    </template>
+                    <template   v-for="(title, i) in collectionTitles">
+                        <template v-if="title.title.label === 'WW'">
+                             <patzi-photo-ww :data-photo="title"></patzi-photo-ww>
+                        </template>
                     </template>
                 </div>
 `,
@@ -49,10 +58,11 @@ parasails.registerComponent('patziPhotoList', {
 
   mounted: async function () {
 
-    if (this.objData.data === undefined) {
+    if (this.collectionTitles === undefined) {
       throw new Error('Neither `:data`  was passed in to <patzi-photo-list>, but one or the other must be provided.');
     }
-    this.list = this.objData.data;
+    console.log('this.collectionTitles.data*****;;;', this.collectionTitles);
+    this.list = this.collectionTitles.data;
   },
 
   beforeDestroy: function () {

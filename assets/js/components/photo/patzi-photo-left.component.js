@@ -41,7 +41,7 @@ parasails.registerComponent('patziPhotoLeft', {
                             </div>
                             <div class="u-container-style u-expand-resize u-layout-cell u-right-cell u-size-33 u-layout-cell-2">
                                 <div class="u-container-layout">
-                                    <img class="u-expanded-height-sm u-expanded-height-xs u-image u-image-2" src=""
+                                    <img class="u-expanded-height-sm u-expanded-height-xs u-image u-image-2" :src="dataPhoto.photos[0].imageSrc"
                                          data-image-width="573" data-image-height="800">
                                 </div>
                             </div>
@@ -50,8 +50,8 @@ parasails.registerComponent('patziPhotoLeft', {
                 </div>
                 <div class="u-align-right u-container-style u-expanded-width-lg u-expanded-width-xl u-expanded-width-xs u-group u-group-1">
                     <div class="u-container-layout u-valign-middle-sm u-valign-middle-xs u-container-layout-3">
-                        <h2 class="u-text u-text-1">{{dataPhoto.subtitleRu}}</h2>
-                        <a href="#" class="u-border-0 u-link u-no-underline u-link-1">22 февраля 2019</a>
+                        <h2 class="u-text u-text-1">{{dataPhoto.title.subtitleRu}}</h2>
+                        <a href="#" class="u-border-0 u-link u-no-underline u-link-1">{{dataPhoto.dateReceiving | getCreate}}</a>
                     </div>
                 </div>
             </div>
@@ -63,13 +63,13 @@ parasails.registerComponent('patziPhotoLeft', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    //...
+    console.log('this.dataPhoto--99222:: ', this.dataPhoto);
   },
 
 
   mounted: async function () {
     // console.log('this.objData--999:: ', this.objData);
-    console.log('this.dataPhoto--99222:: ', this.dataPhoto.images);
+
     if (this.dataPhoto === undefined) {
       throw new Error('Neither `:data`  was passed in to <patzi-foto-left>, but one or the other must be provided.');
     }
@@ -81,6 +81,16 @@ parasails.registerComponent('patziPhotoLeft', {
     //...
   },
 
+  filters: {
+    getCreate: function (value, l, format) {
+      if (!value) {
+        return '';
+      }
+      moment.locale(l);
+      let formatNew = (!format) ? 'LL' : format;
+      return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+    },
+  },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
@@ -89,10 +99,10 @@ parasails.registerComponent('patziPhotoLeft', {
       if (!wrapper) {
         return;
       }
-      console.log('objData:: ', objData);
-      let img = _.last(_.pluck(objData, 'imageSrc'));
-      console.log('imm:', img);
-
+      // console.log('objData:: ', objData.photos);
+      let img = objData.photos[1].imageSrc;
+      // console.log('imm:', img);
+// console.log('wrapper:: ' , wrapper);
       (img && img.length) > 0 ? $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
 
     }

@@ -30,6 +30,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const moment = require('moment');
+    const url = require('url');
     let fullName = _.startCase(inputs.fullName);
     let dog = await Dog.findOne({'fullName': fullName})
       .populate('parents')
@@ -39,6 +40,7 @@ module.exports = {
     if (!dog) {
       throw 'notFound';
     }
+    // console.log('dog.:::: ', dog);
 
     let kennel = await Kennel.findOne({id: dog.kennel.id})
       .populate('continent')
@@ -71,13 +73,15 @@ module.exports = {
     let litter = await sails.helpers.srcImagePreparation.with(
       {
         letter: dog.letter,
-        year: moment(dog.dateBirth).format("YYYY"),
+        year: moment(dog.dateBirth).format('YYYY'),
         preferredLocale: this.req.me.preferredLocale
       });
 
 
     // Проверяем наличие помёта
     dog.isPedigree = litter.letter;
+
+
     dog.parents = await sails.helpers.cloudFrontUrl.with({
       collection: dog.parents,
       collectionName: 'dog',
@@ -113,36 +117,47 @@ module.exports = {
       createField: 'imgI7',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
-        "resize": {
-          "width": 460,
+        'resize': {
+          'width': 460,
           // "height": 160,
-          "fit": "inside",
-          "background": {
-            "r": 255,
-            "g": 255,
-            "b": 255,
-            "alpha": 1
+          'fit': 'inside',
+          'background': {
+            'r': 255,
+            'g': 255,
+            'b': 255,
+            'alpha': 1
           }
         },
-        "flatten": {
-          "background": {
-            "r": 255,
-            "g": 255,
-            "b": 255,
-            "alpha": null
+        'flatten': {
+          'background': {
+            'r': 255,
+            'g': 255,
+            'b': 255,
+            'alpha': null
           }
         }
       }
     });
-    console.log('dog.titleDog::: yyy', dog.titleDog);
+    // console.log('dog.titleDog::: yyy', dog.titleDog);
+
+    // Подготовка объекта фотоссессии
+    dog.titleDog = (!_.isEmpty(dog.titleDog)) ? await dog.titleDog.map((photoSet, i) => {
+      photoSet.comments = _.isArray(photoSet.comments) ? photoSet.comments : [];
+      photoSet.photos.map((image, y) => {
+        image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/dog/${dog.id}/titleDog/${y}/${i}`) : '';
+      });
+      return photoSet;
+    })
+      :
+      '';
+
     /**
      * Генерируем фото скринов для титулов собаки
      */
     dog.titleDog = await sails.helpers.cloudFrontUrlMin.with({
       collection: dog.titleDog,
       collectionName: 'dog',
-      field: 'images',
-      createField: 'imgTit',
+      // createField: 'imgTit',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
         // grayscale: true,
@@ -152,39 +167,11 @@ module.exports = {
             }*/
       }
     });
-    /* dog= await sails.helpers.cloudFrontUrlMin.with({
-       collection: dog,
-       collectionName: 'dog',
-       field: 'titleDog',
-       createField:'imgTit',
-       subfolder:'fileList',
-       collectionToCollection:true,
-       // Этот объект обязателен, хотя может быть и пустой.
-       edits: {
-         "resize": {
-           "width": 414,
-           // "height": 160,
-           "fit": "inside",
-           "background": {
-             "r": 255,
-             "g": 255,
-             "b": 255,
-             "alpha": 1
-           }
-         },
-         "flatten": {
-           "background": {
-             "r": 255,
-             "g": 255,
-             "b": 255,
-             "alpha": null
-           }
-         }
-       }
-     });*/
 
+    dog.titleDog =_.sortBy(dog.titleDog, 'dateReceiving');
 
-    // console.log('breeder::: ', breeder);
+    // console.log(' dog.titleDog***********************:::::; ',  dog.titleDog);
+
     /**
      * Генерирует ссылки с параметрами изображения,
      * которое должен вернуть S3 для данного модуля.
@@ -220,23 +207,23 @@ module.exports = {
       createField: 'imgI7',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
-        "resize": {
-          "width": 414,
+        'resize': {
+          'width': 414,
           // "height": 160,
-          "fit": "inside",
-          "background": {
-            "r": 255,
-            "g": 255,
-            "b": 255,
-            "alpha": 1
+          'fit': 'inside',
+          'background': {
+            'r': 255,
+            'g': 255,
+            'b': 255,
+            'alpha': 1
           }
         },
-        "flatten": {
-          "background": {
-            "r": 255,
-            "g": 255,
-            "b": 255,
-            "alpha": null
+        'flatten': {
+          'background': {
+            'r': 255,
+            'g': 255,
+            'b': 255,
+            'alpha': null
           }
         }
       }
@@ -248,23 +235,23 @@ module.exports = {
       field: 'images',
       // Этот объект обязателен, хотя может быть и пустой.
       edits: {
-        "resize": {
-          "width": 310,
+        'resize': {
+          'width': 310,
           // "height": 160,
-          "fit": "inside",
-          "background": {
-            "r": 255,
-            "g": 255,
-            "b": 255,
-            "alpha": 1
+          'fit': 'inside',
+          'background': {
+            'r': 255,
+            'g': 255,
+            'b': 255,
+            'alpha': 1
           }
         },
-        "flatten": {
-          "background": {
-            "r": 255,
-            "g": 255,
-            "b": 255,
-            "alpha": null
+        'flatten': {
+          'background': {
+            'r': 255,
+            'g': 255,
+            'b': 255,
+            'alpha': null
           }
         }
       }
@@ -278,10 +265,13 @@ module.exports = {
     //   edits: {}
     // });
 
+
+
+
     await dog.parents.map(async (dog) => {
       dog.kennelName = dog.kennel.label;
       // dog.fullName = dog.kennel.right ? `${dog.label} ${dog.kennel.label}` : `${dog.kennel.label} ${dog.label}`;
-      dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
+      dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(' ').join('-')}` : '';
       dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
       // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
       return dog;

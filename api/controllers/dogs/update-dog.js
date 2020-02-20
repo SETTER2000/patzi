@@ -268,7 +268,7 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-    console.log('TITLE DOG:: ', inputs.titleDog);
+    // console.log('TITLE DOG:: ', inputs.titleDog);
     let dog = await Dog.findOne(inputs.id);
     let images = inputs.images ? inputs.images : dog.images;
     let imagesNew = [];
@@ -323,8 +323,8 @@ module.exports = {
 
 
     if (inputs.titleDog && inputs.titleDog.fileList) {
-      inputs.titleDog.images = inputs.titleDog.fileList.filter(o => !_.isNull(o));
-      _.each(inputs.titleDog.images, img => {
+      inputs.titleDog.photos = inputs.titleDog.fileList.filter(o => !_.isNull(o));
+      _.each(inputs.titleDog.photos, img => {
         img.id = _.isString(img.fd) ? _.first(_.last(img.fd.split('\\')).split('.')) : '';
         img.description = '';
         img.dateTaken = '';
@@ -332,16 +332,21 @@ module.exports = {
         delete img.status;
         delete img.field;
       });
+      delete inputs.titleDog.fileList;
     }
 
     // console.log('inputs.titleDog::: ', inputs.titleDog);
     // console.log('dog.titleDog::: ', dog.titleDog);
     // console.log('dog::: ', dog);
 
-
+    // фото собаки
     !_.isEmpty(images) || !_.isEmpty(imagesNew) ? updateObj.images = [...images, ...imagesNew] : '';
+
+    // Фото-сканы дипломов-титулов
     let t = _.uniq([...dog.titleDog, ...[inputs.titleDog]]);
-    updateObj.titleDog = !_.isNull(t) ? t : '';
+    if (!_.isNull(t)) {
+      updateObj.titleDog = t;
+    }
 
 
     // Обновляем
@@ -382,7 +387,10 @@ module.exports = {
     await Dog.replaceCollection(updateDog.id, 'owners').members(owner);
     let year = _.trim(inputs.dateBirth.split('-')[0], '"');
     // Рассылаем данные всем подписанным на событие forSale-dog данной комнаты.
-    await sails.sockets.broadcast('dog', 'forSale-dog', await sails.helpers.forSaleDog.with({letter: inputs.letter, year: year}));
+    await sails.sockets.broadcast('dog', 'forSale-dog', await sails.helpers.forSaleDog.with({
+      letter: inputs.letter,
+      year: year
+    }));
     return exits.success();
   }
 };

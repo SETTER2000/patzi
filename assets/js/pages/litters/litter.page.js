@@ -230,7 +230,7 @@ parasails.registerPage('litter', {
     this.ratio = _.last(_.pluck(this.me.ratio.filter(rat => rat.letter === this.litter.letter), 'litter'));
     // Super SVG animation
     // this.superSvg();
-
+console.log('LITTER::: ', this.litter);
     // // Haha SVG animation
     // this.countHaha > 0 ?  this.hahaSvg():'';
     //
@@ -657,7 +657,7 @@ parasails.registerPage('litter', {
       this.dialogTableVisible = true;
       this.litterId = this.litter.id;
       this.photos = this.litter.images;
-      
+
       console.log('photos:::: ' , this.photos);
       this.title = this.i19p.titlechilds;
       this.indexSlide = indexPhoto;
@@ -1403,40 +1403,6 @@ parasails.registerPage('litter', {
       await io.socket.get(`/api/v1/likes/list-like/${this.litter.id}/${field}`, function gotResponse(body, response) {
         console.log('Сервис Like List ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-
-
-      /*// Принимаем данные по событию list-*
-      io.socket.on('list-like', (data) => {
-        // console.log('LIST LIKE::: ', data);
-        if (data.length > 0 && _.isArray(this.litter[field])) {
-          this.litter[field].map(puppyPhotoSet => {
-            console.log('puppyPhotoSet::: ' , puppyPhotoSet);
-            puppyPhotoSet.likes = _.isArray(puppyPhotoSet.likes) ? puppyPhotoSet.likes : [];
-            puppyPhotoSet.likes = data.filter(like => like.indexPhotoSet === puppyPhotoSet.indexPhotoSet);
-            // console.log('FILTER LIKE photoset +::: ', _.pluck(_.filter(puppyPhotoSet.likes, {like: 'like'}), 'like'));
-            // console.log('FILTER WOW photoset +::: ', _.pluck(_.filter(puppyPhotoSet.likes, {like: 'wow'}), 'like'));
-            this.countLike = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'like'}), 'like').length;
-            this.listLikeUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'like'}), 'userName'));
-            this.countWow = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'wow'}), 'like').length;
-            this.listWowUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'wow'}), 'userName'));
-            // console.log('listWowUserName::: ', this.listWowUserName);
-            this.listAllUsers = _.uniq(_.pluck(puppyPhotoSet.likes, 'userName'));
-            this.countSuper = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'super'}), 'like').length;
-            this.listSuperUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'super'}), 'userName'));
-            this.countHaha = _.pluck(_.filter(puppyPhotoSet.likes, {like: 'haha'}), 'like').length;
-            this.listHahaUserName = _.uniq(_.pluck(_.filter(puppyPhotoSet.likes, {like: 'haha'}), 'userName'));
-            this.superSvg();
-            // this.wowSvg();
-            // this.likeSvg();
-            // this.hahaSvg();
-            this.$forceUpdate();
-          });
-        }
-
-
-      });*/
-
-
     },
 
 
@@ -1482,22 +1448,8 @@ parasails.registerPage('litter', {
 
     },
 
-    /*
-    like
-    super
-    haha
-    wow
-    sorry
-    scandal
-    нравится
-    супер
-    ха-ха
-    ух-ты
-    сочувствую
-    возмутительно*/
     // Добавить Like
     async addLike(command) {
-
       let data = {
         instanceModuleId: this.litter.id,
         like: command.com,
@@ -1507,7 +1459,6 @@ parasails.registerPage('litter', {
         letter: this.litter.letter,
         indexPhotoSet: command.photoSet.indexPhotoSet
       };
-      // command.com === 'Like' ? this.showLike = false : '';
       console.log('POST photoSet data:: ', data);
       let sel = this;
       await io.socket.post('/api/v1/likes/add-like', data, (dataRes, response) => {
@@ -1515,8 +1466,6 @@ parasails.registerPage('litter', {
         (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
           (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
             (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-
-
         if (response.statusCode === 200) {
           this.comment = '';
 
@@ -1598,8 +1547,5 @@ parasails.registerPage('litter', {
     goDogsSale() {
       this.goTo2(this.pathDogSale);
     },
-
   },
 });
-
-//

@@ -161,7 +161,6 @@ module.exports = {
     },
 
 
-
     nickname: {
       type: 'string',
       description: 'Кличка, ласковое имя.'
