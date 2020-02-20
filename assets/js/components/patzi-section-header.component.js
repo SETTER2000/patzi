@@ -82,12 +82,8 @@ parasails.registerComponent('patziSectionHeader', {
       if (!wrapper) {
         return;
       }
-      console.log('objData:: ', objData);
       let img = _.last(_.pluck(objData, 'imageSrc'));
-      console.log('imm:', img);
-
       (img && img.length) > 0 ? $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
-
     }
   }
 });
