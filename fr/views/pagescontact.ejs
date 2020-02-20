@@ -2,6 +2,8 @@
 
   <patzi-section-header :obj-data="seo"></patzi-section-header>
   <!-- Start Service Area -->
+
+  <!-- End Service Area -->
   <section class="service-area section-gap-top">
     <div class="container">
       <patzi-row-h2-h3 :obj-data="seo" :hidden-h3="!cloudSuccess"></patzi-row-h2-h3>
@@ -26,8 +28,8 @@
                 <div class="invalid-feedback" v-if="formErrors.emailAddress"><%= __('Please enter a valid email address') %>.</div>
               </div>
               <div class="form-group">
-                <label for="topic"><%= __('Topic') %></label>
-                <input class="form-control" id="topic" name="topic" type="text" : "class="[formErrors.topic ? 'is-invalid' : '']" v-model.trim="formData.topic" placeholder="<%= __('Pricing question') %>" autocomplete="none">
+                <!--<label for="topic"><%= __('Topic') %></label>-->
+                <!--<input class="form-control" id="topic" name="topic" type="text"  :class="[formErrors.topic ? 'is-invalid' : '']" v-model.trim="formData.topic" placeholder="<%= __('Pricing question') %>" autocomplete="none">-->
                 <div class="invalid-feedback" v-if="formErrors.topic"><%= __('Please choose a topic for your message') %>.</div>
               </div>
               <div class="form-group">
@@ -50,13 +52,11 @@
       </div>
     </div>
   </section>
-  <!-- End Service Area -->
-
   <!-- Start contact-page Area -->
   <section class="service-area ">
     <h2 class="text-center"><%= __('Where to find us') %>?</h2>
     <div class="contact-form"><p class="text-center"><%= __('The nursery is located in Russia in the South-West of Moscow, Konkovo district, near the park Troparyovo. Green, clean, a great place to walk with dogs in Moscow. Come on.') %></p>
-      </div>
+    </div>
     <div class="container">
 
       <div class="row">
@@ -70,38 +70,38 @@
         </div>
 
         <div class="d-flex align-content-stretch flex-wrap">
-        <!--  <div class="single-contact-address d-flex flex-row">
+          <!--  <div class="single-contact-address d-flex flex-row">
 
-          </div>-->
+            </div>-->
 
-            <div class="p-2 flex-fill bd-highlight">
-              <div class="icon"><i class="ti-home"></i></div>
-              <div class="contact-details">
-                <h5><%= __('Moscow, Russia') %></h5>
-                <p><%= __('st. Ostrovityanova d. 27 Bldg. 3') %></p>
-              </div>
+          <div class="p-2 flex-fill bd-highlight">
+            <div class="icon"><i class="ti-home"></i></div>
+            <div class="contact-details">
+              <h5><%= __('Moscow, Russia') %></h5>
+              <p><%= __('st. Ostrovityanova d. 27 Bldg. 3') %></p>
             </div>
-            <div class="p-2 flex-fill bd-highlight">
-              <div class="icon"><i class="ti-headphone"></i></div>
-              <div class="contact-details">
-                <h5>07 (910) 4067 406</h5>
-                <p><%= __('Mon to Mon 9am to 9pm') %></p>
-              </div>
+          </div>
+          <div class="p-2 flex-fill bd-highlight">
+            <div class="icon"><i class="ti-headphone"></i></div>
+            <div class="contact-details">
+              <h5>07 (910) 4067 406</h5>
+              <p><%= __('Mon to Mon 9am to 9pm') %></p>
             </div>
-            <div class="p-2 flex-fill bd-highlight">
-              <div class="icon"><i class="ti-email"></i></div>
-              <div class="contact-details">
-                <!--<h5>support@poaleell.com</h5>-->
-                <p><a href="#feedback"><%= __('Send us your query anytime!') %></a></p>
-              </div>
+          </div>
+          <div class="p-2 flex-fill bd-highlight">
+            <div class="icon"><i class="ti-email"></i></div>
+            <div class="contact-details">
+              <!--<h5>support@poaleell.com</h5>-->
+              <p><a href="#feedback"><%= __('Send us your query anytime!') %></a></p>
             </div>
+          </div>
 
-        <!--  <div class="single-contact-address d-flex flex-row">
+          <!--  <div class="single-contact-address d-flex flex-row">
 
-          </div>-->
+            </div>-->
         </div>
 
-     <% /*<div class="col-lg-8">
+        <% /*<div class="col-lg-8">
           <form
             class="form-area "
             id="myForm"
