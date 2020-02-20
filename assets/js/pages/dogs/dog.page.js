@@ -7,8 +7,8 @@ parasails.registerPage('dog', {
     centerDialogAdded: false,
     dialogImageUrl: '',
     titles: [],
-    titlesDog:[],
-    obj:{},
+    titlesDog: [],
+    obj: {},
     direction: 'ttb',
     dialogVisible: false,
     comment: '',
@@ -23,8 +23,8 @@ parasails.registerPage('dog', {
     squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
     sizeList: ["large", "medium", "small"],
     ruleForm: {
-      id:'',
-      dateReceiving:'',
+      id: '',
+      dateReceiving: '',
     },
     rules: {
 
@@ -125,22 +125,13 @@ parasails.registerPage('dog', {
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
     console.log('DOG::: ', this.dog);
+    // this.getList();
+    // console.log('DOG-2::: ', this.dog);
     // Запрос для события list-*
     io.socket.get(`/api/v1/titles/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
-    io.socket.get(`/api/v1/titles/${this.dog.id}`, function gotResponse(body, response) {
-      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-    });
-
-    // Принимаем данные по событию list-*
-    // получаем титулы собаки
-    io.socket.on('list-titlesDog', (data) => {
-      this.titlesDog = this.obj.data = data;
-
-      console.log('titlesDog:::: ', this.titlesDog);
-      // console.log('this.filterDogs: ', this.filterDogs);
-    });
+    this.getList();
     // Принимаем данные по событию list-*
     // получаем все титулы в системе
     io.socket.on('list-title', (data) => {
@@ -358,7 +349,6 @@ parasails.registerPage('dog', {
       this.dialogVisible = true;
     },
 
-
     mesSuccess(text = '') {
       this.$notify({
         title: 'Success',
@@ -368,7 +358,6 @@ parasails.registerPage('dog', {
       });
     },
 
-
     mesWarning(text = '') {
       this.$notify({
         title: 'Warning',
@@ -377,7 +366,6 @@ parasails.registerPage('dog', {
         type: 'warning'
       });
     },
-
 
     mesInfo(text = '') {
       this.$notify.info({
@@ -451,10 +439,10 @@ parasails.registerPage('dog', {
 
     submitForm: async function (formName) {
       this.$refs[formName].validate((valid) => {
-// console.log('FFF this.ruleForm ::: ' , this.ruleForm);
+
         if (_.isEmpty(this.ruleForm.id)) {
           this.mesError('Error. Не выбран титул.');
-        } else if(!_.isObject(this.ruleForm.dateReceiving)){
+        } else if (!_.isObject(this.ruleForm.dateReceiving)) {
           this.mesError('Error. Не указана дата получения титула.');
         } else if (valid) {
           this.updateDog();
@@ -474,8 +462,7 @@ parasails.registerPage('dog', {
         dateBirth: this.dog.dateBirth,
         label: this.dog.label,
         gender: this.dog.gender,
-        // titleScan:this.ruleForm.fileList,
-        titleDog: this.ruleForm,
+        titleDog: this.ruleForm, // добавляем титул
       };
       console.log('DATA перед отправкой::: ', data);
 
@@ -494,11 +481,25 @@ parasails.registerPage('dog', {
           // this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
           this.ruleForm.federations = this.resetFederation;
-          // this.getList();
+          this.getList();
         }
       });
     },
 
+    getList() {
+      io.socket.get(`/api/v1/titles/${this.dog.id}`, function gotResponse(body, response) {
+        console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+
+      // Принимаем данные по событию list-*
+      // получаем титулы собаки
+      io.socket.on('list-titlesDog', (data) => {
+        this.dog.titleDog = [...data.titleDog];
+        this.$forceUpdate();
+        console.log('titlesDog--**4584:::: ', this.dog.titleDog);
+        console.log('titlesDog--**4584 isArray:::: ', _.isArray(this.dog.titleDog));
+      });
+    },
     openFullScreen() {
       this.loading = this.$loading({
         lock: true,
@@ -519,6 +520,46 @@ parasails.registerPage('dog', {
       this.ruleForm.price = 0;
       this.ruleForm.federations = this.resetFederation;
     },
+
+
+    // Обработчик события удаления титула. Всплывает изнутри компонента
+    openTit(data) {
+      this.$confirm('Это навсегда удалит файл. Продолжить?', 'Внимание', {
+        confirmButtonText: 'Ok',
+        cancelButtonText: 'Отмена',
+        type: 'warning'
+      }).then(() => {
+        if (this.delTitle(data)) {
+          this.$message({
+            type: 'success',
+            message: 'Delete completed'
+          });
+        } else {
+          this.$message({
+            type: 'error',
+            message: 'Непредвиденная ошибка. Не могу удалить объект.'
+          });
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Delete canceled'
+        });
+      });
+    },
+    delTitle: async function (data) {
+      let dt = data;
+      dt.dogId = this.dog.id;
+      let r = false;
+      // console.log('Перед отправкой data DOG: ', dt);
+      await io.socket.delete('/api/v1/dogs/destroy-one-title', dt, (dataRes, jwRes) => {
+        r = (jwRes.statusCode === 200);
+        this.dog.titleDog = this.dog.titleDog.filter(item => ((dt.dateReceiving !== item.dateReceiving) || (dt.id !== item.id)));
+        this.$forceUpdate();
+      });
+      return r;
+    },
+
 
   }
 });

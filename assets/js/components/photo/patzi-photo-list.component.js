@@ -31,12 +31,11 @@ parasails.registerComponent('patziPhotoList', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-                <div class="mb-5">
+                <div class="mb-5" >
                     <template   v-for="(title, i) in collectionTitles">
-
                         <template v-if="title.title.label !== 'WW'">
-                            <patzi-photo-right v-if="i%2" :data-photo="title"></patzi-photo-right>
-                            <patzi-photo-left v-else :data-photo="title"></patzi-photo-left>
+                            <patzi-photo-right v-if="i%2" :data-photo="title" @remove="removeFromList"></patzi-photo-right>
+                            <patzi-photo-left v-else :data-photo="title" @remove="removeFromList"></patzi-photo-left>
                         </template>
                     </template>
                     <template   v-for="(title, i) in collectionTitles">
@@ -57,11 +56,9 @@ parasails.registerComponent('patziPhotoList', {
 
 
   mounted: async function () {
-
     if (this.collectionTitles === undefined) {
       throw new Error('Neither `:data`  was passed in to <patzi-photo-list>, but one or the other must be provided.');
     }
-    console.log('this.collectionTitles.data*****;;;', this.collectionTitles);
     this.list = this.collectionTitles.data;
   },
 
@@ -73,6 +70,9 @@ parasails.registerComponent('patziPhotoList', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    //...
+    removeFromList(id,dateReceiving) {
+      this.$emit('remove-title', {id:id, dateReceiving:dateReceiving});
+    },
+
   }
 });

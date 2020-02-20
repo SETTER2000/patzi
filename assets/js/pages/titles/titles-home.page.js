@@ -278,17 +278,18 @@ parasails.registerPage('titles-home', {
       // Проверка размера входящего файла картинки не более (MB)
 
       const isJPG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < this.sizeLess;
 
-      if (!isJPG) {
-        this.$message.error('Picture must be JPG format!');
+      if (!isJPG && !isPNG) {
+        this.$message.error('Picture must be JPG or PNG format!');
       }
 
       if (!isLt2M) {
         this.$message.error(`Picture size can not exceed ${this.sizeLess}MB!`);
       }
 
-      return isJPG && isLt2M;
+      return (isJPG || isPNG) && isLt2M;
     },
 
     handleSuccess(res, file) {

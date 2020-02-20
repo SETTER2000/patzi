@@ -177,9 +177,6 @@ module.exports = {
         let collectionId = inputs.collection.id ? inputs.collection.id : inputs.collectionId;
         let subfolder = inputs.subfolder ? inputs.subfolder : inputs.field;
 
-        console.log('collectionId++++++++++::: ', collectionId);
-        console.log('subfolder+::: ', subfolder);
-
         (!_.isEmpty(inputs.collection[inputs.field])) ? im.map((image, i) => {
           let id = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${collectionId}/${subfolder}/${id}`) : '';
@@ -198,7 +195,6 @@ module.exports = {
           obj[inputs.createField] = im;
         }
         else {
-          // console.log('Collections Many Location');
           obj[inputs.createField] = (!_.isEmpty(obj[inputs.field])) ? await obj[inputs.field].map((image, i) => {
             i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
             image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${obj.id}/${inputs.field}/${i}`) : '';
@@ -207,7 +203,6 @@ module.exports = {
         }
       });
     }
-
     return inputs.collection;
   }
 };

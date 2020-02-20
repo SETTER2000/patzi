@@ -90,12 +90,8 @@ module.exports = {
     }
 
     if (!collectionObject) {
-      // console.log('Не найдено!' + collectionObject);
       throw 'notFound';
     }
-// console.log('collectionObject:::; ' , collectionObject);
-//     console.log('folder', folder);
-//     console.log('inputs.photoSet', inputs.photoSet);
 
     let arr = _.isArray(collectionObject[folder][inputs.photoSet]['photos']) ?
       await collectionObject[folder][inputs.photoSet]['photos'].filter((image, index) => inputs.key === index) :

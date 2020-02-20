@@ -1,8 +1,6 @@
 module.exports = {
 
-
   friendlyName: 'View dog',
-
 
   description: 'Display "Dog" page.',
 
@@ -12,7 +10,6 @@ module.exports = {
       type: 'string',
       required: true
     }
-
   },
 
   exits: {
@@ -31,6 +28,9 @@ module.exports = {
   fn: async function (inputs, exits) {
     const moment = require('moment');
     const url = require('url');
+    let req = this.req;
+
+
     let fullName = _.startCase(inputs.fullName);
     let dog = await Dog.findOne({'fullName': fullName})
       .populate('parents')
@@ -40,24 +40,22 @@ module.exports = {
     if (!dog) {
       throw 'notFound';
     }
-    // console.log('dog.:::: ', dog);
+
 
     let kennel = await Kennel.findOne({id: dog.kennel.id})
       .populate('continent')
       .populate('country')
       .populate('city');
-    // console.log('KENNEL:::: ' , kennel);
 
 
     let breeder = dog.kennel.breeder ? await User.findOne({id: dog.kennel.breeder}) : '';
-    dog.breeder = breeder ?
-      {
-        continent: kennel.continent.label,
-        country: kennel.country.label,
-        city: (kennel.city && kennel.city.label) ? kennel.city.label : '',
-        fullName: breeder.fullName,
-        avatar: breeder.defaultIcon === 'avatar' ? breeder.avatar : breeder.gravatar
-      } : {};
+    dog.breeder = breeder ? {
+      continent: kennel.continent.label,
+      country: kennel.country.label,
+      city: (kennel.city && kennel.city.label) ? kennel.city.label : '',
+      fullName: breeder.fullName,
+      avatar: breeder.defaultIcon === 'avatar' ? breeder.avatar : breeder.gravatar
+    } : {};
 
     let countryId = _.last(_.pluck(dog.owners, 'country'));
 
@@ -74,7 +72,7 @@ module.exports = {
       {
         letter: dog.letter,
         year: moment(dog.dateBirth).format('YYYY'),
-        preferredLocale: this.req.me.preferredLocale
+        preferredLocale: req.me.preferredLocale
       });
 
 
@@ -95,15 +93,12 @@ module.exports = {
       }
     });
 
+
     // получить все титулы собаки
     let titlesDog = await sails.helpers.getDogTitles.with({id: dog.id});
-    // console.log('TITLES DOGGG:: ', titlesDog);
-    // console.log('dog.titleDog:::: ', dog.titleDog);
-    // соединяем два объекта титула
-    _.each(dog.titleDog, tit => {
-      tit.title = titlesDog.filter(td => tit.id === td.id)[0];
-    });
-    // console.log('Собачий собраный титул:: ', dog.titleDog);
+    // объеденить титулы с объектами титулов собаки
+    dog = await sails.helpers.mergerTitlesAndDogTitles.with({dog: dog, titlesDog: titlesDog});
+
     /**
      * Генерирует ссылки с параметрами изображения,
      * которое должен вернуть S3 для данного модуля.
@@ -138,39 +133,7 @@ module.exports = {
         }
       }
     });
-    // console.log('dog.titleDog::: yyy', dog.titleDog);
 
-    // Подготовка объекта фотоссессии
-    dog.titleDog = (!_.isEmpty(dog.titleDog)) ? await dog.titleDog.map((photoSet, i) => {
-      photoSet.comments = _.isArray(photoSet.comments) ? photoSet.comments : [];
-      photoSet.photos.map((image, y) => {
-        image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/dog/${dog.id}/titleDog/${y}/${i}`) : '';
-      });
-      return photoSet;
-    })
-      :
-      '';
-
-    /**
-     * Генерируем фото скринов для титулов собаки
-     */
-    dog.titleDog = await sails.helpers.cloudFrontUrlMin.with({
-      collection: dog.titleDog,
-      collectionName: 'dog',
-      // createField: 'imgTit',
-      // Этот объект обязателен, хотя может быть и пустой.
-      edits: {
-        // grayscale: true,
-        /*    resize: {
-              width: resizeX,
-              height: resizeY
-            }*/
-      }
-    });
-
-    dog.titleDog =_.sortBy(dog.titleDog, 'dateReceiving');
-
-    // console.log(' dog.titleDog***********************:::::; ',  dog.titleDog);
 
     /**
      * Генерирует ссылки с параметрами изображения,
@@ -256,16 +219,6 @@ module.exports = {
         }
       }
     });
-    // Обработка фото титулов собаки
-    // dog = await sails.helpers.cloudFrontUrlMin.with({
-    //   collection: dog,
-    //   collectionName: 'dog',
-    //   field: 'fieldList',
-    //   // Этот объект обязателен, хотя может быть и пустой.
-    //   edits: {}
-    // });
-
-
 
 
     await dog.parents.map(async (dog) => {
@@ -277,16 +230,17 @@ module.exports = {
       return dog;
     });
 
+    // подготавливаем массив фото собаки для просмотра в слайдере
     dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc');
-    // console.log('DOGG::: ', dog);
-
 
     // Respond with view.
     return exits.success({
+      // Этот объект обязателен, иначе ошибка
+      // В дальнейшем предполагается сделать отдельную модель Seo
       seo: {
         description: `${dog.fullName} - ${dog.subtitle}`,
         title: `${dog.fullName} ${dog.gender} ${moment(dog.dateBirth).format('LL')}`,
-        canonical: `https://${this.req.headers.host}${this.req.originalUrl}`
+        canonical: `https://${req.headers.host}${req.originalUrl}`
       },
       currentSection: 'dog',
       dog

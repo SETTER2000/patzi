@@ -85,7 +85,6 @@ module.exports = {
        return dog;
     });
 
-    // console.log('ETTT: ', dogs);
 
     await sails.sockets.broadcast('dog', 'list-dog', dogs);
 

@@ -38,9 +38,6 @@ module.exports = {
       }
     });
 
-    console.log('DOG::; ', tileIds);
-    console.log('titles::; ', titles);
-
     // Respond with view.
     return titles;
 

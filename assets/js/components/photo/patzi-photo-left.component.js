@@ -52,6 +52,7 @@ parasails.registerComponent('patziPhotoLeft', {
                     <div class="u-container-layout u-valign-middle-sm u-valign-middle-xs u-container-layout-3">
                         <h2 class="u-text u-text-1">{{dataPhoto.title.subtitleRu}}</h2>
                         <a href="#" class="u-border-0 u-link u-no-underline u-link-1">{{dataPhoto.dateReceiving | getCreate}}</a>
+                          <el-button  @click="removeItem" class="my-3" type="danger" icon="el-icon-delete" circle></el-button>
                     </div>
                 </div>
             </div>
@@ -68,8 +69,6 @@ parasails.registerComponent('patziPhotoLeft', {
 
 
   mounted: async function () {
-    // console.log('this.objData--999:: ', this.objData);
-
     if (this.dataPhoto === undefined) {
       throw new Error('Neither `:data`  was passed in to <patzi-foto-left>, but one or the other must be provided.');
     }
@@ -95,16 +94,19 @@ parasails.registerComponent('patziPhotoLeft', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+
+    removeItem: function() {
+      // генерируем событие 'remove' и передаём id элемента
+      this.$emit('remove', this.dataPhoto.id, this.dataPhoto.dateReceiving);
+    },
+
+
     updateStyle(wrapper, objData) {
       if (!wrapper) {
         return;
       }
-      // console.log('objData:: ', objData.photos);
       let img = objData.photos[1].imageSrc;
-      // console.log('imm:', img);
-// console.log('wrapper:: ' , wrapper);
       (img && img.length) > 0 ? $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
-
     }
   }
 });

@@ -143,7 +143,7 @@ module.exports.routes = {
 
   'POST    /api/v1/comments/add-comment': {action: 'comments/add-comment', csrf: false},
   'GET     /api/v1/comments/list-comment/:instanceModuleId/:field': {action: 'comments/list-comment'},
-  'POST  /api/v1/comments/destroy-one-comment': {action: 'comments/destroy-one-comment', csrf: false},
+  'POST    /api/v1/comments/destroy-one-comment': {action: 'comments/destroy-one-comment', csrf: false},
   'POST    /api/v1/comments/update-one-comment': {action: 'comments/update-one-comment', csrf: false},
 
 
@@ -222,6 +222,7 @@ module.exports.routes = {
   'POST   /api/v1/dogs/destroy-one-dog': {action: 'dogs/destroy-one-dog', csrf: false},
   'PUT    /api/v1/dogs/update-dog': {action: 'dogs/update-dog', csrf: false},
   'DELETE /api/v1/dogs/destroy-many-img': {action: 'dogs/destroy-many-img', csrf: false},
+  'DELETE /api/v1/dogs/destroy-one-title': { action: 'dogs/destroy-one-title', csrf: false },
 
 
   'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},

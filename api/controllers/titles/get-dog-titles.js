@@ -49,10 +49,15 @@ module.exports = {
       }
     });
 
-    console.log('DOG::; ', tileIds);
-    console.log('titles::; ', titles);
+    // получить все титулы собаки
+    let titlesDog = await sails.helpers.getDogTitles.with({id: dog.id});
+    // объеденить титулы с объектами титулов собаки
+    dog = await sails.helpers.mergerTitlesAndDogTitles.with({dog: dog, titlesDog: titlesDog});
 
-    await sails.sockets.broadcast('title', 'list-titlesDog', titles);
+    // console.log('DOG::; ', tileIds);
+    // console.log('titles::; ', titles);
+
+    await sails.sockets.broadcast('title', 'list-titlesDog', dog);
     // Respond with view.
     return exits.success();
 
