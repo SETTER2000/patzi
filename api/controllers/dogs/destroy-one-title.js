@@ -55,7 +55,7 @@ module.exports = {
     //
     // Подключить сокет, который сделал запрос, к комнате «title».
     await sails.sockets.join(req, 'title');
-    console.log('inputs:::: ', inputs);
+    console.log('inputs данные для удаления:::: ', inputs);
 
     if (_.isEmpty(inputs.dogId) || _.isEmpty(inputs.id) || _.isEmpty(inputs.dateReceiving)) {
       throw 'badRequest';

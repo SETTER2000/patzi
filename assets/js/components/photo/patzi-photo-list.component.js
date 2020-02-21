@@ -15,7 +15,8 @@ parasails.registerComponent('patziPhotoList', {
   //  ╩  ╩╚═╚═╝╩  ╚═╝
   props: [
     'styleObj',
-    'collectionTitles'
+    'collectionTitles',
+    'me'
   ],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -34,13 +35,13 @@ parasails.registerComponent('patziPhotoList', {
                 <div class="mb-5" >
                     <template   v-for="(title, i) in collectionTitles">
                         <template v-if="title.title.label !== 'WW'">
-                            <patzi-photo-right v-if="i%2" :data-photo="title" @remove="removeFromList"></patzi-photo-right>
-                            <patzi-photo-left v-else :data-photo="title" @remove="removeFromList"></patzi-photo-left>
+                            <patzi-photo-right v-if="i%2" :data-photo="title" :me="me" @remove="removeFromList"></patzi-photo-right>
+                            <patzi-photo-left v-else :data-photo="title" :me="me" @remove="removeFromList"></patzi-photo-left>
                         </template>
                     </template>
                     <template   v-for="(title, i) in collectionTitles">
                         <template v-if="title.title.label === 'WW'">
-                             <patzi-photo-ww :data-photo="title"></patzi-photo-ww>
+                             <patzi-photo-ww :data-photo="title" :me="me" @remove="removeFromList"></patzi-photo-ww>
                         </template>
                     </template>
                 </div>

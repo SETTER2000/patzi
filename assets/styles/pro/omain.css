@@ -1347,12 +1347,17 @@ th {
 
 @media (min-width: 767px) {
   /*Выезжающее меню*/
+  .u-text-white,
+  .u-text-white a,
+  a.u-button-style.u-text-white,
+  a.u-button-style.u-text-white[class*="u-border-"] {
+    color: #e2e2e2e0 !important;
+  }
   header#sec-599b.afterload {
-  transform: translate(0, -95%);
-  transition: .75s;
-  transition-delay: 3s; /* Задержка перед сокрытием меню */
-  position: fixed;
-  /*background-color: rgba(255, 255, 255,.8);*/
+    transform: translate(0, -95%);
+    transition: .75s;
+    transition-delay: 3s; /* Задержка перед сокрытием меню */
+    position: fixed;
   }
 
   header#sec-599b.afterload:hover {
@@ -1365,6 +1370,7 @@ th {
   transition: .75s;
   transition-delay: 2s;  /* Задержка перед открытием меню */
   position: fixed;
+    background-color: #ccced417;
   }
 }
 

@@ -15,7 +15,8 @@ parasails.registerComponent('patziPhotoRight', {
   //  ╩  ╩╚═╚═╝╩  ╚═╝
   props: [
     'styleObj',
-    'dataPhoto'
+    'dataPhoto',
+    'me'
   ],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -44,7 +45,7 @@ parasails.registerComponent('patziPhotoRight', {
                       class="u-container-layout u-valign-middle-lg u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs u-container-layout-2">
                       <h2 class="u-text u-text-1">{{dataPhoto.title.subtitleRu}}</h2>
                       <a href="#" class="u-border-0 u-link u-no-underline u-link-1">{{dataPhoto.dateReceiving | getCreate}}</a>
-                      <div class="flex justify-content-start">
+                      <div  v-if="me.isAdmin || me.isSuperAdmin" class="flex justify-content-start">
                         <el-button   @click="removeItem" class=" my-3" type="danger" icon="el-icon-delete" circle></el-button>
                       </div>
                     </div>
@@ -106,7 +107,7 @@ parasails.registerComponent('patziPhotoRight', {
       if (!wrapper) {
         return;
       }
-      let img = objData.photos[1].imageSrc;
+      let img = (objData.photos && objData.photos.length > 1) ? objData.photos[1].imageSrc : '';
       (img && img.length) > 0 ? $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
     }
   }

@@ -37,6 +37,7 @@ module.exports = {
         }) : [];
 
 
+
       /**
        * Подготовка массива объектов содержащих ссылки на картинки,
        * которые являются вложенными и лежат на втором уровне главного объекта (photos)
@@ -49,12 +50,12 @@ module.exports = {
        * }
        *
        */
-      dog.titleDog = _.isEmpty(dog.titleDog) ? [] : await dog.titleDog.map((title, i) => {
-        title.comments = _.isArray(title.comments) ? title.comments : [];
-        title.photos.map((image, y) => {
+      dog.titleDog = _.isEmpty(dog.titleDog) ? [] : await dog.titleDog.map((photoSet, i) => {
+        photoSet.comments = _.isArray(photoSet.comments) ? photoSet.comments : [];
+        photoSet.photos.map((image, y) => {
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/dog/${dog.id}/titleDog/${y}/${i}`) : '';
         });
-        return title;
+        return photoSet;
       });
 
       /**
@@ -80,7 +81,7 @@ module.exports = {
         dog.countTitlesSubtitleRu = _.uniq(_.pluck(dog.titleDog, 'title.subtitleRu'));
       }
 
-      console.log(' dog.titleDog=-PLuck::: ', dog.titleDog);
+      // console.log(' dog.titleDog=-PLuck::: ', dog);
 
       return dog;
     }

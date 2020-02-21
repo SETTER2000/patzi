@@ -923,5 +923,7 @@
 	"Download the scans of the diploma, which indicates the presence of this title in the dog.": "Загрузите сканы диплома, которые свидетельствует о наличии данного титула у собаки.",
 	"Your title is currently not visible in the catalog. Until you turn on the visibility no one can see it.": "В данный момент ваш титул не виден в каталоге. Пока вы не включите видимость ни кто не сможет его увидеть.",
 	"link to flag country": "ссылка на флаг страны",
-	"Flag link": "Ссылка на флаг"
+	"Flag link": "Ссылка на флаг",
+	"name of the country where the title was received": "название страны, где получили титул",
+	"World Champion Addition": "Дополнение к титулу Чемпион Мира"
 }

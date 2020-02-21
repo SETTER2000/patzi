@@ -20,7 +20,16 @@ module.exports = {
       minLength: 2,
       maxLength: 200
     },
-
+/*    country: {
+      type: 'string',
+      maxLength: 170,
+      description: `Страна где проводился Мир и получен титул.`
+    },
+    city: {
+      type: 'string',
+      maxLength: 170,
+      description: `Город где проводился Мир и получен титул.`
+    },*/
     labelRu: {
       type: 'string',
       description: `Название титула на русском языке. Например для блога или статей.`,

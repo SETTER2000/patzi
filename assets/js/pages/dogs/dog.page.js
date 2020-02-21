@@ -3,8 +3,9 @@ parasails.registerPage('dog', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-    dialogFormAwards: false,
+    dialogFormAwards: true,
     centerDialogAdded: false,
+    dialogPedigreeVisible: true,
     dialogImageUrl: '',
     titles: [],
     titlesDog: [],
@@ -116,6 +117,10 @@ parasails.registerPage('dog', {
       }]
     ],
   },
+  virtualPages: true,
+  html5HistoryMode: 'history',
+  virtualPagesRegExp: /\/chinese-crested\/?[-a-z]+\/?(\w+)([^\/]+)?/i,
+  // virtualPagesRegExp: /^\/chinese-crested\/?[-az]+\/?([^\/]+)?/i,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
@@ -156,6 +161,37 @@ parasails.registerPage('dog', {
       return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
 
+    /**
+     * Показывает возраст с учётом смерти.
+     * @param value дата рождения
+     * @param l язык предпочтения (en|ru)
+     * @param format
+     * @param dateDeath
+     * @returns {*}
+     */
+    getAge: function (value, l, format, dateDeath) {
+      if (!value) {
+        return '';
+      }
+      moment.locale(l);
+      let formatNew = (!format) ? 'LLL' : format;
+      let start = moment(value);
+      let end = !_.isEmpty(dateDeath) ? moment(dateDeath) : '';
+      // return end ? end.from(start, true) : moment(value).fromNow(true);
+
+
+      let now = moment.parseZone();
+      /*  let event = moment.parseZone(value, ["DD.MM.YYYY"]);
+         let a=moment.preciseDiff(now, event);
+        console.log('now: ', now);
+        console.log('EVENT: ', event);
+        console.log('a: ', a);*/
+      // (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+
+      return end ? moment(value).preciseDiff(end) : moment(value).preciseDiff(now);
+
+
+    },
     // Получить значёк валюты
     getCurrency: function (value) {
       if (!value) {
@@ -186,31 +222,6 @@ parasails.registerPage('dog', {
       return (value / 1000 * 2.20462).toFixed(1);
     },
 
-    /**
-     * Показывает возраст с учётом смерти.
-     * @param value дата рождения
-     * @param l язык предпочтения (en|ru)
-     * @param dateDeath
-     * @returns {*}
-     */
-    getAge: function (value, l, dateDeath) {
-      if (!value) {
-        return '';
-      }
-      moment.locale(l);
-      let start = moment(value);
-      let end = !_.isEmpty(dateDeath) ? moment(dateDeath) : '';
-      // return end ? end.from(start, true) : moment(value).fromNow(true);
-
-
-      let now = moment.parseZone();
-      /*  let event = moment.parseZone(value, ["DD.MM.YYYY"]);
-         let a=moment.preciseDiff(now, event);
-        console.log('now: ', now);
-        console.log('EVENT: ', event);
-        console.log('a: ', a);*/
-      return end ? moment(value).preciseDiff(end) : moment(value).preciseDiff(now);
-    },
   },
 
 
@@ -288,7 +299,8 @@ parasails.registerPage('dog', {
       switch (command.com) {
         case 'a':
           this.getAwards(command);
-          this.dialogFormAwards = true;
+          // this.dialogFormAwards = true;
+          this.virtualPageSlug = 'titles';
           break;
         case 'b':
           this.setValueEditPhotoSet(command);
@@ -559,7 +571,25 @@ parasails.registerPage('dog', {
       });
       return r;
     },
+    handlerCloseDialogSlider() {
+      this.photos = [];
+      this.fullscreenLoading = false;
+      this.goto(`/litter/${this.litter.letter}/${this.litter.year}/photo`);
+    },
+    getFullNameLink(name, b = '') {
+      console.log('name::: ', name);
+      if (_.isEmpty(name)) {
+        return '';
+      }
+      let link = `chinese-crested/${name.split(" ").join('-')}`;
+      return _.isEmpty(b) ? `/${link}` : this.goTo(link);
+    },
 
-
+    isWW() {
+      return _.some(_.filter(this.dog.titleDog, {'title': {'label':'WW'}}));
+    },
+    ww(titleId) {
+      return _.last(_.pluck(_.filter(this.titles, {'id': titleId}), 'label')) === 'WW';
+    }
   }
 });

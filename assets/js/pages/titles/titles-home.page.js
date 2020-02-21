@@ -56,22 +56,22 @@ parasails.registerPage('titles-home', {
       //   {required: true, message: 'Пожалуйста введите название на русском', trigger: 'blur'},
       //   {min: 3, max: 200, message: 'Длинна от 3 до 200 знаков', trigger: 'blur'},
       // ],
-      continent: [
-        {required: true, message: 'Please select your continent', trigger: 'change'}
-      ],
-      country: [
-        {required: true, message: 'Please select your country', trigger: 'change'}
-      ],
-      region: [
-        {required: true, message: 'Please select Activity zone', trigger: 'change'}
-      ],
-      gender: [
-        {required: true, message: 'Please select a title gender.', trigger: 'change'}
-      ],
-      description: [
-        {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
-        {max: 1700, message: 'Length should be 10 to 1700', trigger: 'blur'}
-      ]
+      // continent: [
+      //   {required: true, message: 'Please select your continent', trigger: 'change'}
+      // ],
+      // // country: [
+      // //   {required: true, message: 'Please select your country', trigger: 'change'}
+      // // ],
+      // region: [
+      //   {required: true, message: 'Please select Activity zone', trigger: 'change'}
+      // ],
+      // gender: [
+      //   {required: true, message: 'Please select a title gender.', trigger: 'change'}
+      // ],
+      // description: [
+      //   {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
+      //   {max: 1700, message: 'Length should be 10 to 1700', trigger: 'blur'}
+      // ]
     },
     dic: [
       ['en', {

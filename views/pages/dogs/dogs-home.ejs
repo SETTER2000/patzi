@@ -74,7 +74,17 @@
               clearable/>
           </template>
           <template slot-scope="scope">
-            <el-tooltip content="<%= __('Image editor') %>" placement="left" effect="light">
+            <% /* ДОБАВИТЬ ТИТУЛЫ */ %>
+          <!--  <el-row class="my-4">
+              <el-button v-if="buttonUpdate" type="primary" @click="addTitleDog(ruleForm)" round>{{titleAdd}}</el-button>
+            </el-row>-->
+            <el-tooltip :content="titleAdd" placement="top" effect="light">
+              <el-button
+                size="mini"
+                icon="el-icon-trophy"
+                @click="addTitleDog(scope.row)">
+              </el-button>
+            </el-tooltip>    <el-tooltip content="<%= __('Image editor') %>" placement="top" effect="light">
               <el-button
                 v-if="scope.row.images"
                 size="mini"
@@ -902,10 +912,7 @@
 
             </template>
 
-            <% /* ДОБАВИТЬ ТИТУЛЫ */ %>
-            <el-row class="my-4">
-              <el-button v-if="buttonUpdate" type="primary" @click="addTitleDog(ruleForm.id)" round>{{titleAdd}}</el-button>
-            </el-row>
+
 
             <% /* ЗВАНИЯ */ %>
      <!--       <el-form-item

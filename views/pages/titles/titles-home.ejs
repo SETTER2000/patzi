@@ -111,20 +111,6 @@
         <el-row type="flex" class="row-bg mt-3" justify="center">
             <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-
-                    <% /* ССЫЛКА НА ФЛАГ СТРАНЫ*/ %>
-                    <template>
-                        <el-form-item label="<%= __('Flag link') %>" prop="flag">
-                            <el-input show-word-limit
-                                      style="width:80%;"
-                                      clearable
-                                      maxlength="470"
-                                      size="small"
-                                      placeholder="<%= __('link to flag country') %>"
-                                      v-model="ruleForm.flag"></el-input>
-                        </el-form-item>
-                    </template>
-
                     <el-divider content-position="left">English</el-divider>
                     <% /* НАЗВАНИЕ ТИТУЛА на английском*/ %>
                     <template>
@@ -196,7 +182,18 @@
                             </el-form-item>
                         </template>
                     </div>
-
+                    <% /* ССЫЛКА НА ФЛАГ СТРАНЫ*/ %>
+                    <template>
+                        <el-form-item label="<%= __('Flag link') %>" prop="flag">
+                            <el-input show-word-limit
+                                      style="width:80%;"
+                                      clearable
+                                      maxlength="470"
+                                      size="small"
+                                      placeholder="<%= __('link to flag country') %>"
+                                      v-model="ruleForm.flag"></el-input>
+                        </el-form-item>
+                    </template>
 
                     <% /* ВИДЕН ТИТУЛ В СИСТЕМЕ ИЛИ НЕТ */ %>
                     <div class="flex justify-content-center">

@@ -58,7 +58,7 @@ module.exports.routes = {
 
   // 'GET /dogs/dog/:id': {action: 'dogs/view-dog'},
   'GET /dogs/:breed/:virtualPageSlug?': {action: 'dogs/view-dogs-home', locals: {currentSection: 'dogs'}},
-  'GET /chinese-crested/:fullName': {action: 'dogs/view-dog'},
+  'GET /chinese-crested/:fullName/:virtualPageSlug?': {action: 'dogs/view-dog'},
   'GET /kennel/:label': {action: 'kennels/view-kennel'},
   'GET /charts/:virtualPageSlug?': {action: 'charts/view-chart-home'},
 

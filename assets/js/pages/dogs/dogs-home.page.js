@@ -286,7 +286,7 @@ parasails.registerPage('dogs-home', {
         sire: 'Sire',
         dam: 'Dam',
         editDogTitles: 'Добавить|Редактировать титулы собаки',
-        addDogTitles: 'Добавить титулы собаки',
+        addDogTitles: 'Добавить титулы',
         cancel: 'Отменить',
         text400Err: 'Ошибка. Не смог создать!',
         text400ErrUpdate: 'Ошибка. Не смог обновить!',
@@ -1468,8 +1468,10 @@ parasails.registerPage('dogs-home', {
       return '';
     },
 
-    addTitleDog(dogId){
-      console.log('dogId::; ' , dogId);
+    addTitleDog(dog){
+      console.log('dog Id::; ' , dog.id);
+      console.log('dog fullName::; ' , dog.fullName);
+      this.goTo(`chinese-crested/${dog.fullName.split(" ").join('-')}/titles`);
     }
   }
 });
