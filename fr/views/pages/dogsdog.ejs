@@ -1,13 +1,16 @@
 <div id="dog" class="content" v-cloak>
-    <% /*Диалоговое окно. ТИТУЛЫ */ %>
+<!--    virtualPageSlug:: {{virtualPageSlug}}-->
+    <% /* Диалоговое окно ТИТУЛЫ (TITLES)*/ %>
     <el-dialog
             :visible.sync="dialogFormAwards"
             :direction="direction"
-            fullscreen
-            top="0"
             custom-class="awards"
             center
             :show-close="false"
+            :fullscreen="true"
+            top="1vh"
+            :before-close="handlerCloseDialogSlider"
+            v-if="virtualPageSlug==='titles'"
     >
         <!--    шапка-->
         <section class="u-clearfix u-section-1" id="carousel_e299">
@@ -18,9 +21,9 @@
                             <div class="u-container-layout u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs">
                                 <div class="u-align-left u-border-7 u-border-grey-15 u-container-style u-group u-group-1">
                                     <div class="u-container-layout u-valign-middle u-container-layout-2">
-                                        <h1 class="u-text u-title u-text-1"><%= __('I have') %><br><%= __('titles') %></h1>
+                                        <h1 class="u-text u-title u-text-1"><%= __('I have') %><br><%= __('titles') %>{{ _.isEmpty(dog.titleDog) ? '?' :''}}</h1>
                                         <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div>
-                                        <a :href="dog.fullName" class="u-border-0 u-link u-no-underline u-link-1">{{dog.fullName}} &gt;</a>
+                                        <a :href="getFullNameLink(dog.fullName)" class="u-border-0 u-link u-no-underline u-link-1">{{dog.fullName}} &gt;</a>
                                     </div>
                                 </div>
                             </div>
@@ -53,11 +56,11 @@
         </section>
 
         <!--сами титулы, картинки титулов-->
-        <patzi-photo-list :collection-titles="dog.titleDog" @remove-title="openTit"></patzi-photo-list>
+        <patzi-photo-list :collection-titles="dog.titleDog" :me="me" @remove-title="openTit"></patzi-photo-list>
 
 
         <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormAwards = false"><%= __('Close') %></el-button>
+        <el-link :href="getFullNameLink(dog.fullName)" type="success"><%= __('Close') %></el-link>
         </span>
     </el-dialog>
 
@@ -156,18 +159,21 @@
                     <div class="col col-sm-12 col-lg-10">
                         <% /* DIVIDER*/ %>
                         <div>
-                            <el-divider content-position="left">*</el-divider>
+                            <el-divider ></el-divider>
                         </div>
                         <% /* ТИТУЛЫ. Добавить */ %>
                         <el-form-item label="Титул" prop="id">
                             <el-select v-model="ruleForm.id" placeholder="Select">
-                                <el-option v-for="(ob, index) in titles"
-                                           :label="ob.label"
-                                           :title="ob.label"
-                                           :value="ob.id"
-                                           :key="ob.id">
+                                <el-option v-for="item in titles"
+                                           :label="item.label"
+                                           :title="item.subtitleRu"
+                                           :value="item.id"
+                                           :key="item.id">
+                                    <span style="float: left">{{ item.label }}</span>
+<!--                                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.label }}</span>-->
                                 </el-option>
                             </el-select>
+
                         </el-form-item>
                     </div>
                 </div>
@@ -184,6 +190,36 @@
                         </el-form-item>
                     </div>
                 </div>
+
+
+                <% /* СТРАНА для WW*/ %>
+                <template v-if="ww(ruleForm.id)">
+                    <el-divider content-position="left"><%= __('World Champion Addition') %></el-divider>
+                    <el-form-item v-if="" label="<%= __('Country') %>" prop="country">
+                        <el-input show-word-limit
+                                  style="width:80%;"
+                                  clearable
+                                  maxlength="170"
+                                  size="small"
+                                  placeholder="<%= __('name of the country where the title was received') %>"
+                                  v-model="ruleForm.country"></el-input>
+                    </el-form-item>
+                </template>
+
+                <% /* ГОРОД для WW*/ %>
+                <template v-if="ww(ruleForm.id)">
+                    <el-form-item v-if="" label="<%= __('City') %>" prop="city">
+                        <el-input show-word-limit
+                                  style="width:80%;"
+                                  clearable
+                                  maxlength="170"
+                                  size="small"
+                                  placeholder="<%= __('name of the country where the title was received') %>"
+                                  v-model="ruleForm.city"></el-input>
+                    </el-form-item>
+                </template>
+
+
                 <% /* ВИДЕН ТИТУЛ ИЛИ НЕТ */ %>
                 <div class="flex justify-content-center my-5">
                     <el-form-item prop="see">
@@ -244,28 +280,29 @@
     </span>
     </el-dialog>
 
-
-    <div :class="{ winner: dog.winner }">
+    <div :class="{ winner: isWW() }">
         <% /* Шапка страницы */ %>
-        <section class="banner-area relative" :class="{deathColor:dog.dateDeath}">
+        <section class="banner-area relative" :class="{deathColor:dog.dateDeath, }">
             <div class="container">
                 <div class="row d-flex align-items-center justify-content-center">
                     <div class="about-content col-lg-12">
-                        <div v-if="dog.winner" class="menu-center">
-                            <el-popover
+                        <div v-if="isWW()" class="menu-center">
+                           <!-- <el-popover
                                     placement="right-start"
                                     trigger="hover"
                                     width="320">
-                                <div class="menu-center"><h4><%= __('World Winner') %></h4>
-                                    <el-table :data="worldWinner">
+                               <div class="menu-center"><h4><%= __('World Winner') %></h4>
+                                    <el-table :data="_.filter(dog.titleDog, )">
                                         <el-table-column width="70" property="year" label="<%= __('year') %>"></el-table-column>
                                         <el-table-column width="150" property="address" label="<%= __('address') %>"></el-table-column>
                                         <el-table-column width="600" property="description"
                                                          label="<%= __('description') %>"></el-table-column>
                                     </el-table>
-                                </div>
-                                <i slot="reference" style="font-size: 2em" class="ti-crown"></i>
-                            </el-popover>
+                                </div>&ndash;&gt;
+                                <i slot="reference" style="font-size: 2em; color: rgb(170, 150, 124)" class="ti-crown"></i>
+&lt;!&ndash;                                <i slot="reference" style="font-size: 2em; color: #d8bb79" class="ti-crown"></i>&ndash;&gt;
+                            </el-popover>-->
+                            <i slot="reference" style="font-size: 2em; color: rgb(170, 150, 124)" class="ti-crown"></i>
                         </div>
                         <h1 class="text-white">{{dog.fullName}}</h1>
                         <p>{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</p>
@@ -285,10 +322,6 @@
                                     :title="dog.countTitlesSubtitleRu[index]">{{ name }}<span v-if="value>1">x{{ value }}</span>
                                   {{ index < _.size(dog.countTitles) - 1 ? ', ' : '' }}
                               </span>
-
-                             <!--   <span class="pointer" v-for="(title, index) of dog.titleDog" :key="'t-' + index"
-                                    :title="title.title.subtitleRu">{{title.title.label}}{{ index < dog.titleDog.length - 1 ? ', ' : '' }}
-                              </span>-->
                             </el-button>
                         </p>
                     </div>
@@ -553,7 +586,7 @@
                 </div>
             </div>
         </section>
-        <!--<router-view></router-view>-->
+        <router-view></router-view>
     </div>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
