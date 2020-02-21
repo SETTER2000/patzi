@@ -904,7 +904,7 @@
 
             <% /* ДОБАВИТЬ ТИТУЛЫ */ %>
             <el-row class="my-4">
-              <el-button v-if="buttonUpdate" type="primary" @click="addTitleDog=true" round>{{titleAdd}}</el-button>
+              <el-button v-if="buttonUpdate" type="primary" @click="addTitleDog(ruleForm.id)" round>{{titleAdd}}</el-button>
             </el-row>
 
             <% /* ЗВАНИЯ */ %>
@@ -1015,8 +1015,9 @@
     <span slot="footer" class="dialog-footer">
   </span>
   </el-dialog>
+
   <% /* Диалоговое окно. Редактор титулов собак. */ %>
-  <el-dialog
+<!--  <el-dialog
           width="100%"
           :title="titleAdd"
           :visible.sync="addTitleDog"
@@ -1039,7 +1040,7 @@
     <el-button @click="addTitleDog = false">Cancel</el-button>
     <el-button type="primary" @click="addTitleDog = false"><%= __('Save') %></el-button>
   </span>
-  </el-dialog>
+  </el-dialog>-->
   <% /* Диалоговое окно. Редактор картинок. */ %>
   <el-dialog
     :title="`${i19p.photoEditor} ${photos.fullName}`"

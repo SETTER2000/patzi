@@ -23,14 +23,18 @@ module.exports = {
     if (inputs.dog.titleDog && inputs.titlesDog) {
       let url = require('url');
       let dog = inputs.dog;
+      console.log('dog.titleDog::::**999', dog.titleDog);
+      dog.titleDog = _.compact(dog.titleDog);
+      console.log('dog.titleDog::::**999', dog.titleDog);
       /**
        * добавляем объекты титулов в свойства объектов титулов собак
        * т.е. есть сам объект титула и есть свойство dog.titlesDog, которое содержит
        * титулы полученые собакой с дополнительными свойствами, например дата получения титула.
        */
-      _.each(dog.titleDog, tit => {
-        tit.title = inputs.titlesDog.filter(td => tit.id === td.id)[0];
-      });
+      dog.titleDog = (!_.isEmpty(dog.titleDog)) ?
+        _.each(dog.titleDog, tit => {
+          tit.title = inputs.titlesDog.filter(td => tit.id === td.id)[0];
+        }) : [];
 
 
       /**
@@ -45,12 +49,12 @@ module.exports = {
        * }
        *
        */
-      dog.titleDog = _.isEmpty(dog.titleDog) ? '' : await dog.titleDog.map((photoSet, i) => {
-        photoSet.comments = _.isArray(photoSet.comments) ? photoSet.comments : [];
-        photoSet.photos.map((image, y) => {
+      dog.titleDog = _.isEmpty(dog.titleDog) ? [] : await dog.titleDog.map((title, i) => {
+        title.comments = _.isArray(title.comments) ? title.comments : [];
+        title.photos.map((image, y) => {
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/dog/${dog.id}/titleDog/${y}/${i}`) : '';
         });
-        return photoSet;
+        return title;
       });
 
       /**
@@ -76,7 +80,7 @@ module.exports = {
         dog.countTitlesSubtitleRu = _.uniq(_.pluck(dog.titleDog, 'title.subtitleRu'));
       }
 
-      // console.log(' dog.titleDog=-PLuck::: ', dog);
+      console.log(' dog.titleDog=-PLuck::: ', dog.titleDog);
 
       return dog;
     }

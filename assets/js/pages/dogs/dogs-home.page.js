@@ -5,7 +5,7 @@ parasails.registerPage('dogs-home', {
   data: {
     dogs: [],
     owner: false,
-    addTitleDog: false,
+    // addTitleDog: false,
     searchObjects: '',
     ranks: [{
       id:'1',
@@ -1467,5 +1467,9 @@ parasails.registerPage('dogs-home', {
       // }
       return '';
     },
+
+    addTitleDog(dogId){
+      console.log('dogId::; ' , dogId);
+    }
   }
 });
