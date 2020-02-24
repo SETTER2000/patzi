@@ -23,9 +23,9 @@ module.exports = {
     if (inputs.dog.titleDog && inputs.titlesDog) {
       let url = require('url');
       let dog = inputs.dog;
-      console.log('dog.titleDog::::**999', dog.titleDog);
+      console.log('dog.titleDog.photos-1', dog.titleDog.photos);
       dog.titleDog = _.compact(dog.titleDog);
-      console.log('dog.titleDog::::**999', dog.titleDog);
+      console.log('dog.titleDog.photos-2', dog.titleDog.photos);
       /**
        * добавляем объекты титулов в свойства объектов титулов собак
        * т.е. есть сам объект титула и есть свойство dog.titlesDog, которое содержит
@@ -55,6 +55,7 @@ module.exports = {
         photoSet.photos.map((image, y) => {
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/dog/${dog.id}/titleDog/${y}/${i}`) : '';
         });
+        console.log('photoSet:: ' , photoSet);
         return photoSet;
       });
 

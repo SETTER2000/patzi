@@ -65,7 +65,7 @@ parasails.registerComponent('patziPhotoLeft', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    console.log('this.dataPhoto--99222:: ', this.dataPhoto);
+    // console.log('this.dataPhoto--99222:: ', this.dataPhoto);
   },
 
 
