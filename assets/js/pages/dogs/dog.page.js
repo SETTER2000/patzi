@@ -141,7 +141,7 @@ parasails.registerPage('dog', {
     // получаем все титулы в системе
     io.socket.on('list-title', (data) => {
       this.titles = data;
-      console.log('titles:::: ', this.titles);
+      // console.log('titles:::: ', this.titles);
       // console.log('this.filterDogs: ', this.filterDogs);
     });
   },
@@ -419,6 +419,8 @@ parasails.registerPage('dog', {
     },
     // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
+      console.log('files::' , files);
+      console.log('fileList::' , fileList);
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
       ${files.length + fileList.length} ${this.i19p.files}`);
@@ -469,6 +471,7 @@ parasails.registerPage('dog', {
     // Update
     async updateDog() {
       this.openFullScreen();
+      console.log('titleDog.fileList:: ' , this.ruleForm.titleDog);
       let data = {
         id: this.dog.id,
         dateBirth: this.dog.dateBirth,
@@ -508,8 +511,7 @@ parasails.registerPage('dog', {
       io.socket.on('list-titlesDog', (data) => {
         this.dog.titleDog = [...data.titleDog];
         this.$forceUpdate();
-        console.log('titlesDog--**4584:::: ', this.dog.titleDog);
-        console.log('titlesDog--**4584 isArray:::: ', _.isArray(this.dog.titleDog));
+        // console.log('titlesDog--**4584:::: ', this.dog.titleDog);
       });
     },
     openFullScreen() {
@@ -577,7 +579,6 @@ parasails.registerPage('dog', {
       this.goto(`/litter/${this.litter.letter}/${this.litter.year}/photo`);
     },
     getFullNameLink(name, b = '') {
-      console.log('name::: ', name);
       if (_.isEmpty(name)) {
         return '';
       }

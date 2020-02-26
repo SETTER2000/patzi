@@ -320,7 +320,7 @@ module.exports = {
         delete img.field;
       });
     }
-
+    console.log('inputs.titleDog::: ', inputs.titleDog);
 
     if (inputs.titleDog && inputs.titleDog.fileList) {
       inputs.titleDog.photos = inputs.titleDog.fileList.filter(o => !_.isNull(o));
@@ -335,7 +335,7 @@ module.exports = {
       delete inputs.titleDog.fileList;
     }
 
-    // console.log('inputs.titleDog::: ', inputs.titleDog);
+
     // console.log('dog.titleDog::: ', dog.titleDog);
     // console.log('dog::: ', dog);
 

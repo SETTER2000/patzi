@@ -104,7 +104,7 @@ parasails.registerComponent('patziPhotoWw', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    console.log('this.dataPhoto--99222:: ', this.dataPhoto);
+    // console.log('this.dataPhoto--99222:: ', this.dataPhoto);
   },
 
 
