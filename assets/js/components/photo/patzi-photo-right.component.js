@@ -32,7 +32,57 @@ parasails.registerComponent('patziPhotoRight', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-<section class="u-clearfix u-white u-section-4" id="carousel_1ded">
+ <section class="u-align-left u-clearfix u-white u-section-4" id="carousel_1ded">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="u-clearfix u-expanded-width-xs u-gutter-40 u-layout-wrap u-layout-wrap-1">
+          <div class="u-layout">
+            <div class="u-layout-row">
+              <div class="u-size-28 u-size-60-md">
+                <div class="u-layout-col">
+                  <div class="u-container-style u-layout-cell u-left-cell u-size-40 u-layout-cell-1">
+                    <div class="u-container-layout u-container-layout-1">
+                      <img class="u-absolute-hcenter u-expand-resize u-expanded u-image" :src="dataPhoto.photos[0].imageSrc" data-image-width="1163" data-image-height="1600">
+                    </div>
+                  </div>
+                  <div class="u-container-style u-layout-cell u-left-cell u-size-20 u-layout-cell-2">
+                    <div class="u-container-layout u-container-layout-2"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="u-size-32 u-size-60-md">
+                <div class="u-layout-col">
+                  <div class="u-container-style u-image u-layout-cell u-right-cell u-size-60 u-image-2" ref="wrapper" data-image-width="1065" data-image-height="1600">
+                    <div class="u-container-layout u-valign-top-xs u-container-layout-3"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-clearfix u-expanded-width-xs u-gutter-0 u-layout-wrap u-layout-wrap-2">
+          <div class="u-layout">
+            <div class="u-layout-col">
+              <div class="u-align-left u-container-style u-layout-cell u-left-cell u-right-cell u-size-20 u-layout-cell-4">
+                <div class="u-container-layout u-valign-middle u-container-layout-4">
+                  <h2 class="u-text u-text-1">{{dataPhoto.title.subtitleRu}}</h2>
+                </div>
+              </div>
+              <div class="u-align-left u-container-style u-layout-cell u-left-cell u-right-cell u-size-20 u-layout-cell-5">
+                <div class="u-container-layout u-container-layout-5">
+                  <p class="u-text u-text-palette-1-base u-text-2">{{dataPhoto.dateReceiving | getCreate}}</p>
+                </div>
+              </div>
+              <div class="u-align-left u-container-style u-layout-cell u-left-cell u-right-cell u-size-20 u-layout-cell-6">
+                <div class="u-container-layout u-valign-middle u-container-layout-6">
+                  <el-button  v-if="me.isAdmin || me.isSuperAdmin" @click="removeItem" class="u-border-radius-50 u-btn u-btn-round u-button-style u-btn-1">x</el-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+<!--<section class="u-clearfix u-white u-section-4" id="carousel_1ded">
       <div class="u-clearfix u-sheet u-sheet-1">
         <div class="u-clearfix u-expanded-width-xl u-gutter-40 u-layout-wrap u-layout-wrap-1">
           <div class="u-layout">
@@ -46,7 +96,7 @@ parasails.registerComponent('patziPhotoRight', {
                       <h2 class="u-text u-text-1">{{dataPhoto.title.subtitleRu}}</h2>
                       <a href="#" class="u-border-0 u-link u-no-underline u-link-1">{{dataPhoto.dateReceiving | getCreate}}</a>
                       <div  v-if="me.isAdmin || me.isSuperAdmin" class="flex justify-content-start">
-                        <el-button   @click="removeItem" class=" my-3" type="danger" icon="el-icon-delete" circle></el-button>
+                        <el-button  v-if="me.isAdmin || me.isSuperAdmin" @click="removeItem" class=" my-3" type="danger" icon="el-icon-delete" circle></el-button>
                       </div>
                     </div>
                   </div>
@@ -60,7 +110,7 @@ parasails.registerComponent('patziPhotoRight', {
           </div>
         </div>
       </div>
-    </section>
+    </section>-->
 `,
 
 

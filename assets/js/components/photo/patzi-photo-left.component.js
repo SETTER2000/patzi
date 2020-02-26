@@ -32,7 +32,65 @@ parasails.registerComponent('patziPhotoLeft', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
- <section class="u-clearfix u-white u-section-3" id="carousel_8bf4">
+<section class="u-clearfix u-section-3" id="carousel_8bf4">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="u-clearfix u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-gutter-40 u-layout-wrap u-layout-wrap-1">
+          <div class="u-gutter-0 u-layout">
+            <div class="u-layout-row">
+              <div class="u-size-31-lg u-size-31-xl u-size-40-md u-size-40-sm u-size-40-xs">
+                <div class="u-layout-row">
+                  <div class="u-container-style u-layout-cell u-left-cell u-size-60 u-layout-cell-1" src="">
+                    <div class="u-container-layout u-container-layout-1" src="">
+                      <img class="u-absolute-hcenter-xs u-expand-resize u-expanded u-image" :src="dataPhoto.photos[1].imageSrc" data-image-width="460" data-image-height="690">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="u-size-28-sm u-size-28-xs u-size-29-lg u-size-29-xl u-size-52-md">
+                <div class="u-layout-col">
+                  <div class="u-size-40">
+                    <div class="u-layout-row">
+                      <div class="u-align-left u-container-style u-image u-layout-cell u-right-cell u-size-60 u-image-2"  ref="wrapper"  data-image-width="573" data-image-height="800">
+                        <div class="u-container-layout u-container-layout-2" src=""></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="u-size-20">
+                    <div class="u-layout-row">
+                      <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-layout-cell u-right-cell u-size-60 u-layout-cell-3" >
+                        <div class="u-container-layout u-container-layout-3"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-clearfix u-expanded-width-xs u-gutter-0 u-layout-wrap u-layout-wrap-2">
+          <div class="u-layout">
+            <div class="u-layout-col">
+              <div class="u-align-right u-container-style u-layout-cell u-left-cell u-right-cell u-size-20 u-layout-cell-4">
+                <div class="u-container-layout u-container-layout-4">
+                  <h2 class="u-text u-text-1">{{dataPhoto.title.subtitleRu}}</h2>
+                </div>
+              </div>
+              <div class="u-align-right u-container-style u-layout-cell u-left-cell u-right-cell u-size-20 u-layout-cell-5">
+                <div class="u-container-layout u-container-layout-5">
+                  <p class="u-text u-text-palette-1-base u-text-2">{{dataPhoto.dateReceiving | getCreate}}</p>
+                </div>
+              </div>
+              <div class="u-align-right u-container-style u-layout-cell u-left-cell u-right-cell u-size-20 u-layout-cell-6">
+                <div class="u-container-layout u-valign-middle u-container-layout-6">
+                  <el-button  v-if="me.isAdmin || me.isSuperAdmin" @click="removeItem"  class="u-border-radius-50 u-btn u-btn-round u-button-style u-btn-1">x</el-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+<!-- <section class="u-clearfix u-white u-section-3" id="carousel_8bf4">
             <div class="u-clearfix u-sheet u-sheet-1">
                 <div class="u-clearfix u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xl u-gutter-40 u-layout-wrap u-layout-wrap-1">
                     <div class="u-layout">
@@ -57,7 +115,7 @@ parasails.registerComponent('patziPhotoLeft', {
                     </div>
                 </div>
             </div>
-        </section>
+        </section>-->
 `,
 
 
@@ -106,7 +164,7 @@ parasails.registerComponent('patziPhotoLeft', {
       if (!wrapper) {
         return;
       }
-      let img = (objData.photos && objData.photos.length > 1) ? objData.photos[1].imageSrc : '';
+      let img = (objData.photos && objData.photos.length > 1) ? objData.photos[0].imageSrc : '';
       (img && img.length) > 0 ? $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
     }
   }
