@@ -35,8 +35,9 @@ parasails.registerComponent('patziPhotoList', {
                 <div class="mb-5" >
                     <template   v-for="(title, i) in collectionTitles">
                         <template v-if="title.title.label !== 'WW'">
-                            <patzi-photo-right v-if="i%2" :data-photo="title" :me="me" @remove="removeFromList"></patzi-photo-right>
-                            <patzi-photo-left v-else :data-photo="title" :me="me" @remove="removeFromList"></patzi-photo-left>
+                            <patzi-photo-right v-if="(i%3)===1" :data-photo="title" :me="me" @remove="removeFromList"></patzi-photo-right>
+                            <patzi-photo-left v-if="!(i%3)" :data-photo="title" :me="me" @remove="removeFromList"></patzi-photo-left>
+                            <patzi-photo-third v-if="(i%3)===2" :data-photo="title" :me="me" @remove="removeFromList"></patzi-photo-third>
                         </template>
                     </template>
                     <template   v-for="(title, i) in collectionTitles">
