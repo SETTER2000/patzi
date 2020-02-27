@@ -13,27 +13,26 @@
             v-if="virtualPageSlug==='titles'"
     >
         <!--    шапка-->
-        <section class="u-align-right-xs u-clearfix u-valign-middle-xs u-section-1" id="carousel_e299">
-            <div class="u-clearfix u-expanded-width-lg u-expanded-width-md u-expanded-width-xl u-expanded-width-xs u-layout-wrap u-layout-wrap-1">
+        <section class="u-clearfix u-valign-middle-lg u-section-1" id="carousel_e299">
+            <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
                 <div class="u-layout">
                     <div class="u-layout-row">
-                        <div class="u-container-style u-image u-layout-cell u-left-cell u-size-30 u-image-1">
-                            <div class="u-container-layout u-valign-middle-xl u-valign-top-xs">
-                                <div class="u-align-left u-container-style u-group u-group-1">
+                        <div class="u-container-style u-image u-layout-cell u-left-cell u-size-28 u-image-1">
+                            <div class="u-container-layout u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs">
+                                <div class="u-align-left u-border-7 u-border-grey-dark-1 u-container-style u-group u-group-1">
                                     <div class="u-container-layout u-valign-middle u-container-layout-2">
-                                        <h1 class="u-text u-title u-text-1"><%= __('I have') %>
-                                            <br><%= __('titles') %>{{ _.isEmpty(dog.titleDog) ? '?' :''}}
+                                        <h1 class="u-text u-title u-text-1">
+                                           <%= __('I have') %><br><%= __('titles') %>{{ _.isEmpty(dog.titleDog) ? '?' :''}}                                            <br>
                                         </h1>
                                         <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div>
-                                        <a :href="getFullNameLink(dog.fullName)" class="u-border-0 u-link u-no-underline u-link-1">{{dog.fullName}} &gt;</a>
+                                        <a href="#" class="u-border-0 u-link u-no-underline u-link-1">{{dog.fullName}} &gt;</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="u-container-style u-layout-cell u-right-cell u-size-30 u-layout-cell-2">
+                        <div class="u-container-style u-image u-layout-cell u-right-cell u-size-32 u-image-2">
                             <div class="u-container-layout">
-                                <img class="u-absolute-hcenter-md u-absolute-hcenter-sm u-absolute-hcenter-xs u-expand-resize u-expanded u-image"
-                                     :src="dog.images[0].imageSrc">
+                                <img class="u-expand-resize u-expanded-height u-image u-image-2" :src="dog.images[0].imageSrc">
                             </div>
                         </div>
                     </div>
@@ -67,20 +66,25 @@
 
 
         <!--    кнопка-->
-        <section class="u-align-center u-clearfix u-section-2" id="carousel_4c08">
-            <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-                <template>
-                    <div v-if="me.isSuperAdmin || me.isAdmin" class="text-center">
-                        <el-button @click="clickAddButton()" class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"
-                                   icon="el-icon-circle-plus-outline"><%= __('add me title') %></el-button>
-                    </div>
-                   <div class="text-center" v-else>
-                        <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"
-                                   class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('add me title') %></el-button>
+        <section class="u-align-center u-clearfix u-section-2" id="sec-6766">
+            <div class="u-clearfix u-sheet u-sheet-1">
+                <div class="u-align-center u-container-style u-group u-group-1">
+                    <div class="u-container-layout u-valign-middle u-container-layout-1">
+                        <template>
+                            <div v-if="me.isSuperAdmin || me.isAdmin" class="mt-5  text-center">
+                                <el-button @click="clickAddButton()" class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"
+                                           icon="el-icon-circle-plus-outline"><%= __('add me title') %></el-button>
+                            </div>
+                    <div class="mt-5  text-center" v-else>
+                                <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"
+                                           class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('add me title') %></el-button>
 
+                            </div>
+                        </template>
+
+                        <!--                        <a href="#" class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">Кнопка</a>-->
                     </div>
-                </template>
-<!--                <a href="#" class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('add me title') %></a>-->
+                </div>
             </div>
         </section>
         <!--<section class="u-align-center u-clearfix u-section-2" id="carousel_4c08">
