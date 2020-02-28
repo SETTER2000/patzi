@@ -66,20 +66,20 @@
 
 
         <!--    кнопка-->
-        <section class="u-align-center u-clearfix u-section-2" id="sec-6766">
+        <section v-if="me.isSuperAdmin || me.isAdmin" class="u-align-center u-clearfix u-section-2" id="sec-6766">
             <div class="u-clearfix u-sheet u-sheet-1">
                 <div class="u-align-center u-container-style u-group u-group-1">
                     <div class="u-container-layout u-valign-middle u-container-layout-1">
                         <template>
-                            <div v-if="me.isSuperAdmin || me.isAdmin" class="mt-5  text-center">
+                            <div  class="mt-5  text-center">
                                 <el-button @click="clickAddButton()" class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"
                                            icon="el-icon-circle-plus-outline"><%= __('add me title') %></el-button>
                             </div>
-                    <div class="mt-5  text-center" v-else>
-                                <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"
-                                           class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('add me title') %></el-button>
+<!--                            <div class="mt-5  text-center" v-else>-->
+<!--                                <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"-->
+<!--                                           class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('add me title') %></el-button>-->
 
-                            </div>
+<!--                            </div>-->
                         </template>
 
                         <!--                        <a href="#" class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">Кнопка</a>-->
@@ -94,11 +94,11 @@
                         <el-button @click="clickAddButton()" class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"
                                    icon="el-icon-circle-plus-outline"><%= __('add me title') %></el-button>
                     </div>
-                    &lt;!&ndash; <div class="mt-5  text-center" v-else>
+                    <div class="mt-5  text-center" v-else>
                         <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"
                                    class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('add me title') %></el-button>
 
-                    </div>&ndash;&gt;
+                    </div>
                 </template>
                 &lt;!&ndash;                <a href="#" class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">add me title</a>&ndash;&gt;
             </div>
