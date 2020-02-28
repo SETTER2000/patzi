@@ -25,7 +25,7 @@
                                            <%= __('I have') %><br><%= __('titles') %>{{ _.isEmpty(dog.titleDog) ? '?' :''}}                                            <br>
                                         </h1>
                                         <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div>
-                                        <a href="#" class="u-border-0 u-link u-no-underline u-link-1">{{dog.fullName}} &gt;</a>
+                                        <a :href="getFullNameLink(dog.fullName)" class="u-border-0 u-link u-no-underline u-link-1">{{dog.fullName}} &gt;</a>
                                     </div>
                                 </div>
                             </div>
@@ -366,7 +366,8 @@
                         </p>
                         <p>
                             <% /* Титулы */ %>
-                            <el-button type="text" @click="handleCommand({com:'a'})">
+                            {{dog.detail}}
+                            <el-button type="text" @click="goto(name(dog.fullName, 'titles'))">
                               <span class="pointer" v-for="(value, name, index) of dog.countTitles" :key="'t-' + index"
                                     :title="dog.countTitlesSubtitleRu[index]">{{ name }}<span v-if="value>1">x{{ value }}</span>
                                   {{ index < _.size(dog.countTitles) - 1 ? ', ' : '' }}
@@ -561,16 +562,21 @@
                     <% /* РОДИТЕЛИ PARENTS */ %>
                     <el-card class="box-card " v-for="(parent, index) of dog.parents" :key="'p-' + index">
                         <div slot="header" class="clearfix">
-              <span><i
-                          :class="[parent.gender==='sire' ? 'el-icon-male':'', 'el-icon-female']"></i> {{parent.gender}}:</span>
-                            <span
-                                    @click="goTo2(parent.detail)" class="pointer">{{parent.fullName}}</span>
-
+                            <span>
+                                <i :class="[parent.gender==='sire' ? 'el-icon-male':'', 'el-icon-female']"></i>
+                                {{parent.gender}}:
+                            </span>
+                            <el-link :href="parent.detail" class="link" :underline="false">
+<!--                            <span @click="goTo2(parent.detail)" class="pointer">-->
+                                {{parent.fullName}}
+<!--                                </span>-->
+                            </el-link>
                         </div>
                         <div class="menu-between">
                             <span><%= __('Size') %>: </span> <span>{{parent.growth}}<%= __('cm') %>
-                ({{parent.growth | getDin}}") / {{parent.weight/1000}}<%= __('kg') %>
-                ({{parent.weight | getFunt}}#)</span>
+                                ({{parent.growth | getDin}}") / {{parent.weight/1000}}<%= __('kg') %>
+                                ({{parent.weight | getFunt}}#)
+                            </span>
                         </div>
                         <div v-if="parent">
                             <template>
