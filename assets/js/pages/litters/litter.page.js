@@ -1483,8 +1483,6 @@ console.log('LITTER::: ', this.litter);
 
     // Добавить лайк к комментарию
     async commentLike(command) {
-      console.log('photoSet:: ', command.photoSet);
-      console.log('photoSet:: ', command.commentId);
       let data = {
         instanceModuleId: this.litter.id,
         like: command.like,

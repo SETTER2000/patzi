@@ -92,7 +92,7 @@ module.exports = {
     if (!collectionObject) {
       throw 'notFound';
     }
-
+// console.log('collectionObject[folder][inputs.photoSet]::: ' , collectionObject[folder][inputs.photoSet]);
     let arr = _.isArray(collectionObject[folder][inputs.photoSet]['photos']) ?
       await collectionObject[folder][inputs.photoSet]['photos'].filter((image, index) => inputs.key === index) :
       await collectionObject[folder].filter((image, index) => inputs.key === index);

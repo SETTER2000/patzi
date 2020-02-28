@@ -55,7 +55,7 @@ module.exports = {
         photoSet.photos.map((image, y) => {
           image.imageSrc = image.fd ? url.resolve(sails.config.custom.baseUrl, `/download/dog/${dog.id}/titleDog/${y}/${i}`) : '';
         });
-        console.log('photoSet:: ' , photoSet);
+        console.log('photoSet Merge:: ' , photoSet);
         return photoSet;
       });
 

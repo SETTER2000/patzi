@@ -67,7 +67,7 @@ module.exports = {
       console.error('Ошибка. Не смог выбрать обект dog!');
       throw 'badRequest';
     }
-
+console.log('dog.titleDog (destr-one-title):::: ' , dog.titleDog);
     let evens = _.remove(dog.titleDog, (title) => {
       return ((inputs.dateReceiving === title.dateReceiving) && (inputs.id === title.id));
     });

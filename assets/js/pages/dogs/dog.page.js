@@ -15,7 +15,7 @@ parasails.registerPage('dog', {
     comment: '',
     sizeLess: 5, // MB
     objOne: {},
-    limit: 50,
+    limit: 2,
     buttonUpdate: false,
     dialog: {},
     innerVisible: false,
@@ -106,7 +106,7 @@ parasails.registerPage('dog', {
         limitExceededText: `Лимит`,
         limitExceededText2: `вы выбрали`,
         limitExceededText3: `Всего`,
-        files: `файлов`,
+        files: `файла`,
         textUrlErr: 'Не верно заполнено поле УРЛ. Не указан протокол передачи данных. Например:  http:// or https:// ',
         successUploadFiles: `Файлы успешно загружены!`,
         titlePuppies: `Щенки`,
@@ -130,13 +130,20 @@ parasails.registerPage('dog', {
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
     console.log('DOG::: ', this.dog);
-    // this.getList();
-    // console.log('DOG-2::: ', this.dog);
+
     // Запрос для события list-*
     io.socket.get(`/api/v1/titles/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     this.getList();
+
+    // Принимаем данные по событию list-*
+    // получаем титулы собаки
+    io.socket.on('list-titlesDog', (data) => {
+      this.dog.titleDog = [...data.titleDog];
+      this.$forceUpdate();
+      console.log('titlesDog получаем титулы собаки:::: ', this.dog.titleDog);
+    });
     // Принимаем данные по событию list-*
     // получаем все титулы в системе
     io.socket.on('list-title', (data) => {
@@ -298,7 +305,7 @@ parasails.registerPage('dog', {
     handleCommand(command) {
       switch (command.com) {
         case 'a':
-          this.getAwards(command);
+          // this.getAwards(command);
           // this.dialogFormAwards = true;
           this.virtualPageSlug = 'titles';
           break;
@@ -419,17 +426,38 @@ parasails.registerPage('dog', {
     },
     // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
-      console.log('files::' , files);
-      console.log('fileList::' , fileList);
+      console.log('files::', files);
+      console.log('fileList::', fileList);
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
 
     // Срабатывает перед удалением одного файла
-    handleRemove(file, fileList) {
-      this.fileList = fileList;
+    // handleRemove(file, fileList) {
+    //   console.log('fileList-1::: ' , fileList);
+    //   console.log('file-1::: ' , file);
+    //   console.log('file.response-1::: ' , file.response);
+    //   this.fileList = fileList;
+    // },
+
+    handleRemove(file,fileList) {
+        console.log('fileList-1::: ' , fileList);
+        console.log('file-1::: ' , file);
+        console.log('file.response-1::: ' , file.response);
+
+      io.socket.delete('/api/v1/files/remove-picture-from-s3', file.response, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        if (jwRes.statusCode === 200) {
+        }
+      });
+      this.ruleForm.fileList = Object.assign({}, this.ruleForm.fileList, fileList);
     },
+
     getPullKennel() {
       return this.kennels;
     },
@@ -471,7 +499,7 @@ parasails.registerPage('dog', {
     // Update
     async updateDog() {
       this.openFullScreen();
-      console.log('titleDog.fileList:: ' , this.ruleForm.titleDog);
+      console.log('titleDog.fileList.photos:: ', this.ruleForm.titleDog);
       let data = {
         id: this.dog.id,
         dateBirth: this.dog.dateBirth,
@@ -506,13 +534,7 @@ parasails.registerPage('dog', {
         console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
 
-      // Принимаем данные по событию list-*
-      // получаем титулы собаки
-      io.socket.on('list-titlesDog', (data) => {
-        this.dog.titleDog = [...data.titleDog];
-        this.$forceUpdate();
-        // console.log('titlesDog--**4584:::: ', this.dog.titleDog);
-      });
+
     },
     openFullScreen() {
       this.loading = this.$loading({
@@ -578,19 +600,25 @@ parasails.registerPage('dog', {
       this.fullscreenLoading = false;
       this.goto(`/litter/${this.litter.letter}/${this.litter.year}/photo`);
     },
+
+    name(name,hash) {
+      return hash ? `${name.split(" ").join('-')}/${hash}`: `chinese-crested/${name.split(" ").join('-')}`;
+    },
+
     getFullNameLink(name, b = '') {
       if (_.isEmpty(name)) {
         return '';
       }
-      let link = `chinese-crested/${name.split(" ").join('-')}`;
+      let link = this.name(name);
       return _.isEmpty(b) ? `/${link}` : this.goTo(link);
     },
 
     isWW() {
-      return _.some(_.filter(this.dog.titleDog, {'title': {'label':'WW'}}));
+      return _.some(_.filter(this.dog.titleDog, {'title': {'label': 'WW'}}));
     },
     ww(titleId) {
       return _.last(_.pluck(_.filter(this.titles, {'id': titleId}), 'label')) === 'WW';
-    }
+    },
+
   }
 });

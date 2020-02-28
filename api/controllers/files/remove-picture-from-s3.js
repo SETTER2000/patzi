@@ -1,7 +1,7 @@
 module.exports = {
 
 
-  friendlyName: 'Remove picture from s 3',
+  friendlyName: 'Remove picture from s3',
 
 
   description: `Действие удаляет из S3 хранилища файл или файлы картинок`,

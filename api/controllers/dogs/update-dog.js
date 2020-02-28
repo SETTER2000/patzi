@@ -250,6 +250,16 @@ module.exports = {
       responseType: 'badRequest'
     },
 
+    titleImageTwo: {
+      statusCode: 409,
+      description: 'Two photos must be submitted for the title.',
+    },
+
+    titleImageTwoRu: {
+      statusCode: 409,
+      description: 'Для титула должно быть представлено две фотографии.',
+    },
+
     dogAlreadyInUse: {
       statusCode: 409,
       description: 'The specified dog name is already in use.',
@@ -321,6 +331,11 @@ module.exports = {
       });
     }
     console.log('inputs.titleDog::: ', inputs.titleDog);
+    console.log('inputs.titleDog.fileList++++::: ', inputs.titleDog.fileList);
+
+    if (inputs.titleDog.fileList && _.size(inputs.titleDog.fileList) < 2) {
+      throw (req.me.preferredLocale === 'ru') ? 'titleImageTwoRu' : 'titleImageTwo';
+    }
 
     if (inputs.titleDog && inputs.titleDog.fileList) {
       inputs.titleDog.photos = inputs.titleDog.fileList.filter(o => !_.isNull(o));
