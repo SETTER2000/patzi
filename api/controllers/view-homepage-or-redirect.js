@@ -30,11 +30,10 @@ module.exports = {
     }
 
     return {
-
       seo: {
-        description: 'Питомник Poale Ell занимается разведением собак породы "Китайская Хохлатая Собака". В питомнике Китайских Хохлатых Собак можно купить щенка. Мы находимся в Москве. Мы ответственны за продаваемых собак.',
-        title: 'Собаки и щенки породы Китайская хохлатая - купить из питомника,продаже китайских хохлатых в Москве и Московской области',
-        canonical:'https://poaleell.com'
+        description: sails.config.custom.descriptionRootPage,
+        title: sails.config.custom.titleRootPage,
+        canonical: sails.config.custom.canonicalRootPage
       }
     };
 
