@@ -156,7 +156,6 @@
                         v-model="ruleForm.labelRu"></el-input>
             </el-form-item>
           </template>
-
           <% /* ОПИСАНИЕ ТЕМЫ на русском */ %>
           <template>
             <el-form-item label="<%= __('Description') %> (Ru)" prop="subtitleRu">
@@ -279,7 +278,6 @@
           fixed="left"
           width="90">
           <template slot="header" slot-scope="scope">
-
             <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
           </template>
           <template slot-scope="scope">
@@ -304,6 +302,32 @@
           prop="labelRu">
           <template slot-scope="scope">
             <el-link :underline="false" :href="scope.row.detail" type="primary">{{scope.row.labelRu}}</el-link>
+          </template>
+        </el-table-column>
+
+
+        <el-table-column
+          label="<%= __('First') %>"
+          sortable
+          prop="labelRu">
+          <template slot-scope="scope">
+            <el-popover
+                    v-if="scope.row.firstTopic"
+                    placement="right-end"
+                    title=""
+                    width="300"
+                    trigger="hover"
+                    content="Первый на страницы блога">
+            <el-button
+                    slot="reference"
+                    icon="el-icon-star-on"
+                    @click="clickHandlerFirstTopic(scope.row.id)"
+                    size="mini" round></el-button>
+            </el-popover>
+            <el-button v-else
+                       icon="el-icon-star-off"
+                       @click="clickHandlerFirstTopic(scope.row.id)"
+                       size="mini" round></el-button>
           </template>
         </el-table-column>
 

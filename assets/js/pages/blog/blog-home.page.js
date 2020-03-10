@@ -3,19 +3,53 @@ parasails.registerPage('blog-home', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-    topics:[],
-    centerDialogVisible:false,
+    topics: [],
+    centerDialogVisible: false,
     centerDialogAdded: false,
     limit: 50,
-    posts:[{name:'sadf',label:'sdfsd'}],
+    posts: [{name: 'sadf', label: 'sdfsd'}],
     dialog: {},
     sizeLess: 5, // MB
     dialogVisible: false,
     dialogImageUrl: '',
     innerVisible: false,
     buttonUpdate: false,
-    ruleForm: {
-
+    ruleForm: {},
+    rules: {
+      kennel: [
+        {required: true, message: 'Please select kennel name', trigger: 'change'}
+      ],
+      label: [
+        {required: true, message: 'Please input dog name', trigger: 'blur'},
+        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
+      ],
+      gender: [
+        {required: true, message: 'Please select a dog gender.', trigger: 'change'}
+      ],
+      dateBirth: [
+        {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
+      ],
+      // dateBirthUpdate: [
+      //   { type:'string',required: true, message: 'Please pick a date', trigger: 'change'}
+      // ],
+      /*  registerNumber: [
+         {required: true, message: 'Please input register number', trigger: 'blur'},
+         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
+       ],
+       region: [
+         {required: true, message: 'Please select Activity zone', trigger: 'change'}
+       ],
+       continent: [
+         {required: true, message: 'Please select your continent', trigger: 'change'}
+       ],
+      kennel: [
+         {required: true, message: 'Please select your kennel', trigger: 'change'}
+       ],
+       */
+      subtitle: [
+        {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
+        {max: 700, message: 'Length should be 10 to 100', trigger: 'blur'}
+      ]
     },
     dic: [
       ['en', {
@@ -82,7 +116,7 @@ parasails.registerPage('blog-home', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function() {
+  beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
 
@@ -92,22 +126,49 @@ parasails.registerPage('blog-home', {
     });
     // Принимаем данные по событию list-*
     io.socket.on('list-topic', data => {
-     // this.dataAll = this.seo;
-      this.topics = _.each(data, async (t, ind) => {
+      // this.dataAll = this.seo;
+      console.log('DAAT LIST:: ', data);
+      this.topics = _.each(data, (t, ind) => {
         t.uSectionClass = `u-section-3-${ind + 1}`;
         t.active = (ind === 0);
-        t.images = await _.each(t.images, (im,ind)=>{
+        t.images = _.each(t.images, (im, ind) => {
           im.uContainerLayout = `u-container-layout-${ind + 1}`;
           im.uImage = `u-image-${ind + 1}`;
         });
       });
 
-     // this.dataAll.data = this.posts;
+      // this.dataAll.data = this.posts;
 
-      console.log('BBB Seo topics::: ' , this.topics);
+      console.log('BBB Seo topics::: ', this.topics);
     });
   },
-  mounted: async function() {
+
+  filters: {
+    trimString: function (value, count = 12) {
+      if (!value) {
+        return '';
+      }
+      value = _.trunc(value, count);
+      return value;
+    },
+    abc(value, obj, field, lang) {
+      if (!value) {
+        return '';
+      }
+      let r = '';
+      const regex = /[ a-z]+/i;
+      const regexRu = /[ а-яё]+/i;
+
+      obj['lang'] = lang ? lang : 'en';
+      r = lang === 'ru' ? regexRu.exec(value) : regex.exec(value);
+      if (!_.isArray(r)) {
+        obj.errInputLang = true;
+        obj[field] = '';
+      }
+    },
+  },
+
+  mounted: async function () {
     //…
   },
   computed: {
@@ -166,6 +227,180 @@ parasails.registerPage('blog-home', {
     clickAddButton() {
       this.warning = this.i19p.warnNoArr;
       (this.topics.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
+    },
+    getPull() {
+      return this.topics;
+    },
+
+    goTo(path) {
+      window.location = `/${path}`;
+    },
+    goTo2(path) {
+      this.goto(path);
+    },
+    resetForm(formName) {
+      this.$refs.upload ? this.$refs.upload.clearFiles() : '';
+      this.$refs[formName].resetFields();
+      this.ruleForm.fileList = [];
+      this.ruleForm.imageUrl = '';
+      this.ruleForm.price = 0;
+      this.ruleForm.federations = this.resetFederation;
+    },
+
+    async submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid && !this.buttonUpdate) {
+          this.add();
+        } else if (valid && this.buttonUpdate) {
+          this.update();
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    openFullScreen() {
+      this.loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+      // setTimeout(() => {
+      //   loading.close();
+      // }, 2000);
+    }
+    ,
+    // Create Topic
+    async add() {
+      this.openFullScreen();
+      let data = {
+        fileList: this.ruleForm.fileList,
+        topicId: this.ruleForm.topic,
+        label: this.ruleForm.label,
+        // backgroundPosition: this.ruleForm.backgroundPosition,
+        labelRu: this.ruleForm.labelRu,
+        subtitle: this.ruleForm.subtitle,
+        subtitleRu: this.ruleForm.subtitleRu,
+        see: this.ruleForm.see
+      };
+
+      console.log('DATA перед отправкой::: ', data);
+      await io.socket.post('/api/v1/posts/create-post', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
+          (jwRes.statusCode === 400) ? this.mesError(`${this.i19p.text400Err} ${jwRes.headers['x-exit-description']}`) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              (jwRes.statusCode === 401) ? this.mesError(jwRes.headers['x-exit-description']) :
+                // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+                (jwRes.statusCode >= 500) ? this.mesError(`${this.i19p.text500Err} ${jwRes.headers['x-exit-description']}`) : '';
+        this.centerDialogAdded = false;
+        this.loading.close();
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          // this.ruleForm.file = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+        }
+      });
+    },
+    // Update Topic
+    /*    update() {
+          this.openFullScreen();
+          let data = {
+            id: this.ruleForm.id,
+            fileList: this.ruleForm.fileList,
+            topicBackground: this.ruleForm.topicBackground,
+            label: this.ruleForm.label,
+            backgroundPosition: this.ruleForm.backgroundPosition,
+            labelRu: this.ruleForm.labelRu,
+            see: this.ruleForm.see,
+            subtitle: this.ruleForm.subtitle,
+            subtitleRu: this.ruleForm.subtitleRu,
+            firstTopic: this.ruleForm.firstTopic
+          };
+          console.log('DATA UPDATE перед отправкой ::: ', data);
+
+          io.socket.put('/api/v1/topics/update-topic', data, (data, jwRes) => {
+            (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
+              (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+                (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+                  // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+                  (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+            this.buttonUpdate = false;
+            this.centerDialogAdded = false;
+            this.loading.close();
+            if (jwRes.statusCode === 200) {
+              this.$refs['ruleForm'] ?  this.resetForm('ruleForm') : '';
+              this.ruleForm.fileList = [];
+              // this.ruleForm.file = [];
+              this.ruleForm.imageUrl = '';
+              this.ruleForm.federations = this.resetFederation;
+              this.getList();
+              this.$forceUpdate();
+            }
+          });
+        },*/
+
+
+
+    mesSuccess(text = '') {
+      this.$notify({
+        title: 'Success',
+        message: text,
+        offset: 100,
+        type: 'success'
+      });
+    },
+
+
+    mesWarning(text = '') {
+      this.$notify({
+        title: 'Warning',
+        message: text,
+        offset: 100,
+        type: 'warning'
+      });
+    },
+
+
+    mesInfo(text = '') {
+      this.$notify.info({
+        title: 'Info',
+        message: text,
+        offset: 100,
+      });
+    },
+
+
+    mesError(text = '') {
+      this.$notify.error({
+        title: 'Error',
+        message: text,
+        offset: 100,
+      });
+    },
+    async getList() {
+      await io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
+        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      await io.socket.get(`/api/v1/topics/topic-hidden`, function gotResponse(body, response) {
+        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+      await io.socket.get(`/api/v1/topics/topic-count`, function gotResponse(body, response) {
+        // console.log('Сервер topic-count ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
+
+      // // Принимаем данные по событию list-*
+      // await io.socket.on('list-topic', (data) => {
+      //   console.log('data TOPICS all:: ', data);
+      //   this.topics = this.editList = this.filterDogs = _.isNull(data) ? [] : data;
+      // });
+      // Принимаем данные по событию list-*
+      await io.socket.on('topic-hidden', (data) => {
+        this.hidden = data;
+      });
     },
 
   }

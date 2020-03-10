@@ -1,17 +1,17 @@
 module.exports = {
 
 
-  friendlyName: 'Destroy one topic',
+  friendlyName: 'First topic',
 
 
-  description: `Удалить одну тему. `,
+  description: '',
 
 
   inputs: {
     id: {
       type: 'string',
-      required: true
-    }
+      description: `Идентификатор темы, которая должна выводиться первой в списке.`
+    },
   },
 
 
@@ -34,22 +34,15 @@ module.exports = {
     // Подключить сокет, который сделал запрос, к комнате «topic».
     await sails.sockets.join(req, 'topic');
 
-    let topic = await Topic.findOne({
-      id: inputs.id
-    });
-    //
+    let topic = await Topic.update({}).set({'firstTopic': false});
+    topic = await Topic.updateOne({id: inputs.id}).set({'firstTopic': true});
     if (!topic) {
       throw 'notFound';
     }
 
-    await Topic.destroy({id: inputs.id});
-
-    // Remove photos
-    let removeImage = (_.isArray(topic.images) && topic.images.length > 0 ) ? topic.images : [];
-
-    await sails.helpers.removeImgS3(removeImage);
-
     // Respond with view.
     return exits.success();
   }
+
+
 };

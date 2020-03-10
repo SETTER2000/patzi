@@ -219,7 +219,9 @@ parasails.registerPage('topics-home', {
 
 
     abc(value, obj, field, lang) {
-      if (!value) {return '';}
+      if (!value) {
+        return '';
+      }
       let r = '';
       const regex = /[ a-z]+/i;
       const regexRu = /[ а-яё]+/i;
@@ -318,12 +320,26 @@ parasails.registerPage('topics-home', {
       console.log('FILLL::: ', file);
       //объект-картинка, который следует удалить из хранилища s3
       let data = {pictures: [file]};
-      this.warningRemovePhotosS3(data,fileList);
+      this.warningRemovePhotosS3(data, fileList);
       console.log('Массив после удаления ::: ', fileList);
       // массив объектов картинок, которые остались после удаления
 
       // this.ruleForm.topicBackground = this.ruleForm.topicBackground.length > 1 ? this.ruleForm.topicBackground.filter(file=>file.id !== fileList[0].id):[];
     },
+    clickHandlerFirstTopic(id) {
+      io.socket.put('/api/v1/topics/first-topic', {id: id}, (dataRes, jwRes) => {
+        this.errorMessages(jwRes, this.i19p.successUpdate);
+        if (jwRes.statusCode === 200) {
+          // this.$message({
+          //   type: 'success',
+          //   message: this.i19p.success
+          // });
+          this.getList();
+          this.$forceUpdate();
+        }
+      });
+    },
+
 
     resetForm(formName) {
       this.$refs.upload ? this.$refs.upload.clearFiles() : '';
@@ -334,7 +350,7 @@ parasails.registerPage('topics-home', {
       this.ruleForm.federations = this.resetFederation;
       this.fuleForm = {
         label: '',
-        backgroundPosition:'',
+        backgroundPosition: '',
         registerNumber: '',
         dateCreate: undefined,
         site: '',
@@ -348,18 +364,28 @@ parasails.registerPage('topics-home', {
 
     async submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-
-        if (valid && !this.buttonUpdate) {
-          this.add();
-        } else if (valid && this.buttonUpdate) {
-          this.update();
+        if (_.isUndefined(this.ruleForm.topicBackground)) {
+          this.mesWarning('ВНИМАНИЕ! Фон темы - обязателен для загрузки. Подберите нужное фото для фона и загрузите перед тем как отправлять.')
         } else {
-          console.log('error submit!!');
-          return false;
+          if (valid && !this.buttonUpdate) {
+            this.add();
+          } else if (valid && this.buttonUpdate) {
+            this.update();
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
         }
+
       });
     },
 
+    async backgroundFon() {
+      if (_.isUndefined(this.ruleForm.topicBackground)) {
+        return this.mesWarning('ВНИМАНИЕ! Фон темы - обязателен для загрузки. Подберите нужное фото для фона и загрузите перед тем как отправлять.');
+      }
+      console.log('FON BACKGROUND::: ', this.ruleForm.topicBackground);
+    },
 
     // Create Topic
     async add() {
@@ -408,6 +434,7 @@ parasails.registerPage('topics-home', {
         see: this.ruleForm.see,
         subtitle: this.ruleForm.subtitle,
         subtitleRu: this.ruleForm.subtitleRu,
+        firstTopic: this.ruleForm.firstTopic
       };
       console.log('DATA UPDATE перед отправкой ::: ', data);
 
@@ -421,7 +448,7 @@ parasails.registerPage('topics-home', {
         this.centerDialogAdded = false;
         this.loading.close();
         if (jwRes.statusCode === 200) {
-          this.resetForm('ruleForm');
+          this.$refs['ruleForm'] ?  this.resetForm('ruleForm') : '';
           this.ruleForm.fileList = [];
           // this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
@@ -449,7 +476,7 @@ parasails.registerPage('topics-home', {
       //   this.topics = this.editList = this.filterDogs = _.isNull(data) ? [] : data;
       // });
       // Принимаем данные по событию list-*
-      await  io.socket.on('topic-hidden', (data) => {
+      await io.socket.on('topic-hidden', (data) => {
         this.hidden = data;
       });
     },
@@ -637,7 +664,7 @@ parasails.registerPage('topics-home', {
       });
 
       // Принимаем данные по событию list-*
-      await  io.socket.on('update-cover', (data) => {
+      await io.socket.on('update-cover', (data) => {
         // this.counts = data;
       });
 
@@ -659,7 +686,7 @@ parasails.registerPage('topics-home', {
       });
     },
 
-    warningRemovePhotosS3(d,fileList) {
+    warningRemovePhotosS3(d, fileList) {
       this.checkAll = false;
       this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
         confirmButtonText: 'OK',
@@ -706,7 +733,7 @@ parasails.registerPage('topics-home', {
 
 
     deletePhotoS3(data) {
-      console.log('DATA remove picture перед отправкой: ' , data);
+      console.log('DATA remove picture перед отправкой: ', data);
       io.socket.delete('/api/v1/files/remove-picture-from-s3', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
@@ -836,9 +863,6 @@ parasails.registerPage('topics-home', {
       _.isArray(this.ruleForm.topicBackground) ? this.ruleForm.topicBackground.push(res) :
         this.ruleForm.topicBackground = [res];
     },
-
-
-
 
 
   }

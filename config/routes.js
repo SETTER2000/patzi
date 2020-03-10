@@ -185,13 +185,18 @@ module.exports.routes = {
   'GET    /api/v1/topics/topic-count': {action: 'topics/topic-count'},
   'GET    /api/v1/topics/topic-hidden': {action: 'topics/topic-hidden'},
   'POST   /api/v1/topics/create-topic': {action: 'topics/create-topic', csrf: false},
+  'PUT    /api/v1/topics/first-topic': {action: 'topics/first-topic', csrf: false},
   'PUT    /api/v1/topics/update-topic': {action: 'topics/update-topic', csrf: false},
   'DELETE /api/v1/topics/destroy-many-img': {action: 'topics/destroy-many-img', csrf: false},
   'DELETE /api/v1/topics/destroy-one-topic': {action: 'topics/destroy-one-topic', csrf: false},
 
+
+  'POST   /api/v1/posts/create-post': {action: 'posts/create-post', csrf: false},
+
+
   'GET    /api/v1/titles/list': {action: 'titles/list'},
   'GET    /api/v1/titles/count-title': {action: 'titles/count-title'},
-  'GET    /api/v1/titles/:id': { action: 'titles/get-dog-titles' },
+  'GET    /api/v1/titles/:id': {action: 'titles/get-dog-titles'},
   'GET    /api/v1/titles/title-hidden': {action: 'titles/title-hidden'},
   'POST   /api/v1/titles/create-title': {action: 'titles/create-title', csrf: false},
   'PUT    /api/v1/titles/update-title': {action: 'titles/update-title', csrf: false},
@@ -222,7 +227,7 @@ module.exports.routes = {
   'POST   /api/v1/dogs/destroy-one-dog': {action: 'dogs/destroy-one-dog', csrf: false},
   'PUT    /api/v1/dogs/update-dog': {action: 'dogs/update-dog', csrf: false},
   'DELETE /api/v1/dogs/destroy-many-img': {action: 'dogs/destroy-many-img', csrf: false},
-  'DELETE /api/v1/dogs/destroy-one-title': { action: 'dogs/destroy-one-title', csrf: false },
+  'DELETE /api/v1/dogs/destroy-one-title': {action: 'dogs/destroy-one-title', csrf: false},
 
 
   'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},

@@ -41,128 +41,7 @@ parasails.registerComponent('patziPostTopics', {
       </template>
     </ol>
     <div class="u-carousel-inner" role="listbox">
-  <!--<slot name="default"></slot>-->
      <patzi-post-topic-item v-for="(topic,ind) of topics" :obj-data="objData" :topic="topic" :key="topic.id" ></patzi-post-topic-item>
-
-     <!-- <div class="-lg -sm -xl -xs u-carousel-item u-clearfix u-image u-shading u-section-3-2" src="" data-image-widatah="1200" data-image-height="799">
-        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-          <div class="u-align-left u-container-style u-group u-group-1">
-            <div class="u-container-layout u-container-layout-1">
-              <h1 class="u-text u-title u-text-1"><%= __('Show') %></h1>
-              <p class="u-large-text u-text u-text-variant u-text-2"><%= __('Puppies that have already grown up often realize that an exhibition is not just a lot of tasty smells, but also 5, 6, 7, etc. pieces of delicious, fragrant goodies') %>.</p>
-              <a href="#" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">Выбрать</a>
-            </div>
-          </div>
-          <div class="u-clearfix u-gutter-30 u-layout-wrap u-layout-wrap-1">
-            <div class="u-layout">
-              <div class="u-layout-row">
-                <div class="u-align-left u-container-style u-image u-layout-cell u-left-cell u-size-15 u-size-30-md u-image-1" src="" data-image-widatah="690" data-image-height="460">
-                  <div class="u-container-layout u-container-layout-2" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-image u-layout-cell u-size-15 u-size-30-md u-image-2" src="" data-image-widatah="690" data-image-height="460">
-                  <div class="u-container-layout u-container-layout-3" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-image u-layout-cell u-size-15 u-size-30-md u-image-3" src="" data-image-widatah="1600" data-image-height="1067">
-                  <div class="u-container-layout u-container-layout-4" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-image u-layout-cell u-right-cell u-size-15 u-size-30-md u-image-4" src="" data-image-widatah="1600" data-image-height="1067">
-                  <div class="u-container-layout u-valign-middle u-container-layout-5" src=""></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="-lg -sm -xl -xs u-align-left u-carousel-item u-clearfix u-image u-shading u-section-3-3" src="" data-image-widatah="1600" data-image-height="1067">
-        <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-sheet-1">
-          <div class="u-align-left u-container-style u-group u-group-1">
-            <div class="u-container-layout u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-container-layout-1">
-              <h1 class="u-text u-title u-text-1">У природы нет плохой погоды</h1>
-              <p class="u-large-text u-text u-text-variant u-text-2">Улица... какое волнующее слово с детства для каждого ребёнка. Собаки в данном случае не исключение, они как дети, всегда готовы на прогулку.</p>
-              <a href="#" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">Выбрать</a>
-            </div>
-          </div>
-          <div class="u-clearfix u-expanded-widatah-md u-gutter-30 u-layout-wrap u-layout-wrap-1">
-            <div class="u-layout">
-              <div class="u-layout-row">
-                <div class="u-align-left u-container-style u-image u-layout-cell u-left-cell u-size-15 u-size-30-md u-image-1" src="" data-image-widatah="1600" data-image-height="900">
-                  <div class="u-container-layout u-container-layout-2" src=""></div>
-                </div>
-                <div class="u-align-center u-container-style u-image u-layout-cell u-size-15 u-size-30-md u-image-2" src="" data-image-widatah="1000" data-image-height="684">
-                  <div class="u-container-layout u-container-layout-3" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-image u-layout-cell u-size-15 u-size-30-md u-image-3" src="" data-image-widatah="1198" data-image-height="1191">
-                  <div class="u-container-layout u-container-layout-4" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-image u-layout-cell u-right-cell u-size-15 u-size-30-md u-image-4" src="">
-                  <div class="u-container-layout u-valign-middle u-container-layout-5" src=""></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="-lg -sm -xl -xs u-carousel-item u-clearfix u-image u-shading u-section-3-4" src="" data-image-widatah="731" data-image-height="1024">
-        <div class="u-clearfix u-sheet u-sheet-1">
-          <div class="u-align-left u-container-style u-group u-group-1">
-            <div class="u-container-layout u-container-layout-1">
-              <h1 class="u-text u-title u-text-1">Хендлинг</h1>
-              <p class="u-large-text u-text u-text-variant u-text-2">Школа - это не очень нужное слово в детстве, а учёба вообще крайне бессмысленное понятие, но что поделать когда так хочется награды и признания. Приходится идти на жертвы и тратить своё драгоценное время на обучение с незнакомыми
-                людьми в незнакомом месте, поначалу это ужасно страшно.</p>
-              <a href="#sec-c504" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">Выбрать</a>
-            </div>
-          </div>
-          <div class="u-clearfix u-expanded-widatah-md u-expanded-widatah-sm u-expanded-widatah-xs u-gutter-30 u-layout-wrap u-layout-wrap-1">
-            <div class="u-layout">
-              <div class="u-layout-row">
-                <div class="u-align-left u-container-style u-image u-layout-cell u-left-cell u-size-15 u-size-30-md u-image-1" src="" data-image-widatah="1600" data-image-height="1067">
-                  <div class="u-container-layout u-valign-middle-sm u-valign-middle-xs u-container-layout-2" src=""></div>
-                </div>
-                <div class="u-align-center u-container-style u-image u-layout-cell u-size-15 u-size-30-md u-image-2" src="" data-image-widatah="1600" data-image-height="1067">
-                  <div class="u-container-layout u-container-layout-3" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-image u-layout-cell u-size-15 u-size-30-md u-image-3" src="" data-image-widatah="1423" data-image-height="800">
-                  <div class="u-container-layout u-container-layout-4" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-image u-layout-cell u-right-cell u-size-15 u-size-30-md u-image-4" src="" data-image-widatah="1600" data-image-height="900">
-                  <div class="u-container-layout u-container-layout-5" src=""></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="-lg -sm -xl -xs u-carousel-item u-clearfix u-image u-shading u-section-3-5" src="" data-image-widatah="1600" data-image-height="1067">
-        <div class="u-clearfix u-sheet u-sheet-1">
-          <div class="u-align-left u-container-style u-group u-group-1">
-            <div class="u-container-layout u-valign-middle u-container-layout-1">
-              <h1 class="u-text u-title u-text-1"><%= __('Grooming') %></h1>
-              <p class="u-large-text u-text u-text-variant u-text-2"><%= __('No hairstyle - nowhere') %>!&nbsp;
-                <br>- <%= __('Mommy, make me beautiful everywhere') %>.
-              </p>
-              <a href="#sec-c504" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">Выбрать</a>
-            </div>
-          </div>
-          <div class="u-clearfix u-expanded-widatah-md u-expanded-widatah-sm u-expanded-widatah-xs u-gutter-30 u-layout-wrap u-layout-wrap-1">
-            <div class="u-layout">
-              <div class="u-layout-row">
-                <div class="u-align-left u-container-style u-image u-layout-cell u-left-cell u-size-15 u-size-30-md u-image-1" src="">
-                  <div class="u-container-layout u-container-layout-2" src=""></div>
-                </div>
-                <div class="u-align-center u-container-style u-image u-layout-cell u-size-15 u-size-30-md u-image-2" src="">
-                  <div class="u-container-layout u-container-layout-3" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-image u-layout-cell u-size-15 u-size-30-md u-image-3" src="" data-image-widatah="1600" data-image-height="1066">
-                  <div class="u-container-layout u-container-layout-4" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-image u-layout-cell u-right-cell u-size-15 u-size-30-md u-image-4" src="" data-image-widatah="1067" data-image-height="1600">
-                  <div class="u-container-layout u-valign-middle u-container-layout-5" src=""></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>-->
     </div>
     <a class="u-absolute-vcenter u-carousel-control u-carousel-control-prev u-text-grey-30 u-block-fbe7-3" href="#carousel_c5ca" role="button" data-u-slide="prev">
         <span aria-hidden="true">
@@ -187,7 +66,9 @@ parasails.registerComponent('patziPostTopics', {
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
     console.log('this.objData888::: ', this.objData);
-    console.log('this.topics ***::: ', this);
+    console.log('this.topics ***::: ', this.topics.length);
+
+
     // this.updateChart(this.$refs.$wrapper, _.sortBy(this.objData.data,'label'));
     this.data = this.objData.data ? this.objData.data : this.data;
 
@@ -195,14 +76,9 @@ parasails.registerComponent('patziPostTopics', {
 
 
   mounted: async function () {
-    // if (this.objData.data === undefined) {
-    //   throw new Error('Neither `:data`  was passed in to <patzi-post-topics>, but one or the other must be provided.');
+    // if (this.topics.length === 0) {
+    //   throw new Error('Neither `:topics`  was passed in to <patzi-post-topics>, but one or the other must be provided.');
     // }
-
-    if (this.topics === undefined) {
-      throw new Error('Neither `:topics`  was passed in to <patzi-post-topics>, but one or the other must be provided.');
-    }
-
     this.updateStyle(this.$refs.img, this.topics.topicBackground);
 
   },

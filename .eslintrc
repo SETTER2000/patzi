@@ -81,6 +81,7 @@
     "Like": true,
     "Image": true,
     "Title": true,
+    "Post": true,
     "Topic": true
 
     // …and any others.

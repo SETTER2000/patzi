@@ -7,9 +7,6 @@ module.exports = {
   description: 'List topics.',
 
 
-  inputs: {},
-
-
   exits: {
     success: {
       anyData: 'Вы подключились к комнате topic и слушаете событие list'
@@ -42,10 +39,11 @@ module.exports = {
     // Выбираем весь список объектов данной коллекции.
     let topics = await Topic.find()
       .sort([
+        {firstTopic:'DESC'},
         {createdAt: 'DESC'}
       ]);
-    // .populate('owners')
-    ;
+
+
 
     /**
      * Генерирует ссылки с параметрами изображения,

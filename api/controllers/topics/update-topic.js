@@ -8,7 +8,7 @@ module.exports = {
 
 
   inputs: {
-    id:{
+    id: {
       type: 'string',
       required: true,
       description: `Идентификатор записи`
@@ -58,21 +58,22 @@ module.exports = {
       description: `Флаг видимости темы. Видна или нет. По умолчанию видна.`
     },
 
-  },
-
-
-  exits: {
 
   },
 
 
-  fn: async function (inputs,exits) {
+  exits: {},
+
+
+  fn: async function (inputs, exits) {
 
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
     }
+
+
 
     let topic = await Topic.findOne(inputs.id);
     let images = inputs.images ? inputs.images : topic.images;
@@ -88,8 +89,9 @@ module.exports = {
       labelRu: inputs.labelRu,
       backgroundPosition: inputs.backgroundPosition,
       see: inputs.see,
-      subtitle:inputs.subtitle,
-      subtitleRu:inputs.subtitleRu,
+      subtitle: inputs.subtitle,
+      subtitleRu: inputs.subtitleRu,
+      firstTopic:inputs.firstTopic ,
 
     };
 

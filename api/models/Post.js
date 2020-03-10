@@ -1,5 +1,5 @@
 /**
- * Topic.js
+ * Post.js
  *
  * @description :: A model definition represents a database table/collection.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
@@ -14,7 +14,7 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
     label: {
       type: 'string',
-      description: `Название темы. Например для блога или статей.`,
+      description: `Название поста. Например для блога или статей.`,
       example: 'Exhibitions',
       required: true,
       minLength: 2,
@@ -22,7 +22,7 @@ module.exports = {
     },
     labelRu: {
       type: 'string',
-      description: `Название темы на русском языке. Например для блога или статей.`,
+      description: `Название поста на русском языке. Например для блога или статей.`,
       example: 'Выставки',
       required: true,
       minLength: 2,
@@ -31,7 +31,7 @@ module.exports = {
     see: {
       type: 'boolean',
       defaultsTo: true,
-      description: `Флаг видимости темы. Видна или нет. По умолчанию видна.`
+      description: `Флаг видимости поста. Видна или нет. По умолчанию видна.`
     },
 
     firstTopic: {
@@ -50,24 +50,24 @@ module.exports = {
     topicBackground: {
       type: 'ref',
       example: {},
-      description: `Объект файла данных о загруженном файле. Фон темы.`
+      description: `Объект файла данных о загруженном файле. Фон поста.`
     },
 
     subtitle: {
       type: 'string',
-      description: 'Дополнительная информация. Описание темы на английском языке.',
+      description: 'Дополнительная информация. Описание поста на английском языке.',
       maxLength: 700
     },
 
     backgroundPosition: {
       type: 'string',
-      description: 'Дополнительная информация. Описание темы на английском языке.',
+      description: 'Дополнительная информация. Описание поста на английском языке.',
       maxLength: 30
     },
 
     subtitleRu: {
       type: 'string',
-      description: 'Дополнительная информация. Описание темы на русском языке.',
+      description: 'Дополнительная информация. Описание поста на русском языке.',
       maxLength: 700
     },
 
@@ -86,13 +86,11 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
-
-    posts: {
-      collection: 'post',
-      via: 'topic',
-      description: 'У темы, может быть много постов. One to Many'
+    topic: {
+      model: 'topic',
+      description: 'Комментарий может принадлежать только одному пользователю. One to Many'
     },
+
   },
 
 };
