@@ -1,5 +1,5 @@
 <div id="homepage" v-cloak>
-
+<%/*HEADER*/%>
   <section class="skrollable skrollable-between u-align-center u-clearfix u-image u-parallax u-shading u-video-cover u-section-1" id="sec-8a77" data-image-width="1423" data-image-height="800">
     <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-sheet-1">
             <span class="u-icon u-icon-circle u-text-grey-5 u-icon-1">
@@ -12,7 +12,9 @@
       </h1>
       <h2 class="u-text u-text-3" data-animation-name="bounceIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction=""><%= __('Your Eternal Companion') %></h2>
       <p class="u-text u-text-4" data-animation-name="pulse" data-animation-duration="1000" data-animation-delay="0" data-animation-direction=""><%= __('Chinese Crested Dog is surprisingly honest and faithful companion. A capitalion with a huge heart, a cheerful, mischievous character and a warm little body. We know a lot about the breed and are ready to share our knowledge with everyone who, like us, loves this wonderful breed and is ready to share his life with them forever.') %></p>
-      <a href="dogs/chinese-crested" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1" data-animation-name="flipIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="X"><%= __('Dog catalog') %></a>
+      <a href="dogs/chinese-crested" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1" data-animation-name="flipIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="X">
+        <%= __('Dog catalog') %>
+      </a>
       <div class="u-clearfix u-expanded-width-lg u-expanded-width-xl u-gutter-0 u-layout-wrap u-layout-wrap-1">
         <div class="u-layout">
           <div class="u-layout-row">
@@ -55,6 +57,8 @@
       </div>
     </div>
   </section>
+
+ <%/*СОБЫТИЯ ПИТОМНИКА (LAST POST)*/%>
   <section class="skrollable skrollable-between u-align-center-md u-align-center-sm u-align-center-xl u-align-center-xs u-align-left-lg u-clearfix u-section-2" id="sec-2f66">
     <div class="u-clearfix u-sheet u-sheet-1">
       <div class="u-clearfix u-expanded-width-md u-expanded-width-sm u-gutter-10 u-layout-wrap u-layout-wrap-1">
@@ -104,6 +108,8 @@
       <div alt="" class="u-border-10 u-border-white u-image u-image-circle u-image-6" src="" data-animation-name="bounceIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction=""></div>
     </div>
   </section>
+
+  <%/*ПРОДАЖА ЩЕНКОВ*/%>
   <section class="skrollable skrollable-before u-align-left u-clearfix u-image u-parallax u-shading u-section-3" src="" id="sec-7416">
     <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-sheet-1">
       <h2 class="u-text u-text-1"><%= __('Chinese Crested - buy') %>  +7 (910) 406-7-406</h2>
@@ -129,10 +135,10 @@
         </div>
       </div>
       <p class="flex justify-content-center"><a href="/chinese-crested/Poale-Ell-Cooper" class="u-btn u-button-style u-btn-1"><%= __('More') %></a></p>
-
     </div>
   </section>
-  <section class="u-align-center u-clearfix u-image u-section-4" id="sec-bd81" data-image-width="1463" data-image-height="1000">
+  <%/*ПРОДАЖА ЩЕНКОВ 2*/%>
+  <!--<section class="u-align-center u-clearfix u-image u-section-4" id="sec-bd81" data-image-width="1463" data-image-height="1000">
     <div class="u-clearfix u-sheet u-sheet-1">
       <div class="u-clearfix u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xl u-gutter-30 u-layout-wrap u-layout-wrap-1">
         <div class="u-layout">
@@ -189,8 +195,8 @@
         </div>
       </div>
     </div>
-  </section>
-  <section class="u-align-center u-clearfix u-hidden-lg u-hidden-xl u-section-5" id="sec-57af">
+  </section>-->
+<!--  <section class="u-align-center u-clearfix u-hidden-lg u-hidden-xl u-section-5" id="sec-57af">
     <div class="u-align-center u-clearfix u-sheet u-valign-middle u-sheet-1">
       <h2 class="u-text u-text-1">Poale Ell Chen</h2>
       <p class="u-text u-text-2"><%= __('Downy dog ​​for sale, in excellent physical shape, excellent pedigree. Show class. Calm cute, independent baby. He knows the diaper, responds to his name. Has a description after the first exhibition and the first victory (best babby) at the Russia 2019 exhibition.') %>
@@ -202,7 +208,9 @@
         <a href="/chinese-crested/Poale-Ell-Chen" class="u-btn u-button-style u-btn-1"><%= __('More') %></a>
       </p>
     </div>
-  </section>
+  </section>-->
+
+  <%/*ЗАВОДЧИК*/%>
   <section class="u-align-center-md u-align-center-sm u-align-center-xs u-clearfix u-palette-3-light-3 u-section-6" id="sec-ef55">
     <div class="u-clearfix u-sheet u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-sheet-1">
       <div class="u-clearfix u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-gutter-0 u-layout-wrap u-layout-wrap-1">
@@ -226,6 +234,12 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <% /*ПОЗДРАВЛЕНИЯ*/ %>
+  <section class="u-align-center-md u-align-center-sm u-align-center-xs u-clearfix u-palette-3-light-3 u-section-6" id="sec-ef55">
+    <div class="u-clearfix u-sheet u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-sheet-1">
       <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-2">
         <div class="u-layout">
           <div class="u-layout-col">
@@ -274,6 +288,8 @@
       </div>
     </div>
   </section>
+
+  <%/*КОБЕЛИ ДЛЯ ВЯЗОК*/%>
   <section class="u-clearfix u-section-7" id="sec-918f">
     <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
       <div class="u-clearfix u-expanded-width u-gutter-10 u-layout-wrap u-layout-wrap-1">
@@ -317,6 +333,8 @@
       </div>
     </div>
   </section>
+
+  <%/*СТАТЬИ*/%>
   <section class="u-align-center u-clearfix u-section-8" id="sec-0190">
     <div class="u-clearfix u-sheet u-sheet-1">
       <div class="u-clearfix u-expanded-width u-gutter-20 u-layout-wrap u-layout-wrap-1">
@@ -351,9 +369,13 @@
       <a href="/blog" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('More') %></a>
     </div>
   </section>
+
+  <%/*МЫ В СОЦСЕТЯХ*/%>
   <section class="skrollable skrollable-between u-align-center u-border-no-bottom u-border-no-left u-border-no-right u-border-no-top u-clearfix u-image u-shading u-section-9" id="sec-608a">
     <div class="u-clearfix u-sheet u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-sheet-1">
-      <h2 class="u-text u-text-1" data-animation-name="zoomIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction=""><%= __('We are in social networks') %></h2>
+      <h2 class="u-text u-text-1" data-animation-name="zoomIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
+        <%= __('We are in social networks') %>
+      </h2>
       <p class="u-text u-text-2"><%= __('kennel accounts') %></p>
       <div class="u-align-left u-social-icons u-spacing-18 u-social-icons-1" data-animation-name="slideIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="Down">
         <a class="u-social-url"  rel="nofollow" target="_blank" href="https://facebook.com/olga.vasef">
@@ -383,6 +405,8 @@
       </div>
     </div>
   </section>
+
+  <%/*ГДЕ НАС НАЙТИ*/%>
   <section class="u-align-center u-clearfix u-grey-5 u-section-10" id="sec-cabe">
     <div class="u-clearfix u-sheet u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-sheet-1">
       <h2 class="u-text u-text-1"><%= __('We are here') %></h2>
@@ -394,6 +418,8 @@
       </div>
     </div>
   </section>
+
+  <%/*ВЫ ГОТОВЫ ВСТРЕТИТЬСЯ?*/%>
   <section class="u-align-center u-clearfix u-image u-section-11" id="sec-dcba" data-image-width="150" data-image-height="112">
     <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
       <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
@@ -423,6 +449,8 @@
       </div>
     </div>
   </section>
+
+  <%/*ВЫ ЕЩЁ НЕ С НАМИ?*/%>
   <section class="u-align-center u-clearfix u-section-12" id="sec-2849">
     <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-sheet-1">
       <h3 class="u-text u-text-1"><%= __('Not yet with us?') %></h3>
