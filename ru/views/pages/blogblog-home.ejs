@@ -1024,7 +1024,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="u-size-30">
+                    <div v-if="me.isSuperAdmin || me.isAdmin" class="u-size-30">
                         <div class="u-layout-row">
                             <div class="u-align-center u-container-style u-layout-cell u-left-cell u-right-cell u-size-60 u-size-60-md u-layout-cell-4">
                                 <div class="u-container-layout u-valign-middle u-container-layout-4">
@@ -1127,7 +1127,8 @@
     <div class="flex justify-content-center p-5" v-if="posts && !posts.length">
       <el-button  @click="clickAddButton()">Добавьте новый пост...</el-button>
     </div>
-    <patzi-posts :obj-data="seo" @remove="removeItem" :posts="posts"></patzi-posts>
+    <patzi-posts :obj-data="seo" :del-button="me.isSuperAdmin || me.isAdmin" @remove="removeItem"
+                 :posts="posts"></patzi-posts>
 
 
 
