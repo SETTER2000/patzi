@@ -48,6 +48,7 @@ module.exports.routes = {
   'GET /topics/:virtualPageSlug?': {action: 'topics/view-topics-home'},
   'GET /topic/:id': {action: 'topics/view-topic'},
 
+
   'GET /titles/:virtualPageSlug?': {action: 'titles/view-titles-home'},
   'GET /title/:id': {action: 'titles/view-title'},
 
@@ -190,9 +191,9 @@ module.exports.routes = {
   'DELETE /api/v1/topics/destroy-many-img': {action: 'topics/destroy-many-img', csrf: false},
   'DELETE /api/v1/topics/destroy-one-topic': {action: 'topics/destroy-one-topic', csrf: false},
 
-
+  'GET    /api/v1/posts/list': {action: 'posts/list'},
   'POST   /api/v1/posts/create-post': {action: 'posts/create-post', csrf: false},
-
+  'DELETE /api/v1/posts/destroy-one-post': { action: 'posts/destroy-one-post', csrf: false },
 
   'GET    /api/v1/titles/list': {action: 'titles/list'},
   'GET    /api/v1/titles/count-title': {action: 'titles/count-title'},

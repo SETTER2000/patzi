@@ -84,6 +84,9 @@ module.exports = {
       case 'Topic':
         collectionObject = await Topic.findOne(inputs.id);
         break;
+      case 'Post':
+        collectionObject = await Post.findOne(inputs.id);
+        break;
       case 'Title':
         collectionObject = await Title.findOne(inputs.id);
         break;

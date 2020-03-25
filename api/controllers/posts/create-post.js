@@ -18,35 +18,34 @@ module.exports = {
       required: true,
       description: `Идентификатор поста.`
     },
-
     labelRu: {
       type: 'string',
       required: true,
       description: `Официальное имя поста на русском. Поле обязательно для заполнения.`
     },
-
+    dateEvent: {
+      type: 'string',
+      required: true,
+      description: 'Дата события.'
+    },
     fileList: {
       type: 'ref',
       description: 'Массив с файлами данных о загруженных файлах.'
     },
-
     postBackground: {
       type: 'ref',
       description: 'Объект файла данных о загруженном файле. Фон поста.'
     },
-
     subtitle: {
       type: 'string',
       description: 'Дополнительная информация. Описание поста на английском языке.',
       maxLength: 700
     },
-
     backgroundPosition: {
       type: 'string',
       description: 'Дополнительная информация. Описание поста на английском языке.',
       maxLength: 30
     },
-
     subtitleRu: {
       type: 'string',
       description: 'Дополнительная информация. Описание поста на русском языке.',
@@ -104,7 +103,6 @@ module.exports = {
     if (inputs.fileList) {
       images = await inputs.fileList.filter(o => !_.isNull(o));
       await _.each(images, img => {
-        console.log('FDDDk:::', img);
         img.id = _.first(_.last(img.fd.split('\\')).split('.'));
         img.description = '';
         img.dateTaken = '';
@@ -117,7 +115,6 @@ module.exports = {
     if (inputs.postBackground) {
       postBackground = await inputs.postBackground.filter(o => !_.isNull(o));
       await _.each(images, img => {
-        console.log('ВФЫЫ:::', img);
         img.id = _.first(_.last(img.fd.split('\\')).split('.'));
         img.description = '';
         img.dateTaken = '';
@@ -135,6 +132,7 @@ module.exports = {
     let newPost = await Post.create({
       label: inputs.label,
       labelRu: inputs.labelRu,
+      dateEvent: await sails.helpers.dateFix(inputs.dateEvent),
       images: images,
       postBackground: postBackground,
       subtitle: inputs.subtitle,
@@ -151,15 +149,11 @@ module.exports = {
 
     // Выбираем весь список объектов данной коллекции.
     let posts = await Post.find()
-        .sort([{labelRu: 'DESC'}])
-      // .populate('owners')
-    ;
+        .sort([{labelRu: 'DESC'}]);
 
     await sails.sockets.broadcast('post', 'list-post');
     // Respond with view.
     return exits.success();
 
   }
-
-
 };

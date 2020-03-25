@@ -4,10 +4,12 @@ parasails.registerPage('blog-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     topics: [],
+    posts: [],
+    removePostId: '',
     centerDialogVisible: false,
     centerDialogAdded: false,
     limit: 50,
-    posts: [{name: 'sadf', label: 'sdfsd'}],
+    // posts: [{name: 'sadf', label: 'sdfsd'}],
     dialog: {},
     sizeLess: 5, // MB
     dialogVisible: false,
@@ -121,8 +123,17 @@ parasails.registerPage('blog-home', {
     _.extend(this, SAILS_LOCALS);
 
     // Запрос для события list-*
+    io.socket.get(`/api/v1/posts/list`, function gotResponse(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Запрос для события list-*
     io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Принимаем данные по событию list-*
+    io.socket.on('list-post', data => {
+      console.log('POSTS LIST:: ', data);
+      this.posts = data;
     });
     // Принимаем данные по событию list-*
     io.socket.on('list-topic', data => {
@@ -144,6 +155,7 @@ parasails.registerPage('blog-home', {
   },
 
   filters: {
+
     trimString: function (value, count = 12) {
       if (!value) {
         return '';
@@ -277,6 +289,7 @@ parasails.registerPage('blog-home', {
       let data = {
         fileList: this.ruleForm.fileList,
         topicId: this.ruleForm.topic,
+        dateEvent: JSON.stringify(this.ruleForm.dateEvent),
         label: this.ruleForm.label,
         // backgroundPosition: this.ruleForm.backgroundPosition,
         labelRu: this.ruleForm.labelRu,
@@ -385,6 +398,9 @@ parasails.registerPage('blog-home', {
       await io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
+      await io.socket.get(`/api/v1/posts/list`, function gotResponse(body, response) {
+        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
       await io.socket.get(`/api/v1/topics/topic-hidden`, function gotResponse(body, response) {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
@@ -400,6 +416,28 @@ parasails.registerPage('blog-home', {
       // Принимаем данные по событию list-*
       await io.socket.on('topic-hidden', (data) => {
         this.hidden = data;
+      });
+    },
+    removeItem(id) {
+      console.log('Перед отправкой delete POST id: ', id);
+      this.removePostId = id;
+      this.posts = this.posts.filter(item => item.id !== id);
+      this.deleteItem();
+    },
+
+    deleteItem: async function () {
+      console.log('Перед отправкой delete POST: ', this.removePostId);
+      io.socket.delete('/api/v1/posts/destroy-one-post', {id: this.removePostId}, (dataRes, jwRes) => {
+        this.mesSuccess('Объект успешно удалён.');
+        this.dialogDeletePhotoSession = false;
+        if (jwRes.statusCode === 200) {
+          // this.$message({
+          //   type: 'success',
+          //   message: this.i19p.success
+          // });
+          // this.getList();
+          // this.$forceUpdate();
+        }
       });
     },
 
