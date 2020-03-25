@@ -330,10 +330,8 @@ module.exports = {
         delete img.field;
       });
     }
-    console.log('inputs.titleDog::: ', inputs.titleDog);
-    console.log('inputs.titleDog.fileList++++::: ', inputs.titleDog.fileList);
 
-    if (inputs.titleDog.fileList && _.size(inputs.titleDog.fileList) < 2) {
+    if (inputs.titleDog && inputs.titleDog.fileList && _.size(inputs.titleDog.fileList) < 2) {
       throw (req.me.preferredLocale === 'ru') ? 'titleImageTwoRu' : 'titleImageTwo';
     }
 
