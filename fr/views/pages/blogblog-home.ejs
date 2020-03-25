@@ -142,6 +142,32 @@
                     </el-tooltip>
                 </el-form-item>
 
+                <% /* ДАТА */ %>
+                <el-form-item v-if="!buttonUpdate" label="<%= __('Date') %>" prop="dateEvent">
+                    <el-row :gutter="2">
+                        <el-col :span="11">
+                            <el-date-picker
+                                    v-model="ruleForm.dateEvent"
+                                    type="datetime"
+                                    placeholder="<%= __('Select date and time') %>"
+                                    default-time="12:00:00">
+                            </el-date-picker>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+                <el-form-item v-if="buttonUpdate" label="<%= __('Date') %>" prop="dateEventUpdate">
+                    <el-row :gutter="2">
+                        <el-col :span="11">
+                            <el-date-picker
+                                    v-model="dateEventUpdate"
+                                    type="datetime"
+                                    placeholder="<%= __('Select date and time') %>"
+                                    default-time="12:00:00">
+                            </el-date-picker>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+
                 <% /* НАЗВАНИЕ ПОСТА на русском*/ %>
                 <template>
                     <el-form-item label="<%= __('Topic Title') %> (Ru)" prop="labelRu">
@@ -219,124 +245,7 @@
               </el-form-item>
             </template>
 
-            <% /* ДЕНЬ РОЖДЕНИЕ */ %>
-            <el-form-item v-if="!buttonUpdate" label="<%= __('DoB') %>" prop="dateBirth">
-              <el-row :gutter="2">
-                <el-col :span="11">
-                  <el-date-picker
-                    v-model="ruleForm.dateBirth"
-                    type="datetime"
-                    placeholder="<%= __('Select date and time') %>"
-                    default-time="12:00:00">
-                  </el-date-picker>
-                </el-col>
-              </el-row>
-            </el-form-item>
-            <el-form-item v-if="buttonUpdate" label="<%= __('DoB') %>" prop="dateBirthUpdate">
-              <el-row :gutter="2">
-                <el-col :span="11">
-                  <el-date-picker
-                    v-model="dateBirthUpdate"
-                    type="datetime"
-                    placeholder="<%= __('Select date and time') %>"
-                    default-time="12:00:00">
-                  </el-date-picker>
-                </el-col>
-              </el-row>
-            </el-form-item>
 
-            <% /* ДЕНЬ СМЕРТИ */ %>
-            <el-form-item v-if="!buttonUpdate" label="<%= __('DoD') %>" prop="dateDeath">
-              <el-row :gutter="2">
-                <el-col :span="11">
-                  <el-date-picker
-                    v-model="ruleForm.dateDeath"
-                    type="datetime"
-                    placeholder="<%= __('Select date and time') %>"
-                    default-time="12:00:00">
-                  </el-date-picker>
-                </el-col>
-              </el-row>
-            </el-form-item>
-            <el-form-item v-if="buttonUpdate" label="<%= __('DoD') %>" prop="dateDeathUpdate">
-              <el-row :gutter="2">
-                <el-col :span="11">
-                  <el-date-picker
-                    v-model="dateDeathUpdate"
-                    type="datetime"
-                    placeholder="<%= __('Select date and time') %>"
-                    default-time="12:00:00">
-                  </el-date-picker>
-                </el-col>
-              </el-row>
-            </el-form-item>
-
-
-            <el-form-item label="<%= __('Gender') %>" prop="gender">
-              <el-col :xs="8" :sm="10" :md="10" :lg="16" :xl="16">
-                <el-radio-group v-model="ruleForm.gender">
-                  <el-radio label="sire"><%= __('Sire') %></el-radio>
-                  <el-radio label="dam"><%= __('Dam') %></el-radio>
-                </el-radio-group>
-              </el-col>
-            </el-form-item>
-
-
-            <el-form-item
-              v-for="(federation, index) in ruleForm.federations"
-              :label="'№ ' + index"
-              :key="federation.key"
-              :prop="'federations.' + index + '.registerNumber'"
-              :rules="{required: true, message: 'Federation can not be null', trigger: 'blur'}">
-              <el-col :xs="14" :sm="18" :md="18" :lg="17" :xl="16">
-                <el-input placeholder="<%= __("Dog's registration number") %>" v-model="federation.registerNumber"
-                          class="input-with-select">
-
-                  <el-select v-model="federation.value" slot="prepend" class="wds" placeholder="Select">
-                    <el-option label="FCI" value="1"></el-option>
-                    <el-option label="RKF" value="2"></el-option>
-                    <el-option label="BCU" value="3"></el-option>
-                    <el-option label="UKU" value="4"></el-option>
-                    <el-option label="IKC" value="5"></el-option>
-                    <el-option label="VDH" value="6"></el-option>
-                    <el-option label="KCG" value="7"></el-option>
-                  </el-select>
-                  <el-button slot="append" @click="copyElement" icon="el-icon-copy-document"></el-button>
-                  <el-button slot="append" @click.prevent="removeElement(federation)"
-                             icon="el-icon-delete"></el-button>
-                </el-input>
-              </el-col>
-            </el-form-item>
-
-            <% /*Домашняя кличка */ %>
-            <template>
-              <el-form-item label="<%= __('Nickname') %>" prop="nickname">
-                <el-col :xs="14" :sm="14" :md="14" :lg="12" :xl="12">
-                  <el-input minlength="3" maxlength="20" show-word-limit
-                            placeholder="<%= __('Affectionate name') %>"
-                            v-model="ruleForm.nickname"></el-input>
-
-                </el-col>
-                <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
-                  <el-tooltip effect="dark"
-                              content="<%= __("How do you call the house, a nickname, affectionate name") %>"
-                              placement="top-start">
-                    <div size="mini" round class="el-icon-question ml-3"></div>
-                  </el-tooltip>
-                </el-col>
-              </el-form-item>
-            </template>
-
-            <% /*Клеймо*/ %>
-            <template>
-              <el-form-item label="<%= __('Stamp') %>" prop="stamp">
-                <el-col :xs="14" :sm="18" :md="18" :lg="17" :xl="16">
-                  <el-input minlength="3" maxlength="20" show-word-limit
-                            placeholder="<%= __('Stamp Dog number in the registry.') %>"
-                            v-model="ruleForm.stamp"></el-input>
-                </el-col>
-              </el-form-item>
-            </template>
 
             <% /* ТИП */ %>
             <el-form-item label="<%= __('Type') %>" prop="type">
@@ -1213,54 +1122,13 @@
     <% /* Слайдер тем блога */ %>
     <patzi-post-topics :obj-data="seo" :topics="topics"></patzi-post-topics>
 
+    <% /* Посты блога */ %>
 
-    <section class="u-align-center u-clearfix u-image u-image-tiles u-section-4" id="carousel_6b06" data-image-width="400"
-             data-image-height="400">
-        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-            <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
-                <div class="u-gutter-0 u-layout">
-                    <div class="u-layout-row">
-                        <div class="u-align-left u-container-style u-layout-cell u-left-cell u-size-20 u-layout-cell-1"
-                             data-href="/blog/post">
-                            <div class="u-container-layout u-valign-top-md u-valign-top-sm u-valign-top-xl u-valign-top-xs u-container-layout-1">
-                                <div class="u-align-left u-border-5 u-border-palette-1-base u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-shape u-shape-1"></div>
-                                <img class="u-expand-resize u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-image u-image-1"
-                                     src="https://d3a1wbnh2r1l7y.cloudfront.net/20191103DSCF3867_w462.jpg" data-image-width="462"
-                                     data-image-height="693"
-                                     data-href="/blog/post">
-                                <h2 class="u-text u-text-1">Russia 2019</h2>
-                                <p class="u-text u-text-grey-30 u-text-2">3 ноября 2019 года</p>
-                                <p class="u-text u-text-3">Сегодня в ринге звездил Честер. (Поале Елл Честер) Класс беби. Эксперт Geno
-                                    SISNEROS (the USA)🇺🇸. Это первая выставка у малыша ...</p>
-                            </div>
-                        </div>
-                        <div class="u-align-left u-container-style u-layout-cell u-size-20 u-layout-cell-2">
-                            <div class="u-container-layout u-valign-top u-container-layout-2">
-                                <div class="u-align-left u-border-5 u-border-palette-1-base u-expanded-width u-shape u-shape-2"></div>
-                                <img src="https://d3a1wbnh2r1l7y.cloudfront.net/20191201DSCF0698.jpg" alt=""
-                                     class="u-align-left u-expanded-width u-image u-image-2" data-image-width="1600"
-                                     data-image-height="1067">
-                                <h2 class="u-text u-text-4">Первый день зимы</h2>
-                                <p class="u-text u-text-grey-30 u-text-5">3 ноября 2019 года</p>
-                                <p class="u-text u-text-6">Poale Ell Chen, Poale Ell Cooper. Available.</p>
-                            </div>
-                        </div>
-                        <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-20 u-layout-cell-3">
-                            <div class="u-container-layout u-valign-top-md u-valign-top-sm u-valign-top-xl u-valign-top-xs u-container-layout-3">
-                                <div class="u-align-left u-border-5 u-border-palette-1-base u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-shape u-shape-3"></div>
-                                <img src="https://d3a1wbnh2r1l7y.cloudfront.net/79431023_10157748012437622_4449513495053991936_o.jpg" alt=""
-                                     class="u-align-left u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-image u-image-3">
-                                <h2 class="u-text u-text-7">Best Show Dog</h2>
-                                <p class="u-text u-text-grey-30 u-text-8">3 ноября 2019 года</p>
-                                <p class="u-text u-text-9">Сегодня 30.11.2019 на монопородной выставке ранга КЧК, проводимой РОО КК "Бест
-                                    шоу дог", под экспертизой судьи ...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="flex justify-content-center p-5" v-if="posts && !posts.length">
+      <el-button  @click="clickAddButton()">Добавьте новый пост...</el-button>
+    </div>
+    <patzi-posts :obj-data="seo" @remove="removeItem" :posts="posts"></patzi-posts>
+
 
 
 </div>
