@@ -25,6 +25,7 @@ module.exports.policies = {
   'users/update-ratio':'is-all-group',
   'comments/add-comment':'is-all-group',
   'kennels/*':'is-all-group',
+  'topics/list':'is-all-group',
   // 'kennels/*':['is-super-admin','is-admin'],
   'users/list-status':true,
   'groups/is-breeder':true,

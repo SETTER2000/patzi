@@ -21,7 +21,8 @@ parasails.registerComponent('patziPostsItem', {
     'post': {
       type: Object,
       require: true
-    }
+    },
+    'delButton':false
   },
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -53,7 +54,7 @@ parasails.registerComponent('patziPostsItem', {
                                 <h2 class="u-text u-text-1">{{objData.preferredLocale === 'ru' ? post.labelRu : post.label}}</h2>
                                <div class="u-text u-text-grey-30  flex justify-content-between">
                                       <p >{{post.dateEvent  | getCreate(objData.preferredLocale)}}</p>
-                                       <p>  <a href="#" @click="openRemoveDialog(post.id)"><i class="el-icon-delete"></i></a></p>
+                                       <p v-if="delButton">  <a href="#" @click="openRemoveDialog(post.id)"><i class="el-icon-delete"></i></a></p>
                                      </div>  
                                 <p class="u-text u-text-3">{{objData.preferredLocale === 'ru' ? post.subtitleRu : post.subtitle}}</p>
                             </div>

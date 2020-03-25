@@ -15,7 +15,8 @@ parasails.registerComponent('patziPosts', {
   //  ╩  ╩╚═╚═╝╩  ╚═╝
   props: [
     'objData',
-    'posts'
+    'posts' ,
+    'delButton'
   ],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -69,7 +70,7 @@ parasails.registerComponent('patziPosts', {
             <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
                 <div class="u-gutter-0 u-layout">
                     <div class="u-layout-row">
-                    <patzi-posts-item v-for="(post,ind) of posts" :obj-data="objData" @remove="removeItem"  :post="post" :key="post.id" ></patzi-posts-item>
+                    <patzi-posts-item v-for="(post,ind) of posts" :obj-data="objData" :del-button="delButton" @remove="removeItem"  :post="post" :key="post.id" ></patzi-posts-item>
                     
                     </div>
                 </div>
