@@ -41,6 +41,26 @@ module.exports = {
       throw 'notFound';
     }
 
+    let ch = _.pluck(dog.children, 'id');
+    console.log('РОДИТЕЛи чилдрена: ', ch);
+    dog.children = await Dog.find({'id': ch})
+      .populate('parents')
+      .populate('children')
+      .populate('kennel')
+      .populate('owners');
+    console.log('prDog::: ', dog.children);
+
+    dog.children = await _.each(dog.children, async (dog) => {
+      // dog.kennelName = dog.kennel.label;
+      // dog.fullName = dog.kennel.right ? `${dog.label} ${dog.kennel.label}` : `${dog.kennel.label} ${dog.label}`;
+      dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(' ').join('-')}` : '';
+      dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
+      // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
+      return dog;
+    });
+
+
+    console.log('prDog-2::: ', dog.children);
 
     let kennel = await Kennel.findOne({id: dog.kennel.id})
       .populate('continent')
@@ -134,7 +154,34 @@ module.exports = {
       }
     });
 
-
+    dog.children = await sails.helpers.cloudFrontUrlMin.with({
+      collection: dog.children,
+      collectionName: 'dog',
+      field: 'images',
+      createField: 'imgI7',
+      // Этот объект обязателен, хотя может быть и пустой.
+      edits: {
+        'resize': {
+          'width': 460,
+          // "height": 160,
+          'fit': 'inside',
+          'background': {
+            'r': 255,
+            'g': 255,
+            'b': 255,
+            'alpha': 1
+          }
+        },
+        'flatten': {
+          'background': {
+            'r': 255,
+            'g': 255,
+            'b': 255,
+            'alpha': null
+          }
+        }
+      }
+    });
     /**
      * Генерирует ссылки с параметрами изображения,
      * которое должен вернуть S3 для данного модуля.
@@ -223,6 +270,16 @@ module.exports = {
 
     await dog.parents.map(async (dog) => {
       dog.kennelName = dog.kennel.label;
+      // dog.fullName = dog.kennel.right ? `${dog.label} ${dog.kennel.label}` : `${dog.kennel.label} ${dog.label}`;
+      dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(' ').join('-')}` : '';
+      dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
+      // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
+      return dog;
+    });
+
+
+    await dog.children.map(async (dog) => {
+      // dog.kennelName = dog.kennel.label;
       // dog.fullName = dog.kennel.right ? `${dog.label} ${dog.kennel.label}` : `${dog.kennel.label} ${dog.label}`;
       dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(' ').join('-')}` : '';
       dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
