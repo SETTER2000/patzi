@@ -590,11 +590,30 @@
                         </div>
                     </el-card>
 
+                    <% /* БРАТЬЯ СЁСТРЫ. ОДНОПОМЁТНИКИ. */ %>
+                    <el-card class="box-card " v-if="dog.showTeeth">
+                        <div slot="header" class="clearfix">
+                            <span><%= __('Teeth') %></span>
+                        </div>
+                        <div class="menu-between-v">
+                            <div class="menu-between">
+                                <span><%= __('Bite') %>:</span> <span>{{dog.bite}}</span>
+                            </div>
+                            <div class="menu-between" v-if="dog.teethCount">
+                                <span><%= __('Number of teeth') %>:</span>
+                                <el-tooltip content="?" placement="top" effect="light">
+                                    <el-link :underline="false" @click="open" type="info">
+                                        {{dog.teethCount}}
+                                    </el-link>
+                                </el-tooltip>
+                            </div>
+
+                        </div>
+                    </el-card>
                     <% /* ЗУБЫ */ %>
                     <el-card class="box-card " v-if="dog.showTeeth">
                         <div slot="header" class="clearfix">
                             <span><%= __('Teeth') %></span>
-
                         </div>
                         <div class="menu-between-v">
                             <div class="menu-between">
