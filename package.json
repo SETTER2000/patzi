@@ -50,7 +50,7 @@
     "grunt-contrib-jst": "1.0.0",
     "grunt-sync": "0.8.0",
     "mocha": "^6.1.4",
-    "sails-hook-grunt": "^3.1.0",
+    "sails-hook-grunt": "^4.0.1",
     "supertest": "4.0.2"
   },
   "scripts": {
