@@ -42,13 +42,13 @@ module.exports = {
     }
 
     let ch = _.pluck(dog.children, 'id');
-    console.log('РОДИТЕЛи чилдрена: ', ch);
+
     dog.children = await Dog.find({'id': ch})
       .populate('parents')
       .populate('children')
       .populate('kennel')
       .populate('owners');
-    console.log('prDog::: ', dog.children);
+    // console.log('prDog::: ', dog.children);
 
     dog.children = await _.each(dog.children, async (dog) => {
       // dog.kennelName = dog.kennel.label;
@@ -58,9 +58,9 @@ module.exports = {
       // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
       return dog;
     });
+// _.sortBy(dog.children,'dateBirth');
 
-
-    console.log('prDog-2::: ', dog.children);
+    // console.log('prDog-2::: ', dog.children);
 
     let kennel = await Kennel.findOne({id: dog.kennel.id})
       .populate('continent')

@@ -8,6 +8,8 @@ parasails.registerPage('dog', {
     dialogPedigreeVisible: true,
     dialogImageUrl: '',
     titles: [],
+    childrens: [],
+    drawer: false,
     titlesDog: [],
     obj: {},
     direction: 'ttb',
@@ -155,6 +157,7 @@ parasails.registerPage('dog', {
 
 
   mounted: async function () {
+    this.getChildren();
   },
 
 
@@ -441,10 +444,10 @@ parasails.registerPage('dog', {
     //   this.fileList = fileList;
     // },
 
-    handleRemove(file,fileList) {
-        console.log('fileList-1::: ' , fileList);
-        console.log('file-1::: ' , file);
-        console.log('file.response-1::: ' , file.response);
+    handleRemove(file, fileList) {
+      console.log('fileList-1::: ', fileList);
+      console.log('file-1::: ', file);
+      console.log('file.response-1::: ', file.response);
 
       io.socket.delete('/api/v1/files/remove-picture-from-s3', file.response, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
@@ -601,8 +604,8 @@ parasails.registerPage('dog', {
       this.goto(`/litter/${this.litter.letter}/${this.litter.year}/photo`);
     },
 
-    name(name,hash) {
-      return hash ? `${name.split(" ").join('-')}/${hash}`: `chinese-crested/${name.split(" ").join('-')}`;
+    name(name, hash) {
+      return hash ? `${name.split(" ").join('-')}/${hash}` : `chinese-crested/${name.split(" ").join('-')}`;
     },
 
     getFullNameLink(name, b = '') {
@@ -620,5 +623,39 @@ parasails.registerPage('dog', {
       return _.last(_.pluck(_.filter(this.titles, {'id': titleId}), 'label')) === 'WW';
     },
 
+    getChildren() {
+      let gender = this.dog.gender === 'dam' ? 'sire' : 'dam';
+      this.childrens = this.dog.children;
+      let bdt = _.uniq(_.pluck(this.childrens, 'dateBirth'));
+
+      /*
+       * Добавляем поле sire или dam (в зависимости от гендерной принадлежности первого родителя)
+       * с именем второго родителя
+       * */
+      this.childrens.map(ch => {
+        // ch[gender] = _.last(_.pluck(ch.parents.filter(p => p.gender === gender), 'fullName'));
+        ch[gender] = _.last(ch.parents.filter(p => p.gender === gender));
+      });
+
+      let u = [];
+      _.each(bdt, dt => {
+        let ltr = {};
+        let lit = _.filter(this.childrens, {'dateBirth': dt});
+        ltr.fullName = lit[0][gender].fullName;
+        ltr.oneParent = lit[0][gender];
+        ltr.gender = gender;
+        ltr.dateBirth = dt;
+        ltr.detail = lit[0][gender].fullName ? `/chinese-crested/${lit[0][gender].fullName.split(' ').join('-')}` : '';
+        ltr.litter = lit;
+        u.push(ltr);
+      });
+
+      this.dog = Object.assign({}, this.dog, { litter: u });
+      console.log('DGG:: ', this.dog);
+      console.log('U:: ', u);
+      console.log('Все даты помётов:: ', bdt);
+      console.log('Все потомки ', this.childrens);
+      console.log('Второй родитель: ', parent);
+    },
   }
 });

@@ -1351,7 +1351,7 @@ th {
   .u-text-white a,
   a.u-button-style.u-text-white,
   a.u-button-style.u-text-white[class*="u-border-"] {
-    color: #e2e2e2e0 !important;
+    color: #f0f0f0e0 !important;
   }
   header#sec-599b.afterload {
     transform: translate(0, -95%);
