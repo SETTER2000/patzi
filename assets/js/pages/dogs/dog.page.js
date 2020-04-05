@@ -590,7 +590,6 @@ parasails.registerPage('dog', {
       let dt = data;
       dt.dogId = this.dog.id;
       let r = false;
-      // console.log('Перед отправкой data DOG: ', dt);
       await io.socket.delete('/api/v1/dogs/destroy-one-title', dt, (dataRes, jwRes) => {
         r = (jwRes.statusCode === 200);
         this.dog.titleDog = this.dog.titleDog.filter(item => ((dt.dateReceiving !== item.dateReceiving) || (dt.id !== item.id)));
@@ -626,21 +625,30 @@ parasails.registerPage('dog', {
     getChildren() {
       let gender = this.dog.gender === 'dam' ? 'sire' : 'dam';
       this.childrens = this.dog.children;
-      let bdt = _.uniq(_.pluck(this.childrens, 'dateBirth'));
+      let bdt = _.uniq(_.pluck(this.childrens, 'dateBirth')); //"2016-04-10T23:35:00+03:00"
 
       /*
        * Добавляем поле sire или dam (в зависимости от гендерной принадлежности первого родителя)
        * с именем второго родителя
        * */
       this.childrens.map(ch => {
-        // ch[gender] = _.last(_.pluck(ch.parents.filter(p => p.gender === gender), 'fullName'));
         ch[gender] = _.last(ch.parents.filter(p => p.gender === gender));
       });
+
+      bdt = _.map(bdt, dt => {
+        return moment(dt).format("L");
+      });
+      this.childrens.map(child => {
+        child.dBirth = moment(child.dateBirth).format("L");
+        return child;
+      });
+
+      bdt = _.uniq(bdt);
 
       let u = [];
       _.each(bdt, dt => {
         let ltr = {};
-        let lit = _.filter(this.childrens, {'dateBirth': dt});
+        let lit = _.filter(this.childrens, {'dBirth': dt});
         ltr.fullName = lit[0][gender].fullName;
         ltr.oneParent = lit[0][gender];
         ltr.gender = gender;
@@ -649,13 +657,7 @@ parasails.registerPage('dog', {
         ltr.litter = lit;
         u.push(ltr);
       });
-
-      this.dog = Object.assign({}, this.dog, { litter: u });
-      console.log('DGG:: ', this.dog);
-      console.log('U:: ', u);
-      console.log('Все даты помётов:: ', bdt);
-      console.log('Все потомки ', this.childrens);
-      console.log('Второй родитель: ', parent);
+      this.dog = Object.assign({}, this.dog, {litter: u});
     },
   }
 });
