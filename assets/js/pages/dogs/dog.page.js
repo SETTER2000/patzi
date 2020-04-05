@@ -636,7 +636,8 @@ parasails.registerPage('dog', {
       });
 
       bdt = _.map(bdt, dt => {
-        return moment(dt).format("L");
+        moment.locale(this.me.preferredLocale);
+        return  moment.parseZone(dt).format("L");
       });
       this.childrens.map(child => {
         child.dBirth = moment(child.dateBirth).format("L");
@@ -644,11 +645,12 @@ parasails.registerPage('dog', {
       });
 
       bdt = _.uniq(bdt);
-
+console.log('BDT:: ' , bdt);
       let u = [];
       _.each(bdt, dt => {
         let ltr = {};
         let lit = _.filter(this.childrens, {'dBirth': dt});
+        console.log('LIT::: ' , lit);
         ltr.fullName = lit[0][gender].fullName;
         ltr.oneParent = lit[0][gender];
         ltr.gender = gender;
