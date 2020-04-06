@@ -450,8 +450,8 @@
 
             <el-tooltip v-if="dog.sale & dog.price>0" class="item" effect="dark" content="<%= __('For sale') %>"
                         placement="left">
-              <el-button class="lenta pointer" @click="goTo2('/dogs/chinese-crested/sale')">
-                <div style="color: white;">{{dog.currency | getCurrency()}}{{dog.price}}</div>
+              <el-button class="lenta pointer" @click="goTo('dogs/chinese-crested/sale')">
+                <div style="color: white;">{{dog.currency | getCurrency()}} {{dog.price}}</div>
               </el-button>
             </el-tooltip>
             <!--<div><img src="/images/crown.png" alt=""></div>-->
@@ -481,7 +481,7 @@
     <section class="service-area ">
       <div class="container">
 
-      <!--  <div class="menu-between mb-5">
+        <!--  <div class="menu-between mb-5">
           <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()"
                      round><%= __('Pedigree') %></el-button>
         </div>-->
@@ -638,8 +638,8 @@
                               <!--<li><img width="90" :src="lit.oneParent.imgI7[lit.oneParent.cover].imageSrc" alt=""></li>-->
                               <li>
                                 <!--<i class="" :class="[lit.oneParent.gender === 'dam' ? 'el-icon-female' : '', 'el-icon-male']"></i>-->
-                                <div class="flex justify-content-between" >
-                                 <span> <%= __('Gender') %></span><span>{{lit.oneParent.gender}}</span>
+                                <div class="flex justify-content-between">
+                                  <span> <%= __('Gender') %></span><span>{{lit.oneParent.gender}}</span>
                                 </div>
                               </li>
                               <li>
@@ -699,6 +699,23 @@
 
                     <div class="flex justify-content-between" v-for="(ch, ind) of lit.litter">
                       <el-avatar :size="50" :src="ch.imgI7[ch.cover].imageSrc"></el-avatar>
+                      <div v-if="ch.sale" class="pt-2">
+                        <el-popover
+                          placement="top"
+                          width="290"
+                          trigger="hover"
+                        >
+
+                          <div class="alert alert-warning" role="alert">
+                            <div class="flex justify-content-between ">
+                              <h3><%= __('For sale') %>!</h3>
+                              <h3>{{ch.currency | getCurrency()}} {{ch.price}}</h3>
+                            </div>
+                          </div>
+                          <el-button slot="reference" @click="goTo('dogs/chinese-crested/sale')" type="warning"
+                                     icon="el-icon-money" circle></el-button>
+                        </el-popover>
+                      </div>
                       <div class="alert" :class="[ch.gender==='dam' ? 'alert-success' : '',  'alert-primary']"
                            role="alert">
                         <el-popover
@@ -707,28 +724,38 @@
                           trigger="hover">
                           <ul>
                             <li><strong><%= __('Descendant') %></strong></li>
-                            <li v-if="ch.sale"><%= __('For sale') %>!</li>
+                            <!--<li v-if="ch.sale"><%= __('For sale') %>!</li>-->
                             <li><img width="90" :src="ch.imgI7[ch.cover].imageSrc" alt=""></li>
                             <li>
                               <!--<i class="" :class="[ch.gender === 'dam' ? 'el-icon-female' : '', 'el-icon-male']"></i>-->
 
-                              <div class="flex justify-content-between" >
+                              <div class="flex justify-content-between">
                                 <span> <%= __('Gender') %></span><span>{{ch.gender}}</span>
                               </div>
                             </li>
 
-                            <li v-if="ch.color"><div class="flex justify-content-between" >
-                                <span><%= __('Color') %> </span><span>{{ch.color}}</span></div></li>
-                            <li v-if="ch.width"><div class="flex justify-content-between" >
-                                <span>Вес </span><span>{{ch.weight}}</span></div></li>
-                            <li v-if="ch.growth"><div class="flex justify-content-between" >
-                                <span>Рост </span><span>{{ch.growth}}</span></div></li>
+                            <li v-if="ch.color">
+                              <div class="flex justify-content-between">
+                                <span><%= __('Color') %> </span><span>{{ch.color}}</span></div>
+                            </li>
+                            <li v-if="ch.width">
+                              <div class="flex justify-content-between">
+                                <span>Вес </span><span>{{ch.weight}}</span></div>
+                            </li>
+                            <li v-if="ch.growth">
+                              <div class="flex justify-content-between">
+                                <span>Рост </span><span>{{ch.growth}}</span></div>
+                            </li>
                             <div v-if="ch.showTeeth">
-                              <li v-if="ch.canine"><div class="flex justify-content-between" >
-                                  <span>Клыки</span><span>{{ch.canine}}</span></div></li>
+                              <li v-if="ch.canine">
+                                <div class="flex justify-content-between">
+                                  <span>Клыки</span><span>{{ch.canine}}</span></div>
+                              </li>
                               <!--<li v-if="ch.teethCount"><%= __('Bite') %>: {{ch.bite}}</li>-->
-                              <li v-if="ch.teethCount"><div class="flex justify-content-between" >
-                                  <span><%= __('Teeth') %></span><span> {{ch.teethCount}}</span></div></li>
+                              <li v-if="ch.teethCount">
+                                <div class="flex justify-content-between">
+                                  <span><%= __('Teeth') %></span><span> {{ch.teethCount}}</span></div>
+                              </li>
                             </div>
                           </ul>
                           <a slot="reference" :href="ch.detail" style="color: #5a6268"> {{ch.fullName}}</a>
