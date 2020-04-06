@@ -507,16 +507,19 @@
             </div>
             <div class="menu-between-v">
               <div class="menu-between">
-                <span><%= __('DoB') %>:</span> <span>{{dog.dateBirth | getCreate(me.preferredLocale)}}</span>
+                <span><%= __('DoB') %></span> <span>{{dog.dateBirth | getCreate(me.preferredLocale)}}</span>
+              </div>
+              <div v-if="dog.dateDeath" class="menu-between">
+                <span><%= __('DoD') %></span> <span>{{dog.dateDeath | getCreate(me.preferredLocale)}}</span>
               </div>
               <div class="menu-between" v-if="dog.color">
-                <span><%= __('Color') %>:</span> <span> {{dog.color}}</span>
+                <span><%= __('Color') %></span> <span> {{dog.color}}</span>
               </div>
               <div class="menu-between" v-if="dog.type">
-                <span><%= __('Variety') %>:</span> <span>{{dog.type}}</span>
+                <span><%= __('Variety') %></span> <span>{{dog.type}}</span>
               </div>
               <div class="menu-between" v-if="dog.growth">
-                <span><%= __('Size') %>: </span> <span>{{dog.growth}}<%= __('cm') %>
+                <span><%= __('Size') %> </span> <span>{{dog.growth}}<%= __('cm') %>
                   ({{dog.growth | getDin}}") / {{dog.weight/1000}}<%= __('kg') %> ({{dog.weight | getFunt}}#)</span>
               </div>
             </div>
