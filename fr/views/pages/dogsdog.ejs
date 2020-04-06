@@ -722,10 +722,10 @@
                           placement="top-start"
                           width="200"
                           trigger="hover">
-                          <ul>
+                          <ul :style="{ overflow: 'hidden', padding: '15px', border: ch.dateDeath ? '1px solid #3b3b3b' : 'none'}">
                             <li><strong><%= __('Descendant') %></strong></li>
                             <!--<li v-if="ch.sale"><%= __('For sale') %>!</li>-->
-                            <li><img width="90" :src="ch.imgI7[ch.cover].imageSrc" alt=""></li>
+                            <li><img width="142" :src="ch.imgI7[ch.cover].imageSrc" alt=""></li>
                             <li>
                               <!--<i class="" :class="[ch.gender === 'dam' ? 'el-icon-female' : '', 'el-icon-male']"></i>-->
 
@@ -738,7 +738,7 @@
                               <div class="flex justify-content-between">
                                 <span><%= __('Color') %> </span><span>{{ch.color}}</span></div>
                             </li>
-                            <li v-if="ch.width">
+                            <li v-if="ch.weight">
                               <div class="flex justify-content-between">
                                 <span>Вес </span><span>{{ch.weight}}</span></div>
                             </li>
