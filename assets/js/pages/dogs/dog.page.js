@@ -179,29 +179,16 @@ parasails.registerPage('dog', {
      * @param dateDeath
      * @returns {*}
      */
-    getAge: function (value, l, format, dateDeath) {
+    getAge: function (value, l,  dateDeath) {
       if (!value) {
         return '';
       }
-      moment.locale(l);
-      let formatNew = (!format) ? 'LLL' : format;
-      let start = moment(value);
+      moment.locale('LLL');
       let end = !_.isEmpty(dateDeath) ? moment(dateDeath) : '';
-      // return end ? end.from(start, true) : moment(value).fromNow(true);
-
-
       let now = moment.parseZone();
-      /*  let event = moment.parseZone(value, ["DD.MM.YYYY"]);
-         let a=moment.preciseDiff(now, event);
-        console.log('now: ', now);
-        console.log('EVENT: ', event);
-        console.log('a: ', a);*/
-      // (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
-
       return end ? moment(value).preciseDiff(end) : moment(value).preciseDiff(now);
-
-
     },
+
     // Получить значёк валюты
     getCurrency: function (value) {
       if (!value) {
