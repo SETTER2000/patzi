@@ -245,6 +245,11 @@ parasails.registerPage('kennel', {
       if (!nameDog) return;
       return `/chinese-crested/${nameDog.split(" ").join('-')}`;
     },
-
+  /*  goTo(path) {
+      window.location = `/${path}`;
+    },
+    goTo2(path) {
+      this.goto(path);
+    },*/
   }
 });

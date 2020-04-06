@@ -8,13 +8,23 @@ parasails.registerPage('dogs-home', {
     // addTitleDog: false,
     searchObjects: '',
     ranks: [{
-      id:'1',
+      id: '1',
       label: 'Russian Junior Champion',
       abbr: 'RUSJCH',
       labelRu: 'Юный чемпион России',
       value: 1
-    }, {id:'2',label: 'Hungarian Junior Champion', abbr: 'HJCH', labelRu: 'Юный чемпион Болгарии', value: 2}],
+    }, {id: '2', label: 'Hungarian Junior Champion', abbr: 'HJCH', labelRu: 'Юный чемпион Болгарии', value: 2}],
     filterDogs: [],
+    federations: _.sortBy([
+      'FCI',
+      'RKF',
+      'BCU',
+      'UKU',
+      'IKC',
+      'VDH',
+      'KCG',
+      'PKR',
+    ]),
     filterName: '',
     dogsEditList: [],
     isOwner: false,
@@ -438,7 +448,7 @@ parasails.registerPage('dogs-home', {
         return new Map(this.dic).get(this.me.preferredLocale);
       }
     },
-    titleAdd:{
+    titleAdd: {
       get: function () {
         return !this.buttonUpdate ? this.i19p.addDogTitles : this.i19p.editDogTitles;
       }
@@ -1440,12 +1450,12 @@ parasails.registerPage('dogs-home', {
         this.isOwner ? this.dogs.filter(dog => _.isObject(dog.kennel) ? (dog.kennel.breeder === this.me.id) : false) : [];
 
       let ownerDogs = (this.me.isAdmin || this.me.isSuperAdmin) ? this.dogs :
-        this.isOwner ? this.dogs.filter(dog => _.isArray(dog.owners) ? (_.some(dog.owners,{id: this.me.id}) && dog.allowEdit): false) : [];
+        this.isOwner ? this.dogs.filter(dog => _.isArray(dog.owners) ? (_.some(dog.owners, {id: this.me.id}) && dog.allowEdit) : false) : [];
 
 
-      this.dogsEditList = _.uniq([...breederDogs, ...ownerDogs],'fullName');
+      this.dogsEditList = _.uniq([...breederDogs, ...ownerDogs], 'fullName');
 
-      console.log(' this.dogsEditList::: ' ,  this.dogsEditList);
+      console.log(' this.dogsEditList::: ', this.dogsEditList);
       this.dialogEditorList = true;
     },
 
@@ -1468,9 +1478,9 @@ parasails.registerPage('dogs-home', {
       return '';
     },
 
-    addTitleDog(dog){
-      console.log('dog Id::; ' , dog.id);
-      console.log('dog fullName::; ' , dog.fullName);
+    addTitleDog(dog) {
+      console.log('dog Id::; ', dog.id);
+      console.log('dog fullName::; ', dog.fullName);
       this.goTo(`chinese-crested/${dog.fullName.split(" ").join('-')}/titles`);
     }
   }
