@@ -22,9 +22,9 @@ parasails.registerPage('dog', {
     dialog: {},
     innerVisible: false,
     photoVisible: false,
-    circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-    squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
-    sizeList: ["large", "medium", "small"],
+    circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+    squareUrl: 'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png',
+    sizeList: ['large', 'medium', 'small'],
     ruleForm: {
       id: '',
       dateReceiving: '',
@@ -261,9 +261,10 @@ parasails.registerPage('dog', {
     },
     letters: {
       get: function () {
-        let alphabet = [...new Set('ABCDEFGHIJKLMNOPQRSTUVWXYZ')]
-          , ar = []
-        ;
+        let alphabet = [...new Set('ABCDEFGHIJKLMNOPQRSTUVWXYZ')];
+
+
+        let ar = [];
         alphabet.map(y => y === y ? ar.push({value: y, label: y}) : '');
         return ar;
       }
@@ -338,7 +339,7 @@ parasails.registerPage('dog', {
       return true;
     },
     clickPedigree() {
-      this.goto(`/litter/${this.dog.letter}/${moment(this.dog.dateBirth).format("YYYY")}/pedigree`);
+      this.goto(`/litter/${this.dog.letter}/${moment(this.dog.dateBirth).format('YYYY')}/pedigree`);
     },
     clickShowPhoto(row) {
       this.photoVisible = true;
@@ -358,7 +359,7 @@ parasails.registerPage('dog', {
     },
 
     getLinkKennel(kennelName) {
-      return kennelName ? `/kennel/${kennelName.split(" ").join('-')}` : ''
+      return kennelName ? `/kennel/${kennelName.split(' ').join('-')}` : '';
     },
 
     // Если массив kennel пустой, выводим сообщение.
@@ -604,7 +605,7 @@ parasails.registerPage('dog', {
     },
 
     name(name, hash) {
-      return hash ? `${name.split(" ").join('-')}/${hash}` : `chinese-crested/${name.split(" ").join('-')}`;
+      return hash ? `${name.split(' ').join('-')}/${hash}` : `chinese-crested/${name.split(' ').join('-')}`;
     },
 
     getFullNameLink(name, b = '') {
@@ -637,20 +638,20 @@ parasails.registerPage('dog', {
 
       bdt = _.map(bdt, dt => {
         moment.locale(this.me.preferredLocale);
-        return  moment.parseZone(dt).format("L");
+        return moment.parseZone(dt).format('L');
       });
       this.childrens.map(child => {
-        child.dBirth = moment(child.dateBirth).format("L");
+        child.dBirth = moment(child.dateBirth).format('L');
         return child;
       });
 
       bdt = _.uniq(bdt);
-console.log('BDT:: ' , bdt);
+      console.log('BDT:: ', bdt);
       let u = [];
       _.each(bdt, dt => {
         let ltr = {};
         let lit = _.filter(this.childrens, {'dBirth': dt});
-        console.log('LIT::: ' , lit);
+        console.log('LIT::: ', lit);
         ltr.fullName = lit[0][gender].fullName;
         ltr.oneParent = lit[0][gender];
         ltr.gender = gender;
@@ -661,5 +662,6 @@ console.log('BDT:: ' , bdt);
       });
       this.dog = Object.assign({}, this.dog, {litter: u});
     },
+
   }
 });
