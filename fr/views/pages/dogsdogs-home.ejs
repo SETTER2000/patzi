@@ -75,16 +75,17 @@
           </template>
           <template slot-scope="scope">
             <% /* ДОБАВИТЬ ТИТУЛЫ */ %>
-          <!--  <el-row class="my-4">
-              <el-button v-if="buttonUpdate" type="primary" @click="addTitleDog(ruleForm)" round>{{titleAdd}}</el-button>
-            </el-row>-->
+            <!--  <el-row class="my-4">
+                <el-button v-if="buttonUpdate" type="primary" @click="addTitleDog(ruleForm)" round>{{titleAdd}}</el-button>
+              </el-row>-->
             <el-tooltip :content="titleAdd" placement="top" effect="light">
               <el-button
                 size="mini"
                 icon="el-icon-trophy"
                 @click="addTitleDog(scope.row)">
               </el-button>
-            </el-tooltip>    <el-tooltip content="<%= __('Image editor') %>" placement="top" effect="light">
+            </el-tooltip>
+            <el-tooltip content="<%= __('Image editor') %>" placement="top" effect="light">
               <el-button
                 v-if="scope.row.images"
                 size="mini"
@@ -117,7 +118,8 @@
                        icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
         </div>
         <div>
-            <el-button @click="buttonUpdate = false; dialogEditorList = false" class="btn btn-outline-info"><%= __('Close') %></el-button>
+            <el-button @click="buttonUpdate = false; dialogEditorList = false"
+                       class="btn btn-outline-info"><%= __('Close') %></el-button>
         </div>
       </span>
     </span>
@@ -351,13 +353,7 @@
                           class="input-with-select">
 
                   <el-select v-model="federation.value" slot="prepend" class="wds" placeholder="Select">
-                    <el-option label="FCI" value="1"></el-option>
-                    <el-option label="RKF" value="2"></el-option>
-                    <el-option label="BCU" value="3"></el-option>
-                    <el-option label="UKU" value="4"></el-option>
-                    <el-option label="IKC" value="5"></el-option>
-                    <el-option label="VDH" value="6"></el-option>
-                    <el-option label="KCG" value="7"></el-option>
+                    <el-option v-for="(federation, ind) of federations" :label="federation" :value="ind" :key="'index'+ind"></el-option>
                   </el-select>
                   <el-button slot="append" @click="copyElement" icon="el-icon-copy-document"></el-button>
                   <el-button slot="append" @click.prevent="removeElement(federation)"
@@ -373,8 +369,9 @@
                   <el-input minlength="3" maxlength="20" show-word-limit
                             placeholder="<%= __('Affectionate name') %>"
                             v-model="ruleForm.nickname"></el-input>
-
                 </el-col>
+
+
                 <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
                   <el-tooltip effect="dark"
                               content="<%= __("How do you call the house, a nickname, affectionate name") %>"
@@ -505,7 +502,8 @@
                         :value="item.value">
                       </el-option>
                     </el-select>
-                    <el-button class="not-border" icon="el-icon-warning-outline" size="mini" v-popover:popover2 circle></el-button>
+                    <el-button class="not-border" icon="el-icon-warning-outline" size="mini" v-popover:popover2
+                               circle></el-button>
                   </el-col>
                   <el-popover
                     ref="popover2"
@@ -571,8 +569,10 @@
               <!-- `checked` should be true or false -->
 
               <el-checkbox v-model="ruleForm.showTeeth">
-                <span :class="[ruleForm.showTeeth ? 'text-success' : '', 'text-secondary']"><%= __('Show teeth') %></span>
-                | <span :class="[!ruleForm.showTeeth ? 'text-success' : '', 'text-secondary']"><%= __('Do not show teeth') %></span>
+                <span
+                  :class="[ruleForm.showTeeth ? 'text-success' : '', 'text-secondary']"><%= __('Show teeth') %></span>
+                | <span
+                  :class="[!ruleForm.showTeeth ? 'text-success' : '', 'text-secondary']"><%= __('Do not show teeth') %></span>
               </el-checkbox>
             </template>
             <% /* ПРИКУС */ %>
@@ -660,7 +660,8 @@
                       show-input>
                     </el-slider>
                     <el-input-number class="text-center hidden-sm-and-up"
-                                     :min="0" :max="6" size="mini" v-model="ruleForm.teethCountBottom"></el-input-number>
+                                     :min="0" :max="6" size="mini"
+                                     v-model="ruleForm.teethCountBottom"></el-input-number>
                   </el-col>
                   <!--   <el-col :xs="4" :sm="3" :md="3" :lg="3" :xl="2">
                     <el-tooltip effect="dark" content="<%= __("How to measure a dog's height?") %>"
@@ -912,10 +913,8 @@
 
             </template>
 
-
-
             <% /* ЗВАНИЯ */ %>
-     <!--       <el-form-item
+            <!--       <el-form-item
               v-for="(federation, index) in ruleForm.federations"
               :label="'№ ' + index"
               :key="federation.key"
@@ -1024,7 +1023,7 @@
   </el-dialog>
 
   <% /* Диалоговое окно. Редактор титулов собак. */ %>
-<!--  <el-dialog
+  <!--  <el-dialog
           width="100%"
           :title="titleAdd"
           :visible.sync="addTitleDog"
@@ -1145,7 +1144,8 @@
                   </el-link>
                 </el-col>
                 <el-col :span="13">
-                  <el-link :underline="false" type="danger"> {{img.dateTaken | getCreate(me.preferredLocale, 'lll')}}</el-link>
+                  <el-link :underline="false" type="danger"> {{img.dateTaken | getCreate(me.preferredLocale, 'lll')}}
+                  </el-link>
                 </el-col>
               </el-row>
               <el-row :gutter="2">
@@ -1306,13 +1306,15 @@
     :before-close="handlerCloseDialogSlider"
     v-if="virtualPageSlug==='sale'"
   >
-    <section class="skrollable skrollable-between u-align-center u-clearfix u-image u-shading u-video-cover u-section-1" id="sec-8a77">
+    <section class="skrollable skrollable-between u-align-center u-clearfix u-image u-shading u-video-cover u-section-1"
+             id="sec-8a77">
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
         <h1 class="u-text u-text-1" data-animation-name="fadeIn" data-animation-duration="1000"
             data-animation-delay="0"><%= __('Buy puppy chinese crested') %>
           <br>
         </h1>
-        <h2 class="u-text u-text-2" data-animation-name="bounceIn" data-animation-duration="1000" data-animation-delay="0"
+        <h2 class="u-text u-text-2" data-animation-name="bounceIn" data-animation-duration="1000"
+            data-animation-delay="0"
             data-animation-direction=""><%= __('Your Eternal Companion') %></h2>
         <p class="u-text u-text-3" data-animation-name="pulse" data-animation-duration="1000" data-animation-delay="0"
            data-animation-direction=""><%= __('This page contains all the puppies and dogs that the kennel currently sells. You can contact us in any way convenient for you. All prices are preliminary and can be changed individually during communication.') %></p>
@@ -1332,7 +1334,9 @@
           <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
             <div class="u-gutter-0 u-layout">
               <div class="u-layout-row">
-                <div class="u-align-left u-container-style u-layout-cell u-left-cell u-size-20 u-size-20-md u-layout-cell-1" src="">
+                <div
+                  class="u-align-left u-container-style u-layout-cell u-left-cell u-size-20 u-size-20-md u-layout-cell-1"
+                  src="">
                   <div class="u-container-layout u-container-layout-1" src="">
                     <el-image
                       :src="o.images[o.cover].imageSrc"
@@ -1349,16 +1353,19 @@
                       <el-link :underline="false" :href="o.detail" type="primary">{{o.fullName}}</el-link>
                     </h2>
                     <p class="u-align-center u-text u-text-4">{{o.saleDescription}}</p>
-                    <p class="u-align-center u-text u-text-5"><%= __('Dob') %>: {{ o.dateBirth | getCreate(me.preferredLocale,'L') }}</p>
+                    <p class="u-align-center u-text u-text-5"><%= __('Dob') %>: {{ o.dateBirth |
+                      getCreate(me.preferredLocale,'L') }}</p>
                     <span class="u-icon u-icon-circle u-text-palette-1-base u-icon-1">
                   <el-tooltip content="<%= __('Start negotiations') %>" placement="bottom" effect="light">
                     <el-button type="text" @click="openDialogNegotiations(o.fullName)" class="button">
                     <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 512 512" style=""><use
                         xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-7fdd"></use></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-7fdd" x="0px"
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                         id="svg-7fdd" x="0px"
                          y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"
-                         class="u-svg-content"><circle style="fill:#FAD24D;" cx="256" cy="256" r="256"></circle><path style="fill:#FF5B62;"
-                                                                                                                      d="M219.236,194.345c-67.632,0-122.458,47.87-122.458,106.922c0,30.194,14.338,57.462,37.389,76.905  c-27.89,23.219-55.089,21.205-55.089,21.205c25.753,20.079,67.299,9.911,92.843,0.536c14.557,5.331,30.541,8.277,47.316,8.277  c67.632,0,122.458-47.87,122.458-106.922S286.869,194.345,219.236,194.345z"></path><path
+                         class="u-svg-content"><circle style="fill:#FAD24D;" cx="256" cy="256" r="256"></circle><path
+                        style="fill:#FF5B62;"
+                        d="M219.236,194.345c-67.632,0-122.458,47.87-122.458,106.922c0,30.194,14.338,57.462,37.389,76.905  c-27.89,23.219-55.089,21.205-55.089,21.205c25.753,20.079,67.299,9.911,92.843,0.536c14.557,5.331,30.541,8.277,47.316,8.277  c67.632,0,122.458-47.87,122.458-106.922S286.869,194.345,219.236,194.345z"></path><path
                         style="fill:#ED4C54;"
                         d="M219.236,194.345c-11.516,0-22.658,1.391-33.224,3.985c14.118,45.438,61.678,78.86,118.187,78.86  c11.516,0,22.659-1.389,33.224-3.985C323.306,227.766,275.745,194.345,219.236,194.345z"></path><path
                         style="fill:#21D0C3;"
@@ -1395,7 +1402,9 @@
       <section class="u-align-center u-clearfix u-grey-5 u-section-5" id="sec-cabe">
         <div class="u-clearfix u-sheet u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-sheet-1">
           <h2 class="u-text u-text-1"><%= __('We are here') %></h2>
-          <p class="u-text u-text-2"><%= __('A more detailed place is the position when verbally coordinating the meeting') %>.</p>
+          <p
+            class="u-text u-text-2"><%= __('A more detailed place is the position when verbally coordinating the meeting') %>
+            .</p>
           <div class="u-align-left u-expanded-width u-grey-10 u-map u-map-1">
             <div class="embed-responsive">
               <iframe class="embed-responsive-item"
@@ -1405,7 +1414,8 @@
           </div>
         </div>
       </section>
-      <section class="u-align-center u-clearfix u-image u-section-6" id="sec-dcba" data-image-width="150" data-image-height="112">
+      <section class="u-align-center u-clearfix u-image u-section-6" id="sec-dcba" data-image-width="150"
+               data-image-height="112">
         <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
           <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
             <div class="u-layout">
@@ -1416,7 +1426,8 @@
                   </div>
                 </div>
                 <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-36 u-layout-cell-2">
-                  <div class="u-container-layout u-valign-middle-lg u-valign-middle-md u-valign-middle-xl u-container-layout-2">
+                  <div
+                    class="u-container-layout u-valign-middle-lg u-valign-middle-md u-valign-middle-xl u-container-layout-2">
                     <p class="u-text u-text-palette-4-base u-text-2">
                       <br>
                       <br><%= __('Puppy show') %>.
@@ -1691,7 +1702,8 @@
                 <%= __('For Sale') %>
               </el-dropdown-item>
 
-              <el-dropdown-item v-if="me.isSuperAdmin || me.isAdmin || isOwner" icon="el-icon-edit" :command="{com:'e'}">
+              <el-dropdown-item v-if="me.isSuperAdmin || me.isAdmin || isOwner" icon="el-icon-edit"
+                                :command="{com:'e'}">
                 <%= __('Dog editor') %>
               </el-dropdown-item>
 
@@ -1741,7 +1753,8 @@
                  style="position: relative;" class="ell-image-flex"
                  v-if="!_.isEmpty(dog.imagesArrUrl)">
               <transition-group appear name="el-fade-in">
-                <div v-show="show && (showDog === dog.id)" class="transition-box blue-dark" :class="{death:dog.dateDeath}" :key="dog.id">
+                <div v-show="show && (showDog === dog.id)" class="transition-box blue-dark"
+                     :class="{death:dog.dateDeath}" :key="dog.id">
                   <% /* Кнопки управления собакой */ %>
                   <div class="menu-center-v">
                     <div class="py-4">
@@ -1749,13 +1762,15 @@
 
                         <div :class="{deathColor:dog.dateDeath}"> {{dog.fullName}}</div>
 
-                        <div class="date" :class="{deathColor:dog.dateDeath}">{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}
+                        <div class="date" :class="{deathColor:dog.dateDeath}">{{dog.dateBirth |
+                          getAge(me.preferredLocale, dog.dateDeath)}}
                         </div>
                       </el-link>
                       <el-row class="mt-2">
                         <!--<el-button icon="el-icon-search" circle></el-button>-->
                         <!--<el-button type="primary" icon="el-icon-picture" circle></el-button>-->
-                        <el-button v-if="dog.price>0 & dog.sale" @click="goTo2('/dogs/chinese-crested/sale')" type="success" round>
+                        <el-button v-if="dog.price>0 & dog.sale" @click="goTo2('/dogs/chinese-crested/sale')"
+                                   type="success" round>
                           <%= __('For sale') %></el-button>
                         <!--<el-button type="info" icon="el-icon-message" circle></el-button>-->
                         <!--<el-button type="warning" icon="el-icon-star-off" circle></el-button>-->
