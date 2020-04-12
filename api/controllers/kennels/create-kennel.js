@@ -19,7 +19,7 @@ module.exports = {
     registerNumber: {
       type: 'string',
       required: true,
-      description: 'Регистрационный номаер.'
+      description: 'Регистрационный номер.'
     },
     dateCreate: {
       type: 'string',
