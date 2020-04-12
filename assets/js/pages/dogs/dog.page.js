@@ -194,10 +194,10 @@ parasails.registerPage('dog', {
       if (!value) {
         return '';
       }
-
       return (value === 'dollar') ? '$' :
         (value === 'euro') ? '€' : '₽';
     },
+
     // Получить ссылку на аватар или граватар
     getFoto: function (value) {
       if (!value) {
