@@ -195,7 +195,6 @@ parasails.registerPage('dog', {
         return '';
       }
       return (value === 'dollar') ? '$' :
-
         (value === 'euro') ? '€' : '₽';
     },
     // Получить ссылку на аватар или граватар
