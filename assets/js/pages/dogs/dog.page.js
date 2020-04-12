@@ -194,6 +194,7 @@ parasails.registerPage('dog', {
       if (!value) {
         return '';
       }
+
       return (value === 'dollar') ? '$' :
         (value === 'euro') ? '€' : '₽';
     },
