@@ -4,6 +4,7 @@
     <option name="compactDropdowns" value="true" />
     <option name="compactSidebar" value="true" />
     <option name="highlightColorEnabled" value="true" />
+    <option name="isCompactMenus" value="true" />
     <option name="isCompactStatusBar" value="true" />
     <option name="isCompactTables" value="true" />
     <option name="isCustomTreeIndentEnabled" value="true" />
@@ -12,10 +13,11 @@
     <option name="pristineConfig" value="false" />
     <option name="treeFontSizeEnabled" value="true" />
     <option name="tabFontSizeEnabled" value="true" />
-    <option name="customSidebarHeight" value="22" />
-    <option name="treeFontSize" value="19" />
+    <option name="customSidebarHeight" value="20" />
+    <option name="treeFontSize" value="18" />
     <option name="tabFontSize" value="18" />
     <option name="rightTreeIndent" value="6" />
+    <option name="settingsSelectedTab" value="3" />
     <option name="tabsHeight" value="10" />
     <option name="accentColor" value="61cee9" />
     <option name="highlightColor" value="19b844" />
