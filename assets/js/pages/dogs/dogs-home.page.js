@@ -641,6 +641,7 @@ parasails.registerPage('dogs-home', {
 
     // Update
     async updateDog() {
+      console.log('DATA перед онвертацией в строку и  отправкой::: ', typeof this.dateBirthUpdate);
       this.openFullScreen();
       let data = {
         id: this.ruleForm.id,
@@ -679,6 +680,7 @@ parasails.registerPage('dogs-home', {
       };
       // console.log('DATA перед отправкой::: ', data);
 
+      console.log('DATA перед отправкой::: ', typeof data.dateBirth);
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :

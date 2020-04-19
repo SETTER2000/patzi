@@ -91,7 +91,7 @@ module.exports = {
 
 
     dateBirth: {
-      type: 'string',
+      type: 'ref',
       required: true,
       description: 'Дата рождения.'
     },
@@ -217,7 +217,7 @@ module.exports = {
     titleDog: {
       type: 'ref',
       defaultsTo: [],
-      example: [{},{}],
+      example: [{}, {}],
       description: `FD загруженных фотографий родителей`
     },
 
@@ -305,6 +305,50 @@ module.exports = {
 
 
   },
+  // получить всех братьев и сестёр
+  siblings: async function (opts) {
+    const moment = require('moment');
+    const db = sails.getDatastore('mongodb').manager;
+    // let dog = Dog.getDatastore('mongodb').manager;
 
+    // Теперь мы можем делать все, что можем, с экземпляром Mongodb в данном примере коллекция Dog вернётся.
+    // Тип данных Cursor (mongodb):
+    const rawMongoCollection = db.collection(Dog.tableName);
+
+    // let rr = rawMongoCollection.find({growth: {$gt: 31}}).count();
+    // let max = rawMongoCollection.aggregate([{$group: {_id: "Dog", total_birthday: {$min: "$dateBirth"}}}]).toArray();
+    rawMongoCollection.find().forEach(function (hab) {
+      console.log('dateBirth type: ', typeof hab.dateBirth);
+      console.log('dateBirth : ',  hab.dateBirth);
+      console.log('fullName: ',  hab.fullName);
+      console.log('*********************');
+      // hab.dateBirth = new Date(hab.dateBirth);
+      // console.log('hab.dateBirth:::: ',hab.dateBirth);
+      // rawMongoCollection.save(hab);
+    });
+
+
+    /*let siblings = rawMongoCollection.aggregate([{
+      $group: {
+        _id: {
+          year: {$year: "$dateBirth"},
+          day: {$dayOfMonth: "$dateBirth"},
+          month: {$month: "$dateBirth"}
+        }, siblings: {$push: {fullName: "$fullName", id: "$_id"}}
+      }
+    }]).toArray();*/
+
+
+    /* if (!person) {
+       throw require('flaverr')({
+         message: `Cannot find monkeys with the same name as the person w/ id=${opts.id} because that person does not exist.`,
+         code: 'E_UNKNOWN_PERSON'
+       });
+     }*/
+
+    return siblings;
+    // return await Monkey.find({ name: person.name });
+  }
 };
+
 

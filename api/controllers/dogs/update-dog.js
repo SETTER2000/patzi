@@ -297,7 +297,8 @@ module.exports = {
       currency: inputs.currency,
       price: inputs.price,
       saleDescription: inputs.saleDescription,
-      dateBirth: await sails.helpers.dateFix(inputs.dateBirth),
+      dateBirth: await sails.helpers.dateConverter(inputs.dateBirth),
+      // dateBirth: await sails.helpers.dateFix(inputs.dateBirth),
       dateDeath: await sails.helpers.dateFix(inputs.dateDeath),
       dateReceiving: await sails.helpers.dateFix(inputs.dateReceiving),
       nickname: inputs.nickname,
@@ -398,6 +399,9 @@ module.exports = {
      */
     // await User.addToCollection(owner, 'dogs', newDog.id);
     await Dog.replaceCollection(updateDog.id, 'owners').members(owner);
+
+    let siblings = await Dog.siblings({id: 1});
+    console.log('БРАТЬЯ И СЕСТРЫ::: ', siblings);
     let year = _.trim(inputs.dateBirth.split('-')[0], '"');
     // Рассылаем данные всем подписанным на событие forSale-dog данной комнаты.
     await sails.sockets.broadcast('dog', 'forSale-dog', await sails.helpers.forSaleDog.with({

@@ -10,6 +10,7 @@ parasails.registerPage('dog', {
     titles: [],
     childrens: [],
     drawer: false,
+    siblings: false,
     titlesDog: [],
     obj: {},
     direction: 'ttb',
@@ -158,6 +159,7 @@ parasails.registerPage('dog', {
 
   mounted: async function () {
     this.getChildren();
+    // this.getSiblings();
   },
 
 
@@ -179,7 +181,7 @@ parasails.registerPage('dog', {
      * @param dateDeath
      * @returns {*}
      */
-    getAge: function (value, l,  dateDeath) {
+    getAge: function (value, l, dateDeath) {
       if (!value) {
         return '';
       }
@@ -494,12 +496,14 @@ parasails.registerPage('dog', {
       console.log('titleDog.fileList.photos:: ', this.ruleForm.titleDog);
       let data = {
         id: this.dog.id,
-        dateBirth: this.dog.dateBirth,
+        // dateBirth: this.dog.dateBirth.toISOString() + this.dog.dateBirth.getTimezoneOffset(),
+        dateBirth: JSON.stringify(this.dog.dateBirth),
+
         label: this.dog.label,
         gender: this.dog.gender,
         titleDog: this.ruleForm, // добавляем титул
       };
-      console.log('DATA перед отправкой::: ', data);
+      console.log('DATA перед отправкой::: ', typeof data.dateBirth);
 
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
@@ -610,6 +614,11 @@ parasails.registerPage('dog', {
     ww(titleId) {
       return _.last(_.pluck(_.filter(this.titles, {'id': titleId}), 'label')) === 'WW';
     },
+   /* getSiblings() {
+      io.socket.get('/api/v1/dogs/list', function gop(cashier,data) {
+        console.log('ERRRR:: ', data);
+      });
+    },*/
 
     getChildren() {
       let gender = this.dog.gender === 'dam' ? 'sire' : 'dam';

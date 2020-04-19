@@ -29,7 +29,11 @@ module.exports = {
     const moment = require('moment');
     const url = require('url');
     let req = this.req;
+    //  var flaverr = require('flaverr');
 
+
+    var monkeys = await Dog.siblings({id:'5e4d91d17cee89222cfd12ce'});
+console.log('dfff:: '  , monkeys);
 
     let fullName = _.startCase(inputs.fullName);
     let dog = await Dog.findOne({'fullName': fullName})
@@ -286,6 +290,15 @@ module.exports = {
       // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
       return dog;
     });
+/*
+    let usersNamedFinn = await Dog.find()
+      .populate('parents', {
+        where: {
+          fullName: 'Sasquehanna Piaff'
+        }
+      });
+    console.log('usersNamedFinn::', usersNamedFinn);*/
+
 
     // подготавливаем массив фото собаки для просмотра в слайдере
     dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc');
