@@ -1,0 +1,15 @@
+<application>
+  <component name="MaterialThemeConfig">
+    <option name="compactSidebar" value="true" />
+    <option name="isStyledDirectories" value="true" />
+    <option name="isWizardShown" value="true" />
+    <option name="pristineConfig" value="false" />
+    <option name="treeFontSizeEnabled" value="true" />
+    <option name="tabFontSizeEnabled" value="true" />
+    <option name="customSidebarHeight" value="26" />
+    <option name="treeFontSize" value="17" />
+    <option name="tabFontSize" value="24" />
+    <option name="userId" value="-70f58b9d:17193f87ca5:-7ffc" />
+    <option name="version" value="4.5.2" />
+  </component>
+</application>
