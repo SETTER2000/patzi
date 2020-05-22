@@ -1258,25 +1258,6 @@
         <div class="grid-content bg-purple"></div>
       </el-col>
       <el-col :span="18">
-        <div class="grid-content bg-purple-light">
-          <h4><%= __('Welcome') %>, {{me.fullName}}!</h4>
-          <p>{{i19p.startOfNegotiations}} {{fullNameDogNegotiations}}.</p>
-          <p>{{i19p.startOfNegotiations2}}</p>
-
-        </div>
-      </el-col>
-      <el-col :span="1">
-        <div class="grid-content bg-purple"></div>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="1"></el-col>
-      <el-col :span="18">
-        <el-progress type="dashboard" :percentage="percentage" :color="colors2"></el-progress>
-        <img  id="play" ref="play"  />
-        <div id="logger"></div>
-        <video controls src="" ref="video"   poster="/images/default-image.jpg" style="width:460px; height: 280px;" autoplay="true"></video>
-        <canvas ref="canvas"  width=460" height="280"></canvas>
         <el-popover
                 placement="top-start"
                 title="Title"
@@ -1288,6 +1269,26 @@
 
         </el-popover>
         <el-button   @click="stopStream()" type="danger" icon="el-icon-close" circle></el-button>
+        <!--   <div class="grid-content bg-purple-light">
+       <h4><%= __('Welcome') %>, {{me.fullName}}!</h4>
+          <p>{{i19p.startOfNegotiations}} {{fullNameDogNegotiations}}.</p>
+          <p>{{i19p.startOfNegotiations2}}</p>
+
+        </div>-->
+      </el-col>
+      <el-col :span="1">
+        <div class="grid-content bg-purple"></div>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="1"></el-col>
+      <el-col :span="18">
+<!--        <el-progress type="dashboard" :percentage="percentage" :color="colors2"></el-progress>-->
+        <img  id="play" ref="play"  />
+        <div id="logger"></div>
+        <video controls src="" ref="video"   poster="/images/default-image.jpg" style="width:460px; height: 280px;" autoplay="true"></video>
+        <canvas ref="canvas"  width=460" height="280"></canvas>
+
 
       </el-col>
       <el-col :span="1"></el-col>
