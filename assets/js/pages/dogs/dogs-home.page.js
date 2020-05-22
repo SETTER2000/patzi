@@ -17,7 +17,7 @@ parasails.registerPage('dogs-home', {
     ],
     video: {},
     str: {},
-    sr:'',
+    sr: '',
     stream: null,
     ranks: [{
       id: '1',
@@ -403,14 +403,14 @@ parasails.registerPage('dogs-home', {
     // Является ли пользователь владельцем
     this.isOwnerCheck();
 
-    io.socket.on('stream-on',(data)=>{
+    io.socket.on('stream-on', (data) => {
       // console.log('VIDOSIK::: ', data);
       // $('#play').attr('src',data);
       $('#logger').text(data);
-      console.log( 'Data',data);
+      console.log('Data', data);
       // this.$refs.logger.innerText(data)
-      this.sr=data;
-      $('#play').attr('src',data);
+      this.sr = data;
+      $('#play').attr('src', data);
       // $('#logger').text(image);
     })
 
@@ -1544,15 +1544,14 @@ parasails.registerPage('dogs-home', {
     },
 
 
+    stopStream() {
 
-     stopStream(){
-
-       this.goto('/dogs/chinese-crested');
+      this.goto('/dogs/chinese-crested');
 
     },
 
 
-     clientStream() {
+    /*clientStream() {
       this.context = this.$refs.canvas.getContext('2d');
       this.context.width = 900;
       this.context.height = 700;
@@ -1561,28 +1560,30 @@ parasails.registerPage('dogs-home', {
 
       this.video = this.$refs.video;
 
-      navigator.mediaDevices.getUserMedia({video: {
-          width: { min: 150, ideal: 1280, max: 1920 },
-          height: { min: 80, ideal: 720, max: 1080 }
-        }, audio: true}).then((stream) =>{
-          this.stream = stream;
-          this.loadCamera(stream);
-        }).catch( (err)=> {
-          let e  = err.toString().match(/'Permission denied'/) ? 'Нет подключения. Отказано в доступе к камере.' : err;
-          this.mesError(e);
-        });
-      setInterval( () => {
-         this.viewVideo(this.video, this.context, this);
+      navigator.mediaDevices.getUserMedia({
+        video: {
+          width: {min: 150, ideal: 1280, max: 1920},
+          height: {min: 80, ideal: 720, max: 1080}
+        }, audio: true
+      }).then((stream) => {
+        this.stream = stream;
+        this.loadCamera(stream);
+      }).catch((err) => {
+        let e = err.toString().match(/'Permission denied'/) ? 'Нет подключения. Отказано в доступе к камере.' : err;
+        this.mesError(e);
+      });
+      setInterval(() => {
+        this.viewVideo(this.video, this.context, this);
       }, 5);
 
     },
 
-     viewVideo(video, context, that) {
-       context.drawImage(video, 0, 0, context.width, context.height);
-       io.socket.post('/api/v1/stream', {stream: this.$refs.canvas.toDataURL('image/webp')}, (dataRes, response) => {
-       });
+    viewVideo(video, context, that) {
+      context.drawImage(video, 0, 0, context.width, context.height);
+      io.socket.post('/api/v1/stream', {stream: this.$refs.canvas.toDataURL('image/webp')}, (dataRes, response) => {
+      });
 
-    },
+    },*/
 
     increase() {
       this.percentage += 10;
