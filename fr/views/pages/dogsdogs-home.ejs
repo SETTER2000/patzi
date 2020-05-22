@@ -1260,13 +1260,37 @@
       <el-col :span="18">
         <div class="grid-content bg-purple-light">
           <h4><%= __('Welcome') %>, {{me.fullName}}!</h4>
-          <p>{{i19p.startOfNegotiations}} {{this.fullNameDogNegotiations}}.</p>
+          <p>{{i19p.startOfNegotiations}} {{fullNameDogNegotiations}}.</p>
           <p>{{i19p.startOfNegotiations2}}</p>
+
         </div>
       </el-col>
       <el-col :span="1">
         <div class="grid-content bg-purple"></div>
       </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="1"></el-col>
+      <el-col :span="18">
+        <el-progress type="dashboard" :percentage="percentage" :color="colors2"></el-progress>
+        <img  id="play" ref="play"  />
+        <div id="logger"></div>
+        <video controls src="" ref="video"   poster="/images/default-image.jpg" style="width:460px; height: 280px;" autoplay="true"></video>
+        <canvas ref="canvas"  width=460" height="280"></canvas>
+        <el-popover
+                placement="top-start"
+                title="Title"
+                width="200"
+                trigger="hover"
+                content="Включите свою веб-камеру. Для проверки перед коммуникацией.">
+
+          <el-button  slot="reference" @click="clientStream()" type="success" icon="el-icon-video-camera" circle></el-button>
+
+        </el-popover>
+        <el-button   @click="stopStream()" type="danger" icon="el-icon-close" circle></el-button>
+
+      </el-col>
+      <el-col :span="1"></el-col>
     </el-row>
     <el-row type="flex" class="row-bg" justify="space-around">
       <el-col :span="1">
@@ -1330,7 +1354,7 @@
         <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
           <h2 v-if="o.currency === 'рубль'" class="u-text u-text-1">{{o.price}} &#8381;</h2>
           <h2 v-else class="u-text u-text-1">{{o.currency === 'euro' ? '€' : '$'}} {{o.price}}</h2>
-          <p class="u-text u-text-2"><%= __('Litter') %> {{o.letter}} / {{o.dateBirth.split('-')[0]}}</p>
+          <p class="u-text u-text-2"><%= __('Litter') %> {{o.letter}} / {{o.dateBirth | gDate('y')}}</p>
           <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
             <div class="u-gutter-0 u-layout">
               <div class="u-layout-row">
