@@ -169,8 +169,6 @@
     </div>
     <!---------------------------------------------------------------------------------------->
     <% /*Загрузка фото NEW*/ %>
-    <!--  <el-row type="flex" class="row-bg" justify="center">
-        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">-->
     <div class="container-fluid ">
       <div class="row justify-content-center">
         <div class="col">
@@ -198,13 +196,9 @@
         </div>
       </div>
     </div>
-    <!--     </el-col>
-       </el-row>-->
 
     <!---------------------------------------------------------------------------------------->
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-      <!--  <el-row type="flex" class="row-bg" justify="center">
-         <el-col :xs="24" :sm="24" :md="24" :lg="12" :offset="2" :xl="12">-->
       <div class="container-fluid ">
         <div class="row ">
           <div class="col col-sm-12 col-lg-10">
@@ -221,7 +215,6 @@
                            :value="item.id"
                            :key="item.id">
                   <span style="float: left">{{ item.label }}</span>
-                  <!--                                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.label }}</span>-->
                 </el-option>
               </el-select>
 
@@ -282,26 +275,19 @@
             </el-switch>
           </el-form-item>
         </div>
-
-
       </div>
       <el-divider></el-divider>
-
       <el-row type="flex" justify="center">
         <div class="my-3 pt-4 text-center hidden-xs-only">
           <el-form-item>
-
-            <!--                        <el-button v-if="!buttonUpdate" @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>-->
             <el-button @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
             <el-button v-if="!buttonUpdate" type="primary"
                        @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
             <el-button v-else type="primary" @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
-
           </el-form-item>
         </div>
         <div class="text-center hidden-sm-and-up">
           <el-button-group>
-            <!--                        <el-button v-if="!buttonUpdate" @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>-->
             <el-button @click="buttonUpdate = false; centerDialogAdded = false" icon="el-icon-close"></el-button>
             <el-button v-if="!buttonUpdate" type="primary"
                        @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
@@ -385,9 +371,7 @@
       <div class="container">
         <div class="portfolio_details_inner ">
           <div class="row">
-
             <div class="col pt-4">
-
               <% /* Хлебные крошки */ %>
               <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item><a style="text-decoration: none" href="/"><%= __('Home-menu') %></a>
@@ -396,7 +380,6 @@
                                        href="/dogs/chinese-crested"><%= __('Dogs') %></a>
                 </el-breadcrumb-item>
                 <el-breadcrumb-item> {{dog.fullName}}</el-breadcrumb-item>
-                <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
               </el-breadcrumb>
 
             </div>
@@ -411,7 +394,6 @@
                         {{dog.breeder.fullName}}
                       </h5>
                     </el-col>
-
                     <% /* Владелец  */ %>
                     <el-col :span="11">
                       <h5 class="text-center">
@@ -420,7 +402,6 @@
                       </h5>
                     </el-col>
                   </el-row>
-
                 </el-col>
 
                 <% /* Кнопки управления */ %>
@@ -454,8 +435,6 @@
                 <div style="color: white;">{{dog.currency | getCurrency()}} {{dog.price}}</div>
               </el-button>
             </el-tooltip>
-            <!--<div><img src="/images/crown.png" alt=""></div>-->
-            <!--<img :src="dog.images[dog.cover].imageSrc" class="img-fluid" alt="dog.images[dog.cover].name">-->
 
             <el-image
               :src="rootImg()"
@@ -562,7 +541,6 @@
               </div>
             </div>
           </el-card>
-
           <% /* РОДИТЕЛИ PARENTS */ %>
           <el-card class="box-card " v-for="(parent, index) of dog.parents" :key="'p-' + index">
             <div slot="header" class="clearfix">
@@ -571,9 +549,7 @@
                                 {{parent.gender}}:
                             </span>
               <el-link :href="parent.detail" class="link" :underline="false">
-                <!--                            <span @click="goTo2(parent.detail)" class="pointer">-->
                 {{parent.fullName}}
-                <!--                                </span>-->
               </el-link>
             </div>
             <div class="menu-between">
@@ -623,7 +599,7 @@
                   :with-header="false">
 
             <el-container>
-              <el-header><h3><%= __('Offspring') %></h3></el-header>
+              <el-header><h3><%= __('Siblings') %></h3></el-header>
               <el-main>
                 <div class="menu-between-v">
 
@@ -701,7 +677,7 @@
 
 
                     <div class="flex justify-content-between" v-for="(ch, ind) of lit.litter">
-                      <el-avatar :size="50" :src="ch.imgI7[ch.cover].imageSrc"></el-avatar>
+                     <span v-if="ch.imgI7"><el-avatar :size="50" :src="ch.imgI7[ch.cover].imageSrc"></el-avatar></span>
                       <div v-if="ch.sale" class="pt-2">
                         <el-popover
                                 placement="top"
@@ -728,7 +704,7 @@
                           <ul :style="{ overflow: 'hidden', padding: '15px', border: ch.dateDeath ? '1px solid #3b3b3b' : 'none'}">
                             <li><strong><%= __('Descendant') %></strong></li>
                             <!--<li v-if="ch.sale"><%= __('For sale') %>!</li>-->
-                            <li><img width="142" :src="ch.imgI7[ch.cover].imageSrc" alt=""></li>
+                            <li v-if="ch.imgI7" ><img width="142" :src="ch.imgI7[ch.cover].imageSrc" alt=""></li>
                             <li>
                               <!--<i class="" :class="[ch.gender === 'dam' ? 'el-icon-female' : '', 'el-icon-male']"></i>-->
 
@@ -856,7 +832,7 @@
 
 
                     <div class="flex justify-content-between" v-for="(ch, ind) of lit.litter">
-                      <el-avatar :size="50" :src="ch.imgI7[ch.cover].imageSrc"></el-avatar>
+                      <el-avatar v-if="ch.imgI7" :size="50" :src="ch.imgI7[ch.cover].imageSrc"></el-avatar>
                       <div v-if="ch.sale" class="pt-2">
                         <el-popover
                           placement="top"
@@ -883,7 +859,7 @@
                           <ul :style="{ overflow: 'hidden', padding: '15px', border: ch.dateDeath ? '1px solid #3b3b3b' : 'none'}">
                             <li><strong><%= __('Descendant') %></strong></li>
                             <!--<li v-if="ch.sale"><%= __('For sale') %>!</li>-->
-                            <li><img width="142" :src="ch.imgI7[ch.cover].imageSrc" alt=""></li>
+                            <li v-if="ch.imgI7" ><img width="142" :src="ch.imgI7[ch.cover].imageSrc" alt=""></li>
                             <li>
                               <!--<i class="" :class="[ch.gender === 'dam' ? 'el-icon-female' : '', 'el-icon-male']"></i>-->
 
@@ -1006,9 +982,11 @@
       <div class="container">
         <div class="flex justify-content-center mt-5">
           <el-button v-if="!_.isEmpty(dog.litter)" @click="drawer = true" type="success" round>
-            <%= __('Offspring') %>
+            <%= __('Offsprings') %>
           </el-button>
-          <el-button type="warning" @click="siblings = true" type="success" round ><%= __('Siblings') %></el-button>
+          <el-button
+                     type="warning" @click="siblings = true" type="success" round ><%= __('Siblings') %>
+          </el-button>
           <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()"
                      round><%= __('Pedigree') %></el-button>
         </div>
