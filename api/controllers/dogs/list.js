@@ -50,7 +50,7 @@ module.exports = {
     // Have the socket which made the request join the "dog" room.
     // Подключить сокет, который сделал запрос, к комнате «dog».
     await sails.sockets.join(req, 'dog');
-
+    await sails.sockets.join(req, 'stream');
 
     // Выбираем весь список объектов данной коллекции.
     let dogs = await Dog.find()

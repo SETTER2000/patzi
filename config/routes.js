@@ -159,6 +159,10 @@ module.exports.routes = {
   //'GET     /sous': {action: 'security/grant-csrf-token'},
   'POST   /api/v1/message/message-mailgun': {action: 'message/message-mailgun', csrf: false},
 
+
+  'POST /api/v1/stream': {action: 'stream/video', csrf: false},
+
+
   'POST   /api/v1/groups/upload-group': {action: 'groups/upload-group'},
   'GET    /api/v1/groups/:id': {action: 'groups/download-group'},
   'DELETE /api/v1/groups/destroy-one-group': {action: 'groups/destroy-one-group'},
@@ -193,7 +197,7 @@ module.exports.routes = {
 
   'GET    /api/v1/posts/list': {action: 'posts/list'},
   'POST   /api/v1/posts/create-post': {action: 'posts/create-post', csrf: false},
-  'DELETE /api/v1/posts/destroy-one-post': { action: 'posts/destroy-one-post', csrf: false },
+  'DELETE /api/v1/posts/destroy-one-post': {action: 'posts/destroy-one-post', csrf: false},
 
   'GET    /api/v1/titles/list': {action: 'titles/list'},
   'GET    /api/v1/titles/count-title': {action: 'titles/count-title'},
@@ -254,4 +258,5 @@ module.exports.routes = {
   'GET    /api/v1/colors/list': {action: 'colors/list'},
 
   'GET    /native': {action: 'litters/list-native'},
+
 };

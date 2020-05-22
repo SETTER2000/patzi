@@ -54,28 +54,11 @@ module.exports.bootstrap = async function () {
     sails.log('Запуск скрипта начальной загрузки, поскольку он был вынужден ...  (either `--drop` or `--environment=test` использовался)');
   }
 
-
-  // Since the hard-coded data version has been incremented, and we're running in
-  // a "throwaway data" environment, delete all records from all models.
   for (let identity in sails.models) {
     await sails.models[identity].destroy({});
   }//∞
 
 
-
-
-  // By convention, this is a good place to set up fake data during development.
-  // По общему мнению, это хорошее место для настройки поддельных данных во время разработки.
-  // let ryanDahl = await User.create(
-  //   {
-  //     emailAddress: sails.config.custom.friendEmailAddress,
-  //     fullName: 'Ryan Dahl',
-  //     fullNameEn: 'Ryan Dahl',
-  //     isAdmin: false,
-  //     avatar:sails.config.custom.avatar,
-  //     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
-  //     preferredLocale: 'en'
-  //   }).fetch();
 
   let alexFox = await User.create({
     emailAddress: sails.config.custom.internalEmailAddress,
@@ -83,7 +66,6 @@ module.exports.bootstrap = async function () {
     fullNameEn: 'Alex Fox',
     isAdmin: false,
     defaultIcon:'gravatar',
-    // getFullName: function(){return  `${this.fullName} ${this.emailAddress}`;},
     isSuperAdmin: true,
     preferredLocale: 'en',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
@@ -95,7 +77,6 @@ module.exports.bootstrap = async function () {
     fullName: 'Ольга Петрова',
     fullNameEn:await sails.helpers.translitWord.with({str: 'Ольга Петрова'}) ,
     isAdmin: false,
-    // getFullName: function(){return  `${this.fullName} ${this.emailAddress}`;},
     isSuperAdmin: false,
     preferredLocale: 'ru',
     avatar:'https://d3a1wbnh2r1l7y.cloudfront.net/avatar_olga.jpg',
@@ -114,13 +95,6 @@ module.exports.bootstrap = async function () {
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin)
   }).fetch();
 
-
-  // Добавить Райана Даля , как одного из друзей Алекса Фокса
-  // и добавить Алекса Фокса в друзья Райану Далю
-  // await User.addToCollection(alexFox.id, 'friends', ryanDahl.id);
-  // await User.addToCollection(ryanDahl.id, 'friends', alexFox.id);
-
-  // Создаём группу пользователей admin
 
   let group2 = await Group.create({
     label: 'user',
@@ -182,6 +156,16 @@ module.exports.bootstrap = async function () {
       country: 1,
       region: 1000001,
     },
+    {
+      label: 'Zlato Dinastii',
+      rightName: true,
+      dateCreate: '2010-09-13T00:00:00+04:00',
+      registerNumber: '000000',
+      whoCreate: alexFox.id,
+      continent: 1,
+      country: 1,
+      region: 1000001,
+    },
 
   ];
   let createdKennels = await Kennel.createEach(kennelsArr).fetch();
@@ -193,7 +177,7 @@ module.exports.bootstrap = async function () {
       letter:'A',
       sale:false,
       see:true,
-      dateBirth: moment('2016-04-10T20:35:00.000Z').format(),
+      dateBirth:await sails.helpers.dateConverter('"2016-04-10T20:35:00.000Z"'),
       kennel: 'Poale Ell'
     },
     {
@@ -202,7 +186,7 @@ module.exports.bootstrap = async function () {
       letter:'E',
       sale:false,
       see:true,
-      dateBirth: '2013-07-08T08:00:00.000Z',
+      dateBirth: await sails.helpers.dateConverter('"2013-07-08T08:00:00.000Z"'),
       kennel: 'Sasquehanna'
     },
     {
@@ -211,7 +195,7 @@ module.exports.bootstrap = async function () {
       letter:'D',
       sale:false,
       see:true,
-      dateBirth: '2015-12-09T08:00:00.000Z',
+      dateBirth: await sails.helpers.dateConverter('"2015-12-09T08:00:00.000Z"'),
       kennel: 'Alfa Laval'
     },
     {
@@ -220,103 +204,36 @@ module.exports.bootstrap = async function () {
       letter:'N',
       sale:false,
       see:true,
-      dateBirth: '2015-09-25T09:00:00.000Z',
+      dateBirth: await sails.helpers.dateConverter('"2015-09-25T09:00:00.000Z"'),
       kennel: 'Olegro Katrin'
     },
- /*   {
+    {
       label: `Neron`,
       gender: 'sire',
       letter:'N',
       winner:true,
       sale:false,
       see:true,
-      dateBirth: '2011-03-02T09:00:00.000Z',
+      dateBirth: await sails.helpers.dateConverter('"2011-03-02T09:00:00.000Z"'),
       kennel: 'Zlato Dinastii'
-    },*/
+    },
   ];
 
-  dogsArr.map(dog => {
+ dogsArr.map( dog => {
     dog.fullName=  `${dog.kennel} ${dog.label}`;
-    dog.kennel = createdKennels.find(kennel => kennel.label === dog.kennel).id;
+   dog.kennel = createdKennels.find(kennel => kennel.label === dog.kennel).id;
     let label = _.startCase(dog.label.toString().toLowerCase()).replace(/Fci\b/g, '(FCI)');
-
   });
+
 
   let createdDogs = await Dog.createEach(dogsArr).fetch();
   sails.log(`Created ${createdDogs.length} dog${createdDogs.length === 1 ? '' : 's'}.`);
 
   let poaleEll = await Kennel.findOne({label:'Poale Ell'});
   let userKennels =  await User.addToCollection(star.id, 'kennels', poaleEll.id);
-  // let kennelUsers =  await Kennel.addToCollection(poaleEll.id, 'users', star.id);
+
   sails.log(`Created  ${userKennels} userKennels${userKennels === 1 ? '' : 's'}.`);
-  // sails.log(`Created  ${kennelUsers} kennelUsers${kennelUsers === 1 ? '' : 's'}.`);
-  // Нужно создать индекс по полям предков в DB, чтобы включить быстрый поиск по узлам предков:
-  // db.categories.createIndex( { ancestors: 1 } )
-  // let categories = await  Category.createEach( [{ name: "MongoDB", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
-  //   { name: "dbm", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
-  //   { name: "Databases", ancestors: [ "Books", "Programming" ], parent: "Programming" },
-  //   { name: "Languages", ancestors: [ "Books", "Programming" ], parent: "Programming" },
-  //   { name: "Programming", ancestors: [ "Books" ], parent: "Books" },
-  //   { name: "Books", ancestors: [ ], parent: null }]).fetch();
-  //
-  // let tree = await  Tree.createEach( [{ name: "MongoDB", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
-  //   { name: "dbm", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
-  //   { name: "Databases", ancestors: [ "Books", "Programming" ], parent: "Programming" },
-  //   { name: "Languages", ancestors: [ "Books", "Programming" ], parent: "Programming" },
-  //   { name: "Programming", ancestors: [ "Books" ], parent: "Books" },
-  //   { name: "Books", ancestors: [ ], parent: null }]).fetch();
 
-  // sails.log(`Created ${tree.length} tree${tree.length === 1 ? '' : 's'}.`);
-
-  /* let airports  = await  Airports.createEach( [
-     {"airport" : "JFK", "connects" : [ "BOS", "ORD" ] },
-     {"airport" : "BOS", "connects" : [ "JFK", "PWM" ] },
-     {"airport" : "ORD", "connects" : [ "JFK" ] },
-     {"airport" : "PWM", "connects" : [ "BOS", "LHR" ] },
-     {"airport" : "LHR", "connects" : [ "PWM" ] }]).fetch();
-
-   sails.log(`Created ${airports.length} airport${airports.length === 1 ? '' : 's'}.`);
-
-   let travelers   = await  Travelers.createEach( [
-     {"name" : "Dev", "nearestAirport" : "JFK" },
-     {"name" : "Eliot", "nearestAirport" : "JFK" },
-     {"name" : "Jeff", "nearestAirport" : "BOS"}
-   ]).fetch();
-
-   sails.log(`Created ${travelers.length} traveler${travelers.length === 1 ? '' : 's'}.`);
- */
-  // for (let y = 0; y < 100; y++) {
-  //
-  //   let nm = await sails.helpers.strings.random("alphanumeric", 6);
-  //   nm = await User.create({
-  //     emailAddress: `${nm}@mail.ru`,
-  //     fullName: nm,
-  //     kennelAddress: nm,
-  //     phone: await sails.helpers.strings.random("alphanumeric", 6),
-  //     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
-  //     preferredLocale: 'en'
-  //   }).fetch();
-  //
-  //   await User.addToCollection(nm.id, 'groups', group2.id);
-  // }
-
-  // В БУДУЩЕМ: Решить что с эти делать
-  // Create some things
-  /* await Thing.createEach([
-    {owner: ryanDahl.id, label: 'Сладкая дрель'},
-    {owner: ryanDahl.id, label: 'Капкан на куницу'},
-    {owner: ryanDahl.id, label: 'Моторная лодка'},
-    {owner: alexFox.id, label: 'Красный рассвет'}
-  ]).fetch(); */
-
-  /*  await Litter.createEach([
-      {owner: alexFox.id,label: 'a', born: new Date(2016, 3, 10)},
-      {owner: alexFox.id,label: 'b', born: new Date(2017, 10, 3)},
-      {owner: ryanDahl.id,label: 'c', born: new Date(2008, 2, 15)},
-      {owner: ryanDahl.id,label: 'd', born: new Date(2010, 5, 21)}]).fetch();*/
-
-
-  // Save new bootstrap version
   await sails.helpers.fs.writeJson.with({
     destination: bootstrapLastRunInfoPath,
     json: {

@@ -90,18 +90,12 @@ module.exports = {
     },
 
 
-    dateBirth: {
-      type: 'ref',
-      required: true,
-      description: 'Дата рождения.'
-    },
-
     letter: {
       type: 'string',
-      description: `Буква помёта к которому пренадлежит собака. 
-      Информация нужна для фиксации кнопки о продаже на странице помёта. 
-      В случаи когда дата рождения щенков одного помёта разная. 
-      (например в 23:00 первый родился и через 2 часа второй. Помёт один, а дата рождения разная.). 
+      description: `Буква помёта к которому пренадлежит собака.
+      Информация нужна для фиксации кнопки о продаже на странице помёта.
+      В случаи когда дата рождения щенков одного помёта разная.
+      (например в 23:00 первый родился и через 2 часа второй. Помёт один, а дата рождения разная.).
       Если буква не указана, то автоматически берётся первая буква имени собаки.`,
       required: true,
     },
@@ -160,7 +154,11 @@ module.exports = {
       description: 'Дата смерти.'
     },
 
-
+    dateBirth: {
+      type: 'number',
+      required: true,
+      description: 'Дата рождения.'
+    },
     nickname: {
       type: 'string',
       description: 'Кличка, ласковое имя.'
@@ -246,11 +244,11 @@ module.exports = {
     owners: {
       collection: 'user',
       via: 'dogs',
-      description: `  Добавить питомца в коллекцию пользователя: "User.dogs" , 
+      description: `  Добавить питомца в коллекцию пользователя: "User.dogs" ,
                       где у пользователя есть идентификатор 10 и питомец имеет идентификатор 300.
                       await User.addToCollection(10, 'dogs', 300);
-                      
-                      parents и children атрибуты могут быть изменены с помощью 
+
+                      parents и children атрибуты могут быть изменены с помощью
                       .addToCollection(), .removeFromCollection()и .replaceCollection()
                     `
     },
@@ -285,14 +283,14 @@ module.exports = {
     parents: {
       collection: 'dog',
       via: 'children',
-      description: `  Однако также возможно иметь связь между двумя атрибутами в одной и той же модели. 
+      description: `  Однако также возможно иметь связь между двумя атрибутами в одной и той же модели.
                       Это называется рефлексивной ассоциацией.
-                      
+
                       Добавить пользователя № 12 в качестве родителя пользователя № 23
                       await User.addToCollection(23, 'parents', 12);
                       Найти пользователя № 12 и заполнить его детей
                       var userTwelve = await User.findOne(12).populate('children');
-                      parents и children атрибуты могут быть изменены с помощью 
+                      parents и children атрибуты могут быть изменены с помощью
                       .addToCollection(), .removeFromCollection()и .replaceCollection()
                     `
     },
@@ -310,34 +308,47 @@ module.exports = {
     const moment = require('moment');
     const db = sails.getDatastore('mongodb').manager;
     // let dog = Dog.getDatastore('mongodb').manager;
-
-    // Теперь мы можем делать все, что можем, с экземпляром Mongodb в данном примере коллекция Dog вернётся.
+    console.log('OPTS::: ', opts);
+    const fullName = opts.fullName ? opts.fullName.split(' ').join('-') : '';
+    // Теперь мы можем делать все, что можем, с экземпляром Mongodb в данном примере вернётся коллекция Dog.
     // Тип данных Cursor (mongodb):
-    const rawMongoCollection = db.collection(Dog.tableName);
+    const collection = db.collection(Dog.tableName);
+    /*
+    * Поиск однопомётников.
+    * Входящий объект собака.
+    * Взять дату начала того дня, когда родилась собака, например др у неё записан 2017-11-03T12:00
+    * или в UNIX timestamp, сбросить время на 00:00 этого дня.
+    * И найти всех собак рождённых в период с 2017-11-03T00:00 до 2017-11-03T23:59 и
+    *
+    * */
 
     // let rr = rawMongoCollection.find({growth: {$gt: 31}}).count();
-    // let max = rawMongoCollection.aggregate([{$group: {_id: "Dog", total_birthday: {$min: "$dateBirth"}}}]).toArray();
-    rawMongoCollection.find().forEach(function (hab) {
-      console.log('dateBirth type: ', typeof hab.dateBirth);
-      console.log('dateBirth : ',  hab.dateBirth);
-      console.log('fullName: ',  hab.fullName);
-      console.log('*********************');
-      // hab.dateBirth = new Date(hab.dateBirth);
-      // console.log('hab.dateBirth:::: ',hab.dateBirth);
-      // rawMongoCollection.save(hab);
-    });
+    // const cursor = collection.aggregate([{$group: {_id: "Dog", total_birthday: {$min: "$dateBirth"}}}]);
+    console.log('FULLNAME::: ', fullName);
+    // db.dog.aggregate([{$match: {'fullName':'Sasquehanna Ella', see: true}}]).pretty();
 
-
-    /*let siblings = rawMongoCollection.aggregate([{
-      $group: {
-        _id: {
-          year: {$year: "$dateBirth"},
-          day: {$dayOfMonth: "$dateBirth"},
-          month: {$month: "$dateBirth"}
-        }, siblings: {$push: {fullName: "$fullName", id: "$_id"}}
-      }
-    }]).toArray();*/
-
+    // Get all the aggregation results
+    //  cursor.toArray(function(err, docs) {
+    // /*   test.equal(null, err);
+    //    test.equal(2, docs.length);*/
+    //    console.log('MAX', docs);
+    //    // db.close();
+    //  });
+    /*   const cursor = collection.aggregate([{
+         $group: {
+           _id: {
+             year: {$year: "$dateBirth"},
+             day: {$dayOfMonth: "$dateBirth"},
+             month: {$month: "$dateBirth"}
+           }, siblings: {$push: {fullName: "$fullName", id: "$_id"}}
+         }
+       }]);
+       cursor.toArray(function (err, docs) {
+         /!*   test.equal(null, err);
+            test.equal(2, docs.length);*!/
+         console.log('MAX', docs);
+         // db.close();
+       });*/
 
     /* if (!person) {
        throw require('flaverr')({
@@ -346,7 +357,15 @@ module.exports = {
        });
      }*/
 
-    return siblings;
+    return collection.find().forEach(function (hab) {
+      console.log('dateBirth type: ', typeof hab.dateBirth);
+      console.log('dateBirth : ', hab.dateBirth);
+      console.log('fullName: ', hab.fullName);
+      console.log('*********************');
+      // hab.dateBirth = new Date(hab.dateBirth);
+      // console.log('hab.dateBirth:::: ',hab.dateBirth);
+      // rawMongoCollection.save(hab);
+    });
     // return await Monkey.find({ name: person.name });
   }
 };

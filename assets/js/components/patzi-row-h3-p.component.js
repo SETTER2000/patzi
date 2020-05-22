@@ -34,7 +34,8 @@ parasails.registerComponent('patziRowH3P', {
 <!-- Start Sample Area -->
   <section class="sample-text-area">
     <div class="container">
-      <h3 class="text-heading">{{objData.preferredLocale === 'ru' ? objData.h3.ru : objData.h3.en}}</h3>
+      <h3 class="">{{objData.preferredLocale === 'ru' ? objData.h3.ru : objData.h3.en}}</h3>
+<!--      <h3 class="text-heading">{{objData.preferredLocale === 'ru' ? objData.h3.ru : objData.h3.en}}</h3>-->
       <p class="sample-text">
       {{objData.preferredLocale === 'ru' ? objData.textUnderHeading.ru : objData.textUnderHeading.en}}
       </p>

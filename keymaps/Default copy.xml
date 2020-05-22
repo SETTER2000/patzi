@@ -1,9 +1,0 @@
-<keymap version="1" name="Default copy" parent="$default">
-  <action id="AddToFavoritesPopup" />
-  <action id="ReformatCode">
-    <keyboard-shortcut first-keystroke="shift alt f" />
-  </action>
-  <action id="TogglePresentationMode">
-    <keyboard-shortcut first-keystroke="ctrl back_slash" />
-  </action>
-</keymap>

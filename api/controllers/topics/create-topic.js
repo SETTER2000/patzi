@@ -99,7 +99,7 @@ module.exports = {
     if (inputs.fileList) {
       images = await inputs.fileList.filter(o => !_.isNull(o));
       await _.each(images, img => {
-        console.log('FDDDk:::', img);
+        // console.log('FDDDk:::', img);
         img.id = _.first(_.last(img.fd.split('\\')).split('.'));
         img.description = '';
         img.dateTaken = '';

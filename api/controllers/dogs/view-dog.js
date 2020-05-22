@@ -32,8 +32,7 @@ module.exports = {
     //  var flaverr = require('flaverr');
 
 
-    var monkeys = await Dog.siblings({id:'5e4d91d17cee89222cfd12ce'});
-console.log('dfff:: '  , monkeys);
+
 
     let fullName = _.startCase(inputs.fullName);
     let dog = await Dog.findOne({'fullName': fullName})
@@ -44,6 +43,9 @@ console.log('dfff:: '  , monkeys);
     if (!dog) {
       throw 'notFound';
     }
+
+    const monkeys = await Dog.siblings(dog);
+    console.log('dfff:: '  , monkeys);
 
     let ch = _.pluck(dog.children, 'id');
 
@@ -88,7 +90,7 @@ console.log('dfff:: '  , monkeys);
       avatar: _.last(_.pluck(dog.owners, 'avatar')),
       gravatar: _.last(_.pluck(dog.owners, 'gravatar')),
       defaultIcon: _.last(_.pluck(dog.owners, 'defaultIcon')),
-      country: await Country.findOne({id: countryId})
+      country: await Country.find({id: countryId})
     };
 
 

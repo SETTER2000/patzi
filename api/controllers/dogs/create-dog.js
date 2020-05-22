@@ -12,17 +12,17 @@ module.exports = {
       type: 'string',
       required: true,
       description: `Официальное имя собаки. Поле обязательно для заполнения.
-      В рамках всей коллекции это поле не может быть сделано уникальным, только проверка имени вместе 
+      В рамках всей коллекции это поле не может быть сделано уникальным, только проверка имени вместе
       с названием питомника может однозначно установить уникальность собаки в базе.`
     },
 
 
     letter: {
       type: 'string',
-      description: `Буква помёта к которому пренадлежит собака. 
-      Информация нужна для фиксации кнопки о продаже на странице помёта. 
-      В случаи когда дата рождения щенков одного помёта разная. 
-      (например в 23:00 первый родился и через 2 часа второй. Помёт один, а дата рождения разная.). 
+      description: `Буква помёта к которому пренадлежит собака.
+      Информация нужна для фиксации кнопки о продаже на странице помёта.
+      В случаи когда дата рождения щенков одного помёта разная.
+      (например в 23:00 первый родился и через 2 часа второй. Помёт один, а дата рождения разная.).
       Если буква не указана, то автоматически берётся первая буква имени собаки.`,
       //required: true,
     },
@@ -61,7 +61,7 @@ module.exports = {
 
     allowEdit: {
       type: 'boolean',
-      description: `Флаг. При установки заводчиком в true, даёт возможность владельцу 
+      description: `Флаг. При установки заводчиком в true, даёт возможность владельцу
       редактировать собаку.`
     },
 
@@ -248,12 +248,12 @@ module.exports = {
 
     dogAddedUse: {
       statusCode: 409,
-      description: `You do not have the right to add a dog to this kennel, 
+      description: `You do not have the right to add a dog to this kennel,
       because you are not the owner or co-owner of this nursery.`,
     },
     dogAddedUseRU: {
       statusCode: 409,
-      description: `У вас нет права на добавления собаки в данный питомник, 
+      description: `У вас нет права на добавления собаки в данный питомник,
       т.к. вы не являетесь владельцем или совладельцем этого питомника.`,
     },
   },
@@ -268,7 +268,7 @@ module.exports = {
       throw 'badRequest';
     }
 
-    let images=[];
+    let images = [];
 
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
@@ -279,7 +279,7 @@ module.exports = {
     if (inputs.fileList) {
       images = inputs.fileList.filter(o => !_.isNull(o));
       _.each(images, img => {
-        console.log('FDDDk:::', img);
+        // console.log('FDDDk:::', img);
         img.id = _.first(_.last(img.fd.split('\\')).split('.'));
         img.description = '';
         img.dateTaken = '';
@@ -299,7 +299,7 @@ module.exports = {
     // владельцем питомника или совладельцем.
     if (!req.me.isAdmin && !req.me.isSuperAdmin) {
       console.log('1 - one');
-      if (kennel.breeder.id !== req.me.id || !_.sample(kennel.owners,{'id':req.me.id})) {
+      if (kennel.breeder.id !== req.me.id || !_.sample(kennel.owners, {'id': req.me.id})) {
 
         console.log('2 - one');
         throw (req.me.preferredLocale === 'ru') ? 'dogAddedUseRU' : 'dogAddedUse';
@@ -325,9 +325,7 @@ module.exports = {
     let rightFullName = _.startCase(label + ' ' + kennel.label);
     let leftFullName = _.startCase(kennel.label + ' ' + label);
 
-
-    // Создаём собаку
-    let newDog = await Dog.create({
+    const inData = {
       label: label,
       kennel: inputs.kennel,
       gender: inputs.gender,
@@ -336,8 +334,10 @@ module.exports = {
       winner: inputs.winner,
       price: inputs.price,
       saleDescription: inputs.saleDescription,
-      dateBirth: await sails.helpers.dateFix(inputs.dateBirth),
+      dateBirth: await sails.helpers.dateConverter(inputs.dateBirth),
       dateDeath: await sails.helpers.dateFix(inputs.dateDeath),
+      /*     dateBirth: await sails.helpers.dateFix(inputs.dateBirth),
+           dateDeath: await sails.helpers.dateFix(inputs.dateDeath),*/
       nickname: inputs.nickname,
       subtitle: inputs.subtitle,
       see: inputs.see,
@@ -357,7 +357,9 @@ module.exports = {
       letter: inputs.letter ? inputs.letter : label[0],
       teethCount: `${inputs.canine}x${inputs.teethCountTop}x${inputs.teethCountBottom}`,
       fullName: kennel.right ? `${rightFullName}` : `${leftFullName}`
-    }).fetch();
+    };
+    // Создаём собаку
+    let newDog = await Dog.create(inData).fetch();
     // Если не создан возвращаем ошибку.
     if (!newDog) {
       throw 'badRequest';

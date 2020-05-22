@@ -15,7 +15,7 @@ module.exports = {
       type: 'string',
       required: true,
       description: `Официальное имя собаки. Поле обязательно для заполнения.
-      В рамках всей коллекции это поле не может быть уникальным, только проверка имени вместе 
+      В рамках всей коллекции это поле не может быть уникальным, только проверка имени вместе
       с названием питомника может однозначно установить уникальность собаки в базе.`
     },
 
@@ -47,7 +47,7 @@ module.exports = {
 
     allowEdit: {
       type: 'boolean',
-      description: `Флаг. При установки заводчиком в true, даёт возможность владельцу 
+      description: `Флаг. При установки заводчиком в true, даёт возможность владельцу
       редактировать собаку.`
     },
 
@@ -66,10 +66,10 @@ module.exports = {
 
     letter: {
       type: 'string',
-      description: `Буква помёта к которому пренадлежит собака. 
-      Информация нужна для фиксации кнопки о продаже на странице помёта. 
-      В случаи когда дата рождения щенков одного помёта разная. 
-      (например в 23:00 первый родился и через 2 часа второй. Помёт один, а дата рождения разная.). 
+      description: `Буква помёта к которому пренадлежит собака.
+      Информация нужна для фиксации кнопки о продаже на странице помёта.
+      В случаи когда дата рождения щенков одного помёта разная.
+      (например в 23:00 первый родился и через 2 часа второй. Помёт один, а дата рождения разная.).
       Если буква не указана, то автоматически берётся первая буква имени собаки.`,
     },
 
@@ -299,6 +299,7 @@ module.exports = {
       saleDescription: inputs.saleDescription,
       dateBirth: await sails.helpers.dateConverter(inputs.dateBirth),
       // dateBirth: await sails.helpers.dateFix(inputs.dateBirth),
+      // dateDeath: await sails.helpers.dateFix(inputs.dateDeath),
       dateDeath: await sails.helpers.dateFix(inputs.dateDeath),
       dateReceiving: await sails.helpers.dateFix(inputs.dateReceiving),
       nickname: inputs.nickname,
@@ -400,7 +401,7 @@ module.exports = {
     // await User.addToCollection(owner, 'dogs', newDog.id);
     await Dog.replaceCollection(updateDog.id, 'owners').members(owner);
 
-    let siblings = await Dog.siblings({id: 1});
+    let siblings = await Dog.siblings(inputs);
     console.log('БРАТЬЯ И СЕСТРЫ::: ', siblings);
     let year = _.trim(inputs.dateBirth.split('-')[0], '"');
     // Рассылаем данные всем подписанным на событие forSale-dog данной комнаты.

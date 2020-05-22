@@ -5,6 +5,7 @@ parasails.registerPage('homepage', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     heroHeightSet: false,
+    year:'',
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -41,6 +42,12 @@ parasails.registerPage('homepage', {
       $hero.css('min-height', heightToSet - headerHeight+'px');
       this.heroHeightSet = true;
     },
+
+    newYear(){
+      this.year = moment().get('year');
+      return moment().isBetween(moment().startOf('year'), moment().startOf('year').add(2, 'week')); // true;
+      // return true;
+    }
 
   }
 });

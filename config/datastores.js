@@ -38,6 +38,7 @@ module.exports.datastores = {
     user:'root',
     password:'4211817',
     database:'geo',
+    // url: 'mysql://root:4211817@localhost:3306/geo'
     // database:'flk',
     // ssl: {
     //   ca: fs.readFileSync(__dirname + '/rds-combined-ca-bundle.pem')
