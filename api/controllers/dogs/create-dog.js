@@ -270,8 +270,8 @@ module.exports = {
 
     let images = [];
 
-    // Have the socket which made the request join the "kennel" room.
-    // Подключить сокет, который сделал запрос, к комнате «kennel».
+    // hAVE THE SOCKET WHICH MADE THE REQUEST JOIN THE "KENNEL" ROOM.
+    // пОДКЛЮЧИТЬ СОКЕТ, КОТОРЫЙ СДЕЛАЛ ЗАПРОС, К КОМНАТЕ «KENNEL».
     await sails.sockets.join(req, 'dog');
 
 
@@ -322,8 +322,8 @@ module.exports = {
     }
     // с заглавной буквы
     let label = _.startCase(inputs.label.toString().toLowerCase());
-    let rightFullName = _.startCase(label + ' ' + kennel.label);
-    let leftFullName = _.startCase(kennel.label + ' ' + label);
+    let rightFullName = _.startCase(kennel.label + ' ' + label);
+    let leftFullName =  _.startCase(label + ' ' + kennel.label);
 
     const inData = {
       label: label,
@@ -356,7 +356,7 @@ module.exports = {
       dogTests: inputs.dogTests,
       letter: inputs.letter ? inputs.letter : label[0],
       teethCount: `${inputs.canine}x${inputs.teethCountTop}x${inputs.teethCountBottom}`,
-      fullName: kennel.right ? `${rightFullName}` : `${leftFullName}`
+      fullName: kennel.rightName ? `${rightFullName}`  : `${leftFullName}`
     };
     // Создаём собаку
     let newDog = await Dog.create(inData).fetch();

@@ -78,7 +78,7 @@ module.exports = {
 
     await dogs.map(async (dog) => {
       dog.kennelName = dog.kennel.label;
-      dog.fullName = dog.kennel.right ? `${dog.label} ${dog.kennel.label}` : `${dog.kennel.label} ${dog.label}`;
+      dog.fullName = dog.kennel.rightName ? `${dog.kennel.label} ${dog.label}` : `${dog.label} ${dog.kennel.label}`;
       dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
       dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
       // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
