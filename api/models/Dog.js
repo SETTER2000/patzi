@@ -304,69 +304,37 @@ module.exports = {
 
   },
   // получить всех братьев и сестёр
-  siblings: async function (opts) {
+  siblings: async function (dog) {
     const moment = require('moment');
     const db = sails.getDatastore('mongodb').manager;
-    // let dog = Dog.getDatastore('mongodb').manager;
-    console.log('OPTS::: ', opts);
-    const fullName = opts.fullName ? opts.fullName.split(' ').join('-') : '';
-    // Теперь мы можем делать все, что можем, с экземпляром Mongodb в данном примере вернётся коллекция Dog.
+    let siblingsArr = [];
+    // console.log('Для этой собаке получить братьев и сестер из помёта::: ', dog.fullName);
+    let beginDay = moment(dog.dateBirth).startOf('day');
+    let endDay = moment(dog.dateBirth).endOf('day');
+    // console.log(`Др ${dog.fullName} начало времени дня:`, beginDay);
+    // console.log(`Др ${dog.fullName} конец времени дня:`, endDay);
+    console.log(`Др ${dog.fullName} питомник:`, dog.kennel.label);
+    let kennel = dog.kennel.label;
+    // Теперь мы можем делать все, что можем, с экземпляром Mongodb в данном примере
+    // вернётся коллекция Dog.
     // Тип данных Cursor (mongodb):
     const collection = db.collection(Dog.tableName);
     /*
     * Поиск однопомётников.
     * Входящий объект собака.
-    * Взять дату начала того дня, когда родилась собака, например др у неё записан 2017-11-03T12:00
+    * Взять дату начала того дня, когда родилась собака, например др у неё записан 2019-07-12T12:00
     * или в UNIX timestamp, сбросить время на 00:00 этого дня.
-    * И найти всех собак рождённых в период с 2017-11-03T00:00 до 2017-11-03T23:59 и
+    * И найти всех собак рождённых в период с 2019-07-12T00:00 до 2019-07-12T23:59 и
     *
     * */
-
-    // let rr = rawMongoCollection.find({growth: {$gt: 31}}).count();
-    // const cursor = collection.aggregate([{$group: {_id: "Dog", total_birthday: {$min: "$dateBirth"}}}]);
-    console.log('FULLNAME::: ', fullName);
-    // db.dog.aggregate([{$match: {'fullName':'Sasquehanna Ella', see: true}}]).pretty();
-
-    // Get all the aggregation results
-    //  cursor.toArray(function(err, docs) {
-    // /*   test.equal(null, err);
-    //    test.equal(2, docs.length);*/
-    //    console.log('MAX', docs);
-    //    // db.close();
-    //  });
-    /*   const cursor = collection.aggregate([{
-         $group: {
-           _id: {
-             year: {$year: "$dateBirth"},
-             day: {$dayOfMonth: "$dateBirth"},
-             month: {$month: "$dateBirth"}
-           }, siblings: {$push: {fullName: "$fullName", id: "$_id"}}
-         }
-       }]);
-       cursor.toArray(function (err, docs) {
-         /!*   test.equal(null, err);
-            test.equal(2, docs.length);*!/
-         console.log('MAX', docs);
-         // db.close();
-       });*/
-
-    /* if (!person) {
-       throw require('flaverr')({
-         message: `Cannot find monkeys with the same name as the person w/ id=${opts.id} because that person does not exist.`,
-         code: 'E_UNKNOWN_PERSON'
-       });
-     }*/
-
-    return collection.find().forEach(function (hab) {
-      console.log('dateBirth type: ', typeof hab.dateBirth);
-      console.log('dateBirth : ', hab.dateBirth);
-      console.log('fullName: ', hab.fullName);
-      console.log('*********************');
-      // hab.dateBirth = new Date(hab.dateBirth);
-      // console.log('hab.dateBirth:::: ',hab.dateBirth);
-      // rawMongoCollection.save(hab);
+    let regexp = new RegExp(kennel, 'i');
+    let arr = await collection.find().toArray();
+    siblingsArr = arr.map((dog) => {
+      if (moment(dog.dateBirth).isBetween(beginDay, endDay) && !_.isNull(dog.fullName.match(regexp))) {
+        return dog;
+      }
     });
-    // return await Monkey.find({ name: person.name });
+    return _.compact(siblingsArr);
   }
 };
 

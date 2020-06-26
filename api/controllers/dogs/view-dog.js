@@ -32,8 +32,6 @@ module.exports = {
     //  var flaverr = require('flaverr');
 
 
-
-
     let fullName = _.startCase(inputs.fullName);
     let dog = await Dog.findOne({'fullName': fullName})
       .populate('parents')
@@ -45,8 +43,8 @@ module.exports = {
     }
 
     const monkeys = await Dog.siblings(dog);
-    console.log('dfff:: '  , monkeys);
-
+    console.log('dfff:: ', monkeys);
+    dog.siblings = monkeys;
     let ch = _.pluck(dog.children, 'id');
 
     dog.children = await Dog.find({'id': ch})
@@ -292,14 +290,14 @@ module.exports = {
       // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
       return dog;
     });
-/*
-    let usersNamedFinn = await Dog.find()
-      .populate('parents', {
-        where: {
-          fullName: 'Sasquehanna Piaff'
-        }
-      });
-    console.log('usersNamedFinn::', usersNamedFinn);*/
+    /*
+        let usersNamedFinn = await Dog.find()
+          .populate('parents', {
+            where: {
+              fullName: 'Sasquehanna Piaff'
+            }
+          });
+        console.log('usersNamedFinn::', usersNamedFinn);*/
 
 
     // подготавливаем массив фото собаки для просмотра в слайдере
