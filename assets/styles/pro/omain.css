@@ -1353,12 +1353,12 @@ th {
   a.u-button-style.u-text-white[class*="u-border-"] {
     color: #f0f0f0e0 !important;
   }
-  header#sec-599b.afterload {
-    transform: translate(0, -95%);
-    transition: .75s;
-    transition-delay: 3s; /* Задержка перед сокрытием меню */
-    position: fixed;
-  }
+  /*header#sec-599b.afterload {*/
+  /*  transform: translate(0, -95%);*/
+  /*  transition: .75s;*/
+  /*  transition-delay: 3s; !* Задержка перед сокрытием меню *!*/
+  /*  position: fixed;*/
+  /*}*/
 
   header#sec-599b.afterload:hover {
   transform: translate(0, 0);
