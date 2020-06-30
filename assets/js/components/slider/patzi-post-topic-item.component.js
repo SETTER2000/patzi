@@ -45,25 +45,14 @@ parasails.registerComponent('patziPostTopicItem', {
             <div class="u-container-layout u-container-layout-1">
               <h1 class="u-text u-title u-text-1" :style="{'font-size': '3rem'}">{{objData.preferredLocale === 'ru' ? topic.labelRu : topic.label}}</h1>
               <p class="u-large-text u-text u-text-variant u-text-2">{{objData.preferredLocale === 'ru' ? topic.subtitleRu : topic.subtitle}}</p>
-              <a href="#" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">{{objData.preferredLocale === 'ru' ? 'Выбрать' : 'Select'}}</a>
+               <el-button  @click="selectTopic" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">{{objData.preferredLocale === 'ru' ? 'Выбрать' : 'Select'}}</el-button>
             </div>
           </div>
           <div class="u-clearfix u-expanded-widatah u-gutter-30 u-layout-wrap u-layout-wrap-1">
             <div class="u-layout">
               <div class="u-layout-row">
                   <patzi-post-topic-item-img v-for="(img,ind) of topic.images" :obj-data="objData" :img="img" :key="img.id" ></patzi-post-topic-item-img>
-                <!-- <div class="u-align-left u-container-style u-image u-layout-cell u-left-cell u-size-15 u-size-30-md u-image-1" src="">
-                  <div class="u-container-layout u-container-layout-2" src=""></div>
-                </div>
-                <div class="u-align-center u-container-style u-image u-layout-cell u-size-15 u-size-30-md u-image-2" src="" data-image-widatah="1600" data-image-height="1067">
-                  <div class="u-container-layout u-container-layout-3" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-image u-layout-cell u-size-15 u-size-30-md u-image-3" src="">
-                  <div class="u-container-layout u-container-layout-4" src=""></div>
-                </div>
-                <div class="u-align-left u-container-style u-hidden-sm u-hidden-xs u-image u-layout-cell u-right-cell u-size-15 u-size-30-md u-image-4" src="">
-                  <div class="u-container-layout u-container-layout-5" src=""></div>
-                </div>-->
+           
               </div>
             </div>
           </div>
@@ -93,6 +82,9 @@ parasails.registerComponent('patziPostTopicItem', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    //...
+    selectTopic: function() {
+      // генерируем событие 'select-topic' и передаём id элемента
+      this.$emit('select-topic', this.topic.id);
+    },
   }
 });

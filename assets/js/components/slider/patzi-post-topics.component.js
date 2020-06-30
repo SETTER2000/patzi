@@ -41,9 +41,9 @@ parasails.registerComponent('patziPostTopics', {
       </template>
     </ol>
     <div class="u-carousel-inner" role="listbox">
-     <patzi-post-topic-item v-for="(topic,ind) of topics" :obj-data="objData" :topic="topic" :key="topic.id" ></patzi-post-topic-item>
-     
+     <patzi-post-topic-item v-for="(topic,ind) of topics" @select-topic="selectPosts" :obj-data="objData" :topic="topic" :key="topic.id" ></patzi-post-topic-item>
     </div>
+    
     <a class="u-absolute-vcenter u-carousel-control u-carousel-control-prev u-text-grey-30 u-block-fbe7-3" href="#carousel_c5ca" role="button" data-u-slide="prev">
         <span aria-hidden="true">
           <svg viewBox="0 0 477.175 477.175"><path d="M145.188,238.575l215.5-215.5c5.3-5.3,5.3-13.8,0-19.1s-13.8-5.3-19.1,0l-225.1,225.1c-5.3,5.3-5.3,13.8,0,19.1l225.1,225
@@ -77,11 +77,7 @@ parasails.registerComponent('patziPostTopics', {
 
 
   mounted: async function () {
-    // if (this.topics.length === 0) {
-    //   throw new Error('Neither `:topics`  was passed in to <patzi-post-topics>, but one or the other must be provided.');
-    // }
     this.updateStyle(this.$refs.img, this.topics.topicBackground);
-
   },
 
   beforeDestroy: function () {
@@ -100,18 +96,20 @@ parasails.registerComponent('patziPostTopics', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    selectPosts(id,dateReceiving) {
+      console.log('ID::; ', id);
+      console.log('dateReceiving::; ', dateReceiving);
+      this.$emit('select-posts', {id:id, dateReceiving:dateReceiving});
+    },
     updateStyle(wrapper, objData) {
-      console.log('wrapper::: ', wrapper);
-
+      // console.log('wrapper::: ', wrapper);
       if (!wrapper) {
         return;
       }
-      console.log('objData -- 9999 :: ', objData);
+      // console.log('objData -- 9999 :: ', objData);
       let img = _.last(_.pluck(objData, 'imageSrc'));
-      console.log('imm:', img);
-
+      // console.log('imm:', img);
       (img && img.length) > 0 ? $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
-
     }
   }
 });

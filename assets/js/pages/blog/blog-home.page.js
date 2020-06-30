@@ -5,6 +5,7 @@ parasails.registerPage('blog-home', {
   data: {
     topics: [],
     posts: [],
+    cashPosts: [],
     removePostId: '',
     centerDialogVisible: false,
     centerDialogAdded: false,
@@ -133,12 +134,12 @@ parasails.registerPage('blog-home', {
     // Принимаем данные по событию list-*
     io.socket.on('list-post', data => {
       console.log('POSTS LIST:: ', data);
-      this.posts = data;
+      this.posts = this.cashPosts = data;
     });
     // Принимаем данные по событию list-*
     io.socket.on('list-topic', data => {
       // this.dataAll = this.seo;
-      console.log('DAAT LIST:: ', data);
+      console.log('TOPICS LIST:: ', data);
       this.topics = _.each(data, (t, ind) => {
         t.uSectionClass = `u-section-3-${ind + 1}`;
         t.active = (ind === 0);
@@ -439,6 +440,14 @@ parasails.registerPage('blog-home', {
           // this.$forceUpdate();
         }
       });
+    },
+
+    filterPosts(data) {
+      this.posts = this.cashPosts;
+      let ft = _.filter(this.posts, {topic: data.id});
+      console.log('ft.length:: ', ft.length);
+      this.posts = ft.length ? ft : this.posts;
+      ft.length < 1 ? this.mesInfo('Нет на эту тему постов.') : '';
     },
 
   }

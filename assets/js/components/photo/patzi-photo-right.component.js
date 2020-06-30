@@ -58,35 +58,6 @@ parasails.registerComponent('patziPhotoRight', {
         </div>
       </div>
     </section>
-<!--<section class="u-clearfix u-white u-section-4" id="carousel_1ded">
-      <div class="u-clearfix u-sheet u-sheet-1">
-        <div class="u-clearfix u-expanded-width-xl u-gutter-40 u-layout-wrap u-layout-wrap-1">
-          <div class="u-layout">
-            <div class="u-layout-row">
-              <div class="u-container-style u-expand-resize u-layout-cell u-right-cell u-size-33 u-layout-cell-1" >
-                <div class="u-container-layout">
-                  <img class="u-expanded-height-sm u-expanded-height-xs u-image u-image-1" :src="dataPhoto.photos[0].imageSrc">
-                  <div class="u-align-left u-container-style u-group u-group-1">
-                    <div
-                      class="u-container-layout u-valign-middle-lg u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs u-container-layout-2">
-                      <h2 class="u-text u-text-1">{{dataPhoto.title.subtitleRu}}</h2>
-                      <a href="#" class="u-border-0 u-link u-no-underline u-link-1">{{dataPhoto.dateReceiving | getCreate}}</a>
-                      <div   class="flex justify-content-start">
-                        <el-button  v-if="me.isAdmin || me.isSuperAdmin" @click="removeItem" class=" my-3" type="danger" icon="el-icon-delete" circle></el-button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div ref="wrapper" class="u-container-style u-expand-resize u-image u-layout-cell u-left-cell u-size-27 u-image-2"
-                   data-image-width="1163" data-image-height="1600">
-                <div class="u-container-layout"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>-->
 `,
 
 

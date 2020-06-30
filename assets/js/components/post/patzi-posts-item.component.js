@@ -22,7 +22,7 @@ parasails.registerComponent('patziPostsItem', {
       type: Object,
       require: true
     },
-    'delButton':false
+    'delButton': false
   },
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -42,21 +42,22 @@ parasails.registerComponent('patziPostsItem', {
                              
                             <div class="u-container-layout u-valign-top-md u-valign-top-sm u-valign-top-xl u-valign-top-xs u-container-layout-1">
                                 <div class="u-align-left u-border-5 u-border-palette-1-base u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-shape u-shape-1"></div>
+                            
                                 <img v-if="post.images && (post.images.length>0)" class="u-expand-resize u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-image u-image-1"
                                      :src="post.images[0].imageSrc" data-image-width="462"
                                      data-image-height="693"
-                                     data-href="/blog/post">
+                                     :data-href="link()">
                                 <img src="/images/default-image.jpg" alt="not found" v-else class="u-expand-resize u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-image u-image-1"
                                       data-image-width="462"
                                      data-image-height="693"
-                                     data-href="/blog/post">  
+                                     :data-href="link()">  
                                     
-                                <h2 class="u-text u-text-1">{{objData.preferredLocale === 'ru' ? post.labelRu : post.label}}</h2>
+                                <h3 class="u-text u-text-1">{{objData.preferredLocale === 'ru' ? post.labelRu : post.label}}</h3>
                                <div class="u-text u-text-grey-30  flex justify-content-between">
                                       <p >{{post.dateEvent  | getCreate(objData.preferredLocale)}}</p>
                                        <p v-if="delButton">  <a href="#" @click="openRemoveDialog(post.id)"><i class="el-icon-delete"></i></a></p>
                                      </div>  
-                                <p class="u-text u-text-3">{{objData.preferredLocale === 'ru' ? post.subtitleRu : post.subtitle}}</p>
+                                <p class="u-text u-text-3">{{objData.preferredLocale === 'ru' ? post.subtitleRu.limit(70) : post.subtitle}} <el-link :href="link()" icon="el-icon-top-right"></el-link></p>
                             </div>
                         </div>`,
 
@@ -110,12 +111,14 @@ parasails.registerComponent('patziPostsItem', {
       });
     },
 
-    removeItem(){
+    removeItem() {
       // Генерируем событие, возможно с передаваемыми данными
       console.log('Отправляем событие', this.removeId);
       this.$emit('remove', this.removeId);
-    } ,
-
+    },
+    link() {
+      return `/blog/post/${this.post.id}`;
+    }
 
   }
 });
