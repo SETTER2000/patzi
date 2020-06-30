@@ -193,7 +193,7 @@
                                     :keyup="ruleForm.subtitleRu "
                                     placeholder="Please input"
                                     v-model="ruleForm.subtitleRu"
-                                    maxlength="300"
+                                    maxlength="230"
                                     show-word-limit>
                             </el-input>
                         </el-col>
@@ -224,7 +224,7 @@
                                     :keyup="ruleForm.subtitle "
                                     placeholder="Please input"
                                     v-model="ruleForm.subtitle "
-                                    maxlength="300"
+                                    maxlength="230"
                                     show-word-limit>
                             </el-input>
                         </el-col>
@@ -1120,7 +1120,7 @@
     </section>
 
     <% /* Слайдер тем блога */ %>
-    <patzi-post-topics :obj-data="seo" :topics="topics"></patzi-post-topics>
+    <patzi-post-topics :obj-data="seo" :topics="topics" @select-posts="filterPosts"></patzi-post-topics>
 
     <% /* Посты блога */ %>
 
