@@ -1768,12 +1768,10 @@
       </div>
 
       <% /* ФОТО СОБАК */ %>
-
       <div class="scrollbar" id="style-1">
         <el-row :gutter="7" class="flex-container wrap">
           <el-col class="flex-item" v-for="(dog, index) in objFilter()" :key="dog.id"
                   :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-
             <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
                  style="position: relative;" class="ell-image-flex"
                  v-if="!_.isEmpty(dog.imagesArrUrl)">
