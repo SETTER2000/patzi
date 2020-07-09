@@ -16188,7 +16188,7 @@ a.pswp__share--download:hover {
 }
 [class*="u-border-"],
 .u-link[class*="u-border-"] {
-  border-style: solid;
+  /*border-style: solid;*/
 }
 .u-border-0,
 .u-separator-0:after,
@@ -16239,10 +16239,10 @@ a.u-button-style.u-border-4 {
 .u-separator-5:after,
 .u-text.u-border-5,
 a.u-button-style.u-border-5 {
-  border-width: 5px;
+  /*border-width: 5px;*/
 }
 .u-link.u-border-5 {
-  border-width: 0 0 5px 0;
+  /*border-width: 0 0 5px 0;*/
 }
 .u-border-6,
 .u-separator-6:after,

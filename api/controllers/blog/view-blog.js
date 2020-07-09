@@ -58,6 +58,7 @@ module.exports = {
             }*/
       }
     });
+    post.imagesArrUrl = _.pluck(post.images, 'imageSrc');
     // Respond with view.
     return exits.success({
       seo: {

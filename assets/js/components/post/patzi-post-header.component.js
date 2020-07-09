@@ -49,9 +49,12 @@ parasails.registerComponent('patziPostHeader', {
                     <p class="u-custom-font u-heading-font u-text u-text-white u-text-1">{{post.dateEvent | getCreate(objData.preferredLocale)}}</p>
                   </div>
                 </div>
-                <img :src="post.images[0].imageSrc" class="u-align-left u-image u-image-1">
+     
+                <el-image :src="post.images[0].imageSrc" :fit="'cover'"
+                class="u-align-left u-image u-image-1"
+                :preview-src-list="post.imagesArrUrl">
+                </el-image>
                 <div class="u-border-4 u-border-palette-1-base u-shape u-shape-circle u-shape-2"></div>
-                <h3 class="u-align-center-lg u-align-center-md u-align-center-sm u-align-center-xl u-text u-text-palette-1-base u-text-2" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">19</h3>
               </div>
             </div>
             <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-21 u-layout-cell-2">

@@ -234,6 +234,8 @@ module.exports.routes = {
   'DELETE /api/v1/dogs/destroy-many-img': {action: 'dogs/destroy-many-img', csrf: false},
   'DELETE /api/v1/dogs/destroy-one-title': {action: 'dogs/destroy-one-title', csrf: false},
 
+  'GET    /api/v1/youtube/list': { action: 'youtube/list' },
+
 
   'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},
   'PUT    /api/v1/files/update-cover-album': {action: 'files/update-cover-album', csrf: false},
