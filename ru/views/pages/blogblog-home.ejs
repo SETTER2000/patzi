@@ -232,6 +232,34 @@
                 </template>
 
 
+                <% /* ВИДЕО */ %>
+                <el-form-item v-if="!buttonUpdate" label="<%= __('Topic') %>" prop="topic">
+                    <el-select v-model="ruleForm.topic" placeholder="<%= __('Choose your cattery') %>"
+                               class="form-width"
+                    >
+                        <el-option v-for="item in getPull()"
+                                   :key="item.id"
+                                   :label="item.labelRu"
+                                   :value="item.id">
+                            <div class="d-flex justify-content-between">
+                                <div class="size pr-5">{{ item.labelRu | trimString}}</div>
+                                <div class="size">{{ item.label | trimString}}</div>
+                            </div>
+                        </el-option>
+                    </el-select>
+                    <el-tooltip effect="dark"
+                                content="<%= __("Add topic") %>"
+                                placement="top-start">
+                        <el-button @click="goTo('topics')" size="mini" round icon="el-icon-plus"></el-button>
+                    </el-tooltip>
+                    <el-tooltip effect="dark"
+                                content="<%= __("Paste here the link to the video clip from youtube.com") %>"
+                                placement="top-start">
+
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
                 <!--
             <% /* ИМЯ СОБАКИ*/ %>
             <template v-if="ruleForm.kennel &&  !buttonUpdate">
