@@ -181,14 +181,16 @@ parasails.registerPage('dog', {
      * @param dateDeath
      * @returns {*}
      */
-    getAge: function (value, l, dateDeath) {
+    getAge: function (value, l, dateDeath, format) {
       if (!value) {
         return '';
       }
-      moment.locale('LLL');
+      moment.locale(l);
+      let formatNew = format ? format : 'LLL';
       let end = !_.isEmpty(dateDeath) ? moment(dateDeath) : '';
       let now = moment.parseZone();
-      return end ? moment(value).preciseDiff(end) : moment(value).preciseDiff(now);
+      return end ? moment.parseZone(value).preciseDiff(end) : moment.parseZone(value).preciseDiff(now);
+
     },
 
     // Получить значёк валюты
@@ -614,11 +616,11 @@ parasails.registerPage('dog', {
     ww(titleId) {
       return _.last(_.pluck(_.filter(this.titles, {'id': titleId}), 'label')) === 'WW';
     },
-   /* getSiblings() {
-      io.socket.get('/api/v1/dogs/list', function gop(cashier,data) {
-        console.log('ERRRR:: ', data);
-      });
-    },*/
+    /* getSiblings() {
+       io.socket.get('/api/v1/dogs/list', function gop(cashier,data) {
+         console.log('ERRRR:: ', data);
+       });
+     },*/
 
     getChildren() {
       let gender = this.dog.gender === 'dam' ? 'sire' : 'dam';
