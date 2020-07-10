@@ -361,6 +361,34 @@
                 </el-input>
               </el-col>
             </el-form-item>
+            <% /* ВЕС при рождении */ %>
+            <template>
+              <el-row :gutter="2">
+                <el-form-item label="<%= __('Birth weight (g)') %>" prop="birthWeight">
+                  <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                    <el-slider
+                            class="hidden-xs-only"
+                            v-model="ruleForm.birthWeight"
+                            class="hidden-xs-only"
+                            :min="20"
+                            :max="1000"
+                            :step="1"
+                            show-input>
+                    </el-slider>
+                    <el-input-number :min="20" class="text-center hidden-sm-and-up"
+                                     :max="1000" size="mini" v-model="ruleForm.birthWeight"></el-input-number>
+                  </el-col>
+                  <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                    <el-tooltip effect="dark"
+                                content="<%= __("Specify the weight at birth.") %>"
+                                placement="top-start">
+                      <div size="mini" round class="el-icon-question ml-3"></div>
+                    </el-tooltip>
+                  </el-col>
+                </el-form-item>
+              </el-row>
+
+            </template>
 
             <% /*Домашняя кличка */ %>
             <template>
@@ -411,7 +439,6 @@
 
             <% /* РОСТ */ %>
             <template>
-
               <el-row :gutter="2">
                 <el-form-item label="<%= __('Growth (cm)') %>" prop="growth">
                   <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
@@ -458,6 +485,13 @@
                                      v-model="ruleForm.weight">
                     </el-input-number>
                   </div>
+                </el-col>
+                <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                  <el-tooltip effect="dark"
+                              content="<%= __("Indicate the current weight of the dog.") %>"
+                              placement="top-start">
+                    <div size="mini" round class="el-icon-question ml-3"></div>
+                  </el-tooltip>
                 </el-col>
               </el-form-item>
             </template>
