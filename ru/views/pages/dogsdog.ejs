@@ -603,23 +603,22 @@
               <el-main>
                 <div class="menu-between-v">
 
-                  <div class="mb-5" v-for="(lit, ind) of dog.siblings" :key="lit.dateBirth">
+                  <div class="mb-5" v-for="(lit, ind) of dog.siblings" :key="lit.id">
 
-                    {{lit.fullName}}
+                    <h3>    <a :href="lit.detail" class="alert-link">{{lit.fullName}}</a>
+                      <i :class="[lit.gender==='sire' ? 'el-icon-male':'', 'el-icon-female']"></i>
+                    </h3>
 
-                   <!-- <div class="menu-between">
+                    <div class="menu-between">
                       <div>
-                        <div class="alert alert-secondary" role="alert">
-                          <el-popover
-                                  placement="top-start"
-                                  width="200"
-                                  trigger="hover">
-                            <ul>
+                        <div class="alert" :class="[lit.gender==='dam' ? 'alert-success' : '',  'alert-primary']" role="alert">
+
+                            <!--<ul>
                               <li><strong><%= __('Partner') %></strong></li>
                               <li v-if="lit.oneParent.sale"><%= __('For sale') %>!</li>
-                              &lt;!&ndash;<li><img width="90" :src="lit.oneParent.imgI7[lit.oneParent.cover].imageSrc" alt=""></li>&ndash;&gt;
+&lt;!&ndash;                              <li><img width="90" :src="lit.oneParent.imgI7[lit.oneParent.cover].imageSrc" alt=""></li>&ndash;&gt;
                               <li>
-                                &lt;!&ndash;<i class="" :class="[lit.oneParent.gender === 'dam' ? 'el-icon-female' : '', 'el-icon-male']"></i>&ndash;&gt;
+&lt;!&ndash;                              <i class="" :class="[lit.oneParent.gender === 'dam' ? 'el-icon-female' : '', 'el-icon-male']"></i>&ndash;&gt;
                                 <div class="flex justify-content-between">
                                   <span> <%= __('Gender') %></span><span>{{lit.oneParent.gender}}</span>
                                 </div>
@@ -666,20 +665,35 @@
                                   </div>
                                 </li>
                               </div>
-                            </ul>
-                            <a slot="reference" :href="lit.detail" class="alert-link">{{lit.fullName}}</a>
+                            </ul>-->
+
+
+<!--                              <img :src="lit.images[0].imageSrc" alt="lit.fullName">-->
+                              <el-image
+                                      style="width: 250px;"
+                                      :alt="lit.fullName"
+                                      fit="'cover'"
+                                      :src="lit.images[lit.cover].imageSrc"
+                                      :preview-src-list="lit.imagesArrUrl">
+                              </el-image>
+                          <el-popover
+                                  placement="top-start"
+                                  width="200"
+                                  trigger="hover">
+                            <div slot="reference" :href="lit.detail" class="alert-link"></div>
                           </el-popover>
                         </div>
                       </div>
                       <div>
+                        <p>{{lit.dateBirth |  getAge(me.preferredLocale, dog.dateDeath)}}</p>
                         <em>
-                          <small title="Дата помёта"> {{lit.dateBirth}}</small>
+                          <small title="Дата помёта"> {{lit.dateBirth | getCreate(me.preferredLocale, 'llll')}}</small>
                         </em>
                       </div>
                     </div>
 
 
-                    <div class="flex justify-content-between" v-for="(ch, ind) of lit.litter">
+                    <!--<div class="flex justify-content-between" v-for="(ch, ind) of lit.litter">
                      <span v-if="ch.imgI7"><el-avatar :size="50" :src="ch.imgI7[ch.cover].imageSrc"></el-avatar></span>
                       <div v-if="ch.sale" class="pt-2">
                         <el-popover
@@ -744,6 +758,8 @@
                         </el-popover>
                       </div>
                     </div>-->
+
+
                   </div>
                 </div>
               </el-main>
@@ -987,7 +1003,7 @@
           <el-button v-if="!_.isEmpty(dog.litter)" @click="drawer = true" type="success" round>
             <%= __('Offsprings') %>
           </el-button>
-          <el-button
+          <el-button   v-if="dog.siblings && dog.siblings.length > 1"
                      type="warning" @click="siblings = true" type="success" round ><%= __('Siblings') %>
           </el-button>
           <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()"
