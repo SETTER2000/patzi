@@ -145,7 +145,7 @@ parasails.registerPage('dog', {
     io.socket.on('list-titlesDog', (data) => {
       this.dog.titleDog = [...data.titleDog];
       this.$forceUpdate();
-      console.log('titlesDog получаем титулы собаки:::: ', this.dog.titleDog);
+      // console.log('titlesDog получаем титулы собаки:::: ', this.dog.titleDog);
     });
     // Принимаем данные по событию list-*
     // получаем все титулы в системе

@@ -313,7 +313,7 @@ module.exports = {
     let endDay = moment(dog.dateBirth).endOf('day');
     // console.log(`Др ${dog.fullName} начало времени дня:`, beginDay);
     // console.log(`Др ${dog.fullName} конец времени дня:`, endDay);
-    console.log(`Др ${dog.fullName} питомник:`, dog.kennel.label);
+    // console.log(`Др ${dog.fullName} питомник:`, dog.kennel.label);
     let kennel = dog.kennel.label;
     // Теперь мы можем делать все, что можем, с экземпляром Mongodb в данном примере
     // вернётся коллекция Dog.
@@ -331,9 +331,32 @@ module.exports = {
     let arr = await collection.find().toArray();
     siblingsArr = arr.map((dog) => {
       if (moment(dog.dateBirth).isBetween(beginDay, endDay) && !_.isNull(dog.fullName.match(regexp))) {
+        dog.detail = `/chinese-crested/${dog.fullName.split(' ').join('-')}`;
         return dog;
       }
     });
+
+    siblingsArr = _.compact(siblingsArr);
+
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    siblingsArr = await sails.helpers.cloudFrontUrl.with({
+      collection: siblingsArr,
+      collectionName: 'dog',
+      edits: {
+        resize: {}
+      }
+    });
+
+    await siblingsArr.map(async (dog) => {
+      dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
+    });
+
+    siblingsArr =  _.sortBy(siblingsArr, 'dateBirth');
+
     return _.compact(siblingsArr);
   }
 };

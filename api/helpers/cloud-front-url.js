@@ -79,7 +79,7 @@ module.exports = {
       }
     } else {
       await _.each(inputs.collection, async (obj) => {
-        objId = obj.id;
+        objId = obj.id ? obj.id : obj._id;
         // console.log('obj::: ' , obj);
         // console.log('obj[inputs.field]::: ' ,  (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? 'y':'n');
         // console.log('inputs.field::: ' , inputs.field);

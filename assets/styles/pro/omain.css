@@ -4738,6 +4738,12 @@ body.mobile-nav-active #mobile-nav-toggle {
   font-weight: 300;
 }
 
+
+.el-drawer__body {
+  overflow-y: auto !important;
+}
+
+
 @media (max-width: 991.98px) {
   .single-footer-widget {
     margin-bottom: 30px;

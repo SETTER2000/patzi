@@ -43,7 +43,7 @@ module.exports = {
     }
 
     const monkeys = await Dog.siblings(dog);
-    console.log('dfff:: ', monkeys);
+    // console.log('dfff:: ', monkeys);
     dog.siblings = monkeys;
     let ch = _.pluck(dog.children, 'id');
 
