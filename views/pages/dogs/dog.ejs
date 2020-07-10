@@ -627,9 +627,9 @@
                                         </h3>
 
                                         <div class="menu-between">
-                                            <div>
-                                                <div class="alert"
-                                                     :class="[lit.gender==='dam' ? 'alert-success' : '',  'alert-primary']"
+                                            <div :style="{ overflow: 'hidden', padding: '15px', border: lit.dateDeath ? '1px solid #3b3b3b' : 'none'}">
+                                                <div class="alert" :class="[lit.gender==='dam' ? 'alert-success' :
+                                                '',  'alert-primary']"
                                                      role="alert">
                                                     <el-image
                                                             style="width: 250px;"
@@ -638,18 +638,21 @@
                                                             :src="lit.images[lit.cover].imageSrc"
                                                             :preview-src-list="lit.imagesArrUrl">
                                                     </el-image>
-                                                    <el-popover
-                                                            placement="top-start"
-                                                            width="200"
-                                                            trigger="hover">
-                                                        <div slot="reference" :href="lit.detail"
-                                                             class="alert-link"></div>
-                                                    </el-popover>
+<!--                                                    <el-popover-->
+<!--                                                            placement="top-start"-->
+<!--                                                            width="200"-->
+<!--                                                            trigger="hover">-->
+<!--                                                        <div slot="reference" :href="lit.detail"-->
+<!--                                                             class="alert-link"></div>-->
+<!--                                                    </el-popover>-->
                                                 </div>
                                             </div>
                                             <div>
+<!--                                                <p v-if="dateDeath" title="<%= __('Age') %>">{{lit.dateBirth | getAge(me-->
+<!--                                                    .preferredLocale,-->
+<!--                                                    dog.dateDeath)}}</p>-->
                                                 <p title="<%= __('Age') %>">{{lit.dateBirth | getAge(me.preferredLocale,
-                                                    dog.dateDeath)}}</p>
+                                                    lit.dateDeath)}}</p>
                                                 <em>
                                                     <small title="<%= __('Date of birth') %>"> {{lit.dateBirth |
                                                       getCreate(me.preferredLocale, 'llll')}}
