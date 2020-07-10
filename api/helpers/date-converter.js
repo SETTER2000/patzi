@@ -24,10 +24,11 @@ module.exports = {
 
 
   fn: async function (inputs) {
-    const moment = require('moment');
-    const tz = require('moment-timezone');
+    // const moment = require('moment');
+    const moment = require('moment-timezone');
     moment.locale('en');
     console.log('Входящие даты: ', inputs.date);
+    console.log('IS NUMBER?: ', _.isNumber(inputs.date));
     // let dt = inputs.date;
     let dt = JSON.parse(inputs.date);
     let now = moment(); // создаёт текущую дату, тип объект

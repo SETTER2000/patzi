@@ -148,6 +148,14 @@ module.exports = {
     },
 
 
+    birthWeight: {
+      type: 'number',
+      description: 'Вес. В граммах при рождении.',
+      example: 170
+    },
+
+
+
     weight: {
       type: 'number',
       description: 'Вес. В граммах.',
@@ -343,6 +351,7 @@ module.exports = {
       see: inputs.see,
       allowEdit: inputs.allowEdit,
       weight: inputs.weight,
+      birthWeight: inputs.birthWeight,
       growth: inputs.growth,
       type: inputs.type,
       sale: inputs.sale,

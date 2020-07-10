@@ -172,6 +172,13 @@ module.exports = {
                     Обложка альбома.`
     },
 
+    birthWeight: {
+      type: 'number',
+      description: 'Вес. В граммах при рождении.',
+      example: 170
+    },
+
+
     weight: {
       type: 'number',
       description: 'Вес. В граммах.',
@@ -308,13 +315,16 @@ module.exports = {
     const moment = require('moment');
     const db = sails.getDatastore('mongodb').manager;
     let siblingsArr = [];
-    // console.log('Для этой собаке получить братьев и сестер из помёта::: ', dog.fullName);
     let beginDay = moment(dog.dateBirth).startOf('day');
     let endDay = moment(dog.dateBirth).endOf('day');
-    // console.log(`Др ${dog.fullName} начало времени дня:`, beginDay);
-    // console.log(`Др ${dog.fullName} конец времени дня:`, endDay);
-    // console.log(`Др ${dog.fullName} питомник:`, dog.kennel.label);
-    let kennel = dog.kennel.label;
+    let kennel = '';
+    if (!dog.kennel) {
+      let ob = await Dog.findOne(dog.id).populate('kennel');
+      kennel = ob.kennel.label;
+    } else {
+      kennel = dog.kennel.label;
+    }
+
     // Теперь мы можем делать все, что можем, с экземпляром Mongodb в данном примере
     // вернётся коллекция Dog.
     // Тип данных Cursor (mongodb):
@@ -355,7 +365,7 @@ module.exports = {
       dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
     });
 
-    siblingsArr =  _.sortBy(siblingsArr, 'dateBirth');
+    siblingsArr = _.sortBy(siblingsArr, 'dateBirth');
 
     return _.compact(siblingsArr);
   }
