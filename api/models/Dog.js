@@ -312,11 +312,15 @@ module.exports = {
   },
   // получить всех братьев и сестёр
   siblings: async function (dog) {
+    console.log('Входящий объект Dog для sibling: ', dog);
     const moment = require('moment');
     const db = sails.getDatastore('mongodb').manager;
+    console.log('IS NUMBER?: ', _.isNumber(dog.dateBirth));
     let siblingsArr = [];
-    let beginDay = moment(dog.dateBirth).startOf('day');
-    let endDay = moment(dog.dateBirth).endOf('day');
+    let birth = dog.dateBirth;  // дата должна быть представлена как: '1593334800000'
+    // let birth = _.isNumber(dog.dateBirth) ? dog.dateBirth : await sails.helpers.dateFix(dog.dateBirth);
+    let beginDay = moment(birth).startOf('day');
+    let endDay = moment(birth).endOf('day');
     let kennel = '';
     if (!dog.kennel) {
       let ob = await Dog.findOne(dog.id).populate('kennel');

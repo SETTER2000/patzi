@@ -15,8 +15,8 @@ module.exports = {
 
 
   fn: async function (inputs) {
-    const moment = require('moment');
-    const tz = require('moment-timezone');
+    // const moment = require('moment');
+    const moment = require('moment-timezone');
     moment.locale('en');
     let str = inputs.date;
     let dateNew = (str && str.match(/"/)) ? str.replace(/"([^"]+(?="))"/g, '$1') : str;

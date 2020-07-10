@@ -242,7 +242,7 @@ parasails.registerPage('dogs-home', {
       subtitle: '',
       weight: 10,
       growth: 20,
-      birthWeight: 20,
+      // birthWeight: 20,
       type: '',
     },
     //  fits: 'cover',
