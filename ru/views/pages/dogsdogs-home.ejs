@@ -371,12 +371,12 @@
                             v-model="ruleForm.birthWeight"
                             class="hidden-xs-only"
                             :min="0"
-                            :max="1000"
+                            :max="400"
                             :step="1"
                             show-input>
                     </el-slider>
                     <el-input-number :min="0" class="text-center hidden-sm-and-up"
-                                     :max="1000" size="mini" v-model="ruleForm.birthWeight"></el-input-number>
+                                     :max="400" size="mini" v-model="ruleForm.birthWeight"></el-input-number>
                   </el-col>
                   <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
                     <el-tooltip effect="dark"
