@@ -629,7 +629,7 @@
                                         <div class="menu-between">
                                             <div>
                                                 <div class="alert"
-                                                     :class="[lit.gender==='dam' ? 'alert-success' : '',  'alert-primary']"
+                                                      'alert-success' : '',  'alert-primary']"
                                                      role="alert">
                                                     <el-image
                                                             style="width: 250px;"
@@ -642,14 +642,14 @@
                                                             placement="top-start"
                                                             width="200"
                                                             trigger="hover">
-                                                        <div slot="reference" :href="lit.detail"
-                                                             class="alert-link"></div>
+                                                        
+                                                             
                                                     </el-popover>
                                                 </div>
                                             </div>
                                             <div>
                                                 <p title="<%= __('Age') %>">{{lit.dateBirth | getAge(me.preferredLocale,
-                                                    dog.dateDeath)}}</p>
+                                                    
                                                 <em>
                                                     <small title="<%= __('Date of birth') %>"> {{lit.dateBirth |
                                                       getCreate(me.preferredLocale, 'llll')}}
