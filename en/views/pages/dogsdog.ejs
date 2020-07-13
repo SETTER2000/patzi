@@ -35,8 +35,8 @@
                         </div>
                         <div class="u-container-style u-image u-layout-cell u-right-cell u-size-32 u-image-2">
                             <div class="u-container-layout">
-                                <img class="u-expand-resize u-expanded-height u-image u-image-2"
-                                     :src="dog.images[0].imageSrc">
+                                <img class="u-expand-resize u-expanded-height u-image u-image-2 lazyload"
+                                     :data-src="dog.images[0].imageSrc">
                             </div>
                         </div>
                     </div>
@@ -195,7 +195,7 @@
                     </el-upload>
                     <br>
                     <el-dialog :visible.sync="dialogVisible" style="z-index: 10000">
-                        <img :src="dialogImageUrl" alt="">
+                        <img :data-src="dialogImageUrl" class="lazyload" alt="">
                     </el-dialog>
                 </div>
             </div>
@@ -314,7 +314,7 @@
             :visible.sync="photoVisible"
             :before-close="handleCloseDialog">
         <div class="menu-center" v-if="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)">
-            <img :src="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)" style="width: 100%;"
+            <img class="lazyload" :data-src="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)" style="width: 100%;"
                  :alt="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)">
         </div>
         <span slot="footer" class="dialog-footer">
@@ -525,7 +525,8 @@
                             <div class="block">
                                 <a href="#" @click="clickShowPhoto(dog.breeder)" class="flex justify-content-center">
                                     <el-avatar :size="100" :src="dog.breeder.avatar" @error="errorHandler">
-                                        <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                                        <img data-src="https://cube.elemecdn
+                                        .com/e/fd/0fc7d20532fdaf769a25683617711png.png" class="lazyload"/>
                                     </el-avatar>
                                 </a>
                             </div>
@@ -547,7 +548,8 @@
                             <div class="block">
                                 <a href="#" @click="clickShowPhoto(dog.owners)" class="flex justify-content-center">
                                     <el-avatar :size="100" :src="dog.owners | getFoto()" @error="errorHandler">
-                                        <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                                        <img class="lazyload" data-src="https://cube.elemecdn
+                                        .com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
                                     </el-avatar>
                                 </a>
                             </div>
@@ -576,7 +578,7 @@
                                     <el-carousel-item v-for="(img, index) of parent.imgI7" :key="img.id"
                                                       class="menu-center">
                                         <p class="medium">{{ parent.description }}</p>
-                                        <img :src="img.imageSrc" style="width: auto; height: 300px; " alt="">
+                                        <img :data-src="img.imageSrc" class="lazyload" style="width: auto; height: 300px; " alt="">
                                     </el-carousel-item>
                                 </el-carousel>
                             </template>
@@ -627,9 +629,9 @@
                                         </h3>
 
                                         <div class="menu-between">
-                                            <div>
-                                                <div class="alert"
-                                                      'alert-success' : '',  'alert-primary']"
+                                            <div :style="{ overflow: 'hidden', padding: '15px', border: lit.dateDeath ? '1px solid #3b3b3b' : 'none'}">
+                                                <div class="alert" :class="[lit.gender==='dam' ? 'alert-success' :
+                                                '',  'alert-primary']"
                                                      role="alert">
                                                     <el-image
                                                             style="width: 250px;"
@@ -638,18 +640,21 @@
                                                             :src="lit.images[lit.cover].imageSrc"
                                                             :preview-src-list="lit.imagesArrUrl">
                                                     </el-image>
-                                                    <el-popover
-                                                            placement="top-start"
-                                                            width="200"
-                                                            trigger="hover">
-                                                        
-                                                             
-                                                    </el-popover>
+<!--                                                    <el-popover-->
+<!--                                                            placement="top-start"-->
+<!--                                                            width="200"-->
+<!--                                                            trigger="hover">-->
+<!--                                                        <div slot="reference" :href="lit.detail"-->
+<!--                                                             class="alert-link"></div>-->
+<!--                                                    </el-popover>-->
                                                 </div>
                                             </div>
                                             <div>
+<!--                                                <p v-if="dateDeath" title="<%= __('Age') %>">{{lit.dateBirth | getAge(me-->
+<!--                                                    .preferredLocale,-->
+<!--                                                    dog.dateDeath)}}</p>-->
                                                 <p title="<%= __('Age') %>">{{lit.dateBirth | getAge(me.preferredLocale,
-                                                    
+                                                    lit.dateDeath)}}</p>
                                                 <em>
                                                     <small title="<%= __('Date of birth') %>"> {{lit.dateBirth |
                                                       getCreate(me.preferredLocale, 'llll')}}
@@ -783,8 +788,8 @@
                                                     <ul :style="{ overflow: 'hidden', padding: '15px', border: ch.dateDeath ? '1px solid #3b3b3b' : 'none'}">
                                                         <li><strong><%= __('Descendant') %></strong></li>
                                                         <!--<li v-if="ch.sale"><%= __('For sale') %>!</li>-->
-                                                        <li v-if="ch.imgI7"><img width="142"
-                                                                                 :src="ch.imgI7[ch.cover].imageSrc"
+                                                        <li v-if="ch.imgI7"><img width="142"  class="lazyload"
+                                                                                 :data-src="ch.imgI7[ch.cover].imageSrc"
                                                                                  alt=""></li>
                                                         <li>
                                                             <!--<i class="" :class="[ch.gender === 'dam' ? 'el-icon-female' : '', 'el-icon-male']"></i>-->
@@ -933,7 +938,7 @@
                                 <picture @click="clickShowPhoto(img)" class="pointer">
                                     <source media="(min-width: 1240px)" :srcset="dog.imagesMin[index].imageSrc">
                                     <source media="(max-width: 414px)" :srcset="dog.imgI7[index].imageSrc">
-                                    <img :src="img.imageSrc" class="portrait" :alt="img.name">
+                                    <img :data-src="img.imageSrc" class="portrait lazyload" :alt="img.name">
                                 </picture>
                             </div>
                         </div>
