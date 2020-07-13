@@ -32,7 +32,7 @@
             <div v-if="!_.isEmpty(scope.row.images)">
               <a href="#" @click="clickShowPhoto(scope.$index,scope.row)" class="flex justify-content-center">
                 <el-avatar :size="38" @error="errorHandler">
-                  <img :src="scope.row.images[scope.row.cover].imageSrc"/>
+                  
                 </el-avatar>
               </a>
             </div>
@@ -214,7 +214,7 @@
           </el-upload>
           <br>
           <el-dialog :visible.sync="dialogVisible" style="z-index: 10000">
-            <img :src="dialogImageUrl" alt="">
+            
           </el-dialog>
         </div>
       </div>
@@ -1165,7 +1165,7 @@
               </div>
             </template>
 
-            <img :src="img.imageSrc" class="image">
+            
 
 
             <div style="padding: 14px;">
@@ -1443,7 +1443,7 @@
                   class="u-align-left u-container-style u-expand-resize u-layout-cell u-right-cell u-size-20 u-size-20-md u-layout-cell-3"
                   src="">
                   <div class="u-container-layout u-container-layout-3" src="" v-if="o.images[(o.cover+1)]">
-                    <!--<img :src="o.images[1].imageSrc" alt="" class="u-expanded-width u-image u-image-default u-image-2" data-image-width="1600" data-image-height="1067">-->
+                    
                     <el-image
                       :src="o.images[(o.cover+1)].imageSrc"
                       :key="o.id"
@@ -1685,7 +1685,7 @@
       <el-carousel indicator-position="outside" height="65vh">
         <el-carousel-item v-for="(item, index) of items" :key="index">
           <div class="d-flex justify-content-center align-items-center">
-            <img :src="item.src" class="img-fluid height"
+            
                  alt="A generic square placeholder image with rounded corners in a figure.">
           </div>
         </el-carousel-item>
@@ -1700,7 +1700,7 @@
     :visible.sync="photoVisible"
     :before-close="handleCloseDialog">
     <div class="menu-center" v-if="objOne.images">
-      <img :src="objOne.images[objOne.cover].imageSrc" style="width: 100%" :alt="objOne.fullName">
+      
     </div>
     <!--<div class="block">
       <el-image :src="objOne.img" class="cov">
