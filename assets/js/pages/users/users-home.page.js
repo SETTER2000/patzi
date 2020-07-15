@@ -315,8 +315,7 @@ parasails.registerPage('users-home', {
 
     io.socket.on('list', (data) => {
       this.users = _.get(data, 'users') ? data.users : this.users;
-      console.log(' this.users::: ', this.users);
-      console.log(' data.users::: ', data);
+
       // this.count = _.get(data, 'count') ?  data.count : this.count;
     });
 
@@ -978,13 +977,12 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
 
     async cityList() {
       await io.socket.get(`/api/v1/city/list/${this.regionId}`, function gotResponse(body, response) {
-        console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
+       // console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-city', (data) => {
         this.citys = data;
       });
-      console.log('this.citys::: ', this.citys);
     },
 
 
