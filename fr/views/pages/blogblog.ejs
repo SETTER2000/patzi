@@ -1,15 +1,15 @@
 <div id="blog" v-cloak>
   <% /* шапка страницы post */ %>
   <patzi-post-header :obj-data="seo" :post="post" @select-posts="filterPosts"></patzi-post-header>
-
-
-
+  <% /* ВЫВОД КАРТИНОК */ %>
+  <!--<ul>
+    <li v-for="(img, index) of post.images"><img height="100vh" class="lazyload" :data-src="img.imageSrc" alt=""> </li>
+  </ul>-->
   <section class="u-clearfix u-section-2" id="carousel_1cb2">
     <div class="u-clearfix u-sheet u-sheet-1">
-      <p class="u-text u-text-1">
-        Your Dog</p>
-      <h2 class="u-text u-text-2">
-        In The Focus!</h2>
+      <p class="u-text u-text-1 text-capitalize"><%= __('dog') %></p>
+      <h2 class="u-text u-text-2 text-uppercase">
+        <%= __('in the focus') %>!</h2>
       <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
         <div class="u-layout">
           <div class="u-layout-row">
