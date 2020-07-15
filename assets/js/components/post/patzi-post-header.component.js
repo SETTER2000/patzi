@@ -50,8 +50,7 @@ parasails.registerComponent('patziPostHeader', {
                   </div>
                 </div>
 
-                <el-image :data-src="post.images[0].imageSrc" :fit="'cover'"
-                class="u-align-left u-image u-image-1 lazyload"
+                <el-image :src="post.images[0].imageSrc" :fit="'cover'" class="u-align-left u-image u-image-1"
                 :preview-src-list="post.imagesArrUrl">
                 </el-image>
                 <div class="u-border-4 u-border-palette-1-base u-shape u-shape-circle u-shape-2"></div>
