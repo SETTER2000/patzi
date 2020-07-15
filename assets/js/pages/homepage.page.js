@@ -7,8 +7,7 @@ parasails.registerPage('homepage', {
     heroHeightSet: false,
     year:'',
     language:'en',
-    posts:[],
-    num:2   // Кол-во выводимых постов на homepage
+    posts:[]
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -20,7 +19,7 @@ parasails.registerPage('homepage', {
 
     this.language = window.navigator.language;
     // Запрос для события list-*
-    io.socket.get(`/api/v1/posts/cnt/${this.num}`, function gotResponse(body, response) {
+    io.socket.get(`/api/v1/posts/cnt`, function gotResponse(body, response) {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Принимаем данные по событию list-*

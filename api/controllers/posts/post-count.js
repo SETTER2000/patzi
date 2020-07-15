@@ -42,7 +42,7 @@ module.exports = {
     await sails.sockets.join(req, 'post');
 console.log('inputs.num::: ' , inputs.num);
     // Выбираем весь список объектов данной коллекции.
-    let posts = await Post.find({'see':true, 'rootPage':true}).limit(inputs.num)
+    let posts = await Post.find({'see':true, 'rootPage':true}).limit(sails.config.custom.countPostRootPage,)
       .sort([
         {firstTopic: 'DESC'},
         {dateEvent: 'DESC'}
