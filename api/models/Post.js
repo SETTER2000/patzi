@@ -33,7 +33,11 @@ module.exports = {
       defaultsTo: true,
       description: `Флаг видимости поста. Видна или нет. По умолчанию видна.`
     },
-
+    rootPage: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: `Флаг видимости поста на главной. Виден или нет. По умолчанию не виден.`
+    },
     firstTopic: {
       type: 'boolean',
       defaultsTo: false,

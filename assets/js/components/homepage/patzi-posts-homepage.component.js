@@ -1,5 +1,5 @@
 /**
- * <patzi-posts>
+ * <patzi-posts-homepage>
  * -----------------------------------------------------------------------------
  * Начальный пример возможного построения компонента.
  *
@@ -9,14 +9,14 @@
  * -----------------------------------------------------------------------------
  */
 
-parasails.registerComponent('patziPosts', {
+parasails.registerComponent('patziPostsHomepage', {
   //  ╔═╗╦═╗╔═╗╔═╗╔═╗
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╩╚═╚═╝╩  ╚═╝
   props: [
     'objData',
     'posts' ,
-    'delButton'
+    'lang' ,
   ],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -31,19 +31,12 @@ parasails.registerComponent('patziPosts', {
   //  ╦ ╦╔╦╗╔╦╗╦
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
-  template: `<section class="u-align-center u-clearfix u-image u-image-tiles u-section-4" id="carousel_6b06" data-image-width="400"
-             data-image-height="400">
-        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-            <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
-                <div class="u-gutter-0 u-layout">
-                    <div class="u-layout-row">
-                    <patzi-posts-item v-if="post.see"  v-for="(post,ind) of posts" :obj-data="objData" :del-button="delButton" @remove="removeItem"  :post="post" :key="post.id" ></patzi-posts-item>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-`,
+  template: ` <section        
+            class="skrollable skrollable-between u-align-center-md u-align-center-sm u-align-center-xl u-align-center-xs u-align-left-lg u-clearfix u-section-2"
+            id="sec-2f66">
+       
+          <patzi-posts-homepage-item  v-if="post.rootPage" v-for="(post,ind) of posts" :obj-data="objData" :index="ind" :lang="lang" :post="post" :key="post.id" >  </patzi-posts-homepage-item>
+    </section>`,
 
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -55,8 +48,10 @@ parasails.registerComponent('patziPosts', {
 
 
   mounted: async function () {
-    // console.log('objData++::', this.objData);
     this.data = this.objData.data ? this.objData.data : this.data;
+    // if (this.objData.data === undefined) {
+    //   throw new Error('Neither `:data`  was passed in to <patziPostsHomepage>, but one or the other must be provided.');
+    // }
   },
 
   beforeDestroy: function () {
@@ -67,10 +62,6 @@ parasails.registerComponent('patziPosts', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    removeItem(id){
-      // Генерируем событие, возможно с передаваемыми данными
-      console.log('Отправляем событие', id);
-      this.$emit('remove', id);
-    } ,
+   //...
   }
 });

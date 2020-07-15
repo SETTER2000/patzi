@@ -196,6 +196,7 @@ module.exports.routes = {
   'DELETE /api/v1/topics/destroy-one-topic': {action: 'topics/destroy-one-topic', csrf: false},
 
   'GET    /api/v1/posts/list': {action: 'posts/list'},
+  'GET    /api/v1/posts/cnt/:num?': {action: 'posts/post-count'},
   'POST   /api/v1/posts/create-post': {action: 'posts/create-post', csrf: false},
   'DELETE /api/v1/posts/destroy-one-post': {action: 'posts/destroy-one-post', csrf: false},
 
@@ -234,7 +235,7 @@ module.exports.routes = {
   'DELETE /api/v1/dogs/destroy-many-img': {action: 'dogs/destroy-many-img', csrf: false},
   'DELETE /api/v1/dogs/destroy-one-title': {action: 'dogs/destroy-one-title', csrf: false},
 
-  'GET    /api/v1/youtube/list': { action: 'youtube/list' },
+  'GET    /api/v1/youtube/list': {action: 'youtube/list'},
 
 
   'POST   /api/v1/files/upload': {action: 'files/upload-files', csrf: false},
@@ -260,5 +261,5 @@ module.exports.routes = {
   'GET    /api/v1/colors/list': {action: 'colors/list'},
 
   'GET    /native': {action: 'litters/list-native'},
-
+  'GET /csrfToken': {action: 'security/grant-csrf-token'}
 };

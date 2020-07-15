@@ -13,6 +13,7 @@
 
 module.exports.policies = {
 
+  // '*': true,
   '*': ['is-logged-in','localize'],
 
   // Bypass the `is-logged-in` policy for:
@@ -26,6 +27,11 @@ module.exports.policies = {
   'comments/add-comment':'is-all-group',
   'kennels/*':'is-all-group',
   'topics/list':'is-all-group',
+  'posts/post-count':true,
+  'files/*':'is-homepage',
+  // 'posts/*':true,
+
+
   // 'kennels/*':['is-super-admin','is-admin'],
   'users/list-status':true,
   'groups/is-breeder':true,

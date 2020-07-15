@@ -49,6 +49,7 @@ module.exports = {
 
   fn: async function (inputs) {
     const btoa = require('btoa');
+    const url = require('url');
     let imageSrc = '',
       objId = '',
       resize = {
@@ -56,6 +57,7 @@ module.exports = {
         width: 1424,
         height: 800
       };
+
     // Если не передан объект resize, то устанавливаем размер по умолчанию.
     inputs.edits.resize = inputs.edits.resize ? inputs.edits.resize : resize;
     // console.log('inputs.collection::: ', inputs.collection);

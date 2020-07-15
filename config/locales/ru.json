@@ -953,5 +953,16 @@
 	"Specify the weight at birth.": "Укажите вес при рождение щенка.",
 	"Indicate the current weight of the dog.": "Укажите текущий вес собаки.",
 	"Birth weight": "Вес при рождении",
-	"Age": "Возраст"
+	"Age": "Возраст",
+	"you dog": "ваша собака",
+	"pet": "питомец",
+	"in the focus": "в фокусе",
+	"dog": "собака",
+	"not show": "не показывать",
+	"on": "вкл.",
+	"off": "выкл.",
+	"Article": "Статья",
+	"On the main": "На главной",
+	"Will your article/post on the site be visible?": "Будет ли видна ваша статья/пост на сайте?",
+	"Enable the display of this topic on the main page of the site?": "Включить показ данного топика на главной странице сайта?"
 }

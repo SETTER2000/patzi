@@ -42,10 +42,10 @@ module.exports = {
     await sails.sockets.join(req, 'post');
 
     // Выбираем весь список объектов данной коллекции.
-    let posts = await Post.find({see:true})
+    let posts = await Post.find({see:true, 'rootPage':true}).limit(inputs.num)
       .sort([
         {firstTopic: 'DESC'},
-        {createdAt: 'DESC'}
+        {dateEvent: 'DESC'}
       ]);
 
 
@@ -85,7 +85,7 @@ module.exports = {
     });
 
 
-    await sails.sockets.broadcast('post', 'list-post', posts);
+    await sails.sockets.broadcast('post', 'post-count', posts);
     // Respond with view.
     return exits.success();
 

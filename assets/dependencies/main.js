@@ -405,12 +405,18 @@ $(document).ready(function () {
 
   $('.your-class').slick({});
 
-
+    // console.log('LNG:: ', ELEMENT.lang.en);
   let lang = ELEMENT.lang.en;
   lang = (SAILS_LOCALS.me && SAILS_LOCALS.me.preferredLocale === 'ru') ? ELEMENT.lang.ruRU : lang;
 
   ELEMENT.locale(lang);
   (!!SAILS_LOCALS.me) ? moment.locale(SAILS_LOCALS.me.preferredLocale) : '';
 });
+
+
+  // if ( window.navigator.language.slice(0, 2) !== "en" ) {
+  //   console.log('LANG:: ',window.navigator.language);
+  // }
+
 
 

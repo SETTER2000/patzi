@@ -17,7 +17,9 @@ parasails.registerPage('blog-home', {
     dialogImageUrl: '',
     innerVisible: false,
     buttonUpdate: false,
-    ruleForm: {},
+    ruleForm: {
+      see:true
+    },
     rules: {
       kennel: [
         {required: true, message: 'Please select kennel name', trigger: 'change'}
@@ -296,7 +298,8 @@ parasails.registerPage('blog-home', {
         labelRu: this.ruleForm.labelRu,
         subtitle: this.ruleForm.subtitle,
         subtitleRu: this.ruleForm.subtitleRu,
-        see: this.ruleForm.see
+        see: this.ruleForm.see  ,
+        rootPage: this.ruleForm.rootPage
       };
 
       console.log('DATA перед отправкой::: ', data);

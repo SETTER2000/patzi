@@ -40,7 +40,7 @@ parasails.registerComponent('patziPostsItem', {
   template: `<div class="u-align-left u-container-style u-layout-cell u-left-cell u-size-20 u-layout-cell-1"
                           >
                              
-                            <div class="u-container-layout u-valign-top-md u-valign-top-sm u-valign-top-xl u-valign-top-xs u-container-layout-1">
+                            <div  class="u-container-layout u-valign-top-md u-valign-top-sm u-valign-top-xl u-valign-top-xs u-container-layout-1">
                                 <div class="u-align-left u-border-5 u-border-palette-1-base u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-shape u-shape-1"></div>
                             
                                 <img v-if="post.images && (post.images.length>0)" class="u-expand-resize u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-image u-image-1"
