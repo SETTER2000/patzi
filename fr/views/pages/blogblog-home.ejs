@@ -948,108 +948,24 @@
             custom-class="dialog-kennel-add"
             center>
         <!-- Start Pricing Area -->
-        <!-- <section>
+      <section>
       <div class="row">
         <div class="col-lg-12">
           <div class="section-title text-center">
-            <h3><%= __('Annual subscription') %></h3>
-            <h2 class="mt-5"><span><%= __('Tariff Plans') %></span></h2>
+            <h3><%= __('Need to do now') %>!</h3>
+            <h2 class="mt-5"><span><%= __('Post Topics') %></span></h2>
             <p>
             <ul>
-              <li><span class="ti-close cross mx-2 text-danger"></span><%= __('Not included in the price') %></li>
+              <li><span class=" cross mx-2 text-danger"></span><%= __('Your system currently does not have a blog topic catalog. Any blog post should be tied to a specific topic. You need to create at least one topic in the Themes module. To do this, go to the main menu Settings -> Themes') %><el-link href="/topics" icon="el-icon-top-right"></el-link></li>
             </ul>
             </p>
           </div>
         </div>
       </div>
-      <div class="row">
-        <el-alert
-          title="<%= __('You have not linked a payment source to your account. In order to access paid features, you\'ll need to provide your credit card information. (Don\'t worry: you will only be charged when you\'ve reached the limit of your free plan.)') %>"
-          type="warning">
-        </el-alert>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="pricing_item">
-            <h3 class="p_title"><%= __('User') %></h3>
-            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
-            <h1 class="p_price">&euro;0</h1>
-            <div class="p_list">
-              <ul>
-
-                <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
-                <li><span class="ti-check"></span> <%= __('Write comments') %></li>
-                <li><span class="ti-close cross"></span><%= __('Add dogs') %> </li>
-                <li><span class="ti-close cross"></span> <%= __('Edit dogs') %></li>
-                <li><span class="ti-close cross"></span> <%= __('Add kennel') %></li>
-                <li><span class="ti-close cross"></span> <%= __('Edit kennel') %></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="pricing_item">
-            <h3 class="p_title"><%= __('Owner') %></h3>
-            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
-            <h1 class="p_price">&euro;5</h1>
-            <div class="p_list">
-              <ul>
-                <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
-                <li><span class="ti-check"></span> <%= __('Write comments') %></li>
-                <li><span class="ti-check"></span> <%= __('Add 3 dogs') %></li>
-                <li><span class="ti-check"></span> <%= __('Edit 3 dogs') %></li>
-                <li><span class="ti-close cross"></span> <%= __('Add kennel') %></li>
-                <li><span class="ti-close cross"></span> <%= __('Edit kennel') %></li>
-
-              </ul>
-              <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
-                <span>D</span>
-                <span>e</span>
-                <span>t</span>
-                <span>a</span>
-                <span>i</span>
-                <span>l</span>
-                <span>e</span>
-                <span>d</span>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="pricing_item">
-            <h3 class="p_title"><%= __('Breeder') %></h3>
-            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
-            <h1 class="p_price">&euro;8</h1>
-            <div class="p_list">
-              <ul>
-                <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
-                <li><span class="ti-check"></span> <%= __('Write comments') %></li>
-                <li><span class="ti-check"></span> <%= __('Add dogs') %></li>
-                <li><span class="ti-check"></span> <%= __('Edit dogs') %></li>
-                <li><span class="ti-check"></span> <%= __('Add kennel') %></li>
-                <li><span class="ti-check"></span> <%= __('Edit kennel') %></li>
-              </ul>
-              <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
-                <span>D</span>
-                <span>e</span>
-                <span>t</span>
-                <span>a</span>
-                <span>i</span>
-                <span>l</span>
-                <span>e</span>
-                <span>d</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </section>-->
+      </section>
         <div slot="footer" class="dialog-footer mb-3 pb-5">
 
-            <el-button @click="centerDialogVisible = false"><%= __('Close') %></el-button>
+            <el-button @click="centerDialogVisible = false" ><%= __('Ok') %></el-button>
             <!--<el-button type="info" @click="goTo('account')" size="large"><%= __('Add card') %></el-button>-->
         </div>
     </el-dialog>
