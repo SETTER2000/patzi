@@ -8,7 +8,7 @@ parasails.registerPage('homepage', {
     year:'',
     language:'en',
     posts:[],
-    num:1   // Кол-во выводимых постов на homepage
+    num:2   // Кол-во выводимых постов на homepage
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗

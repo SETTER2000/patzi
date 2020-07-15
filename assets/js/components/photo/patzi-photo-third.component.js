@@ -42,7 +42,7 @@ parasails.registerComponent('patziPhotoThird', {
               </div>
               <div class="u-container-style u-expand-resize u-layout-cell u-right-cell u-size-33 u-layout-cell-2">
                 <div class="u-container-layout">
-                  <img class="u-expanded-height-sm u-expanded-height-xs u-image u-image-2" :src="dataPhoto.photos[0].imageSrc">
+                  <img class="u-expanded-height-sm u-expanded-height-xs u-image u-image-2 lazyload" :data-src="dataPhoto.photos[0].imageSrc">
                   <div class="u-align-left u-container-style u-group u-group-1">
                     <div class="u-container-layout u-valign-middle-lg u-valign-middle-sm u-valign-middle-xs u-container-layout-3">
                       <h2 class="u-text u-text-1">{{dataPhoto.title.subtitleRu}}</h2>

@@ -142,7 +142,8 @@ module.exports = {
       subtitle: inputs.subtitle,
       backgroundPosition: inputs.backgroundPosition,
       subtitleRu: inputs.subtitleRu,
-      see: inputs.see
+      see: inputs.see,
+      rootPage: inputs.rootPage
     }).fetch();
     console.log('[newPost.id]', newPost);
     if (!newPost) {

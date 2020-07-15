@@ -18,7 +18,8 @@ parasails.registerPage('blog-home', {
     innerVisible: false,
     buttonUpdate: false,
     ruleForm: {
-      see:true
+      see:true,
+      rootPage:false
     },
     rules: {
       kennel: [
@@ -228,8 +229,8 @@ parasails.registerPage('blog-home', {
 
     // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
-      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
-      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
 
@@ -240,8 +241,9 @@ parasails.registerPage('blog-home', {
 
     // Если массив тем постов пустой, выводим сообщение.
     clickAddButton() {
+      console.log('CLICK');
       this.warning = this.i19p.warnNoArr;
-      (this.topics.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
+      (this.topics && this.topics.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisible = true;
     },
     getPull() {
       return this.topics;
@@ -298,7 +300,7 @@ parasails.registerPage('blog-home', {
         labelRu: this.ruleForm.labelRu,
         subtitle: this.ruleForm.subtitle,
         subtitleRu: this.ruleForm.subtitleRu,
-        see: this.ruleForm.see  ,
+        see: this.ruleForm.see,
         rootPage: this.ruleForm.rootPage
       };
 

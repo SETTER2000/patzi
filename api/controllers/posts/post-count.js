@@ -40,9 +40,9 @@ module.exports = {
     // Have the socket which made the request join the "post" room.
     // Подключить сокет, который сделал запрос, к комнате «post».
     await sails.sockets.join(req, 'post');
-
+console.log('inputs.num::: ' , inputs.num);
     // Выбираем весь список объектов данной коллекции.
-    let posts = await Post.find({see:true, 'rootPage':true}).limit(inputs.num)
+    let posts = await Post.find({'see':true, 'rootPage':true}).limit(inputs.num)
       .sort([
         {firstTopic: 'DESC'},
         {dateEvent: 'DESC'}
