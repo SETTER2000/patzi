@@ -211,7 +211,7 @@
                         <el-input show-word-limit
                                   style="width:80%;"
                                   clearable
-                                  maxlength="70"
+                                  maxlength="120"
                                   size="small"
                                   :keyup="ruleForm.labelRu | abc(ruleForm,'labelRu','ru')"
                                   placeholder="<%= __('Topic Title') %>"
@@ -230,7 +230,7 @@
                                     :keyup="ruleForm.subtitleRu "
                                     placeholder="Please input"
                                     v-model="ruleForm.subtitleRu"
-                                    maxlength="230"
+                                    maxlength="700"
                                     show-word-limit>
                             </el-input>
                         </el-col>
@@ -242,7 +242,7 @@
                         <el-input show-word-limit
                                   style="width:80%;"
                                   clearable
-                                  maxlength="70"
+                                  maxlength="120"
                                   size="small"
                                   :keyup="ruleForm.label | abc(ruleForm,'label','en')"
                                   placeholder="<%= __('Topic Title') %>"
@@ -261,7 +261,7 @@
                                     :keyup="ruleForm.subtitle "
                                     placeholder="Please input"
                                     v-model="ruleForm.subtitle "
-                                    maxlength="230"
+                                    maxlength="700"
                                     show-word-limit>
                             </el-input>
                         </el-col>
