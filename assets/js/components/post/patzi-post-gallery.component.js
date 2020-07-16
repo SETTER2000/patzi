@@ -1,7 +1,7 @@
 /**
- * <patzi-posts>
+ * <patzi-post-gallery>
  * -----------------------------------------------------------------------------
- * Начальный пример возможного построения компонента.
+ * Компонент для вывода фотографий на странице поста в блоге.
  *
  * @type {Component}
  *
@@ -9,14 +9,15 @@
  * -----------------------------------------------------------------------------
  */
 
-parasails.registerComponent('patziPosts', {
+parasails.registerComponent('patziPostGallery', {
   //  ╔═╗╦═╗╔═╗╔═╗╔═╗
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╩╚═╚═╝╩  ╚═╝
   props: [
     'objData',
-    'posts' ,
-    'delButton'
+    'post',
+    'delButton',
+    'lines',
   ],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -31,18 +32,21 @@ parasails.registerComponent('patziPosts', {
   //  ╦ ╦╔╦╗╔╦╗╦
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
-  template: `<section class="u-align-center u-clearfix u-image u-image-tiles u-section-4" id="carousel_6b06" data-image-width="400"
-             data-image-height="400">
-        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-            <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
-                <div class="u-gutter-0 u-layout">
-                    <div class="u-layout-row">
-                    <patzi-posts-item v-if="post.see"  v-for="(post,ind) of posts" :obj-data="objData" :del-button="delButton" @remove="removeItem"  :post="post" :key="post.id" ></patzi-posts-item>
-                    </div>
-                </div>
-            </div>
+  template: `
+ <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
+        <div class="u-layout">
+          <div class="u-layout-row">
+          <template v-if="!lines">
+          <patzi-post-gallery-item-left  v-if="post.images && post.images.length > 0" :obj-data="_.at(post.images, [0, 1])" :del-button="delButton" @remove="removeItem" ></patzi-post-gallery-item-left> 
+          <patzi-post-gallery-item-center  v-if="post.images && post.images.length >= 3" :obj-data="_.at(post.images, [2, 3])" :del-button="delButton" @remove="removeItem" ></patzi-post-gallery-item-center>
+          <patzi-post-gallery-item-right  v-if="post.images && post.images.length >= 5" :obj-data="_.at(post.images, [4, 5])" :del-button="delButton" @remove="removeItem"  ></patzi-post-gallery-item-right>
+          </template>
+          <template v-else> 
+          <patzi-post-gallery-item-lines   :obj-data="post" :del-button="delButton" @remove="removeItem"  ></patzi-post-gallery-item-lines>
+          </template> 
+          </div>
         </div>
-    </section>
+      </div>
 `,
 
 
@@ -55,8 +59,9 @@ parasails.registerComponent('patziPosts', {
 
 
   mounted: async function () {
-    // console.log('objData++::', this.objData);
-    this.data = this.objData.data ? this.objData.data : this.data;
+    // if (this.objData.data === undefined) {
+    //   throw new Error('Neither `:data`  was passed in to <patzi-post-gallery>, but one or the other must be provided.');
+    // }
   },
 
   beforeDestroy: function () {

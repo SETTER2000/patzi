@@ -8,8 +8,9 @@ parasails.registerPage('welcome', {
     WxH: '800x420',
     coverMode: 'cover',
     fp: 'fp-x:0.5,fp-y:0.5,fp-z:1',
-    cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net'
-
+    cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net' ,
+    posts:[],
+    post:[],
 
   },
 
@@ -19,6 +20,16 @@ parasails.registerPage('welcome', {
   beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
+    io.socket.get(`/api/v1/posts/cnt`, function gotResponse(body, response) {
+      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Принимаем данные по событию list-*
+    io.socket.on('post-count', data => {
+      console.log('POSTS LIST:: ', data);
+      this.posts = this.cashPosts = data;
+      this.post = _.last(_.at(this.posts, [0]));
+      console.log('ONE POST::: ' , this.post);
+    });
 
   },
   mounted: async function () {

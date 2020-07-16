@@ -10,6 +10,7 @@ parasails.registerPage('blog-home', {
     centerDialogVisible: false,
     centerDialogAdded: false,
     limit: 50,
+    postCount: 0,
     // posts: [{name: 'sadf', label: 'sdfsd'}],
     dialog: {},
     sizeLess: 5, // MB
@@ -18,8 +19,8 @@ parasails.registerPage('blog-home', {
     innerVisible: false,
     buttonUpdate: false,
     ruleForm: {
-      see:true,
-      rootPage:false
+      see: true,
+      rootPage: false
     },
     rules: {
       kennel: [
@@ -130,6 +131,7 @@ parasails.registerPage('blog-home', {
     io.socket.get(`/api/v1/posts/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
+
     // Запрос для события list-*
     io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -137,6 +139,7 @@ parasails.registerPage('blog-home', {
     // Принимаем данные по событию list-*
     io.socket.on('list-post', data => {
       console.log('POSTS LIST:: ', data);
+      this.postCount = data && data.length > 0 ? data.length : this.postCount;
       this.posts = this.cashPosts = data;
     });
     // Принимаем данные по событию list-*

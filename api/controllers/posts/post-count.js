@@ -40,14 +40,15 @@ module.exports = {
     // Have the socket which made the request join the "post" room.
     // Подключить сокет, который сделал запрос, к комнате «post».
     await sails.sockets.join(req, 'post');
-console.log('inputs.num::: ' , inputs.num);
+// console.log('inputs.num::: ' , inputs.num);
     // Выбираем весь список объектов данной коллекции.
-    let posts = await Post.find({'see':true, 'rootPage':true}).limit(sails.config.custom.countPostRootPage,)
+    let posts = await Post.find({'see': true, 'rootPage': true}).limit(sails.config.custom.countPostRootPage,)
       .sort([
         {firstTopic: 'DESC'},
         {dateEvent: 'DESC'}
-      ]);
-
+      ])
+      .populate('topic')
+    ;
 
 
     /**
@@ -78,7 +79,7 @@ console.log('inputs.num::: ' , inputs.num);
 
 
     await posts.map(async (post) => {
-      post.detail = post.label ? `/post/${post.id}` : '';
+      post.detail = post.label ? `/blog/post/${post.id}` : '';
       post.imagesArrUrl = _.pluck(post.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
       // post.cover = post.imagesArrUrl[0]; // Обложка альбома
       return post;

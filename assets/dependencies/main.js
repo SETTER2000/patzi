@@ -8,6 +8,7 @@ function initMap() {
     });
   }
 }
+
 String.prototype.limit = function( limit, userParams) {
   var text = this
     , options = {

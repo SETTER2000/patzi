@@ -50,7 +50,7 @@ parasails.registerComponent('patziPostHeader', {
                   </div>
                 </div>
 
-                <el-image :src="post.images[0].imageSrc" :fit="'cover'" class="u-align-left u-image u-image-1"
+                <el-image  :src="post.images[0].imageSrc" :fit="'cover'" class="u-align-left u-image u-image-1"
                 :preview-src-list="post.imagesArrUrl">
                 </el-image>
                 <div class="u-border-4 u-border-palette-1-base u-shape u-shape-circle u-shape-2"></div>
@@ -85,9 +85,9 @@ parasails.registerComponent('patziPostHeader', {
 
 
   mounted: async function () {
-    if (this.objData === undefined) {
-      throw new Error('Neither `:data`  was passed in to <patzi-post-header>, but one or the other must be provided.');
-    }
+    // if (this.objData === undefined) {
+    //   throw new Error('Neither `:data`  was passed in to <patzi-post-header>, but one or the other must be provided.');
+    // }
   },
 
   beforeDestroy: function () {

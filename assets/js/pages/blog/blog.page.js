@@ -3,7 +3,7 @@ parasails.registerPage('blog', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-
+    lines: true,
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -30,5 +30,9 @@ parasails.registerPage('blog', {
       this.post = ft.length ? ft : this.post;
       ft.length < 1 ? this.mesInfo('Нет на эту тему постов.') : '';*/
     },
-  }
+  },
+
+  // lines(){
+  //   return
+  // }
 });

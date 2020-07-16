@@ -1,7 +1,8 @@
 /**
- * <patzi-posts>
+ * <patzi-post-gallery-item-lines>
  * -----------------------------------------------------------------------------
- * Начальный пример возможного построения компонента.
+ * Компонент дизайна отображения фотографий для компонента patzi-post-gallery.component.js
+ * просто в линию друг за другом
  *
  * @type {Component}
  *
@@ -9,15 +10,17 @@
  * -----------------------------------------------------------------------------
  */
 
-parasails.registerComponent('patziPosts', {
+parasails.registerComponent('patziPostGalleryItemLines', {
   //  ╔═╗╦═╗╔═╗╔═╗╔═╗
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╩╚═╚═╝╩  ╚═╝
-  props: [
-    'objData',
-    'posts' ,
-    'delButton'
-  ],
+  props: {
+    'objData': {
+      type: Object,
+      require: true
+    },
+    'delButton': false
+  },
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
@@ -31,18 +34,15 @@ parasails.registerComponent('patziPosts', {
   //  ╦ ╦╔╦╗╔╦╗╦
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
-  template: `<section class="u-align-center u-clearfix u-image u-image-tiles u-section-4" id="carousel_6b06" data-image-width="400"
-             data-image-height="400">
-        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-            <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
-                <div class="u-gutter-0 u-layout">
-                    <div class="u-layout-row">
-                    <patzi-posts-item v-if="post.see"  v-for="(post,ind) of posts" :obj-data="objData" :del-button="delButton" @remove="removeItem"  :post="post" :key="post.id" ></patzi-posts-item>
-                    </div>
-                </div>
-            </div>
+  template: `
+        <div class="photo-flex">   
+            <el-image  v-for="(img, index) of objData.images" 
+                       class="child lazyload"
+                       :key="'ims-'+index"
+                       :src="img.imageSrc"
+                       :fit="'cover'">
+            </el-image>                
         </div>
-    </section>
 `,
 
 
@@ -55,8 +55,7 @@ parasails.registerComponent('patziPosts', {
 
 
   mounted: async function () {
-    // console.log('objData++::', this.objData);
-    this.data = this.objData.data ? this.objData.data : this.data;
+
   },
 
   beforeDestroy: function () {
@@ -67,10 +66,29 @@ parasails.registerComponent('patziPosts', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    removeItem(id){
+    openRemoveDialog(id) {
+      this.removeId = id;
+      this.$confirm('Это навсегда удалит объект. Продолжить?', 'Внимание', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Отмена',
+        type: 'warning'
+      }).then(() => {
+        this.removeItem();
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Удаление отменено'
+        });
+      });
+    },
+    removeItem() {
       // Генерируем событие, возможно с передаваемыми данными
-      // console.log('Отправляем событие', id);
-      this.$emit('remove', id);
-    } ,
+      // console.log('Отправляем событие', this.removeId);
+      this.$emit('remove', this.removeId);
+    },
+    link() {
+      return `/blog/post/${this.post.id}`;
+    }
   }
 });
