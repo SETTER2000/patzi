@@ -37,10 +37,12 @@ parasails.registerComponent('patziPostGalleryItemLines', {
   template: `
         <div class="photo-flex">   
             <el-image  v-for="(img, index) of objData.images" 
-                       class="child lazyload"
+                       class="child"
                        :key="'ims-'+index"
                        :src="img.imageSrc"
-                       :fit="'cover'">
+                       :preview-src-list="objData.imagesArrUrl"
+                       :fit="'cover'"
+                       lazy>
             </el-image>                
         </div>
 `,
