@@ -170,10 +170,11 @@
       </div>
     </div>
   </section>
+  <%/*МИР СОБАК БЛОГ*/%>
   <section class="u-align-right u-clearfix u-image u-shading u-section-6" id="sec-b36a" data-image-width="1280" data-image-height="766">
     <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
       <h5 class="u-text u-text-1"><%= __('our blog') %></h5>
-      <h2 class="u-text u-text-grey-10 u-text-2"><%= __('Latest Good Story') %></h2>
+      <h2 class="u-text u-text-grey-10 u-text-2"><%= __('Dog World') %></h2>
       <p class="u-text u-text-white u-text-3"><%= __('This blog talks about the life of the nursery. All events worthy of publicity are outlined here. Exhibitions, victories, awards of our dogs, just interesting events and facts from the life of dogs. You can leave your comments and share your opinion with us') %>.
         <br><%= __('Your opinion is very important to us friends') %>.
         <br>
@@ -181,40 +182,16 @@
       </p>
     </div>
   </section>
-  <section class="u-clearfix u-section-7" id="sec-04f4">
-    <div class="u-clearfix u-sheet u-sheet-1">
-      <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
-        <div class="u-layout">
-          <div class="u-layout-row">
-            <div class="u-container-style u-expand-resize u-layout-cell u-left-cell u-size-30 u-layout-cell-1">
-              <div class="u-container-layout" >
-                <a href="/blog/post">
-                <img class="u-image u-image-1 lazyload" data-src="https://d3a1wbnh2r1l7y.cloudfront.net/20191102untitled3481.jpg"
-                     data-image-width="1600" data-image-height="1067">
-                <img data-src="https://d3a1wbnh2r1l7y.cloudfront.net/20191102untitled3474.jpg" alt=""
-                     class="u-align-left u-image u-image-2 lazyload">
-                </a>
-              </div>
-            </div>
-            <div class="u-container-style u-layout-cell u-right-cell u-size-30 u-layout-cell-2">
-              <div class="u-container-layout u-valign-middle u-container-layout-2">
-                <h2 class="u-align-left u-text u-text-1">Russia 2019</h2>
-                <h4 class="u-align-left u-text u-text-2"><%= __('The first day') %></h4>
-                <p class="u-align-left u-text u-text-3">November 2, 2019</p>
-                <p class="u-align-left u-text u-text-4">International Dog Shows (3 x CACIB FCI) «Russia 2019» (Crufts qualification), «RKF President’s Cup 2019» &amp; «RKF Cup 2019»
-                  <br>November 2, 2019
-                  <br>Poale Ell Chen&nbsp;,
-                  <br>baby class, judge Daniel Arnoult (France), very promising, CW, bob baby.
-                  <br>
-                </p>
-                <p class="u-align-right u-text u-text-5">For Sale</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+
+  <%/* ПОСТ БЛОГА */%>
+
+  <patzi-blog-post :obj-data="seo" :post="post" ></patzi-blog-post>
+
+
+
+
+
+
 
   <router-view></router-view>
 
