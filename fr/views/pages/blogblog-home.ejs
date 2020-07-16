@@ -107,14 +107,14 @@
                 <el-form-item label="<%= __('Article') %>" prop="see">
                     <el-row :gutter="2">
                         <el-col :span="5">
-                    <el-switch
-                            style="display: block; padding-bottom: 0"
-                            v-model="ruleForm.see"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949"
-                            active-text="<%= __('visible') %>"
-                            inactive-text="<%= __('not visible') %>">
-                    </el-switch>
+                            <el-switch
+                                    style="display: block; padding-bottom: 0"
+                                    v-model="ruleForm.see"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                                    active-text="<%= __('visible') %>"
+                                    inactive-text="<%= __('not visible') %>">
+                            </el-switch>
                         </el-col>
                         <el-col :span="5">
                             <el-tooltip effect="dark"
@@ -942,35 +942,38 @@
         <span slot="footer" class="dialog-footer">
   </span>
     </el-dialog>
-    <% /* Диалоговое окно. Тарифы. */ %>
+    <% /* Диалоговое окно. Подсказка о создание темы. */ %>
     <el-dialog
             :visible.sync="centerDialogVisible"
             custom-class="dialog-kennel-add"
             center>
         <!-- Start Pricing Area -->
-      <section>
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="section-title text-center">
-            <h3><%= __('Need to do now') %>!</h3>
-            <h2 class="mt-5"><span><%= __('Post Topics') %></span></h2>
-            <p>
-            <ul>
-              <li><span class=" cross mx-2 text-danger"></span><%= __('Your system currently does not have a blog topic catalog. Any blog post should be tied to a specific topic. You need to create at least one topic in the Themes module. To do this, go to the main menu Settings -> Themes') %><el-link href="/topics" icon="el-icon-top-right"></el-link></li>
-            </ul>
-            </p>
-          </div>
-        </div>
-      </div>
-      </section>
+        <section>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title text-center">
+                        <h3><%= __('Need to do now') %>!</h3>
+                        <h2 class="mt-5"><span><%= __('Post Topics') %></span></h2>
+                        <p>
+                        <ul>
+                            <li>
+                                <span class=" cross mx-2 text-danger"></span><%= __('Your system currently does not have a blog topic catalog. Any blog post should be tied to a specific topic. You need to create at least one topic in the Themes module. To do this, go to the main menu Settings -> Themes') %>
+                                <el-link href="/topics" icon="el-icon-top-right"></el-link>
+                            </li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
         <div slot="footer" class="dialog-footer mb-3 pb-5">
 
-            <el-button @click="centerDialogVisible = false" ><%= __('Ok') %></el-button>
+            <el-button @click="centerDialogVisible = false"><%= __('Ok') %></el-button>
             <!--<el-button type="info" @click="goTo('account')" size="large"><%= __('Add card') %></el-button>-->
         </div>
     </el-dialog>
 
-
+    <% /* HEADER */ %>
     <section class="u-align-center u-clearfix u-image u-shading u-valign-middle u-section-1" id="sec-61d2"
              data-image-width="1280"
              data-image-height="1280">
@@ -1027,20 +1030,25 @@
             </div>
         </div>
     </section>
+
+    <% /* ФАКТЫ, ЗАМЕТКИ, ПОБЕДЫ, НАСТРОЕНИЕ. */ %>
     <section class="u-align-center u-clearfix u-image u-image-tiles u-section-2" id="sec-df25" data-image-width="400"
              data-image-height="400">
         <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-            <h3 class="u-text u-text-1">Наш Блог</h3>
-            <h2 class="u-heading-font u-text u-text-black u-text-2">Факты, заметки, победы, настроение</h2>
+
+            <h3 class="u-text u-text-1 text-capitalize">
+                <%= __('Our Blog') %>
+            </h3>
+            <h2 class="u-heading-font u-text u-text-black u-text-2"><%= __('Facts, notes, victories, mood') %></h2>
             <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
                 <div class="u-layout">
+                    <% /* ОЦЕНКИ. */ %>
                     <div class="u-layout-row">
                         <div class="u-container-style u-layout-cell u-left-cell u-size-20 u-layout-cell-1">
                             <div class="u-container-layout u-valign-top u-container-layout-1">
                                 <span class="u-icon u-icon-circle u-text-palette-1-base u-icon-1">
-                    <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 54 54" style=""><use
-                                xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-55ad"></use></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                        <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 54 54" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-55ad"></use></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
                          id="svg-55ad" x="0px"
                          y="0px" viewBox="0 0 54 54" style="enable-background:new 0 0 54 54;" xml:space="preserve"
                          class="u-svg-content"><g><path
@@ -1054,10 +1062,12 @@
                                     d="M12.15,11.564c0.195,0.195,0.451,0.293,0.707,0.293s0.512-0.098,0.707-0.293c0.391-0.391,0.391-1.023,0-1.414l-2.828-2.828   c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414L12.15,11.564z"></path><path
                                     d="M27,13c-6.617,0-12,5.383-12,12c0,0.553,0.447,1,1,1s1-0.447,1-1c0-5.514,4.486-10,10-10c0.553,0,1-0.447,1-1   S27.553,13,27,13z"></path>
 </g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
-                  </span>
+                                </span>
                                 <h1 class="u-align-center u-text u-text-palette-1-base u-text-3"
                                     data-animation-name="counter"
-                                    data-animation-event="scroll" data-animation-duration="3000">+500</h1>
+                                    data-animation-event="scroll" data-animation-duration="3000">
+                                    +{{postCount}}
+                                </h1>
                                 <h5 class="u-align-center u-text u-text-4">всего постов</h5>
                                 <p class="u-align-center u-text u-text-5">Этот показатель фиксирует общее количество
                                     постов во всем блоге
@@ -1080,7 +1090,7 @@
 </g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
                   </span>
                                 <h1 class="u-text u-text-palette-1-base u-text-6" data-animation-name="counter"
-                                    data-animation-event="scroll" data-animation-duration="3000">+1000</h1>
+                                    data-animation-event="scroll" data-animation-duration="3000">+101</h1>
                                 <h5 class="u-text u-text-7">оценок супер</h5>
                                 <p class="u-text u-text-8">Этот показатель фиксирует общее количество оценок&nbsp;
                                     "Super" во всем блоге
