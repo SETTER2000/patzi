@@ -399,6 +399,8 @@
                                             <h5 class="text-center">
                                                 <small>breeder:</small>
                                                 {{dog.breeder.fullName}}
+                                                <% /* Сделать перевод имён */ %>
+<!--                                                {{me.preferredLocale === 'ru' ? dog.breeder.fullName : dog.breeder.fullNameEn}}-->
                                             </h5>
                                         </el-col>
                                         <% /* Владелец  */ %>
@@ -406,6 +408,8 @@
                                             <h5 class="text-center">
                                                 <small>owner:</small>
                                                 {{dog.owners.fullName}}
+                                                <% /* Сделать перевод имён */ %>
+<!--                                                {{me.preferredLocale === 'ru' ? dog.owners.fullName : dog.owners.fullNameEn}}-->
                                             </h5>
                                         </el-col>
                                     </el-row>
