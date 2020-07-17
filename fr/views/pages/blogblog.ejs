@@ -1,23 +1,131 @@
 <div id="blog" v-cloak>
+    <% /* Диалоговое окно редактор поста (EDIT)*/ %>
+    <el-dialog
+            :title=" succ ? '<%= __('REDACTED') %>': '<%= __('POST EDITOR') %>' "
+            :visible.sync="dialogPedigreeVisible"
+            :fullscreen="true"
+            top="1vh"
+            center
+            :class="[succ ? activeClass : '', '']"
+            :before-close="handlerCloseDialogSlider"
+            v-if="virtualPageSlug==='edit'">
+
+        <div style="height: 90px;" class="flex justify-content-center align-content-center">
+            <h2 v-if="eLabel"> {{post.labelRu}}</h2>
+            <div  v-else="!eLabel" class="demo-input-suffix">
+<!--                <span class="demo-input-label">Using attributes</span>-->
+                <el-input  style=" width: 25rem" placeholder="<%= __('Required to fill') %>"
+                           v-model="post.labelRu "
+                           class="input-with-select">
+                </el-input>
+                <el-input  style=" width: 25rem"
+                        placeholder="<%= __('Required to fill') %>"
+                        v-model="post.label">
+                    <el-button  v-if="!succ" type="info" @click="editLabel" slot="append"
+                                icon="el-icon-circle-check"></el-button>
+
+                </el-input>
+
+            </div>
+            <div v-if="eLabel" class="btr pointer">
+                <i @click="eLabel ? eLabel=false : eLabel=true" class="el-icon-view"></i>
+            </div>
+        </div>
+        <div class="block">
+            <!---------------------------------------------------------------------------------------->
+            <% /*Загрузка фото NEW*/ %>
+            <div class="container-fluid ">
+                <div class="row justify-content-center">
+                    <div class="col">
+                        <el-upload
+                                action="/api/v1/files/upload"
+                                list-type="picture-card"
+                                drag
+                                multiple
+                                ref="upload"
+                                :on-preview="handlePictureCardPreview"
+                                :before-upload="beforeUpload"
+                                :limit="limit"
+                                :on-success="handleSuccess"
+                                :on-exceed="handleExceed"
+                                :on-remove="handleRemove"
+                        >
+                            <i class="el-icon-plus"></i>
+                            <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
+                                {{sizeLess}}<%= __('MB') %></div>
+                        </el-upload>
+                        <br>
+                        <el-dialog :visible.sync="dialogVisible" style="z-index: 10000">
+                            <img :src="dialogImageUrl" alt="">
+                        </el-dialog>
+                    </div>
+                </div>
+            </div>
+            <!---------------------------------------------------------------------------------------->
+            <el-form :model="post" :rules="rules" ref="post" class="demo-ruleForm">
+                <% /* ВИДЕН ПОСТ ИЛИ НЕТ */ %>
+                <el-form-item label="<%= __('Article') %>" prop="see">
+                    <el-row :gutter="2">
+                        <el-col :span="5">
+                            <el-switch
+                                    style="display: block; padding-bottom: 0"
+                                    v-model="post.see"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                                    active-text="<%= __('visible') %>"
+                                    inactive-text="<%= __('not visible') %>">
+                            </el-switch>
+                        </el-col>
+                        <el-col :span="5">
+                            <el-tooltip effect="dark"
+                                        content="<%= __("Will your article/post on the site be visible?") %>"
+                                        placement="top-start">
+
+                                <div size="mini" round class="el-icon-question "></div>
+                            </el-tooltip>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+                <% /* ДАТА */ %>
+                <el-form-item  label="<%= __('Date') %>" prop="dateEvent">
+                    <el-row :gutter="2">
+                        <el-col :span="11">
+                            <el-date-picker
+                                    v-model="post.dateEvent"
+                                    type="datetime"
+                                    placeholder="<%= __('Select date and time') %>"
+                                    default-time="12:00:00">
+                            </el-date-picker>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+            </el-form>
+        </div>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handlerCloseDialogSlider()"><%= __('Close') %></el-button>
+        </span>
+    </el-dialog>
     <% /* шапка страницы post */ %>
-    <patzi-post-header :obj-data="seo" :post="post" @select-posts="filterPosts"></patzi-post-header>
+    <patzi-post-header :obj-data="seo" :post="post" @editpost="editPost" @remove="removeItem"
+                       @select-posts="filterPosts"></patzi-post-header>
     <% /* ВЫВОД КАРТИНОК */ %>
     <section class="u-clearfix u-section-2" id="carousel_1cb2">
         <div class="u-clearfix u-sheet u-sheet-1">
             <p class="u-text u-text-1 text-capitalize"><%= __('dog') %></p>
-            <h2 class="u-text u-text-2 text-uppercase flex space-between" >
-               <span><%= __('in the focus') %>!</span>
-              <el-switch
-                            style="display: block"
-                            v-model="lines"
-                            active-color="#13ce66"
-                            inactive-color="#bdce0d"
-                            active-text="<%= __('row') %>"
-                            inactive-text="<%= __('column') %>">
-            </el-switch>
+            <h2 class="u-text u-text-2 text-uppercase flex space-between">
+                <span><%= __('in the focus') %>!</span>
+                <el-switch
+                        style="display: block"
+                        v-model="lines"
+                        active-color="#13ce66"
+                        inactive-color="#bdce0d"
+                        active-text="<%= __('row') %>"
+                        inactive-text="<%= __('column') %>">
+                </el-switch>
             </h2>
 
-            <patzi-post-gallery :obj-data="seo" :post="post" :lines="lines" @select-posts="filterPosts"></patzi-post-gallery>
+            <patzi-post-gallery :obj-data="seo" :post="post" :lines="lines"
+                                @select-posts="filterPosts"></patzi-post-gallery>
         </div>
     </section>
 
@@ -123,6 +231,6 @@
         </div>
     </section>
 
-
+    <router-view></router-view>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
