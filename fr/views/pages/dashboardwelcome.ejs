@@ -195,7 +195,7 @@
 
   <router-view></router-view>
 
-  <modal class="example-modal" v-if="modal==='example'" @close="closeExampleModal()" v-cloak>
+ <!-- <modal class="example-modal" v-if="modal==='example'" @close="closeExampleModal()" v-cloak>
     <div class="modal-header">
       <h2 class="modal-title"><%= __('Dog Shows') %></h2>
       <p><%= __('An exciting journey into the world of dogs through the prism of the exhibition marathon.') %></p>
@@ -211,9 +211,9 @@
       <p><%= __('On video') %> Chinese Crested Dog: Poale Ell Bazhen </p>
       <div class="embed-responsive embed-responsive-16by9">
 
-        <!--<iframe width="560" height="315" src="https://www.youtube.com/embed/Z5SmaOld7lM" frameborder="0"-->
-        <!--allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"-->
-        <!--allowfullscreen></iframe>-->
+        &lt;!&ndash;<iframe width="560" height="315" src="https://www.youtube.com/embed/Z5SmaOld7lM" frameborder="0"&ndash;&gt;
+        &lt;!&ndash;allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"&ndash;&gt;
+        &lt;!&ndash;allowfullscreen></iframe>&ndash;&gt;
         <iframe width="560" height="315" src="https://www.youtube.com/embed/Z5SmaOld7lM?start=4" frameborder="0"
                 allow="accelerometer; autoplay; encrypted media; gyroscope; picture-in-picture"
                 allowfullscreen></iframe>
@@ -297,7 +297,7 @@
       <div class="d-flex bd-highlight mb-0">
         <div class="p-2 bd-highlight">
           <a class="grouped_elements" rel="group1" href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-9.jpg">
-            <!--<img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-9.jpg" alt="">-->
+            &lt;!&ndash;<img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-9.jpg" alt="">&ndash;&gt;
             <el-image class="f-img img-fluid mx-auto" :src="getSrc('ds-9.jpg')"
                       alt=""></el-image>
           </a>
@@ -355,7 +355,7 @@
       <button type="button" data-dismiss="modal" class="btn btn-info"><%= __('Close') %></button>
       <button type="button" data-dismiss="modal" class="btn btn-outline-danger"><%= __('Cancel') %></button>
     </div>
-  </modal>
+  </modal>-->
 </div>
 
 <%- /* Exposé des locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
