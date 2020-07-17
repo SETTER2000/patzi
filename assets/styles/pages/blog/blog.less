@@ -1062,4 +1062,49 @@
       }
     }
   }
+
+  .edit-buttons{
+    height: 90px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .not-border {
+    border: 0 !important;
+    &:hover, &:active, &:focus {
+      border: 0 !important;
+      background: none;
+    }
+  }
+  .btr{
+    height: 85px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+  .el-dialog__wrapper.scc{
+    .el-dialog__title{
+      color: green;
+      font-size: 1.2rem;
+      font-weight: bolder;
+      transition: color 2s, font-size 2s;
+    }
+  }
+  .el-dialog__wrapper.text-danger{
+    .el-dialog__title{
+      color: red;
+      font-size: 1.2rem;
+      font-weight: bolder;
+      transition: color 2s, font-size 2s;
+    }
+  }
+   .el-upload-dragger{
+     width: unset;
+     height: unset;
+   }
 }

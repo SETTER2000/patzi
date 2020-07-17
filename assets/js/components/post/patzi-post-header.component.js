@@ -50,7 +50,7 @@ parasails.registerComponent('patziPostHeader', {
                   </div>
                 </div>
 
-                <el-image  :src="post.images[0].imageSrc" :fit="'cover'" class="u-align-left u-image u-image-1"
+                <el-image v-if="post.images && post.images.length>0" :src="post.images[0].imageSrc" :fit="'cover'" class="u-align-left u-image u-image-1"
                 :preview-src-list="post.imagesArrUrl">
                 </el-image>
                 <div class="u-border-4 u-border-palette-1-base u-shape u-shape-circle u-shape-2"></div>
@@ -64,6 +64,16 @@ parasails.registerComponent('patziPostHeader', {
                 <p class="u-text u-text-5">
                 {{objData.preferredLocale ==='ru' ? post.subtitleRu : post.subtitle}}
                 </p>
+          
+                <el-row class="edit-buttons" v-if="post.isAdmin || post.isSuperAdmin">                 
+                    <el-button  @click="goto('/blog')" icon="el-icon-house" circle></el-button>
+                    <el-button  @click="openEditDialog()" type="primary" icon="el-icon-edit" circle></el-button>
+                   <!-- <el-button disabled type="success" icon="el-icon-check" circle></el-button>
+                    <el-button disabled type="info" icon="el-icon-message" circle></el-button>
+                    <el-button disabled type="warning" icon="el-icon-star-off" circle></el-button>-->
+                    <el-button  @click="removeItem()" type="danger" icon="el-icon-delete" circle></el-button>
+                </el-row>
+       
                 <!--<a href="#" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1" data-animation-name="rollIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">More</a>-->
               </div>
             </div>
@@ -109,6 +119,12 @@ parasails.registerComponent('patziPostHeader', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    //...
+    openEditDialog() {
+      this.$emit('editpost', this.post);
+    },
+    removeItem() {
+      // Генерируем событие, возможно с передаваемыми данными
+      this.$emit('remove', this.post.id);
+    },
   }
 });

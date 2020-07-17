@@ -37,8 +37,8 @@ parasails.registerComponent('patziBlogPost', {
           <patzi-posts-homepage-item  v-if="post.rootPage" v-for="(post,ind) of posts" :obj-data="objData" :index="ind" :lang="lang" :post="post" :key="post.id" >  </patzi-posts-homepage-item>
     </section>-->
 
-
-<section class="u-clearfix u-section-7" id="sec-04f4">
+    
+<section class="u-clearfix u-section-7" id="sec-04f4">       
     <div class="u-clearfix u-sheet u-sheet-1">
       <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
         <div class="u-layout">
@@ -73,7 +73,7 @@ parasails.registerComponent('patziBlogPost', {
             <div class="u-container-style u-layout-cell u-right-cell u-size-30 u-layout-cell-2">
               <div class="u-container-layout u-valign-middle u-container-layout-2">
                 <h2 class="u-align-left u-text u-text-1">{{objData.preferredLocale === 'ru' ? post.labelRu : post.label}}</h2>
-                <h4 class="u-align-left u-text u-text-2"><a href="/blog">{{objData.preferredLocale === 'ru' ? (post.topic && post.topic.labelRu ? post.topic.labelRu: '') : post.topic.label}}</a> </h4>
+                <h4 class="u-align-left u-text u-text-2"><a href="/blog">{{objData.preferredLocale === 'ru' ? (post.topic && post.topic.labelRu ? post.topic.labelRu: '') : (post.topic && post.topic.label ? post.topic.label: '')}}</a> </h4>
                 <p class="u-align-left u-text u-text-3">{{post.dateEvent  | getCreate(objData.preferredLocale)}}</p>
                 <p class="u-align-left u-text u-text-4"> 
                   {{objData.preferredLocale === 'ru' ? post.subtitleRu : post.subtitle}} 

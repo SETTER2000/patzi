@@ -37,7 +37,7 @@ parasails.registerComponent('patziPosts', {
             <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
                 <div class="u-gutter-0 u-layout">
                     <div class="u-layout-row">
-                    <patzi-posts-item v-if="post.see"  v-for="(post,ind) of posts" :obj-data="objData" :del-button="delButton" @remove="removeItem"  :post="post" :key="post.id" ></patzi-posts-item>
+                    <patzi-posts-item v-if="post.see"  v-for="(post,ind) of posts" :obj-data="objData" :del-button="delButton" @editpost="editPost" @remove="removeItem"  :post="post" :key="post.id" ></patzi-posts-item>
                     </div>
                 </div>
             </div>
@@ -71,6 +71,11 @@ parasails.registerComponent('patziPosts', {
       // Генерируем событие, возможно с передаваемыми данными
       // console.log('Отправляем событие', id);
       this.$emit('remove', id);
+    } ,
+    editPost(post){
+      // Генерируем событие, возможно с передаваемыми данными
+      // console.log('Отправляем событие', id);
+      this.$emit('editpost', post);
     } ,
   }
 });

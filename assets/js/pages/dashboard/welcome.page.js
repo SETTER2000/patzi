@@ -10,7 +10,7 @@ parasails.registerPage('welcome', {
     fp: 'fp-x:0.5,fp-y:0.5,fp-z:1',
     cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net' ,
     posts:[],
-    post:[],
+    post:{},
 
   },
 

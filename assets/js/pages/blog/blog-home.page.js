@@ -11,6 +11,7 @@ parasails.registerPage('blog-home', {
     centerDialogAdded: false,
     limit: 50,
     postCount: 0,
+
     // posts: [{name: 'sadf', label: 'sdfsd'}],
     dialog: {},
     sizeLess: 5, // MB
@@ -365,8 +366,6 @@ parasails.registerPage('blog-home', {
           });
         },*/
 
-
-
     mesSuccess(text = '') {
       this.$notify({
         title: 'Success',
@@ -386,7 +385,6 @@ parasails.registerPage('blog-home', {
       });
     },
 
-
     mesInfo(text = '') {
       this.$notify.info({
         title: 'Info',
@@ -394,7 +392,6 @@ parasails.registerPage('blog-home', {
         offset: 100,
       });
     },
-
 
     mesError(text = '') {
       this.$notify.error({
@@ -417,25 +414,20 @@ parasails.registerPage('blog-home', {
         // console.log('Сервер topic-count ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
 
-      // // Принимаем данные по событию list-*
-      // await io.socket.on('list-topic', (data) => {
-      //   console.log('data TOPICS all:: ', data);
-      //   this.topics = this.editList = this.filterDogs = _.isNull(data) ? [] : data;
-      // });
       // Принимаем данные по событию list-*
       await io.socket.on('topic-hidden', (data) => {
         this.hidden = data;
       });
     },
     removeItem(id) {
-      console.log('Перед отправкой delete POST id: ', id);
       this.removePostId = id;
       this.posts = this.posts.filter(item => item.id !== id);
       this.deleteItem();
     },
-
+    editPost(post) {
+      this.goto(`/blog/post/${post.id}/edit`);
+    },
     deleteItem: async function () {
-      console.log('Перед отправкой delete POST: ', this.removePostId);
       io.socket.delete('/api/v1/posts/destroy-one-post', {id: this.removePostId}, (dataRes, jwRes) => {
         this.mesSuccess('Объект успешно удалён.');
         this.dialogDeletePhotoSession = false;
@@ -453,7 +445,6 @@ parasails.registerPage('blog-home', {
     filterPosts(data) {
       this.posts = this.cashPosts;
       let ft = _.filter(this.posts, {topic: data.id});
-      console.log('ft.length:: ', ft.length);
       this.posts = ft.length ? ft : this.posts;
       ft.length < 1 ? this.mesInfo('Нет на эту тему постов.') : '';
     },

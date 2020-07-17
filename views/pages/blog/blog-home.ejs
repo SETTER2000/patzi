@@ -17,7 +17,7 @@
 
             </el-image>
         </el-dialog>
-        <% /* Диалоговое окно. Не верный текст имени собаки. */ %>
+        <% /* Диалоговое окно. Не верный текст. */ %>
         <el-dialog
                 title="<%= __('Error') %>"
                 width="30%"
@@ -66,8 +66,6 @@
         </div>
         <!---------------------------------------------------------------------------------------->
         <% /*Загрузка фото NEW*/ %>
-        <!--  <el-row type="flex" class="row-bg" justify="center">
-            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">-->
         <div class="container-fluid ">
             <div class="row justify-content-center">
                 <div class="col">
@@ -95,8 +93,6 @@
                 </div>
             </div>
         </div>
-        <!--     </el-col>
-           </el-row>-->
         <!---------------------------------------------------------------------------------------->
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
             <!--<el-row type="flex" class="row-bg" justify="center">
@@ -1131,12 +1127,12 @@
     <% /* Слайдер тем блога */ %>
     <patzi-post-topics :obj-data="seo" :topics="topics" @select-posts="filterPosts"></patzi-post-topics>
 
-    <% /* Посты блога */ %>
 
     <div class="flex justify-content-center p-5" v-if="posts && !posts.length">
         <el-button @click="clickAddButton()">Добавьте новый пост...</el-button>
     </div>
-    <patzi-posts :obj-data="seo" :del-button="me.isSuperAdmin || me.isAdmin" @remove="removeItem"
+    <% /* Посты блога */ %>
+    <patzi-posts :obj-data="seo" :del-button="me.isSuperAdmin || me.isAdmin" @remove="removeItem" @editpost="editPost"
                  :posts="posts"></patzi-posts>
 
 

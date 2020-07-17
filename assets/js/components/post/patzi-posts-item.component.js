@@ -55,7 +55,11 @@ parasails.registerComponent('patziPostsItem', {
                                 <h3 class="u-text u-text-1">{{objData.preferredLocale === 'ru' ? post.labelRu : post.label}}</h3>
                                <div class="u-text u-text-grey-30  flex justify-content-between">
                                       <p class="nonMar">{{post.dateEvent  | getCreate(objData.preferredLocale)}}</p>
-                                       <p  class="nonMar" v-if="delButton">  <a href="#" @click="openRemoveDialog(post.id)"><i class="el-icon-delete"></i></a></p>
+                                       <p  class="nonMar" v-if="delButton">  
+                                       <a href="#" @click="openRemoveDialog(post.id)"><i class="el-icon-delete"></i></a>
+                                    
+                                       <a href="#" @click="openEditDialog()"><i class="el-icon-edit-outline"></i></a>
+                                       </p>
                                      </div>
                                 <p class="u-text u-text-3">{{objData.preferredLocale === 'ru' ? post.subtitleRu.limit(70) : post.subtitle}} <el-link :href="link()" icon="el-icon-top-right"></el-link></p>
                             </div>
@@ -110,7 +114,9 @@ parasails.registerComponent('patziPostsItem', {
         });
       });
     },
-
+    openEditDialog(){
+      this.$emit('editpost',this.post);
+    } ,
     removeItem() {
       // Генерируем событие, возможно с передаваемыми данными
       this.$emit('remove', this.removeId);
