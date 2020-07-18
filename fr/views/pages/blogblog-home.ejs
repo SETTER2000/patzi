@@ -264,33 +264,173 @@
                     </el-form-item>
                 </template>
 
-                <% /* ВИДЕО */ %>
-                <el-form-item v-if="!buttonUpdate" label="<%= __('Topic') %>" prop="topic">
-                    <el-select v-model="ruleForm.topic" placeholder="<%= __('Choose your cattery') %>"
-                               class="form-width"
-                    >
-                        <el-option v-for="item in getPull()"
-                                   :key="item.id"
-                                   :label="item.labelRu"
-                                   :value="item.id">
-                            <div class="d-flex justify-content-between">
-                                <div class="size pr-5">{{ item.labelRu | trimString}}</div>
-                                <div class="size">{{ item.label | trimString}}</div>
-                            </div>
-                        </el-option>
-                    </el-select>
+                <% /* ВИДЕО URL */ %>
+                <el-form-item v-if="!buttonUpdate" label="<%= __('Url youtube') %>" prop="videoUrl">
+                    <el-input show-word-limit
+                              style="width:60%;"
+                              clearable
+                              maxlength="700"
+                              size="small"
+                              placeholder="/embed/oH6XUwNL8-U"
+                              v-model="ruleForm.videoUrl"></el-input>
+                <el-tooltip effect="dark"
+                            content="<%= __("Insert part of the url from the video here youtube '/embed/oH6XUwNL8-U'") %>"
+                            placement="top-start">
+
+                    <div size="mini" round class="el-icon-question "></div>
+                </el-tooltip>
+                </el-form-item>
+
+                <% /* ВИДЕО Заголовок */ %>
+                <el-form-item v-if="!buttonUpdate" label="<%= __('Title video') %>" prop="videoHeader">
+                    <el-input show-word-limit
+                              style="width:60%;"
+                              clearable
+                              maxlength="200"
+                              size="small"
+                              placeholder="Title"
+                              v-model="ruleForm.videoHeader"></el-input>
                     <el-tooltip effect="dark"
-                                content="<%= __("Add topic") %>"
-                                placement="top-start">
-                        <el-button @click="goTo('topics')" size="mini" round icon="el-icon-plus"></el-button>
-                    </el-tooltip>
-                    <el-tooltip effect="dark"
-                                content="<%= __("Paste here the link to the video clip from youtube.com") %>"
+                                content="<%= __("The title for the video is displayed on the post page") %>"
                                 placement="top-start">
 
                         <div size="mini" round class="el-icon-question "></div>
                     </el-tooltip>
                 </el-form-item>
+
+                <% /* ВИДЕО Описание */ %>
+                <el-form-item v-if="!buttonUpdate" label="<%= __('Description video') %>" prop="videoDescription">
+                    <el-input show-word-limit
+                              style="width:60%;"
+                              clearable
+                              maxlength="700"
+                              size="small"
+                              placeholder="Description"
+                              v-model="ruleForm.videoDescription"></el-input>
+                    <el-tooltip effect="dark"
+                                content="<%= __("The description for the video is displayed on the post page") %>"
+                                placement="top-start">
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
+                <% /* ВИДЕО Showinfo:  */ %>
+                <%= __('Showinfo youtube') %>
+                    <template>
+                        <el-row :gutter="2">
+                            <el-form-item prop="videoShowinfo">
+                                <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                    <el-slider
+                                            class="hidden-xs-only"
+                                            v-model="ruleForm.videoShowinfo"
+                                            class="hidden-xs-only"
+                                            :min="0"
+                                            :max="400"
+                                            :step="1"
+                                            show-input>
+                                    </el-slider>
+                                    <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                     :max="400" size="mini" v-model="ruleForm.videoShowinfo"></el-input-number>
+                                </el-col>
+                                <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                    <el-tooltip effect="dark"
+                                                content="<%= __("Specify the weight at birth.") %>"
+                                                placement="top-start">
+                                        <div size="mini" round class="el-icon-question ml-3"></div>
+                                    </el-tooltip>
+                                </el-col>
+                            </el-form-item>
+                        </el-row>
+                    </template>
+
+                <% /* ВИДЕО videoStart:  */ %>
+                <%= __('Start youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoStart">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="ruleForm.videoStart"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="ruleForm.videoStart"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+
+                <% /* ВИДЕО videoControls:  */ %>
+                <%= __('Controls youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoControls">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="ruleForm.videoControls"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="ruleForm.videoControls"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+
+                <% /* ВИДЕО videoMute:  */ %>
+                <%= __('Mute youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoMute">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="ruleForm.videoMute"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="ruleForm.videoMute"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+
+
 
                 <!--
             <% /* ИМЯ СОБАКИ*/ %>
@@ -1043,20 +1183,24 @@
                         <div class="u-container-style u-layout-cell u-left-cell u-size-20 u-layout-cell-1">
                             <div class="u-container-layout u-valign-top u-container-layout-1">
                                 <span class="u-icon u-icon-circle u-text-palette-1-base u-icon-1">
-                                        <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 54 54" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-55ad"></use></svg>
-                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
-                         id="svg-55ad" x="0px"
-                         y="0px" viewBox="0 0 54 54" style="enable-background:new 0 0 54 54;" xml:space="preserve"
-                         class="u-svg-content"><g><path
-                                    d="M27,8c-9.374,0-17,7.626-17,17c0,7.112,4.391,13.412,11,15.9V50c0,0.553,0.447,1,1,1h1v2c0,0.553,0.447,1,1,1h6   c0.553,0,1-0.447,1-1v-2h1c0.553,0,1-0.447,1-1v-9.1c6.609-2.488,11-8.788,11-15.9C44,15.626,36.374,8,27,8z M30,49   c-0.553,0-1,0.447-1,1v2h-4v-2c0-0.553-0.447-1-1-1h-1v-5h8v5H30z M31.688,39.242C31.277,39.377,31,39.761,31,40.192V42h-8v-1.808   c0-0.432-0.277-0.815-0.688-0.95C16.145,37.214,12,31.49,12,25c0-8.271,6.729-15,15-15s15,6.729,15,15   C42,31.49,37.855,37.214,31.688,39.242z"></path><path
-                                    d="M27,6c0.553,0,1-0.447,1-1V1c0-0.553-0.447-1-1-1s-1,0.447-1,1v4C26,5.553,26.447,6,27,6z"></path><path
-                                    d="M51,24h-4c-0.553,0-1,0.447-1,1s0.447,1,1,1h4c0.553,0,1-0.447,1-1S51.553,24,51,24z"></path><path
-                                    d="M7,24H3c-0.553,0-1,0.447-1,1s0.447,1,1,1h4c0.553,0,1-0.447,1-1S7.553,24,7,24z"></path><path
-                                    d="M43.264,7.322l-2.828,2.828c-0.391,0.391-0.391,1.023,0,1.414c0.195,0.195,0.451,0.293,0.707,0.293   s0.512-0.098,0.707-0.293l2.828-2.828c0.391-0.391,0.391-1.023,0-1.414S43.654,6.932,43.264,7.322z"></path><path
-                                    d="M12.15,38.436l-2.828,2.828c-0.391,0.391-0.391,1.023,0,1.414c0.195,0.195,0.451,0.293,0.707,0.293   s0.512-0.098,0.707-0.293l2.828-2.828c0.391-0.391,0.391-1.023,0-1.414S12.541,38.045,12.15,38.436z"></path><path
-                                    d="M41.85,38.436c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l2.828,2.828c0.195,0.195,0.451,0.293,0.707,0.293   s0.512-0.098,0.707-0.293c0.391-0.391,0.391-1.023,0-1.414L41.85,38.436z"></path><path
-                                    d="M12.15,11.564c0.195,0.195,0.451,0.293,0.707,0.293s0.512-0.098,0.707-0.293c0.391-0.391,0.391-1.023,0-1.414l-2.828-2.828   c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414L12.15,11.564z"></path><path
-                                    d="M27,13c-6.617,0-12,5.383-12,12c0,0.553,0.447,1,1,1s1-0.447,1-1c0-5.514,4.486-10,10-10c0.553,0,1-0.447,1-1   S27.553,13,27,13z"></path>
+                                        <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 54 54"
+                                             style=""><use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                           xlink:href="#svg-55ad"></use></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                                             id="svg-55ad" x="0px"
+                                             y="0px" viewBox="0 0 54 54" style="enable-background:new 0 0 54 54;"
+                                             xml:space="preserve"
+                                             class="u-svg-content"><g><path
+                                                        d="M27,8c-9.374,0-17,7.626-17,17c0,7.112,4.391,13.412,11,15.9V50c0,0.553,0.447,1,1,1h1v2c0,0.553,0.447,1,1,1h6   c0.553,0,1-0.447,1-1v-2h1c0.553,0,1-0.447,1-1v-9.1c6.609-2.488,11-8.788,11-15.9C44,15.626,36.374,8,27,8z M30,49   c-0.553,0-1,0.447-1,1v2h-4v-2c0-0.553-0.447-1-1-1h-1v-5h8v5H30z M31.688,39.242C31.277,39.377,31,39.761,31,40.192V42h-8v-1.808   c0-0.432-0.277-0.815-0.688-0.95C16.145,37.214,12,31.49,12,25c0-8.271,6.729-15,15-15s15,6.729,15,15   C42,31.49,37.855,37.214,31.688,39.242z"></path><path
+                                                        d="M27,6c0.553,0,1-0.447,1-1V1c0-0.553-0.447-1-1-1s-1,0.447-1,1v4C26,5.553,26.447,6,27,6z"></path><path
+                                                        d="M51,24h-4c-0.553,0-1,0.447-1,1s0.447,1,1,1h4c0.553,0,1-0.447,1-1S51.553,24,51,24z"></path><path
+                                                        d="M7,24H3c-0.553,0-1,0.447-1,1s0.447,1,1,1h4c0.553,0,1-0.447,1-1S7.553,24,7,24z"></path><path
+                                                        d="M43.264,7.322l-2.828,2.828c-0.391,0.391-0.391,1.023,0,1.414c0.195,0.195,0.451,0.293,0.707,0.293   s0.512-0.098,0.707-0.293l2.828-2.828c0.391-0.391,0.391-1.023,0-1.414S43.654,6.932,43.264,7.322z"></path><path
+                                                        d="M12.15,38.436l-2.828,2.828c-0.391,0.391-0.391,1.023,0,1.414c0.195,0.195,0.451,0.293,0.707,0.293   s0.512-0.098,0.707-0.293l2.828-2.828c0.391-0.391,0.391-1.023,0-1.414S12.541,38.045,12.15,38.436z"></path><path
+                                                        d="M41.85,38.436c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l2.828,2.828c0.195,0.195,0.451,0.293,0.707,0.293   s0.512-0.098,0.707-0.293c0.391-0.391,0.391-1.023,0-1.414L41.85,38.436z"></path><path
+                                                        d="M12.15,11.564c0.195,0.195,0.451,0.293,0.707,0.293s0.512-0.098,0.707-0.293c0.391-0.391,0.391-1.023,0-1.414l-2.828-2.828   c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414L12.15,11.564z"></path><path
+                                                        d="M27,13c-6.617,0-12,5.383-12,12c0,0.553,0.447,1,1,1s1-0.447,1-1c0-5.514,4.486-10,10-10c0.553,0,1-0.447,1-1   S27.553,13,27,13z"></path>
 </g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
                                 </span>
                                 <h1 class="u-align-center u-text u-text-palette-1-base u-text-3"
