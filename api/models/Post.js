@@ -50,6 +50,12 @@ module.exports = {
       description: `FD загруженных фотографий родителей`
     },
 
+    video: {
+      type: 'ref',
+      defaultsTo: [],
+      description: `Массив с объектами роликов из youtube`
+    },
+
     topicBackground: {
       type: 'ref',
       example: {},
