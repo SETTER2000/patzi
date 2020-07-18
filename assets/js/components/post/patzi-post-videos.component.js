@@ -51,9 +51,8 @@ parasails.registerComponent('patziPostVideos', {
                             <!--              <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;" class="embed-responsive-item" src="https://www.youtube.com/embed/TUar0_aUWq8?mute=0&amp;showinfo=0&amp;controls=0&amp;start=0" frameborder="0" allowfullscreen=""></iframe>-->
                         </div>
                     </div>
-                    <h2 class="u-text u-text-1">Красавчик, Честер.</h2>
-                    <p class="u-text u-text-2">Sample text. Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                        nullam nunc justo sagittis suscipit ultrices.</p>
+                    <h2 class="u-text u-text-1">{{post.videoHeader}}</h2>
+                    <p class="u-text u-text-2">{{post.videoDescription}}</p>
                 </div>
             </div>
         </div>
