@@ -305,7 +305,14 @@ parasails.registerPage('blog-home', {
         subtitle: this.ruleForm.subtitle,
         subtitleRu: this.ruleForm.subtitleRu,
         see: this.ruleForm.see,
-        rootPage: this.ruleForm.rootPage
+        rootPage: this.ruleForm.rootPage,
+        videoUrl: this.ruleForm.videoUrl,
+        videoShowinfo: this.ruleForm.videoShowinfo,
+        videoStart: this.ruleForm.videoStart,
+        videoControls: this.ruleForm.videoControls,
+        videoMute: this.ruleForm.videoMute,
+        videoHeader: this.ruleForm.videoHeader,
+        videoDescription: this.ruleForm.videoDescription,
       };
 
       console.log('DATA перед отправкой::: ', data);

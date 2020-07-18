@@ -59,6 +59,47 @@ module.exports = {
       type: 'boolean',
       description: `Флаг видимости поста на главной. Виден или нет. По умолчанию не виден.`
     },
+
+    // https://www.youtube.com/embed/oH6XUwNL8-U?mute=0&amp;showinfo=0&amp;controls=0&amp;start=0"
+
+    videoUrl: {
+      type: 'string',
+      example: '/embed/oH6XUwNL8-U',
+      description: 'Часть url ролика c youtube.',
+      maxLength: 700
+    },
+    videoShowinfo: {
+      type: 'number',
+      defaultsTo: 0,
+      description: `Настройка для видео линка youtube.`
+    },
+    videoStart: {
+      type: 'number',
+      defaultsTo: 0,
+      description: `Настройка для видео линка youtube.`
+    },
+    videoControls: {
+      type: 'number',
+      defaultsTo: 0,
+      description: `Настройка для видео линка youtube.`
+    },
+    videoMute: {
+      type: 'number',
+      defaultsTo: 0,
+      description: `Настройка для видео линка youtube.`
+    },
+    videoHeader: {
+      type: 'string',
+      defaultsTo: 'Красавчик Честер',
+      description: `Заголовок для видео выводится на странице поста.`
+    },
+    videoDescription: {
+      type: 'string',
+      defaultsTo: '-Ждём соседей!',
+      description: `Описание для видео выводится на странице поста.`
+    },
+
+
   },
 
 
@@ -132,6 +173,17 @@ module.exports = {
     if (conflicting) {
       throw (req.me.preferredLocale === 'ru') ? 'alreadyInUseRU' : 'alreadyInUse';
     }
+console.log('inputs.videoUrl::: ', inputs.videoUrl);
+    let video = [{
+      videoUrl: inputs.videoUrl,
+      videoShowinfo: inputs.videoShowinfo,
+      videoStart: inputs.videoStart,
+      videoControls: inputs.videoControls,
+      videoMute: inputs.videoMute,
+      videoHeader: inputs.videoHeader,
+      videoDescription: inputs.videoDescription,
+    }];
+
 
     let newPost = await Post.create({
       label: inputs.label,
@@ -143,7 +195,8 @@ module.exports = {
       backgroundPosition: inputs.backgroundPosition,
       subtitleRu: inputs.subtitleRu,
       see: inputs.see,
-      rootPage: inputs.rootPage
+      rootPage: inputs.rootPage,
+      video: video
     }).fetch();
     console.log('[newPost.id]', newPost);
     if (!newPost) {
@@ -154,7 +207,7 @@ module.exports = {
 
     // Выбираем весь список объектов данной коллекции.
     let posts = await Post.find()
-        .sort([{labelRu: 'DESC'}]);
+      .sort([{labelRu: 'DESC'}]);
 
     await sails.sockets.broadcast('post', 'list-post');
     // Respond with view.

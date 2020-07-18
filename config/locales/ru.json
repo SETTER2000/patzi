@@ -976,5 +976,15 @@
 	"Post editor": "Редактировать пост",
 	"POST EDITOR": "РЕДАКТИРОВАТЬ ПОСТ",
 	"REDACTED": "ОТРЕДАКТИРОВАНО",
-	"Required to fill": "Обязательно к заполнению"
+	"Required to fill": "Обязательно к заполнению",
+	"Url youtube": "Url видео",
+	"Insert part of the url from the video here youtube '/embed/oH6XUwNL8-U'": "Вставьте сюда часть урл с ролика youtube '/embed/oH6XUwNL8-U'",
+	"Showinfo youtube": "Showinfo youtube",
+	"The title for the video is displayed on the post page": "Заголовок для видео выводится на странице поста",
+	"The description for the video is displayed on the post page": "Описание для видео выводится на странице поста",
+	"Start youtube": "Start youtube",
+	"Controls youtube": "Controls youtube",
+	"Mute youtube": "Mute youtube",
+	"Title video": "Заголовок к video",
+	"Description video": "Описание к video"
 }
