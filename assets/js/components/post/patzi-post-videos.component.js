@@ -15,7 +15,7 @@ parasails.registerComponent('patziPostVideos', {
   //  ╩  ╩╚═╚═╝╩  ╚═╝
   props: [
     'objData',
-    'post' ,
+    'video',
     'delButton'
   ],
 
@@ -24,27 +24,28 @@ parasails.registerComponent('patziPostVideos', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: function () {
     return {
-      //...
+      vid: false
     };
   },
 
   //  ╦ ╦╔╦╗╔╦╗╦
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
-  template: ` <section class="u-carousel u-slide u-block-926e-1" id="carousel_62aa" data-interval="5000" data-u-ride="carousel">
-       <!-- <ol class="u-absolute-hcenter u-carousel-indicators u-block-926e-5">
-            <li data-u-target="#carousel_62aa" data-u-slide-to="0" class="u-palette-1-light-1"></li>
-            <li data-u-target="#carousel_62aa" class="u-palette-1-light-1" data-u-slide-to="1"></li>
-            <li data-u-target="#carousel_62aa" class="u-palette-1-light-1" data-u-slide-to="2"></li>
-        </ol>-->
-
+  template: ` <section  class="u-carousel u-slide u-block-926e-1" id="carousel_62aa" data-interval="5000" data-u-ride="carousel">
+      <template v-if="vid" >
+        <ol class="u-absolute-hcenter u-carousel-indicators u-block-926e-5">
+            <li v-for="(post, index) of video" data-u-target="#carousel_62aa" class="u-palette-1-light-1" :data-u-slide-to="index"></li>
+<!--            <li data-u-target="#carousel_62aa" class="u-palette-1-light-1" data-u-slide-to="1"></li>
+            <li data-u-target="#carousel_62aa" class="u-palette-1-light-1" data-u-slide-to="2"></li>-->
+        </ol>
+             
         <div class="u-carousel-inner" role="listbox">
-            <div class="u-align-center u-carousel-item u-clearfix u-palette-1-base u-active u-section-3-1">
+            <div v-for="(post, index) of video"  :key="'io-'+index" class="u-align-center u-carousel-item u-clearfix u-palette-1-base" :class="classObject(index)"  >
                 <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-                    <div class="u-align-left u-expanded-width-sm u-expanded-width-xs u-video u-video-contain u-video-1">
+                    <div class="u-align-left u-expanded-width-sm u-expanded-width-xs u-video u-video-contain u-video-1" >
                         <div style="position: absolute;" class="embed-responsive">
                             <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;"
-                                    class="embed-responsive-item" :src="'https://www.youtube.com'+post.videoUrl"
+                                    class="embed-responsive-item" :src="'https://www.youtube.com/embed/'+post.videoUrl"
                                     frameborder="0"
                                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                                     allowfullscreen></iframe>
@@ -72,6 +73,7 @@ parasails.registerComponent('patziPostVideos', {
         </span>
             <span class="sr-only">Next</span>
         </a>
+        </template>
     </section>
 
 `,
@@ -81,12 +83,14 @@ parasails.registerComponent('patziPostVideos', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    //...
+    console.log('RqwER:::', this.video);
+    this.vid = (this.video && this.video.length > 0);
   },
-
+  computed: {},
 
   mounted: async function () {
     // console.log('objData++::', this.objData);
+
     this.data = this.objData.data ? this.objData.data : this.data;
   },
 
@@ -98,15 +102,23 @@ parasails.registerComponent('patziPostVideos', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    removeItem(id){
+    classObject(index) {
+      index = index + 1;
+      var o = {
+        'u-active': (index === 1)
+      };
+      o[`u-section-3-${index}`] = true;
+      return o;
+    },
+    removeItem(id) {
       // Генерируем событие, возможно с передаваемыми данными
       // console.log('Отправляем событие', id);
       this.$emit('remove', id);
-    } ,
-    editPost(post){
+    },
+    editPost(post) {
       // Генерируем событие, возможно с передаваемыми данными
       // console.log('Отправляем событие', id);
       this.$emit('editpost', post);
-    } ,
+    },
   }
 });

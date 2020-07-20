@@ -53,13 +53,12 @@ module.exports = {
     await sails.sockets.join(req, 'user');
 
 
-    data = await sails.helpers.listUser.with({
+  let  data = await sails.helpers.listUser.with({
       count: inputs.count,
       query: inputs.query,
       preferredLocale:  req.me.preferredLocale,
     });
 
-console.log('DASSSS:::: ' , data);
     await sails.sockets.broadcast('user', 'list', data);
     // Respond with view.
     return exits.success();

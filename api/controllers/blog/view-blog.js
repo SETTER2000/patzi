@@ -31,7 +31,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    console.log('POST ID:: ', inputs.postId);
+   // console.log('POST ID:: ', inputs.postId);
 
     let post = await Post.findOne(inputs.postId)
       .populate('topic');

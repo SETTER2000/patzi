@@ -986,5 +986,9 @@
 	"Controls youtube": "Controls youtube",
 	"Mute youtube": "Mute youtube",
 	"Title video": "Заголовок к video",
-	"Description video": "Описание к video"
+	"Description video": "Описание к video",
+	"Insert part of the url from the video here youtube": "Вставьте часть URL из видео здесь YouTube",
+	"Click on YouTube button \"SHARE\" and then button \"COPY\" and paste the copied url here": "Нажмите в YouTube кнопку \"ПОДЕЛИТЬСЯ\" и затем кнопку \"КОПИРОВАТЬ\" и вставьте сюда скопированный url",
+	"Insert part of the url from the video here youtube 'https://youtu.be/TUar0_aUWq8'": "Insert part of the url from the video here youtube 'https://youtu.be/TUar0_aUWq8'",
+	"Add a video": "Добавить видео"
 }

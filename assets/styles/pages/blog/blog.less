@@ -615,87 +615,177 @@
     left: auto;
     right: 0
   }
+  // GENERATOR  стилей для видео в слайдере
+  @section-name: u-section-3; // Префикс класса section
+  @video-count: 10;  // Количество видео для слайдера
 
-  .u-section-3-1 {
-    background-image: none
+  .generate-section(@i: 1) when (@i =< @video-count) {
+    .@{section-name}-@{i} {
+      background-image: none;
+      .u-sheet-1 {
+        min-height: 1080px
+      }
+      .u-video-1 {
+        height: 608px;
+        width: 1080px;
+        margin: 60px auto 0
+      }
+      .u-text-1 {
+        width: 680px;
+        margin: 30px auto 0
+      }
+      .u-text-2 {
+        width: 680px;
+        margin: 20px auto 60px
+      }
+
+      @media (max-width: 1199px) {
+        .@{section-name}-@{i} .u-video-1 {
+          width: 940px
+        }
+      }
+
+      @media (max-width: 991px) {
+        .@{section-name}-@{i} .u-video-1 {
+          width: 720px
+        }
+      }
+
+      @media (max-width: 767px) {
+        .@{section-name}-@{i} .u-sheet-1 {
+          min-height: 549px
+        }
+
+        .@{section-name}-@{i} .u-video-1 {
+          height: 300px;
+          margin-right: initial;
+          margin-left: initial;
+          width: auto
+        }
+
+        .@{section-name}-@{i} .u-text-1 {
+          width: 540px;
+          margin-left: 0;
+          margin-right: 0
+        }
+
+        .@{section-name}-@{i} .u-text-2 {
+          width: 540px
+        }
+      }
+
+      @media (max-width: 575px) {
+        .@{section-name}-@{i} .u-sheet-1 {
+          min-height: 473px
+        }
+
+        .@{section-name}-@{i} .u-video-1 {
+          height: 190px;
+          width: auto;
+          margin-right: initial;
+          margin-left: initial
+        }
+
+        .@{section-name}-@{i} .u-text-1 {
+          width: 340px
+        }
+
+        .@{section-name}-@{i} .u-text-2 {
+          width: 340px
+        }
+      }
+    }
+
+    .generate-section(@i + 1);
   }
 
-  .u-section-3-1 .u-sheet-1 {
+  .generate-section();
+  // GENERATOR end
+
+
+  //SECTION 3-1
+ /* .u-section-3-* {
+    background-image: none;
+  }
+
+  .u-section-3-* .u-sheet-1 {
     min-height: 1080px
   }
 
-  .u-section-3-1 .u-video-1 {
+  .u-section-3-* .u-video-1 {
     height: 608px;
     width: 1080px;
     margin: 60px auto 0
   }
 
-  .u-section-3-1 .u-text-1 {
+  .u-section-3-* .u-text-1 {
     width: 680px;
     margin: 30px auto 0
   }
 
-  .u-section-3-1 .u-text-2 {
+  .u-section-3-* .u-text-2 {
     width: 680px;
     margin: 20px auto 60px
   }
 
   @media (max-width: 1199px) {
-    .u-section-3-1 .u-video-1 {
+    .u-section-3-* .u-video-1 {
       width: 940px
     }
   }
 
   @media (max-width: 991px) {
-    .u-section-3-1 .u-video-1 {
+    .u-section-3-* .u-video-1 {
       width: 720px
     }
   }
 
   @media (max-width: 767px) {
-    .u-section-3-1 .u-sheet-1 {
+    .u-section-3-* .u-sheet-1 {
       min-height: 549px
     }
 
-    .u-section-3-1 .u-video-1 {
+    .u-section-3-* .u-video-1 {
       height: 300px;
       margin-right: initial;
       margin-left: initial;
       width: auto
     }
 
-    .u-section-3-1 .u-text-1 {
+    .u-section-3-* .u-text-1 {
       width: 540px;
       margin-left: 0;
       margin-right: 0
     }
 
-    .u-section-3-1 .u-text-2 {
+    .u-section-3-* .u-text-2 {
       width: 540px
     }
   }
 
   @media (max-width: 575px) {
-    .u-section-3-1 .u-sheet-1 {
+    .u-section-3-* .u-sheet-1 {
       min-height: 473px
     }
 
-    .u-section-3-1 .u-video-1 {
+    .u-section-3-* .u-video-1 {
       height: 190px;
       width: auto;
       margin-right: initial;
       margin-left: initial
     }
 
-    .u-section-3-1 .u-text-1 {
+    .u-section-3-* .u-text-1 {
       width: 340px
     }
 
-    .u-section-3-1 .u-text-2 {
+    .u-section-3-* .u-text-2 {
       width: 340px
     }
   }
 
+
+  //SECTION 3-2
   .u-section-3-2 {
     background-image: none
   }
@@ -774,6 +864,8 @@
     }
   }
 
+
+  //SECTION 3-3
   .u-section-3-3 {
     background-image: none
   }
@@ -851,6 +943,8 @@
       width: 340px
     }
   }
+*/
+  //SECTION 4
 
   .u-section-4 {
     margin-top: 0;
@@ -1033,6 +1127,11 @@
       margin-top: -372px
     }
   }
+
+
+
+
+
 
   .red-border {
     border-bottom: 1px solid #c1c9c0;

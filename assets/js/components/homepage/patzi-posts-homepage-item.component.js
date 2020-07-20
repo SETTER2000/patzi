@@ -108,7 +108,7 @@ parasails.registerComponent('patziPostsHomepageItem', {
                     </div>
                 </div>
             </div>
-            <div ref="wrapper6" alt="" class="u-border-10 u-border-white u-image u-image-circle u-image-6" src=""
+            <div ref="wrapper5" alt="" class="u-border-10 u-border-white u-image u-image-circle u-image-6" src=""
                  data-animation-name="bounceIn" data-animation-duration="1000" data-animation-delay="0"
                  data-animation-direction=""></div>
         </div>

@@ -201,7 +201,7 @@ module.exports.routes = {
   'POST   /api/v1/posts/create-post': {action: 'posts/create-post', csrf: false},
   'PUT    /api/v1/posts/update-post': {action: 'posts/update-post', csrf: false},
   'DELETE /api/v1/posts/destroy-one-post': {action: 'posts/destroy-one-post', csrf: false},
-
+  'DELETE /api/v1/posts/destroy-video': { action: 'posts/destroy-video', csrf: false },
   'GET    /api/v1/titles/list': {action: 'titles/list'},
   'GET    /api/v1/titles/count-title': {action: 'titles/count-title'},
   'GET    /api/v1/titles/:id': {action: 'titles/get-dog-titles'},

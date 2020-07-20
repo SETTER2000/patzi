@@ -6,7 +6,14 @@ parasails.registerPage('blog', {
     lines: true,
     dialogPedigreeVisible: true,
     virtualPageSlug: '',
+    countDelVideo: 0,
     limit: 50,
+    multipleSelection: [],
+    rws: false,
+    rowsUpdateVideo: [],
+    outerVisible: false,
+    innerVisible: false,
+    dialogFormVisible: false,
     activeClass: 'scc',
     errorClass: 'text-danger',
     sizeLess: 5, // MB
@@ -19,6 +26,13 @@ parasails.registerPage('blog', {
       see: true,
       rootPage: false
     },
+    form: {
+      videoUrl: 'https://youtu.be/y0AfJFLW6_k',
+      videoHeader: 'Вася у мамы силён в математике',
+      videoDescription: 'Вася у мамы силён в математике Вася у мамы силён в математике Вася у мамы силён в' +
+        ' математике А',
+    },
+    formLabelWidth: '140px',
     rules: {
       kennel: [
         {required: true, message: 'Please select kennel name', trigger: 'change'}
@@ -33,6 +47,13 @@ parasails.registerPage('blog', {
       dateEvent: [
         {required: true, message: 'Please pick a date', trigger: 'blur'}
       ],
+      videoUrl: [
+        {
+          required: true,
+          message: 'Укажите пожалуйста Url ролика из YouTube. Например: https://youtu.be/y0AfJFLW6_k',
+          trigger: 'change'
+        }
+      ],
       // dateBirthUpdate: [
       //   { type:'string',required: true, message: 'Please pick a date', trigger: 'change'}
       // ],
@@ -40,9 +61,7 @@ parasails.registerPage('blog', {
          {required: true, message: 'Please input register number', trigger: 'blur'},
          {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
        ],
-       region: [
-         {required: true, message: 'Please select Activity zone', trigger: 'change'}
-       ],
+
        continent: [
          {required: true, message: 'Please select your continent', trigger: 'change'}
        ],
@@ -128,7 +147,7 @@ parasails.registerPage('blog', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
-    console.log('POST::: ', this.post);
+    // console.log('POST::: ', this.post);
     this.post.isAdmin = this.me.isAdmin;
     this.post.isSuperAdmin = this.me.isSuperAdmin;
   },
@@ -228,7 +247,7 @@ parasails.registerPage('blog', {
 
       // data.fileList = this.ruleForm.fileList;
       // data.dateEvent = JSON.stringify(this.post.dateEvent);
-      console.log('DATA UPDATE перед отправкой ::: ', data);
+      // console.log('DATA UPDATE перед отправкой ::: ', data);
       let p = this;
       io.socket.put('/api/v1/posts/update-post', data, (data, jwRes) => {
         // (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
@@ -296,13 +315,57 @@ parasails.registerPage('blog', {
         }
       });
     },
+
+    updateVideo: async function () {
+      let data = {
+        id: this.post.id,
+        video: this.rowsUpdateVideo
+      };
+      let r = this;
+      io.socket.delete('/api/v1/posts/destroy-video', data, (dataRes, jwRes) => {
+
+        if (jwRes.statusCode === 200) {
+          this.mesSuccess('Оk!');
+          r.post.video = this.rowsUpdateVideo;
+          r.dialogFormVisible = false;
+          this.$forceUpdate();
+          // setTimeout(() => {
+          //   this.goto(`/blog/`);
+          // }, 2000);
+
+          // this.$message({
+          //   type: 'success',
+          //   message: this.i19p.success
+          // });
+          // this.getList();
+
+        }
+
+      });
+    },
     open() {
-      this.$confirm('Это навсегда удалит данный пост. Продолжать?', 'ВНИМАНИЕ!', {
+      this.$confirm('Это навсегда удалит данный объект. Продолжить?', 'ВНИМАНИЕ!', {
         confirmButtonText: 'Да',
         cancelButtonText: 'Отменить',
         type: 'warning'
       }).then(() => {
         this.deleteItem();
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Удаление отменено'
+        });
+      });
+    },
+
+    openD() {
+      this.$confirm(` Вы пытаетесь удалить ${this.countDelVideo}шт. видео. Это навсегда удалит выделенные ролики с сайта. Но вы всегда можете загрузить их снова с сайта youtube. Продолжить?`, `ВНИМАНИЕ!`, {
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Отменить',
+        type: 'warning'
+      }).then(() => {
+        this.updateVideo();
 
       }).catch(() => {
         this.$message({
@@ -318,22 +381,68 @@ parasails.registerPage('blog', {
     editPost(post) {
       this.goto(`/blog/post/${post.id}/edit`);
     },
-    openNo(text='This is a message', title='Title') {
+    openNo(text = 'This is a message', title = 'Title') {
       this.$alert(text, title, {
         confirmButtonText: 'OK',
       });
     },
 
     editLabel() {
-      !this.post.label || !this.post.labelRu ?  this.openNo("Заполните поля заголовка поста.", "ВНИМАНИЕ!"): '';
+      !this.post.label || !this.post.labelRu ? this.openNo("Заполните поля заголовка поста.", "ВНИМАНИЕ!") : '';
       this.update({
         id: this.post.id,
         label: this.post.label,
         labelRu: this.post.labelRu,
         topicId: this.post.topic.id
       });
-    }
+    },
+
+
+    // deleteRow(index, tableData) {
+    //   console.log('INdex', index);
+    //   console.log('tableData:', tableData);
+    // },
+
+    editRow(index, tableData) {
+      // console.log('editRow INdex', index);
+      // console.log('editRow tableData:', tableData);
+    },
+
+    selectRowsVideo(rows) {
+      this.rws = rows.length > 0;
+      this.countDelVideo = rows.length;
+      this.rowsUpdateVideo = rows;
+    },
+    deleteRowsVideo: function () {
+      let videos = this.post.video;
+
+      // let vs =  _.partition(rows,  vd => _.some(videos , vd));
+      this.rowsUpdateVideo = _.compact(videos.map(vd => {
+        return _.some(this.rowsUpdateVideo, vd) ? false : vd;
+      }));
+      this.openD();
+    },
+
+    toggleSelection(rows) {
+      if (rows) {
+        this.rws = !this.rws;
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    addVideo() {
+      this.form.videoUrl = this.form.videoUrl.replace(/https:\/\/youtu.be\//gi, '') ;
+      this.post.video.push(this.form);
+      this.rowsUpdateVideo = this.post.video;
+      this.updateVideo();
+    },
+
   },
-
-
 });

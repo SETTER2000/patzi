@@ -64,7 +64,7 @@ module.exports = {
 
     videoUrl: {
       type: 'string',
-      example: '/embed/oH6XUwNL8-U',
+      example: 'https://youtu.be/TUar0_aUWq8',
       description: 'Часть url ролика c youtube.',
       maxLength: 700
     },
@@ -90,12 +90,10 @@ module.exports = {
     },
     videoHeader: {
       type: 'string',
-      defaultsTo: 'Красавчик Честер',
       description: `Заголовок для видео выводится на странице поста.`
     },
     videoDescription: {
       type: 'string',
-      defaultsTo: '-Ждём соседей!',
       description: `Описание для видео выводится на странице поста.`
     },
 
@@ -173,9 +171,9 @@ module.exports = {
     if (conflicting) {
       throw (req.me.preferredLocale === 'ru') ? 'alreadyInUseRU' : 'alreadyInUse';
     }
-console.log('inputs.videoUrl::: ', inputs.videoUrl);
+// console.log('inputs.videoUrl::: ', inputs.videoUrl);
     let video = [{
-      videoUrl: inputs.videoUrl,
+      videoUrl: inputs.videoUrl.replace(/https:\/\/youtu.be\//gi,''),
       videoShowinfo: inputs.videoShowinfo,
       videoStart: inputs.videoStart,
       videoControls: inputs.videoControls,
