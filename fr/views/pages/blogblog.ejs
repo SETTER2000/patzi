@@ -9,7 +9,185 @@
             :class="[succ ? activeClass : '', '']"
             :before-close="handlerCloseDialogSlider"
             v-if="virtualPageSlug==='edit'">
+        <% /* Диалоговое окно добавления видео*/ %>
+        <el-dialog
+                width="35%"
+                title="<%= __('Add a video') %>"
+                :visible.sync="dialogFormVisible"
+                append-to-body>
+            <el-form :model="form" :rules="rules" ref="form" class="demo-form">
+                <el-form-item  label="<%= __('Url youtube') %>" prop="videoUrl">
 
+                    <% /* ВИДЕО URL */ %>
+                    <el-input show-word-limit
+                              style="width:60%;"
+                              clearable
+                              maxlength="700"
+                              size="small"
+                              placeholder="https://youtu.be/TUar0_aUWq8"
+                              v-model="form.videoUrl"></el-input>
+                    <el-tooltip effect="dark"
+                                content="<%= __("Click on YouTube button \"SHARE\" and then button \"COPY\" and paste the copied url here") %>"
+                                placement="top-start">
+
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
+                <% /* ВИДЕО Заголовок */ %>
+                <el-form-item  label="<%= __('Title video') %>" prop="videoHeader">
+                    <el-input show-word-limit
+                              style="width:60%;"
+                              clearable
+                              maxlength="200"
+                              size="small"
+                              placeholder="Title"
+                              v-model="form.videoHeader"></el-input>
+                    <el-tooltip effect="dark"
+                                content="<%= __("The title for the video is displayed on the post page") %>"
+                                placement="top-start">
+
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
+                <% /* ВИДЕО Описание */ %>
+                <el-form-item  label="<%= __('Description video') %>" prop="videoDescription">
+                    <el-input show-word-limit
+                              style="width:60%;"
+                              clearable
+                              maxlength="700"
+                              size="small"
+                              placeholder="Description"
+                              v-model="form.videoDescription"></el-input>
+                    <el-tooltip effect="dark"
+                                content="<%= __("The description for the video is displayed on the post page") %>"
+                                placement="top-start">
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
+                <% /* ВИДЕО Showinfo:  */ %>
+                <%= __('Showinfo youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoShowinfo">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="form.videoShowinfo"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="form.videoShowinfo"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+
+                <% /* ВИДЕО videoStart:  */ %>
+                <%= __('Start youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoStart">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="form.videoStart"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="form.videoStart"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+
+                <% /* ВИДЕО videoControls:  */ %>
+                <%= __('Controls youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoControls">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="form.videoControls"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="form.videoControls"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+
+                <% /* ВИДЕО videoMute:  */ %>
+                <%= __('Mute youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoMute">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="form.videoMute"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="form.videoMute"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false"><%= __('Cancel') %></el-button>
+    <el-button type="primary" @click="addVideo()"><%= __('Add') %></el-button>
+  </span>
+        </el-dialog>
         <div style="height: 90px;" class="flex justify-content-center align-content-center">
             <h2 v-if="eLabel"> {{post.labelRu}}</h2>
             <div  v-else="!eLabel" class="demo-input-suffix">
@@ -35,7 +213,7 @@
             <!---------------------------------------------------------------------------------------->
             <% /*Загрузка фото NEW*/ %>
             <div class="container-fluid ">
-                <div class="row justify-content-center">
+                <div class="row">
                     <div class="col">
                         <el-upload
                                 action="/api/v1/files/upload"
@@ -66,7 +244,7 @@
                 <% /* ВИДЕН ПОСТ ИЛИ НЕТ */ %>
                 <el-form-item label="<%= __('Article') %>" prop="see">
                     <el-row :gutter="2">
-                        <el-col :span="5">
+                        <el-col :span="3">
                             <el-switch
                                     style="display: block; padding-bottom: 0"
                                     v-model="post.see"
@@ -76,14 +254,14 @@
                                     inactive-text="<%= __('not visible') %>">
                             </el-switch>
                         </el-col>
-                        <el-col :span="5">
+                    <!--    <el-col :span="5">
                             <el-tooltip effect="dark"
                                         content="<%= __("Will your article/post on the site be visible?") %>"
                                         placement="top-start">
 
                                 <div size="mini" round class="el-icon-question "></div>
                             </el-tooltip>
-                        </el-col>
+                        </el-col>-->
                     </el-row>
                 </el-form-item>
                 <% /* ДАТА */ %>
@@ -100,6 +278,93 @@
                     </el-row>
                 </el-form-item>
             </el-form>
+
+            <% /* ВИДЕО */ %>
+            <template>
+                <el-divider content-position="left">Всего роликов: {{post.video.length}}</el-divider>
+                <el-table
+                        :data="post.video"
+                        ref="multipleTable"
+                        style="width: 100vw"
+                        max-height="250"
+                        @select="selectRowsVideo"
+                        @select-all="selectRowsVideo"
+                        @selection-change="handleSelectionChange">
+                    <el-table-column
+                            type="selection"
+                            width="55">
+                    </el-table-column>
+                    <!--     <el-table-column
+                                 fixed
+                                 prop="date"
+                                 label="Date"
+                                 width="150">
+                         </el-table-column>-->
+                    <el-table-column
+                            sortable
+                            prop="videoHeader"
+                            label="Заголовок"
+                            width="220">
+                    </el-table-column>
+                    <el-table-column
+                            sortable
+                            prop="videoDescription"
+                            label="Описание"
+                            width="320">
+                    </el-table-column>
+                    <el-table-column
+                            prop="videoUrl"
+                            label="URL"
+                            width="300">
+                    </el-table-column>
+                    <el-table-column
+                            prop="videoControls"
+                            label="videoControls"
+                            width="120">
+                    </el-table-column>
+                    <el-table-column
+                            prop="videoMute"
+                            label="videoMute"
+                            width="120">
+                    </el-table-column>
+                    <el-table-column
+                            prop="videoShowinfo"
+                            label="videoShowinfo"
+                            width="130">
+                    </el-table-column>
+                    <el-table-column
+                            prop="videoStart"
+                            label="videoStart"
+                            width="120">
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            label=""
+                            width="80">
+                        <template slot-scope="scope">
+<!--                            <el-button-->
+<!--                                    @click.native.prevent="deleteRow(scope.$index, post.video)"-->
+<!--                                    type="text"-->
+<!--                                    size="small">-->
+<!--                                Remove-->
+<!--                            </el-button>-->
+                            <el-button @click.native.prevent="editRow(scope.$index, post.video)" type="text"
+                                       size="small">Edit</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div style="margin-top: 20px">
+
+
+                    <el-button type="" @click="dialogFormVisible = true"  > <%= __('Video')
+                        %>&nbsp;<i class="el-icon-circle-plus-outline el-icon-right"></i></el-button>
+<!--                    <el-button @click="toggleSelection([...post.video])"><span v-if="rws">Выделить-->
+<!--                            всё</span><span v-else>Снять выделение</span></el-button>-->
+<!--                    <el-button @click="toggleSelection()">Снять выделение</el-button>-->
+                    <el-button type="danger"  v-if="rws" @click.native.prevent="deleteRowsVideo()" >Удалить
+                        выделенное</el-button>
+                </div>
+            </template>
         </div>
         <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handlerCloseDialogSlider()"><%= __('Close') %></el-button>
@@ -130,8 +395,7 @@
     </section>
 
     <% /* КАРУСЕЛЬ С ВИДЕО */ %>
-
-    <patzi-post-videos :obj-data="seo" :post="_.last(post.video)"></patzi-post-videos>
+    <patzi-post-videos  :obj-data="seo" :video="post.video"></patzi-post-videos>
     <% /* ЭКСПЕРТЫ НА ВЫСТАВКЕ */ %>
     <section class="skrollable skrollable-between u-clearfix u-image u-image-tiles u-section-4" id="sec-5927"
              data-image-width="400" data-image-height="400">
