@@ -303,10 +303,7 @@ parasails.registerPage('blog', {
         type: 'warning'
       }).then(() => {
         this.deleteItem();
-        /*this.$message({
-          type: 'success',
-          message: 'Delete completed'
-        });*/
+
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -324,12 +321,6 @@ parasails.registerPage('blog', {
     openNo(text='This is a message', title='Title') {
       this.$alert(text, title, {
         confirmButtonText: 'OK',
-        /*callback: action => {
-          this.$message({
-            type: 'info',
-            message: `action: ${ action }`
-          });
-        }*/
       });
     },
 
@@ -341,10 +332,6 @@ parasails.registerPage('blog', {
         labelRu: this.post.labelRu,
         topicId: this.post.topic.id
       });
-      /*  this.$message({
-          type: 'info',
-          message: `Вы пытаетесь редактировать ${this.post.label}`
-        });*/
     }
   },
 
