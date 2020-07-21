@@ -9,14 +9,14 @@
             :class="[succ ? activeClass : '', '']"
             :before-close="handlerCloseDialogSlider"
             v-if="virtualPageSlug==='edit'">
-        <% /* Диалоговое окно добавления видео*/ %>
+        <% /* Диалоговое окно добавления|редактирование видео*/ %>
         <el-dialog
-                width="35%"
+                width="40rem"
                 title="<%= __('Add a video') %>"
                 :visible.sync="dialogFormVisible"
                 append-to-body>
             <el-form :model="form" :rules="rules" ref="form" class="demo-form">
-                <el-form-item  label="<%= __('Url youtube') %>" prop="videoUrl">
+                <el-form-item label="<%= __('Url youtube') %>" prop="videoUrl">
 
                     <% /* ВИДЕО URL */ %>
                     <el-input show-word-limit
@@ -25,7 +25,8 @@
                               maxlength="700"
                               size="small"
                               placeholder="https://youtu.be/TUar0_aUWq8"
-                              v-model="form.videoUrl"></el-input>
+                              v-model="form.videoUrl"
+                              autofocus></el-input>
                     <el-tooltip effect="dark"
                                 content="<%= __("Click on YouTube button \"SHARE\" and then button \"COPY\" and paste the copied url here") %>"
                                 placement="top-start">
@@ -35,7 +36,7 @@
                 </el-form-item>
 
                 <% /* ВИДЕО Заголовок */ %>
-                <el-form-item  label="<%= __('Title video') %>" prop="videoHeader">
+                <el-form-item label="<%= __('Title video') %>" prop="videoHeader">
                     <el-input show-word-limit
                               style="width:60%;"
                               clearable
@@ -52,7 +53,7 @@
                 </el-form-item>
 
                 <% /* ВИДЕО Описание */ %>
-                <el-form-item  label="<%= __('Description video') %>" prop="videoDescription">
+                <el-form-item label="<%= __('Description video') %>" prop="videoDescription">
                     <el-input show-word-limit
                               style="width:60%;"
                               clearable
@@ -185,22 +186,23 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisible = false"><%= __('Cancel') %></el-button>
-    <el-button type="primary" @click="addVideo()"><%= __('Add') %></el-button>
+    <el-button v-if="updateButton" type="primary" @click="saveUpdateVideo()"><%= __('Save') %></el-button>
+    <el-button v-else type="primary" @click="addVideo()"><%= __('Add') %></el-button>
   </span>
         </el-dialog>
         <div style="height: 90px;" class="flex justify-content-center align-content-center">
             <h2 v-if="eLabel"> {{post.labelRu}}</h2>
-            <div  v-else="!eLabel" class="demo-input-suffix">
-<!--                <span class="demo-input-label">Using attributes</span>-->
-                <el-input  style=" width: 25rem" placeholder="<%= __('Required to fill') %>"
-                           v-model="post.labelRu "
-                           class="input-with-select">
+            <div v-else="!eLabel" class="demo-input-suffix">
+                <!--                <span class="demo-input-label">Using attributes</span>-->
+                <el-input style=" width: 25rem" placeholder="<%= __('Required to fill') %>"
+                          v-model="post.labelRu "
+                          class="input-with-select">
                 </el-input>
-                <el-input  style=" width: 25rem"
-                        placeholder="<%= __('Required to fill') %>"
-                        v-model="post.label">
-                    <el-button  v-if="!succ" type="info" @click="editLabel" slot="append"
-                                icon="el-icon-circle-check"></el-button>
+                <el-input style=" width: 25rem"
+                          placeholder="<%= __('Required to fill') %>"
+                          v-model="post.label">
+                    <el-button v-if="!succ" type="info" @click="editLabel" slot="append"
+                               icon="el-icon-circle-check"></el-button>
 
                 </el-input>
 
@@ -240,7 +242,7 @@
                 </div>
             </div>
             <!---------------------------------------------------------------------------------------->
-            <el-form :model="post" :rules="rules" ref="post" class="demo-ruleForm">
+            <el-form :model="post" :rules="rules" ref="post" label-width="120px" class="demo-ruleForm">
                 <% /* ВИДЕН ПОСТ ИЛИ НЕТ */ %>
                 <el-form-item label="<%= __('Article') %>" prop="see">
                     <el-row :gutter="2">
@@ -254,7 +256,7 @@
                                     inactive-text="<%= __('not visible') %>">
                             </el-switch>
                         </el-col>
-                    <!--    <el-col :span="5">
+                        <!--    <el-col :span="5">
                             <el-tooltip effect="dark"
                                         content="<%= __("Will your article/post on the site be visible?") %>"
                                         placement="top-start">
@@ -265,7 +267,7 @@
                     </el-row>
                 </el-form-item>
                 <% /* ДАТА */ %>
-                <el-form-item  label="<%= __('Date') %>" prop="dateEvent">
+                <el-form-item label="<%= __('Date') %>" prop="dateEvent">
                     <el-row :gutter="2">
                         <el-col :span="11">
                             <el-date-picker
@@ -277,9 +279,73 @@
                         </el-col>
                     </el-row>
                 </el-form-item>
-            </el-form>
+                <% /* ТЕМА */ %>
+                <el-form-item label="<%= __('Topic') %>" prop="topic">
+                    <el-select v-model="post.topic.id" placeholder="<%= __('Choose your cattery') %>"
+                               class="form-width"
+                    >
+                        <el-option v-for="item in getPull()"
+                                   :key="item.id"
+                                   :label="item.labelRu"
+                                   :value="item.id">
+                            <div class="d-flex justify-content-between">
+                                <div class="size pr-5">{{ item.labelRu | trimString}}</div>
+                                <div class="size">{{ item.label | trimString}}</div>
+                            </div>
+                        </el-option>
+                    </el-select>
+                    <el-tooltip effect="dark"
+                                content="<%= __("Add topic") %>"
+                                placement="top-start">
+                        <el-button @click="goTo('topics')" size="mini" round icon="el-icon-plus"></el-button>
+                    </el-tooltip>
+                    <el-tooltip effect="dark"
+                                content="<%= __("If you have not found your cattery, go to the \"topics\" section and create it.") %>"
+                                placement="top-start">
 
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+                <% /* ОПИСАНИЕ ПОСТА на русском */ %>
+                <template>
+                    <el-form-item label="<%= __('Description') %> (Ru)" prop="subtitleRu">
+                        <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+
+                            <el-input
+                                    type="textarea"
+                                    :rows="3"
+                                    clearable
+                                    :keyup="post.subtitleRu  | abc(post,'label','ru')"
+                                    placeholder="Please input"
+                                    v-model="post.subtitleRu"
+                                    maxlength="700"
+                                    show-word-limit>
+                            </el-input>
+                        </el-col>
+                    </el-form-item>
+                </template>
+                <% /* ОПИСАНИЕ ПОСТА на английском */ %>
+                <template>
+                    <el-form-item label="<%= __('Description') %> (En)" prop="subtitle">
+                        <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+                            <el-input
+                                    type="textarea"
+                                    :rows="3"
+                                    clearable
+                                    placeholder="Please input"
+                                    v-model="post.subtitle"
+                                    maxlength="700"
+                                    show-word-limit>
+                            </el-input>
+                        </el-col>
+                    </el-form-item>
+                </template>
+            </el-form>
+            <span slot="footer" class="dialog-footer  flex justify-content-center" style="margin-bottom: 180px" >
+            <el-button  type="success" @click="saveUpdate()"><%= __('Save') %></el-button>
+        </span>
             <% /* ВИДЕО */ %>
+            <h2 class="flex justify-content-center"><%= __('Video Editor') %></h2>
             <template>
                 <el-divider content-position="left">Всего роликов: {{post.video.length}}</el-divider>
                 <el-table
@@ -342,33 +408,32 @@
                             label=""
                             width="80">
                         <template slot-scope="scope">
-<!--                            <el-button-->
-<!--                                    @click.native.prevent="deleteRow(scope.$index, post.video)"-->
-<!--                                    type="text"-->
-<!--                                    size="small">-->
-<!--                                Remove-->
-<!--                            </el-button>-->
+                            <!--                            <el-button-->
+                            <!--                                    @click.native.prevent="deleteRow(scope.$index, post.video)"-->
+                            <!--                                    type="text"-->
+                            <!--                                    size="small">-->
+                            <!--                                Remove-->
+                            <!--                            </el-button>-->
                             <el-button @click.native.prevent="editRow(scope.$index, post.video)" type="text"
-                                       size="small">Edit</el-button>
+                                       size="small">Edit
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div style="margin-top: 20px">
-
-
-                    <el-button type="" @click="dialogFormVisible = true"  > <%= __('Video')
-                        %>&nbsp;<i class="el-icon-circle-plus-outline el-icon-right"></i></el-button>
-<!--                    <el-button @click="toggleSelection([...post.video])"><span v-if="rws">Выделить-->
-<!--                            всё</span><span v-else>Снять выделение</span></el-button>-->
-<!--                    <el-button @click="toggleSelection()">Снять выделение</el-button>-->
-                    <el-button type="danger"  v-if="rws" @click.native.prevent="deleteRowsVideo()" >Удалить
-                        выделенное</el-button>
+                    <el-button type="" @click="addOneVideo()">
+                        <%= __('Video') %>&nbsp;<i class="el-icon-circle-plus-outline el-icon-right"></i></el-button>
+                    <el-button type="danger" v-if="rws" @click.native.prevent="openD()">
+                        Удалить выделенное
+                    </el-button>
                 </div>
             </template>
         </div>
-        <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handlerCloseDialogSlider()"><%= __('Close') %></el-button>
+        <span slot="footer" class="dialog-footer flex justify-content-center">
+            <el-button type="" @click="handlerCloseDialogSlider()"><%= __('Close') %></el-button>
+<!--            <el-button  type="success" @click="saveUpdate()"><%= __('Save') %></el-button>-->
         </span>
+
     </el-dialog>
     <% /* шапка страницы post */ %>
     <patzi-post-header :obj-data="seo" :post="post" @editpost="editPost" @remove="removeItem"
@@ -395,7 +460,8 @@
     </section>
 
     <% /* КАРУСЕЛЬ С ВИДЕО */ %>
-    <patzi-post-videos  :obj-data="seo" :video="post.video"></patzi-post-videos>
+
+    <patzi-post-videos v-if="post.video.length > 0" :obj-data="seo" :video="post.video"></patzi-post-videos>
     <% /* ЭКСПЕРТЫ НА ВЫСТАВКЕ */ %>
     <section class="skrollable skrollable-between u-clearfix u-image u-image-tiles u-section-4" id="sec-5927"
              data-image-width="400" data-image-height="400">
