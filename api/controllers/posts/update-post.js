@@ -247,7 +247,19 @@ module.exports = {
     }
     post = await Post.findOne(update.id).populate('topic');
     // let owner = inputs.owner ? inputs.owner : this.req.me.id;
-
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    post = await sails.helpers.cloudFrontUrl.with({
+      collection: post,
+      collectionName: 'post',
+      edits: {
+        resize: {}
+      }
+    });
+    post.imagesArrUrl = _.pluck(post.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
     /**
      * Добавить питомца в коллекцию пользователя: "User.dogs",
      * где у пользователя есть идентификатор 10 и питомец имеет идентификатор 300.

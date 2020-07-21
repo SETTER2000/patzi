@@ -26,10 +26,11 @@ parasails.registerPage('blog', {
     succ: false,
     dialogImageUrl: '',
     eLabel: true,
+
     post: {
       see: true,
       rootPage: false,
-      fileList:[],
+      fileList: [],
       topic: {},
       dateEvent: {},
       subtitle: '',
@@ -159,10 +160,8 @@ parasails.registerPage('blog', {
     this.post.topicId = this.post.topic.id;
     this.post.isAdmin = this.me.isAdmin;
     this.post.isSuperAdmin = this.me.isSuperAdmin;
-    this.post.images.map(im => {
-       im.url= im.imageSrc;
-    });
-    this.post.fileList = this.post.images;
+    this.fix();
+
     // Запрос для события list-*
     io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -179,6 +178,7 @@ parasails.registerPage('blog', {
       this.post.topic = data.topic;
       this.post.images = data.images;
       this.post.imagesArrUrl = data.imagesArrUrl;
+      this.fix();
       this.$forceUpdate();
       console.log('NEW TOPIC::', this.post);
     });
@@ -241,15 +241,24 @@ parasails.registerPage('blog', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    fix() {
+      if (this.post.images && this.post.images.length > 0) {
+        this.post.images.map(im => {
+          im.url = im.imageSrc;
+        });
+        this.post.fileList = this.post.images;
+        // this.fileList = this.post.images;
+      }
+    },
     handlePictureCardPreview(file) {
-      console.log('FOTO preview: ', file);
+      // console.log('FOTO preview: ', file);
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
 
     beforeUpload(file) {
       // Проверка размера входящего файла картинки не более (MB)
-       console.log('FILE:: ', file);
+      //  console.log('FILE:: ', file);
       const isJPG = file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < this.sizeLess;
 
@@ -265,10 +274,14 @@ parasails.registerPage('blog', {
     },
 
     handleSuccess(res, file) {
-      console.log('HANDLE SUCCESS res: ' , res);
-      console.log('HANDLE SUCCESS file: ' , file);
-      _.isArray(this.post.fileList) ? this.post.fileList.push(res) :
-        this.post.fileList = [res];
+      console.log('HANDLE SUCCESS res: ', res);
+      console.log('HANDLE SUCCESS file: ', file);
+      console.log('this.post.fileList::', this.post.fileList);
+      console.log(' fileList::: ', this.fileList);
+      this.post.fileList = _.isUndefined(this.post.fileList) ? [] : this.post.fileList;
+      this.fileList.push(res);
+      // _.isArray(this.post.fileList) ? this.post.fileList.push(res) : this.post.fileList = [res];
+      // this.post.fileList=[...this.post.images, ...this.post.fileList];
     },
 
     // функция перехвата при превышении лимита
@@ -280,8 +293,9 @@ parasails.registerPage('blog', {
 
     // Срабатывает перед удалением одного файла
     handleRemove(file, fileList) {
-      console.log('REMOVE FILE:: ', file);
-      console.log('REMOVE fileList:: ', fileList);
+      console.log('HANDLE REMOVE file: ', file);
+      console.log('HANDLE REMOVE fileList: ', fileList);
+      this.fileList = [];
       this.post.fileList = fileList;
     },
 
@@ -323,7 +337,7 @@ parasails.registerPage('blog', {
     // Update Post
     update(data) {
       this.openFullScreen();
-
+      data.fileList = [...this.fileList, ...this.post.fileList];
       // data.fileList = this.fileList;
       // data.dateEvent = JSON.stringify(data.dateEvent);
       // data.topicId = _.isObject(data.topic) ? data.topic.id : data.topic;
