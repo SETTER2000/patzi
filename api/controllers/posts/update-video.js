@@ -36,17 +36,20 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
+    // Have the socket which made the request join the "post" room.
+    // Подключить сокет, который сделал запрос, к комнате «post».
+    await sails.sockets.join(req, 'post');
 
     await inputs.video.map(async (v) => {
       v.videoUrl = v.videoUrl.replace(/https:\/\/youtu.be\//gi, '');
       return v;
     });
 
-    await Post.updateOne({id: inputs.id}).set({
+    let updated=  await Post.updateOne({id: inputs.id}).set({
       video: inputs.video
     });
-
-    await sails.sockets.broadcast('post', 'list-post');
+    if(_.isUndefined(updated)){ throw 'badRequest';}
+    await sails.sockets.broadcast('post', 'post-video', updated);
     // Respond with view.
     return exits.success();
 

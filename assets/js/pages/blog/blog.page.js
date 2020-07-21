@@ -6,12 +6,15 @@ parasails.registerPage('blog', {
     lines: true,
     dialogPedigreeVisible: true,
     virtualPageSlug: '',
+    inx: '',
+    topics: [],
     countDelVideo: 0,
     limit: 50,
     multipleSelection: [],
     rws: false,
     rowsUpdateVideo: [],
     outerVisible: false,
+    updateButton: false,
     innerVisible: false,
     dialogFormVisible: false,
     activeClass: 'scc',
@@ -21,23 +24,28 @@ parasails.registerPage('blog', {
     succ: false,
     dialogImageUrl: '',
     eLabel: true,
-    post: {},
+    // post: {},
     ruleForm: {
       see: true,
       rootPage: false
     },
-    form: {
-      videoUrl: 'https://youtu.be/y0AfJFLW6_k',
-      videoHeader: 'Вася у мамы силён в математике',
-      videoDescription: 'Вася у мамы силён в математике Вася у мамы силён в математике Вася у мамы силён в' +
-        ' математике А',
+    post: {
+      topic: {},
+      dateEvent: {},
+      subtitle: '',
+      subtitleRu: '',
     },
+    form: {},
     formLabelWidth: '140px',
     rules: {
       kennel: [
         {required: true, message: 'Please select kennel name', trigger: 'change'}
       ],
       label: [
+        {required: true, message: 'Please input dog name', trigger: 'blur'},
+        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
+      ],
+      labelRu: [
         {required: true, message: 'Please input dog name', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
       ],
@@ -147,9 +155,43 @@ parasails.registerPage('blog', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
-    // console.log('POST::: ', this.post);
+    console.log('POST::: ', this.post);
+    this.post.topicId = this.post.topic.id;
     this.post.isAdmin = this.me.isAdmin;
     this.post.isSuperAdmin = this.me.isSuperAdmin;
+    // Запрос для события list-*
+    io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
+      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Принимаем данные по событию list-*
+    io.socket.on('post-video', data => {
+      this.post.video = data.video;
+      this.$forceUpdate();
+      console.log('NEW POST::', this.post);
+    });
+    // Принимаем данные по событию list-*
+    io.socket.on('update-post', data => {
+      this.post.topic = data.topic;
+      this.$forceUpdate();
+      console.log('NEW TOPIC::', this.post);
+    });
+
+    // Принимаем данные по событию list-*
+    io.socket.on('list-topic', data => {
+      // this.dataAll = this.seo;
+      // console.log('TOPICS LIST:: ', data);
+      this.topics = _.each(data, (t, ind) => {
+        t.uSectionClass = `u-section-3-${ind + 1}`;
+        t.active = (ind === 0);
+        t.images = _.each(t.images, (im, ind) => {
+          im.uContainerLayout = `u-container-layout-${ind + 1}`;
+          im.uImage = `u-image-${ind + 1}`;
+        });
+      });
+
+      // this.dataAll.data = this.posts;
+
+    });
   },
   mounted: async function () {
     //…
@@ -162,6 +204,31 @@ parasails.registerPage('blog', {
       }
     },
 
+  },
+  filters: {
+
+    trimString: function (value, count = 12) {
+      if (!value) {
+        return '';
+      }
+      value = _.trunc(value, count);
+      return value;
+    },
+    abc(value, obj, field, lang) {
+      if (!value) {
+        return '';
+      }
+      let r = '';
+      const regex = /[ a-z]+/i;
+      const regexRu = /[ а-яё]+/i;
+
+      obj['lang'] = lang ? lang : 'en';
+      r = lang === 'ru' ? regexRu.exec(value) : regex.exec(value);
+      if (!_.isArray(r)) {
+        obj.errInputLang = true;
+        obj[field] = '';
+      }
+    },
   },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
@@ -246,8 +313,10 @@ parasails.registerPage('blog', {
       this.openFullScreen();
 
       // data.fileList = this.ruleForm.fileList;
-      // data.dateEvent = JSON.stringify(this.post.dateEvent);
-      // console.log('DATA UPDATE перед отправкой ::: ', data);
+      // data.dateEvent = JSON.stringify(data.dateEvent);
+      // data.topicId = _.isObject(data.topic) ? data.topic.id : data.topic;
+      // data.topicId = _.isObject(data.topic) ? data.topic.id : data.topic;
+      console.log('DATA UPDATE перед отправкой ::: ', data);
       let p = this;
       io.socket.put('/api/v1/posts/update-post', data, (data, jwRes) => {
         // (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
@@ -317,18 +386,18 @@ parasails.registerPage('blog', {
     },
 
     updateVideo: async function () {
-      let data = {
-        id: this.post.id,
-        video: this.rowsUpdateVideo
-      };
-      let r = this;
-      io.socket.delete('/api/v1/posts/destroy-video', data, (dataRes, jwRes) => {
-
+      console.log('DATA перед отправкой: ', this.post);
+      io.socket.put('/api/v1/posts/update-video', this.post, (dataRes, jwRes) => {
+        this.$forceUpdate();
         if (jwRes.statusCode === 200) {
+          this.form = {};
+          this.dialogFormVisible = false;
+          this.rws = false;
+
           this.mesSuccess('Оk!');
-          r.post.video = this.rowsUpdateVideo;
-          r.dialogFormVisible = false;
-          this.$forceUpdate();
+          // r.post.video = this.rowsUpdateVideo;
+
+
           // setTimeout(() => {
           //   this.goto(`/blog/`);
           // }, 2000);
@@ -365,9 +434,15 @@ parasails.registerPage('blog', {
         cancelButtonText: 'Отменить',
         type: 'warning'
       }).then(() => {
+        this.post.video = _.compact(this.post.video.map(vd => {
+          return _.some(this.rowsUpdateVideo, vd) ? false : vd;
+        }));
+        console.log('rowsUpdateVideo::: ', this.post.video);
         this.updateVideo();
 
       }).catch(() => {
+        this.$refs.multipleTable.clearSelection();
+        this.rws = false;
         this.$message({
           type: 'info',
           message: 'Удаление отменено'
@@ -403,23 +478,18 @@ parasails.registerPage('blog', {
     //   console.log('tableData:', tableData);
     // },
 
-    editRow(index, tableData) {
-      // console.log('editRow INdex', index);
-      // console.log('editRow tableData:', tableData);
-    },
-
     selectRowsVideo(rows) {
       this.rws = rows.length > 0;
       this.countDelVideo = rows.length;
       this.rowsUpdateVideo = rows;
+      console.log('this.rowsUpdateVideo:: ', this.rowsUpdateVideo);
     },
     deleteRowsVideo: function () {
-      let videos = this.post.video;
-
       // let vs =  _.partition(rows,  vd => _.some(videos , vd));
-      this.rowsUpdateVideo = _.compact(videos.map(vd => {
+      this.rowsUpdateVideo = _.compact(this.post.video.map(vd => {
         return _.some(this.rowsUpdateVideo, vd) ? false : vd;
       }));
+      console.log('rowsUpdateVideo::: ', this.rowsUpdateVideo);
       this.openD();
     },
 
@@ -438,10 +508,47 @@ parasails.registerPage('blog', {
       this.multipleSelection = val;
     },
     addVideo() {
-      this.form.videoUrl = this.form.videoUrl.replace(/https:\/\/youtu.be\//gi, '') ;
+      console.log('this.form:: ', this.form);
+      console.log('this.post.video:: ', this.post.video);
+      this.form.videoUrl = this.form.videoUrl.replace(/https:\/\/youtu.be\//gi, '');
       this.post.video.push(this.form);
-      this.rowsUpdateVideo = this.post.video;
+      // this.rowsUpdateVideo = this.post.video;
+      // console.log('this.rowsUpdateVideo:: ', this.rowsUpdateVideo);
       this.updateVideo();
+    },
+    addOneVideo() {
+      this.form = {};
+      this.dialogFormVisible = true;
+      this.updateButton = false;
+    },
+
+    editRow(index, videos) {
+      this.form = {};
+      this.inx = index;
+      this.updateButton = true;
+      this.form = videos[index];
+      this.dialogFormVisible = true;
+    },
+
+    saveUpdateVideo() {
+      console.log('this.form:: ', this.form);
+      console.log('this.post.video:: ', this.post.video);
+      this.form.videoUrl = this.form.videoUrl.replace(/https:\/\/youtu.be\//gi, '');
+      this.post.video[this.inx] = this.form;
+      this.updateVideo();
+    },
+    getPull() {
+      return this.topics;
+    },
+    goTo(path) {
+      window.location = `/${path}`;
+    },
+    goTo2(path) {
+      this.goto(path);
+    },
+
+    saveUpdate() {
+      this.update(this.post);
     },
 
   },

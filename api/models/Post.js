@@ -104,7 +104,7 @@ module.exports = {
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     topic: {
       model: 'topic',
-      description: 'Комментарий может принадлежать только одному пользователю. One to Many'
+      description: 'Пост может принадлежать только одной теме. One to Many'
     },
 
   },

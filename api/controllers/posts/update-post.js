@@ -19,7 +19,12 @@ module.exports = {
     topicId: {
       type: 'string',
       required: true,
-      description: `Идентификатор поста.`
+      description: `Идентификатор темы.`
+    },
+    topic: {
+      type: 'ref',
+      required: true,
+      description: `Объект темы.`
     },
     labelRu: {
       type: 'string',
@@ -94,7 +99,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const req = this.req;
-
+      console.log('topic::: ' , inputs.topic);
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
@@ -135,7 +140,8 @@ module.exports = {
       backgroundPosition: inputs.backgroundPosition,
       subtitleRu: inputs.subtitleRu,
       see: inputs.see,
-      rootPage: inputs.rootPage
+      rootPage: inputs.rootPage,
+      topic:inputs.topic.id     ,
       /*label: label,
       gender: inputs.gender,
       see: inputs.see,
@@ -239,7 +245,7 @@ module.exports = {
     if (!update) {
       throw 'badRequest';
     }
-
+    post = await Post.findOne(update.id).populate('topic');
     // let owner = inputs.owner ? inputs.owner : this.req.me.id;
 
     /**
@@ -255,7 +261,7 @@ module.exports = {
      console.log('БРАТЬЯ И СЕСТРЫ::: ', siblings);
      let year = _.trim(inputs.dateBirth.split('-')[0], '"');*/
     // Рассылаем данные всем подписанным на событие forSale-post данной комнаты.
-    await sails.sockets.broadcast('post', 'update-post');
+    await sails.sockets.broadcast('post', 'update-post', post);
     return exits.success();
   }
 };

@@ -139,14 +139,14 @@ parasails.registerPage('blog-home', {
     });
     // Принимаем данные по событию list-*
     io.socket.on('list-post', data => {
-      console.log('POSTS LIST:: ', data);
+      // console.log('POSTS LIST:: ', data);
       this.postCount = data && data.length > 0 ? data.length : this.postCount;
       this.posts = this.cashPosts = data;
     });
     // Принимаем данные по событию list-*
     io.socket.on('list-topic', data => {
       // this.dataAll = this.seo;
-      console.log('TOPICS LIST:: ', data);
+      // console.log('TOPICS LIST:: ', data);
       this.topics = _.each(data, (t, ind) => {
         t.uSectionClass = `u-section-3-${ind + 1}`;
         t.active = (ind === 0);
@@ -158,7 +158,6 @@ parasails.registerPage('blog-home', {
 
       // this.dataAll.data = this.posts;
 
-      console.log('BBB Seo topics::: ', this.topics);
     });
   },
 

@@ -175,7 +175,6 @@ module.exports = {
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
-      console.log('ВАСЯ я дерево!');
       throw 'badRequest';
     }
 

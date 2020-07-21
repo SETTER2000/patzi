@@ -39,7 +39,6 @@ module.exports = {
   fn: async function (inputs, exits) {
     const req = this.req;
     if (!req.isSocket) {
-      console.log('ВАСЯ я дерево!');
       throw 'forbidden';
     }
 // Подключить сокет, который сделал запрос, к комнате «kennel».
