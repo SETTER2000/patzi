@@ -217,6 +217,7 @@
             <div class="container-fluid ">
                 <div class="row">
                     <div class="col">
+
                         <el-upload
                                 action="/api/v1/files/upload"
                                 list-type="picture-card"
@@ -454,7 +455,8 @@
                         inactive-text="<%= __('column') %>">
                 </el-switch>
             </h2>
-
+           <span  class="flex justify-content-center m-5" v-if="post.images.length == 0"> Собачка не фокусе. Добавьте
+               картинок.</span>
             <patzi-post-gallery :obj-data="seo" :post="post" :lines="lines"
                                 @select-posts="filterPosts"></patzi-post-gallery>
         </div>
