@@ -99,7 +99,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const req = this.req;
-      console.log('topic::: ' , inputs.topic);
+      // console.log('topic::: ' , inputs.topic);
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
@@ -114,7 +114,7 @@ module.exports = {
     let images = inputs.images ? inputs.images : post.images;
     let imagesNew = [];
 
-
+        console.log('inputs.fileList', inputs.fileList);
     // Проверяем есть ли фото
     if (inputs.fileList) {
       images = await inputs.fileList.filter(o => !_.isNull(o));

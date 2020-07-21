@@ -6,6 +6,8 @@ parasails.registerPage('blog', {
     lines: true,
     dialogPedigreeVisible: true,
     virtualPageSlug: '',
+    fileList: [],
+    // fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
     inx: '',
     topics: [],
     countDelVideo: 0,
@@ -24,12 +26,10 @@ parasails.registerPage('blog', {
     succ: false,
     dialogImageUrl: '',
     eLabel: true,
-    // post: {},
-    ruleForm: {
-      see: true,
-      rootPage: false
-    },
     post: {
+      see: true,
+      rootPage: false,
+      fileList:[],
       topic: {},
       dateEvent: {},
       subtitle: '',
@@ -159,6 +159,10 @@ parasails.registerPage('blog', {
     this.post.topicId = this.post.topic.id;
     this.post.isAdmin = this.me.isAdmin;
     this.post.isSuperAdmin = this.me.isSuperAdmin;
+    this.post.images.map(im => {
+       im.url= im.imageSrc;
+    });
+    this.post.fileList = this.post.images;
     // Запрос для события list-*
     io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -166,12 +170,15 @@ parasails.registerPage('blog', {
     // Принимаем данные по событию list-*
     io.socket.on('post-video', data => {
       this.post.video = data.video;
+      // this.$refs.upload = this.post.images;
       this.$forceUpdate();
       console.log('NEW POST::', this.post);
     });
     // Принимаем данные по событию list-*
     io.socket.on('update-post', data => {
       this.post.topic = data.topic;
+      this.post.images = data.images;
+      this.post.imagesArrUrl = data.imagesArrUrl;
       this.$forceUpdate();
       console.log('NEW TOPIC::', this.post);
     });
@@ -235,13 +242,14 @@ parasails.registerPage('blog', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     handlePictureCardPreview(file) {
+      console.log('FOTO preview: ', file);
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
 
     beforeUpload(file) {
       // Проверка размера входящего файла картинки не более (MB)
-
+       console.log('FILE:: ', file);
       const isJPG = file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < this.sizeLess;
 
@@ -257,8 +265,10 @@ parasails.registerPage('blog', {
     },
 
     handleSuccess(res, file) {
-      _.isArray(this.ruleForm.fileList) ? this.ruleForm.fileList.push(res) :
-        this.ruleForm.fileList = [res];
+      console.log('HANDLE SUCCESS res: ' , res);
+      console.log('HANDLE SUCCESS file: ' , file);
+      _.isArray(this.post.fileList) ? this.post.fileList.push(res) :
+        this.post.fileList = [res];
     },
 
     // функция перехвата при превышении лимита
@@ -270,7 +280,9 @@ parasails.registerPage('blog', {
 
     // Срабатывает перед удалением одного файла
     handleRemove(file, fileList) {
-      this.fileList = fileList;
+      console.log('REMOVE FILE:: ', file);
+      console.log('REMOVE fileList:: ', fileList);
+      this.post.fileList = fileList;
     },
 
     filterPosts(data) {
@@ -298,21 +310,21 @@ parasails.registerPage('blog', {
       });
       // setTimeout(() => {
       //   loading.close();
-      // }, 2000);
+      // }, 2000);                     imageSrc
     },
     resetForm(formName) {
       this.$refs.upload ? this.$refs.upload.clearFiles() : '';
       this.$refs[formName].resetFields();
-      this.ruleForm.fileList = [];
-      this.ruleForm.imageUrl = '';
-      this.ruleForm.price = 0;
-      this.ruleForm.federations = this.resetFederation;
+      this.post.fileList = [];
+      this.post.imageUrl = '';
+      this.post.price = 0;
+      this.post.federations = this.resetFederation;
     },
     // Update Post
     update(data) {
       this.openFullScreen();
 
-      // data.fileList = this.ruleForm.fileList;
+      // data.fileList = this.fileList;
       // data.dateEvent = JSON.stringify(data.dateEvent);
       // data.topicId = _.isObject(data.topic) ? data.topic.id : data.topic;
       // data.topicId = _.isObject(data.topic) ? data.topic.id : data.topic;
