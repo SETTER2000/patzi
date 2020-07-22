@@ -743,5 +743,11 @@
 	"dog": "dog",
 	"in the focus": "in the focus",
 	"row": "row",
-	"column": "column"
+	"column": "column",
+	"Birth weight (g)": "Birth weight (g)",
+	"Specify the weight at birth.": "Specify the weight at birth.",
+	"Indicate the current weight of the dog.": "Indicate the current weight of the dog.",
+	"Header video": "Header video",
+	"Paste the link to the YouTube video here to display it in the dog's page header": "Paste the link to the YouTube video here to display it in the dog's page header",
+	"Enable or disable display of video header for this dog": "Enable or disable display of video header for this dog"
 }

@@ -315,7 +315,6 @@ module.exports = {
       currency: inputs.currency,
       price: inputs.price,
       headerVideoShow: inputs.headerVideoShow,
-      headerVideo:  inputs.headerVideo.replace(/https:\/\/youtu.be\//gi,''),
       saleDescription: inputs.saleDescription,
       dateBirth: await sails.helpers.dateConverter(inputs.dateBirth),
       // dateBirth: await sails.helpers.dateFix(inputs.dateBirth),
@@ -384,6 +383,7 @@ module.exports = {
       updateObj.titleDog = t;
     }
 
+    updateObj.headerVideo= inputs.headerVideo ?  inputs.headerVideo.replace(/https:\/\/youtu.be\//gi,'') : updateObj.headerVideo;
 
     // Обновляем
     let updateDog = await Dog.updateOne({id: inputs.id}).set(updateObj);
