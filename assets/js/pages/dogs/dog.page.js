@@ -9,7 +9,9 @@ parasails.registerPage('dog', {
     dialogImageUrl: '',
     titles: [],
     childrens: [],
+    urlYoutube:'',
     drawer: false,
+    video: true,
     siblings: false,
     titlesDog: [],
     obj: {},
@@ -133,6 +135,7 @@ parasails.registerPage('dog', {
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
     console.log('DOG::: ', this.dog);
+    this.urlYoutube = `https://www.youtube.com/embed/${this.dog.headerVideo}?playlist=${this.dog.headerVideo}&amp;loop=1&amp;mute=1&amp;showinfo=0&amp;controls=0&amp;start=0&amp;autoplay=1`;
 
     // Запрос для события list-*
     io.socket.get(`/api/v1/titles/list`, function gotResponse(body, response) {

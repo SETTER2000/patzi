@@ -19,6 +19,18 @@ module.exports = {
       с названием питомника может однозначно установить уникальность собаки в базе.`
     },
 
+    headerVideoShow: {
+      type: 'boolean',
+      description: `Флаг. Виден видео-хедер или нет`
+    },
+
+
+    headerVideo: {
+      type: 'string',
+      example: 'https://youtu.be/RPp6p73ria4',
+      description: 'Код видео из ютуба для показа в хедере собаки'
+    },
+
     gender: {
       type: 'string',
       required: true,
@@ -302,6 +314,8 @@ module.exports = {
       allowEdit: inputs.allowEdit,
       currency: inputs.currency,
       price: inputs.price,
+      headerVideoShow: inputs.headerVideoShow,
+      headerVideo:  inputs.headerVideo.replace(/https:\/\/youtu.be\//gi,''),
       saleDescription: inputs.saleDescription,
       dateBirth: await sails.helpers.dateConverter(inputs.dateBirth),
       // dateBirth: await sails.helpers.dateFix(inputs.dateBirth),

@@ -164,6 +164,19 @@ module.exports = {
       description: 'Кличка, ласковое имя.'
     },
 
+    headerVideoShow: {
+      type: 'boolean',
+      description: `Флаг. Виден видео-хедер или нет`
+    },
+
+
+    headerVideo: {
+      type: 'string',
+      example: 'https://youtu.be/RPp6p73ria4',
+      description: 'Код видео из ютуба для показа в хедере собаки'
+    },
+
+
     cover: {
       type: 'number',
       defaultsTo: 0,

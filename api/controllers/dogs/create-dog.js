@@ -65,6 +65,19 @@ module.exports = {
       редактировать собаку.`
     },
 
+    headerVideoShow: {
+      type: 'boolean',
+      description: `Флаг. Виден видео-хедер или нет`
+    },
+
+
+    headerVideo: {
+      type: 'string',
+      example: 'https://youtu.be/RPp6p73ria4',
+      description: 'Код видео из ютуба для показа в хедере собаки'
+    },
+
+
     sire: {
       type: 'string',
       description: 'Отец.',
@@ -153,7 +166,6 @@ module.exports = {
       description: 'Вес. В граммах при рождении.',
       example: 170
     },
-
 
 
     weight: {
@@ -331,7 +343,7 @@ module.exports = {
     // с заглавной буквы
     let label = _.startCase(inputs.label.toString().toLowerCase());
     let rightFullName = _.startCase(kennel.label + ' ' + label);
-    let leftFullName =  _.startCase(label + ' ' + kennel.label);
+    let leftFullName = _.startCase(label + ' ' + kennel.label);
 
     const inData = {
       label: label,
@@ -350,6 +362,8 @@ module.exports = {
       subtitle: inputs.subtitle,
       see: inputs.see,
       allowEdit: inputs.allowEdit,
+      headerVideoShow: inputs.headerVideoShow,
+      headerVideo:  inputs.headerVideo.replace(/https:\/\/youtu.be\//gi,''),
       weight: inputs.weight,
       birthWeight: inputs.birthWeight,
       growth: inputs.growth,
@@ -365,7 +379,7 @@ module.exports = {
       dogTests: inputs.dogTests,
       letter: inputs.letter ? inputs.letter : label[0],
       teethCount: `${inputs.canine}x${inputs.teethCountTop}x${inputs.teethCountBottom}`,
-      fullName: kennel.rightName ? `${rightFullName}`  : `${leftFullName}`
+      fullName: kennel.rightName ? `${rightFullName}` : `${leftFullName}`
     };
     // Создаём собаку
     let newDog = await Dog.create(inData).fetch();

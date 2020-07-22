@@ -786,7 +786,7 @@
 	"Puppies that have already grown up often realize that an exhibition is not just a lot of tasty smells, but also 5, 6, 7, etc. pieces of delicious, fragrant goodies": "Уже подросшие щенки, часто понимают, что выставка - это не просто много вкусных запахов, но и 5, 6, 7 и т.д. кусочков вкусного, ароматного лакомства",
 	"The first day": "Первый день",
 	"Chinese Crested Puppies. On sale.": "Щенки китайской хохлатой. Продажа.",
-	"On sale there are puppies of the Chinese Crested Dogs of show class. Parented, in good physical shape, very active, playful. All documents are in order. We draw up a sales contract. A lot of bonuses.": "В продаже есть подрощенный щенок Китайской Хохлатой Собаки шоу класса. Подрощенные, в прекрасной физической форме, очень активные, игривые. Все документы в порядке. Оформляем договор продажи. Много бонусов.",
+	"On sale there are puppies of the Chinese Crested Dogs of show class. Parented, in good physical shape, very active, playful. All documents are in order. We draw up a sales contract. A lot of bonuses.": "В продаже есть подрощенный щенок Китайской Хохлатой Собаки шоу класса. Подрощенные, в прекрасной физической форме, очень активный, игривый кобель. Все документы в порядке. Оформляем договор продажи. Много бонусов.",
 	"Date of Birth:": "Дата рождения:",
 	"Chinese Crested Dog is surprisingly honest and faithful companion. A capitalion with a huge heart, a cheerful, mischievous character and a warm little body. We know a lot about the breed and are ready to share our knowledge with everyone who, like us, loves this wonderful breed and is ready to share his life with them forever.": "Китайская хохлатая собака удивительно честный и верный спутник. Компаньон с большой буквы, с огромным сердцем, с весёлым, озорным характером и тёплым тельцем. Мы много знаем о породе и готовы поделиться нашими знаниями со всеми, кто, как и мы, любит эту замечательную породу и готов навсегда разделить с ними свою жизнь.",
 	"Do you plan to further increase the number of supported languages in the application": "Планируете ли вы в дальнейшем увеличить в приложении количество поддерживаемых языков",
@@ -991,5 +991,8 @@
 	"Click on YouTube button \"SHARE\" and then button \"COPY\" and paste the copied url here": "Нажмите в YouTube кнопку \"ПОДЕЛИТЬСЯ\" и затем кнопку \"КОПИРОВАТЬ\" и вставьте сюда скопированный url",
 	"Insert part of the url from the video here youtube 'https://youtu.be/TUar0_aUWq8'": "Insert part of the url from the video here youtube 'https://youtu.be/TUar0_aUWq8'",
 	"Add a video": "Добавить видео",
-	"Video Editor": "Редактировать видео"
+	"Video Editor": "Редактировать видео",
+	"Header video": "Header video",
+	"Paste the link to the YouTube video here to display it in the dog's page header": "Вставьте сюда ссылку на ролик в ютубе, для показа в хедера страницы собаки",
+	"Enable or disable display of video header for this dog": "Включить или выключить показ видео-хедера для данной собаки"
 }
