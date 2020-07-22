@@ -415,35 +415,7 @@ parasails.registerPage('dogs-home', {
       this.sr = data;
       $('#play').attr('src', data);
       // $('#logger').text(image);
-    })
-
-    // if (navigator.geolocation) {
-    //   navigator.geolocation.getCurrentPosition (getPosition);
-    // }
-    // function getPosition (position) {
-    //   console.log ('geolocation::: ',position.coords.latitude, position.coords.longitude);
-    // }
-
-
-//     navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msgGetUserMedia);
-// console.log('NVV:: ' ,  navigator);
-
-    /*try {
-      this.stream =  navigator.mediaDevices.getUserMedia({video: true, audio: true}, this.loadCamera, this.loadFail);
-      /!* use the stream *!/
-    } catch(err) {
-      /!* handle the error *!/
-    }*/
-
-    /*    navigator.mediaDevices.getUserMedia({video: true, audio: true})
-          .then(function(stream) {
-            this.stream = stream;
-            /!* use the stream *!/
-          })
-          .catch(function(err) {
-            console.log('Error stream: ', err);
-            /!* handle the error *!/
-          });*/
+    });
   },
 
   filters: {

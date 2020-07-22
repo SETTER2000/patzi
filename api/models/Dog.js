@@ -323,6 +323,35 @@ module.exports = {
 
 
   },
+
+  // получить предков для pedigree
+  pedigree: async function (id) {
+    const db = sails.getDatastore('mongodb').manager;
+    const collection = db.collection(Dog.tableName);
+    const ObjectID = require("bson-objectid");
+            console.log('IDD::: ' , id);
+
+    return collection.aggregate([
+      {$match: {_id:  ObjectID(id)}},
+      {
+        $graphLookup: {
+          from: "dog_children__dog_parents",
+          startWith: "$_id",
+          connectFromField: "dog_children",
+          connectToField: "dog_parents",
+          maxDepth: 3,
+          depthField: "numConnections",
+          as: "destinations"
+        }
+      }
+    ]).toArray();
+
+
+
+    // console.log('RRR : ', dogsNew);
+    // dogsNew;
+  },
+
   // получить всех братьев и сестёр
   siblings: async function (dog) {
     console.log('Входящий объект Dog для sibling: ', dog);

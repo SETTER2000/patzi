@@ -76,6 +76,7 @@ module.exports.routes = {
 
   'GET /kennels/:virtualPageSlug?': {action: 'kennels/view-kennels-home', locals: {currentSection: 'kennels'}},
 
+
   'GET /pedigree/:virtualPageSlug?': {action: 'pedigree/view-pedigree-home'},
 
 
@@ -255,6 +256,10 @@ module.exports.routes = {
   'GET    /api/v1/likes/list-like/:instanceModuleId/:field': {action: 'likes/list-like'},
   'DELETE /api/v1/likes/destroy-one-like': {action: 'likes/destroy-one-like', csrf: false},
   'POST   /api/v1/likes/comment-like': {action: 'likes/comment-like', csrf: false},
+
+  'PUT    /api/v1/pdg': {action: 'pedigree/one-pedigree', csrf: false},
+
+
 
   'GET    /undefined': {action: 'files/undefined'},
 

@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Search dog',
 
 
-  description: 'Обрабатывает сокет подключение клиента и отдаёт весь список объектов коллекции.',
+  description: 'Обрабатывает сокет подключение клиента и отдаёт весь список объектов коллекции dog.',
 
 
   inputs: {
@@ -56,10 +56,22 @@ module.exports = {
 
 
     // Выбираем всех собак согласно гендорному признаку
-    let dogs = await Dog.find({
-      gender: ['dam', 'sire']
-    }).populate('kennel');
+    let dogs = await Dog.find({gender: ['dam', 'sire']})
+      .populate('kennel')
+      .populate('parents');
 
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    dogs = await sails.helpers.cloudFrontUrl.with({
+      collection: dogs,
+      collectionName: 'dog',
+      edits: {
+        resize: {}
+      }
+    });
 
     // Определяем расположение названия питомника относительно имя собаки
     // и формируем динамически новое свойство value для элемента select
@@ -72,15 +84,19 @@ module.exports = {
     // });
 
     result = dogs.filter(dog => {
-      console.log('inputs.queryString:', inputs.queryString);
-      return dog.value = !_.isString(inputs.queryString) ? dog.value :
+      // console.log('inputs.queryString:', inputs.queryString);
+      dog.value = !_.isString(inputs.queryString) ? dog.value :
         dog.value.toLowerCase().indexOf(inputs.queryString.toLowerCase()) !== -1 ? dog.value : '';
+      return dog.value;
       // console.log('dam.value: ', dog.value);
     });
 
     // Подрезаем результат до 20 записей
     result = (result.length > 20) ? result.slice(0, 20) : result;
 
+
+    let resultNew = await Dog.pedigree(result);
+    console.log('result::: ', resultNew);
     // Распространяем ответ на все подключенные сокеты к комнате dog слушающие событие search-dog
     await sails.sockets.broadcast('dog', 'search-dog', result);
 

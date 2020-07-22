@@ -423,7 +423,7 @@ module.exports = {
     await Dog.replaceCollection(updateDog.id, 'owners').members(owner);
 
     let siblings = await Dog.siblings(inputs);
-    console.log('БРАТЬЯ И СЕСТРЫ::: ', siblings);
+    // console.log('БРАТЬЯ И СЕСТРЫ::: ', siblings);
     let year = _.trim(inputs.dateBirth.split('-')[0], '"');
     // Рассылаем данные всем подписанным на событие forSale-dog данной комнаты.
     await sails.sockets.broadcast('dog', 'forSale-dog', await sails.helpers.forSaleDog.with({
