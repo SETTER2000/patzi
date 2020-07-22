@@ -325,26 +325,61 @@
 
     <div :class="{ winner: isWW() }">
         <% /* Шапка страницы */ %>
-        <section class="banner-area relative" :class="{deathColor:dog.dateDeath, }">
+        <section v-if="!dog.headerVideoShow" class="banner-area relative" :class="{deathColor:dog.dateDeath,
+         }">
             <div class="container">
                 <div class="row d-flex align-items-center justify-content-center">
                     <div class="about-content col-lg-12">
                         <div v-if="isWW()" class="menu-center">
-                            <!-- <el-popover
-                                    placement="right-start"
-                                    trigger="hover"
-                                    width="320">
-                               <div class="menu-center"><h4><%= __('World Winner') %></h4>
-                                    <el-table :data="_.filter(dog.titleDog, )">
-                                        <el-table-column width="70" property="year" label="<%= __('year') %>"></el-table-column>
-                                        <el-table-column width="150" property="address" label="<%= __('address') %>"></el-table-column>
-                                        <el-table-column width="600" property="description"
-                                                         label="<%= __('description') %>"></el-table-column>
-                                    </el-table>
-                                </div>&ndash;&gt;
-                                <i slot="reference" style="font-size: 2em; color: rgb(170, 150, 124)" class="ti-crown"></i>
-&lt;!&ndash;                                <i slot="reference" style="font-size: 2em; color: #d8bb79" class="ti-crown"></i>&ndash;&gt;
-                            </el-popover>-->
+                            <i slot="reference" style="font-size: 2em; color: rgb(170, 150, 124)" class="ti-crown"></i>
+                        </div>
+                        <h1 class="text-white">{{dog.fullName}}</h1>
+                        <p>{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</p>
+                        <H2 v-if="dog.nickname" class="text-gold">
+                            <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
+                            <i v-else class="el-icon-female"></i>
+                            {{dog.nickname}}
+                        </H2>
+                        <p v-else class="gender">
+                            <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
+                            <i v-else class="el-icon-female"></i>
+                        </p>
+                        <p>
+                            <% /* Титулы */ %>
+                            {{dog.detail}}
+                            <el-button type="text" @click="goto(name(dog.fullName, 'titles'))">
+                              <span class="pointer" v-for="(value, name, index) of dog.countTitles" :key="'t-' + index"
+                                    :title="dog.countTitlesSubtitleRu[index]">{{ name }}<span v-if="value>1">x{{ value }}</span>
+                                  {{ index < _.size(dog.countTitles) - 1 ? ', ' : '' }}
+                              </span>
+                            </el-button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section v-if="dog.headerVideoShow && dog.headerVideo"  class="u-clearfix u-video u-section-1" id="sec-53d9">
+            <div style="" class="u-background-video u-expanded u-video-cover">
+                <div style=" position: absolute;width:178%;left:-39%;height:178%;top:-39%" class="embed-responsive">
+                    <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;"
+                    class="embed-responsive-item" :src="urlYoutube" frameborder="0" allowfullscreen=""></iframe>
+                </div>
+            </div>
+           <!-- <div class="u-clearfix u-sheet u-sheet-1">
+                <img src="images/adc12b1e1454f20fadfaabb27bbc3476.png" alt="" class="u-image u-image-contain u-image-default u-image-1" data-image-width="195" data-image-height="199" data-animation-name="bounceIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
+                <div class="u-align-center u-container-style u-expanded-width u-group u-group-1">
+                    <div class="u-container-layout">
+                        <h3 class="u-text u-text-white u-text-1">hello, we are</h3>
+                        <h1 class="u-text u-text-white u-title u-text-2" data-animation-name="fadeIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">{{dog.fullName}}</h1>
+                        <p class="u-text u-text-body-alt-color u-text-3">Chinese Crested Dog Lovely baby</p>
+                    </div>
+                </div>
+                <img src="images/a43f0c881afb6a0766cbd11968251686.png" alt="" class="u-image u-image-contain u-image-default u-image-2" data-image-width="195" data-image-height="199" data-animation-name="rollIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
+            </div>-->
+            <div class="u-clearfix u-sheet u-sheet-1 container">
+                <div class="row d-flex align-items-center justify-content-center">
+                    <div class="about-content col-lg-12">
+                        <div v-if="isWW()" class="menu-center">
                             <i slot="reference" style="font-size: 2em; color: rgb(170, 150, 124)" class="ti-crown"></i>
                         </div>
                         <h1 class="text-white">{{dog.fullName}}</h1>
