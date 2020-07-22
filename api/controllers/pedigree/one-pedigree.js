@@ -39,13 +39,14 @@ module.exports = {
     await sails.sockets.join(req, 'dog');
 
     let pedigree = await Dog.pedigree(inputs.id);
-          console.log('ПЕРЕДЖ ' , pedigree);
+
     if (!pedigree) {
       throw 'notFound';
     }
 
+    console.log('pedigree.destinations::: ' , _.last(pedigree).destinations);
     // Respond with view.
-    await sails.sockets.broadcast('dog', 'list-pedigree', pedigree);
+    await sails.sockets.broadcast('dog', 'list-pedigree', _.last(pedigree).destinations);
     return exits.success();
 
   }

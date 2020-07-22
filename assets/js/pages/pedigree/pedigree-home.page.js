@@ -163,6 +163,7 @@ parasails.registerPage('pedigree-home', {
         console.log('PEDIGRRR: ', data);
         item.pedigree = data;
         this.resultSearch = item;
+        console.log('Получено значение ввода: ', this.resultSearch);
       });
 
 

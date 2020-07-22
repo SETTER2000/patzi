@@ -329,7 +329,6 @@ module.exports = {
     const db = sails.getDatastore('mongodb').manager;
     const collection = db.collection(Dog.tableName);
     const ObjectID = require("bson-objectid");
-            console.log('IDD::: ' , id);
 
     return collection.aggregate([
       {$match: {_id:  ObjectID(id)}},
