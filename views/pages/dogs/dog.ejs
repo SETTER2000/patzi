@@ -314,7 +314,8 @@
             :visible.sync="photoVisible"
             :before-close="handleCloseDialog">
         <div class="menu-center" v-if="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)">
-            <img class="lazyload" :data-src="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)" style="width: 100%;"
+            <img class="lazyload" :data-src="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)"
+                 style="width: 100%;"
                  :alt="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)">
         </div>
         <span slot="footer" class="dialog-footer">
@@ -358,32 +359,41 @@
                 </div>
             </div>
         </section>
-        <section v-if="dog.headerVideoShow && dog.headerVideo"  class="u-clearfix u-video u-section-1" id="sec-53d9">
+        <section v-if="dog.headerVideoShow && dog.headerVideo" class="u-clearfix u-video u-section-1" id="sec-53d9">
             <div style="" class="u-background-video u-expanded u-video-cover">
                 <div style=" position: absolute;width:178%;left:-39%;height:178%;top:-39%" class="embed-responsive">
                     <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;"
-                    class="embed-responsive-item" :src="urlYoutube" frameborder="0" allowfullscreen=""></iframe>
+                            class="embed-responsive-item" :src="urlYoutube" frameborder="0" allowfullscreen=""></iframe>
                 </div>
             </div>
-           <!-- <div class="u-clearfix u-sheet u-sheet-1">
-                <img src="images/adc12b1e1454f20fadfaabb27bbc3476.png" alt="" class="u-image u-image-contain u-image-default u-image-1" data-image-width="195" data-image-height="199" data-animation-name="bounceIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
-                <div class="u-align-center u-container-style u-expanded-width u-group u-group-1">
-                    <div class="u-container-layout">
-                        <h3 class="u-text u-text-white u-text-1">hello, we are</h3>
-                        <h1 class="u-text u-text-white u-title u-text-2" data-animation-name="fadeIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">{{dog.fullName}}</h1>
-                        <p class="u-text u-text-body-alt-color u-text-3">Chinese Crested Dog Lovely baby</p>
-                    </div>
-                </div>
-                <img src="images/a43f0c881afb6a0766cbd11968251686.png" alt="" class="u-image u-image-contain u-image-default u-image-2" data-image-width="195" data-image-height="199" data-animation-name="rollIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
-            </div>-->
+            <!-- <div class="u-clearfix u-sheet u-sheet-1">
+                 <img src="images/adc12b1e1454f20fadfaabb27bbc3476.png" alt="" class="u-image u-image-contain u-image-default u-image-1" data-image-width="195" data-image-height="199" data-animation-name="bounceIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
+                 <div class="u-align-center u-container-style u-expanded-width u-group u-group-1">
+                     <div class="u-container-layout">
+                         <h3 class="u-text u-text-white u-text-1">hello, we are</h3>
+                         <h1 class="u-text u-text-white u-title u-text-2" data-animation-name="fadeIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">{{dog.fullName}}</h1>
+                         <p class="u-text u-text-body-alt-color u-text-3">Chinese Crested Dog Lovely baby</p>
+                     </div>
+                 </div>
+                 <img src="images/a43f0c881afb6a0766cbd11968251686.png" alt="" class="u-image u-image-contain u-image-default u-image-2" data-image-width="195" data-image-height="199" data-animation-name="rollIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
+             </div>-->
             <div class="u-clearfix u-sheet u-sheet-1 container">
                 <div class="row d-flex align-items-center justify-content-center">
                     <div class="about-content col-lg-12">
                         <div v-if="isWW()" class="menu-center">
-                            <i slot="reference" style="font-size: 2em; color: rgb(170, 150, 124)" class="ti-crown"></i>
+                            <h3 class="u-text u-text-white u-text-1">
+
+                                <i slot="reference" style="font-size: 2em; color: rgb(170, 150, 124)"
+                                   class="ti-crown"></i>
+                            </h3>
                         </div>
-                        <h1 class="text-white">{{dog.fullName}}</h1>
-                        <p>{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</p>
+                        <h1 class="u-text u-text-white u-title u-text-2" data-animation-name="fadeIn"
+                            data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
+                            {{dog.fullName}}</h1>
+                        <p class="u-text u-text-body-alt-color u-text-3">{{dog.dateBirth | getAge(me.preferredLocale,
+                            dog.dateDeath)}}</p>
+                        <!--  <h1 class="text-white">{{dog.fullName}}</h1>
+                          <p>{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</p>-->
                         <H2 v-if="dog.nickname" class="text-gold">
                             <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
                             <i v-else class="el-icon-female"></i>
@@ -435,7 +445,7 @@
                                                 <small>breeder:</small>
                                                 {{dog.breeder.fullName}}
                                                 <% /* Сделать перевод имён */ %>
-<!--                                                {{me.preferredLocale === 'ru' ? dog.breeder.fullName : dog.breeder.fullNameEn}}-->
+                                                <!--                                                {{me.preferredLocale === 'ru' ? dog.breeder.fullName : dog.breeder.fullNameEn}}-->
                                             </h5>
                                         </el-col>
                                         <% /* Владелец  */ %>
@@ -444,7 +454,7 @@
                                                 <small>owner:</small>
                                                 {{dog.owners.fullName}}
                                                 <% /* Сделать перевод имён */ %>
-<!--                                                {{me.preferredLocale === 'ru' ? dog.owners.fullName : dog.owners.fullNameEn}}-->
+                                                <!--                                                {{me.preferredLocale === 'ru' ? dog.owners.fullName : dog.owners.fullNameEn}}-->
                                             </h5>
                                         </el-col>
                                     </el-row>
@@ -617,7 +627,8 @@
                                     <el-carousel-item v-for="(img, index) of parent.imgI7" :key="img.id"
                                                       class="menu-center">
                                         <p class="medium">{{ parent.description }}</p>
-                                        <img :data-src="img.imageSrc" class="lazyload" style="width: auto; height: 300px; " alt="">
+                                        <img :data-src="img.imageSrc" class="lazyload"
+                                             style="width: auto; height: 300px; " alt="">
                                     </el-carousel-item>
                                 </el-carousel>
                             </template>
@@ -679,24 +690,24 @@
                                                             :src="lit.images[lit.cover].imageSrc"
                                                             :preview-src-list="lit.imagesArrUrl">
                                                     </el-image>
-<!--                                                    <el-popover-->
-<!--                                                            placement="top-start"-->
-<!--                                                            width="200"-->
-<!--                                                            trigger="hover">-->
-<!--                                                        <div slot="reference" :href="lit.detail"-->
-<!--                                                             class="alert-link"></div>-->
-<!--                                                    </el-popover>-->
+                                                    <!--                                                    <el-popover-->
+                                                    <!--                                                            placement="top-start"-->
+                                                    <!--                                                            width="200"-->
+                                                    <!--                                                            trigger="hover">-->
+                                                    <!--                                                        <div slot="reference" :href="lit.detail"-->
+                                                    <!--                                                             class="alert-link"></div>-->
+                                                    <!--                                                    </el-popover>-->
                                                 </div>
                                             </div>
                                             <div>
-<!--                                                <p v-if="dateDeath" title="<%= __('Age') %>">{{lit.dateBirth | getAge(me-->
-<!--                                                    .preferredLocale,-->
-<!--                                                    dog.dateDeath)}}</p>-->
+                                                <!--                                                <p v-if="dateDeath" title="<%= __('Age') %>">{{lit.dateBirth | getAge(me-->
+                                                <!--                                                    .preferredLocale,-->
+                                                <!--                                                    dog.dateDeath)}}</p>-->
                                                 <p title="<%= __('Age') %>">{{lit.dateBirth | getAge(me.preferredLocale,
                                                     lit.dateDeath)}}</p>
                                                 <em>
                                                     <small title="<%= __('Date of birth') %>"> {{lit.dateBirth |
-                                                      getCreate(me.preferredLocale, 'llll')}}
+                                                        getCreate(me.preferredLocale, 'llll')}}
                                                         <span v-if="lit.birthWeight" title="<%= __('Birth weight') %>">
                                                         ({{lit.birthWeight}}g)</span>
                                                     </small>
@@ -827,7 +838,7 @@
                                                     <ul :style="{ overflow: 'hidden', padding: '15px', border: ch.dateDeath ? '1px solid #3b3b3b' : 'none'}">
                                                         <li><strong><%= __('Descendant') %></strong></li>
                                                         <!--<li v-if="ch.sale"><%= __('For sale') %>!</li>-->
-                                                        <li v-if="ch.imgI7"><img width="142"  class="lazyload"
+                                                        <li v-if="ch.imgI7"><img width="142" class="lazyload"
                                                                                  :data-src="ch.imgI7[ch.cover].imageSrc"
                                                                                  alt=""></li>
                                                         <li>
