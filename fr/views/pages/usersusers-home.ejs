@@ -1208,12 +1208,14 @@
 
           <el-table-column type="expand">
             <template slot-scope="scope">
+              <p>Аккаунт создан:  {{ scope.row.createdAt | getCreate()}}</p>
               <p v-if="!_.isUndefined(_.pluck(scope.row.kennels,'phones')[0])">Телефон: {{ _.pluck(_.pluck(scope.row.kennels,'phones'),'value').join(', ') }}</p>
               <p v-if="!_.isUndefined(_.pluck(scope.row.kennels,'continent')[0])">Continent: {{ _.pluck(scope.row.kennels,'continent').join(', ') }}</p>
               <p v-if="!_.isUndefined(_.pluck(scope.row.kennels,'country')[0])">Country: {{ _.pluck(scope.row.kennels,'country').join(', ') }}</p>
               <p v-if="!_.isUndefined(_.pluck(scope.row.kennels,'region')[0])"><%= __('Region') %>: {{ _.pluck(scope.row.kennels,'region').join(', ') }}</p>
               <p v-if="!_.isUndefined(_.pluck(scope.row.kennels,'city')[0])">Город: {{ _.pluck(scope.row.kennels,'city').join(', ') }}</p>
-              <p v-if="!_.isUndefined(_.pluck(scope.row.kennels,'address'))">Адрес: {{ _.pluck(scope.row.kennels,'address')[0] }}</p>
+              <p v-if="!_.isUndefined(_.pluck(scope.row.kennels,'address'))">Адрес: {{ _.pluck(scope.row.kennels,
+                'address')[0] }}</p>
               <p v-if="!_.isUndefined(_.pluck(scope.row.kennels,'site')[0])">Сайт: {{ _.pluck(scope.row.kennels,'site').join(', ') }}</p>
               <p v-if="!_.isUndefined(_.pluck(scope.row.kennels,'label')[0])">Совладелец: {{ _.pluck(scope.row.kennels,'label').join(', ') }}</p>
             </template>
