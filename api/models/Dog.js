@@ -330,25 +330,52 @@ module.exports = {
     const collection = db.collection(Dog.tableName);
     const ObjectID = require("bson-objectid");
 
-    return collection.aggregate([
-      {$match: {_id:  ObjectID(id)}},
-      {
-        $graphLookup: {
+    let dog = await collection.aggregate([
+      {$match: {_id: ObjectID(id)}},
+      { $graphLookup: {
           from: "dog_children__dog_parents",
           startWith: "$_id",
           connectFromField: "dog_children",
           connectToField: "dog_parents",
           maxDepth: 3,
           depthField: "numConnections",
-          as: "destinations"
+          as: "pedigree" }
+      },
+      { $lookup: {
+          from: "kennel",
+          localField: "kennel",
+          foreignField: "_id",
+          as: "kennel"}
+      },
+      { $lookup: {
+          from: "dog",
+          localField: "pedigree.dog_children",
+          foreignField: "_id",
+          as: "parents"
         }
-      }
+      },
+      {$unwind:{path:"$parents", includeArrayIndex: "arrayIndex"}},
+      { $lookup:{
+          from: "kennel",
+          localField: "parents.kennel",
+          foreignField: "_id",
+          as: "parents.kennel"
+        }},
+      {$group:{_id:"$_id", label:{$last:"$label"},pedigree:{$last:"$pedigree"}, parents:{$push:"$parents"}, kennel:{$last:"$kennel"},titleDog:{$last:"$titleDog"},date:{$last:"$date"},images:{$last:"$images"},gender:{$last:"$gender"},currency:{$last:"$currency"},showTeeth:{$last:"$showTeeth"},price:{$last:"$price"},saleDescription:{$last:"$saleDescription"},dateBirth:{$last:"$dateBirth"},dateDeath:{$last:"$dateDeath"},nickname:{$last:"$nickname"},subtitle:{$last:"$subtitle"},see:{$last:"$see"},allowEdit:{$last:"$allowEdit"},weight:{$last:"$weight"},growth:{$last:"$growth"},type:{$last:"$type"},sale:{$last:"$sale"},color:{$last:"$color"},stamp:{$last:"$stamp"},bite:{$last:"$bite"},canine:{$last:"$canine"},teethCountBottom:{$last:"$teethCountBottom"},teethCountTop:{$last:"$teethCountTop"},letter:{$last:"$letter"},teethCount:{$last:"$teethCount"},fullName:{$last:"$fullName"},createdAt:{$last:"$createdAt"},updatedAt:{$last:"$updatedAt"},winner:{$last:"$winner"},dogTests:{$last:"$dogTests"},cover:{$last:"$cover"},titleDog:{$last:"$titleDog"},dateReceiving:{$last:"$dateReceiving"},birthWeight:{$last:"$birthWeight"},headerVideoShow:{$last:"$headerVideoShow"},headerVideo:{$last:"$headerVideo"}}}
     ]).toArray();
 
-
-
-    // console.log('RRR : ', dogsNew);
-    // dogsNew;
+    dog = _.last(dog);
+    // console.log('DOGGG::: ' , dog);
+    let level0 = _.pluck(_.filter(dog.pedigree, {numConnections: 0}), 'dog_children');
+    let level1 = _.pluck(_.filter(dog.pedigree, {numConnections: 1}), 'dog_children');
+    level0 = [_.find(dog.parents,{_id:level0[0]}),_.find(dog.parents,{_id:level0[1]})];
+    level1 = [_.find(dog.parents,{_id:level1[0]}),_.find(dog.parents,{_id:level1[1]})];
+    console.log('level 0: ', level0);
+    console.log('level 1: ', level1);
+    // console.log('level 1: ', level1);
+    // console.log('pedigree : ', dog.pedigree);
+    // console.log('parents : ', dog.parents);
+    return dog;
   },
 
   // получить всех братьев и сестёр

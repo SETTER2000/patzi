@@ -38,15 +38,15 @@ module.exports = {
     // пОДКЛЮЧИТЬ СОКЕТ, КОТОРЫЙ СДЕЛАЛ ЗАПРОС, К КОМНАТЕ «KENNEL».
     await sails.sockets.join(req, 'dog');
 
-    let pedigree = await Dog.pedigree(inputs.id);
+    let dog = await Dog.pedigree(inputs.id);
 
-    if (!pedigree) {
+    if (!dog) {
       throw 'notFound';
     }
 
-    console.log('pedigree.destinations::: ' , _.last(pedigree).destinations);
+    // console.log('pedigree.destinations::: ' , _.last(pedigree).destinations);
     // Respond with view.
-    await sails.sockets.broadcast('dog', 'list-pedigree', _.last(pedigree).destinations);
+    await sails.sockets.broadcast('dog', 'list-pedigree', dog.pedigree);
     return exits.success();
 
   }

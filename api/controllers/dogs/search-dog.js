@@ -97,8 +97,7 @@ module.exports = {
     result = (result.length > 20) ? result.slice(0, 20) : result;
 
 
-    let resultNew = await Dog.pedigree(result);
-    console.log('result::: ', resultNew);
+    // let resultNew = await Dog.pedigree(result);
     // Распространяем ответ на все подключенные сокеты к комнате dog слушающие событие search-dog
     await sails.sockets.broadcast('dog', 'search-dog', result);
 
