@@ -7,7 +7,8 @@
             <!--<div class="col">-->
 
             <!--<h3><%= __('Born in') %></h3>-->
-            <h1 class="section-title text-center"><%= __('Pedigree') %></h1>
+            <h3 style="margin-bottom: 5px" class="section-title text-center text-uppercase"><%= __('Dog\'s name')
+                %></h3>
 
             <div class="row">
                 <div class="col-lg-6 offset-lg-3">
@@ -25,7 +26,7 @@
                                         v-model="ruleForm.search"
                                         :fetch-suggestions="querySearchAsync"
                                         clearable
-                                        placeholder="<%= __('Please input dog name') %>: Poale Ell Adam"
+                                        placeholder="<%= __('Start typing the dog\'s name') %>: Poale Ell Adam"
                                         :trigger-on-focus="false"
                                         @select="handleSelect"
                                         @focus="focus"
@@ -40,30 +41,28 @@
                                     <!--<el-button slot="append" @click="submitForm('ruleForm')" icon="el-icon-search"></el-button>-->
                                 </el-autocomplete>
                             </el-form-item>
-
-                            <!--<el-form-item label="Age" prop="age">-->
-                            <!--<el-input v-model.number="ruleForm.age"></el-input>-->
-                            <!--</el-form-item>-->
                         </el-form>
                     </div>
                 </div>
             </div>
             <div class="d-flex flex-column" v-if="resultSearch">
-              <% /* 0 УРОВЕНЬ СОБАКА для которой родословная */ %>
+
+                <% /* 0 УРОВЕНЬ СОБАКА для которой родословная */ %>
                 <div class="d-flex  justify-content-center">
                     <div class="block">
-<!--                      {{resultSearch.images[0].imageSrc}}-->
-                      <div class="flex justify-content-between align-content-stretch">
-                        <h3 style="margin: 0;padding: 0;">{{resultSearch.fullName}}</h3>
-                        <div style="height: 50px; padding-top: 9px" class="">dob: {{resultSearch.dateBirth |
-                          getCreate(me
-                          .preferredLocale, 'lll')}}</div>
-                      </div>
+                        <div class="flex justify-content-between align-content-stretch">
+                            <h3 style="margin: 0;padding: 0;"><a :href="resultSearch.detail">{{resultSearch
+                                    .fullName}}</a></h3>
+                            <div style="height: 50px; padding-top: 9px" class="">dob: {{resultSearch.dateBirth |
+                                getCreate(me.preferredLocale, 'lll')}}
+                            </div>
+                        </div>
 
                         <el-image
                                 style="max-width: 470px; "
-                                :src="resultSearch.images[0].imageSrc">
-<!--                        <el-image :src="dog.images[0].imageSrc">-->
+                                :src="resultSearch.images[0].imageSrc"
+                                :preview-src-list="resultSearch.imagesArrUrl"
+                        >
                             <div slot="placeholder" class="image-slot">
                                 Loading<span class="dot">...</span>
                             </div>
@@ -73,98 +72,32 @@
                         </el-image>
                     </div>
                 </div>
-              <% /* 1 УРОВЕНЬ  папа мама */ %>
 
-
+                <% /* 1 УРОВЕНЬ  папа мама */ %>
                 <div class="d-flex  justify-content-around" v-if="resultSearch.parents && resultSearch.parents
                         .length > 0">
-                  <div class="block" v-for="(o, index) in resultSearch.parents" :key="o.id">
-                    <!--                      {{resultSearch.images[0].imageSrc}}-->
-                    <div class="flex justify-content-between align-content-stretch">
-                      <h3 style="margin: 0;padding: 0;">{{o.fullName}}</h3>
-                      <div style="height: 50px; padding-top: 9px" class="">dob: {{o.dateBirth |
-                        getCreate(me
-                        .preferredLocale, 'lll')}}</div>
+                    <div class="block" v-for="(o, index) in resultSearch.parents" :key="o.id">
+                        <div class="flex justify-content-between align-content-stretch">
+                            <h3 style="margin: 0;padding: 0;">{{o.fullName}}</h3>
+                            <div style="height: 50px; padding-top: 9px" class="">dob: {{o.dateBirth |
+                                getCreate(me
+                                .preferredLocale, 'lll')}}
+                            </div>
+                        </div>
+                        <el-image
+                                style="max-width: 470px; "
+                                :src="o.images[0].imageSrc">
+                            <div slot="placeholder" class="image-slot">
+                                Loading<span class="dot">...</span>
+                            </div>
+                            <div slot="error" class="image-slot">
+                                <i class="el-icon-picture-outline"></i>
+                            </div>
+                        </el-image>
                     </div>
-
-                    <el-image
-                            style="max-width: 470px; "
-                            :src="o.images[0].imageSrc">
-                      <!--                        <el-image :src="dog.images[0].imageSrc">-->
-                      <div slot="placeholder" class="image-slot">
-                        Loading<span class="dot">...</span>
-                      </div>
-                      <div slot="error" class="image-slot">
-                        <i class="el-icon-picture-outline"></i>
-                      </div>
-                    </el-image>
-
-                  </div>
                 </div>
-
             </div>
-
-<!--            <div class="row">-->
-<!--                <div class="col">-->
-
-
-<!--                    <ul v-if="resultSearch">-->
-<!--                        <li v-for="(dog, index, key) in resultSearch" :key="dog.id">{{key}} : {{dog}}</li>-->
-<!--                    </ul>-->
-
-<!--                </div>-->
-<!--            </div>-->
-            <!--<el-row type="flex">-->
-            <!--<el-col :span="16" :offset="4">-->
-            <!--<div v-if="me.isSuperAdmin || me.isAdmin" class="mt-80">-->
-            <!--<el-form :model="ruleForm" :rules="rules" ref="ruleForm"-->
-            <!--label-width="120px"-->
-            <!--class="demo-ruleForm">-->
-
-            <!--<el-form-item prop="search">-->
-            <!--&lt;!&ndash;:autofocus="true"&ndash;&gt;-->
-            <!--<el-autocomplete-->
-            <!--class="inline-input"-->
-
-            <!--prefix-icon="el-icon-search"-->
-            <!--style="width: 100%;"-->
-            <!--v-model="ruleForm.search"-->
-            <!--:fetch-suggestions="querySearchAsync"-->
-            <!--clearable-->
-            <!--placeholder="<%= __('Please input dog name') %>: Poale Ell Adam"-->
-            <!--:trigger-on-focus="false"-->
-            <!--@select="handleSelect"-->
-            <!--@focus="focus"-->
-            <!--@change="change"-->
-            <!--@blur="blur"-->
-            <!--&gt;-->
-
-
-            <!--&lt;!&ndash;<el-button type="primary" @click="submitForm('ruleForm')">Create</el-button>&ndash;&gt;-->
-            <!--&lt;!&ndash;<el-button @click="resetForm('ruleForm')">Reset</el-button>&ndash;&gt;-->
-
-            <!--&lt;!&ndash;<el-button slot="append" @click="submitForm('ruleForm')" icon="el-icon-search"></el-button>&ndash;&gt;-->
-            <!--</el-autocomplete>-->
-            <!--</el-form-item>-->
-
-            <!--&lt;!&ndash;<el-form-item label="Age" prop="age">&ndash;&gt;-->
-            <!--&lt;!&ndash;<el-input v-model.number="ruleForm.age"></el-input>&ndash;&gt;-->
-            <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
-            <!--</el-form>-->
-            <!--</div>-->
-            <!--</el-col>-->
-            <!--</el-row>-->
         </div>
-        <!--</div>-->
-        <!--<div class="col-lg-12 d-none">-->
-        <!--<div class="filters">-->
-        <!--<ul>-->
-        <!--<li class="active" data-filter=".all"></li>-->
-        <!--</ul>-->
-        <!--</div>-->
-
-
     </section>
-
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
