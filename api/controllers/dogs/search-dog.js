@@ -76,6 +76,8 @@ module.exports = {
     // Определяем расположение названия питомника относительно имя собаки
     // и формируем динамически новое свойство value для элемента select
     await _.each(dogs, (dog) => {
+      dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
+      dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
       dog.value = (dog.kennel.rightName) ? `${dog.kennel.label} ${dog.label}` : `${dog.label} ${dog.kennel.label}`;
     });
 

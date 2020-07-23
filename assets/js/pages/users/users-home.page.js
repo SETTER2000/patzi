@@ -484,6 +484,8 @@ parasails.registerPage('users-home', {
       });
       await  io.socket.on('list', (data) => {
         this.users = _.get(data, 'users') ? data.users : this.users;
+
+        console.log('USERS1: ' ,  this.users);
         // this.count = _.get(data, 'count') ?  data.count : this.count;
       });
       // Кол-во всего пользователей в системе
