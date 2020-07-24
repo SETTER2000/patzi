@@ -1,7 +1,7 @@
 <div id="pedigree-home" class="content" v-cloak>
 
     <!-- Start Work Area Area -->
-    <section style="height: 83vh" class="work-area section-gap-top" id="work">
+    <section style="min-height: 83vh" class="work-area section-gap-top" id="work">
         <div class="container">
             <!--<div class="row">-->
             <!--<div class="col">-->
@@ -45,57 +45,11 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex flex-column" v-if="resultSearch">
+            <div class="d-flex flex-column" v-if="treeData">
 
-                <% /* 0 УРОВЕНЬ СОБАКА для которой родословная */ %>
-                <div class="d-flex  justify-content-center">
-                    <div class="block">
-                        <div class="flex justify-content-between align-content-stretch">
-                            <h3 style="margin: 0;padding: 0;"><a :href="resultSearch.detail">{{resultSearch
-                                    .fullName}}</a></h3>
-                            <div style="height: 50px; padding-top: 9px" class="">dob: {{resultSearch.dateBirth |
-                                getCreate(me.preferredLocale, 'lll')}}
-                            </div>
-                        </div>
-
-                        <el-image
-                                style="max-width: 470px; "
-                                :src="resultSearch.images[0].imageSrc"
-                                :preview-src-list="resultSearch.imagesArrUrl"
-                        >
-                            <div slot="placeholder" class="image-slot">
-                                Loading<span class="dot">...</span>
-                            </div>
-                            <div slot="error" class="image-slot">
-                                <i class="el-icon-picture-outline"></i>
-                            </div>
-                        </el-image>
-                    </div>
-                </div>
-
-                <% /* 1 УРОВЕНЬ  папа мама */ %>
-                <div class="d-flex  justify-content-around" v-if="resultSearch.parents && resultSearch.parents
-                        .length > 0">
-                    <div class="block" v-for="(o, index) in resultSearch.parents" :key="o.id">
-                        <div class="flex justify-content-between align-content-stretch">
-                            <h3 style="margin: 0;padding: 0;">{{o.fullName}}</h3>
-                            <div style="height: 50px; padding-top: 9px" class="">dob: {{o.dateBirth |
-                                getCreate(me
-                                .preferredLocale, 'lll')}}
-                            </div>
-                        </div>
-                        <el-image
-                                style="max-width: 470px; "
-                                :src="o.images[0].imageSrc">
-                            <div slot="placeholder" class="image-slot">
-                                Loading<span class="dot">...</span>
-                            </div>
-                            <div slot="error" class="image-slot">
-                                <i class="el-icon-picture-outline"></i>
-                            </div>
-                        </el-image>
-                    </div>
-                </div>
+          <patzi-tree  :obj-data="seo" :item="treeData"
+                       @make-folder="makeFolder"
+                       @add-item="addItem"></patzi-tree>
             </div>
         </div>
     </section>
