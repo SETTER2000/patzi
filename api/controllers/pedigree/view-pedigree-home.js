@@ -30,17 +30,12 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    // Бибилиотека Node.js
-    const url = require('url');
-    const moment = require('moment');
 
-    let dogs = await Dog.find(inputs.id).populate('parents');
+    let dogs = await Dog.pedigree(inputs.id);
 
-    if (!dogs) {
-      throw 'notFound';
-    }
-
-    // Respond with view.
+    // if (!dogs) {
+    //   throw 'notFound';
+    // }
 
     return exits.success({
       seo: {

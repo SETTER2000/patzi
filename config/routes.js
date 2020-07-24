@@ -80,6 +80,7 @@ module.exports.routes = {
   'GET /pedigree/:virtualPageSlug?': {action: 'pedigree/view-pedigree-home'},
 
 
+
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
   //  ╩ ╩╩╚═╝╚═╝  ╩╚═╚═╝═╩╝╩╩╚═╚═╝╚═╝ ╩ ╚═╝  └┘   ═╩╝╚═╝╚╩╝╝╚╝╩═╝╚═╝╩ ╩═╩╝╚═╝
@@ -202,7 +203,7 @@ module.exports.routes = {
   'POST   /api/v1/posts/create-post': {action: 'posts/create-post', csrf: false},
   'PUT    /api/v1/posts/update-post': {action: 'posts/update-post', csrf: false},
   'DELETE /api/v1/posts/destroy-one-post': {action: 'posts/destroy-one-post', csrf: false},
-  'PUT    /api/v1/posts/update-video': { action: 'posts/update-video', csrf: false },
+  'PUT    /api/v1/posts/update-video': {action: 'posts/update-video', csrf: false},
 
 
   'GET    /api/v1/titles/list': {action: 'titles/list'},
@@ -256,9 +257,9 @@ module.exports.routes = {
   'GET    /api/v1/likes/list-like/:instanceModuleId/:field': {action: 'likes/list-like'},
   'DELETE /api/v1/likes/destroy-one-like': {action: 'likes/destroy-one-like', csrf: false},
   'POST   /api/v1/likes/comment-like': {action: 'likes/comment-like', csrf: false},
-
+  'GET    /pedigree/:id?': {action: 'pedigree/one-pedigree'},
   'PUT    /api/v1/pdg': {action: 'pedigree/one-pedigree', csrf: false},
-
+  'PUT    /api/v1/getRootNode': {action: 'pedigree/root-node-pedigree', csrf: false},
 
 
   'GET    /undefined': {action: 'files/undefined'},

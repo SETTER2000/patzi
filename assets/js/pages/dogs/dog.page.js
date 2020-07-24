@@ -136,7 +136,15 @@ parasails.registerPage('dog', {
     moment().locale(this.me.preferredLocale);
     console.log('DOG::: ', this.dog);
     this.urlYoutube = `https://www.youtube.com/embed/${this.dog.headerVideo}?playlist=${this.dog.headerVideo}&amp;loop=1&amp;mute=1&amp;showinfo=0&amp;controls=0&amp;start=0&amp;autoplay=1`;
-
+    io.socket.put(`/api/v1/pdg`, this.dog, function gotResponse(body, response) {
+      // console.log('Сервис Dogs dam ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Принимаем данные по событию search-*
+    io.socket.on('list-pedigree', (data) => {
+      // console.log('PEDIGRRR: ', data);
+      this.dog.pedigree = data.pedigree;
+      console.log('Pedigree: ', this.dog);
+    });
     // Запрос для события list-*
     io.socket.get(`/api/v1/titles/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);

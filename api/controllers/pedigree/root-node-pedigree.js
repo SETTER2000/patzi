@@ -47,7 +47,7 @@ module.exports = {
 
     // console.log('pedigree.destinations::: ' , _.last(pedigree).destinations);
     // Respond with view.
-    await sails.sockets.broadcast('dog', 'list-pedigree', dog);
+    await sails.sockets.broadcast('dog', 'root-node-pedigree', dog);
     return exits.success();
 
   }

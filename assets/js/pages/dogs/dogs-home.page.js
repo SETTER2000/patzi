@@ -1146,8 +1146,7 @@ parasails.registerPage('dogs-home', {
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-    }
-    ,
+    } ,
 
 
     deleteDog: async function () {

@@ -329,52 +329,145 @@ module.exports = {
     const db = sails.getDatastore('mongodb').manager;
     const collection = db.collection(Dog.tableName);
     const ObjectID = require("bson-objectid");
-
+    console.log('Pedigree for:', id);
     let dog = await collection.aggregate([
       {$match: {_id: ObjectID(id)}},
-      { $graphLookup: {
+      {
+        $graphLookup: {
           from: "dog_children__dog_parents",
           startWith: "$_id",
           connectFromField: "dog_children",
           connectToField: "dog_parents",
           maxDepth: 3,
           depthField: "numConnections",
-          as: "pedigree" }
+          as: "pedigree"
+        }
       },
-      { $lookup: {
+      {
+        $lookup: {
           from: "kennel",
           localField: "kennel",
           foreignField: "_id",
-          as: "kennel"}
+          as: "kennel"
+        }
       },
-      { $lookup: {
+      {
+        $lookup: {
           from: "dog",
           localField: "pedigree.dog_children",
           foreignField: "_id",
-          as: "parents"
+          as: "ancestors"       // получаем массив предков
         }
       },
-      {$unwind:{path:"$parents", includeArrayIndex: "arrayIndex"}},
-      { $lookup:{
+      {$unwind: {path: "$ancestors", includeArrayIndex: "arrayIndex"}},
+      {
+        $lookup: {
           from: "kennel",
-          localField: "parents.kennel",
+          localField: "ancestors.kennel",
           foreignField: "_id",
-          as: "parents.kennel"
-        }},
-      {$group:{_id:"$_id", label:{$last:"$label"},pedigree:{$last:"$pedigree"}, parents:{$push:"$parents"}, kennel:{$last:"$kennel"},titleDog:{$last:"$titleDog"},date:{$last:"$date"},images:{$last:"$images"},gender:{$last:"$gender"},currency:{$last:"$currency"},showTeeth:{$last:"$showTeeth"},price:{$last:"$price"},saleDescription:{$last:"$saleDescription"},dateBirth:{$last:"$dateBirth"},dateDeath:{$last:"$dateDeath"},nickname:{$last:"$nickname"},subtitle:{$last:"$subtitle"},see:{$last:"$see"},allowEdit:{$last:"$allowEdit"},weight:{$last:"$weight"},growth:{$last:"$growth"},type:{$last:"$type"},sale:{$last:"$sale"},color:{$last:"$color"},stamp:{$last:"$stamp"},bite:{$last:"$bite"},canine:{$last:"$canine"},teethCountBottom:{$last:"$teethCountBottom"},teethCountTop:{$last:"$teethCountTop"},letter:{$last:"$letter"},teethCount:{$last:"$teethCount"},fullName:{$last:"$fullName"},createdAt:{$last:"$createdAt"},updatedAt:{$last:"$updatedAt"},winner:{$last:"$winner"},dogTests:{$last:"$dogTests"},cover:{$last:"$cover"},titleDog:{$last:"$titleDog"},dateReceiving:{$last:"$dateReceiving"},birthWeight:{$last:"$birthWeight"},headerVideoShow:{$last:"$headerVideoShow"},headerVideo:{$last:"$headerVideo"}}}
+          as: "ancestors.kennel"
+        }
+      },
+      {
+        $group: {
+          _id: "$_id",
+          label: {$last: "$label"},
+          pedigree: {$last: "$pedigree"},
+          ancestors: {$push: "$ancestors"},
+          kennel: {$last: "$kennel"},
+          date: {$last: "$date"},
+          images: {$last: "$images"},
+          gender: {$last: "$gender"},
+          currency: {$last: "$currency"},
+          showTeeth: {$last: "$showTeeth"},
+          price: {$last: "$price"},
+          saleDescription: {$last: "$saleDescription"},
+          dateBirth: {$last: "$dateBirth"},
+          dateDeath: {$last: "$dateDeath"},
+          nickname: {$last: "$nickname"},
+          subtitle: {$last: "$subtitle"},
+          see: {$last: "$see"},
+          allowEdit: {$last: "$allowEdit"},
+          weight: {$last: "$weight"},
+          growth: {$last: "$growth"},
+          type: {$last: "$type"},
+          sale: {$last: "$sale"},
+          color: {$last: "$color"},
+          stamp: {$last: "$stamp"},
+          bite: {$last: "$bite"},
+          canine: {$last: "$canine"},
+          teethCountBottom: {$last: "$teethCountBottom"},
+          teethCountTop: {$last: "$teethCountTop"},
+          letter: {$last: "$letter"},
+          teethCount: {$last: "$teethCount"},
+          fullName: {$last: "$fullName"},
+          createdAt: {$last: "$createdAt"},
+          updatedAt: {$last: "$updatedAt"},
+          winner: {$last: "$winner"},
+          dogTests: {$last: "$dogTests"},
+          cover: {$last: "$cover"},
+          titleDog: {$last: "$titleDog"},
+          dateReceiving: {$last: "$dateReceiving"},
+          birthWeight: {$last: "$birthWeight"},
+          headerVideoShow: {$last: "$headerVideoShow"},
+          headerVideo: {$last: "$headerVideo"}
+        }
+      }
     ]).toArray();
 
+    if (!_.isArray(dog) || (_.isArray(dog) && dog.length < 1)) {
+      console.info('Нет в базе родителей для этой собаки.');
+      return false;
+    }
     dog = _.last(dog);
-    // console.log('DOGGG::: ' , dog);
-    let level0 = _.pluck(_.filter(dog.pedigree, {numConnections: 0}), 'dog_children');
-    let level1 = _.pluck(_.filter(dog.pedigree, {numConnections: 1}), 'dog_children');
-    level0 = [_.find(dog.parents,{_id:level0[0]}),_.find(dog.parents,{_id:level0[1]})];
-    level1 = [_.find(dog.parents,{_id:level1[0]}),_.find(dog.parents,{_id:level1[1]})];
-    console.log('level 0: ', level0);
-    console.log('level 1: ', level1);
-    // console.log('level 1: ', level1);
-    // console.log('pedigree : ', dog.pedigree);
-    // console.log('parents : ', dog.parents);
+    console.log('DOGGG::: ', (dog && dog.label) ? dog.label : dog);
+    // Создать массив идентификаторов родителей
+    let parentsId = _.pluck(_.filter(dog.pedigree, {numConnections: 0}), 'dog_children');
+    // Получить коллекцию родителей
+    let parents = [_.find(dog.ancestors, {_id: parentsId[0]}), _.find(dog.ancestors, {_id: parentsId[1]})];
+
+    console.log('parents: ', parents);
+    dog.parents = parents;
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    dog.id = dog._id;
+    dog = await sails.helpers.cloudFrontUrl.with({
+      collection: dog,
+      collectionName: 'dog',
+      edits: {
+        resize: {}
+      }
+    });
+
+    dog.kennel = _.last(dog.kennel);
+    /* dog.fullName = dog.kennel.rightName ? `${dog.kennel.label} ${dog.label}` : `${dog.label} ${dog.kennel.label}`;*/
+    dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
+    dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
+    // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    dog.parents = await sails.helpers.cloudFrontUrl.with({
+      collection: dog.parents,
+      collectionName: 'dog',
+      edits: {
+        resize: {}
+      }
+    });
+
+    await dog.parents.map(async (dog) => {
+      dog.kennel = _.last(dog.kennel);
+      /* dog.fullName = dog.kennel.rightName ? `${dog.kennel.label} ${dog.label}` : `${dog.label} ${dog.kennel.label}`;*/
+      dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(" ").join('-')}` : '';
+      dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
+      // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
+      return dog;
+    });
     return dog;
   },
 
