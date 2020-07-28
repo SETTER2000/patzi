@@ -211,9 +211,13 @@ parasails.registerPage('pedigree-home', {
       });
 
       await io.socket.on('list-pedigree', (data) => {
-        console.log('addItem: ', data);
+        console.log('Получил объект: ', data);
+        console.log('Сюда добавляем родичей parents должен быть пустой:::',item );
         // item.pedigree =  data.pedigree;
-        item.parents.push(data);
+        // item = Object.assign({}, item, data);
+        // item.parents.push(data);
+        item.parents.push(data.parents[0]);
+        item.parents.push(data.parents[1]);
         // item = Object.assign({}, item, data);
         // console.log('Получено значение ввода: ', this.treeData);
       });
@@ -233,6 +237,7 @@ parasails.registerPage('pedigree-home', {
 
     makeFolder: function (item) {
       this.$set(item, "parents", []);
+
       // this.addItem(item);
       this.addItem(item);
     },

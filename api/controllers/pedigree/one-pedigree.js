@@ -38,14 +38,23 @@ module.exports = {
     // пОДКЛЮЧИТЬ СОКЕТ, КОТОРЫЙ СДЕЛАЛ ЗАПРОС, К КОМНАТЕ «KENNEL».
     await sails.sockets.join(req, 'dog');
                      console.log('INPUTSSS::; ', inputs);
-    let dog = await Dog.pedigree(inputs.id);
+   /* let dog = await Dog.findOne({id:inputs.id}).populate('parents');
+    console.log('DOGGG  find:: ', dog);
+    console.log('DOGGG parents find:: ', dog.parents);
+    if(!dog){
+      throw 'notFound';
+    }
+    let dogParents = _.pluck(dog.parents,'id');
+    console.log('dogParents::', dogParents);
+    dog = await Dog.pedigree(dogParents[0]);   */
+    let  dog = await Dog.pedigree(inputs.id);
 
     if (!dog) {
       throw 'notFound';
     }
 
 
-    // console.log('pedigree.destinations::: ' , _.last(pedigree).destinations);
+    console.log('Перед отдачей::: ' , dog);
     // Respond with view.
     await sails.sockets.broadcast('dog', 'list-pedigree', dog);
     return exits.success();
