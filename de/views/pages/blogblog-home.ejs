@@ -2,7 +2,7 @@
     <% /* Диалоговое окно. Добавить | Редактировать пост. */ %>
     <el-dialog title="<%= __('Add post') %>"
                :visible.sync="centerDialogAdded"
-               custom-class="dialog-kennel-add-dog"
+               custom-class="dialog-window"
                center>
         <el-dialog
                 width="60%"
@@ -94,10 +94,9 @@
             </div>
         </div>
         <!---------------------------------------------------------------------------------------->
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-            <!--<el-row type="flex" class="row-bg" justify="center">
-                 <el-col :xs="24" :sm="24" :md="24" :lg="12" :offset="2" :xl="12">-->
-            <div class="container-fluid ">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm ">
+            <div class="d-flex justify-content-around">
+            <div style="width: 41vw; border-right:0.1em solid #e9e9e9  ">
 
                 <% /* ВИДЕН ПОСТ ИЛИ НЕТ */ %>
                 <el-form-item label="<%= __('Article') %>" prop="see">
@@ -169,6 +168,36 @@
                     </el-tooltip>
                     <el-tooltip effect="dark"
                                 content="<%= __("If you have not found your cattery, go to the \"topics\" section and create it.") %>"
+                                placement="top-start">
+
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
+                <% /* ЭКСПЕРТЫ  */ %>
+                <el-form-item v-if="!buttonUpdate" label="<%= __('Expert') %>" prop="experts">
+                    <el-select v-model="ruleForm.experts"
+                               placeholder="<%= __('Choose your expert') %>"
+                               class="form-width"
+                               multiple
+                    >
+                        <el-option v-for="item in getPullExpert()"
+                                   :key="item.id"
+                                   :label="me.preferredLocale === 'ru' ? item.fullName : item.fullNameEn"
+                                   :value="item.id">
+                            <div class="d-flex justify-content-between">
+                                <div class="size pr-5">{{ item.fullName}}</div>
+                                <div class="size">{{ item.fullNameEn }}</div>
+                            </div>
+                        </el-option>
+                    </el-select>
+                    <el-tooltip effect="dark"     v-if="me.isAdmin || me.isSuperAdmin"
+                                content="<%= __("Add expert") %>"
+                                placement="top-start">
+                        <el-button @click="goTo('users')" size="mini" round icon="el-icon-plus"></el-button>
+                    </el-tooltip>
+                    <el-tooltip effect="dark"
+                                content="<%= __("If you haven't found the expert you are looking for, go to the Users section and create one.") %>"
                                 placement="top-start">
 
                         <div size="mini" round class="el-icon-question "></div>
@@ -263,173 +292,6 @@
                         </el-col>
                     </el-form-item>
                 </template>
-
-                <% /* ВИДЕО URL */ %>
-                <el-form-item v-if="!buttonUpdate" label="<%= __('Url youtube') %>" prop="videoUrl">
-                    <el-input show-word-limit
-                              style="width:60%;"
-                              clearable
-                              maxlength="700"
-                              size="small"
-                              placeholder="https://youtu.be/TUar0_aUWq8"
-                              v-model="ruleForm.videoUrl"></el-input>
-                <el-tooltip effect="dark"
-                            content="<%= __("Insert part of the url from the video here youtube 'https://youtu.be/TUar0_aUWq8'") %>"
-                            placement="top-start">
-
-                    <div size="mini" round class="el-icon-question "></div>
-                </el-tooltip>
-                </el-form-item>
-
-                <% /* ВИДЕО Заголовок */ %>
-                <el-form-item v-if="!buttonUpdate" label="<%= __('Title video') %>" prop="videoHeader">
-                    <el-input show-word-limit
-                              style="width:60%;"
-                              clearable
-                              maxlength="200"
-                              size="small"
-                              placeholder="Title"
-                              v-model="ruleForm.videoHeader"></el-input>
-                    <el-tooltip effect="dark"
-                                content="<%= __("The title for the video is displayed on the post page") %>"
-                                placement="top-start">
-
-                        <div size="mini" round class="el-icon-question "></div>
-                    </el-tooltip>
-                </el-form-item>
-
-                <% /* ВИДЕО Описание */ %>
-                <el-form-item v-if="!buttonUpdate" label="<%= __('Description video') %>" prop="videoDescription">
-                    <el-input show-word-limit
-                              style="width:60%;"
-                              clearable
-                              maxlength="700"
-                              size="small"
-                              placeholder="Description"
-                              v-model="ruleForm.videoDescription"></el-input>
-                    <el-tooltip effect="dark"
-                                content="<%= __("The description for the video is displayed on the post page") %>"
-                                placement="top-start">
-                        <div size="mini" round class="el-icon-question "></div>
-                    </el-tooltip>
-                </el-form-item>
-
-                <% /* ВИДЕО Showinfo:  */ %>
-                <%= __('Showinfo youtube') %>
-                    <template>
-                        <el-row :gutter="2">
-                            <el-form-item prop="videoShowinfo">
-                                <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
-                                    <el-slider
-                                            class="hidden-xs-only"
-                                            v-model="ruleForm.videoShowinfo"
-                                            class="hidden-xs-only"
-                                            :min="0"
-                                            :max="400"
-                                            :step="1"
-                                            show-input>
-                                    </el-slider>
-                                    <el-input-number :min="0" class="text-center hidden-sm-and-up"
-                                                     :max="400" size="mini" v-model="ruleForm.videoShowinfo"></el-input-number>
-                                </el-col>
-                                <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
-                                    <el-tooltip effect="dark"
-                                                content="<%= __("Specify the weight at birth.") %>"
-                                                placement="top-start">
-                                        <div size="mini" round class="el-icon-question ml-3"></div>
-                                    </el-tooltip>
-                                </el-col>
-                            </el-form-item>
-                        </el-row>
-                    </template>
-
-                <% /* ВИДЕО videoStart:  */ %>
-                <%= __('Start youtube') %>
-                <template>
-                    <el-row :gutter="2">
-                        <el-form-item prop="videoStart">
-                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
-                                <el-slider
-                                        class="hidden-xs-only"
-                                        v-model="ruleForm.videoStart"
-                                        class="hidden-xs-only"
-                                        :min="0"
-                                        :max="400"
-                                        :step="1"
-                                        show-input>
-                                </el-slider>
-                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
-                                                 :max="400" size="mini" v-model="ruleForm.videoStart"></el-input-number>
-                            </el-col>
-                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
-                                <el-tooltip effect="dark"
-                                            content="<%= __("Specify the weight at birth.") %>"
-                                            placement="top-start">
-                                    <div size="mini" round class="el-icon-question ml-3"></div>
-                                </el-tooltip>
-                            </el-col>
-                        </el-form-item>
-                    </el-row>
-                </template>
-
-                <% /* ВИДЕО videoControls:  */ %>
-                <%= __('Controls youtube') %>
-                <template>
-                    <el-row :gutter="2">
-                        <el-form-item prop="videoControls">
-                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
-                                <el-slider
-                                        class="hidden-xs-only"
-                                        v-model="ruleForm.videoControls"
-                                        class="hidden-xs-only"
-                                        :min="0"
-                                        :max="400"
-                                        :step="1"
-                                        show-input>
-                                </el-slider>
-                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
-                                                 :max="400" size="mini" v-model="ruleForm.videoControls"></el-input-number>
-                            </el-col>
-                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
-                                <el-tooltip effect="dark"
-                                            content="<%= __("Specify the weight at birth.") %>"
-                                            placement="top-start">
-                                    <div size="mini" round class="el-icon-question ml-3"></div>
-                                </el-tooltip>
-                            </el-col>
-                        </el-form-item>
-                    </el-row>
-                </template>
-
-                <% /* ВИДЕО videoMute:  */ %>
-                <%= __('Mute youtube') %>
-                <template>
-                    <el-row :gutter="2">
-                        <el-form-item prop="videoMute">
-                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
-                                <el-slider
-                                        class="hidden-xs-only"
-                                        v-model="ruleForm.videoMute"
-                                        class="hidden-xs-only"
-                                        :min="0"
-                                        :max="400"
-                                        :step="1"
-                                        show-input>
-                                </el-slider>
-                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
-                                                 :max="400" size="mini" v-model="ruleForm.videoMute"></el-input-number>
-                            </el-col>
-                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
-                                <el-tooltip effect="dark"
-                                            content="<%= __("Specify the weight at birth.") %>"
-                                            placement="top-start">
-                                    <div size="mini" round class="el-icon-question ml-3"></div>
-                                </el-tooltip>
-                            </el-col>
-                        </el-form-item>
-                    </el-row>
-                </template>
-
 
 
                 <!--
@@ -1043,35 +905,207 @@
           </div>
         </div>
       </div>-->
-                <el-divider></el-divider>
 
-                <div class="d-flex justify-content-center">
-                    <div class="my-3 pt-4 text-center hidden-xs-only">
-                        <el-form-item>
+            </div>
+            <div style="width: 40vw;">
 
-                            <el-button v-if="!buttonUpdate"
-                                       @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
-                            <el-button
-                                    @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
-                            <el-button v-if="!buttonUpdate" type="primary"
-                                       @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
-                            <el-button v-else type="primary"
-                                       @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
+                <% /* ВИДЕО URL */ %>
+                <el-form-item v-if="!buttonUpdate" label="<%= __('Url youtube') %>" prop="videoUrl">
+                    <el-input show-word-limit
+                              style="width:60%;"
+                              clearable
+                              maxlength="700"
+                              size="small"
+                              placeholder="https://youtu.be/TUar0_aUWq8"
+                              v-model="ruleForm.videoUrl"></el-input>
+                    <el-tooltip effect="dark"
+                                content="<%= __("Insert part of the url from the video here youtube 'https://youtu.be/TUar0_aUWq8'") %>"
+                                placement="top-start">
 
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
+                <% /* ВИДЕО Заголовок */ %>
+                <el-form-item v-if="!buttonUpdate" label="<%= __('Title video') %>" prop="videoHeader">
+                    <el-input show-word-limit
+                              style="width:60%;"
+                              clearable
+                              maxlength="200"
+                              size="small"
+                              placeholder="Title"
+                              v-model="ruleForm.videoHeader"></el-input>
+                    <el-tooltip effect="dark"
+                                content="<%= __("The title for the video is displayed on the post page") %>"
+                                placement="top-start">
+
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
+                <% /* ВИДЕО Описание */ %>
+                <el-form-item v-if="!buttonUpdate" label="<%= __('Description video') %>" prop="videoDescription">
+                    <el-input show-word-limit
+                              style="width:60%;"
+                              clearable
+                              maxlength="700"
+                              size="small"
+                              placeholder="Description"
+                              v-model="ruleForm.videoDescription"></el-input>
+                    <el-tooltip effect="dark"
+                                content="<%= __("The description for the video is displayed on the post page") %>"
+                                placement="top-start">
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
+                <% /* ВИДЕО Showinfo:  */ %>
+                <%= __('Showinfo youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoShowinfo">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="ruleForm.videoShowinfo"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="ruleForm.videoShowinfo"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
                         </el-form-item>
-                    </div>
-                    <div class="text-center hidden-sm-and-up">
-                        <el-button-group>
-                            <el-button v-if="!buttonUpdate" @click="resetForm('ruleForm')"
-                                       icon="el-icon-minus"></el-button>
-                            <el-button @click="buttonUpdate = false; centerDialogAdded = false"
-                                       icon="el-icon-close"></el-button>
-                            <el-button v-if="!buttonUpdate" type="primary"
-                                       @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
-                            <el-button v-else type="primary" @click="submitForm('ruleForm')"
-                                       icon="el-icon-check"></el-button>
-                        </el-button-group>
-                    </div>
+                    </el-row>
+                </template>
+
+                <% /* ВИДЕО videoStart:  */ %>
+                <%= __('Start youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoStart">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="ruleForm.videoStart"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="ruleForm.videoStart"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+
+                <% /* ВИДЕО videoControls:  */ %>
+                <%= __('Controls youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoControls">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="ruleForm.videoControls"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="ruleForm.videoControls"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+
+                <% /* ВИДЕО videoMute:  */ %>
+                <%= __('Mute youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoMute">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="ruleForm.videoMute"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="ruleForm.videoMute"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+
+
+            </div>
+            </div>
+            <el-divider></el-divider>
+
+            <div class="d-flex justify-content-center">
+                <div class="my-3 pt-4 text-center hidden-xs-only">
+                    <el-form-item>
+
+                        <el-button v-if="!buttonUpdate"
+                                   @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+                        <el-button
+                                @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
+                        <el-button v-if="!buttonUpdate" type="primary"
+                                   @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+                        <el-button v-else type="primary"
+                                   @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
+
+                    </el-form-item>
+                </div>
+                <div class="text-center hidden-sm-and-up">
+                    <el-button-group>
+                        <el-button v-if="!buttonUpdate" @click="resetForm('ruleForm')"
+                                   icon="el-icon-minus"></el-button>
+                        <el-button @click="buttonUpdate = false; centerDialogAdded = false"
+                                   icon="el-icon-close"></el-button>
+                        <el-button v-if="!buttonUpdate" type="primary"
+                                   @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+                        <el-button v-else type="primary" @click="submitForm('ruleForm')"
+                                   icon="el-icon-check"></el-button>
+                    </el-button-group>
                 </div>
             </div>
         </el-form>
