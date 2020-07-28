@@ -308,6 +308,37 @@
                         <div size="mini" round class="el-icon-question "></div>
                     </el-tooltip>
                 </el-form-item>
+                <% /* ЭКСПЕРТЫ  */ %>
+
+                <el-form-item label="<%= __('Expert') %>" prop="experts">
+                    <el-select v-model="post.experts"
+                               placeholder="<%= __('Choose your expert') %>"
+                               class="form-width"
+                               multiple
+                    >
+                        <el-option v-for="item in getPullExpert()"
+                                   :key="item.id"
+                                   :label="me.preferredLocale === 'ru' ? item.fullName : item.fullNameEn"
+                                   :value="item.id">
+                            <div class="d-flex justify-content-between">
+                                <div class="size pr-5">{{ item.fullName}}</div>
+                                <div class="size">{{ item.fullNameEn }}</div>
+                            </div>
+                        </el-option>
+                    </el-select>
+                    <el-tooltip effect="dark"     v-if="me.isAdmin || me.isSuperAdmin"
+                                content="<%= __("Add expert") %>"
+                                placement="top-start">
+                        <el-button @click="goTo('users')" size="mini" round icon="el-icon-plus"></el-button>
+                    </el-tooltip>
+                    <el-tooltip effect="dark"
+                                content="<%= __("If you haven't found the expert you are looking for, go to the Users section and create one.") %>"
+                                placement="top-start">
+
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
                 <% /* ОПИСАНИЕ ПОСТА на русском */ %>
                 <template>
                     <el-form-item label="<%= __('Description') %> (Ru)" prop="subtitleRu">
