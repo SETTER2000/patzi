@@ -43,6 +43,7 @@ module.exports = {
 
     // Выбираем весь список объектов данной коллекции.
     let posts = await Post.find({see:true})
+      .populate('experts')
       .sort([
         {firstTopic: 'DESC'},
         {createdAt: 'DESC'}

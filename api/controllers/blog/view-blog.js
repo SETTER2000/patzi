@@ -34,6 +34,7 @@ module.exports = {
    // console.log('POST ID:: ', inputs.postId);
 
     let post = await Post.findOne(inputs.postId)
+      .populate('experts')
       .populate('topic');
 
     if (!post) {

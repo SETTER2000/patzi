@@ -424,6 +424,11 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       description: `Многие ко Многим (Many-to-Many)`
     },
 
+    // Add a reference to Pet
+    posts: {
+      collection: 'post',
+      via: 'experts'
+    },
 
     comments: {
       collection: 'commentary',

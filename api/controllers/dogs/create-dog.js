@@ -27,6 +27,12 @@ module.exports = {
       //required: true,
     },
 
+    federation: {
+      type: 'ref',
+      description: `Регистрационный номер собаки в определённой федерации странцы.`,
+      example: 'RKF 4876128',
+      maxLength: 40
+    },
 
     owner: {
       type: 'string',
@@ -351,6 +357,7 @@ module.exports = {
       gender: inputs.gender,
       currency: inputs.currency,
       showTeeth: inputs.showTeeth,
+      federation: inputs.federation,
       winner: inputs.winner,
       price: inputs.price,
       saleDescription: inputs.saleDescription,

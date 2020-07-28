@@ -7,6 +7,8 @@ parasails.registerPage('blog', {
     dialogPedigreeVisible: true,
     virtualPageSlug: '',
     fileList: [],
+    expt: [],
+    experts:[],
     // fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}],
     inx: '',
     topics: [],
@@ -31,6 +33,7 @@ parasails.registerPage('blog', {
       see: true,
       rootPage: false,
       fileList: [],
+      experts:[],
       topic: {},
       dateEvent: {},
       subtitle: '',
@@ -158,10 +161,14 @@ parasails.registerPage('blog', {
     moment().locale(this.me.preferredLocale);
     console.log('POST::: ', this.post);
     this.post.topicId = this.post.topic.id;
+    this.post.experts = _.pluck(this.post.experts, 'id');
     this.post.isAdmin = this.me.isAdmin;
     this.post.isSuperAdmin = this.me.isSuperAdmin;
     this.fix();
-
+    // Запрос для события list-*
+    io.socket.get(`/api/v1/users/list-expert`, function gotResponse(body, response) {
+      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
     // Запрос для события list-*
     io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -182,7 +189,20 @@ parasails.registerPage('blog', {
       this.$forceUpdate();
       console.log('NEW TOPIC::', this.post);
     });
+    // Принимаем данные по событию list-*
+    io.socket.on('list-expert', data => {
 
+      this.expt = _.each(data.users, (t, ind) => {
+        t.uSectionClass = `u-section-3-${ind + 1}`;
+        t.active = (ind === 0);
+        t.images = _.each(t.images, (im, ind) => {
+          im.uContainerLayout = `u-container-layout-${ind + 1}`;
+          im.uImage = `u-image-${ind + 1}`;
+        });
+      });
+
+      // console.log('EXPERTS LIST:: ', this.experts);
+    });
     // Принимаем данные по событию list-*
     io.socket.on('list-topic', data => {
       // this.dataAll = this.seo;
@@ -576,6 +596,8 @@ parasails.registerPage('blog', {
     saveUpdate() {
       this.update(this.post);
     },
-
+    getPullExpert() {
+      return this.expt;
+    },
   },
 });

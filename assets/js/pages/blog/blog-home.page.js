@@ -4,6 +4,7 @@ parasails.registerPage('blog-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     topics: [],
+    experts: [],
     posts: [],
     cashPosts: [],
     removePostId: '',
@@ -135,6 +136,10 @@ parasails.registerPage('blog-home', {
 
     // Запрос для события list-*
     io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
+      console.log('Сервер topics ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Запрос для события list-*
+    io.socket.get(`/api/v1/users/list-expert`, function gotResponse(body, response) {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Принимаем данные по событию list-*
@@ -144,9 +149,23 @@ parasails.registerPage('blog-home', {
       this.posts = this.cashPosts = data;
     });
     // Принимаем данные по событию list-*
+    io.socket.on('list-expert', data => {
+      // this.dataAll = this.seo;
+      console.log('EXPERTS LIST:: ', data);
+      this.experts = _.each(data.users, (t, ind) => {
+        t.uSectionClass = `u-section-3-${ind + 1}`;
+        t.active = (ind === 0);
+        t.images = _.each(t.images, (im, ind) => {
+          im.uContainerLayout = `u-container-layout-${ind + 1}`;
+          im.uImage = `u-image-${ind + 1}`;
+        });
+      });
+    });
+
+    // Принимаем данные по событию list-*
     io.socket.on('list-topic', data => {
       // this.dataAll = this.seo;
-      // console.log('TOPICS LIST:: ', data);
+      console.log('TOPICS LIST:: ', data);
       this.topics = _.each(data, (t, ind) => {
         t.uSectionClass = `u-section-3-${ind + 1}`;
         t.active = (ind === 0);
@@ -155,9 +174,6 @@ parasails.registerPage('blog-home', {
           im.uImage = `u-image-${ind + 1}`;
         });
       });
-
-      // this.dataAll.data = this.posts;
-
     });
   },
 
@@ -246,10 +262,13 @@ parasails.registerPage('blog-home', {
     clickAddButton() {
       console.log('CLICK');
       this.warning = this.i19p.warnNoArr;
-      (this.topics && this.topics.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisible = true;
+      ((this.topics && this.topics.length > 0) || (this.experts && this.experts.length > 0)) ? this.centerDialogAdded = true : this.centerDialogVisible = true;
     },
     getPull() {
       return this.topics;
+    },
+    getPullExpert() {
+      return this.experts;
     },
 
     goTo(path) {
@@ -291,7 +310,7 @@ parasails.registerPage('blog-home', {
       // }, 2000);
     }
     ,
-    // Create Topic
+    // Create Post
     async add() {
       this.openFullScreen();
       let data = {
@@ -311,6 +330,7 @@ parasails.registerPage('blog-home', {
         videoControls: this.ruleForm.videoControls,
         videoMute: this.ruleForm.videoMute,
         videoHeader: this.ruleForm.videoHeader,
+        experts: this.ruleForm.experts,
         videoDescription: this.ruleForm.videoDescription,
       };
 

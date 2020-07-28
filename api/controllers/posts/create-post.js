@@ -32,6 +32,10 @@ module.exports = {
       type: 'ref',
       description: 'Массив с файлами данных о загруженных файлах.'
     },
+    experts: {
+      type: 'ref',
+      description: 'Коллекция экспертов.'
+    },
     postBackground: {
       type: 'ref',
       description: 'Объект файла данных о загруженном файле. Фон поста.'
@@ -171,16 +175,19 @@ module.exports = {
     if (conflicting) {
       throw (req.me.preferredLocale === 'ru') ? 'alreadyInUseRU' : 'alreadyInUse';
     }
+    let video = [];
 // console.log('inputs.videoUrl::: ', inputs.videoUrl);
-    let video = [{
-      videoUrl: inputs.videoUrl.replace(/https:\/\/youtu.be\//gi,''),
-      videoShowinfo: inputs.videoShowinfo,
-      videoStart: inputs.videoStart,
-      videoControls: inputs.videoControls,
-      videoMute: inputs.videoMute,
-      videoHeader: inputs.videoHeader,
-      videoDescription: inputs.videoDescription,
-    }];
+    if (inputs.videoUrl) {
+      video = [{
+        videoUrl: inputs.videoUrl.replace(/https:\/\/youtu.be\//gi, ''),
+        videoShowinfo: inputs.videoShowinfo,
+        videoStart: inputs.videoStart,
+        videoControls: inputs.videoControls,
+        videoMute: inputs.videoMute,
+        videoHeader: inputs.videoHeader,
+        videoDescription: inputs.videoDescription,
+      }];
+    }
 
 
     let newPost = await Post.create({
@@ -203,9 +210,12 @@ module.exports = {
 
     await Topic.addToCollection(inputs.topicId, 'posts').members([newPost.id]);
 
+    // Добавляем экспертов к посту
+    console.log('inputs.experts:: ', inputs.experts);
+    await Post.addToCollection(newPost.id, 'experts').members(inputs.experts);
     // Выбираем весь список объектов данной коллекции.
-    let posts = await Post.find()
-      .sort([{labelRu: 'DESC'}]);
+    // let posts = await Post.find()
+    //   .sort([{labelRu: 'DESC'}]);
 
     await sails.sockets.broadcast('post', 'list-post');
     // Respond with view.

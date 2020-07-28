@@ -27,16 +27,6 @@ parasails.registerPage('dogs-home', {
       value: 1
     }, {id: '2', label: 'Hungarian Junior Champion', abbr: 'HJCH', labelRu: 'Юный чемпион Болгарии', value: 2}],
     filterDogs: [],
-    federations: _.sortBy([
-      'FCI',
-      'RKF',
-      'BCU',
-      'UKU',
-      'IKC',
-      'VDH',
-      'KCG',
-      'PKR',
-    ]),
     filterName: '',
     dogsEditList: [],
     isOwner: false,
@@ -189,6 +179,16 @@ parasails.registerPage('dogs-home', {
       value: '',
       registerNumber: ''
     }],
+    federations: _.sortBy([
+      'FCI',
+      'RKF',
+      'BCU',
+      'UKU',
+      'IKC',
+      'VDH',
+      'KCG',
+      'PKR',
+    ]),
     ruleForm: {
       //
       name: '',
@@ -212,10 +212,10 @@ parasails.registerPage('dogs-home', {
       saleDescription: '',
       file: [],
       federations: [{
-        key: 1,
-        value: 'FCI',
+        key: '',
+        value: '',
         registerNumber: ''
-      }],
+      },],
       sire: '',
       fileList: [],
       color: '',
@@ -683,10 +683,11 @@ parasails.registerPage('dogs-home', {
         currency: this.ruleForm.currency,
         color: this.ruleForm.color,
         stamp: this.ruleForm.stamp,
-        registerNumber: this.ruleForm.registerNumber,
+        regNumber: this.ruleForm.registerNumber,
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
       };
+      console.log('this.ruleForm:: ' , this.ruleForm);
       console.log('DATA create before send: ', data);
       await io.socket.post('/api/v1/dogs/create-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
@@ -740,13 +741,13 @@ parasails.registerPage('dogs-home', {
         currency: this.ruleForm.currency,
         color: this.ruleForm.color,
         stamp: this.ruleForm.stamp,
+        regNumber: this.ruleForm.registerNumber,
         canine: this.ruleForm.canine,
         bite: this.ruleForm.bite,
         letter: this.ruleForm.letter,
         dogTests: this.ruleForm.dogTests,
         teethCountTop: this.ruleForm.teethCountTop,
         teethCountBottom: this.ruleForm.teethCountBottom,
-        registerNumber: this.ruleForm.registerNumber,
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
       };

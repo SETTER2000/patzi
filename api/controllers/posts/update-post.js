@@ -40,6 +40,10 @@ module.exports = {
       type: 'ref',
       description: 'Массив с файлами данных о загруженных файлах.'
     },
+    experts: {
+      type: 'ref',
+      description: 'Коллекция экспертов.'
+    },
     postBackground: {
       type: 'ref',
       description: 'Объект файла данных о загруженном файле. Фон поста.'
@@ -99,7 +103,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     const req = this.req;
-      // console.log('topic::: ' , inputs.topic);
+    // console.log('topic::: ' , inputs.topic);
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
@@ -114,7 +118,7 @@ module.exports = {
     let images = inputs.images ? inputs.images : post.images;
     let imagesNew = [];
 
-        console.log('inputs.fileList', inputs.fileList);
+    console.log('inputs.fileList', inputs.fileList);
     // Проверяем есть ли фото
     if (inputs.fileList) {
       images = await inputs.fileList.filter(o => !_.isNull(o));
@@ -141,7 +145,7 @@ module.exports = {
       subtitleRu: inputs.subtitleRu,
       see: inputs.see,
       rootPage: inputs.rootPage,
-      topic:inputs.topic.id     ,
+      topic: inputs.topic.id,
       /*label: label,
       gender: inputs.gender,
       see: inputs.see,
@@ -240,7 +244,10 @@ module.exports = {
      parents = _.pluck(parentFind, 'id');
      parents.length > 0 ? await Post.replaceCollection(update.id, 'parents').members(parents) : '';
  */
-
+    // Обновляем экспертов к посту
+    console.log('inputs.experts:: ', inputs.experts);
+    console.log('inputs.id:: ', inputs.id);
+    await Post.replaceCollection(inputs.id, 'experts').members(inputs.experts);
     // Если не создан возвращаем ошибку.
     if (!update) {
       throw 'badRequest';

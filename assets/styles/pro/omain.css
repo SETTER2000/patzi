@@ -4779,6 +4779,12 @@ p.footer-text a:hover {
   padding-right: 0;
 }
 
+.dialog-window {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  font-size: 3rem;
+  width: 90vw;
+}
 /*Menu правка высоты*/
 /*.u-header .u-menu-1 {margin: -40px 0 20px auto;}*/
 

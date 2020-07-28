@@ -53,6 +53,9 @@ module.exports.routes = {
   'GET /titles/:virtualPageSlug?': {action: 'titles/view-titles-home'},
   'GET /title/:id': {action: 'titles/view-title'},
 
+  'GET /federations': { action: 'federations/view-federations-home'},
+
+  'GET /experts': { action: 'experts/view-experts-home' },
 
   // 'GET /litters/litter/:id': {action: 'litters/view-litter'},
   'GET /litter/:letter/:year/:virtualPageSlug?': {action: 'litters/view-litter'},
@@ -186,6 +189,7 @@ module.exports.routes = {
   'DELETE /users/destroy-user-group': {action: 'users/destroy-user-group', csrf: false},
   'POST   /api/v1/users/update-ratio': {action: 'users/update-ratio', csrf: false},
   'GET    /api/v1/users/status': {action: 'users/list-status'},
+  'GET    /api/v1/users/list-expert': { action: 'users/list-expert' },
   // 'POST   /api/v1/users/looked-comment': {action: 'users/looked-comment', csrf: false},
   'DELETE /api/v1/files/remove-picture-from-s3': {action: 'files/remove-picture-from-s3', csrf: false},
 

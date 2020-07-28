@@ -322,7 +322,7 @@ parasails.registerPage('users-home', {
     // Принимаем данные по событию list-*
     io.socket.on('list-continent', (data) => {
       this.continents = data.continents;
-      console.log('  this.continents ::: ' ,   this.continents );
+      console.log('  this.continents ::: ', this.continents);
     });
 
     // Получаем данные для селектов в форме
@@ -358,7 +358,7 @@ parasails.registerPage('users-home', {
 
 
   filters: {
-    getCreate: function (value,  format) {
+    getCreate: function (value, format) {
       if (!value) {
         return '';
       }
@@ -476,20 +476,20 @@ parasails.registerPage('users-home', {
 
     },
     async getList() {
-      await  io.socket.get(`/sockets/user/list/${this.count}`, function gotResponse(body, response) {
+      await io.socket.get(`/sockets/user/list/${this.count}`, function gotResponse(body, response) {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-      await  io.socket.get('/sockets/user/count-all', function gotResp(body, response) {
+      await io.socket.get('/sockets/user/count-all', function gotResp(body, response) {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-      await  io.socket.on('list', (data) => {
+      await io.socket.on('list', (data) => {
         this.users = _.get(data, 'users') ? data.users : this.users;
 
-        console.log('USERS1: ' ,  this.users);
+        console.log('USERS1: ', this.users);
         // this.count = _.get(data, 'count') ?  data.count : this.count;
       });
       // Кол-во всего пользователей в системе
-      await  io.socket.on('count-all', (data) => {
+      await io.socket.on('count-all', (data) => {
         this.counts = data;
       });
     },
@@ -500,7 +500,7 @@ parasails.registerPage('users-home', {
         this.loadingSearch = true;
         console.log('this.arrSearch:::: ', this.arrSearch);
         console.log('this.count::: ', this.count);
-        await  io.socket.get(`/sockets/user/list/${this.count}/${this.arrSearch}`, function gotResp(body, response) {
+        await io.socket.get(`/sockets/user/list/${this.count}/${this.arrSearch}`, function gotResp(body, response) {
           console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
         });
         setTimeout(() => {
@@ -517,8 +517,7 @@ parasails.registerPage('users-home', {
 
     async changeSelectSearch(e) {
       this.arrSearch = e;
-console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
-      await  io.socket.put('/api/v1/users/update-search', {
+      await io.socket.put('/api/v1/users/update-search', {
         'count': this.count,
         'query': this.arrSearch
       }, (data, response) => {
@@ -560,8 +559,6 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
     },
 
     handleDelete(index, row) {
-      console.log('index', index);
-      console.log('row', row);
       this.text = `Вы действительно хотите удалить этого пользователя? 
         Учётную запись невозможно будет восстановить.`;
       this.centerDialogVisibleConfirm = true;
@@ -569,8 +566,9 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
     },
 
     handleSelect(index, row) {
-
-      io.socket.put('/sockets/user/update-user-group', {'id': row.id, 'groupId': row.groups}, (data, jwRes) => {
+      let data = {'id': row.id, 'groupId': row.groups};
+      // console.log('DATA перед отправкой::: ', data);
+      io.socket.put('/sockets/user/update-user-group', data, (data, jwRes) => {
         // this.getList();
         console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
       });
@@ -581,12 +579,11 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
 
 
     async handleSelectCity(e) {
-      console.log('handleSelect::: ', e);
       this.cityId = (_.isNumber(e.id)) ? e.id : undefined;
     },
     handleDeleteGroup(e, index, row) {
       io.socket.delete('/users/destroy-user-group', {'id': row.id, 'groupId': [e]}, (data, jwRes) => {
-        console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+        // console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
         this.mesSuccess('Группа успешно удалена.');
       });
     },
@@ -607,12 +604,9 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
       this.currentRow = val;
     },
     filterHandler(value, row, column) {
-      console.log('value', value);
-      console.log('row', row);
-      console.log('column', column);
       // this.arrSearch.push(value);
       io.socket.put('/api/v1/users/update-filter-date', {'count': 100, 'query': value}, (data, response) => {
-        console.log('Сервер ответил-2 кодом ' + response.statusCode + ' и данными: ', data);
+        // console.log('Сервер ответил-2 кодом ' + response.statusCode + ' и данными: ', data);
       });
 
 
@@ -626,12 +620,11 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
       },
   */
     handleClick() {
-      console.log('click');
+      // console.log('click');
     },
 
     clickShowPhoto(index, row) {
       this.dialogTableVisible = true;
-      console.log('row:', row);
       this.objOne = row;
     },
 
@@ -674,7 +667,6 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
       this.dialogFormVisible = true;
     },
     onSubmit() {
-      console.log('submit!');
     },
 
 
@@ -717,7 +709,6 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
 
 
     handleSuccess(res, file) {
-      console.log('RWSPONNN::: ', res);
       // this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
       _.isArray(this.ruleForm.fileList) ? this.ruleForm.fileList.push(res) :
         this.ruleForm.fileList = [res];
@@ -792,14 +783,14 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
         description: this.ruleForm.description
       };
 
-      console.log('DATA перед отправкой::: ', data);
+      // console.log('DATA перед отправкой::: ', data);
       await io.socket.post('/api/v1/users/create-user', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(`${this.i19p.text400Err} ${jwRes.headers['x-exit-description']}`) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-            (jwRes.statusCode === 401) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
-              (jwRes.statusCode >= 500) ? this.mesError(`${this.i19p.text500Err} ${jwRes.headers['x-exit-description']}`) : '';
+              (jwRes.statusCode === 401) ? this.mesError(jwRes.headers['x-exit-description']) :
+                // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+                (jwRes.statusCode >= 500) ? this.mesError(`${this.i19p.text500Err} ${jwRes.headers['x-exit-description']}`) : '';
         this.centerDialogAdded = false;
         this.loading.close();
         if (jwRes.statusCode === 200) {
@@ -921,7 +912,6 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
 
     groupAction() {
       this.ruleForm.groups = this.ruleForm.emailStatus === 'confirmed' ? [_.pluck(this.groups, 'id')[0]] : [];
-      console.log('this.ruleForm.groups:: ', this.ruleForm.groups);
     },
     handleClose(done) {
       done();
@@ -934,12 +924,12 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
 
 
     changeSelectRegion() {
-      console.log('changeSelectRegion: ');
+      // console.log('changeSelectRegion: ');
       // this.ruleForm.city = null;
     },
 
     changeSelectCountry() {
-      console.log('changeSelectCountry: ');
+      // console.log('changeSelectCountry: ');
       // this.ruleForm.city = null;
     },
 
@@ -947,7 +937,6 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
       let t = this.continents.filter(continent => {
         return continent.id === this.ruleForm.continent;
       });
-      console.log('getPullCountry::: ' , t);
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
       return _.sortBy(t[0].countrys, field);
     },
@@ -971,15 +960,13 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
     // Реагирует на событие change в поле города|city
     async changeRegion(regionId) {
       this.regionId = regionId;
-      console.log('this.ruleForm.city:', this.ruleForm.city);
-      console.log('this.regionId:', this.regionId);
       await this.cityList();
     },
 
 
     async cityList() {
       await io.socket.get(`/api/v1/city/list/${this.regionId}`, function gotResponse(body, response) {
-       // console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-city', (data) => {
@@ -992,7 +979,6 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
     querySearch(queryString, cb) {
       let links = this.citys;
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
-      console.log('RESULT CITYS::: ', results);
       cb(results);
     },
 
@@ -1004,12 +990,10 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
     },
 
     getPullRegion() {
-
       let t = this.countrys.filter(country => {
         return country.id === this.ruleForm.country || country.id === this.country;
       });
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'label';
-      // console.log('t[0].regions::: ', t[0]);
       return !_.isEmpty(t) ? _.sortBy(t[0].regions, field) : '';
 
     },
@@ -1033,24 +1017,6 @@ console.log('  changeSelectSearch.arrSearch::: ',   this.arrSearch) ;
         this.regions = data;
       });
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   },

@@ -37,15 +37,20 @@ module.exports = {
     if (!admin) {
       throw 'badRequest';
     }
-
+                  console.log(' inputs.groupId::: ' ,  inputs.groupId);
     // Добавить пользователя inputs.id в группу inputs.groupId.
     await User.replaceCollection(inputs.id, 'groups', inputs.groupId);
+
+    // // Обновляем экспертов к посту
+    // console.log('inputs.experts:: ', inputs.experts);
+    // console.log('inputs.id:: ', inputs.id);
+    await User.replaceCollection(inputs.id, 'posts').members(inputs.groupId);
 
 
     //
     let user = await User.findOne({where: {id: inputs.id}, select: ['fullName']})
       .populate('groups');
-console.log('USER: ' ,user);
+
     let isAdmin = false;
     await _.each(user.groups, group => {isAdmin = (group.label === 'admin');});
     await User.update({id: inputs.id},{isAdmin:isAdmin});

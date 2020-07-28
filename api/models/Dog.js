@@ -44,6 +44,15 @@ module.exports = {
     },
 
 
+    federation: {
+      type: 'string',
+      description: `Пол собак. В смысле не пол собаки, а конец есть или нет.`,
+      required: true,
+      example: 'RKF 4876128',
+      maxLength: 40
+    },
+
+
     sale: {
       type: 'boolean',
       defaultsTo: false,
@@ -257,9 +266,9 @@ module.exports = {
 
     kennel: {
       model: 'kennel',
-      description: 'Собака может принадлежать только одному питомнику. One to Many'
+      description: 'Собака может родиться только в одном питомнике. One to Many'
     },
-// Добавьте одну сторону множественной рефлексивной ассоциации
+
     // Владельцы
     owners: {
       collection: 'user',

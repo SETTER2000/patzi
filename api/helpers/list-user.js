@@ -16,6 +16,11 @@ module.exports = {
       type: 'ref',
       description: 'Строка, которую пытаемся найти в fullName.'
     },
+    groups: {
+      type: 'ref',
+      example:`['expert']`,
+      description: 'Массив групп, которые следует вернуть'
+    },
     preferredLocale: {
       type: 'string',
       defaultsTo: 'ru',
@@ -86,14 +91,14 @@ module.exports = {
      * 1. В цикле
      * 2. С библиотекой Lodash
      */
-    _.each(users,async (user) => {
+    _.each(users, async (user) => {
       // Устанавливаем свойство источника изображения
       // Первый аргумент, базовый url
       user.imageSrc = user.avatarFD ? url.resolve(sails.config.custom.baseUrl, `/api/v1/users/${user.id}`) : '';
 
       // Добавляем массив групп для каждого пользователя
       user.allGroups = allGroups;
-      user.kennelName = await sails.helpers.getKennelUser.with({id:'5e258b20f38cd205ec54a5af'});
+      user.kennelName = await sails.helpers.getKennelUser.with({id: '5e258b20f38cd205ec54a5af'});
       // Столбец: Дата регистрации. Форматировано, согласно языку для представления.
       user.createdAtFormat = moment(user.createdAt).format(format);
 
@@ -118,10 +123,23 @@ module.exports = {
 
     });
 
-// console.log('FFFFF:::: ' , await sails.helpers.getKennelUser.with({id:'5e258b20f38cd205ec54a5af'}));
     data.users = _.sortByOrder(users, ['createdAt'], ['desc']);
-    // data.users = _.sortByOrder(users,['createdAt', 'updatedAt'], ['desc','asc']);
     data.count = inputs.count;
+    // console.log('ВСЕГО ПОЛЬЗОВАТЕЛЕЙ : ', data.users.length);
+
+    if (_.isArray(inputs.groups) && inputs.groups.length > 0) {
+      data.users = _.filter(data.users, user => {
+       // console.log('USER : ', user.fullName);
+        return _.find(user.groups, group => {
+          // console.log('Группы юзера::: ', group.label);
+          // console.log('Нашлась у юзера группа?::: ',inputs.groups.indexOf(group.label) > -1);
+          // console.log('inputs.groups:: ', inputs.groups);
+        return  inputs.groups.indexOf(group.label) > -1;
+        });
+      });
+    }
+
+
 
     return data;
   }

@@ -106,7 +106,11 @@ module.exports = {
       model: 'topic',
       description: 'Пост может принадлежать только одной теме. One to Many'
     },
-
+    // Add a reference to User
+    experts: {
+      collection: 'user',
+      via: 'posts'
+    }
   },
 
 };
