@@ -955,7 +955,7 @@
                                         inactive-text="<%= __('not allow') %>">
                                 </el-switch>
 
-                                <el-tooltip class="ml-3" effect="dark" content="<%= __('Allow Edit Dog') %>"
+                                <el-tooltip class="ml-3" effect="dark" content="<%= __('Allow Edit Dog owner') %>"
                                             placement="top-start">
                                     <el-button @click="innerVisibleDogEditor=true" size="mini" round
                                                icon="el-icon-question"></el-button>
@@ -1252,7 +1252,7 @@
     <el-dialog
             width="30%"
             top="3vh"
-            title="<%= __('Allow Edit Dog') %>"
+            title="<%= __('Allow Edit Dog owner') %>"
             :visible.sync="innerVisibleDogEditor"
             append-to-body>
         <div class="justify-content-center">
