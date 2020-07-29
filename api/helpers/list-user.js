@@ -73,7 +73,7 @@ module.exports = {
       .populate('kennelBreed')   // все владельцы питомника
       .limit(inputs.count)
     ;
-      console.log('users.kennels: ', users);
+
 
     // Получить список групп, которые существуют в системе. Для вывода в select
     let allGroups = await Group.find();
@@ -131,21 +131,21 @@ module.exports = {
 
     data.users = _.sortByOrder(users, ['createdAt'], ['desc']);
     data.count = inputs.count;
-    // console.log('ВСЕГО ПОЛЬЗОВАТЕЛЕЙ : ', data.users.length);
+    console.log('ВСЕГО ПОЛЬЗОВАТЕЛЕЙ : ', data.users.length);
 
     if (_.isArray(inputs.groups) && inputs.groups.length > 0) {
       data.users = _.filter(data.users, user => {
-       // console.log('USER : ', user.fullName);
+       console.log('USER : ', user.fullName);
         return _.find(user.groups, group => {
-          // console.log('Группы юзера::: ', group.label);
-          // console.log('Нашлась у юзера группа?::: ',inputs.groups.indexOf(group.label) > -1);
-          // console.log('inputs.groups:: ', inputs.groups);
+          console.log('Группы юзера::: ', group.label);
+          console.log('Нашлась у юзера группа?::: ',inputs.groups.indexOf(group.label) > -1);
+          console.log('inputs.groups:: ', inputs.groups);
         return  inputs.groups.indexOf(group.label) > -1;
         });
       });
     }
 
-
+       console.log('ДАТУШКА::: ' ,data);
 
     return data;
   }

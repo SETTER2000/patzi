@@ -167,18 +167,16 @@ parasails.registerPage('blog', {
     this.fix();
     // Запрос для события list-*
     io.socket.get(`/api/v1/users/list-expert`, function gotResponse(body, response) {
-      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // console.log('Сервер list-expert ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Запрос для события list-*
     io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
-      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Принимаем данные по событию list-*
     io.socket.on('post-video', data => {
       this.post.video = data.video;
-      // this.$refs.upload = this.post.images;
       this.$forceUpdate();
-      console.log('NEW POST::', this.post);
     });
     // Принимаем данные по событию list-*
     io.socket.on('update-post', data => {
@@ -191,7 +189,7 @@ parasails.registerPage('blog', {
     });
     // Принимаем данные по событию list-*
     io.socket.on('list-expert', data => {
-
+           console.log('Список экспертов в базе user: ', data);
       this.expt = _.each(data.users, (t, ind) => {
         t.uSectionClass = `u-section-3-${ind + 1}`;
         t.active = (ind === 0);

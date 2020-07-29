@@ -83,14 +83,11 @@ parasails.registerComponent('patziPostVideos', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    console.log('RqwER:::', this.video);
     this.vid = (this.video && this.video.length > 0);
   },
   computed: {},
 
   mounted: async function () {
-    // console.log('objData++::', this.objData);
-
     this.data = this.objData.data ? this.objData.data : this.data;
   },
 
@@ -112,12 +109,10 @@ parasails.registerComponent('patziPostVideos', {
     },
     removeItem(id) {
       // Генерируем событие, возможно с передаваемыми данными
-      // console.log('Отправляем событие', id);
       this.$emit('remove', id);
     },
     editPost(post) {
       // Генерируем событие, возможно с передаваемыми данными
-      // console.log('Отправляем событие', id);
       this.$emit('editpost', post);
     },
   }

@@ -182,7 +182,6 @@ module.exports = {
     // Have the socket which made the request join the "kennel" room.
     // Подключить сокет, который сделал запрос, к комнате «kennel».
     await sails.sockets.join(req, 'kennel');
-    console.log('INPUTS:::: ', inputs);
 
     inputs.file = (_.get(inputs.file, 'fd')) ? inputs.file : '';
 
@@ -218,7 +217,6 @@ module.exports = {
       city: inputs.cityId,
     };
 
-    console.log('Перед обновлением объект:::: ', obj);
 
     await Kennel.update({id: inputs.id}).set(obj);
 
@@ -250,7 +248,6 @@ module.exports = {
     /**
      *  Добавляем связь бридеру с питомником
      */
-    console.log('obj.breeder:: ', obj.breeder);
     await User.replaceCollection(obj.breeder.toString(), 'kennelBreed').members(inputs.id);
     // await Kennel.addToCollection(inputs.id, 'breeder').members(obj.breeder.toString());
     // Если есть идентификаторы совладельцев ...

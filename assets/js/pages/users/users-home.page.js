@@ -408,10 +408,8 @@ parasails.registerPage('users-home', {
       if (query !== '') {
         this.arrSearch = query;
         this.loadingSearch = true;
-        console.log('this.arrSearch:::: ', this.arrSearch);
-        console.log('this.count::: ', this.count);
         await io.socket.get(`/sockets/user/list/${this.count}/${this.arrSearch}`, function gotResp(body, response) {
-          console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+          // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
         });
         setTimeout(() => {
           this.loadingSearch = false;
@@ -472,7 +470,7 @@ parasails.registerPage('users-home', {
       let data = {'id': row.id, 'groupId': row.groups};
       // console.log('DATA update-user-group перед отправкой::: ', data);
       io.socket.put('/sockets/user/update-user-group', data, (data, jwRes) => {
-        console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+        // console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
       });
     },
 
@@ -682,7 +680,7 @@ parasails.registerPage('users-home', {
         description: this.ruleForm.description
       };
 
-      console.log('DATA create перед отправкой::: ', data);
+      // console.log('DATA create перед отправкой::: ', data);
       await io.socket.post('/api/v1/users/create-user', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(`${this.i19p.text400Err} ${jwRes.headers['x-exit-description']}`) :
@@ -723,7 +721,7 @@ parasails.registerPage('users-home', {
         description: this.ruleForm.description,
       };
 
-      console.log('DATA update перед отправкой::: ', data);
+      // console.log('DATA update перед отправкой::: ', data);
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :

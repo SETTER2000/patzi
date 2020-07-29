@@ -136,11 +136,11 @@ parasails.registerPage('blog-home', {
 
     // Запрос для события list-*
     io.socket.get(`/api/v1/topics/list`, function gotResponse(body, response) {
-      console.log('Сервер topics ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // console.log('Сервер topics ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Запрос для события list-*
     io.socket.get(`/api/v1/users/list-expert`, function gotResponse(body, response) {
-      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Принимаем данные по событию list-*
     io.socket.on('list-post', data => {
