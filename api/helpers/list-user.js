@@ -63,11 +63,17 @@ module.exports = {
 
     // Формат отображаемой даты
     let format = 'LL HH:mm';
-    let users = await User.find(inputs.query).limit(inputs.count)
+    let users = await User.find(inputs.query)
       .populate('groups')
-      .populate('kennels')
+      .populate('city')
+      .populate('continent')
+      .populate('country')
+      .populate('region')
+      .populate('kennels')   // все совладельцы питомника
+      .populate('kennelBreed')   // все владельцы питомника
+      .limit(inputs.count)
     ;
-
+      console.log('users.kennels: ', users);
 
     // Получить список групп, которые существуют в системе. Для вывода в select
     let allGroups = await Group.find();

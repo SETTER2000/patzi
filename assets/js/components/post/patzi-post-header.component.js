@@ -65,13 +65,15 @@ parasails.registerComponent('patziPostHeader', {
                 {{objData.preferredLocale ==='ru' ? post.subtitleRu : post.subtitle}}
                 </p>
           
-                <el-row class="edit-buttons" v-if="post.isAdmin || post.isSuperAdmin">                 
+                <el-row class="edit-buttons" >                 
                     <el-button  @click="goto('/blog')" icon="el-icon-house" circle></el-button>
+                    <template v-if="post.isAdmin || post.isSuperAdmin">
                     <el-button  @click="openEditDialog()" type="primary" icon="el-icon-edit" circle></el-button>
                    <!-- <el-button disabled type="success" icon="el-icon-check" circle></el-button>
                     <el-button disabled type="info" icon="el-icon-message" circle></el-button>
                     <el-button disabled type="warning" icon="el-icon-star-off" circle></el-button>-->
                     <el-button  @click="removeItem()" type="danger" icon="el-icon-delete" circle></el-button>
+                    </template>
                 </el-row>
        
                 <!--<a href="#" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1" data-animation-name="rollIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">More</a>-->

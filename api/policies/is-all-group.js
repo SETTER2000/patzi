@@ -1,4 +1,3 @@
-
 module.exports = async function (req, res, proceed) {
   let isUser = false;
   let isOwner = false;
@@ -13,7 +12,7 @@ module.exports = async function (req, res, proceed) {
     return res.redirect('/');
   }
 
-  let foundUser = await User.findOne({id:req.me.id}).populate('groups');
+  let foundUser = await User.findOne({id: req.me.id}).populate('groups');
 
   if (!foundUser) {
     if (req.wantsJSON) {
@@ -27,7 +26,8 @@ module.exports = async function (req, res, proceed) {
   isBreeder = (_.last(_.pluck(foundUser.groups, 'label')) === 'breeder');
   isAdmin = (_.last(_.pluck(foundUser.groups, 'label')) === 'admin');
 
-  return (isUser || isOwner || isBreeder || isAdmin) ? proceed() : res.redirect('/');
+  return foundUser.groups && foundUser.groups.length > 0 ? proceed() : res.redirect('/');
+  // return (isUser || isOwner || isBreeder || isAdmin) ? proceed() : res.redirect('/');
 
   // return proceed();
 

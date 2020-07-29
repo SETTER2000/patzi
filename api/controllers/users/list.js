@@ -53,10 +53,10 @@ module.exports = {
     await sails.sockets.join(req, 'user');
 
 
-  let  data = await sails.helpers.listUser.with({
+    let data = await sails.helpers.listUser.with({
       count: inputs.count,
       query: inputs.query,
-      preferredLocale:  req.me.preferredLocale,
+      preferredLocale: req.me.preferredLocale,
     });
 
     await sails.sockets.broadcast('user', 'list', data);

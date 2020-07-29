@@ -875,7 +875,7 @@
 	"edit": "редактировать",
 	"allow": "разрешить",
 	"reset all filters": "Сбросить фильтры",
-	"Allow Edit Dog": "Разрешить редактировать собаку",
+	"Allow Edit Dog owner": "Разрешить редактировать собаку владельцу",
 	"The first photo in this download will become the album cover. Later in the editor you can change these settings.": "Первая фотография в этой загрузке, станет обложкой альбома. В последствие в редакторе вы сможете изменить эти установки.",
 	"not allow": "не разрешать",
 	"Allow - this means that you allow the owner to edit the dog, otherwise he will not see his dog in the editor window.": "Разрешить - это значит, что вы разрешаете редактировать собаку владельцу, в противном случае он не увидит свою собаку в окне редактора.",
@@ -1000,5 +1000,6 @@
 	"Expert": "Эксперт",
 	"Choose your expert": "Выберите своего эксперта",
 	"Add expert": "Добавить эксперта",
-	"If you haven't found the expert you are looking for, go to the Users section and create one.": "Если вы не нашли нужного эксперта, перейдите в раздел «пользователи» и создайте его."
+	"If you haven't found the expert you are looking for, go to the Users section and create one.": "Если вы не нашли нужного эксперта, перейдите в раздел «пользователи» и создайте его.",
+	"Allow Edit Dog": "Allow Edit Dog"
 }

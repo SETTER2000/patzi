@@ -171,7 +171,7 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    // Бибилиотека Node.js
+    const ObjectID = require("bson-objectid");
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
@@ -247,16 +247,24 @@ module.exports = {
     let ownersId = _.pluck(kennel.owners, 'id');
     inputs.coOwner ? ownersId.push(inputs.coOwner) : '';
 
+    /**
+     *  Добавляем связь бридеру с питомником
+     */
+    console.log('obj.breeder:: ', obj.breeder);
+    await User.replaceCollection(obj.breeder.toString(), 'kennelBreed').members(inputs.id);
+    // await Kennel.addToCollection(inputs.id, 'breeder').members(obj.breeder.toString());
     // Если есть идентификаторы совладельцев ...
     if (ownersId.length > 0) {
       // ... то обновляет данные о совладельцах питомника
-      await Kennel.addToCollection(inputs.id, 'owners').members(ownersId);
+      // await Kennel.addToCollection(inputs.id, 'owners').members(ownersId);
+      await Kennel.replaceCollection(inputs.id, 'owners').members(ownersId);
+
       // ...  то добавляем совладельцев в группы соответствия
       _.each(ownersId, async id => {
         await sails.helpers.addGroup.with({
           groups: ['user', 'owner', 'breeder'],
           userId: id
-        })
+        });
       });
     }
 

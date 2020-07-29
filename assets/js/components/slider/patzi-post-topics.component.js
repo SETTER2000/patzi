@@ -40,7 +40,7 @@ parasails.registerComponent('patziPostTopics', {
       <li data-u-target="#carousel_c5ca" class="u-grey-30"  :data-u-slide-to="i - 1"></li>
       </template>
     </ol>
-    <div class="u-carousel-inner" role="listbox">
+    <div class="u-carousel-inner" role="listbox">  
      <patzi-post-topic-item v-for="(topic,ind) of topics" @select-topic="selectPosts" :obj-data="objData" :topic="topic" :key="topic.id" ></patzi-post-topic-item>
     </div>
     

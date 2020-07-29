@@ -214,6 +214,8 @@ module.exports = {
     (inputs.coOwner) ? owners.push(inputs.coOwner) : '';
     let ownerFind = await Kennel.find({fullName: owners});
     // Обновляет данные о совладельцах питомника
+    // Добавить пользователя inputs.id в группу inputs.groupId.
+
     owners.length > 0 ? await Kennel.addToCollection(newKennel.id, 'owners').members(owners) : '';
 
     // inputs.yourKennel ? await User.addToCollection(req.me.id, 'kennels', newKennel.id): '';

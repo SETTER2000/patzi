@@ -302,9 +302,15 @@ module.exports = {
        parents = _.pluck(parentFind, 'id');
        parents.length > 0 ? await User.addToCollection(newUser.id, 'parents').members(parents) : '';
    */
+    data = await sails.helpers.listUser.with({
+      count: inputs.count,
+      query: inputs.query,
+      preferredLocale: req.me.preferredLocale,
+    });
 
+    await sails.sockets.broadcast('user', 'list', data);
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
-    await sails.sockets.broadcast('user', 'list');
+    // await sails.sockets.broadcast('user', 'list');
 
     return exits.success();
   }

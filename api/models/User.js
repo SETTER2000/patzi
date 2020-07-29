@@ -414,7 +414,14 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       collection: 'kennel',
       via: 'owners',
       // dominant: true,
-      description: `Многие ко Многим (Many-to-Many)`
+      description: `Многие ко Многим (Many-to-Many). В каких питомниках пользователь является совладельцем.`
+    },
+
+    kennelBreed: {
+      collection: 'kennel',
+      via: 'breeder',
+      // dominant: true,
+      description: `Один ко Многим (One-to-Many). В каком питомнике пользователь является заводчиком.`
     },
 
     dogs:{

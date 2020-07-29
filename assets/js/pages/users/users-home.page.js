@@ -1,19 +1,14 @@
-// Регистрируем глобальную пользовательскую директиву `v-focus`
-/*parasails.directive('focus', {
-  // Когда привязанный элемент вставлен в DOM...
-  inserted: function (el) {
-    // Переключаем фокус на элемент
-    el.focus();
-  }
-});*/
 parasails.registerPage('users-home', {
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
+    users: [],
     value: '',
     value1: '',
     value2: '',
+    minCount:20,
+    stepCount:20,
     files: [],
     cityId: undefined,
     continent: '',
@@ -45,7 +40,6 @@ parasails.registerPage('users-home', {
     text: '',
     confirm: false,
     rowTable: '',
-    users: [],
     sizeForm: {
       name: '',
       region: '',
@@ -113,9 +107,6 @@ parasails.registerPage('users-home', {
       sendCodEmail: 'unconfirmed'
     },
     rules: {
-      // kennel: [
-      //   {required: true, message: 'Please select kennel name', trigger: 'change'}
-      // ],
       label: [
         {required: true, message: 'Please input you name', trigger: 'blur'},
         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
@@ -129,67 +120,14 @@ parasails.registerPage('users-home', {
       region: [
         {required: true, message: 'Please select Activity zone', trigger: 'change'}
       ],
-
-      /*emailAddress: [
-        {required: true, message: 'Please input email', trigger: 'blur'},
-        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
-        //{isEmail: true, message: 'Не верный формат Email', trigger: 'blur'},
-      ],*/
       gender: [
         {required: true, message: 'Please select a dog gender.', trigger: 'change'}
       ],
-      // password: [
-      //   {required: true, message: 'Please input password.', trigger: 'change'}
-      // ],
-      // checkPass: [
-      //   {required: true, message: 'Please input checkPass.', trigger: 'change'}
-      // ],
-      // dateBirth: [
-      //   {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
-      // ],
-
       description: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
         {max: 1700, message: 'Length should be 10 to 1700', trigger: 'blur'}
       ]
     },
-    /*  tableData: [
-        {
-          date: '2016-05-03',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles'
-        },
-        {
-          date: '2016-05-02',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles'
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles'
-        },
-        {
-          date: '2016-05-01',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles'
-        },
-        {
-          date: '2016-05-08',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles'
-        },
-        {
-          date: '2016-05-06',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles'
-        },
-        {
-          date: '2016-05-07',
-          name: 'Tom',
-          address: 'No. 189, Grove St, Los Angeles'
-        }
-      ],*/
     multipleSelection: [],
     selectOptions: [
       {
@@ -278,9 +216,11 @@ parasails.registerPage('users-home', {
 
   watch: {
     // эта функция запускается при любом изменении count
-    count: function (newUsers) {
+    count: async  function (newUsers) {
       this.count = newUsers;
-      this.getList();
+     await io.socket.get(`/sockets/user/list/${this.count}`, function gotResponse(body, response) {
+        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      });
     }
   },
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -302,21 +242,22 @@ parasails.registerPage('users-home', {
     });
 
 
-    // Подписываемся на комнату continent  и событие list-continent
+    // Подписываемся на комнату continent
     io.socket.get(`/api/v1/continents/list`, function gotResponse(body, response) {
       // console.log('Сервер continents ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
-    // Подписываемся на комнату country  и событие list-country
+    // Подписываемся на комнату country
     io.socket.get(`/api/v1/country/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
 
     io.socket.on('list', (data) => {
-      this.users = _.get(data, 'users') ? data.users : this.users;
-
-      // this.count = _.get(data, 'count') ?  data.count : this.count;
+      console.log('USER list::: ', data);
+      this.users = _.get(data, 'users') ?
+         _.each(data.users, user=>{ user.groups = _.pluck(user.groups, 'id');}) : this.users;
+      console.log('USER list this.users::: ', this.users);
     });
 
     // Принимаем данные по событию list-*
@@ -362,10 +303,8 @@ parasails.registerPage('users-home', {
       if (!value) {
         return '';
       }
-      // moment.locale(l);
       let formatNew = (!format) ? 'LLL' : format;
       return (moment(value).format(formatNew)) ? moment(value).format(formatNew) : value;
-      // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
     abc(value, ruleForm) {
       if (!value) {
@@ -377,24 +316,7 @@ parasails.registerPage('users-home', {
       _.isArray(r) ? this.ruleForm.label = r[0] : '';
       this.ruleForm.errInputDogName = (!_.isArray(r));
       r = [];
-      // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
-    /*date: function (value) {
-      // return value.toLocaleString();
-      if (!value) return '';
-      let date, year, month, dt;
-      date = new Date(value);
-      year = date.getFullYear();
-      month = date.getMonth() + 1;
-      dt = date.getDate();
-      if (dt < 10) {
-        dt = '0' + dt;
-      }
-      if (month < 10) {
-        month = '0' + month;
-      }
-      return  (this.me.preferredLocale ==='ru') ? `${dt}.${month}.${year}`:`${year}.${month}.${dt}`;
-    }*/
   },
 
   mounted: function () {
@@ -436,18 +358,6 @@ parasails.registerPage('users-home', {
         return this.dateFilter;
       }
     }
-    // count: {
-    //   get: function () {
-    //     return 0;
-    //   },
-    //   set: function (newValue) {
-    //     if (_.isNumber(newValue)) {
-    //       this.getList();
-    //       return newValue;
-    //     }
-    //     return 0;
-    //   },
-    // },
 
   },
 
@@ -476,18 +386,18 @@ parasails.registerPage('users-home', {
 
     },
     async getList() {
-      await io.socket.get(`/sockets/user/list/${this.count}`, function gotResponse(body, response) {
-        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
-      });
+      // await io.socket.get(`/sockets/user/list/${this.count}`, function gotResponse(body, response) {
+      //   // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // });
       await io.socket.get('/sockets/user/count-all', function gotResp(body, response) {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-      await io.socket.on('list', (data) => {
-        this.users = _.get(data, 'users') ? data.users : this.users;
-
-        console.log('USERS1: ', this.users);
-        // this.count = _.get(data, 'count') ?  data.count : this.count;
-      });
+      // await io.socket.on('list', (data) => {
+      //   this.users = _.get(data, 'users') ? data.users : this.users;
+      //
+      //   console.log('USERS1: ', this.users);
+      //   // this.count = _.get(data, 'count') ?  data.count : this.count;
+      // });
       // Кол-во всего пользователей в системе
       await io.socket.on('count-all', (data) => {
         this.counts = data;
@@ -525,15 +435,10 @@ parasails.registerPage('users-home', {
       });
     },
 
-
     confirmDeletion() {
-
       this.centerDialogVisibleConfirm = false;
       this.confirm = true;
-      let self = this;
       if (this.confirm) {
-
-
         /**
          * TODO WEBSOCKET: Удаление объекта
          */
@@ -541,12 +446,10 @@ parasails.registerPage('users-home', {
           if (jwRes.statusCode === 404) {
             this.text = 'Этого пользователя нельзя удалить. Это системная запись, возможно isSuperAdmin.';
             this.centerDialogVisible = true;
-
           } else {
             this.plain = true;
             this.mesSuccess('Учётная запись успешно удалена.');
             this.getList();
-
           }
           console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
         });
@@ -567,20 +470,16 @@ parasails.registerPage('users-home', {
 
     handleSelect(index, row) {
       let data = {'id': row.id, 'groupId': row.groups};
-      // console.log('DATA перед отправкой::: ', data);
+      // console.log('DATA update-user-group перед отправкой::: ', data);
       io.socket.put('/sockets/user/update-user-group', data, (data, jwRes) => {
-        // this.getList();
         console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
       });
-      // console.log('selectedGroup', this.selectedGroup);
-      // console.log('index', index);
-      // console.log('row', row.id);
     },
-
 
     async handleSelectCity(e) {
       this.cityId = (_.isNumber(e.id)) ? e.id : undefined;
     },
+
     handleDeleteGroup(e, index, row) {
       io.socket.delete('/users/destroy-user-group', {'id': row.id, 'groupId': [e]}, (data, jwRes) => {
         // console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
@@ -783,7 +682,7 @@ parasails.registerPage('users-home', {
         description: this.ruleForm.description
       };
 
-      // console.log('DATA перед отправкой::: ', data);
+      console.log('DATA create перед отправкой::: ', data);
       await io.socket.post('/api/v1/users/create-user', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(`${this.i19p.text400Err} ${jwRes.headers['x-exit-description']}`) :
@@ -820,30 +719,11 @@ parasails.registerPage('users-home', {
         region: this.region,
         city: this.city,
         sire: this.sire,
-        // nickname: this.ruleForm.nickname,
-        // federation: this.ruleForm.federation,
-        // weight: this.ruleForm.weight,
-        // growth: this.ruleForm.growth,
-        // type: this.ruleForm.type,
-        // sale: this.ruleForm.sale,
         see: this.ruleForm.see,
-        // price: +this.ruleForm.price,
-        // saleDescription: this.ruleForm.saleDescription,
-        // currency: this.ruleForm.currency,
-        // color: this.ruleForm.color,
-        // stamp: this.ruleForm.stamp,
-        // canine: this.ruleForm.canine,
-        // bite: this.ruleForm.bite,
-        // letter: this.ruleForm.letter,
-        // dogTests: this.ruleForm.dogTests,
-        // teethCountTop: this.ruleForm.teethCountTop,
-        // teethCountBottom: this.ruleForm.teethCountBottom,
-        // registerNumber: this.ruleForm.registerNumber,
         description: this.ruleForm.description,
-        // yourKennel: this.ruleForm.yourKennel,
       };
-      // console.log('DATA перед отправкой::: ', data);
 
+      console.log('DATA update перед отправкой::: ', data);
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
