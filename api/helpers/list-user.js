@@ -51,7 +51,7 @@ module.exports = {
     // moment.locale(inputs.req.me.preferredLocale);
     moment.locale(inputs.preferredLocale);
     // Проверка кол-ва объектов запрошеных с frontend
-    inputs.count = inputs.count < 1 ? 5 : inputs.count;
+    inputs.count = inputs.count < 1 ? {} : inputs.count;
 
 
     inputs.query = (_.isString(inputs.query) && (-1 < inputs.query.indexOf(','))) ? inputs.query.split(',') : inputs.query;

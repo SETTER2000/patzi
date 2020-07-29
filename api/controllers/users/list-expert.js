@@ -54,7 +54,6 @@ module.exports = {
 
 
     let data = await sails.helpers.listUser.with({
-      count: 10,
       query: inputs.query,
       groups:['expert'],
       preferredLocale: req.me.preferredLocale,
