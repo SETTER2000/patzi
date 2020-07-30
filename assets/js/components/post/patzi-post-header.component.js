@@ -60,7 +60,7 @@ parasails.registerComponent('patziPostHeader', {
                 :preview-src-list="post.imagesArrUrl">
                 </el-image>-->   
                 <img ref="wrapper" :src="post.images[0].imageSrc" alt="" class="u-align-left u-image u-image-1">
-                 
+                  <transition name="fade">
                   <div v-if="showRule"  class="block d-flex justify-content-center align-content-center" >
                   <el-slider
                         @input="changePositionX"
@@ -69,9 +69,10 @@ parasails.registerComponent('patziPostHeader', {
                      >
                     </el-slider>
                   </div> 
+                  </transition>
                 <div class="u-border-4 u-border-palette-1-base u-shape u-shape-circle u-shape-2"></div>
               </div>
-    
+                 <transition name="fade">
                 <div v-if="showRule"  class="d-flex flex-column justify-content-center">
                   <el-slider
                     v-model="post.valueY"
@@ -80,6 +81,7 @@ parasails.registerComponent('patziPostHeader', {
                     height="200px">
                   </el-slider>
                 </div>
+                </transition>
 
             </div>
             <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-21 u-layout-cell-2">
