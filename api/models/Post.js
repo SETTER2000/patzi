@@ -67,7 +67,23 @@ module.exports = {
       description: 'Дополнительная информация. Описание поста на английском языке.',
       maxLength: 700
     },
-
+    position: {
+      type: 'string',
+      example: '20% 50%',
+      description: 'Общая строка позиции для главной картинки поста.',
+    },
+    valueX: {
+      type: 'number',
+      example: 20,
+      defaultsTo: 0,
+      description: 'Позиции по оси X для главной картинки поста.',
+    },
+    valueY: {
+      type: 'number',
+      example: 50,
+      defaultsTo: 0,
+      description: 'Позиции по оси Y для главной картинки поста.',
+    },
     backgroundPosition: {
       type: 'string',
       description: 'Дополнительная информация. Описание поста на английском языке.',

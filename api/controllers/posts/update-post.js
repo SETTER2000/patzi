@@ -247,7 +247,7 @@ module.exports = {
     // Обновляем экспертов к посту
     console.log('inputs.experts:: ', inputs.experts);
     console.log('inputs.id:: ', inputs.id);
-    await Post.replaceCollection(inputs.id, 'experts').members(inputs.experts);
+    inputs.experts ?  await Post.replaceCollection(inputs.id, 'experts').members(inputs.experts): '';
     // Если не создан возвращаем ошибку.
     if (!update) {
       throw 'badRequest';

@@ -4798,3 +4798,7 @@ p.footer-text a:hover {
   -khtml-user-drag: element;
   -webkit-user-drag: element;
 }
+
+.img-poz img{
+  object-position: 0 10%;
+}

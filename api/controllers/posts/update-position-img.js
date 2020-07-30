@@ -1,10 +1,10 @@
 module.exports = {
 
 
-  friendlyName: 'Destroy video',
+  friendlyName: 'Update position img',
 
 
-  description: 'Удаление выделенных видео из поста',
+  description: 'Положение главной картинки поста.',
 
 
   inputs: {
@@ -13,10 +13,22 @@ module.exports = {
       required: true,
       description: 'Идентификатор поста'
     },
-    video: {
-      type: 'ref',
+    valueX: {
+      type: 'number',
+      example: 20,
       required: true,
-      description: `Массив объектов видео для удаления.`
+      description: 'Позиции по оси X для главной картинки поста.',
+    },
+    valueY: {
+      type: 'number',
+      example: 50,
+      required: true,
+      description: 'Позиции по оси Y для главной картинки поста.',
+    },
+    position: {
+      type: 'string',
+      example: '20% 50%',
+      required: true
     }
   },
 
@@ -36,23 +48,20 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-    // Have the socket which made the request join the "post" room.
+
     // Подключить сокет, который сделал запрос, к комнате «post».
     await sails.sockets.join(req, 'post');
-
-    await inputs.video.map(async (v) => {
-      v.videoUrl = v.videoUrl.replace(/https:\/\/youtu.be\//gi, '');
-      return v;
+    let updated = await Post.updateOne({id: inputs.id}).set({
+      position: inputs.position,
+      valueX: inputs.valueX,
+      valueY: inputs.valueY,
     });
-
-    let updated=  await Post.updateOne({id: inputs.id}).set({
-      video: inputs.video
-    });
-    if(_.isUndefined(updated)){ throw 'badRequest';}
-    await sails.sockets.broadcast('post', 'post-video', updated);
+    if (_.isUndefined(updated)) {
+      throw 'badRequest';
+    }
+    await sails.sockets.broadcast('post', 'post-position', updated);
     // Respond with view.
     return exits.success();
-
   }
 
 

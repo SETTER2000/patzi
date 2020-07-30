@@ -356,10 +356,8 @@ parasails.registerPage('blog', {
     update(data) {
       this.openFullScreen();
       data.fileList = [...this.fileList, ...this.post.fileList];
-      // data.fileList = this.fileList;
-      // data.dateEvent = JSON.stringify(data.dateEvent);
-      // data.topicId = _.isObject(data.topic) ? data.topic.id : data.topic;
-      // data.topicId = _.isObject(data.topic) ? data.topic.id : data.topic;
+      data.topic = this.post.topic;
+
       console.log('DATA UPDATE перед отправкой ::: ', data);
       let p = this;
       io.socket.put('/api/v1/posts/update-post', data, (data, jwRes) => {

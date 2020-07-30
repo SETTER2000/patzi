@@ -59,7 +59,7 @@ module.exports = {
       preferredLocale: req.me.preferredLocale,
     });
 
-    console.log('DATA перед отправкой на стр post: ', data);
+
     // All done.
     await sails.sockets.broadcast('user', 'list-expert', data);
     // Respond with view.

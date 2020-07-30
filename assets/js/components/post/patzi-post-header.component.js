@@ -23,7 +23,10 @@ parasails.registerComponent('patziPostHeader', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: function () {
     return {
-      //...
+      valueX: 0,
+      valueY: 0,
+      showRule: false,
+      vs: 0,
     };
   },
 
@@ -32,14 +35,14 @@ parasails.registerComponent('patziPostHeader', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
   <section class="skrollable skrollable-between u-clearfix u-image u-shading u-section-1" id="carousel_6c71" data-image-width="1148" data-image-height="678">
-    <div class="u-clearfix u-sheet u-sheet-1">
+    <div class="u-clearfix u-sheet u-sheet-1"> 
       <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
         <div class="u-layout">
           <div class="u-layout-row">
             <div class="u-container-style u-expand-resize u-layout-cell u-left-cell u-size-39 u-layout-cell-1">
               <div class="u-container-layout u-valign-middle-xs u-container-layout-1">
                 <div class="u-align-left u-expanded-height u-palette-1-base u-shape u-shape-1"></div>
-                <div class="u-align-left u-container-style u-group u-group-1">
+                <div  class="u-align-left u-container-style u-group u-group-1">
                   <div class="u-container-layout u-valign-middle u-container-layout-2">
                                         <span class="u-icon u-icon-circle u-text-white u-icon-1">
                         <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 58 58" style=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-9af0"></use></svg>
@@ -50,14 +53,39 @@ parasails.registerComponent('patziPostHeader', {
                   </div>
                 </div>
 
-                <el-image v-if="post.images && post.images.length>0" :src="post.images[0].imageSrc" :fit="'cover'" class="u-align-left u-image u-image-1"
+                <!--<el-image ref="wrapper" v-if="post.images && post.images.length>0" 
+                :src="post.images[0].imageSrc" 
+                :fit="'cover'" 
+                class="u-align-left u-image u-image-1 img-poz"
                 :preview-src-list="post.imagesArrUrl">
-                </el-image>
+                </el-image>-->   
+                <img ref="wrapper" :src="post.images[0].imageSrc" alt="" class="u-align-left u-image u-image-1">
+                 
+                  <div v-if="showRule"  class="block d-flex justify-content-center align-content-center" >
+                  <el-slider
+                        @input="changePositionX"
+                        v-model="post.valueX"
+                        style="width: 250px"
+                     >
+                    </el-slider>
+                  </div> 
                 <div class="u-border-4 u-border-palette-1-base u-shape u-shape-circle u-shape-2"></div>
               </div>
+    
+                <div v-if="showRule"  class="d-flex flex-column justify-content-center">
+                  <el-slider
+                    v-model="post.valueY"
+                     @input="changePositionY"
+                    vertical
+                    height="200px">
+                  </el-slider>
+                </div>
+
             </div>
             <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-21 u-layout-cell-2">
+
               <div class="u-container-layout u-container-layout-3">
+              
                 <div class="u-border-9 u-border-grey-5 u-line u-line-horizontal u-line-1"></div>
                 <h1 class="u-custom-font u-font-oswald u-text u-text-grey-10 u-text-3">{{objData.preferredLocale ==='ru' ? post.labelRu : post.label}}</h1>
                 <h4 class="u-custom-font u-font-open-sans u-text u-text-5"> <strong> {{objData.preferredLocale ==='ru' ? 'Тема' : 'Theme'}}</strong>: {{objData.preferredLocale ==='ru' ? post.topic.labelRu : post.topic.label}}</h4>
@@ -69,8 +97,8 @@ parasails.registerComponent('patziPostHeader', {
                     <el-button  @click="goto('/blog')" icon="el-icon-house" circle></el-button>
                     <template v-if="post.isAdmin || post.isSuperAdmin">
                     <el-button  @click="openEditDialog()" type="primary" icon="el-icon-edit" circle></el-button>
-                   <!-- <el-button disabled type="success" icon="el-icon-check" circle></el-button>
-                    <el-button disabled type="info" icon="el-icon-message" circle></el-button>
+                    <el-button type="warning" @click="toggle" icon="el-icon-s-operation" circle></el-button>
+                    <!--  <el-button disabled type="info" icon="el-icon-message" circle></el-button>
                     <el-button disabled type="warning" icon="el-icon-star-off" circle></el-button>-->
                     <el-button  @click="removeItem()" type="danger" icon="el-icon-delete" circle></el-button>
                     </template>
@@ -92,14 +120,38 @@ parasails.registerComponent('patziPostHeader', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    //...
+    // Принимаем данные по событию list-*
+    io.socket.on('post-position', data => {
+      console.log('Прехали данные data.position с сервака:: ', data.position);
+      console.log('Прехали данные data.valueY с сервака:: ', data.valueY);
+      console.log('Прехали данные data.valueX с сервака:: ', data.valueX);
+      // this.post.position = data.position;
+      // this.valueX = data.valueX;
+      // this.valueY = data.valueY;
+      this.$forceUpdate();
+    });
   },
 
+  watch: {
+    // эта функция запускается при любом изменении count
+    /*  valueX: async function (newVal) {
+         this.post.valueX = newVal;
+         this.updateStyle(this.$refs.wrapper);
+         // await io.socket.update(`/sockets/user/list/${this.value}`, function gotResponse(body, response) {
+         //   // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+         // });
+       },
+       valueY: async function (newVal) {
+         this.post.valueY = newVal;
+         this.updateStyle(this.$refs.wrapper);
+         // await io.socket.update(`/sockets/user/list/${this.value}`, function gotResponse(body, response) {
+         //   // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+         // });
+       }*/
+  },
 
   mounted: async function () {
-    // if (this.objData === undefined) {
-    //   throw new Error('Neither `:data`  was passed in to <patzi-post-header>, but one or the other must be provided.');
-    // }
+    this.updateStyle(this.$refs.wrapper);
   },
 
   beforeDestroy: function () {
@@ -128,5 +180,32 @@ parasails.registerComponent('patziPostHeader', {
       // Генерируем событие, возможно с передаваемыми данными
       this.$emit('remove', this.post.id);
     },
+    changePositionX(newVol) {
+      console.log('newVol X:: ', newVol);
+      this.post.valueX = newVol;
+      this.updateStyle(this.$refs.wrapper);
+    },
+
+    changePositionY(newVol) {
+      console.log('newVol Y:: ', newVol);
+      this.post.valueY = newVol;
+      this.updateStyle(this.$refs.wrapper);
+    },
+    async updateStyle(wrapper) {
+      const t = `${this.post.valueX}% ${this.post.valueY}%`;
+      let data = {id: this.post.id, position: t, valueX: this.post.valueX, valueY: this.post.valueY};
+      wrapper ? wrapper.style.setProperty('object-position', t) : '';
+      console.log('Before sends: ', data);
+      await io.socket.put(`/api/v1/posts/update-position-img`, data, (data, jwRes) => {
+        console.log('Сервер update-position-img ответил кодом ' + jwRes.statusCode + ' и данными: ', data);
+      });
+      // wrappers.map((wrapper, ind) => {
+      //   let img = (objData && objData.length >= 1) ? objData[ind].imageSrc : '';
+      //   img ? $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
+      // });
+    },
+    toggle() {
+      this.showRule = !this.showRule;
+    }
   }
 });
