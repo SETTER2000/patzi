@@ -194,12 +194,12 @@
             <h2 v-if="eLabel"> {{post.labelRu}}</h2>
             <div v-else="!eLabel" class="demo-input-suffix">
                 <!--                <span class="demo-input-label">Using attributes</span>-->
-                <el-input style=" width: 25rem" placeholder="<%= __('Required to fill') %>"
+                <el-input style=" width: 25rem" placeholder="<%= __('Required to fill') %> <%=__('in Russian')%>"
                           v-model="post.labelRu "
                           class="input-with-select">
                 </el-input>
                 <el-input style=" width: 25rem"
-                          placeholder="<%= __('Required to fill') %>"
+                          placeholder="<%= __('Required to fill') %> <%=__('in English')%>"
                           v-model="post.label">
                     <el-button v-if="!succ" type="info" @click="editLabel" slot="append"
                                icon="el-icon-circle-check"></el-button>
@@ -207,7 +207,7 @@
                 </el-input>
 
             </div>
-            <div v-if="eLabel" class="btr pointer">
+            <div v-if="eLabel" class="btr pointer ml-2">
                 <i @click="eLabel ? eLabel=false : eLabel=true" class="el-icon-view"></i>
             </div>
         </div>
@@ -493,7 +493,6 @@
     </section>
 
     <% /* КАРУСЕЛЬ С ВИДЕО */ %>
-
     <patzi-post-videos v-if="post.video.length > 0" :obj-data="seo" :video="post.video"></patzi-post-videos>
     <% /* ЭКСПЕРТЫ НА ВЫСТАВКЕ */ %>
     <section class="skrollable skrollable-between u-clearfix u-image u-image-tiles u-section-4" id="sec-5927"
