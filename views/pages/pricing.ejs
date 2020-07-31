@@ -3,70 +3,7 @@
 
 
   <!-- Start Service Area -->
-  <section class="service-area section-gap-top">
-    <div class="container">
-      <patzi-row-h3-h2 :obj-data="seo"></patzi-row-h3-h2>
-
-      <div class="row">
-        <div class="col-lg-4 col-md-6">
-          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
-            <div class="d-flex align-items-center mb-3">
-              <i class="flaticon-button"></i>
-              <h4 class="ml-3"><%= __('Overexposure of Dogs') %></h4>
-            </div>
-            <p><%= __('If you need to go on a short trip, we will gladly take our dog for a few days for free.') %></p>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
-            <div class="d-flex align-items-center mb-3">
-              <i class="flaticon-water"></i>
-              <h4 class="ml-3"><%= __('Natural Nutrition') %></h4>
-            </div>
-            <p><%= __('All dogs of the kennel eat only natural food. Meat, vegetables, fruits. Individual approach.') %></p>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6">
-          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
-            <div class="d-flex align-items-center mb-3">
-              <i class="flaticon-ring"></i>
-              <h4 class="ml-3"><%= __('Return of the Dog') %></h4>
-            </div>
-            <p><%= __('Always ready to take back our dog, if for some reason you do not have the opportunity to continue to contain a pet.') %></p>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
-            <div class="d-flex align-items-center mb-3">
-              <i class="flaticon-art"></i>
-              <h4 class="ml-3"><%= __('Dog Show') %></h4>
-            </div>
-            <p><%= __('Promising dogs, with the consent of the owner - display at exhibitions at the expense of the kennel.') %></p>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.0s">
-            <div class="d-flex align-items-center mb-3">
-              <!--<i class="flaticon-shirt"></i>-->
-              <i class="groom"></i>
-              <h4 class="ml-3"><%= __('Dog Grooming') %></h4>
-            </div>
-            <p><%= __('Fashionable, haircut. The washing up. Cleaning the ears, claws, hair removal. Use of professional cosmetics.') %></p>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
-            <div class="d-flex align-items-center mb-3">
-              <i class="flaticon-content"></i>
-              <h4 class="ml-3"><%= __('Event Coverage') %></h4>
-            </div>
-            <p><%= __('Permanent support of the owners, discounts on the purchase of medicines, consumables, feed, etc.') %></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <patzi-post-services :obj-data="seo" ></patzi-post-services>
 
   <!-- End Service Area -->
 
