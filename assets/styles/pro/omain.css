@@ -4809,3 +4809,11 @@ p.footer-text a:hover {
 .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
   opacity: 0;
 }
+
+.img-up  img {
+  border-style: none;
+  width: -webkit-fill-available;
+}
+.form-width{
+  width: 350px;
+}
