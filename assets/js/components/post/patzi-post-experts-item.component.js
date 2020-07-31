@@ -42,7 +42,7 @@ parasails.registerComponent('patziPostExpertsItem', {
                 </div>
                 <div class="u-container-style u-layout-cell u-palette-5-light-3 u-size-20 u-layout-cell-2 ">
                   <div class="u-container-layout u-valign-middle u-container-layout-2 ">
-                    <h6 class="u-custom-font u-text u-text-font u-text-1">EXPERT FCI</h6>
+                    <h6 class="u-custom-font u-text u-text-font u-text-1">EXPERT FCI {{objData.preferredLocale === 'ru' ? '& RKF' : ''}}</h6>
                     <h1 class="u-custom-font u-font-roboto-condensed u-text u-text-2">{{expert.fullNameEn}}</h1>
                     <p class="u-text u-text-3">{{expert.description}}</p>
                     <p class="u-text u-text-default u-text-4">Image from <a href="/pricing" target="_blank"><b>Poale Ell</b>

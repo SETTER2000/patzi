@@ -30,20 +30,20 @@ parasails.registerComponent('patziPostExperts', {
   //  ╦ ╦╔╦╗╔╦╗╦
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
-  template: `     
+  template: `
         <section class="u-carousel u-slide u-valign-middle u-block-7fbf-1" id="carousel_db1e" data-interval="5000" data-u-ride="carousel">
       <ol class="u-absolute-hcenter u-carousel-indicators u-block-7fbf-2">
 <!--        <li data-u-target="#carousel_db1e" data-u-slide-to="0" class="u-grey-30"></li>
         <li data-u-target="#carousel_db1e" class="u-grey-30" data-u-slide-to="1"></li>-->
          <li v-for="(po, index) of experts" data-u-target="#carousel_db1e" class="u-grey-30" :data-u-slide-to="index"></li>
       </ol>
-     
-     
+
+
       <div class="u-carousel-inner" role="listbox">
     <patzi-post-experts-item  v-for="(expert, ind) of experts" :obj-data="objData" :expert="expert" :section="ind+1" :key="expert.id"></patzi-post-experts-item>
       </div>
-     
-     
+
+    <template v-if="experts && experts.length>1">
       <a class="u-absolute-vcenter u-carousel-control u-carousel-control-prev u-text-grey-30 u-block-7fbf-3" href="#carousel_db1e" role="button" data-u-slide="prev">
         <span aria-hidden="true">
           <svg viewBox="0 0 477.175 477.175"><path d="M145.188,238.575l215.5-215.5c5.3-5.3,5.3-13.8,0-19.1s-13.8-5.3-19.1,0l-225.1,225.1c-5.3,5.3-5.3,13.8,0,19.1l225.1,225
@@ -58,8 +58,9 @@ parasails.registerComponent('patziPostExperts', {
         </span>
         <span class="sr-only">Next</span>
       </a>
+      </template>
     </section>
-  
+
 
 `,
 
