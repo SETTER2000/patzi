@@ -59,7 +59,7 @@ module.exports = {
       preferredLocale: req.me.preferredLocale,
     });
 
-
+     console.log('EXPERTS:: ' , data);
     // All done.
     await sails.sockets.broadcast('user', 'list-expert', data);
     // Respond with view.

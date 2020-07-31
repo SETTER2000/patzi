@@ -520,36 +520,8 @@
     <% /* КАРУСЕЛЬ С ВИДЕО */ %>
     <patzi-post-videos v-if="post.video.length > 0" :obj-data="seo" :video="post.video"></patzi-post-videos>
     <% /* ЭКСПЕРТЫ НА ВЫСТАВКЕ */ %>
-    <section class="skrollable skrollable-between u-clearfix u-image u-image-tiles u-section-4" id="sec-5927"
-             data-image-width="400" data-image-height="400">
-        <div class="u-clearfix u-sheet u-sheet-1">
-            <div class="u-clearfix u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-gutter-0 u-layout-wrap u-layout-wrap-1">
-                <div class="u-layout">
-                    <div class="u-layout-row">
-                        <div class="u-container-style u-image u-layout-cell u-left-cell u-size-30 u-image-1" src=""
-                             data-image-width="1378" data-image-height="1378">
-                            <div class="u-container-layout u-container-layout-1"></div>
-                        </div>
-                        <div class="u-container-style u-layout-cell u-right-cell u-size-30 u-layout-cell-2">
-                            <div class="u-container-layout u-container-layout-2">
-                                <div class="u-container-style u-group u-white u-group-1">
-                                    <div class="u-container-layout u-valign-middle u-container-layout-3">
-                                        <h2 class="u-text u-text-1">Geno SISNERO</h2>
-                                        <p class="u-text u-text-2">Отличный судья. Тщательно осматривает собак,
-                                            прекрасно разбирается в породе, долго выбирает, много гоняет по рингу.</p>
-                                    </div>
-                                </div>
-                                <div class="u-align-center u-container-style u-group u-image u-image-2"
-                                     data-image-width="1600" data-image-height="842">
-                                    <div class="u-container-layout u-container-layout-4"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+       ROPP^^^c :::  <pre>{{experts[2]}}</pre>
+    <patzi-post-experts v-if="post.experts.length > 0" :obj-data="seo" :experts="experts" ></patzi-post-experts>
 
     <router-view></router-view>
 </div>

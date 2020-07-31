@@ -161,7 +161,10 @@ parasails.registerPage('blog', {
     moment().locale(this.me.preferredLocale);
     console.log('POST::: ', this.post);
     this.post.topicId = this.post.topic.id;
+    // this.experts =   this.post.experts;
+
     this.post.experts = _.pluck(this.post.experts, 'id');
+    console.log('this.post.experts ::: ' , this.post.experts );
     this.post.isAdmin = this.me.isAdmin;
     this.post.isSuperAdmin = this.me.isSuperAdmin;
     this.fix();
@@ -185,12 +188,14 @@ parasails.registerPage('blog', {
       this.post.imagesArrUrl = data.imagesArrUrl;
       this.fix();
       this.$forceUpdate();
-      console.log('NEW TOPIC::', this.post);
     });
     // Принимаем данные по событию list-*
     io.socket.on('list-expert', data => {
-           console.log('Список экспертов в базе user: ', data);
       this.expt = _.each(data.users, (t, ind) => {
+
+        _.indexOf(this.post.experts, t.id) > -1 ? this.experts.push(t) : '';
+
+
         t.uSectionClass = `u-section-3-${ind + 1}`;
         t.active = (ind === 0);
         t.images = _.each(t.images, (im, ind) => {
