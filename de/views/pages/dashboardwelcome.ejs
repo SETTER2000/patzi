@@ -132,7 +132,8 @@
                   <br><%= __('Pedigree (puppy card)') %>
                   <br>
                 </p>
-                <a href="pricing" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('detailed') %></a>
+                <a href="/pricing" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base
+                u-btn-1"><%= __('detailed') %></a>
               </div>
             </div>
             <div class="u-align-center-lg u-align-center-sm u-align-center-xl u-align-center-xs u-container-style u-layout-cell u-size-15 u-size-30-md u-layout-cell-2">
@@ -142,7 +143,8 @@
                 <p class="u-align-center-md u-text u-text-8"><%= __('Vaccination, anthelmintic') %>
                   <br><%= __('Pedigree (puppy card)') %>
                 </p>
-                <a href="pricing" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-2"><%= __('detailed') %></a>
+                <a href="/pricing" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base
+                u-btn-2"><%= __('detailed') %></a>
               </div>
             </div>
             <div class="u-container-style u-layout-cell u-size-15 u-size-30-md u-layout-cell-3">
@@ -152,7 +154,8 @@
                 <p class="u-align-center u-text u-text-11"><%= __('Vaccination, anthelmintic') %>
                   <br><%= __('Pedigree (puppy card)') %>
                 </p>
-                <a href="pricing" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-3"><%= __('detailed') %></a>
+                <a href="/pricing" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base
+                u-btn-3"><%= __('detailed') %></a>
               </div>
             </div>
             <div class="u-container-style u-layout-cell u-right-cell u-size-15 u-size-30-md u-layout-cell-4">
@@ -162,7 +165,8 @@
                 <p class="u-align-center u-text u-text-14"><%= __('Vaccination, anthelmintic') %>
                   <br><%= __('Pedigree (puppy card)') %>
                 </p>
-                <a href="pricing" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-4"><%= __('detailed') %></a>
+                <a href="/pricing" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base
+                u-btn-4"><%= __('detailed') %></a>
               </div>
             </div>
           </div>
@@ -177,15 +181,17 @@
       <h2 class="u-text u-text-grey-10 u-text-2"><%= __('Dog World') %></h2>
       <p class="u-text u-text-white u-text-3"><%= __('This blog talks about the life of the nursery. All events worthy of publicity are outlined here. Exhibitions, victories, awards of our dogs, just interesting events and facts from the life of dogs. You can leave your comments and share your opinion with us') %>.
         <br><%= __('Your opinion is very important to us friends') %>.
-        <br>
-        <br>
+      </p>
+      <p v-if="!showPostsSection" class="d-flex justify-content-end">
+        <a href="/blog" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base
+                u-btn-3"><%= __('detailed') %></a>
       </p>
     </div>
   </section>
 
   <%/* ПОСТ БЛОГА */%>
 
-  <patzi-blog-post :obj-data="seo" :post="post" ></patzi-blog-post>
+  <patzi-blog-post v-if="showPostsSection" :obj-data="seo" :post="post" ></patzi-blog-post>
 
 
 
