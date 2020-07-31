@@ -159,12 +159,12 @@ parasails.registerPage('blog', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
-    console.log('POST::: ', this.post);
+    // console.log('POST::: ', this.post);
     this.post.topicId = this.post.topic.id;
     // this.experts =   this.post.experts;
 
     this.post.experts = _.pluck(this.post.experts, 'id');
-    console.log('this.post.experts ::: ' , this.post.experts );
+    // console.log('this.post.experts ::: ' , this.post.experts );
     this.post.isAdmin = this.me.isAdmin;
     this.post.isSuperAdmin = this.me.isSuperAdmin;
     this.fix();

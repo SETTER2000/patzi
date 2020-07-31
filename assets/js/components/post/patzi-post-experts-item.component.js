@@ -133,7 +133,6 @@ parasails.registerComponent('patziPostExpertsItem', {
       this.$emit('editpost', post);
     },
     getFlag(country) {
-      console.log('country::: ' , country);
       return !_.isObject(country)   ? false :
         country.label === 'Russia' ? 'https://d3a1wbnh2r1l7y.cloudfront.net/flags/Russia.jpg' :
           country.label === 'Poland' ? 'https://d3a1wbnh2r1l7y.cloudfront.net/flags/Poland.jpg' :

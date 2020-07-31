@@ -60,8 +60,8 @@ module.exports = {
       }
     });
     post.imagesArrUrl = _.pluck(post.images, 'imageSrc');
-    
-    console.log('POST block:: ', post);
+
+
     // Respond with view.
     return exits.success({
       seo: {
