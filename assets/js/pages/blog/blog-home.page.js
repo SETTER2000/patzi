@@ -144,14 +144,14 @@ parasails.registerPage('blog-home', {
     });
     // Принимаем данные по событию list-*
     io.socket.on('list-post', data => {
-      // console.log('POSTS LIST:: ', data);
+      console.log('POSTS LIST:: ', data);
       this.postCount = data && data.length > 0 ? data.length : this.postCount;
       this.posts = this.cashPosts = data;
     });
     // Принимаем данные по событию list-*
     io.socket.on('list-expert', data => {
       // this.dataAll = this.seo;
-      console.log('EXPERTS LIST:: ', data);
+      // console.log('EXPERTS LIST:: ', data);
       this.experts = _.each(data.users, (t, ind) => {
         t.uSectionClass = `u-section-3-${ind + 1}`;
         t.active = (ind === 0);

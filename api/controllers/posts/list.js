@@ -45,8 +45,8 @@ module.exports = {
     let posts = await Post.find({see:true})
       .populate('experts')
       .sort([
-        {firstTopic: 'DESC'},
-        {createdAt: 'DESC'}
+        {rootPage: 'DESC'},
+        {dateEvent: 'DESC'}
       ]);
 
 
@@ -85,7 +85,7 @@ module.exports = {
       return post;
     });
 
-
+             console.log('LIST POSTS: ', posts);
     await sails.sockets.broadcast('post', 'list-post', posts);
     // Respond with view.
     return exits.success();

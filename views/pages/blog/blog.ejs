@@ -268,6 +268,29 @@
                         </el-col>-->
                     </el-row>
                 </el-form-item>
+                <% /* НА ГЛАВНУЮ */ %>
+                <el-form-item label="<%= __('On the main') %>" prop="rootPage">
+                    <el-row :gutter="2">
+                        <el-col :span="4">
+                            <el-switch
+                                    style="display: block"
+                                    v-model="post.rootPage"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                                    active-text="<%= __('on') %>"
+                                    inactive-text="<%= __('off') %>">
+                            </el-switch>
+                        </el-col>
+                        <el-col :span="5">
+                            <el-tooltip effect="dark"
+                                        content="<%= __("Enable the display of this topic on the main page of the site?") %>"
+                                        placement="top-start">
+
+                                <div size="mini" round class="el-icon-question "></div>
+                            </el-tooltip>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
                 <% /* ДАТА */ %>
                 <el-form-item label="<%= __('Date') %>" prop="dateEvent">
                     <el-row :gutter="2">

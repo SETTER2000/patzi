@@ -8,10 +8,10 @@ parasails.registerPage('welcome', {
     WxH: '800x420',
     coverMode: 'cover',
     fp: 'fp-x:0.5,fp-y:0.5,fp-z:1',
-    cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net' ,
-    posts:[],
-    post:{},
-
+    cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net',
+    posts: [],
+    post: {},
+    showPostsSection: true
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -26,9 +26,14 @@ parasails.registerPage('welcome', {
     // Принимаем данные по событию list-*
     io.socket.on('post-count', data => {
       console.log('POSTS LIST:: ', data);
-      this.posts = this.cashPosts = data;
-      this.post = _.last(_.at(this.posts, [0]));
-      console.log('ONE POST::: ' , this.post);
+      if (_.isArray(data) && data.length < 1) {
+        this.showPostsSection = false;
+      } else {
+        this.showPostsSection = true;
+        this.posts = this.cashPosts = data;
+        this.post = _.last(_.at(this.posts, [0]));
+        console.log('ONE POST::: ', this.post);
+      }
     });
 
   },
@@ -86,7 +91,7 @@ parasails.registerPage('welcome', {
           resize: {
             fit: 'inside',
             width: 1424,
-            height:800
+            height: 800
           }
         }
       });
