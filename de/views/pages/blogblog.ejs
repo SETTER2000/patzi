@@ -237,7 +237,7 @@
                                 {{sizeLess}}<%= __('MB') %></div>
                         </el-upload>
                         <br>
-                        <el-dialog :visible.sync="dialogVisible" style="z-index: 10000">
+                        <el-dialog :visible.sync="dialogVisible" class="img-up" style="z-index: 10000">
                             <img :src="dialogImageUrl" alt="">
                         </el-dialog>
                     </div>
@@ -473,9 +473,10 @@
     <% /* ВЫВОД КАРТИНОК */ %>
     <section class="u-clearfix u-section-2" id="carousel_1cb2">
         <div class="u-clearfix u-sheet u-sheet-1">
-            <p class="u-text u-text-1 text-capitalize"><%= __('dog') %></p>
+            <p class="u-text u-text-1 text-capitalize"><%= __('event') %></p>
             <h2 class="u-text u-text-2 text-uppercase flex space-between">
                 <span><%= __('in the focus') %>!</span>
+
                 <el-switch
                         style="display: block"
                         v-model="lines"
@@ -485,6 +486,7 @@
                         inactive-text="<%= __('column') %>">
                 </el-switch>
             </h2>
+            <span>{{me.preferredLocale === 'ru' ? post.topic.labelRu : post.topic.label}}</span>
            <span  class="flex justify-content-center m-5" v-if="post.images.length == 0"> Собачка не фокусе. Добавьте
                картинок.</span>
             <patzi-post-gallery :obj-data="seo" :post="post" :lines="lines"
