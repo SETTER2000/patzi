@@ -79,7 +79,18 @@ module.exports = {
         data = await Topic.updateOne(inputs.id).set(await f());
         break;
     }
-
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    data = await sails.helpers.cloudFrontUrl.with({
+      collection: data,
+      collectionName:'dog',
+      edits: {
+        resize: {}
+      }
+    });
 
     return data;
   }

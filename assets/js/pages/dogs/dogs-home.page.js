@@ -1437,15 +1437,18 @@ parasails.registerPage('dogs-home', {
 
 
     async coverPhoto(id, index) {
-      await io.socket.put(`/api/v1/files/update-cover-album`, {
+      let data = {
         id: id,
         cover: index,
         field: 'images',
         collectionName: 'Dog'
-      }, (body, response) => {
+      };
+      await io.socket.put(`/api/v1/files/update-cover-album`, data, (body, response) => {
         this.dogs.map(dog => {
           if (dog.id === id) {
+
             let cut = dog['images'].splice(index, 1);
+            // dog.cover= data.index;
             dog['images'] = [...cut, ...dog['images']];
             dog.imagesArrUrl = _.pluck(dog['images'], 'imageSrc');
           }
