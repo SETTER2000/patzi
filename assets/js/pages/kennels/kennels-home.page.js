@@ -257,7 +257,7 @@ parasails.registerPage('kennels-home', {
 
     // Принимаем данные по событию list-*
     io.socket.on('list-kennel', (data) => {
-      console.log('data KENNELS:', data);
+      // console.log('data KENNELS:', data);
       this.kennels = this.kennelsEditList = this.filterObjects = _.isNull(data.kennels) ? [] : data;
     });
 
@@ -339,12 +339,12 @@ parasails.registerPage('kennels-home', {
       });
 
       await io.socket.get(`/api/v1/kennels/list`, function gotResponse(body, response) {
-        console.log('Сервер 1 ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервер 1 ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
 
       // Принимаем данные по событию list-*
       await io.socket.on('list-kennel', (data) => {
-        console.log('DATA обновлённые данные: ', data);
+        // console.log('DATA обновлённые данные: ', data);
         this.kennels = this.kennelsEditList = this.filterObjects = _.isNull(data.kennels) ? [] : data;
         // Ограничевает видимость только собственным питомником владельца
         this.$forceUpdate();
@@ -405,7 +405,7 @@ parasails.registerPage('kennels-home', {
         } else if (valid && this.buttonUpdate) {
           this.updateKennel();
         } else {
-          console.log('error submit!!');
+          // console.log('error submit!!');
           return false;
         }
       });
@@ -453,7 +453,6 @@ parasails.registerPage('kennels-home', {
     },
 
     addKennel: async function () {
-      console.log('this.cityId::: ', this.cityId);
       this.openFullScreen();
       let data = {
         file: this.ruleForm.file,
@@ -476,13 +475,13 @@ parasails.registerPage('kennels-home', {
         phones: this.ruleForm.phones
       };
 
-      console.log('KENNEL before added::: ', data);
+      // console.log('KENNEL before added::: ', data);
       await io.socket.post('/api/v1/kennels/create-kennel', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-        console.log('Сервер create-kennel ответил кодом ' + jwRes.statusCode + ' и данными: ', data);
+        // console.log('Сервер create-kennel ответил кодом ' + jwRes.statusCode + ' и данными: ', data);
         this.centerDialogAdded = false;
         this.loading.close();
         if (jwRes.statusCode === 200) {
@@ -496,26 +495,17 @@ parasails.registerPage('kennels-home', {
 
     async continentReject() {
       this.updateForm.continent = this.updateForm.continent.id ? _.find(this.kennelsEditList, {id: this.updateForm.continent.id}) : '';
-      console.log(' XXX this.updateForm.continent::::: ', this.updateForm.continent);
+      // console.log(' XXX this.updateForm.continent::::: ', this.updateForm.continent);
     },
 
     async updateKennel() {
-      // console.log('this.breederId::: ', this.breederId);
-      // console.log('this.regionId::: ', this.regionId);
-      // console.log('updateForm.breeder::: ', this.updateForm.breeder);
-      console.log('this.updateForm::: ', this.updateForm);
-      // console.log('this.updateForm.continent::: ', this.updateForm.continent);
       this.openFullScreen();
       let data = this.updateForm;
-
       data.phones = _.isNull(data.phones) ? [{
         key: 1,
         value: '',
         fullName: '',
       }] : data.phones;
-
-      /*this.updateForm.continent = this.updateForm.continent.id ? _.find(this.kennelsEditList, {id: this.updateForm.continent.id}) : '';
-      console.log(' XXX this.updateForm.continent::::: ' ,   this.updateForm.continent);*/
       data.continentId = this.updateForm.continent.id;
       data.countryId = this.updateForm.country.id;
       data.regionId = this.updateForm.region.id;
@@ -530,7 +520,7 @@ parasails.registerPage('kennels-home', {
       data.dateCreate = this.updateForm.dateCreate;
       // data.dateCreate = JSON.stringify(this.updateForm.dateCreate);
 
-      console.log('DATA перед отправкой::: ', data);
+      // console.log('DATA перед отправкой::: ', data);
       await io.socket.put('/api/v1/kennels/update-kennel', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
           (jwRes.statusCode === 400) ? this.mesError(`${this.i19p.text400Err} Ошибка обновления.`) :
@@ -602,7 +592,6 @@ parasails.registerPage('kennels-home', {
       this.ruleForm.country = null;
       this.ruleForm.region = null;
       this.ruleForm.city = null;
-      console.log('SAS this.updateForm:', this.updateForm);
 
     },
 
@@ -612,19 +601,16 @@ parasails.registerPage('kennels-home', {
       this.updateForm.city = {};
       this.ruleForm.region = null;
       this.ruleForm.city = null;
-      console.log('changeSelectCountry::::;', this.updateForm);
     },
 
 
     // Реагирует на событие change в поле города|city
     changeSelectRegion(regionId) {
-      console.log('REGGG:: ', regionId);
       this.regionId = regionId;
       this.cityList();
       this.cityListAdd();
       this.updateForm.city = {};
       this.ruleForm.city = null;
-      console.log('changeSelectCountry::::;', this.updateForm);
     },
 
 
@@ -666,14 +652,8 @@ parasails.registerPage('kennels-home', {
 
     querySearchFoo(queryString, cb) {
       if (_.isUndefined(this.users) || _.isUndefined(queryString)) return;
-      // let users = this.users;
       let results = queryString ? this.users.filter(this.createFilterOwner(queryString)) : this.users;
-      console.log('RESULT SEARCH:::; ', results);
-      /* clearTimeout(this.timeout);
-       this.timeout = setTimeout(() => {*/
-      // console.log('results:: ', results);
       cb(results);
-      /*      }, 3000 * Math.random());*/
     },
 
     createFilterOwner(queryString) {
@@ -682,18 +662,11 @@ parasails.registerPage('kennels-home', {
       };
     },
 
-    // async handleSelected(e) {
-    //   console.log('handleSelected::: ', e);
-    //   this.coOwnerId = e.id ? e.id : undefined;
-    // },
-
     async handleBreederSelected(e) {
-      console.log('handleBreederSelected::: ', e);
       this.breederId = e.id ? e.id : undefined;
     },
 
     async handleCoOwnerSelected(e) {
-      console.log('handleBreederSelected::: ', e);
       this.coOwnerId = e.id ? e.id : null;
     },
 
@@ -703,8 +676,6 @@ parasails.registerPage('kennels-home', {
      */
     async clearInputBreeder() {
       this.updateForm.breeder = '';
-      console.log('ПЕРЕДОК::: ', this.updateForm.id);
-      console.log('clearInputBreeder::: ', this.updateForm.breeder);
       io.socket.post('/api/v1/kennels/destroy-one-breeder', {'id': this.updateForm.id}, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successDel)) :
           (jwRes.statusCode === 400 && jwRes.headers['x-exit'] === 'badRequestDog') ? this.mesError(this.i19p.badRequestDog) :
@@ -713,11 +684,6 @@ parasails.registerPage('kennels-home', {
                 (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
                   (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
                     (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-        /*
-        * jwRes.headers:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}
-        * */
-
-        // console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
       });
     },
     /**
@@ -726,8 +692,6 @@ parasails.registerPage('kennels-home', {
      */
     async clearInputCity() {
       this.updateForm.city = {};
-      console.log('ПЕРЕДОК city::: ', this.updateForm.id);
-      console.log('clearInputBreeder city::: ', this.updateForm.breeder);
       io.socket.post('/api/v1/kennels/destroy-one-city', {'id': this.updateForm.id}, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successDel)) :
           (jwRes.statusCode === 400 && jwRes.headers['x-exit'] === 'badRequestDog') ? this.mesError(this.i19p.badRequestDog) :
@@ -736,11 +700,6 @@ parasails.registerPage('kennels-home', {
                 (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
                   (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
                     (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-        /*
-        * jwRes.headers:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}
-        * */
-
-        // console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
       });
     },
 
@@ -789,7 +748,7 @@ parasails.registerPage('kennels-home', {
 
 
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      // console.log(file, fileList);
     },
 
 
@@ -806,7 +765,6 @@ parasails.registerPage('kennels-home', {
 
     handleAvatarSuccess(res, file) {
       this.files.push(file.response);
-      console.log('file.response::: ', file.response);
       this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
       this.updateForm.imageUrl = URL.createObjectURL(file.raw);
       this.ruleForm.file = file.response;
@@ -828,44 +786,27 @@ parasails.registerPage('kennels-home', {
 
 
     async cityList() {
-      console.log('this.regionId:::: ', this.regionId);
-      console.log('this.updateForm.regionId:::: ', this.updateForm.regionId);
       if (!this.regionId && !this.updateForm.regionId) return this.citys = [];
       let region = this.regionId ? this.regionId : this.updateForm.regionId;
-      console.log('REGION ID:::: ', region);
       await io.socket.get(`/api/v1/city/list/${region}`, function gotResponse(body, response) {
         // console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-city', (data) => {
-        console.log('ГОРОДА: ', data);
         this.citys = data;
       });
     },
 
     async cityListAdd() {
-      console.log('this.regionId:::: ', this.regionId);
-      console.log('this.updateForm.regionId:::: ', this.updateForm.regionId);
-      // if (!this.regionId && !this.updateForm.regionId) return this.citys = [];
       let region = this.regionId ? this.regionId : this.updateForm.regionId;
-      console.log('REGION ID:::: ', region);
       await io.socket.get(`/api/v1/city/list/${region}`, function gotResponse(body, response) {
         // console.log('Сервер City ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-city', (data) => {
-        console.log('ГОРОДА: ', data);
         this.citys = data;
       });
     },
-
-
-    /*  // Реагирует на событие change в поле континент|continent
-      async changeContinent(continentId) {
-        this.continentId = continentId;
-        console.log('this.continentId:',this.continentId);
-        await this.cityList();
-      },*/
 
 
     async countryList() {
@@ -910,22 +851,17 @@ parasails.registerPage('kennels-home', {
 
     /* Авто поиск по городам */
     async querySearch(queryString, cb) {
-      console.log('Строка поиска города: ', queryString);
       this.cityListAdd();
       let links = this.citys;
-      console.log('ГОРОДА для выбора: ', links);
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
       cb(results);
     },
 
     /* Авто поиск по городам */
     querySearchUpdate(queryString, cb) {
-      console.log('Строка поиска города: ', queryString);
       this.cityList();
       let links = this.citys;
-      console.log('ГОРОДА для выбора: ', links);
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
-      console.log('CITY results: ', results);
       cb(results);
     },
 
@@ -939,14 +875,12 @@ parasails.registerPage('kennels-home', {
 
 
     async handleSelect(e) {
-      console.log('handleSelect::: ', e);
       this.cityId = _.isNumber(e.id) ? e.id : {};
       this.city = _.isString(e.value) ? e.value : '';
     },
 
 
     async handleSelectRegion(e) {
-      console.log('handleSelectRegion::: ', e);
       this.regionId = _.isNumber(e.id) ? e.id : null;
       this.region = _.isString(e.value) ? e.value : '';
     },
@@ -969,11 +903,6 @@ parasails.registerPage('kennels-home', {
                   (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
                     (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
                       (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-          /*
-          * jwRes.headers:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}:  {X-Exit: "badRequestDog", X-Exit-Description: "Cannot be deleted! You have associated files: dog.", cache-control: "no-cache, no-store", x-exit: "badRequestDog", x-exit-description: "Cannot be deleted! You have associated files: dog."}
-          * */
-
-          // console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
         });
         /**
          * TODO WEBSOCKET: End
@@ -1038,19 +967,15 @@ parasails.registerPage('kennels-home', {
 
 
     handleEdit(index, row) {
-      console.log('ROW input ::: ', row);
       row.coOwnerId = '';
       row.cowner = '';
       row.breeder = _.isNull(row.breeder) ? {} : row.breeder;
-      // row.coOwner = _.isUndefined(row.coOwner) ? {fullName:''} : row.coOwner;
       row.city = _.isNull(row.city) ? {} : row.city;
       row.continentId = row.continent ? row.continent.id : row.continentId;
       row.countryId = row.country ? row.country.id : row.countryId;
       row.regionId = row.region ? row.region.id : row.regionId;
       this.updateForm = row;
       this.updateForm.dateCreate = moment(row.dateCreate);
-
-      console.log('ROW this.updateForm ::: ', this.updateForm);
       this.centerDialogAdded = false;
       this.centerDialogUpdate = true;
       this.buttonUpdate = true;
@@ -1095,15 +1020,11 @@ parasails.registerPage('kennels-home', {
       let data = {
         id: this.removeKennelId,
       };
-      console.log('Перед отправкой data DOG: ', data);
+      // console.log('Перед отправкой data DOG: ', data);
       io.socket.post('/api/v1/kennels/destroy-one-kennel', data, (dataRes, jwRes) => {
         this.errorMessages(jwRes, this.i19p.successDelete);
         this.dialogDeletePhotoSession = false;
         if (jwRes.statusCode === 200) {
-          // this.$message({
-          //   type: 'success',
-          //   message: this.i19p.success
-          // });
           this.getList();
           this.$forceUpdate();
         }
@@ -1163,7 +1084,6 @@ parasails.registerPage('kennels-home', {
 
         if (jwRes.statusCode === 200) {
           this.updateForm.owners = this.updateForm.owners.filter(owner => owner.id !== this.coownerId);
-          console.log('OWWW::: ', this.updateForm.owners);
           this.cowner = '';
           this.getList();
           this.$forceUpdate();

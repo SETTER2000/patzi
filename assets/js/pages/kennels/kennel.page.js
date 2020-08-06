@@ -78,9 +78,6 @@ parasails.registerPage('kennel', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
-
-
-    console.log('KENNEL SAILS_LOCALS', this.kennel);
   },
 
 
@@ -211,11 +208,8 @@ parasails.registerPage('kennel', {
 
     // Получить все награды собаки
     getAwards(command) {
-      console.log('command::: ', command);
     },
     handlerSetActiveSlider(i) {
-      // console.log('Нажали по слайду: ', i);
-      // this.photos = _.pluck(this.litter.puppies, 'photos');
       return this.indexPhoto;
     },
     /* Открывает диалоговое окно редактирования*/
