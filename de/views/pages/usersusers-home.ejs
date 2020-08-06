@@ -690,14 +690,14 @@
                     <el-table-column type="expand">
                         <template slot-scope="scope">
                             <p>Аккаунт создан: <strong>{{ scope.row.createdAt | getCreate()}}</strong></p>
-                            <p v-if="_.last(_.pluck(_.last(_.pluck(scope.row.kennelBreed,'phones')),
-                                'value'))">Телефон: {{_.last(_.pluck(_.last(_.pluck(scope.row.kennelBreed,'phones')),
-                                'value'))}} {{_.last(_.pluck(_.last(_.pluck(scope.row.kennelBreed,'phones')),
-                                'fullName'))}} </p>
-                            <p v-if="scope.row.continent">Continent: {{scope.row.continent.label}}</p>
+                            <p v-if="_.isArray(_.last(_.pluck(scope.row.kennelBreed,'phones')))">
+                                Телефон: {{_.last(_.pluck(_.last(_.pluck(scope.row.kennelBreed,'phones')), 'value'))}}
+                                {{_.last(_.pluck(_.last(_.pluck(scope.row.kennelBreed,'phones')), 'fullName'))}}
+                            </p>
+                          <p v-if="scope.row.continent">Continent: {{scope.row.continent.label}}</p>
                             <p v-if="scope.row.country">Country: {{scope.row.country.label }}</p>
                             <p v-if="scope.row.region"><%= __('Region') %>: {{scope.row.region.label }}</p>
-                            <p v-if="scope.row.city.value">Город: {{scope.row.city.value }}</p>
+                            <p v-if="scope.row.city">Город: {{scope.row.city.value }}</p>
                             <p v-if="_.pluck(scope.row.kennelBreed,'address')[0]">Адрес: {{_.pluck(scope.row.kennelBreed,'address')[0] }}</p>
                             <p v-if="_.pluck(scope.row.kennelBreed,'site').join(', ')">Сайт: {{
                                 _.pluck(scope.row.kennelBreed,'site').join(', ') }}</p>
