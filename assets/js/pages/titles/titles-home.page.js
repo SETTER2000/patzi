@@ -179,7 +179,7 @@ parasails.registerPage('titles-home', {
     io.socket.on('list-country', (data) => {
       this.countrys = data.countrys;
       this.countrys.unshift({labelRu:'Нет страны', label:''});
-      // console.log('ALL COUNTRYS::: ', this.countrys);
+      console.log('ALL COUNTRYS::: ', this.countrys);
     });
     // Кол-во всех тем
     io.socket.on('title-hidden', (data) => {
@@ -591,7 +591,8 @@ parasails.registerPage('titles-home', {
     },
     objFilter() {
       // titles.filter(title=>title.see)
-      return this.titles.filter(data => (!this.searchObjects || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & !_.isEmpty(data.images[data.cover]));
+      return this.titles.filter(data => (!this.searchObjects || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see);
+      // return this.titles.filter(data => (!this.searchObjects || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & !_.isEmpty(data.images[data.cover]));
     },
     deleteObj: async function () {
       let data = {
