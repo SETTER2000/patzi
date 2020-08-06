@@ -24,6 +24,8 @@ module.exports.policies = {
   // 'users/*':'is-super-admin',
   'users/list-form/*':'is-all-group',
   'users/update-ratio':'is-all-group',
+  'users/list-status':true,
+  'users/list-expert':'is-all-group',
   'comments/add-comment':'is-all-group',
   'kennels/*':'is-all-group',
   'topics/list':'is-all-group',
@@ -33,7 +35,7 @@ module.exports.policies = {
 
 
   // 'kennels/*':['is-super-admin','is-admin'],
-  'users/list-status':true,
+
   'groups/is-breeder':true,
   'groups/is-owner':true,
   'entrance/*': true,

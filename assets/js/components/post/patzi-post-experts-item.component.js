@@ -43,7 +43,7 @@ parasails.registerComponent('patziPostExpertsItem', {
                 <div class="u-container-style u-layout-cell u-palette-5-light-3 u-size-20 u-layout-cell-2 ">
                   <div class="u-container-layout u-valign-middle u-container-layout-2 ">
                     <h6 class="u-custom-font u-text u-text-font u-text-1">EXPERT FCI {{objData.preferredLocale === 'ru' ? '& RKF' : ''}}</h6>
-                    <h1 class="u-custom-font u-font-roboto-condensed u-text u-text-2">{{expert.fullNameEn}}</h1>
+                    <h1 class="u-custom-font u-font-roboto-condensed u-text u-text-2">{{expert.fullName}}</h1>
                     <p class="u-text u-text-3">{{expert.description}}</p>
                     <p class="u-text u-text-default u-text-4">Image from <a href="/pricing" target="_blank"><b>Poale Ell</b>
                       </a>
@@ -62,37 +62,6 @@ parasails.registerComponent('patziPostExpertsItem', {
             </div>
           </div>
         </div>
-      <!--  <div class="u-align-center u-carousel-item u-clearfix u-image u-section-5-2">
-          <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
-            <div class="u-layout">
-              <div class="u-layout-row">
-                <div class="u-align-center u-container-style u-image u-layout-cell u-left-cell u-size-29 u-image-1">
-                  <div class="u-container-layout u-valign-middle u-container-layout-1"></div>
-                </div>
-                <div class="u-container-style u-layout-cell u-palette-5-light-3 u-size-20 u-layout-cell-2">
-                  <div class="u-container-layout u-valign-middle u-container-layout-2">
-                    <h6 class="u-custom-font u-text u-text-font u-text-1">EXPERT FCI&amp;RKF</h6>
-                    <h1 class="u-custom-font u-font-roboto-condensed u-text u-text-2">Sokolova Lidiya Vasilevna</h1>
-                    <p class="u-text u-text-3">Эксперт Российской Кинологической Федерации и Международной Кинологической Федерации (FCI).
-Владелец питомника гриффонов, который называется "Искрящаяся Радость".</p>
-                    <p class="u-text u-text-default u-text-4">Image from <a href="https://www.freepik.com/free-photos-vectors/business" target="_blank"><b>Poale Ell</b>
-                      </a>
-                    </p>
-                    <a href="https://nicepage.com" class="u-border-2 u-border-black u-link u-text-body-color u-link-1">read more</a>
-                    <img src="images/rus.jpg" alt="" class="u-image u-image-default u-image-2" data-animation-name="slideIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="Down">
-                  </div>
-                </div>
-                <div class="u-container-style u-layout-cell u-right-cell u-size-11 u-layout-cell-3">
-                  <div class="u-container-layout u-valign-bottom u-container-layout-3">
-                    <h2 class="u-text u-text-5">02</h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>-->
-
-
 `,
 
 

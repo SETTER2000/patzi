@@ -199,7 +199,7 @@ parasails.registerComponent('patziPostHeader', {
       wrapper ? wrapper.style.setProperty('object-position', t) : '';
       console.log('Before sends: ', data);
       await io.socket.put(`/api/v1/posts/update-position-img`, data, (data, jwRes) => {
-        console.log('Сервер update-position-img ответил кодом ' + jwRes.statusCode + ' и данными: ', data);
+        // console.log('Сервер update-position-img ответил кодом ' + jwRes.statusCode + ' и данными: ', data);
       });
       // wrappers.map((wrapper, ind) => {
       //   let img = (objData && objData.length >= 1) ? objData[ind].imageSrc : '';
