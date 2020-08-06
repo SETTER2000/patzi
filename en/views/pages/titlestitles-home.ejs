@@ -183,7 +183,7 @@
                         </template>
                     </div>
                     <% /* ССЫЛКА НА ФЛАГ СТРАНЫ*/ %>
-                    <template>
+                    <!--<template>
                         <el-form-item label="<%= __('Flag link') %>" prop="flag">
                             <el-input show-word-limit
                                       style="width:80%;"
@@ -193,8 +193,22 @@
                                       placeholder="<%= __('link to flag country') %>"
                                       v-model="ruleForm.flag"></el-input>
                         </el-form-item>
+                    </template>-->
+                    <% /* ССЫЛКА НА ФЛАГ СТРАНЫ*/ %>
+                    <template>
+                        <el-form-item label="<%= __('Country flag') %>" prop="flag">
+                        <el-select v-model="ruleForm.flag" placeholder="Select">
+                            <el-option
+                                    v-for="item in countrys"
+                                    :key="item.label"
+                                    :label="item.labelRu"
+                                    :value="item.label">
+                                <span style="float: left">{{ item.labelRu }}</span>
+                                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.label }}</span>
+                            </el-option>
+                        </el-select>
+                        </el-form-item>
                     </template>
-
                     <% /* ВИДЕН ТИТУЛ В СИСТЕМЕ ИЛИ НЕТ */ %>
                     <div class="flex justify-content-center">
                         <el-form-item prop="see">
@@ -264,7 +278,7 @@
                         <div v-if="!_.isEmpty(scope.row.images)">
                             <a href="#" @click="clickShowPhoto(scope.$index,scope.row)" class="flex justify-content-center">
                                 <el-avatar :size="38" @error="errorHandler" v-if="scope.row.flag">
-                                    <img :src="scope.row.flag"/>
+                                    <img :src="getLinkFlag(scope.row.flag)"/>
                                 </el-avatar>
                                 <el-avatar :size="38" @error="errorHandler" v-else>
                                     <img :src="scope.row.images[scope.row.cover].imageSrc"/>
@@ -610,7 +624,7 @@
                         clearable/>
             </div>
 
-            <% /* ФОТО TOPICS */ %>
+            <% /* ФОТО ФЛАГОВ-ТИТУЛОВ*/ %>
             <div class="scrollbar" id="style-1">
                 <el-row :gutter="7" class="flex-container wrap">
                     <el-col class="flex-item" v-for="(title, index) in objFilter()" :key="title.id"
@@ -646,16 +660,15 @@
                                 </div>
 
                             </transition-group>
-
                             <el-image v-if="title.flag"
-                                    :src="title.flag"
+                                    :src="getLinkFlag(title.flag)"
                                     :key="title.id"
                                     :fit="'cover'"
                                     :scroll-container="'#style-1'"
                                     lazy
                                    >
                             </el-image>
-                            <el-image v-else
+                            <el-image v-if="!title.flag"
                                     :src="title.images[title.cover].imageSrc"
                                     :key="title.id"
                                     :fit="'cover'"
