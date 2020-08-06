@@ -103,9 +103,7 @@ parasails.registerComponent('patziPostExpertsItem', {
     },
     getFlag(country) {
       return !_.isObject(country)   ? false :
-        country.label === 'Russia' ? 'https://d3a1wbnh2r1l7y.cloudfront.net/flags/Russia.jpg' :
-          country.label === 'Poland' ? 'https://d3a1wbnh2r1l7y.cloudfront.net/flags/Poland.jpg' :
-            country.label === 'USA' ? 'https://d3a1wbnh2r1l7y.cloudfront.net/flags/USA.jpg' : '';
+        country.label ? `https://d3a1wbnh2r1l7y.cloudfront.net/flags/${country.label}.jpg` : '';
     },
     async updateStyle(wrapper) {
       /*  const t = `${this.post.valueX}% ${this.post.valueY}%`;

@@ -8,6 +8,9 @@ parasails.registerPage('titles-home', {
     hidden: 0,
     limit: 4,
     objOne: {},
+    countrys: [],
+    label:'',
+    labelRu:'',
     show: false,
     id: undefined,
     dialog: {},
@@ -44,6 +47,7 @@ parasails.registerPage('titles-home', {
       flag: '',
       labelRu: '',
       subtitle: '',
+      country:'',
       // gender: '',
       subtitleRu: '',
     },
@@ -156,6 +160,9 @@ parasails.registerPage('titles-home', {
     io.socket.get('/api/v1/titles/count-title', function gotResp(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
+    io.socket.get('/api/v1/country/list', function gotResp(body, response) {
+      console.log('Сервер country/list ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
     // Запрос для события list-*
     io.socket.get(`/api/v1/titles/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -168,13 +175,18 @@ parasails.registerPage('titles-home', {
     io.socket.on('count-title', (data) => {
       this.counts = data;
     });
+    // All country
+    io.socket.on('list-country', (data) => {
+      this.countrys = data.countrys;
+      this.countrys.unshift({labelRu:'Нет страны', label:''});
+      // console.log('ALL COUNTRYS::: ', this.countrys);
+    });
     // Кол-во всех тем
     io.socket.on('title-hidden', (data) => {
       this.hidden = data;
     });
     // Обновление темы
     io.socket.on('update-title', (data) => {
-      console.log('UPDATEEE');
       // this.getList();
       this.$forceUpdate();
     });
@@ -370,6 +382,9 @@ parasails.registerPage('titles-home', {
       });
     },
 
+    getLinkFlag(country){
+       return `https://d3a1wbnh2r1l7y.cloudfront.net/flags/${country}.jpg`;
+    } ,
 
     // Create Title
     async add() {
@@ -413,6 +428,7 @@ parasails.registerPage('titles-home', {
         fileList: this.ruleForm.fileList,
         titleBackground: this.ruleForm.titleBackground,
         label: this.ruleForm.label,
+        // flag: this.getLinkFlag(),
         flag: this.ruleForm.flag,
         labelRu: this.ruleForm.labelRu,
         see: this.ruleForm.see,
@@ -441,9 +457,6 @@ parasails.registerPage('titles-home', {
         }
       });
     },
-
-
-
 
 
     openFullScreen() {
@@ -633,7 +646,7 @@ parasails.registerPage('titles-home', {
       });
 
       // Принимаем данные по событию list-*
-      await  io.socket.on('update-cover', (data) => {
+      await io.socket.on('update-cover', (data) => {
         // this.counts = data;
       });
 
@@ -753,7 +766,7 @@ parasails.registerPage('titles-home', {
     showOut() {
       this.show = false;
     },
-    warningRemovePhotosS3(d,fileList) {
+    warningRemovePhotosS3(d, fileList) {
       this.checkAll = false;
       this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
         confirmButtonText: 'OK',
