@@ -275,7 +275,7 @@
                         <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
                     </template>
                     <template slot-scope="scope">
-                        <div v-if="!_.isEmpty(scope.row.images)">
+                        <div v-if="!_.isEmpty(scope.row.images) || !_.isEmpty(scope.row.flag)">
                             <a href="#" @click="clickShowPhoto(scope.$index,scope.row)" class="flex justify-content-center">
                                 <el-avatar :size="38" @error="errorHandler" v-if="scope.row.flag">
                                     <img :src="getLinkFlag(scope.row.flag)"/>
@@ -302,7 +302,7 @@
                     </template>
                 </el-table-column>
 
-
+                <%/*ПОИСК */%>
                 <el-table-column
                         label="(En)"
                         sortableв
@@ -321,6 +321,7 @@
                         </el-popover>
                     </template>
                 </el-table-column>
+
                 <el-table-column align="right">
                     <template slot="header" slot-scope="scope">
                         <el-input
@@ -530,16 +531,17 @@
             custom-class="dialog-kennel-add"
             :visible.sync="photoVisible"
             :before-close="handleCloseDialog">
-        <div class="menu-center" v-if="objOne.images">
-            <img :src="objOne.images[objOne.cover].imageSrc" style="width: 100%" :alt="objOne.fullName">
+        <div class="menu-center" v-if="!_.isUndefined(objOne.flag)">
+            <img :src="getLinkFlag(objOne.flag)" style="width: 100%" :alt="objOne.fullName">
         </div>
-        <!--<div class="block">
-          <el-image :src="objOne.img" class="cov">
-            <div slot="placeholder" class="image-slot">
-              Loading<span class="dot">...</span>
-            </div>
-          </el-image>
+        <div class="menu-center" v-else>
+            <img v-if="objOne.images" :src="objOne.images[objOne.cover].imageSrc" style="width: 100%" :alt="objOne
+            .fullName">
+        </div>
+      <!--  <div class="menu-center" v-if="objOne.images">
+            <img :src="objOne.images[objOne.cover].imageSrc" style="width: 100%" :alt="objOne.fullName">
         </div>-->
+
         <span slot="footer" class="dialog-footer">
     <el-button type="primary" @click="objOne={};photoVisible = false"><%= __('Close') %></el-button>
   </span>
@@ -631,8 +633,7 @@
                             :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
 
                         <div @mouseenter="showMenu(title.id)" @mouseleave="showOut()"
-                             style="position: relative;" class="ell-image-flex"
-                             v-if="!_.isEmpty(title.imagesArrUrl)">
+                             style="position: relative;" class="ell-image-flex">
                             <transition-group appear name="el-fade-in">
                                 <div v-show="show && (showTitle === title.id)" class="transition-box blue-dark" :class="{death:title.dateDeath}"
                                      :key="title.id">
@@ -668,7 +669,7 @@
                                     lazy
                                    >
                             </el-image>
-                            <el-image v-if="!title.flag"
+                            <el-image v-else
                                     :src="title.images[title.cover].imageSrc"
                                     :key="title.id"
                                     :fit="'cover'"
