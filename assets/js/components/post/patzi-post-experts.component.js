@@ -33,16 +33,11 @@ parasails.registerComponent('patziPostExperts', {
   template: `
         <section class="u-carousel u-slide u-valign-middle u-block-7fbf-1" id="carousel_db1e" data-interval="5000" data-u-ride="carousel">
       <ol class="u-absolute-hcenter u-carousel-indicators u-block-7fbf-2">
-<!--        <li data-u-target="#carousel_db1e" data-u-slide-to="0" class="u-grey-30"></li>
-        <li data-u-target="#carousel_db1e" class="u-grey-30" data-u-slide-to="1"></li>-->
          <li v-for="(po, index) of experts" data-u-target="#carousel_db1e" class="u-grey-30" :data-u-slide-to="index"></li>
       </ol>
-
-
       <div class="u-carousel-inner" role="listbox">
     <patzi-post-experts-item  v-for="(expert, ind) of experts" :obj-data="objData" :expert="expert" :section="ind+1" :key="expert.id"></patzi-post-experts-item>
       </div>
-
     <template v-if="experts && experts.length>1">
       <a class="u-absolute-vcenter u-carousel-control u-carousel-control-prev u-text-grey-30 u-block-7fbf-3" href="#carousel_db1e" role="button" data-u-slide="prev">
         <span aria-hidden="true">
@@ -60,8 +55,6 @@ parasails.registerComponent('patziPostExperts', {
       </a>
       </template>
     </section>
-
-
 `,
 
 
@@ -87,19 +80,11 @@ parasails.registerComponent('patziPostExperts', {
   methods: {
     classObject(index) {
       index = index + 1;
-      var o = {
+      let o = {
         'u-active': (index === 1)
       };
       o[`u-section-3-${index}`] = true;
       return o;
     },
-    // removeItem(id) {
-    //   // Генерируем событие, возможно с передаваемыми данными
-    //   this.$emit('remove', id);
-    // },
-    // editPost(post) {
-    //   // Генерируем событие, возможно с передаваемыми данными
-    //   this.$emit('editpost', post);
-    // },
   }
 });
