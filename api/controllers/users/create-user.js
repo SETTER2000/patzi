@@ -112,7 +112,13 @@ module.exports = {
       description: 'Является ли этот пользователь «администратором»',
       defaultsTo: false
     },
-
+    cover: {
+      type: 'number',
+      defaultsTo: 0,
+      example: 5,
+      description: `Номер ключа в массиве фотографий, который определяет главную фотографию альбома.
+                    Обложка альбома.`
+    },
 
     dateBirth: {
       type: 'string',
@@ -235,6 +241,7 @@ module.exports = {
       emailStatus: (inputs.sendCodEmail === 'confirmed') ? 'confirmed' : inputs.emailStatus,
       description: inputs.description,
       see: inputs.see,
+      cover: inputs.cover,
       filename: filenameAvatar,
       avatarFD: avatarFD,
       region: inputs.region,

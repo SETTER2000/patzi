@@ -271,6 +271,13 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
     },
 
 
+    cover: {
+      type: 'number',
+      defaultsTo: 0,
+      example: 5,
+      description: `Номер ключа в массиве фотографий, который определяет главную фотографию альбома.
+                    Обложка альбома.`
+    },
 
 
     avatar: {

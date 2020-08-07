@@ -146,6 +146,24 @@ module.exports = {
     }
 
 
+    /**
+     * Генерирует ссылки с параметрами изображения,
+     * которое должен вернуть S3 для данного модуля
+     * https://sharp.pixelplumbing.com/en/stable/api-resize/
+     */
+    data.users = await sails.helpers.cloudFrontUrl.with({
+      collection: data.users,
+      collectionName:'user',
+      edits: {
+        resize: {}
+      }
+    });
+
+    await data.users.map(async (user) => {
+      user.imagesArrUrl = _.pluck(user.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
+      user.cover = user.imagesArrUrl[0]; // Обложка альбома
+      return user;
+    });
 
     return data;
   }

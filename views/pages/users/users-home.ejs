@@ -4,31 +4,6 @@
                :visible.sync="centerDialogAdded"
                custom-class="dialog-add"
                center>
-        <!-- <el-dialog
-           width="80%"
-           :title="dialog.header"
-           :visible.sync="innerVisible"
-           append-to-body>
-           <div class="text-center"><p>{{dialog.description}}</p></div>
-           <el-image :src="dialog.src" style="width: 100%">
-             <div slot="placeholder" class="image-slot">
-               Loading<span class="dot">...</span>
-             </div>
-
-           </el-image>
-         </el-dialog>-->
-        <% /* Диалоговое окно. Не верный текст имени собаки. */ %>
-        <!--  <el-dialog
-      title="<%= __('Error') %>"
-      width="30%"
-      :visible.sync="ruleForm.errInputDogName"
-      :show-close=false
-      append-to-body>
-      <span><%= __('The name of the dog is written only in English letters. Switch the keyboard to the correct layout.') %></span>
-      <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="ruleForm.errInputDogName = false; ruleForm.label=''">Ok</el-button>
-  </span>
-    </el-dialog>-->
         <% /* Диалоговое окно. Подсказка о использование поля пароля. */ %>
         <el-dialog
                 title="Установка пароля"
@@ -566,24 +541,18 @@
 
     <% /* Диалоговое окно. Показывает фото профиля. */ %>
     <el-dialog :title="objOne.fullName" :visible.sync="dialogTableVisible">
-        <div class="demo-image__placeholder">
-            <div class="menu-center">
-                <span class="demonstration">{{objOne.kennel}}</span>
-                <el-row class="demo-avatar demo-basic">
-                    <el-col :span="24">
-                        <div class="demo-basic--circle">
-                            <div class="block">
-                                <el-image :src="objOne.imageSrc">
-                                    <div slot="placeholder" class="image-slot">
-                                        Loading<span class="dot">...</span>
-                                    </div>
-                                </el-image>
-                            </div>
-                        </div>
-                    </el-col>
-                </el-row>
-            </div>
-        </div>
+        <span class="demonstration">{{objOne.kennel}}</span>
+        <el-carousel height="60vh" trigger="click" :autoplay="false" indicator-position="none">
+            <el-carousel-item v-for="(img, index) of objOne.images" :key="img.id" class="d-flex flex-center
+          ">
+                <p class="medium">{{ img.description }}</p>
+                <img :data-src="img.imageSrc" class="lazyload"   style="object-fit:contain; " alt="">
+            </el-carousel-item>
+        </el-carousel>
+        <span slot="footer" class="dialog-footer d-flex justify-content-center">
+                <el-button @click="dialogTableVisible = false">Ок</el-button>
+
+             </span>
     </el-dialog>
 
 
@@ -694,11 +663,12 @@
                                 Телефон: {{_.last(_.pluck(_.last(_.pluck(scope.row.kennelBreed,'phones')), 'value'))}}
                                 {{_.last(_.pluck(_.last(_.pluck(scope.row.kennelBreed,'phones')), 'fullName'))}}
                             </p>
-                          <p v-if="scope.row.continent">Continent: {{scope.row.continent.label}}</p>
+                            <p v-if="scope.row.continent">Continent: {{scope.row.continent.label}}</p>
                             <p v-if="scope.row.country">Country: {{scope.row.country.label }}</p>
                             <p v-if="scope.row.region"><%= __('Region') %>: {{scope.row.region.label }}</p>
                             <p v-if="scope.row.city">Город: {{scope.row.city.value }}</p>
-                            <p v-if="_.pluck(scope.row.kennelBreed,'address')[0]">Адрес: {{_.pluck(scope.row.kennelBreed,'address')[0] }}</p>
+                            <p v-if="_.pluck(scope.row.kennelBreed,'address')[0]">Адрес:
+                                {{_.pluck(scope.row.kennelBreed,'address')[0] }}</p>
                             <p v-if="_.pluck(scope.row.kennelBreed,'site').join(', ')">Сайт: {{
                                 _.pluck(scope.row.kennelBreed,'site').join(', ') }}</p>
                             <p v-if="_.last(_.pluck(scope.row.kennelBreed,'label'))">Владелец питомника: {{

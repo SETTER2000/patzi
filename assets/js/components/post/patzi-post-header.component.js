@@ -124,12 +124,6 @@ parasails.registerComponent('patziPostHeader', {
   beforeMount: function () {
     // Принимаем данные по событию list-*
     io.socket.on('post-position', data => {
-      console.log('Прехали данные data.position с сервака:: ', data.position);
-      console.log('Прехали данные data.valueY с сервака:: ', data.valueY);
-      console.log('Прехали данные data.valueX с сервака:: ', data.valueX);
-      // this.post.position = data.position;
-      // this.valueX = data.valueX;
-      // this.valueY = data.valueY;
       this.$forceUpdate();
     });
   },
