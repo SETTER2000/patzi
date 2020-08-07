@@ -275,7 +275,7 @@
                         <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
                     </template>
                     <template slot-scope="scope">
-                        <div v-if="!_.isEmpty(scope.row.images) || !_.isEmpty(scope.row.flag)">
+                        <div v-if="(scope.row.images && scope.row.images.length > 0) || !_.isEmpty(scope.row.flag)">
                             <a href="#" @click="clickShowPhoto(scope.$index,scope.row)" class="flex justify-content-center">
                                 <el-avatar :size="38" @error="errorHandler" v-if="scope.row.flag">
                                     <img :src="getLinkFlag(scope.row.flag)"/>
@@ -525,18 +525,25 @@
     <el-button @click="centerDialogVisiblePhotos = false">Cancel</el-button>
   </span>
     </el-dialog>
-    <% /* Диалоговое окно. Фото темы. */ %>
+    <% /* Диалоговое окно. Фото ФЛАГА. */ %>
     <el-dialog
             :title="objOne.fullName"
             custom-class="dialog-kennel-add"
             :visible.sync="photoVisible"
             :before-close="handleCloseDialog">
-        <div class="menu-center" v-if="!_.isUndefined(objOne.flag)">
+        <div class="d-flex justify-content-between"><h3>{{objOne.subtitleRu}}</h3><h3>{{objOne.subtitle}}</h3></div>
+        <div class="menu-center" v-if="!_.isEmpty(objOne.flag)">
             <img :src="getLinkFlag(objOne.flag)" style="width: 100%" :alt="objOne.fullName">
         </div>
         <div class="menu-center" v-else>
-            <img v-if="objOne.images" :src="objOne.images[objOne.cover].imageSrc" style="width: 100%" :alt="objOne
+            <img v-if="_.isArray(objOne.images) && objOne.images.length>0" :src="objOne.images[objOne.cover].imageSrc"
+                 style="width: 100%" :alt="objOne
             .fullName">
+            <el-image v-else>
+                <div slot="error" class="image-slot">
+                    <i class="el-icon-picture-outline"></i>
+                </div>
+            </el-image>
         </div>
       <!--  <div class="menu-center" v-if="objOne.images">
             <img :src="objOne.images[objOne.cover].imageSrc" style="width: 100%" :alt="objOne.fullName">
@@ -629,6 +636,7 @@
             <% /* ФОТО ФЛАГОВ-ТИТУЛОВ*/ %>
             <div class="scrollbar" id="style-1">
                 <el-row :gutter="7" class="flex-container wrap">
+
                     <el-col class="flex-item" v-for="(title, index) in objFilter()" :key="title.id"
                             :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
 
@@ -661,6 +669,7 @@
                                 </div>
 
                             </transition-group>
+
                             <el-image v-if="title.flag"
                                     :src="getLinkFlag(title.flag)"
                                     :key="title.id"
@@ -668,14 +677,20 @@
                                     :scroll-container="'#style-1'"
                                     lazy
                                    >
+                                <div slot="error" class="image-slot">
+                                    <i class="el-icon-picture-outline"></i>
+                                </div>
                             </el-image>
                             <el-image v-else
-                                    :src="title.images[title.cover].imageSrc"
-                                    :key="title.id"
-                                    :fit="'cover'"
-                                    :scroll-container="'#style-1'"
-                                    lazy
-                                    :preview-src-list="title.imagesArrUrl">
+                                      :src="title.images[title.cover].imageSrc"
+                                      :key="title.id"
+                                      :fit="'cover'"
+                                      :scroll-container="'#style-1'"
+                                      lazy
+                                      :preview-src-list="title.imagesArrUrl">
+                                <div slot="error" class="image-slot">
+                                    <i class="el-icon-picture-outline"></i>
+                                </div>
                             </el-image>
                         </div>
                     </el-col>
