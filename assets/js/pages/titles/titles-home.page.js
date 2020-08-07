@@ -591,7 +591,7 @@ parasails.registerPage('titles-home', {
     },
     objFilter() {
       // titles.filter(title=>title.see)
-      return this.titles.filter(data => (!this.searchObjects || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see);
+      return this.titles.filter(data => (!this.searchObjects || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & (!_.isEmpty(data.images) || !_.isEmpty(data.flag)));
       // return this.titles.filter(data => (!this.searchObjects || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & !_.isEmpty(data.images[data.cover]));
     },
     deleteObj: async function () {

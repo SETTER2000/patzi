@@ -50,6 +50,8 @@ parasails.registerPage('title', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    //…
+    getLinkFlag(country){
+      return `https://d3a1wbnh2r1l7y.cloudfront.net/flags/${country}.jpg`;
+    } ,
   }
 });
