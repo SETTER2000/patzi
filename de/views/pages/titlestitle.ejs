@@ -15,16 +15,30 @@
           </div>
         </div>
         <patzi-row-h3-p :obj-data="seo"></patzi-row-h3-p>
-
-        <div class="demo-image flex justify-content-center">
-          <div class="m-1" v-for="img in data.imagesMin" :key="img.fd" >
-            <el-image
+        <div class="d-flex justify-content-center">
+          <div v-if="getLinkFlag(data.flag)">  <el-image
                     style=" height: 300px;"
-                    :src="img.imageSrc"
+                    :src="getLinkFlag(data.flag)"
                     :fit="'cover'"
                     :scroll-container="'#style-1'"
                     :preview-src-list="data.imagesArrUrl"
             >
+              <div slot="error" class="image-slot">
+                <i class="el-icon-picture-outline"></i>
+              </div>
+            </el-image></div>
+          <div v-else class="m-1" v-for="img in data.imagesMin" :key="img.fd" >
+            <el-image
+                    style=" height: 300px;"
+                    :src="img.imageSrc "
+                    :fit="'cover'"
+                    :scroll-container="'#style-1'"
+                    :preview-src-list="data.imagesArrUrl"
+            >
+              <div slot="error" class="image-slot">
+                <i class="el-icon-picture-outline"></i>
+              </div>
+            </el-image>
           </div>
         </div>
 
