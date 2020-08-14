@@ -42,6 +42,8 @@ module.exports = {
       throw 'notFound';
     }
 
+    dog.pageUrl = dog.fullName ? url.resolve(sails.config.custom.baseUrl, `/chinese-crested/${dog.fullName.split(' ').join('-')}`) : '';
+
     const monkeys = await Dog.siblings(dog);
     // console.log('dfff:: ', monkeys);
     dog.siblings = monkeys;

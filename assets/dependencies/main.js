@@ -50,77 +50,12 @@ String.prototype.limit = function( limit, userParams) {
 $(document).ready(function () {
   "use strict";
 
-
-  (function () {
-/*
-    document.onreadystatechange = () => {
-
-      if (document.readyState === 'complete') {
-
-        /!**
-         * Setup your Lazy Line element.
-         * see README file for more settings
-         *!/
-        let haha = document.querySelector('#haha');
-        console.log('EL1L haha::; ', haha);
-        if(!_.isNull(haha)) {
-          let hahaAnimation = new LazyLinePainter(haha, {
-            "ease": "easeInOutQuart",
-            "strokeWidth": 16,
-            "strokeOpacity": 1,
-            "strokeColor": "#67cac7",
-            "strokeCap": "square"
-          });
-          hahaAnimation.paint();
-        }
-        let el = document.querySelector('#wow');
-        if(!_.isNull(el)) {
-          let myAnimation = new LazyLinePainter(el, {
-            "ease": "easeInOutQuad",
-            "strokeWidth": 6.9,
-            "strokeOpacity": 1,
-            "strokeColor": "#F2C511",
-            "strokeCap": "square"
-          });
-          myAnimation.paint();
-        }
-
-        let sup = document.querySelector('#super');
-        if(!_.isNull(sup)) {
-          console.log('ELLL super::; ', sup);
-          let superAnimation = new LazyLinePainter(sup, {
-            'ease': 'easeInOutSine',
-            'strokeWidth': 19.0,
-            'strokeOpacity': 0.9,
-            'strokeColor': '#E84B3C',
-            'strokeCap': 'square'
-          });
-          superAnimation.paint();
-        }
-        let like = document.querySelector('#like');
-        if(!_.isNull(like)) {
-        let likeAnimation = new LazyLinePainter(like, {
-          'ease': 'easeOutBounce',
-          'strokeWidth': 19,
-          'strokeOpacity': 1,
-          'strokeColor': '#2980B9',
-          'strokeCap': 'square'
-        });
-        likeAnimation.paint();
-      }
-      }
-    }*/
-
-  })();
-
-
   var window_width = $(window).width(),
     window_height = window.innerHeight,
     header_height = $(".default-header").height(),
     header_height_static = $(".site-header.static").outerHeight(),
     fitscreen = window_height - header_height;
 
-  //   $(".fullscreen").css("height", window_height);
   $(".fitscreen").css("height", fitscreen);
 
   //------- Wow JS Initialized --------//
@@ -212,6 +147,7 @@ $(document).ready(function () {
         slideDuration: 500
       });
     }
+
   });
 
   //------- Superfist nav menu  js --------//
@@ -321,6 +257,7 @@ $(document).ready(function () {
   });
 
   $(document).ready(function () {
+
     $("html, body").hide();
 
     if (window.location.hash) {
@@ -375,6 +312,7 @@ $(document).ready(function () {
       });
     };
     $('#flag').hide();
+
     if ($(window).height() < 800) {
       $('#flag').show();
     }
