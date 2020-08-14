@@ -296,6 +296,7 @@
                         <div v-if="isWW()" class="menu-center">
                             <i slot="reference" style="font-size: 2em; color: rgb(170, 150, 124)" class="ti-crown"></i>
                         </div>
+
                         <h1 class="text-white">{{dog.fullName}}</h1>
                         <p>{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</p>
                         <H2 v-if="dog.nickname" class="text-gold">
@@ -469,6 +470,12 @@
                                 <i class="el-icon-picture-outline"></i> <%= __('not found') %>
                             </div>
                         </el-image>
+                        <div class="fb-share-button"
+                             :data-href="dog.pageUrl"
+                             data-layout="button" data-size="large">
+                            <a target="_blank"
+                               href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpoaleell.com%2Fchinese-crested%2FPoale-Ell-Chester&amp;src=sdkpreparse"
+                               class="fb-xfbml-parse-ignore"></a></div>
                     </div>
 
                 </div>
@@ -859,6 +866,11 @@
                     </el-button>
                     <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()"
                                round><%= __('Pedigree') %></el-button>
+
+
+
+
+
                 </div>
             </div>
         </section>
