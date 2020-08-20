@@ -109,7 +109,7 @@ parasails.registerComponent('patziPostHeader', {
                              data-layout="button_count"
                              data-size="large">
                             <a target="_blank"
-                               href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpoaleell.com%2Fchinese-crested%2FPoale-Ell-Chester&amp;src=sdkpreparse"
+                               :href="getUrlShare()"
                                class="fb-xfbml-parse-ignore"></a>
                         </div>
                 <!--<a href="#" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1" data-animation-name="rollIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">More</a>-->
@@ -208,6 +208,9 @@ parasails.registerComponent('patziPostHeader', {
     },
     toggle() {
       this.showRule = !this.showRule;
+    },
+    getUrlShare(){
+      return `https://www.facebook.com/sharer/sharer.php?u=${this.objData.canonical}&amp;src=sdkpreparse`;
     }
   }
 });
