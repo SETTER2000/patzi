@@ -100,12 +100,17 @@ parasails.registerComponent('patziPostHeader', {
                     <template v-if="post.isAdmin || post.isSuperAdmin">
                     <el-button  @click="openEditDialog()" type="primary" icon="el-icon-edit" circle></el-button>
                     <el-button type="warning" @click="toggle" icon="el-icon-s-operation" circle></el-button>
-                    <!--  <el-button disabled type="info" icon="el-icon-message" circle></el-button>
-                    <el-button disabled type="warning" icon="el-icon-star-off" circle></el-button>-->
                     <el-button  @click="removeItem()" type="danger" icon="el-icon-delete" circle></el-button>
+                   
                     </template>
                 </el-row>
-       
+                    <div class="fb-share-button"
+                             :data-href="objData.canonical"
+                             data-layout="button" data-size="large">
+                            <a target="_blank"
+                               href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpoaleell.com%2Fchinese-crested%2FPoale-Ell-Chester&amp;src=sdkpreparse"
+                               class="fb-xfbml-parse-ignore"></a>
+                        </div>
                 <!--<a href="#" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1" data-animation-name="rollIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">More</a>-->
               </div>
             </div>

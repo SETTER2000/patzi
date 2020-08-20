@@ -159,7 +159,8 @@ parasails.registerPage('blog', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
-    // console.log('POST::: ', this.post);
+    console.log('POST::: ', this.post);
+    console.log('SEO::: ', this.seo);
     this.post.topicId = this.post.topic.id;
 
     this.post.experts = _.pluck(this.post.experts, 'id');
