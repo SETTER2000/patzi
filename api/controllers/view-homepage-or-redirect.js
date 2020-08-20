@@ -33,7 +33,8 @@ module.exports = {
       seo: {
         description: sails.config.custom.descriptionRootPage,
         title: sails.config.custom.titleRootPage,
-        canonical: sails.config.custom.canonicalRootPage
+        canonical: sails.config.custom.canonicalRootPage,
+        image:'https://d3a1wbnh2r1l7y.cloudfront.net/ChesterIMG_0500b.jpg'
       }
     };
 
