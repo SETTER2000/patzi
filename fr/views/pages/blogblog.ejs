@@ -502,6 +502,7 @@
                 <span><%= __('in the focus') %>!</span>
 
                 <el-switch
+                        v-if="post.images.length !== 0"
                         style="display: block"
                         v-model="lines"
                         active-color="#13ce66"
@@ -511,8 +512,13 @@
                 </el-switch>
             </h2>
             <span>{{me.preferredLocale === 'ru' ? post.topic.labelRu : post.topic.label}}</span>
-           <span  class="flex justify-content-center m-5" v-if="post.images.length == 0"> Собачка не фокусе. Добавьте
-               картинок.</span>
+           <div  class="flex justify-content-center  m-5" v-if="post.images.length == 0">
+               <h3 class="mr-10">Собачка не фокусе, добавьте картинок </h3>
+               <p >
+               <el-button @click="editPost(post)" type="success" icon="el-icon-plus" circle ></el-button>
+               </p>
+
+           </div>
             <patzi-post-gallery :obj-data="seo" :post="post" :lines="lines"
                                 @select-posts="filterPosts"></patzi-post-gallery>
         </div>
