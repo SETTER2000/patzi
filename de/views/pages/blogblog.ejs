@@ -1,4 +1,9 @@
 <div id="blog" v-cloak>
+    <meta property="og:url"                :content="seo.canonical" />
+    <meta property="og:type"               content="article" />
+    <meta property="og:title"              :content="seo.title" />
+    <meta property="og:description"        :content="seo.description"  />
+    <meta property="og:image"              :content="post.images[post.cover].imageSrc" />
     <% /* Диалоговое окно редактор поста (EDIT)*/ %>
     <el-dialog
             :title=" succ ? '<%= __('REDACTED') %>': '<%= __('POST EDITOR') %>' "
