@@ -106,7 +106,8 @@ parasails.registerComponent('patziPostHeader', {
                 </el-row>
                     <div class="fb-share-button"
                              :data-href="objData.canonical"
-                             data-layout="button" data-size="large">
+                             data-layout="button_count"
+                             data-size="large">
                             <a target="_blank"
                                href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpoaleell.com%2Fchinese-crested%2FPoale-Ell-Chester&amp;src=sdkpreparse"
                                class="fb-xfbml-parse-ignore"></a>

@@ -23,7 +23,12 @@
       Google Fonts и т. Д. - над «body», чтобы предотвратить мерцание страницы при использовании шрифтов
     загрузить.) */ %>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+    <meta property="fb:app_id"             content="300089384393151" />
+    <meta property="og:url"                content="<%=seo.canonical%>" />
+    <meta property="og:type"               content="article" />
+    <meta property="og:title"              content="<%=seo.title%>" />
+    <meta property="og:description"        content="<%=seo.description%>"  />
+    <meta property="og:image"              content="<%=seo.image%>" />
     <% /* Certain scripts, normally analytics tools like Google Tag Manager and
     Google Analytics, should only be included in production:
     Некоторые сценарии, обычно аналитические инструменты, такие как Google Tag Manager и
@@ -31,11 +36,7 @@
     */
     if (sails.config.environment === 'production') { %>
         <link rel="canonical" href="<%= seo.canonical %>">
-        <meta property="og:url"                content="<%=seo.canonical%>" />
-        <meta property="og:type"               content="article" />
-        <meta property="og:title"              content="<%=seo.title%>" />
-        <meta property="og:description"        content="<%=seo.description%>"  />
-        <meta property="og:image"              content="<%=seo.image%>" />
+
         <!-- Google Analytics, Google Tag Manager, etc. -->
 
         <!-- Yandex.Metrika informer -->
@@ -81,11 +82,6 @@
     */
     else { %>
         <meta name="robots" content="noindex">
-    <meta property="og:url"                content="<%=seo.canonical%>" />
-    <meta property="og:type"               content="article" />
-    <meta property="og:title"              content="<%=seo.title%>" />
-    <meta property="og:description"        content="<%=seo.description%>"  />
-    <meta property="og:image"              content="<%=seo.image%>" />
     <% } %>
 
     <% /*
@@ -129,6 +125,29 @@
 
 </head>
 <body data-home-page-name='Homepage' class="u-body u-overlap" v-cloak>
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '300089384393151',
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v8.0'
+        });
+
+        FB.AppEvents.logPageView();
+
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v8.0" nonce="SyNyEYZR"></script>
 <!--<body data-home-page="homepage.html" data-home-page-title="homepage" class="u-body u-overlap u-overlap-contrast" v-cloak>-->
 
 <% if(!me){ %>
@@ -150,8 +169,7 @@
 <!-- Start Header Area -->
 <!--// sec-599b-->
 <% if(me) { %>
-    <div id="fb-root"></div>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v8.0" nonce="SyNyEYZR"></script>
+
     <!--OLD-->
     <header class="u-clearfix u-header u-header" id="sec-599b">
         <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-md u-valign-middle-sm u-valign-middle-xl u-sheet-1">
