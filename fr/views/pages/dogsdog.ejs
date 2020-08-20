@@ -1,4 +1,9 @@
 <div id="dog" class="content" v-cloak>
+    <meta property="og:url"                :content="seo.canonical" />
+    <meta property="og:type"               content="article" />
+    <meta property="og:title"              :content="seo.title" />
+    <meta property="og:description"        :content="seo.description"  />
+    <meta property="og:image"              :content="dog.images[dog.cover].imageSrc" />
     <!--    virtualPageSlug:: {{virtualPageSlug}}-->
     <% /* Диалоговое окно ТИТУЛЫ (TITLES) Представление*/ %>
     <el-dialog
@@ -470,12 +475,14 @@
                                 <i class="el-icon-picture-outline"></i> <%= __('not found') %>
                             </div>
                         </el-image>
-                        <div class="fb-share-button"
-                             :data-href="dog.pageUrl"
+                        <% /* КНОПКА ПОДЕЛИТЬСЯ*/ %>
+                        <div class="fb-share-button mt-2"
+                             :data-href="seo.canonical"
                              data-layout="button" data-size="large">
                             <a target="_blank"
                                href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpoaleell.com%2Fchinese-crested%2FPoale-Ell-Chester&amp;src=sdkpreparse"
-                               class="fb-xfbml-parse-ignore"></a></div>
+                               class="fb-xfbml-parse-ignore"></a>
+                        </div>
                     </div>
 
                 </div>
