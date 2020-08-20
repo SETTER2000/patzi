@@ -673,8 +673,16 @@
                                 _.pluck(scope.row.kennelBreed,'label').join(', ') }}</p>
                             <p v-if="_.last(_.pluck(scope.row.kennels,'label'))">Совладелец питомника: {{
                                 _.pluck(scope.row.kennels,'label').join(', ') }}</p>
-                            <p v-if="1">IP: {{
-                                scope.row.tosAcceptedByIp }}</p>
+<!--                            <p v-if="ip">-->
+<!--                                <el-button @click="goTo2( `https://awebanalysis.com/ru/ip-lookup/${scope.row.tosAcceptedByIp}/`)"-->
+<!--                                           type="success" round>{{-->
+<!--                                    scope.row.tosAcceptedByIp }}</el-button>-->
+<!--                                 </p>-->
+                            <p v-if="scope.row.tosAcceptedByIp">
+                                <el-button type="text" @click="checkIp(scope.row.tosAcceptedByIp)" >
+                                    {{ scope.row.tosAcceptedByIp }}
+                                </el-button>
+                            </p>
                         </template>
                     </el-table-column>
 
