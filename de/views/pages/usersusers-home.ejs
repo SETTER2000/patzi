@@ -673,6 +673,8 @@
                                 _.pluck(scope.row.kennelBreed,'label').join(', ') }}</p>
                             <p v-if="_.last(_.pluck(scope.row.kennels,'label'))">Совладелец питомника: {{
                                 _.pluck(scope.row.kennels,'label').join(', ') }}</p>
+                            <p v-if="1">IP: {{
+                                scope.row.tosAcceptedByIp }}</p>
                         </template>
                     </el-table-column>
 
