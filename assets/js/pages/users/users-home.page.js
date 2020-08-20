@@ -876,6 +876,9 @@ parasails.registerPage('users-home', {
 
     },
 
+    checkIp(ip) {
+      this.goto( `https://awebanalysis.com/ru/ip-lookup/${ip}/`);
+    },
 
     getPullCity() {
       let regions = this.regions.filter(region => {

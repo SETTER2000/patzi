@@ -338,7 +338,6 @@ module.exports = {
     const db = sails.getDatastore('mongodb').manager;
     const collection = db.collection(Dog.tableName);
     const ObjectID = require("bson-objectid");
-    console.log('Pedigree for:', id);
     let dog = await collection.aggregate([
       {$match: {_id: ObjectID(id)}},
       {
@@ -429,13 +428,13 @@ module.exports = {
       return false;
     }
     dog = _.last(dog);
-    console.log('DOGGG::: ', (dog && dog.label) ? dog.label : dog);
+    // console.log('DOGGG::: ', (dog && dog.label) ? dog.label : dog);
     // Создать массив идентификаторов родителей
     let parentsId = _.pluck(_.filter(dog.pedigree, {numConnections: 0}), 'dog_children');
     // Получить коллекцию родителей
     let parents = [_.find(dog.ancestors, {_id: parentsId[0]}), _.find(dog.ancestors, {_id: parentsId[1]})];
 
-    console.log('parents: ', parents);
+    // console.log('parents: ', parents);
     dog.parents = parents;
     /**
      * Генерирует ссылки с параметрами изображения,
@@ -482,10 +481,10 @@ module.exports = {
 
   // получить всех братьев и сестёр
   siblings: async function (dog) {
-    console.log('Входящий объект Dog для sibling: ', dog);
+    // console.log('Входящий объект Dog для sibling: ', dog);
     const moment = require('moment');
     const db = sails.getDatastore('mongodb').manager;
-    console.log('IS NUMBER?: ', _.isNumber(dog.dateBirth));
+    // console.log('IS NUMBER?: ', _.isNumber(dog.dateBirth));
     let siblingsArr = [];
     let birth = dog.dateBirth;  // дата должна быть представлена как: '1593334800000'
     // let birth = _.isNumber(dog.dateBirth) ? dog.dateBirth : await sails.helpers.dateFix(dog.dateBirth);

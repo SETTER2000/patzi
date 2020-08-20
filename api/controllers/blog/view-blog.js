@@ -71,6 +71,7 @@ module.exports = {
         header: {ru: 'Китайская Хохлатая Собака', en: 'Chinese Crested Dog'},
         // subTitle: {ru: 'Каталог собак', en: 'Post catalog'},
         preferredLocale: this.req.me.preferredLocale,
+        image: post.imagesArrUrl[0]
         // h2: {ru: 'ФАКТЫ, ЗАМЕТКИ, ПОБЕДЫ, НАСТРОЕНИЕ', en: 'FACTS, NOTES, VICTORIES, MOOD'},
         // h3: {ru: 'Наш Блог', en: 'Our Blog'}
       },

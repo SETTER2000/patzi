@@ -312,7 +312,8 @@ module.exports = {
       seo: {
         description: `${dog.fullName} - ${dog.subtitle}`,
         title: `${dog.fullName} ${dog.gender} ${moment(dog.dateBirth).format('LL')}`,
-        canonical: `https://${req.headers.host}${req.originalUrl}`
+        canonical: `https://${req.headers.host}${req.originalUrl}`,
+        image: dog.imagesArrUrl[0]
       },
       currentSection: 'dog',
       dog
