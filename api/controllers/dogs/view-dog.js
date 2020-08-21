@@ -29,9 +29,6 @@ module.exports = {
     const moment = require('moment');
     const url = require('url');
     let req = this.req;
-    //  var flaverr = require('flaverr');
-
-
     let fullName = _.startCase(inputs.fullName);
     let dog = await Dog.findOne({'fullName': fullName})
       .populate('parents')
@@ -42,10 +39,7 @@ module.exports = {
       throw 'notFound';
     }
 
-    // dog.pageUrl = dog.fullName ? url.resolve(sails.config.custom.baseUrl, `/chinese-crested/${dog.fullName.split(' ').join('-')}`) : '';
-
     const monkeys = await Dog.siblings(dog);
-    // console.log('dfff:: ', monkeys);
     dog.siblings = monkeys;
     let ch = _.pluck(dog.children, 'id');
 
@@ -54,19 +48,14 @@ module.exports = {
       .populate('children')
       .populate('kennel')
       .populate('owners');
-    // console.log('prDog::: ', dog.children);
 
     dog.children = await _.each(dog.children, async (dog) => {
-      // dog.kennelName = dog.kennel.label;
       // dog.fullName = dog.kennel.right ? `${dog.label} ${dog.kennel.label}` : `${dog.kennel.label} ${dog.label}`;
       dog.detail = dog.fullName ? `/chinese-crested/${dog.fullName.split(' ').join('-')}` : '';
       dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
-      // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
       return dog;
     });
-// _.sortBy(dog.children,'dateBirth');
 
-    // console.log('prDog-2::: ', dog.children);
 
     let kennel = await Kennel.findOne({id: dog.kennel.id})
       .populate('continent')
@@ -85,14 +74,18 @@ module.exports = {
 
     let countryId = _.last(_.pluck(dog.owners, 'country'));
 
+    let countryOwner = await Country.find({id: countryId});
+
     dog.owners = {
       fullName: _.last(_.pluck(dog.owners, 'fullName')),
       avatar: _.last(_.pluck(dog.owners, 'avatar')),
       gravatar: _.last(_.pluck(dog.owners, 'gravatar')),
       defaultIcon: _.last(_.pluck(dog.owners, 'defaultIcon')),
-      country: await Country.find({id: countryId})
-    };
 
+    };
+    if (_.isArray(countryOwner) && countryOwner.length > 0) {
+      dog.owners.country = _.last(countryOwner).label;
+    }
 
     let litter = await sails.helpers.srcImagePreparation.with(
       {
@@ -292,19 +285,11 @@ module.exports = {
       // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
       return dog;
     });
-    /*
-        let usersNamedFinn = await Dog.find()
-          .populate('parents', {
-            where: {
-              fullName: 'Sasquehanna Piaff'
-            }
-          });
-        console.log('usersNamedFinn::', usersNamedFinn);*/
+
 
 
     // подготавливаем массив фото собаки для просмотра в слайдере
     dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc');
-
     // Respond with view.
     return exits.success({
       // Этот объект обязателен, иначе ошибка

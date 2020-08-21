@@ -54,7 +54,7 @@ module.exports = {
     }
 
 
-    console.log('Перед отдачей::: ' , dog);
+    // console.log('Перед отдачей::: ' , dog);
     // Respond with view.
     await sails.sockets.broadcast('dog', 'list-pedigree', dog);
     return exits.success();
