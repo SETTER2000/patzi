@@ -1,7 +1,7 @@
 module.exports = {
 
 
-  friendlyName: 'Destroy one title',
+  friendlyName: 'Destroy one federation',
 
 
   description: `Удалить одну федерацию.`,
@@ -26,7 +26,7 @@ module.exports = {
     //   responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
     // },
     // forbiddenDog: {
-    //   description: 'Cannot be deleted! You have associated files: title.',
+    //   description: 'Cannot be deleted! You have associated files: federation.',
     //   responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
     // },
     // forbiddenLitter: {
@@ -48,9 +48,9 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-    // Have the socket which made the request join the "title" room.
-    // Подключить сокет, который сделал запрос, к комнате «title».
-    await sails.sockets.join(req, 'title');
+    // Have the socket which made the request join the "federation" room.
+    // Подключить сокет, который сделал запрос, к комнате «federation».
+    await sails.sockets.join(req, 'federation');
     // let litter = await Litter.findOne({id:inputs.id});
     // if(litter){
     //   throw 'forbiddenLitter';
@@ -62,26 +62,26 @@ module.exports = {
     //   throw 'badRequestDog';
     // }
     //
-    let title = await Title.findOne({
+    let federation = await Federation.findOne({
       id: inputs.id
     });
     //
-    if (!title) {
+    if (!federation) {
       throw 'notFound';
     }
 
-    // if (title.owner !== this.req.me.id && !this.req.me.isSuperAdmin) {
+    // if (federation.owner !== this.req.me.id && !this.req.me.isSuperAdmin) {
     //   throw 'forbidden';
     // }
 
 
-    // await Title.findOne({id: inputs.id});
+    // await Federation.findOne({id: inputs.id});
     //
-    await Title.destroy({id: inputs.id});
+    await Federation.destroy({id: inputs.id});
 
 
     // Remove photos
-    let removeImage = (_.isArray(title.images) && title.images.length > 0 ) ? title.images : [];
+    let removeImage = (_.isArray(federation.images) && federation.images.length > 0 ) ? federation.images : [];
     // let removeImage = [...litter.images, ...puppies];
     // console.log('Для удаления::: ', removeImage);
     await sails.helpers.removeImgS3(removeImage);

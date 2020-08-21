@@ -634,5 +634,49 @@ parasails.registerPage('federations-home', {
         });
       });
     },
+    removePhotos() {
+      this.checkAll = false;
+      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
+        confirmButtonText: 'OK',
+        cancelButtonText: this.i19p.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.destroyManyPhotos();
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.i19p.delCancel
+        });
+      });
+    },
+    async destroyManyPhotos() {
+      let removeImage = _.remove(this.photos.images, img => _.indexOf(this.checkedPhoto, img.id) > -1);
+      // console.log('Удалённые картинки: ', removeImage);
+      let data = this.photos;
+      data['removeImage'] = _.pluck(removeImage, 'id');
+      // Если картинок нет закрываем окно редактора
+      console.log('REMOVE DATA перед отправкой::', data);
+      _.isEmpty(this.photos.images) ? this.centerDialogVisiblePhotos = false : '';
+      io.socket.delete('/api/v1/federations/destroy-many-img', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        // this.loading.close();
+        if (jwRes.statusCode === 200) {
+          // this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          this.checkedPhoto = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+        }
+      });
+    },
+
+
   }
 });

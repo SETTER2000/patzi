@@ -36,7 +36,7 @@ module.exports = {
 
     dogAlreadyInUse: {
       statusCode: 409,
-      description: 'The specified title name is already in use.',
+      description: 'The specified federation name is already in use.',
     },
 
     dogAlreadyInUseRU: {
@@ -54,14 +54,14 @@ module.exports = {
     }
 
 
-    let title = await Title.findOne(inputs.id);
+    let federation = await Federation.findOne(inputs.id);
     console.log('IN:: ', inputs.removeImage);
-    let removeImage = _.remove(title.images, img => _.indexOf(inputs.removeImage, img.id) > -1);
+    let removeImage = _.remove(federation.images, img => _.indexOf(inputs.removeImage, img.id) > -1);
     console.log('Картинки для удаления removeImage::: ', removeImage);
-    console.log('title.images::: ', title.images);
+    console.log('federation.images::: ', federation.images);
 
-    let update = await Title.updateOne({id: inputs.id})
-      .set({images: title.images});
+    let update = await Federation.updateOne({id: inputs.id})
+      .set({images: federation.images});
 
     console.log('removeImage::: ', removeImage);
 
