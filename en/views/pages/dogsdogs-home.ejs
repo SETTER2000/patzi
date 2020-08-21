@@ -11,7 +11,7 @@
                     ref="filterTable"
                     :row-class-name="tableRowClassName"
                     :data="dogsEditList.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))"
-                    :default-sort="{prop: 'fullName', order: 'descending'}"
+                    :default-sort="{prop: 'updatedAt', order: 'descending'}"
                     max-height="650"
                     style="width: 100%">
                 <el-table-column
@@ -52,6 +52,18 @@
                         prop="fullName">
                     <template slot-scope="scope">
                         <el-link @click="goTo2(scope.row.detail)" type="primary">{{scope.row.fullName}}</el-link>
+                    </template>
+                </el-table-column>
+
+
+
+                <el-table-column
+                        v-show="true"
+                        label="<%= __('Update') %>"
+                        sortable
+                        prop="updatedAt">
+                    <template slot-scope="scope">
+                        {{scope.row.updatedAt |  getCreate(me.preferredLocale, 'llll')}}
                     </template>
                 </el-table-column>
 
@@ -985,7 +997,7 @@
                             </el-form-item>
                         </template>
                         <% /* видно|не видно ВИДЕО ДЛЯ HEADER  */ %>
-                        <template>
+                        <template>  
                             <el-form-item prop="headerVideoShow">
 
                                 <el-switch
