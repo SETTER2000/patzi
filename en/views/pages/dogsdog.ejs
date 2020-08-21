@@ -499,8 +499,9 @@
                         <div class="card-body">
                             <blockquote class="blockquote mb-0">
                                 <p>{{dog.subtitle}}</p>
-                                <footer class="blockquote-footer">{{dog.breeder.fullName}} <cite
-                                            :title="dog.kennel.label">{{dog.kennel.label}}</cite>
+                                <footer class="blockquote-footer">
+                                    {{dog.owners.fullName}}
+<!--                                    <cite :title="dog.kennel.label">{{dog.kennel.label}}</cite>-->
                                 </footer>
                             </blockquote>
                         </div>
