@@ -34,7 +34,7 @@
                     :class="classObject"
                 >{{ruleForm.label}}
                 </h1>
-                <el-button class="not-border text-danger" icon="el-icon-warning-outline" size="mini" v-popover:popover circle></el-button>
+              <p>  <el-button class="not-border text-danger" icon="el-icon-warning-outline" size="mini" v-popover:popover circle></el-button></p>
             </div>
         </template>
         <template v-else>
@@ -148,6 +148,20 @@
                     <div class="mt-5">
                         <el-divider content-position="left">Русский</el-divider>
 
+
+                        <% /* НАЗВАНИЕ ТИТУЛА на русском*/ %>
+                        <template>
+                            <el-form-item label="<%= __('Title') %> (Ru)" prop="labelRu">
+                                <el-input show-word-limit
+                                          style="width:80%;"
+                                          clearable
+                                          maxlength="70"
+                                          size="small"
+                                          :keyup="ruleForm.labelRu"
+                                          placeholder="<%= __('Title') %>"
+                                          v-model="ruleForm.labelRu"></el-input>
+                            </el-form-item>
+                        </template>
                         <% /* ОПИСАНИЕ ТИТУЛА на русском */ %>
                         <template>
                             <el-form-item label="<%= __('Description') %> (Ru)" prop="subtitleRu">
@@ -167,20 +181,6 @@
                             </el-form-item>
                         </template>
 
-
-                        <% /* НАЗВАНИЕ ТИТУЛА на русском*/ %>
-                        <template>
-                            <el-form-item label="<%= __('Title') %> (Ru)" prop="labelRu">
-                                <el-input show-word-limit
-                                          style="width:80%;"
-                                          clearable
-                                          maxlength="70"
-                                          size="small"
-                                          :keyup="ruleForm.labelRu"
-                                          placeholder="<%= __('Title') %>"
-                                          v-model="ruleForm.labelRu"></el-input>
-                            </el-form-item>
-                        </template>
                     </div>
                     <% /* ССЫЛКА НА ФЛАГ СТРАНЫ*/ %>
                     <!--<template>
@@ -303,7 +303,7 @@
                 </el-table-column>
 
                 <%/*ПОИСК */%>
-                <el-table-column
+               <!-- <el-table-column
                         label="(En)"
                         sortableв
                         prop="subtitleRu"
@@ -320,7 +320,7 @@
                                        circle></el-button>
                         </el-popover>
                     </template>
-                </el-table-column>
+                </el-table-column>-->
 
                 <el-table-column align="right">
                     <template slot="header" slot-scope="scope">
@@ -339,17 +339,27 @@
                                     @click="handleEditPhotos(scope.$index, scope.row)">
                             </el-button>
                         </el-tooltip>
-                        <el-button
+                    <!--    <el-button
                                 size="mini"
                                 @click="handleEdit(scope.$index, scope.row)">
                             Edit
-                        </el-button>
-                        <el-button
+                        </el-button>-->
+                        <el-popover
+                                placement="left-end"
+                                title=""
+                                width="300"
+                                trigger="hover"
+                                :content="scope.row.subtitleRu">
+                            <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit" slot="reference"
+                                       circle></el-button>
+                        </el-popover>
+                   <!--     <el-button
                                 size="mini"
                                 type="danger"
                                 @click="openRemoveDialog(scope.row.id)"
                         >Delete
-                        </el-button>
+                        </el-button>-->
+                        <el-button type="danger"   @click="openRemoveDialog(scope.row.id)" icon="el-icon-delete" circle></el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -645,14 +655,14 @@
                             <transition-group appear name="el-fade-in">
                                 <div v-show="show && (showTitle === title.id)" class="transition-box blue-dark" :class="{death:title.dateDeath}"
                                      :key="title.id">
-                                    <% /* Кнопки управления собакой */ %>
+                                    <% /* Кнопки управления */ %>
                                     <div class="menu-center-v">
                                         <div class="py-4">
                                             <el-link :href="title.detail" class="link" :underline="false">
 
                                                 <div :class="{deathColor:title.dateDeath}"> {{me.preferredLocale==='ru' ? title.label : title.label}}</div>
 
-                                                <div class="date" :class="{textSecondary:title.subtitleRu}">{{title.subtitleRu}}
+                                                <div class="my-3 text-capitalize" :class="{textSecondary:title.subtitleRu}">{{title.subtitleRu}}
                                                 </div>
                                             </el-link>
                                             <el-row class="mt-2">
