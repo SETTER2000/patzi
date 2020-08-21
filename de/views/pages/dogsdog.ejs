@@ -526,9 +526,10 @@
                             <div class="menu-between" v-if="dog.type">
                                 <span><%= __('Variety') %></span> <span>{{dog.type}}</span>
                             </div>
-                            <div class="menu-between" v-if="dog.growth">
-                                <span><%= __('Size') %> </span> <span>{{dog.growth}}<%= __('cm') %>
-                  ({{dog.growth | getDin}}") / {{dog.weight/1000}}<%= __('kg') %> ({{dog.weight | getFunt}}#)</span>
+                            <div class="menu-between" v-if="dog.growth > 20">
+                                <span><%= __('Size') %> </span> <template>{{dog.growth}}<%= __('cm') %>
+                  ({{dog.growth | getDin}}") <template v-if="dog.weight > 20">/ {{dog.weight/1000}}<%= __('kg') %> ({{dog.weight | getFunt}}#)
+                                </template></template>
                             </div>
                         </div>
                     </el-card>
@@ -552,14 +553,16 @@
 
                         <div class="menu-center">
                             <el-link :underline="false" type="info" :href="getLinkKennel(dog.kennel.label)">
-                                {{dog.kennel.label}} <span
-                                        v-if="dog.breeder.country">({{dog.breeder.country}})</span></el-link>
+                                {{dog.kennel.label}}
+                                <span v-if="dog.breeder.country">({{dog.breeder.country}})</span>
+                            </el-link>
                         </div>
                     </el-card>
                     <% /* ВЛАДЕЛЕЦ OWNER*/ %>
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
-                            <span><%= __('Owner') %>: {{dog.owners.fullName}} <template v-if="dog.owners.country">({{dog.owners.country.label}})</template></span>
+                            <span><%= __('Owner') %>: {{dog.owners.fullName}}
+                                <template v-if="dog.owners.country">({{dog.owners.country}})</template></span>
 
                         </div>
                         <div class="menu-center">
@@ -605,12 +608,12 @@
                     </el-card>
 
                     <% /* РАЗНОЕ */ %>
-                    <el-card class="box-card" v-if="dog.birthWeight | dog.teethCount">
+                    <el-card class="box-card" v-if="(dog.birthWeight && dog.birthWeight>20) | dog.teethCount">
                         <div slot="header" class="clearfix">
                             <span><%= __('Varia') %></span>
                         </div>
                         <div class="menu-between-v">
-                            <div class="menu-between" v-if="dog.birthWeight">
+                            <div class="menu-between" v-if="dog.birthWeight && dog.birthWeight>20">
                                 <span><%= __('Birth weight') %>:</span> <span>{{dog.birthWeight}} g</span>
                             </div>
                             <span v-if="dog.showTeeth">
