@@ -8,8 +8,9 @@ parasails.registerPage('dog', {
     dialogPedigreeVisible: true,
     dialogImageUrl: '',
     titles: [],
+    contPuppies: 0,
     childrens: [],
-    urlYoutube:'',
+    urlYoutube: '',
     drawer: false,
     video: true,
     siblings: false,
@@ -672,9 +673,13 @@ parasails.registerPage('dog', {
       });
       this.dog = Object.assign({}, this.dog, {litter: u});
     },
-    getUrlShare(){
+    getUrlShare() {
       return `https://www.facebook.com/sharer/sharer.php?u=${this.seo.canonical}&amp;src=sdkpreparse`;
       // https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse
-    }
+    },
+
+    countPuppies() {
+      return this.dog.litter ?  _.flatten(_.pluck(this.dog.litter, 'litter')).length : 0;
+    },
   }
 });
