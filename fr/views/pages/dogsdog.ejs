@@ -868,7 +868,7 @@
             <div class="container">
                 <div class="flex justify-content-center mt-5">
                     <el-button v-if="!_.isEmpty(dog.litter)" @click="drawer = true" type="success" round>
-                        <%= __('Offsprings') %>
+                        <%= __('Offsprings') %> {{countPuppies()}}
                     </el-button>
                     <el-button v-if="dog.siblings && dog.siblings.length > 1"
                                type="warning" @click="siblings = true" type="success" round><%= __('Siblings') %>
