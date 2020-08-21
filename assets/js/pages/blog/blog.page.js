@@ -267,7 +267,7 @@ parasails.registerPage('blog', {
     fix() {
       if (this.post.images && this.post.images.length > 0) {
         this.post.images.map(im => {
-          im.url = im.imageSrc;
+          im.url = im.imageSrc ? im.imageSrc : '/images/default-image.jpg';
         });
         this.post.fileList = this.post.images;
         // this.fileList = this.post.images;

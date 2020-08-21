@@ -35,7 +35,7 @@ parasails.registerComponent('patziPostHeader', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
   <section class="skrollable skrollable-between u-clearfix u-image u-shading u-section-1" id="carousel_6c71" data-image-width="1148" data-image-height="678">
-    <div class="u-clearfix u-sheet u-sheet-1"> 
+    <div class="u-clearfix u-sheet u-sheet-1">
       <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
         <div class="u-layout">
           <div class="u-layout-row">
@@ -53,13 +53,8 @@ parasails.registerComponent('patziPostHeader', {
                   </div>
                 </div>
 
-                <!--<el-image ref="wrapper" v-if="post.images && post.images.length>0" 
-                :src="post.images[0].imageSrc" 
-                :fit="'cover'" 
-                class="u-align-left u-image u-image-1 img-poz"
-                :preview-src-list="post.imagesArrUrl">
-                </el-image>-->   
-                <img ref="wrapper" :src="post.images[0].imageSrc" alt="" class="u-align-left u-image u-image-1">
+
+                <img ref="wrapper" :src="getUrlImg()" alt="" class="u-align-left u-image u-image-1">
                   <transition name="fade">
                   <div v-if="showRule"  class="block d-flex justify-content-center align-content-center" >
                   <el-slider
@@ -68,7 +63,7 @@ parasails.registerComponent('patziPostHeader', {
                         style="width: 250px"
                      >
                     </el-slider>
-                  </div> 
+                  </div>
                   </transition>
                 <div class="u-border-4 u-border-palette-1-base u-shape u-shape-circle u-shape-2"></div>
               </div>
@@ -87,21 +82,21 @@ parasails.registerComponent('patziPostHeader', {
             <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-21 u-layout-cell-2">
 
               <div class="u-container-layout u-container-layout-3">
-              
+
                 <div class="u-border-9 u-border-grey-5 u-line u-line-horizontal u-line-1"></div>
                 <h1 class="u-custom-font u-font-oswald u-text u-text-grey-10 u-text-3">{{objData.preferredLocale ==='ru' ? post.labelRu : post.label}}</h1>
                 <h4 class="u-custom-font u-font-open-sans u-text u-text-5"> <strong> {{objData.preferredLocale ==='ru' ? 'Тема' : 'Theme'}}</strong>: {{objData.preferredLocale ==='ru' ? post.topic.labelRu : post.topic.label}}</h4>
                 <p class="u-text u-text-5">
                 {{objData.preferredLocale ==='ru' ? post.subtitleRu : post.subtitle}}
                 </p>
-          
-                <el-row class="edit-buttons" >                 
+
+                <el-row class="edit-buttons" >
                     <el-button  @click="goto('/blog')" icon="el-icon-house" circle></el-button>
                     <template v-if="post.isAdmin || post.isSuperAdmin">
                     <el-button  @click="openEditDialog()" type="primary" icon="el-icon-edit" circle></el-button>
                     <el-button type="warning" @click="toggle" icon="el-icon-s-operation" circle></el-button>
                     <el-button  @click="removeItem()" type="danger" icon="el-icon-delete" circle></el-button>
-                   
+
                     </template>
                 </el-row>
                     <div class="fb-share-button"
@@ -211,6 +206,9 @@ parasails.registerComponent('patziPostHeader', {
     },
     getUrlShare(){
       return `https://www.facebook.com/sharer/sharer.php?u=${this.objData.canonical}&amp;src=sdkpreparse`;
+    },
+    getUrlImg(){
+      return  this.post.images && this.post.images.length > 0 ? this.post.images[this.post.cover].imageSrc : '/images/default-image.jpg' ;
     }
   }
 });
