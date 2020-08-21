@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Destroy one title',
 
 
-  description: `Удалить один титул.`,
+  description: `Удалить одну федерацию.`,
 
 
   inputs: {

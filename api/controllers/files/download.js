@@ -90,6 +90,9 @@ module.exports = {
       case 'Title':
         collectionObject = await Title.findOne(inputs.id);
         break;
+      case 'Federation':
+        collectionObject = await Federation.findOne(inputs.id);
+        break;
     }
 
     if (!collectionObject) {

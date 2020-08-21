@@ -7,11 +7,35 @@ parasails.registerPage('federations-home', {
     hidden: 0,
     centerDialogAdded: false,
     countrys: [],
+    dialogEditor:false,
+    search: '',
+    federations:[],
+    editorList: [],
+    show: false,
+    id: undefined,
+    dialog: {},
+    checkAll: false,
+    checkedPhoto: [],
+    objOne: {},
+    isIndeterminate: true,
     limit: 4,
+    showTitle: undefined,
+    photoVisible: false,
+    photos: {},
+    photoDescUpdate: false,
+    photoDesc: {
+      innerVisiblePhotoDescription: false,
+      photoId: '',
+      description: '',
+      dateTaken: '',
+    },
+    centerDialogVisiblePhotos: false,
     sizeLess: 5, // MB
     buttonUpdate: false,
     dialogVisible: false,
     dialogImageUrl: '',
+    searchObjects: '',
+    dialogEditorList: false,
     ruleForm: {
       see: true,
       errInputLang: false,
@@ -28,26 +52,6 @@ parasails.registerPage('federations-home', {
         {required: true, message: 'Пожалуйста введите название на английском', trigger: 'blur'},
         {min: 2, max: 200, message: 'Длинна от 3 до 200 знаков', trigger: 'blur'},
       ],
-      // labelRu: [
-      //   {required: true, message: 'Пожалуйста введите название на русском', trigger: 'blur'},
-      //   {min: 3, max: 200, message: 'Длинна от 3 до 200 знаков', trigger: 'blur'},
-      // ],
-      // continent: [
-      //   {required: true, message: 'Please select your continent', trigger: 'change'}
-      // ],
-      // // country: [
-      // //   {required: true, message: 'Please select your country', trigger: 'change'}
-      // // ],
-      // region: [
-      //   {required: true, message: 'Please select Activity zone', trigger: 'change'}
-      // ],
-      // gender: [
-      //   {required: true, message: 'Please select a title gender.', trigger: 'change'}
-      // ],
-      // description: [
-      //   {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
-      //   {max: 1700, message: 'Length should be 10 to 1700', trigger: 'blur'}
-      // ]
     },
     dic: [
       ['en', {
@@ -75,11 +79,11 @@ parasails.registerPage('federations-home', {
         selectGender: 'Please select a title gender.',
         growth: 'How to measure a title\'s height?',
         hairless: 'What is a down or naked title?',
-        infoColor: 'Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of titles by color, but rather an attempt to provide more information on the appearance of the title. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding titles.',
+        infoColor: 'Chinese Crested may have any combination of colors, as prescribed in the FCI 288 standard. <br/>This paragraph does not apply to the classification of federations by color, but rather an attempt to provide more information on the appearance of the title. People in their lives always have priorities, this also applies to color, the preference of one or another color often becomes decisive when buying or breeding federations.',
         whyColor: 'Why determine the color.',
         priceTitle: 'Selling price.',
         priceText: 'You can set the price at any time, but until the price is set, the title will not appear on the sales page. Remember to set the selling currency.',
-        recommendationsSale: 'Recommendations for the sale of titles. Describe the main advantages and benefits of the title. This information will be posted on the title’s card on the sales page.',
+        recommendationsSale: 'Recommendations for the sale of federations. Describe the main advantages and benefits of the title. This information will be posted on the title’s card on the sales page.',
         areYouClose: 'Are you sure you want to close chat?',
         startOfNegotiations: 'My name is Olga, I am a breeder and owner of the nursery Poale Ell. I see your choice fell on a puppy by name ',
         startOfNegotiations2: '. Ready to answer your questions.',
@@ -89,7 +93,7 @@ parasails.registerPage('federations-home', {
         limitExceededText: `Лимит`,
         limitExceededText2: `вы выбрали`,
         limitExceededText3: `Всего`,
-        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе.
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         warnRemove: 'Это навсегда удалит объект. Продолжить?',
         photoEditor: 'Редактор фотографий',
@@ -135,6 +139,24 @@ parasails.registerPage('federations-home', {
     // Кол-во всех тем
     io.socket.on('count-federation', (data) => {
       this.counts = data;
+    });
+    io.socket.get('/api/v1/country/list', function gotResp(body, response) {
+      console.log('Сервер country/list ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // All country
+    io.socket.on('list-country', (data) => {
+      this.countrys = data.countrys;
+      this.countrys.unshift({labelRu:'Нет страны', label:''});
+      console.log('ALL COUNTRYS::: ', this.countrys);
+    });
+    // Запрос для события list-*
+    io.socket.get(`/api/v1/federations/list`, function gotResponse(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Все
+    io.socket.on('list-federation', (data) => {
+      console.log('Federation all:: ', data);
+      this.federations = this.editorList = data ? data : this.editorList;
     });
   },
   filters: {
@@ -293,8 +315,8 @@ parasails.registerPage('federations-home', {
 
     // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
-      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
-      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
     // Срабатывает перед удалением одного файла
@@ -430,7 +452,187 @@ parasails.registerPage('federations-home', {
       await io.socket.on('hidden-federation', (data) => {
         this.hidden = data;
       });
+    },
+    objFilter() {
+      // federations.filter(title=>title.see)
+      return this.federations && this.federations.length>0 ? this.federations.filter(data => (!this.searchObjects || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & (!_.isEmpty(data.images) || !_.isEmpty(data.flag))):[];
+      // return this.federations.filter(data => (!this.searchObjects || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & !_.isEmpty(data.images[data.cover]));
+    },
+    deleteObj: async function () {
+      let data = {
+        id: this.removeId,
+      };
+      console.log('Перед удалением data: ', data);
+      io.socket.delete('/api/v1/federations/destroy-one', data, (dataRes, jwRes) => {
+        this.errorMessages(jwRes, this.i19p.successDelete);
+        this.dialogDeletePhotoSession = false;
+        if (jwRes.statusCode === 200) {
+          // this.$message({
+          //   type: 'success',
+          //   message: this.i19p.success
+          // });
+          this.getList();
+          this.$forceUpdate();
+        }
+      });
+    },
+    async updateDescriptionPhoto() {
+      this.photoDesc.id = this.photos.id;
+      this.photoDesc.innerVisiblePhotoDescription = false;
+      await io.socket.put('/api/v1/federations/update-description-img', this.photoDesc, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        // this.loading.close();
+        if (jwRes.statusCode === 200) {
+          // this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          this.checkedPhoto = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+          this.$forceUpdate();
+        }
+      });
+    },
+    // Выбирает темы для редактирования
+    dialogEditors() {
+      this.editorList = (this.me.isAdmin || this.me.isSuperAdmin) ? this.federations : '';
+      this.dialogEditorList = true;
+    },
+    clearFilter() {
+      this.$refs.filterTable.clearFilter();
+      this.search = '';
+    },
+    // Вы можете выделить содержимое таблицы,
+    // чтобы различать «успех, информация, предупреждение, опасность» и другие состояния.
+    tableRowClassName({row, rowIndex}) {
+      if (!row.see) {
+        return 'warning-row';
+      }
+      // else if (rowIndex === 3) {
+      //   return 'success-row';
+      // }
+      return '';
+    },
 
+
+
+    handleEditPhotos(index, row) {
+      this.photos = row;
+      // console.log('Собака::: ', row);
+      this.centerDialogVisiblePhotos = true;
+    },
+
+    handleCheckAllChange(val) {
+      this.checkedPhoto = val ? _.pluck(this.photos.images, 'id') : [];
+      this.isIndeterminate = false;
+      // console.log('this.checkedPhoto:: ', this.checkedPhoto);
+    },
+    handleCheckedPhotosChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === _.pluck(this.photos.images, 'id').length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < _.pluck(this.photos.images, 'id').length;
+    },
+    clickShowPhoto(index, row) {
+      this.photoVisible = true;
+      this.objOne = Object.assign({}, this.objOne, row);
+    },
+    handleCloseDialog(done) {
+      done();
+      /*  this.$confirm('Are you sure to close this dialog?')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {
+          });*/
+    },
+
+    showMenu(id) {
+      this.id = id;
+      this.show = true;
+      this.showTitle = id;
+    },
+    errorHandler() {
+      return true;
+    },
+    showOut() {
+      this.show = false;
+    },
+    getLinkFlag(country){
+      return `https://d3a1wbnh2r1l7y.cloudfront.net/flags/${country}.jpg`;
+    } ,
+    async handleEdit(index, row) {
+      row.titleBackground = _.isArray(row.titleBackground) ? await _.each(row.titleBackground, bg => {
+        bg.url = bg.imageSrc;
+        return bg;
+      }) : [];
+      this.ruleForm = row;
+      console.log('this.ruleForm:::: ', this.ruleForm);
+
+      // this.dateBirthUpdate = row.dateBirth;
+      // this.dateDeathUpdate = row.dateDeath;
+      // this.ruleForm.kennel = row.kennel.id;
+      this.dialogEditor = true;
+      this.centerDialogAdded = true;
+      this.buttonUpdate = true;
+    },
+    // Update
+    update() {
+      this.openFullScreen();
+      let data = {
+        id: this.ruleForm.id,
+        fileList: this.ruleForm.fileList,
+        titleBackground: this.ruleForm.titleBackground,
+        label: this.ruleForm.label,
+        // flag: this.getLinkFlag(),
+        flag: this.ruleForm.flag,
+        labelRu: this.ruleForm.labelRu,
+        see: this.ruleForm.see,
+        subtitle: this.ruleForm.subtitle,
+        subtitleRu: this.ruleForm.subtitleRu,
+      };
+      console.log('DATA UPDATE перед отправкой ::: ', data);
+
+      io.socket.put('/api/v1/federations/update-federation', data, (data, jwRes) => {
+        (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
+          (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
+            (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
+              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
+              (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
+        this.buttonUpdate = false;
+        this.centerDialogAdded = false;
+        this.loading.close();
+        if (jwRes.statusCode === 200) {
+          this.resetForm('ruleForm');
+          this.ruleForm.fileList = [];
+          // this.ruleForm.file = [];
+          this.ruleForm.imageUrl = '';
+          this.ruleForm.federations = this.resetFederation;
+          this.getList();
+          this.$forceUpdate();
+        }
+      });
+    },
+    openRemoveDialog(id) {
+      this.removeId = id;
+      this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
+        confirmButtonText: 'OK',
+        cancelButtonText: this.i19p.cancel,
+        type: 'warning'
+      }).then(() => {
+        this.deleteObj();
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.i19p.delCancel
+        });
+      });
     },
   }
 });

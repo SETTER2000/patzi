@@ -217,13 +217,16 @@ module.exports.routes = {
   'GET    /api/v1/titles/title-hidden': {action: 'titles/title-hidden'},
   'POST   /api/v1/titles/create-title': {action: 'titles/create-title', csrf: false},
   'PUT    /api/v1/titles/update-title': {action: 'titles/update-title', csrf: false},
-  'DELETE /api/v1/titles/destroy-one-title': {action: 'titles/destroy-one-title', csrf: false},
+  'DELETE /api/v1/titles/destroy-one': {action: 'titles/destroy-one', csrf: false},
   'DELETE /api/v1/titles/destroy-many-img': {action: 'titles/destroy-many-img', csrf: false},
 
+  'GET    /api/v1/federations/list': {action: 'federations/list'},
   'GET    /api/v1/federations/count-federation': {action: 'federations/count-federation'},
   'GET    /api/v1/federations/hidden-federation': {action: 'federations/hidden-federation'},
   'POST   /api/v1/federations/create-federation': { action: 'federations/create-federation', csrf: false },
-
+  'PUT    /api/v1/federations/update-federation': {action: 'federations/update-federation', csrf: false},
+  'DELETE /api/v1/federations/destroy-one': {action: 'federations/destroy-one', csrf: false},
+  'DELETE /api/v1/federations/destroy-many-img': {action: 'federations/destroy-many-img', csrf: false},
 
     'GET    /api/v1/continents/list': {action: 'continents/list'},
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},

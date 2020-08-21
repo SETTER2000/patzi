@@ -117,7 +117,7 @@ parasails.registerPage('titles-home', {
         limitExceededText: `Лимит`,
         limitExceededText2: `вы выбрали`,
         limitExceededText3: `Всего`,
-        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе.
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         warnRemove: 'Это навсегда удалит объект. Продолжить?',
         photoEditor: 'Редактор фотографий',
@@ -167,21 +167,27 @@ parasails.registerPage('titles-home', {
     io.socket.get('/api/v1/country/list', function gotResp(body, response) {
       console.log('Сервер country/list ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
+
     // Запрос для события list-*
     io.socket.get(`/api/v1/titles/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Все темы
+    io.socket.on('list-title', (data) => {
+      console.log('Titles all:: ', data);
+      this.titles = this.editorList = data ? data : this.editorList;
     });
     // получаем кол-во скрытых элементов
     io.socket.get('/api/v1/titles/title-hidden', function gotResp(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
-
     // All country
     io.socket.on('list-country', (data) => {
       this.countrys = data.countrys;
       this.countrys.unshift({labelRu:'Нет страны', label:''});
       console.log('ALL COUNTRYS::: ', this.countrys);
     });
+
     // Кол-во всех тем
     io.socket.on('title-hidden', (data) => {
       this.hidden = data;
@@ -191,11 +197,7 @@ parasails.registerPage('titles-home', {
       // this.getList();
       this.$forceUpdate();
     });
-    // Все темы
-    io.socket.on('list-title', (data) => {
-      console.log('Titles all:: ', data);
-      this.titles = this.editorList = data ? data : this.editorList;
-    });
+
   },
 
 
@@ -314,8 +316,8 @@ parasails.registerPage('titles-home', {
 
     // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
-      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
-      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
 
@@ -421,7 +423,7 @@ parasails.registerPage('titles-home', {
         }
       });
     },
-    // Update Title
+    // Update
     update() {
       this.openFullScreen();
       let data = {
@@ -600,7 +602,7 @@ parasails.registerPage('titles-home', {
         id: this.removeId,
       };
       console.log('Перед удалением data Title: ', data);
-      io.socket.delete('/api/v1/titles/destroy-one-title', data, (dataRes, jwRes) => {
+      io.socket.delete('/api/v1/titles/destroy-one', data, (dataRes, jwRes) => {
         this.errorMessages(jwRes, this.i19p.successDelete);
         this.dialogDeletePhotoSession = false;
         if (jwRes.statusCode === 200) {
