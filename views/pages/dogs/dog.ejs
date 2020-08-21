@@ -587,11 +587,17 @@
                                 {{parent.fullName}}
                             </el-link>
                         </div>
-                        <div class="menu-between">
-                            <span><%= __('Size') %>: </span> <span>{{parent.growth}}<%= __('cm') %>
-                ({{parent.growth | getDin}}") / {{parent.weight/1000}}<%= __('kg') %>
-                ({{parent.weight | getFunt}}#)
-                            </span>
+<!--                        <div class="menu-between">-->
+<!--                            <span><%= __('Size') %>: </span> <span>{{parent.growth}}<%= __('cm') %>-->
+<!--                ({{parent.growth | getDin}}") / {{parent.weight/1000}}<%= __('kg') %>-->
+<!--                ({{parent.weight | getFunt}}#)-->
+<!--                            </span>-->
+<!--                        </div>-->
+
+                        <div class="menu-between" v-if="parent.growth > 20">
+                            <span><%= __('Size') %> </span> <template>{{parent.growth}}<%= __('cm') %>
+                                ({{parent.growth | getDin}}") <template v-if="parent.weight > 20">/ {{parent.weight/1000}}<%= __('kg') %> ({{parent.weight | getFunt}}#)
+                                </template></template>
                         </div>
                         <div v-if="parent">
                             <template>

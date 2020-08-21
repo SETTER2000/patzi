@@ -225,7 +225,7 @@ parasails.registerPage('dogs-home', {
       label: '',
       nickname: '',
       headerVideo: '',
-      headerVideoShow: true,
+      headerVideoShow: false,
       stamp: '',
       /*  canine: '',
         bite: '',
