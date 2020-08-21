@@ -680,7 +680,7 @@ parasails.registerPage('users-home', {
         description: this.ruleForm.description
       };
 
-      // console.log('DATA create перед отправкой::: ', data);
+      console.log('DATA create перед отправкой::: ', data);
       await io.socket.post('/api/v1/users/create-user', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(`${this.i19p.text400Err} ${jwRes.headers['x-exit-description']}`) :

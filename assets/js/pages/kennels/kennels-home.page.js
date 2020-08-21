@@ -280,6 +280,16 @@ parasails.registerPage('kennels-home', {
   },
 
   filters: {
+    getCreate: function (value, l, format) {
+      if (!value) {
+        return '';
+      }
+      // console.log('format::: ', format);
+      moment.locale(l);
+      let formatNew = _.isEmpty(format) ? 'LLL' : format;
+      return (moment(value).format(formatNew)) ? moment(value).format(formatNew) : value;
+      // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
+    },
     /**
      * Показывает возраст с учётом смерти.
      * @param value дата рождения
@@ -475,7 +485,7 @@ parasails.registerPage('kennels-home', {
         phones: this.ruleForm.phones
       };
 
-      // console.log('KENNEL before added::: ', data);
+      console.log('KENNEL before added::: ', data);
       await io.socket.post('/api/v1/kennels/create-kennel', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :

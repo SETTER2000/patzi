@@ -173,28 +173,30 @@ module.exports = {
     await sails.sockets.join(req, 'kennel');
 
     inputs.file = (_.get(inputs.file, 'fd')) ? inputs.file : '';
+     let beforeNewKennel = {
+       imageUploadFD: inputs.file.fd,
+       imageUploadMime: inputs.file.type,
+       filename: inputs.file.filename,
+       label: _.startCase(inputs.label.toString().toLowerCase()).replace(/Fci\b/g, '(FCI)'),
+       yourKennel: inputs.yourKennel,
+       breeder: (inputs.yourKennel) ? this.req.me.id : null,
+       whoCreate: this.req.me.id,
+       rightName: inputs.rightName,
+       registerNumber: _.trim(inputs.registerNumber),
+       dateCreate: await sails.helpers.dateFix(inputs.dateCreate),
+       subtitle: inputs.subtitle,
+       manufacturers: inputs.manufacturers,
+       site: _.trim(inputs.site),
+       city: _.isEmpty(inputs.city) ? null : inputs.city,
+       country: inputs.country,
+       continent: inputs.continent,
+       region: inputs.region,
+       address: inputs.address,
+       phones: inputs.phones
+     };
 
-    let newKennel = await Kennel.create({
-      imageUploadFD: inputs.file.fd,
-      imageUploadMime: inputs.file.type,
-      filename: inputs.file.filename,
-      label: _.startCase(inputs.label.toString().toLowerCase()).replace(/Fci\b/g, '(FCI)'),
-      yourKennel: inputs.yourKennel,
-      breeder: (inputs.yourKennel) ? this.req.me.id : null,
-      whoCreate: this.req.me.id,
-      rightName: inputs.rightName,
-      registerNumber: _.trim(inputs.registerNumber),
-      dateCreate: await sails.helpers.dateFix(inputs.dateCreate),
-      subtitle: inputs.subtitle,
-      manufacturers: inputs.manufacturers,
-      site: _.trim(inputs.site),
-      city: _.isEmpty(inputs.city) ? null : inputs.city,
-      country: inputs.country,
-      continent: inputs.continent,
-      region: inputs.region,
-      address: inputs.address,
-      phones: inputs.phones
-    }).fetch();
+     console.log('beforeNewKennel::: ' , beforeNewKennel);
+    let newKennel = await Kennel.create(beforeNewKennel).fetch();
 
     if (!newKennel) {
       throw 'badRequest';
@@ -244,7 +246,7 @@ module.exports = {
     }
 
 
-    console.log('RESULT COL::: ', result);
+    // console.log('RESULT COL::: ', result);
     // Рассылаем данные всем подписанным на событие list данной комнаты.
     await sails.sockets.broadcast('kennel', 'list-kennel', result.collection);
 

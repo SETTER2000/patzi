@@ -263,6 +263,7 @@ module.exports = {
     //   emailStatus: 'unconfirmed'
     // } : {});
 
+    console.log('BEFORE CREATE USER: ' , data);
     // Создаём пользователя
     let newUser = await User.create(data)
       .intercept('E_UNIQUE', ()=>conflictingEmail)
