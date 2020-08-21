@@ -649,6 +649,7 @@ parasails.registerPage('dogs-home', {
     // Create
     async addDog() {
       this.openFullScreen();
+      console.log('ruleForm::: ' , this.ruleForm);
       // console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
       let data = {
         fileList: this.ruleForm.fileList,
@@ -1319,6 +1320,7 @@ parasails.registerPage('dogs-home', {
 
 
     handleEdit(index, row) {
+      console.log('DOG edit::::', row);
       this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
       this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
       this.owner = _.last(_.pluck(row.owners, 'fullName'));
@@ -1330,6 +1332,7 @@ parasails.registerPage('dogs-home', {
       this.dialogEditor = true;
       this.centerDialogAdded = true;
       this.buttonUpdate = true;
+      console.log('DOG edit 2::::', row);
     },
 
 

@@ -23,7 +23,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    const moment = require('moment');
+    // const moment = require('moment');
 
     let data = await Federation.find();
 

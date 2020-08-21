@@ -82,6 +82,7 @@
     "Image": true,
     "Title": true,
     "Post": true,
+    "Federation": true,
     "Topic": true
 
     // …and any others.

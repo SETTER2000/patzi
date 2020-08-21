@@ -211,7 +211,7 @@ module.exports.routes = {
   'PUT    /api/v1/posts/update-position-img': { action: 'posts/update-position-img', csrf: false },
 
 
-    'GET    /api/v1/titles/list': {action: 'titles/list'},
+  'GET    /api/v1/titles/list': {action: 'titles/list'},
   'GET    /api/v1/titles/count-title': {action: 'titles/count-title'},
   'GET    /api/v1/titles/:id': {action: 'titles/get-dog-titles'},
   'GET    /api/v1/titles/title-hidden': {action: 'titles/title-hidden'},
@@ -220,8 +220,12 @@ module.exports.routes = {
   'DELETE /api/v1/titles/destroy-one-title': {action: 'titles/destroy-one-title', csrf: false},
   'DELETE /api/v1/titles/destroy-many-img': {action: 'titles/destroy-many-img', csrf: false},
 
+  'GET    /api/v1/federations/count-federation': {action: 'federations/count-federation'},
+  'GET    /api/v1/federations/hidden-federation': {action: 'federations/hidden-federation'},
+  'POST   /api/v1/federations/create-federation': { action: 'federations/create-federation', csrf: false },
 
-  'GET    /api/v1/continents/list': {action: 'continents/list'},
+
+    'GET    /api/v1/continents/list': {action: 'continents/list'},
   'GET    /api/v1/continents/:id': {action: 'continents/download-photo'},
   'POST   /api/v1/continents/create-continent': {action: 'continents/create-continent', csrf: false},
 

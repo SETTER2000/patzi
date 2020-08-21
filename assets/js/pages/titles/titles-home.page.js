@@ -160,6 +160,10 @@ parasails.registerPage('titles-home', {
     io.socket.get('/api/v1/titles/count-title', function gotResp(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
+    // Кол-во всех тем
+    io.socket.on('count-title', (data) => {
+      this.counts = data;
+    });
     io.socket.get('/api/v1/country/list', function gotResp(body, response) {
       console.log('Сервер country/list ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
@@ -171,10 +175,7 @@ parasails.registerPage('titles-home', {
     io.socket.get('/api/v1/titles/title-hidden', function gotResp(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
-    // Кол-во всех тем
-    io.socket.on('count-title', (data) => {
-      this.counts = data;
-    });
+
     // All country
     io.socket.on('list-country', (data) => {
       this.countrys = data.countrys;

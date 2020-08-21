@@ -12,7 +12,7 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-    abbr: {
+  /*  abbr: {
       type: 'string',
       description: `Аббревиатура наименования федерации`,
       example: 'FCI',
@@ -20,7 +20,7 @@ module.exports = {
       minLength: 2,
       maxLength: 15
     },
-
+*/
     label: {
       type: 'string',
       description: `Полное наименование федерации на английском.`,
@@ -39,10 +39,47 @@ module.exports = {
       maxLength: 300
     },
 
-    logo: {
+    flag: {
       type: 'string',
-      description: `Логотип федерации. Ссылка на картинку.`,
-      required: true
+      description: `ССылка на флаг страны. Из Википедии можно взять. SVG`
+    },
+    see: {
+      type: 'boolean',
+      defaultsTo: true,
+      description: `Флаг видимости титула. Видна или нет. По умолчанию видна.`
+    },
+
+    images: {
+      type: 'ref',
+      defaultsTo: [],
+      example: ['5d1f1b04fbe834262cbb8c53', '5d1f1b04fbe834262cbb8c54'],
+      description: `FD загруженных фотографий родителей`
+    },
+
+    titleBackground: {
+      type: 'ref',
+      example: {},
+      description: `Объект файла данных о загруженном файле. Фон титула.`
+    },
+
+    subtitle: {
+      type: 'string',
+      description: 'Дополнительная информация. Описание титула на английском языке.',
+      maxLength: 700
+    },
+
+    subtitleRu: {
+      type: 'string',
+      description: 'Дополнительная информация. Описание титула на русском языке.',
+      maxLength: 700
+    },
+
+    cover: {
+      type: 'number',
+      defaultsTo: 0,
+      example: 5,
+      description: `Номер ключа в массиве фотографий, который определяет главную фотографию альбома.
+                    Обложка альбома.`
     },
 
 
