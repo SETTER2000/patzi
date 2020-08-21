@@ -215,7 +215,7 @@ parasails.registerPage('dogs-home', {
         key: '',
         value: '',
         registerNumber: ''
-      },],
+      }],
       sire: '',
       fileList: [],
       color: '',

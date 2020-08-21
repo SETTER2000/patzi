@@ -36,7 +36,7 @@ parasails.registerComponent('patziTree', {
   //  ╦ ╦╔╦╗╔╦╗╦
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
-  template: `<section class="u-align-center u-clearfix u-image u-image-tiles u-section-4" id="carousel_6b06" data-image-width="400"
+  template: `<section class="u-align-center u-clearfix u-image u-image-tiles u-section-4"  data-image-width="400"
              data-image-height="400">
              <!--0 lev-->
                 <div class="d-flex   justify-content-center align-content-center">
