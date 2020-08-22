@@ -17,6 +17,7 @@ parasails.registerPage('dog', {
     siblings: false,
     titlesDog: [],
     obj: {},
+
     direction: 'ttb',
     dialogVisible: false,
     comment: '',
@@ -701,8 +702,8 @@ parasails.registerPage('dog', {
           delete fd.key;
           delete fd.value;
       }) : '';
-      // console.log('this.dog.federations::; ', this.dog.federations);
-      return str;
+
+      return str ;
     },
   }
 });

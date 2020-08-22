@@ -38,6 +38,7 @@ parasails.registerPage('dogs-home', {
     innerVisibleCo: false,
     innerVisibleDogEditor: false,
     isCollapse: true,
+    showRegNo: false,
     dialogEditor: false,
     photoDescUpdate: false,
     dogFullName: '',
