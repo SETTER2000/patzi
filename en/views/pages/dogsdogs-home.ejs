@@ -360,6 +360,8 @@
                                 :key="federation.key"
                                 :prop="'federations.' + index + '.registerNumber'"
                                 :rules="{required: true, message: 'Federation can not be null', trigger: 'blur'}">
+
+
                             <el-col :xs="14" :sm="18" :md="18" :lg="17" :xl="16">
                                 <el-input placeholder="<%= __("Dog's registration number") %>"
                                           v-model="federation.registerNumber"
@@ -378,9 +380,11 @@
                                                icon="el-icon-delete"></el-button>
                                 </el-input>
                             </el-col>
+
                         </el-form-item>
                         <% /* ВЕС при рождении */ %>
                         <template>
+
                             <el-row :gutter="2">
                                 <el-form-item label="<%= __('Birth weight (g)') %>" prop="birthWeight">
                                     <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
