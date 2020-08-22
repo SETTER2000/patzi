@@ -17,9 +17,19 @@ module.exports = {
       required: true,
       description: `Официальное имя темы на английском. Поле обязательно для заполнения.`
     },
+    dateBirth: {
+      type: 'string',
+      required: true,
+      description: 'Дата образования.'
+    },
     flag: {
       type: 'string',
       description: `ССылка на флаг страны. Из Википедии можно взять. SVG`
+    },
+    site: {
+      type: 'string',
+      description: `Сайт Федерации`,
+      maxLength:170
     },
     labelRu: {
       type: 'string',
@@ -87,7 +97,9 @@ module.exports = {
     let updateObj = {
       label: inputs.label.toUpperCase(),
       labelRu: inputs.labelRu,
+      dateBirth: await sails.helpers.dateConverter(inputs.dateBirth),
       flag: inputs.flag,
+      site: inputs.site,
       backgroundPosition: inputs.backgroundPosition,
       see: inputs.see,
       subtitle:_.startCase(inputs.subtitle.toString().toLowerCase()),

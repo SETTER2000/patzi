@@ -43,12 +43,21 @@ module.exports = {
       type: 'string',
       description: `ССылка на флаг страны. Из Википедии можно взять. SVG`
     },
+    site: {
+      type: 'string',
+      description: `Сайт Федерации`,
+      maxLength:170
+    },
     see: {
       type: 'boolean',
       defaultsTo: true,
       description: `Флаг видимости титула. Видна или нет. По умолчанию видна.`
     },
-
+    dateBirth: {
+      type: 'number',
+      required: true,
+      description: 'Дата образования.'
+    },
     images: {
       type: 'ref',
       defaultsTo: [],

@@ -11,6 +11,7 @@ parasails.registerPage('federations-home', {
     search: '',
     federations:[],
     editorList: [],
+    dateBirthUpdate: '',
     show: false,
     id: undefined,
     dialog: {},
@@ -42,6 +43,7 @@ parasails.registerPage('federations-home', {
       label: '',
       flag: '',
       labelRu: '',
+      dateBirth: '',
       subtitle: '',
       country:'',
       // gender: '',
@@ -51,6 +53,9 @@ parasails.registerPage('federations-home', {
       label: [
         {required: true, message: 'Пожалуйста введите название на английском', trigger: 'blur'},
         {min: 2, max: 200, message: 'Длинна от 3 до 200 знаков', trigger: 'blur'},
+      ],
+      dateBirth: [
+        {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
       ],
     },
     dic: [
@@ -243,6 +248,8 @@ parasails.registerPage('federations-home', {
         titleBackground: this.ruleForm.titleBackground,
         label: this.ruleForm.label,
         flag: this.ruleForm.flag,
+        dateBirth: JSON.stringify(this.ruleForm.dateBirth),
+        site: this.ruleForm.site,
         labelRu: this.ruleForm.labelRu,
         subtitle: this.ruleForm.subtitle,
         subtitleRu: this.ruleForm.subtitleRu,
@@ -571,10 +578,11 @@ parasails.registerPage('federations-home', {
         bg.url = bg.imageSrc;
         return bg;
       }) : [];
+      this.dateBirthUpdate = row.dateBirth;
       this.ruleForm = row;
       console.log('this.ruleForm:::: ', this.ruleForm);
 
-      // this.dateBirthUpdate = row.dateBirth;
+      this.dateBirthUpdate = row.dateBirth;
       // this.dateDeathUpdate = row.dateDeath;
       // this.ruleForm.kennel = row.kennel.id;
       this.dialogEditor = true;
@@ -589,6 +597,8 @@ parasails.registerPage('federations-home', {
         fileList: this.ruleForm.fileList,
         titleBackground: this.ruleForm.titleBackground,
         label: this.ruleForm.label,
+        site: this.ruleForm.site,
+        dateBirth: JSON.stringify(this.dateBirthUpdate),
         // flag: this.getLinkFlag(),
         flag: this.ruleForm.flag,
         labelRu: this.ruleForm.labelRu,

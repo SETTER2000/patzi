@@ -19,6 +19,17 @@ module.exports = {
       description: `ССылка на флаг страны. Из Википедии можно взять. SVG`
     },
 
+    site: {
+      type: 'string',
+      description: `Сайт Федерации`,
+      maxLength:170
+    },
+
+    dateBirth: {
+      type: 'string',
+      required: true,
+      description: 'Дата образования.'
+    },
     labelRu: {
       type: 'string',
       description: `Официальное имя титула на русском. Поле обязательно для заполнения.`
@@ -126,7 +137,9 @@ module.exports = {
     let newObj = await Federation.create({
       label: inputs.label.toUpperCase(),
       labelRu: inputs.labelRu,
+      dateBirth: await sails.helpers.dateConverter(inputs.dateBirth),
       flag: inputs.flag,
+      site: inputs.site,
       images: images,
       topicBackground: topicBackground,
       subtitle: _.startCase(inputs.subtitle.toString().toLowerCase()),
