@@ -703,11 +703,7 @@ parasails.registerPage('dog', {
           delete fd.value;
           delete fd.registerNumber;
       }) : '';
-
-      console.log('this.dog.federations::: ' , this.dog.federations);
       return str;
-      // console.log('this.dog.federations2::: ' , this.dog.federations.join());
-      // return this.dog.federations.join();
     },
   }
 });
