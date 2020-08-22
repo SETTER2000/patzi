@@ -46,7 +46,6 @@
         </section>
 
 
-
         <!--    кнопка-->
         <section v-if="me.isSuperAdmin || me.isAdmin" class="u-align-center u-clearfix u-section-2" id="sec-6766">
             <div class="u-clearfix u-sheet u-sheet-1">
@@ -472,10 +471,10 @@
                             </div>
                         </el-image>
                         <% /* КНОПКА ПОДЕЛИТЬСЯ*/ %>
-                       <!-- <div class="fb-share-button" :data-href="seo.canonical" data-layout="button_count"
-                             data-size="small"><a target="_blank" :href="getUrlShare()"
-                                                  class="fb-xfbml-parse-ignore">Поделиться</a>
-                        </div>-->
+                        <!-- <div class="fb-share-button" :data-href="seo.canonical" data-layout="button_count"
+                              data-size="small"><a target="_blank" :href="getUrlShare()"
+                                                   class="fb-xfbml-parse-ignore">Поделиться</a>
+                         </div>-->
                     </div>
 
                 </div>
@@ -501,7 +500,7 @@
                                 <p>{{dog.subtitle}}</p>
                                 <footer class="blockquote-footer">
                                     {{dog.owners.fullName}}
-<!--                                    <cite :title="dog.kennel.label">{{dog.kennel.label}}</cite>-->
+                                    <!--                                    <cite :title="dog.kennel.label">{{dog.kennel.label}}</cite>-->
                                 </footer>
                             </blockquote>
                         </div>
@@ -515,9 +514,9 @@
                         <div class="menu-between-v">
 
                             <% /* Регистрационный номер в федерации*/ %>
-                            <div class="menu-between">
+                            <div class="menu-between" v-if="regNo()">
                                 <span><%= __('Reg. no') %></span>
-                                <span>{{regNo()}}</span>
+                                <span class="text-uppercase">{{regNo()}}</span>
                             </div>
 
                             <div class="menu-between">
@@ -535,9 +534,13 @@
                                 <span><%= __('Variety') %></span> <span>{{dog.type}}</span>
                             </div>
                             <div class="menu-between" v-if="dog.growth > 20">
-                                <span><%= __('Size') %> </span> <template>{{dog.growth}}<%= __('cm') %>
-                  ({{dog.growth | getDin}}") <template v-if="dog.weight > 20">/ {{dog.weight/1000}}<%= __('kg') %> ({{dog.weight | getFunt}}#)
-                                </template></template>
+                                <span><%= __('Size') %> </span>
+                                <template>{{dog.growth}}<%= __('cm') %>
+                                    ({{dog.growth | getDin}}")
+                                    <template v-if="dog.weight > 20">/ {{dog.weight/1000}}<%= __('kg') %> ({{dog.weight
+                                        | getFunt}}#)
+                                    </template>
+                                </template>
                             </div>
                         </div>
                     </el-card>
@@ -586,18 +589,24 @@
                         </div>
                     </el-card>
                     <% /* РАЗНОЕ */ %>
-                    <el-card class="box-card" v-if="(dog.birthWeight && dog.birthWeight>20) | dog.teethCount | dog.dogTests">
+                    <el-card class="box-card"
+                             v-if="(dog.growth && dog.growth > 20) | dog.teethCount | dog.dogTests | dog.stamp">
                         <div slot="header" class="clearfix">
                             <span><%= __('Varia') %></span>
                         </div>
                         <div class="menu-between-v">
-                            <div class="menu-between" v-if="dog.birthWeight && dog.birthWeight>20">
+                            <div class="menu-between" v-if="dog.birthWeight && dog.birthWeight > 20">
                                 <span><%= __('Birth weight') %>:</span> <span>{{dog.birthWeight}} g</span>
                             </div>
+                            <div class="menu-between" v-if="dog.stamp">
+                                <span><%= __('Stamp') %>:</span> <span>{{dog.stamp}}</span>
+                            </div>
+
+                            <div class="menu-between" v-if="dog.dogTests">
+                                <span><%= __('Tests') %>:</span> <span>{{dog.dogTests}}</span>
+                            </div>
+
                             <span v-if="dog.showTeeth">
-                                  <div class="menu-between">
-                             <span><%= __('Tests') %>:</span> <span>{{dog.dogTests}}</span>
-                           </div>
                            <div class="menu-between">
                              <span><%= __('Bite') %>:</span> <span>{{dog.bite}}</span>
                            </div>
@@ -625,17 +634,21 @@
                                 {{parent.fullName}}
                             </el-link>
                         </div>
-<!--                        <div class="menu-between">-->
-<!--                            <span><%= __('Size') %>: </span> <span>{{parent.growth}}<%= __('cm') %>-->
-<!--                ({{parent.growth | getDin}}") / {{parent.weight/1000}}<%= __('kg') %>-->
-<!--                ({{parent.weight | getFunt}}#)-->
-<!--                            </span>-->
-<!--                        </div>-->
+                        <!--                        <div class="menu-between">-->
+                        <!--                            <span><%= __('Size') %>: </span> <span>{{parent.growth}}<%= __('cm') %>-->
+                        <!--                ({{parent.growth | getDin}}") / {{parent.weight/1000}}<%= __('kg') %>-->
+                        <!--                ({{parent.weight | getFunt}}#)-->
+                        <!--                            </span>-->
+                        <!--                        </div>-->
 
                         <div class="menu-between" v-if="parent.growth > 20">
-                            <span><%= __('Size') %> </span> <template>{{parent.growth}}<%= __('cm') %>
-                                ({{parent.growth | getDin}}") <template v-if="parent.weight > 20">/ {{parent.weight/1000}}<%= __('kg') %> ({{parent.weight | getFunt}}#)
-                                </template></template>
+                            <span><%= __('Size') %> </span>
+                            <template>{{parent.growth}}<%= __('cm') %>
+                                ({{parent.growth | getDin}}")
+                                <template v-if="parent.weight > 20">/ {{parent.weight/1000}}<%= __('kg') %>
+                                    ({{parent.weight | getFunt}}#)
+                                </template>
+                            </template>
                         </div>
                         <div v-if="parent">
                             <template>
@@ -650,7 +663,6 @@
                             </template>
                         </div>
                     </el-card>
-
 
                     <% /* DRAWER. Siblings. БРАТЬЯ и СЁСТРЫ. ОДНОПОМЁТНИКИ.*/ %>
                     <el-drawer
@@ -889,9 +901,6 @@
                     </el-button>
                     <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()"
                                round><%= __('Pedigree') %></el-button>
-
-
-
 
 
                 </div>
