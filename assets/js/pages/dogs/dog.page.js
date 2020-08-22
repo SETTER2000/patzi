@@ -699,10 +699,9 @@ parasails.registerPage('dog', {
           fd.label = `${y} ${fd.registerNumber}`;
           str += i>0 ? `, ${fd.label}` : fd.label;
           delete fd.key;
-          delete fd.federationId;
           delete fd.value;
-          delete fd.registerNumber;
       }) : '';
+      // console.log('this.dog.federations::; ', this.dog.federations);
       return str;
     },
   }

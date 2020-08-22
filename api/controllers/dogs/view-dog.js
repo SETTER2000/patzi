@@ -288,6 +288,7 @@ module.exports = {
 
 
 
+
     // подготавливаем массив фото собаки для просмотра в слайдере
     dog.imagesArrUrl = _.pluck(dog.images, 'imageSrc');
     // Respond with view.
