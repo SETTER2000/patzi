@@ -44,13 +44,12 @@ module.exports = {
     },
 
 
-    federation: {
-      type: 'string',
-      description: `Пол собак. В смысле не пол собаки, а конец есть или нет.`,
-      required: true,
-      example: 'RKF 4876128',
-      maxLength: 40
+    federations: {
+      type: 'ref',
+      description: `Массив объектов содержащий ID федерации и рег. номер.`,
+      example: ` [ { "key": "", "value": "", "registerNumber": "1212", "federationId": 0 }, { "key": 1598060284550, "value": "", "federationId": 1, "registerNumber": "788" } ]`,
     },
+
 
 
     sale: {

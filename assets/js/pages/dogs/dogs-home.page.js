@@ -179,16 +179,7 @@ parasails.registerPage('dogs-home', {
       value: '',
       registerNumber: ''
     }],
-    federations: _.sortBy([
-      'FCI',
-      'RKF',
-      'BCU',
-      'UKU',
-      'IKC',
-      'VDH',
-      'KCG',
-      'PKR',
-    ]),
+    federations: [],
     ruleForm: {
       //
       name: '',
@@ -377,7 +368,15 @@ parasails.registerPage('dogs-home', {
     io.socket.get(`/api/v1/colors/list`, function gotResponse(body, response) {
       // console.log('Сервер color ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
-
+    // Запрос для события list-*
+    io.socket.get(`/api/v1/federations/list`, function gotResponse(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Все
+    io.socket.on('list-federation', (data) => {
+      console.log('Federation all:: ', data);
+      this.federations = data;
+    });
     // Принимаем данные по событию list-*
     io.socket.on('list-kennel', data => {
       this.kennels = data;
@@ -664,7 +663,7 @@ parasails.registerPage('dogs-home', {
         headerVideo: this.ruleForm.headerVideo,
         headerVideoShow: this.ruleForm.headerVideoShow,
         birthWeight: this.ruleForm.birthWeight,
-        federation: this.ruleForm.federation,
+        federations: this.ruleForm.federations,
         weight: this.ruleForm.weight,
         growth: this.ruleForm.growth,
         canine: this.ruleForm.canine,
@@ -730,7 +729,7 @@ parasails.registerPage('dogs-home', {
         headerVideo: this.ruleForm.headerVideo,
         headerVideoShow: this.ruleForm.headerVideoShow,
         birthWeight: this.ruleForm.birthWeight,
-        federation: this.ruleForm.federation,
+        federations: this.ruleForm.federations,
         weight: this.ruleForm.weight,
         growth: this.ruleForm.growth,
         type: this.ruleForm.type,

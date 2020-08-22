@@ -24,11 +24,10 @@ module.exports = {
       description: `Флаг. Виден видео-хедер или нет`
     },
 
-    federation: {
+    federations: {
       type: 'ref',
-      description: `Регистрационный номер собаки в определённой федерации странцы.`,
-      example: 'RKF 4876128',
-      maxLength: 40
+      description: `Массив объектов содержащий ID федерации и рег. номер.`,
+      example: ` [ { "key": "", "value": "", "registerNumber": "1212", "federationId": 0 }, { "key": 1598060284550, "value": "", "federationId": 1, "registerNumber": "788" } ]`,
     },
 
 
@@ -320,7 +319,7 @@ module.exports = {
       see: inputs.see,
       allowEdit: inputs.allowEdit,
       currency: inputs.currency,
-      federation: inputs.federation,
+      federations: inputs.federations,
       price: inputs.price,
       headerVideoShow: inputs.headerVideoShow,
       saleDescription: inputs.saleDescription,
