@@ -338,7 +338,8 @@
                 prop="label">
           <template slot-scope="scope">
 
-            <el-link :underline="false" :href="scope.row.detail" type="primary">{{scope.row.label}}</el-link>
+            {{scope.row.label}}
+<!--            <el-link :underline="false" :href="scope.row.detail" type="primary">{{scope.row.label}}</el-link>-->
 
           </template>
         </el-table-column>
@@ -686,6 +687,9 @@
 
                         <div class="my-3 text-capitalize" :class="{textSecondary:title.subtitleRu}">
                           {{title.subtitleRu}}
+                        </div>
+                        <div class="text-capitalize" :class="{textSecondary:title.subtitleRu}">
+                          {{title.dateBirth | getCreate(me.preferredLocale, 'YYYY')}}
                         </div>
                       </el-link>
                       <el-row class="mt-2">
