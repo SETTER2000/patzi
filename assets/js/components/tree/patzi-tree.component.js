@@ -47,16 +47,16 @@ parasails.registerComponent('patziTree', {
                     >
                         <div class="flex justify-content-between align-content-stretch">
                             <h3 style="margin: 0;padding: 0;">
-                                <a :href="item.detail">{{item
-                                    .fullName}}</a></h3>
-                            <div style="height: 50px; padding-top: 9px" class="">dob: {{item.dateBirth |
-                                getCreate(objData.preferredLocale, 'lll')}}
+                                <a :href="item.detail">{{item.fullName}}</a>
+                            </h3>
+                            <div style="height: 50px; padding-top: 9px" class="">
+                                dob: {{item.dateBirth | getCreate(objData.preferredLocale, 'lll')}}
                             </div>
                        </div>
                         <el-image
                                 style="max-width: 470px; "
                                 :src="item.images[0].imageSrc"
-                          
+
                         >      <!-- :preview-src-list="o.imagesArrUrl"-->
                             <div slot="placeholder" class="image-slot">
                                 Loading<span class="dot">...</span>
@@ -78,6 +78,7 @@ parasails.registerComponent('patziTree', {
                         @make-folder="$emit('make-folder', $event)"
                         @add-item="$emit('add-item', $event)"
                 ></patzi-tree>
+
 <!--                <li class="add" @click="$emit('add-item', item)">+</li>-->
                  <!--   <div class="block" v-for="(o, index) in item.parents" :key="o.id">
                         <div class="flex justify-content-between align-content-center">
@@ -92,7 +93,7 @@ parasails.registerComponent('patziTree', {
                                 @click=""
                                 style="max-width: 470px; "
                                 :src="o.images[0].imageSrc"
-                               
+
                         >
 &lt;!&ndash;                         :preview-src-list="o.imagesArrUrl"&ndash;&gt;
                             <div slot="placeholder" class="image-slot">

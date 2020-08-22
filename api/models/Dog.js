@@ -51,7 +51,6 @@ module.exports = {
     },
 
 
-
     sale: {
       type: 'boolean',
       defaultsTo: false,
@@ -337,6 +336,7 @@ module.exports = {
     const db = sails.getDatastore('mongodb').manager;
     const collection = db.collection(Dog.tableName);
     const ObjectID = require("bson-objectid");
+
     let dog = await collection.aggregate([
       {$match: {_id: ObjectID(id)}},
       {
@@ -387,6 +387,7 @@ module.exports = {
           gender: {$last: "$gender"},
           currency: {$last: "$currency"},
           showTeeth: {$last: "$showTeeth"},
+          federations: {$last: "$federations"},
           price: {$last: "$price"},
           saleDescription: {$last: "$saleDescription"},
           dateBirth: {$last: "$dateBirth"},

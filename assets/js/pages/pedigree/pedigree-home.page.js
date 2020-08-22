@@ -4,8 +4,34 @@ parasails.registerPage('pedigree-home', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     timeout: null,
-    treeData: '',
+    // treeData: '',
     parents: '',
+    // demo data
+    treeData2: {
+      fullName: "My Tree",
+      parents: [
+        {fullName: "dam"},
+        {fullName: "sire"},
+        {
+          fullName: "parent folder",
+          parents: [
+            {
+              fullName: "parent folder",
+              parents: [{fullName: "dam"}, {fullName: "sire"}]
+            },
+            {fullName: "dam"},
+            {fullName: "sire"},
+            {
+              fullName: "parent folder",
+              parents: [{fullName: "dam"}, {fullName: "sire"}]
+            }
+          ]
+        }
+      ]
+    },
+
+
+
     ruleForm: {
       search: ''
     },
@@ -152,7 +178,7 @@ parasails.registerPage('pedigree-home', {
       });
       // Принимаем данные по событию search-*
       await io.socket.on('search-dog', (data) => {
-        console.log('INSERT DOG: ' , data);
+        console.log('INSERT DOG: ', data);
         this.dogs = data;
       });
     },
@@ -188,7 +214,7 @@ parasails.registerPage('pedigree-home', {
 
     async handleSelect(item) {
       console.log('SELECT Object:: ', item);
-      this.treeData = item;
+      this.treeData2 = item;
       let id = item._id ? item._id : item.id;
       await io.socket.put(`/api/v1/getRootNode`, {id: id}, function gotResponse(body, response) {
         console.log('Сервис Dogs ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -197,7 +223,7 @@ parasails.registerPage('pedigree-home', {
       await io.socket.on('root-node-pedigree', (data) => {
         console.log('handleSelect data: ', data);
         // item.pedigree =  data.pedigree;
-        this.treeData = Object.assign({}, this.treeData, data);
+        this.treeData2 = Object.assign({}, this.treeData2, data);
         // console.log('Получено значение ввода: ', this.treeData);
       });
     },
@@ -205,14 +231,14 @@ parasails.registerPage('pedigree-home', {
     async addItem(item) {
       console.log('addItem перед отправк. ', item);
       let id = item._id ? item._id : item.id;
-      await io.socket.put(`/api/v1/pdg`, {id: id}, (body, response) =>{
-          (response.statusCode === 404)  ? this.mesInfo('Нет в базе родителей для этой собаки.') : '';
+      await io.socket.put(`/api/v1/pdg`, {id: id}, (body, response) => {
+        (response.statusCode === 404) ? this.mesInfo('Нет в базе родителей для этой собаки.') : '';
         // console.log('Сервис Dogs dam ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
 
       await io.socket.on('list-pedigree', (data) => {
         console.log('Получил объект: ', data);
-        console.log('Сюда добавляем родичей parents должен быть пустой:::',item );
+        console.log('Сюда добавляем родичей parents должен быть пустой:::', item);
         // item.pedigree =  data.pedigree;
         // item = Object.assign({}, item, data);
         // item.parents.push(data);
@@ -241,10 +267,19 @@ parasails.registerPage('pedigree-home', {
       // this.addItem(item);
       this.addItem(item);
     },
-    // addItem: function (item) {
-    //
-    //   this.addItem(item);
-    //   // item.parents.push(this.parents[0]);
-    // }
+
+
+    makeFolder2: function(item) {
+      console.log('item:: ', item);
+      // Vue.set(item, "parents", []);
+      this.$set(item, "parents", []);
+      console.log('itemitem::: ' , item);
+      this.addItem2(item);
+    },
+    addItem2: function(item) {
+      item.parents.push({
+        fullName: `Здесь должны быть родители ${item.fullName}`
+      });
+    }
   }
 });
