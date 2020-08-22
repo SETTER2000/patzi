@@ -208,6 +208,46 @@
               </el-select>
             </el-form-item>
           </template>
+
+          <% /* САЙТ ФЕДЕРАЦИИ */ %>
+          <template>
+            <el-form-item label="<%= __('Site') %>" prop="site">
+              <el-input show-word-limit
+                        v-model="ruleForm.site"
+                        style="width:50%;"
+                        clearable
+                        maxlength="70"
+                        size="small"
+                        :keyup="ruleForm.site"
+                        placeholder="<%= __('Federation website') %>"
+                        ></el-input>
+            </el-form-item>
+          </template>
+          <% /* ДАТА ОБРАЗОВАНИЯ */ %>
+          <el-form-item v-if="!buttonUpdate" label="<%= __('DoB') %>" prop="dateBirth">
+            <el-row :gutter="2">
+              <el-col :span="11">
+                <el-date-picker
+                        v-model="ruleForm.dateBirth"
+                        type="datetime"
+                        placeholder="<%= __('Select date and time') %>"
+                        default-time="12:00:00">
+                </el-date-picker>
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item v-if="buttonUpdate" label="<%= __('DoB') %>" prop="dateBirthUpdate">
+            <el-row :gutter="2">
+              <el-col :span="11">
+                <el-date-picker
+                        v-model="dateBirthUpdate"
+                        type="datetime"
+                        placeholder="<%= __('Select date and time') %>"
+                        default-time="12:00:00">
+                </el-date-picker>
+              </el-col>
+            </el-row>
+          </el-form-item>
           <% /* ВИДЕН ТИТУЛ В СИСТЕМЕ ИЛИ НЕТ */ %>
           <div class="flex justify-content-center">
             <el-form-item prop="see">
