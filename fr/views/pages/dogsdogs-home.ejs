@@ -2,10 +2,11 @@
     <p class="text-danger"
        v-if="cloudError === 'dogAlreadyInUse'"><%= __('There is already an account using that email address') %>.
     </p>
-    <% /* Диалоговое окно Редактор собак. Список собак*/ %>
+    <% /* Диалоговое окно Список собак*/ %>
     <el-dialog title="<%= __('Dog editor') %>. <%= __('List') %>."
                custom-class="dialog-kennel-add"
-               :visible.sync="dialogEditorList">
+               :visible.sync="dialogEditorList"
+               width="60%">
         <template>
             <el-table
                     ref="filterTable"
@@ -205,8 +206,7 @@
         </div>
         <!---------------------------------------------------------------------------------------->
         <% /*Загрузка фото NEW*/ %>
-        <!--  <el-row type="flex" class="row-bg" justify="center">
-            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">-->
+
         <div class="container-fluid ">
             <div class="row justify-content-center">
                 <div class="col">
@@ -234,12 +234,9 @@
                 </div>
             </div>
         </div>
-        <!--     </el-col>
-           </el-row>-->
+
         <!---------------------------------------------------------------------------------------->
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-            <!--  <el-row type="flex" class="row-bg" justify="center">
-               <el-col :xs="24" :sm="24" :md="24" :lg="12" :offset="2" :xl="12">-->
             <div class="container-fluid ">
                 <div class="row ">
                     <div class="col col-lg-6">
@@ -364,19 +361,20 @@
                                 :prop="'federations.' + index + '.registerNumber'"
                                 :rules="{required: true, message: 'Federation can not be null', trigger: 'blur'}">
                             <el-col :xs="14" :sm="18" :md="18" :lg="17" :xl="16">
-                                <button>22</button>
                                 <el-input placeholder="<%= __("Dog's registration number") %>"
                                           v-model="federation.registerNumber"
                                           class="input-with-select">
 
-                                    <el-select v-model="federation.value" slot="prepend" class="wds"
+                                    <el-select v-model="federation.federationId" slot="prepend" class="wds"
                                                placeholder="Select">
-                                        <el-option v-for="(federation, ind) of federations" :label="federation"
+                                        <el-option v-for="(federation, ind) of federations"
+                                                   :label="federation.label"
                                                    :value="ind" :key="'index'+ind"></el-option>
                                     </el-select>
                                     <el-button slot="append" @click="copyElement"
                                                icon="el-icon-copy-document"></el-button>
-                                    <el-button slot="append" @click.prevent="removeElement(federation)"
+                                    <el-button v-if="ruleForm.federations.length >1"
+                                               slot="append" @click.prevent="removeElement(federation)"
                                                icon="el-icon-delete"></el-button>
                                 </el-input>
                             </el-col>
