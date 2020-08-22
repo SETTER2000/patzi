@@ -8,6 +8,7 @@ parasails.registerPage('dog', {
     dialogPedigreeVisible: true,
     dialogImageUrl: '',
     titles: [],
+    federations:[],
     contPuppies: 0,
     childrens: [],
     urlYoutube: '',
@@ -101,7 +102,7 @@ parasails.registerPage('dog', {
         textOneErr: `Произошла ошибка`,
         textTwoErr: `Комментарий не добавлен.`,
         warnNoDogs: `Нет возможности создать помёт, пока отсутствует хотя бы одна пара собак.`,
-        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе.
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         text400Err: 'Ошибка. Не смог создать!',
         text404Err: 'Ошибка. Возможно у вас нет прав на удаление данного объекта!',
@@ -151,7 +152,15 @@ parasails.registerPage('dog', {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     this.getList();
-
+// Запрос для события list-*
+    io.socket.get(`/api/v1/federations/list`, function gotResponse(body, response) {
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+    });
+    // Все
+    io.socket.on('list-federation', (data) => {
+      console.log('Federation all:: ', data);
+      this.federations = data;
+    });
     // Принимаем данные по событию list-*
     // получаем титулы собаки
     io.socket.on('list-titlesDog', (data) => {
@@ -436,8 +445,8 @@ parasails.registerPage('dog', {
     handleExceed(files, fileList) {
       console.log('files::', files);
       console.log('fileList::', fileList);
-      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
-      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
 
@@ -680,6 +689,25 @@ parasails.registerPage('dog', {
 
     countPuppies() {
       return this.dog.litter ?  _.flatten(_.pluck(this.dog.litter, 'litter')).length : 0;
+    },
+
+    regNo(){
+      let str = '';
+      (this.dog.federations && this.dog.federations.length > 0 && this.federations.length > 0) ?
+        this.dog.federations.map((fd, i)=>{
+          let y = _.last(_.pluck( _.filter(this.federations,{id:fd.federationId}),'label'));
+          fd.label = `${y} ${fd.registerNumber}`;
+          str += i>0 ? `, ${fd.label}` : fd.label;
+          delete fd.key;
+          delete fd.federationId;
+          delete fd.value;
+          delete fd.registerNumber;
+      }) : '';
+
+      console.log('this.dog.federations::: ' , this.dog.federations);
+      return str;
+      // console.log('this.dog.federations2::: ' , this.dog.federations.join());
+      // return this.dog.federations.join();
     },
   }
 });
