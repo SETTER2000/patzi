@@ -513,6 +513,13 @@
 
                         </div>
                         <div class="menu-between-v">
+
+                            <% /* Регистрационный номер в федерации*/ %>
+                            <div class="menu-between">
+                                <span><%= __('Reg. no') %></span>
+                                <span>{{regNo()}}</span>
+                            </div>
+
                             <div class="menu-between">
                                 <span><%= __('DoB') %></span>
                                 <span>{{dog.dateBirth | getCreate(me.preferredLocale)}}</span>
