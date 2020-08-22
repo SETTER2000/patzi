@@ -369,7 +369,7 @@
                                                placeholder="Select">
                                         <el-option v-for="(federation, ind) of federations"
                                                    :label="federation.label"
-                                                   :value="ind" :key="'index'+ind"></el-option>
+                                                   :value="federation.id" :key="'index'+ind"></el-option>
                                     </el-select>
                                     <el-button slot="append" @click="copyElement"
                                                icon="el-icon-copy-document"></el-button>
