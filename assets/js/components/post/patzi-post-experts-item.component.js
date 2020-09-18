@@ -45,10 +45,10 @@ parasails.registerComponent('patziPostExpertsItem', {
                     <h6 class="u-custom-font u-text u-text-font u-text-1">EXPERT FCI {{objData.preferredLocale === 'ru' ? '& RKF' : ''}}</h6>
                     <h1 class="u-custom-font u-font-roboto-condensed u-text u-text-2">{{expert.fullName}}</h1>
                     <p class="u-text u-text-3">{{expert.description}}</p>
-                    <p class="u-text u-text-default u-text-4">Image from <a href="/pricing" target="_blank"><b>Poale Ell</b>
+<!--                    <p class="u-text u-text-default u-text-4"><a href="/pricing" target="_blank"><b>Poale Ell</b>-->
                       </a>
                     </p>
-                    <a href="#" class="u-border-2 u-border-black u-link u-text-body-color u-link-1">read more</a>
+<!--                    <a href="#" class="u-border-2 u-border-black u-link u-text-body-color u-link-1">read more</a>-->
 
                     <img  :src="getFlag(expert.country)" alt="" :title="expert.country ? expert.country.label : ''" class="u-image u-image-default u-image-2" data-animation-name="slideIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="Down" data-image-width="1424" data-image-height="749">
                   </div>
