@@ -355,7 +355,7 @@ parasails.registerPage('dogs-home', {
     // Принимаем данные по событию list-*
     io.socket.on('list-dog', (data) => {
       this.dogs = this.dogsEditList = this.filterDogs = _.isNull(data) ? [] : data;
-      console.log('DOGS:::: ', this.dogs);
+      // console.log('DOGS:::: ', this.dogs);
       // console.log('this.filterDogs: ', this.filterDogs);
     });
     // Подключаемся к комнате kennel
@@ -375,7 +375,7 @@ parasails.registerPage('dogs-home', {
     });
     // Все
     io.socket.on('list-federation', (data) => {
-      console.log('Federation all:: ', data);
+      // console.log('Federation all:: ', data);
       this.federations = data;
     });
     // Принимаем данные по событию list-*
@@ -410,7 +410,7 @@ parasails.registerPage('dogs-home', {
       // console.log('VIDOSIK::: ', data);
       // $('#play').attr('src',data);
       $('#logger').text(data);
-      console.log('Data', data);
+      // console.log('Data', data);
       // this.$refs.logger.innerText(data)
       this.sr = data;
       $('#play').attr('src', data);
@@ -649,7 +649,7 @@ parasails.registerPage('dogs-home', {
     // Create
     async addDog() {
       this.openFullScreen();
-      console.log('ruleForm::: ' , this.ruleForm);
+      // console.log('ruleForm::: ' , this.ruleForm);
       // console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
       let data = {
         fileList: this.ruleForm.fileList,
@@ -688,8 +688,8 @@ parasails.registerPage('dogs-home', {
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
       };
-      console.log('this.ruleForm:: ' , this.ruleForm);
-      console.log('DATA create before send: ', data);
+      // console.log('this.ruleForm:: ' , this.ruleForm);
+      // console.log('DATA create before send: ', data);
       await io.socket.post('/api/v1/dogs/create-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -712,7 +712,7 @@ parasails.registerPage('dogs-home', {
 
     // Update
     async updateDog() {
-      console.log('DATA перед онвертацией в строку и  отправкой::: ', typeof this.dateBirthUpdate);
+      // console.log('DATA перед онвертацией в строку и  отправкой::: ', typeof this.dateBirthUpdate);
       this.openFullScreen();
       let data = {
         id: this.ruleForm.id,
@@ -752,9 +752,9 @@ parasails.registerPage('dogs-home', {
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
       };
-      console.log('DATA update перед отправкой::: ', data);
+      // console.log('DATA update перед отправкой::: ', data);
 
-      console.log('TYPE data.dateBirth перед отправкой::: ', typeof data.dateBirth);
+      // console.log('TYPE data.dateBirth перед отправкой::: ', typeof data.dateBirth);
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -1320,7 +1320,7 @@ parasails.registerPage('dogs-home', {
 
 
     handleEdit(index, row) {
-      console.log('DOG edit::::', row);
+      // console.log('DOG edit::::', row);
       this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
       this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
       this.owner = _.last(_.pluck(row.owners, 'fullName'));
@@ -1332,7 +1332,7 @@ parasails.registerPage('dogs-home', {
       this.dialogEditor = true;
       this.centerDialogAdded = true;
       this.buttonUpdate = true;
-      console.log('DOG edit 2::::', row);
+      // console.log('DOG edit 2::::', row);
     },
 
 
@@ -1493,7 +1493,7 @@ parasails.registerPage('dogs-home', {
 
       this.dogsEditList = _.uniq([...breederDogs, ...ownerDogs], 'fullName');
 
-      console.log(' this.dogsEditList::: ', this.dogsEditList);
+      // console.log(' this.dogsEditList::: ', this.dogsEditList);
       this.dialogEditorList = true;
     },
 
@@ -1513,8 +1513,8 @@ parasails.registerPage('dogs-home', {
     },
 
     addTitleDog(dog) {
-      console.log('dog Id::; ', dog.id);
-      console.log('dog fullName::; ', dog.fullName);
+      // console.log('dog Id::; ', dog.id);
+      // console.log('dog fullName::; ', dog.fullName);
       this.goTo(`chinese-crested/${dog.fullName.split(" ").join('-')}/titles`);
     },
 
