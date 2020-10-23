@@ -96,10 +96,10 @@ parasails.registerComponent('patziPostsHomepageItem', {
                                            data-animation-delay="0"
                                            data-animation-direction="">{{post.dateEvent  | getCreate(lang)}}</p>
                              
-                                        <h2 class="u-align-center-lg u-align-center-md u-align-center-xl u-text u-text-2">{{lang === 'ru' ? post.labelRu : post.label}}</h2>
+                                        <h2 class="u-align-center-lg u-align-center-md u-align-center-xl u-text u-text-2">{{lang === 'ru-RU' ? post.labelRu : post.label}}</h2>
                                         <p class="u-align-center-lg u-align-center-md u-align-center-xl u-text u-text-3">
-                                           {{lang === 'ru' ? post.subtitleRu.limit(70) : post.subtitle}}</p>
-                                        <a href="/blog" class="u-btn u-button-style u-btn-1">{{lang === 'ru' ? 'Подробнее' : 'More'}}</a>
+                                           {{lang === 'ru-RU' ? post.subtitleRu.limit(70) : post.subtitle}}</p>
+                                        <a href="/blog" class="u-btn u-button-style u-btn-1">{{lang === 'ru-RU' ? 'Подробнее' : 'More'}}</a>
                                     </div>
                                 </div>
                             </div>

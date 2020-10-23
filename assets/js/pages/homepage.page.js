@@ -18,6 +18,7 @@ parasails.registerPage('homepage', {
     _.extend(this, SAILS_LOCALS);
 
     this.language = window.navigator.language;
+    console.log('language:::: ',window.navigator.language );
     // Запрос для события list-*
     io.socket.get(`/api/v1/posts/cnt`, function gotResponse(body, response) {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
