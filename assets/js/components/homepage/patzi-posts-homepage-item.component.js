@@ -37,7 +37,8 @@ parasails.registerComponent('patziPostsHomepageItem', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: function () {
     return {
-      //...
+      lg:(this.lang === 'ru-RU'  | this.lang === 'ru' )
+      //
     };
   },
 
@@ -95,16 +96,18 @@ parasails.registerComponent('patziPostsHomepageItem', {
                                            data-animation-name="bounceIn" data-animation-duration="1000"
                                            data-animation-delay="0"
                                            data-animation-direction="">{{post.dateEvent  | getCreate(lang)}}</p>
-                             
-                                        <h2 class="u-align-center-lg u-align-center-md u-align-center-xl u-text u-text-2">{{lang === 'ru-RU' ? post.labelRu : post.label}}</h2>
+
+                                        <h2 class="u-align-center-lg u-align-center-md u-align-center-xl u-text u-text-2">
+                                        {{lg ? post.labelRu : post.label}}</h2>
                                         <p class="u-align-center-lg u-align-center-md u-align-center-xl u-text u-text-3">
-                                           {{lang === 'ru-RU' ? post.subtitleRu.limit(70) : post.subtitle}}</p>
-                                        <a href="/blog" class="u-btn u-button-style u-btn-1">{{lang === 'ru-RU' ? 'Подробнее' : 'More'}}</a>
+
+                                           {{lg ? post.subtitleRu.limit(70) : post.subtitle.limit(70) }}</p>
+                                        <a href="/blog" class="u-btn u-button-style u-btn-1">{{lg  ? 'Подробнее' : 'More'}}</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <el-divider v-if="index > 0"><i class="el-icon-star-on"></i></el-divider>  
+                        <el-divider v-if="index > 0"><i class="el-icon-star-on"></i></el-divider>
                     </div>
                 </div>
             </div>

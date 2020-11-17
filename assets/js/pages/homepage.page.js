@@ -16,16 +16,14 @@ parasails.registerPage('homepage', {
   beforeMount: function() {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
-
     this.language = window.navigator.language;
-    console.log('language:::: ',window.navigator.language );
+
     // Запрос для события list-*
     io.socket.get(`/api/v1/posts/cnt`, function gotResponse(body, response) {
       console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Принимаем данные по событию list-*
     io.socket.on('post-count', data => {
-      console.log('POSTS LIST:: ', data);
       this.posts = this.cashPosts = data;
     });
   },

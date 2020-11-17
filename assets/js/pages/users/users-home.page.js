@@ -7,8 +7,8 @@ parasails.registerPage('users-home', {
     value: '',
     value1: '',
     value2: '',
-    minCount:20,
-    stepCount:20,
+    minCount:100,
+    stepCount:50,
     files: [],
     cityId: undefined,
     continent: '',
@@ -179,7 +179,7 @@ parasails.registerPage('users-home', {
         startOfNegotiations2: '. Ready to answer your questions.',
       }],
       ['ru', {
-        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе.
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         warnRemove: 'Это навсегда удалит объект. Продолжить?',
         photoEditor: 'Редактор фотографий',
@@ -460,7 +460,7 @@ parasails.registerPage('users-home', {
     },
 
     handleDelete(index, row) {
-      this.text = `Вы действительно хотите удалить этого пользователя? 
+      this.text = `Вы действительно хотите удалить этого пользователя?
         Учётную запись невозможно будет восстановить.`;
       this.centerDialogVisibleConfirm = true;
       this.rowTable = row;
@@ -614,8 +614,8 @@ parasails.registerPage('users-home', {
 
     // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
-      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
-      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
 

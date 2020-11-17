@@ -30,7 +30,7 @@ module.exports.policies = {
   'kennels/*':'is-all-group',
   'topics/list':'is-all-group',
   'posts/post-count':true,
-  // 'files/*':'is-homepage',
+  'files/*':'is-homepage',
   // 'posts/*':true,
 
 
