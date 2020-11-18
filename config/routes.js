@@ -57,11 +57,10 @@ module.exports.routes = {
 
   'GET /experts': { action: 'experts/view-experts-home' },
 
-  // 'GET /litters/litter/:id': {action: 'litters/view-litter'},
+ 
   'GET /litter/:letter/:year/:virtualPageSlug?': {action: 'litters/view-litter'},
   'GET /litters/:virtualPageSlug?': {action: 'litters/view-litters-home'},
 
-  // 'GET /dogs/dog/:id': {action: 'dogs/view-dog'},
   'GET /dogs/:breed/:virtualPageSlug?': {action: 'dogs/view-dogs-home', locals: {currentSection: 'dogs'}},
   'GET /chinese-crested/:fullName/:virtualPageSlug?': {action: 'dogs/view-dog'},
   'GET /kennel/:label': {action: 'kennels/view-kennel'},
