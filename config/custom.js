@@ -24,7 +24,8 @@ module.exports.custom = {
    **************************************************************************/
   baseUrl: 'http://localhost:1337',
   cloudFrontUrl: 'https://d3a1wbnh2r1l7y.cloudfront.net',
-  pathPhotoS3: '',
+  pathPhotoS3: 'https://d3a1wbnh2r1l7y.cloudfront.net',
+
   /**************************************************************************
    *                                                                         *
    * The TTL (time-to-live) for various sorts of tokens before they expire.  *
