@@ -52,8 +52,17 @@ module.exports = {
      *    (See https://sailsjs.com/config/datastores for help.)                 *
      *                                                                          *
      ***************************************************************************/
+    mongodb: {
+      adapter: process.env.PTZ_ADDAP,
+      host:    process.env.PTZ_HOST,
+      port:    process.env.PTZ_PORT,
+      user:    process.env.PTZ_LOGIN,
+      password:process.env.PTZ_PASS,
+      database:process.env.PTZ_DB
+    },
+
     default: {
-      adapter: 'sails-mongo',
+     // adapter: 'sails-mongo',
       // adapter: 'sails-mysql',
       // url: 'mysql://user:password@host:port/database',
       //--------------------------------------------------------------------------
@@ -272,7 +281,7 @@ module.exports = {
     //   'http://localhost:1337',
     //   'https://staging.example.com',
     // ],
-
+    onlyAllowOrigins: ['https://poaleell.com','https://www.poaleell.com'],
 
     /***************************************************************************
      *                                                                          *
@@ -286,7 +295,6 @@ module.exports = {
      * (https://sailsjs.com/docs/concepts/deployment/scaling)                   *
      *                                                                          *
      ***************************************************************************/
-    adapter: '@sailshq/socket.io-redis',
     // url: 'redis://user:password@bigsquid.redistogo.com:9562/databasenumber',
     //--------------------------------------------------------------------------
     // /\   OR, to avoid checking it in to version control, you might opt to
@@ -338,8 +346,7 @@ module.exports = {
      * (https://sailsjs.com/config/http)                                        *
      *                                                                          *
      ***************************************************************************/
-    trustProxy:
-      true,
+    trustProxy: true,
 
   },
 
@@ -399,10 +406,7 @@ module.exports = {
      *                                                                          *
      ***************************************************************************/
     adapter: require('skipper-s3'),
-    // key: 'fake-aws-keyagsd8agsdagsdhagsd',
-    // secret: 'fake-aws-secretasdg8asgd8gsd8asgd8',
-    // bucket: 'uploaded_photos_of_things_prod',
-    // region: 'us-east-1',
+
     //--------------------------------------------------------------------------
     //  /\   To avoid checking them in to version control, you might opt to set
     //  ||   sensitive credentials like `s3Secret` using an environment variable.
@@ -435,9 +439,8 @@ module.exports = {
    *                                                                         *
    ***************************************************************************/
   custom: {
-    baseUrl: 'https://example.com',
-    internalEmailAddress:
-      'info@example.com',
+    baseUrl: process.env.PTZ_BASEURL,
+    internalEmailAddress:process.env.PTZ_INTERNALEMAIL,
 
     // mailgunDomain: 'mg.example.com',
     // mailgunSecret: 'key-prod_fake_xx',
@@ -455,8 +458,6 @@ module.exports = {
     //--------------------------------------------------------------------------
 
   }
-  ,
-
 
 };
 
