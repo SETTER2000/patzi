@@ -1,7 +1,7 @@
 {
   "name": "patzi",
   "private": true,
-  "version": "0.4.5",
+  "version": "0.4.2",
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
@@ -33,6 +33,7 @@
     "sails-hook-uploads": "^0.4.2",
     "sails-mongo": "^1.2.0",
     "sails-mysql": "^1.0.1",
+    "sharp": "^0.23.1",
     "skipper-s3": "^0.6.0",
     "split2": "^3.1.1",
     "through2": "^3.0.1",
@@ -71,6 +72,6 @@
   "author": "anonymous node/sails user",
   "license": "",
   "engines": {
-    "node": "^10.22.1"
+    "node": "^12.0"
   }
 }
