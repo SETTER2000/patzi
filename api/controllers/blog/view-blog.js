@@ -1,10 +1,6 @@
 module.exports = {
-
   friendlyName: 'View blog',
-
   description: 'Display "Blog" page.',
-
-
   inputs: {
     postId: {
       description: 'Идентификатор поста',
@@ -12,7 +8,6 @@ module.exports = {
       required: true
     }
   },
-
   exits: {
     success: {
       viewTemplatePath: 'pages/blog/blog'
