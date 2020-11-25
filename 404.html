@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    .container {
+      min-height: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .foo {
+      font-size: xx-large;
+      grid-column-start: 2;
+      grid-column-end: 3;
+      justify-self: center;
+      grid-row-start: row1-start;
+      grid-row-end: 3;
+      background-color:#ededed;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="foo">
+    Oops... 404 Not found
+  </div>
+</div>
+</body>
+</html>
