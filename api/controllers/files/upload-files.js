@@ -35,12 +35,7 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    const req = this.req;
-    const fs = require('fs');
-    const mime = require('mime-types');
     const through2 = require('through2');
-    const sharp = require('sharp');
-    const zlib = require('zlib');
     const skp = require('@setter/skp')(
       {
         key: sails.config.uploads.key,

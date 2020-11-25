@@ -25,9 +25,7 @@ module.exports = {
 
     edits: {
       type: 'ref',
-      description: `Объект преобразования картинки.
-      https://sharp.pixelplumbing.com/en/stable/api-resize/#examples
-      `,
+      description: `Объект преобразования картинки. `,
       required: true
     },
     field: {
