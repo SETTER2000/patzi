@@ -72,6 +72,6 @@
   "author": "anonymous node/sails user",
   "license": "",
   "engines": {
-    "node": "^10.13"
+    "node": "^12.0"
   }
 }
