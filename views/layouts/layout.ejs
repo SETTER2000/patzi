@@ -4,9 +4,23 @@
 <html lang="zxx" class="no-js">
 <head>
     <meta charset="utf-8">
-    <title><%= seo.title %></title>
 
-    <meta name="description" content="<%= seo.description %>">
+    <%
+    if(typeof seo === 'undefined') { %>
+        <title>WEB Webinar</title>
+    <% } else { %>
+        <title><%= seo.title %></title>
+        <meta name="description" content="<%= seo.description %>">
+        <meta property="og:url" content="<%= seo.canonical %>"/>
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="<%= seo.title %>"/>
+        <meta property="og:description" content="<%= seo.description %>"/>
+        <meta property="og:image" content="<%= seo.image %>"/>
+
+    <% } %>
+
+
+
 
     <% /* Viewport tag for sensible mobile support
     Тег Viewport для разумной мобильной поддержки */ %>
@@ -24,18 +38,14 @@
     загрузить.) */ %>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta property="fb:app_id"             content="300089384393151" />
-    <meta property="og:url"                content="<%=seo.canonical%>" />
-    <meta property="og:type"               content="article" />
-    <meta property="og:title"              content="<%=seo.title%>" />
-    <meta property="og:description"        content="<%=seo.description%>"  />
-    <meta property="og:image"              content="<%=seo.image%>" />
+
     <% /* Certain scripts, normally analytics tools like Google Tag Manager and
     Google Analytics, should only be included in production:
     Некоторые сценарии, обычно аналитические инструменты, такие как Google Tag Manager и
      Google Analytics, должны быть включены только в производство:
     */
     if (sails.config.environment === 'production') { %>
-        <link rel="canonical" href="<%= seo.canonical %>">
+ 
 
         <!-- Google Analytics, Google Tag Manager, etc. -->
 
@@ -181,7 +191,7 @@
                     <a
                             class="u-button-style u-custom-active-color u-custom-text-color u-custom-text-hover-color u-nav-link u-text-active-white u-text-white"
                             href="#">
-                        <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 302 302" style="undefined">
+                        <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 302 302" >
                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-0b31"></use>
                         </svg>
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-0b31"
