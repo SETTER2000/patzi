@@ -14,7 +14,6 @@ parasails.registerPage('topic', {
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
     this.seo.data = this.data;
-    console.log('TOPIC::: ', this.data);
   },
   mounted: async function () {
     //…

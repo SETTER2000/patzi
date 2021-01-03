@@ -46,7 +46,7 @@ module.exports = {
     const resizeX = 1424
       , resizeY = 800
       , gravity = 'Center'// NorthWest, North, NorthEast, West, Center, East, SouthWest, South, SouthEast
-      , Q = 45 // Качество изображения (100 - 0) http://www.graphicsmagick.org/GraphicsMagick.html#details-compress
+      , Q = 45
     ;
 
     let info = '';
