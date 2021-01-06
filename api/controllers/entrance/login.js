@@ -60,7 +60,7 @@ and exposed as req.me.)`
     badCombo: {
       description: `The provided email and password combination does not
       match any user in the database.`,
-      responseType: 'unauthorized'
+      responseType: 'unauthorized | ошибка автризации'
       // ^This uses the custom `unauthorized` response located in `api/responses/unauthorized.js`.
       // To customize the generic "unauthorized" response across this entire app, change that file
       // (see api/responses/unauthorized).
