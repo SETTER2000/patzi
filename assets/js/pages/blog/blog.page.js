@@ -164,7 +164,7 @@ parasails.registerPage('blog', {
     this.post.topicId = this.post.topic.id;
 
     this.post.experts = _.pluck(this.post.experts, 'id');
-    console.log('this.post.experts ::: ' , this.post.experts );
+    // console.log('this.post.experts ::: ' , this.post.experts );
     this.post.isAdmin = this.me.isAdmin;
     this.post.isSuperAdmin = this.me.isSuperAdmin;
     this.fix();
@@ -297,10 +297,10 @@ parasails.registerPage('blog', {
     },
 
     handleSuccess(res, file) {
-      console.log('HANDLE SUCCESS res: ', res);
+/*      console.log('HANDLE SUCCESS res: ', res);
       console.log('HANDLE SUCCESS file: ', file);
       console.log('this.post.fileList::', this.post.fileList);
-      console.log(' fileList::: ', this.fileList);
+      console.log(' fileList::: ', this.fileList);*/
       this.post.fileList = _.isUndefined(this.post.fileList) ? [] : this.post.fileList;
       this.fileList.push(res);
       // _.isArray(this.post.fileList) ? this.post.fileList.push(res) : this.post.fileList = [res];
@@ -316,8 +316,8 @@ parasails.registerPage('blog', {
 
     // Срабатывает перед удалением одного файла
     handleRemove(file, fileList) {
-      console.log('HANDLE REMOVE file: ', file);
-      console.log('HANDLE REMOVE fileList: ', fileList);
+/*      console.log('HANDLE REMOVE file: ', file);
+      console.log('HANDLE REMOVE fileList: ', fileList);*/
       this.fileList = [];
       this.post.fileList = fileList;
     },
@@ -363,7 +363,7 @@ parasails.registerPage('blog', {
       data.fileList = [...this.fileList, ...this.post.fileList];
       data.topic = this.post.topic;
 
-      console.log('DATA UPDATE перед отправкой ::: ', data);
+      // console.log('DATA UPDATE перед отправкой ::: ', data);
       let p = this;
       io.socket.put('/api/v1/posts/update-post', data, (data, jwRes) => {
         // (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
@@ -433,7 +433,7 @@ parasails.registerPage('blog', {
     },
 
     updateVideo: async function () {
-      console.log('DATA перед отправкой: ', this.post);
+      // console.log('DATA перед отправкой: ', this.post);
       io.socket.put('/api/v1/posts/update-video', this.post, (dataRes, jwRes) => {
         this.$forceUpdate();
         if (jwRes.statusCode === 200) {
@@ -484,7 +484,7 @@ parasails.registerPage('blog', {
         this.post.video = _.compact(this.post.video.map(vd => {
           return _.some(this.rowsUpdateVideo, vd) ? false : vd;
         }));
-        console.log('rowsUpdateVideo::: ', this.post.video);
+        // console.log('rowsUpdateVideo::: ', this.post.video);
         this.updateVideo();
 
       }).catch(() => {
@@ -529,14 +529,14 @@ parasails.registerPage('blog', {
       this.rws = rows.length > 0;
       this.countDelVideo = rows.length;
       this.rowsUpdateVideo = rows;
-      console.log('this.rowsUpdateVideo:: ', this.rowsUpdateVideo);
+      // console.log('this.rowsUpdateVideo:: ', this.rowsUpdateVideo);
     },
     deleteRowsVideo: function () {
       // let vs =  _.partition(rows,  vd => _.some(videos , vd));
       this.rowsUpdateVideo = _.compact(this.post.video.map(vd => {
         return _.some(this.rowsUpdateVideo, vd) ? false : vd;
       }));
-      console.log('rowsUpdateVideo::: ', this.rowsUpdateVideo);
+      // console.log('rowsUpdateVideo::: ', this.rowsUpdateVideo);
       this.openD();
     },
 
@@ -555,8 +555,6 @@ parasails.registerPage('blog', {
       this.multipleSelection = val;
     },
     addVideo() {
-      console.log('this.form:: ', this.form);
-      console.log('this.post.video:: ', this.post.video);
       this.form.videoUrl = this.form.videoUrl.replace(/https:\/\/youtu.be\//gi, '');
       this.post.video.push(this.form);
       // this.rowsUpdateVideo = this.post.video;
@@ -578,8 +576,6 @@ parasails.registerPage('blog', {
     },
 
     saveUpdateVideo() {
-      console.log('this.form:: ', this.form);
-      console.log('this.post.video:: ', this.post.video);
       this.form.videoUrl = this.form.videoUrl.replace(/https:\/\/youtu.be\//gi, '');
       this.post.video[this.inx] = this.form;
       this.updateVideo();

@@ -165,7 +165,7 @@ parasails.registerPage('blog-home', {
     // Принимаем данные по событию list-*
     io.socket.on('list-topic', data => {
       // this.dataAll = this.seo;
-      console.log('TOPICS LIST:: ', data);
+      // console.log('TOPICS LIST:: ', data);
       this.topics = _.each(data, (t, ind) => {
         t.uSectionClass = `u-section-3-${ind + 1}`;
         t.active = (ind === 0);
@@ -260,7 +260,7 @@ parasails.registerPage('blog-home', {
 
     // Если массив тем постов пустой, выводим сообщение.
     clickAddButton() {
-      console.log('CLICK');
+      // console.log('CLICK');
       this.warning = this.i19p.warnNoArr;
       ((this.topics && this.topics.length > 0) || (this.experts && this.experts.length > 0)) ? this.centerDialogAdded = true : this.centerDialogVisible = true;
     },
@@ -293,7 +293,7 @@ parasails.registerPage('blog-home', {
         } else if (valid && this.buttonUpdate) {
           this.update();
         } else {
-          console.log('error submit!!');
+          // console.log('error submit!!');
           return false;
         }
       });
@@ -334,7 +334,7 @@ parasails.registerPage('blog-home', {
         videoDescription: this.ruleForm.videoDescription,
       };
 
-      console.log('DATA перед отправкой::: ', data);
+      // console.log('DATA перед отправкой::: ', data);
       await io.socket.post('/api/v1/posts/create-post', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(`${this.i19p.text400Err} ${jwRes.headers['x-exit-description']}`) :
