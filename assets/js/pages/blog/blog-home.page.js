@@ -144,7 +144,7 @@ parasails.registerPage('blog-home', {
     });
     // Принимаем данные по событию list-*
     io.socket.on('list-post', data => {
-      console.log('POSTS LIST:: ', data);
+      // console.log('POSTS LIST:: ', data);
       this.postCount = data && data.length > 0 ? data.length : this.postCount;
       this.posts = this.cashPosts = data;
     });

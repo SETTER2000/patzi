@@ -21,18 +21,18 @@ parasails.registerPage('welcome', {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     io.socket.get(`/api/v1/posts/cnt`, function gotResponse(body, response) {
-      console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Принимаем данные по событию list-*
     io.socket.on('post-count', data => {
-      console.log('POSTS LIST:: ', data);
+      // console.log('POSTS LIST:: ', data);
       if (_.isArray(data) && data.length < 1) {
         this.showPostsSection = false;
       } else {
         this.showPostsSection = true;
         this.posts = this.cashPosts = data;
         this.post = _.last(_.at(this.posts, [0]));
-        console.log('ONE POST::: ', this.post);
+        // console.log('ONE POST::: ', this.post);
       }
     });
 
