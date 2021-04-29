@@ -888,6 +888,7 @@
 	"At the moment, the topic is hidden, that is, it will not be visible in the system and therefore articles on this topic are also hidden. Set the visibility.": "На данный момент тема скрыта, то есть она не будет видна в системе и следовательно статьи по данной теме тоже будут скрыты. Установите видимость.",
 	"Add topic": "Добавить тему",
 	"topic": "тема",
+	"Buying a dog": "Покупка собаки",
 	"Download right before": "Загрузите сразу до ",
 	"photos for this module.": "фотографий для данного модуля.",
 	"Please note that the weight of the photo file should not exceed": "Обратите внимание, вес файла фотографии не должен превышать",
@@ -1017,5 +1018,6 @@
 	"Delete object": "Удалить запись",
 	"Editor": "Редактор",
 	"Federation website": "Federation website",
-	"Reg. no": "Reg. no"
+	"Reg. no": "Reg. no",
+	"Please choose a topic2 for your message": "Please choose a topic2 for your message"
 }

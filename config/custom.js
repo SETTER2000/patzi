@@ -81,7 +81,7 @@ module.exports.custom = {
   // Email address for receiving support messages & other correspondences.
   // Адрес электронной почты для получения сообщений поддержки и другой корреспонденции.
   internalEmailAddress: 'lphp@mail.ru',
-  passwordSuperAdmin: 'abc123',
+  passwordSuperAdmin: '123abc',
   // Whether to require proof of email address ownership any time a new user
   // signs up, or when an existing user attempts to change their email address.
   // Требовать ли подтверждения владения адресом электронной почты в любое время, когда новый пользователь
