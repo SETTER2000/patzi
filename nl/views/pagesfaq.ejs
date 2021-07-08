@@ -1,0 +1,144 @@
+<div id="faq">
+  <div class="container">
+    <h1>FAQ</h1>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4>Wat is dit voor pagina?</h4>
+      <p>Dit is een sjabloon voor het bouwen van uw eigen "veelgestelde Vragen" pagina.  Het werd automatisch gegenereerd als onderdeel van de uitbreiding van de zaad-app die door <a href="https://sailsjs.com/about">Zeilen</a>.  Op de top van haar primaire doel als een sjabloon op deze pagina fungeert als een handige gids over het zaad app zelf.</p>
+      <p><small>Voordat u het implementeert deze app, productie, vervang de inhoud op deze pagina met de echte vragen en antwoorden die relevant zijn voor uw project.  Of als u het niet nodig een FAQ, maar verwijdert u dit bestand helemaal.</small></p>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4>Andere dan de Zeilen, wat technologieën, frameworks of diensten doet deze app rekenen op?</h4>
+      <p>Deze app bevat verschillende tools en integraties die we gebruiken vaak op de top van de Zeilen.  Ze hebben goed gewerkt voor ons in het verleden; waardoor wij ons kunnen richten op het ontwikkelen van nieuwe functies met minimale overhead.  Sommige zijn bestanden die we hebben gerold onszelf, en de rest zijn 3rd party services en frameworks. Terwijl een paar van deze vereisen dat je een account (of het verkrijgen van een API-sleutel, enz.), wij willen benadrukken dat wij alleen opgenomen vertrouwde, betrouwbare tools die we voelen ons comfortabel bij het gebruik van op onze eigen projecten en onze klanten projecten.</p>
+      <ul>
+        <li><a target="_blank" href="http://getbootstrap.com/docs/4.0/getting-started/introduction/"><strong>Bootstrap 4</strong></a> Front - end component bibliotheek</li>
+        <li><a target="_blank" href="http://fontawesome.io/icons/"><strong>Font Awesome 4</strong></a> - Pictogrammen</li>
+        <li><a target="_blank" href="https://vuejs.org/"><strong>Vue.js</strong></a> Front - end framework</li>
+        <li><a target="_blank" href="https://npmjs.com/package/parasails"><strong>parasails.js</strong></a> - Dunne laag van gebundelde conventies voor het gebruik van Vue.js met Sails.js en dynamisch gegenereerd SDK voor de afhandeling van AJAX en/of WebSocket verzoeken van de front-end van de acties in de Zeilen app. (Meer info over het gebruik, hieronder.)</li>
+        <li><a target="_blank" href="https://www.mailgun.com/"><strong>Mailgun</strong></a>* E - Mails</li>
+        <li><a target="_blank" href="https://stripe.com/docs"><strong>Streep</strong></a>* - Betalingen</li>
+      </ul>
+      <p><small>* hiervoor is een API-sleutel</small></p>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4>Waarom zie ik aanduidingen als "Poale Ell" all over the place? Wat is de beste manier om deze aanpassen?</h4>
+      <p>Omdat de projecten worden gegenereerd voordat het product en/of bedrijfsnamen zijn afgerond, vonden we het meer zin heeft om gemakkelijk te zoeken-en-vervangen tijdelijke aanduidingen dan een aanwijzing voor een app of bedrijfsnaam aan het begin. (Het is veel makkelijker om te zoeken/vervangen "Poale Ell" zonder conflicten, dan is het om te zoeken/vervangen in een meer algemeen gebruikt word.)</p>
+      <p>Wanneer je hebt je product, bedrijfsnaam, de naam en branding afgerond, hier worden de tijdelijke aanduidingen die u zult willen om over te schakelen:</p>
+      <ul>
+        <li><strong>Poale Ell</strong> - U kunt de plaats van een exemplaar van deze met de naam van uw product.</li>
+        <li><strong>Poale Ell</strong> - Deze tijdelijke aanduiding wordt gebruikt voor de naam van de entiteit in de standaard wettelijke voorwaarden &amp; privacy-beleid, en kunnen worden vervangen door de naam van het bedrijf achter de app.</li>
+        <li><strong>NEW_APP_CREATION_CALENDAR_DATE</strong> - Vervang dit met de huidige datum.</li>
+        <li><strong>NEW_APP_COMPANY_ABOUT_HREF</strong> - Dit is de link in het copyright gedeelte van de voet. Wilt u waarschijnlijk ook in te schakelen voor een link naar uw bedrijf over de pagina of de marketing van de site.</li>
+        <li>tijdelijke Aanduiding voor logo - gebruik van uw eigen merknaam, u kunt gewoon de plaats van het image-bestand op <code>assets/images/logo.</code> png met een aangepaste afbeelding van dezelfde naam, of de afbeelding wijzigen src <code></code> in de kop van <code>aanzichten/opmaak/lay-out.ejs</code>.</li>
+      </ul>
+      <blockquote><small>Gewoon een heads-up, de vorige paar alinea ' s maken veel minder zin als je eenmaal hebt gedaan, zoeken/vervangen op elk van deze tijdelijke aanduiding woorden.</small></blockquote>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4>Hoe configureer ik een nieuwe methode te gebruiken met cloud.js?</h4>
+      <p>als je Eenmaal hebt gemaakt een controller actie en toegevoegd aan uw routes (zie de <a target="_blank" href="https://sailsjs.com/documentation/concepts/routes">Sails.js docs voor meer info over hoe dat te doen</a>), er zijn slechts een paar eenvoudige stappen toevoegen aan uw wereldwijde <code></code> Cloud SDK:</p>
+      <ul>
+        <li>de Wederopbouw van deze app aangepaste SDK met <code>zeilen uitvoeren van scripts/rebuild-cloud-sdk</code>.  (Dit automatisch regenereert de methode definities in uw <code>assets/js/cloud.setup.js</code> bestand op basis van uw geconfigureerd routes.)</li>
+        <li>U kunt dan bellen naar alle relevante nieuwe acties als "cloud methoden" in uw frontend code: wachten <code>Cloud.doSomething.met({…})</code></li>
+      </ul>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4>Hoe registreer ik een nieuwe pagina met parasails.js?</h4>
+      <p>om bestanden Te genereren voor een nieuwe pagina (bijvoorbeeld "hotels-overzicht"):</p>
+      <p><code>zeilen genereren pagina hotels-overzicht</code></p>
+      <p>Dan kunt u een route voor de nieuwe weergave actie om het toegankelijk te maken vanuit de browser.  Bijvoorbeeld:</p>
+      <p><code>'GET /hotels': { action: 'view-hotels-overview' }</code></p>
+      <p><small>Voor het aanmelden van een nieuwe pagina, zonder de generator, zorg ervoor dat het element van het hoogste niveau van de weergave die u wilt registreren heeft een <code>id</code> eigendom (bijv. <code>&lt;div id="my-new-page"&gt;...&lt;/div&gt;</code>). Maak vervolgens een nieuwe javascript-bestand, en zijn <code>parasails.registerPage('mijn-nieuwe-pagina' { /* opties voor de Vue.js aanleg */ })</code>. Voor meer uitgebreide voorbeelden, graven rond in <code>assets/js/pages/</code>.</small></p>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4>Hoe kan ik inzetten om Heroku?</h4>
+      <p>In uw Heroku dashboard <a target="_blank" href="https://dashboard.heroku.com"></a>, configureren van uw app op auto-implementeren van het implementeren <code></code> tak van dit project op GitHub repository. Vervolgens, vanaf de opdrachtregel uitvoeren <code>zeilen uitvoeren implementeren</code>.</p>
+      <p>Voor meer implementatie tips, <a href="https://sailsjs.com/documentation/concepts/deployment">klik hier</a>.</p>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4>moet ik host op Heroku?</h4>
+      <p>Geen manier!  U kunt het implementeren van uw app overal dat ondersteunt <a target="_blank" href="https://sailsjs.com/documentation/concepts/deployment/hosting">Node.js</a>.</p>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4>Hoe kan ik controleren of mijn gebruiker e-mailadressen?</h4>
+      <p>standaard e-mail verificatie is niet vereist voor inschrijving, noch voor wanneer een bestaande gebruiker verandert hun e-mail adres van hun account pagina.  Om een e-mail controle stap voor beide acties open <code>config/custom.js</code> en wijzigen <code>verifyEmailAddresses: false</code> te <code>verifyEmailAddresses: true</code>.</p>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4>Hoe ik klaar ben met het opzetten van Mailgun?</h4>
+      <p>Te gebruiken Mailgun, moet u <a target="_blank" href="https://www.mailgun.com/">aanmelden voor een account</a>. (Hoewel dit <em></em> een betaalde dienst op een hoger verbruik door de levels, je moet in staat zijn om gebruik Mailgun zo veel als je nodig hebt om in ontwikkeling, zonder dat enige credit card informatie.)</p>
+      <p>Nadat je een account hebt aangemaakt, moet u deze toevoegen in uw Mailgun domein en API geheim naar uw aangepaste config. (In ontwikkeling, deze zal of in de <code>config/custom.js</code>, of in een <code>local.js</code> bestand dat u toevoegt aan uw <code>config/</code> map. Voor de staging-of productie-implementatie, zult u wilt u deze omgevingsvariabelen met behulp van de system -- aka de "config variabelen" in Heroku.)</p>
+      <p>Als u reeds een eigen domein voor uw app, die u kunt volgen Mailgun"s instructies voor het configureren van een verzendende domein.</p>
+      <p>Anders, voor het verzenden van e-mails vanaf deze app <em>zonder</em> het configureren van het verzenden van een domein, kunt u gebruik maken van de zandbak domein &amp; test API geheim dat meegeleverd wordt met uw Mailgun account. Zorg gewoon voor het configureren van het bevoegd geadresseerden voor uw sandbox domein eerste, of er zullen fouten van de eindpunten van die poging tot het verzenden van e-mails.</p>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4>Hoe ik klaar bent met het opzetten van de Streep?</h4>
+      <p>Te gebruiken Streep voor de verwerking van uw betaling apps, moet u <a target="_blank" href="https://stripe.com">aanmelden voor een account</a>.</p>
+      <p>Zodra je een account hebt, zult u nodig hebt om uw kan worden gepubliceerd en geheime sleutels in uw app aangepaste config <code>zeilen.config.aangepast.stripePublishableKey</code> en <code>zeilen.config.aangepast.stripeSecret</code>. In ontwikkeling, u kunt uw test-toetsen om <code>config/custom.js</code>, of in een <code>local.js</code> bestand dat u toevoegt aan uw <code>config/</code> map.</p>
+      <p>In de staging-of productie-implementatie, zult u wilt om uw API-sleutels met behulp van het systeem omgevingsvariabelen (aka "configuratie variabelen" in Heroku), en moet u ervoor zorgen dat uw site voldoet aan de Streep de HTTPS-eisen om voor de Streep de Kassa te werken. Voor meer informatie, zie Streep de <a target="_blank" href="https://stripe.com/docs/checkout">Gedetailleerde Kassa Gids</a>.</p>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4>Hoe schakel ik ___________?</h4>
+      <p class="pt-4 text-muted"><strong><em>Voor het uitschakelen van het Bootstrap framework:</em></strong></p>
+      <ul>
+        <li>Verwijder de map <code>activa/afhankelijkheden/bootstrap/</code></li>
+        <li>In <code>tasks/pipeline.js</code>, verwijderen <code>'afhankelijkheden/bootstrap/afhankelijkheden/**/*.js',</code> van <code>jsFilesToInject</code></li>
+      </ul>
+      <p class="pt-4 text-muted"><strong><em>uitschakelen FontAwesome:</em></strong></p>
+      <ul>
+        <li>Verwijderen van de map op <code>activa/afhankelijkheden/font-awesome-4/</code>. (Je zult waarschijnlijk ook wilt zoeken in het project voor "fa fa-" controleren op achtergebleven pictogrammen in de HTML.)</li>
+      </ul>
+      <p class="pt-4 text-muted"><strong><em>uit Te wisselen Mailgun:</em></strong></p>
+      <p>We kozen voor Mailgun vanwege de zeer royale gratis tier (u kan maximaal 10.000 e-mails per maand).  Plus het is gemakkelijk te integreren, het is al rond voor een tijdje (dus het is stabiel en heeft een goede baan te ontwijken spamfilters), en het is intern wordt gebruikt op bedrijven zoals GitHub en Heroku.</p>
+      <p>Out-of-the-box, als Mailgun is niet geconfigureerd voor deze app, het contact-formulier en de terugwinning van het wachtwoord zal de flow niet doen, tenzij een e-mail adres dat eindigt op "@example.com de" wordt gebruikt.  Gelukkig, als u gebruik wenst te maken van <a target="_blank" href="https://stackshare.io/mailgun/alternatives">een andere oplossing voor het verzenden van geautomatiseerde e-mails</a>, de logica voor het verzenden van e-mails is vrij beperkt. Om over te schakelen naar een andere service dan Mailgun, moet u de volgende wijzigingen aanbrengen in uw code:</p>
+      <ul>
+        <li>Wijzigen van de code in <code>api/helpers/</code> gebruik van de e-mail service van uw keuze.</li>
+        <li>In <code>api/hooks/custom/index.js</code>, verwijder de waarschuwingen in verband met Mailgun.</li>
+      </ul>
+      <p class="pt-4 text-muted"><strong><em>te verwijderen of Te vervangen Streep integratie:</em></strong></p>
+      <p>We kozen voor de Streep, want het is de gemakkelijkste te integreren payment processor in de industrie.  De prijzen zijn ongeveer hetzelfde <a target="_blank" href="https://stackshare.io/stripe/alternatives">als haar concurrenten</a>, maar zelfs als dat niet het geval is, Streep"s richten zich op ontwikkelaars geluk waarschijnlijk zou maken.  Streep processen betalingen, uitbetalingen en meer voor <a target="_blank" href="https://stripe.com/us/customers">honderdduizenden bedrijven</a> over de hele wereld.</p>
+      <p>standaard functies met betrekking tot de facturering automatisch uitgeschakeld als u niet beschikt over een Streep kan worden gepubliceerd toets &amp; geheime sleutel in uw aangepaste config (<code>zeilen.config.aangepast.stripePublishableKey</code> en <code>zeilen.config.aangepast.stripeSecret</code>, respectievelijk). Uw app zal niet negatief worden beïnvloed of verschijnen gebroken; het zal alleen overbodige code in plaatsen. Als je niet anticiperen op de integratie van facturatie-functies in uw app en wil deze verwijderen code volledig, kunt u de volgende wijzigingen aanbrengen:</p>
+      <ul>
+        <li>In de <code>Gebruiker</code> definitie van een model op <code>api/models/User.js</code>, verwijder de <code>stripeCustomerId</code>, <code>billingCardBrand</code>, <code>billingCardLast4</code>, <code>billingCardExpMonth</code>, en <code>billingCardExpYear</code> kenmerk definities.</li>
+        <li>In de "signup" actie bij <code>api/controllers/entrance/signup.js</code>:
+          <ul>
+            <li>Verwijder de regel op de top die de afhankelijkheid van de Streep</li>
+            <li>Verwijder het blok van de code voor het maken van een Streep klant. (Als u problemen hebt met het vinden van waar dit gebeurt, lees de opmerkingen.)</li>
+            <li>In de oproep tot <code>Gebruiker.create()</code>, verwijder de <code>stripeCustomerId</code> eigendom.</li>
+          </ul>
+        </li>
+        <li>In de "confirm e-mail" actie bij <code>api/controllers/entrance/confirm-email.js</code>:
+          <ul>
+            <li>Verwijder de regel op de top die de afhankelijkheid van de Streep.</li>
+            <li>Verwijder het blok van de code verwerkt aanmaken/updaten van een Streep klant. (Als u problemen hebt met het vinden van waar dit gebeurt, lees de opmerkingen.)</li>
+          </ul>
+        </li>
+        <li>Verwijderen van de update card billing en eindpunt van alle verwijzingen naar het door het volgende te doen:
+          <ul>
+            <li>het Verwijderen van het bestand op <code>api/account/update-billing-card.js</code>.</li>
+            <li>In <code>config/routes.js</code>, verwijdert u de route configuratie voor <code>'PUT /api/v1/rekening/update-facturatie-kaart'</code>.</li>
+            <li>In <code>assets/js/cloud.setup.js</code>, verwijder de <code>updateBillingCard</code> methode.</li>
+            <li>In <code>assets/js/pages/account/my-account.page.js</code>, verwijder de <code>clickStripeCheckoutButton</code> methode.</li>
+            <li>In <code>views/pagina ' s/account/my-account.ejs</code>, verwijdert u de HTML in verband met de facturering.</li>
+          </ul>
+        </li>
+        <li>In <code>api/hooks/custom/index.js</code>, verwijder de waarschuwingen in verband met Streep.</li>
+        <li>In <code>api/hooks/custom/index.js</code>, verwijderen <code>zeilen.config.aangepast.enableBillingFeatures = !isMissingStripeConfig;</code>.</li>
+      </ul>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4>Waar kan ik terecht voor hulp?</h4>
+      <p>Als u in de problemen komt, kan je vaak het antwoord vinden in de <a target="_blank" href="http://sailsjs.com/documentation">Sails.js documentatie</a>.  Als u niet zeker bent over hoe verder te gaan, of helemaal een raadsel, zorg ervoor om te controleren de <a target="_blank" href="http://sailsjs.com/support">nieuwste beschikbare middelen</a>.</p>
+    </div>
+  </div>
+</div>
+<%- /* Laat de lokale bevolking als `venster.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

@@ -1,0 +1,631 @@
+<div id="kennel" class="content" v-cloak>
+
+  <% /* Диалоговое окно. Добавить Помёт NEW. */ %>
+  <el-dialog
+    title="<%= __('Add your Litter') %>"
+    :visible.sync="centerDialogAdded"
+    custom-class="dialog-kennel-add"
+    center>
+
+    <el-dialog
+      width="80%"
+      top="3vh"
+      title="Continents 6"
+      :visible.sync="innerVisible"
+      append-to-body>
+      <div class="justify-content-center">
+        <el-image
+          style="width: inherit; height: auto"
+          :src=url
+          :fit="fit"></el-image>
+      </div>
+    </el-dialog>
+
+    <div class="container">
+      <div v-if="ruleForm.imageUrl" class="col">
+        <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
+      </div>
+      <!--<img src="https://d3a1wbnh2r1l7y.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" class="img-fluid" alt="Responsive image">-->
+      <div class="form-group py-2">
+        <h5><%= __('Multiple upload photos') %></h5>
+        <label v-if="!ruleForm.imageUrl">
+          <%= __('Make albums, dividing by event or by time group of photos. Describe events, tell about the photo, thereby structuring your memories and events.') %>
+        </label>
+        <hr>
+        <div class="photo-uploader">
+          <div class="row">
+            <div class="col-md-12 ">
+              <el-upload
+                action="/api/v1/files/upload"
+                drag
+                multiple
+                list-type="picture-card"
+                :file-list="fileList"
+                :on-preview="handlePictureCardPreview"
+                :on-remove="handleRemove"
+                :thumbnail-mode="true"
+                :before-upload="beforeAvatarUpload"
+              >
+                <i class="el-icon-plus"></i>
+                <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
+                  {{sizeLess}}<%= __('Kb') %></div>
+              </el-upload>
+              <br>
+              <el-dialog :visible.sync="dialogVisible">
+                <img width="100%" :src="dialogImageUrl" alt="">
+              </el-dialog>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <el-row :gutter="22">
+      <el-col :span="1"></el-col>
+      <el-col :span="23">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
+                 label-width="120px" class="demo-ruleForm">
+          <% /* Дата помёта NEW */ %>
+          <el-form-item label="<%= __('Date of litter') %>">
+            <el-form-item prop="born">
+              <el-date-picker
+                v-model="ruleForm.born"
+                type="datetime"
+                placeholder="<%= __('Select date and time') %>"
+                default-time="12:00:00">
+              </el-date-picker>
+            </el-form-item>
+          </el-form-item>
+          <% /* Буква помёта NEW */ %>
+          <el-form-item label="<%= __('Litter letter') %>">
+            <el-form-item prop="born">
+              <el-input
+                size="medium"
+                placeholder="A"
+                v-model="ruleForm.label">
+              </el-input>
+            </el-form-item>
+          </el-form-item>
+
+
+          <!--<div class="form-group">-->
+            <!--<label><%= __('Litter letter') %></label>-->
+            <!--<input class="form-control"-->
+                   <!--:class="(formErrors.label && !uploadFormData.label) ? 'is-invalid' : ''"-->
+                   <!--type="text"-->
+                   <!--id="validationServerUsername"-->
+                   <!--aria-describedby="inputGroupPrepend3"-->
+                   <!--v-model.trim="uploadFormData.label"-->
+                   <!--placeholder="A">-->
+            <!--<small v-if="formErrors.label && !uploadFormData.label" class="text-danger ">-->
+              <!--<%= __('Please indicate the litter letter.') %>-->
+            <!--</small>-->
+          <!--</div>-->
+
+          <% /* Кобель Sire NEW */ %>
+          <template v-if="sires">
+            <el-form-item label="<%= __('Sire') %>" prop="sire">
+              <el-autocomplete
+                popper-class="my-autocomplete"
+                v-model="ruleForm.sire"
+                :fetch-suggestions="querySearchSires"
+                placeholder="<%= __("Start typing the dog's name") %>"
+                :trigger-on-focus="false"
+                @select="handleSelect"
+                style="width: 58%;"
+              ><i slot="prefix" class="el-autocomplete__icon el-icon-male"></i>
+                <template slot-scope="{ item }">
+                  <span class="value">{{ item.value }}</span>
+                  <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
+                </template>
+              </el-autocomplete>
+            </el-form-item>
+          </template>
+          <% /* Сука Dam NEW */ %>
+          <template v-if="dams">
+            <el-form-item label="<%= __('Dam') %>" prop="dam">
+              <el-autocomplete
+                popper-class="my-autocomplete"
+                v-model="ruleForm.dam"
+                :fetch-suggestions="querySearchDams"
+                placeholder="<%= __("Start typing the dog's name") %>"
+                :trigger-on-focus="false"
+                @select="handleSelect"
+                style="width: 58%;"
+              ><i slot="prefix" class="el-autocomplete__icon el-icon-female"></i>
+                <template slot-scope="{ item }">
+                  <span class="value">{{ item.value }}</span>
+                  <!--<span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>-->
+                </template>
+              </el-autocomplete>
+            </el-form-item>
+          </template>
+          <% /* Кнопки управления */ %>
+          <div class="my-3 pt-4">
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+              <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+              <el-button @click="centerDialogAdded = false"><%= __('Cancel') %></el-button>
+            </el-form-item>
+          </div>
+        </el-form>
+      </el-col>
+    </el-row>
+    <span slot="footer" class="dialog-footer">
+  </span>
+  </el-dialog>
+
+
+  <!-- start banner Area -->
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white"><%= __('Litters') %></h1>
+          <p><%= __('All litter kennel') %></p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End banner Area -->
+
+  <!-- Start Work Area Area -->
+  <section class="work-area section-gap-top" id="work">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3><%= __('Born in') %> Poale Ell</h3>
+            <h2><span><%= __('Check Our Work') %></span></h2>
+            <div v-if="me.isSuperAdmin" class="mt-5">
+              <button class="btn btn-outline-info" @click="clickAddButton()"><%= __('Add litter') %></button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 d-none">
+          <div class="filters">
+            <ul>
+              <li class="active" data-filter=".all"></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card text-center mb-5" v-for="(litter, index) in litters" :key="'litter'+litter.id">
+        <div class="card-header">
+          <%= __('Litter') %>: {{litter.label}}
+        </div>
+        <div class="card-body">
+          <h4 class="card-title"> {{litter.born}}</h4>
+          <p class="card-text">
+            <a :href="litter.detail">
+
+              <img :src="litter.imageSrc" alt="litter.title" class="img-fluid gallery">
+              <div v-if="me.isSuperAdmin" class="flx">
+                <!-- <div class="fixButton">
+                   <a class="p-button" href="#"
+                      @click="clickEdit(litter.id)">
+                     <i class="el-icon-edit"></i>
+                   </a>
+                 </div>-->
+                <div class="fixButton">
+                  <a class="p-button" v-if="me.isSuperAdmin" href="#"
+                     @click="clickDeleteLitter(litter.id)">
+                    <i class="el-icon-delete"></i>
+                  </a>
+                </div>
+              </div>
+            </a>
+
+          </p>
+          <el-button type="danger" plain>{{litter.dam}}</el-button>
+          <i class="ti-heart mx-1" style="font-size: 1.2rem; color: red"></i>
+          <el-button type="danger" plain>{{litter.sire}}</el-button>
+          <!--<a href="#" class="btn btn-primary">Sasquehanna (FCI) Ella</a>  <a href="#" class="btn btn-primary">Olegro Katrin Naruto</a>-->
+        </div>
+        <!--   <div class="card-footer text-muted">
+             2 days ago
+           </div>-->
+      </div>
+
+      <!--    <div class="listings" v-if="litters.length > 0">
+        <div class="card" :key="'litter'+litter.id"
+             :class="[litter.owner.id === me.id ? 'mine' : '', litter.unavailable ? 'not-available' : '']"
+             v-for="(litter, index) in litters"
+             :data-index="index"
+        >
+          <div class="card-options dropdown" v-if="litter.borrowedBy && litter.owner.id === me.id">
+            <span class="options-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                class="fa fa-ellipsis-v"></span></span>
+            <div class="dropdown-menu dropdown-menu-right">
+              <span class="dropdown-item" @click="clickDeleteLitter(litter.id)"><%= __('Delete') %></span>
+              <span class="dropdown-item" @click="clickMarkReturned(litter.id)"><%= __('Mark as returned') %></span>
+              <span class="dropdown-item" @click="clickContactBorrower(litter.id)"><%= __('Contact') %>
+                {{litter.borrowedBy.fullName}}</span>
+            </div>
+          </div>
+
+          <div class="card-options dropdown" v-else-if="litter.borrowedBy && litter.borrowedBy.id === me.id">
+            <span class="options-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+                class="fa fa-ellipsis-v"></span></span>
+            <div class="dropdown-menu dropdown-menu-right">
+              <span class="dropdown-item" @click="clickReturn(litter.id)"><%= __('Give this back') %></span>
+              <span class="dropdown-item" @click="clickContactOwner(litter.id)"><%= __('Contact') %>
+                {{litter.owner.fullName}}</span>
+            </div>
+          </div>
+
+          <div class="card-options" v-else-if="!litter.borrowedBy">
+            <span class="options-button" data-toggle="tooltip" data-placement="top" title="Delete"
+                  @click="clickDeleteLitter(litter.id)"
+                  v-if="litter.owner.id === me.id"><span class="fa fa-trash-o text-danger"></span></span>
+            <span class="options-button borrow" data-toggle="tooltip" data-placement="top"
+                  title="<%= __('to reserve') %>" @click="clickBorrow(litter.id)"
+                  v-else-if="litter.ourPreliminaryPrice>0 && litter.owner.id !== me.id"><span class="fa fa-handshake-o text-dark"></span></span>
+          </div>
+
+          <a :href="litter.detail">
+            <img :src="litter.imageSrc" alt="litter.title" class="img-fluid" >
+          </a>
+
+          <span class="label" v-if="litter.label">{{litter.title}}<br/></span>
+          <small class="owner text-secondary" v-if="litter.owner.id === me.id"><span class="fa fa-home mr-1"></span>
+            Mine
+          </small>
+          <small class="owner text-success" v-else-if="litter.borrowedBy && litter.borrowedBy.id === me.id"><span
+              class="fa fa-star-o mr-1"></span> <%= __('Borrowing') %>
+          </small>
+          <small class="owner text-primary" v-else>{{litter.born | date}}</small>
+          &lt;!&ndash;<small class="owner text-primary" v-else>{{litter.owner.fullName}}</small>&ndash;&gt;
+        </div>
+      </div>
+      <div v-else>
+        <div v-if="me.isSuperAdmin" class="empty text-center">
+          <p><%= __('You have not downloaded yet a single idea of your litters.') %>
+            <a href="/litters/new"
+               @click="clickAddButton()"><%= __('Add your') %></a> <%= __('first litter show now') %>!
+          </p></div>
+      </div>-->
+
+    </div>
+  </section>
+
+  <% /* "Upload Litter" Modal */ %>
+  <modal v-if="virtualPageSlug==='new'" v-cloak key="new" @close="closeUploadLitterModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Upload new photo') %></h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="uploadLitter" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingUploadLitterForm"
+               @submitted="submittedUploadLitterForm($event)"
+    >
+      <div class="modal-body">
+        <div class="form-group">
+          <label><%= __('Photo for presentation') %>:</label>
+
+          <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
+            <div class="photo-upload-field row d-flex align-items-center"
+                 :class="!uploadFormData.previewImageSrc ? 'justify-content-center' :  'justify-content-start'">
+              <div class="photo-preview col">
+                <div class="image-wrapper"
+                     :class="!uploadFormData.previewImageSrc ? 'd-flex align-items-center justify-content-center' : ''">
+
+                  <img v-if="uploadFormData.previewImageSrc" alt="A preview of the selected item"
+                       :src="uploadFormData.previewImageSrc"/>
+                  <span v-else class="placeholder-icon fa fa-picture-o"></span>
+                </div>
+              </div>
+              <div class="col d-flex-column justify-content-center">
+                <span class="file-upload-button btn btn-sm"
+                      :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
+                  <span class="button-text" v-if="!uploadFormData.previewImageSrc"><%= __('Select image') %></span>
+                  <span class="button-text" v-else><%= __('Change image') %></span>
+                  <input type="file" :disabled="syncing" accept="image/*" class="file-input"
+                         @change="changeFileInput($event.target.files)"/>
+                </span>
+                <p class="image-advice text-muted" v-if="!formErrors.photo">
+                  <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
+                </p>
+                <p class="image-advice text-danger" v-if="formErrors.photo">
+                  <%= __('A photo is required in order to add a new item') %>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% /* Дата и время рождения */ %>
+        <div class="form-group">
+          <label><%= __('Date of litter') %></label>
+
+          <datepicker ref="datepickerref"
+                      v-model="uploadFormData.born"
+                      placeholder-text="(<%= __('Date of litter') %>)"
+                      :popup="true"
+                      :invalid="formErrors.born && !uploadFormData.born"
+                      validation-error-message="<%= __('Please set the date when puppies were born.') %>."
+          >
+          </datepicker>
+
+          <!--<el-form-item label="<%= __('Date') %>" required>-->
+          <!--<el-col :span="11">-->
+          <!--<el-form-item prop="dateCreate">-->
+          <!--<el-date-picker-->
+          <!--type="date"-->
+          <!--placeholder="<%= __('Registration date') %>"-->
+          <!--v-model="uploadFormData.born"-->
+          <!--style="width: 100%;"-->
+          <!--&gt;</el-date-picker>-->
+          <!--</el-form-item>-->
+          <!--</el-col>-->
+          <!--</el-form-item>-->
+        </div>
+        <% /*Буква помёта*/ %>
+        <div class="form-group">
+          <label><%= __('Litter letter') %></label>
+          <input class="form-control"
+                 :class="(formErrors.label && !uploadFormData.label) ? 'is-invalid' : ''"
+                 type="text"
+                 id="validationServerUsername"
+                 aria-describedby="inputGroupPrepend3"
+                 v-model.trim="uploadFormData.label"
+                 placeholder="A">
+          <small v-if="formErrors.label && !uploadFormData.label" class="text-danger ">
+            <%= __('Please indicate the litter letter.') %>
+          </small>
+        </div>
+
+        <% /* Сука Dam*/ %>
+        <!-- <div class="form-group">
+          <label><%= __('Dam') %></label>
+          <input class="form-control"
+                 :class="formErrors.dam ? 'is-invalid' : ''"
+                 type="text"
+                 id="validationServerUsername"
+                 aria-describedby="inputGroupPrepend3"
+                 v-model.trim="uploadFormData.dam"
+                 placeholder="">
+          <small v-if="formErrors.dam" class="text-danger ">
+            <%= __('Please indicate the litter letter.') %>
+          </small>
+        </div>-->
+        <% /* Кобель Sire*/ %>
+        <!--       <div class="form-group">
+          <label><%= __('Sire') %></label>
+          <input class="form-control"
+                 :class="formErrors.sire ? 'is-invalid' : ''"
+                 type="text"
+                 id="validationServerUsername3"
+                 aria-describedby="inputGroupPrepend3"
+                 v-model.trim="uploadFormData.sire"
+                 placeholder="">
+          <small v-if="formErrors.sire" class="text-danger ">
+            <%= __('Please indicate the litter letter.') %>
+          </small>
+        </div>-->
+        <% /*Пол*/ %>
+        <!--      <div class="form-group row">
+          <div class="col-sm-6">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text"
+                       for="inputGroupSelect01"
+                >
+                  <%= __('Gender') %>
+                </label>
+              </div>
+              <select class="custom-select"
+                      id="inputGroupSelect01"
+                      :class="(formErrors.gender && !uploadFormData.gender)? 'is-invalid' : ''"
+                      v-model="uploadFormData.gender"
+              >
+                <option value="dam">Dam</option>
+                <option value="sire">Sire</option>
+              </select>
+            </div>
+            <small v-if="formErrors.gender && !uploadFormData.gender" class="text-danger ">
+              <%= __('Please indicate the litter letter.') %>
+            </small>
+          </div>
+          &lt;!&ndash;Тип&ndash;&gt;
+          <div class="col-sm-6">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">
+                  <%= __('Type') %>
+                </label>
+              </div>
+              <select class="custom-select"
+                      id="inputGroupSelect01"
+                      :class="(formErrors.type && !uploadFormData.type) ? 'is-invalid' : ''"
+                      v-model="uploadFormData.type"
+              >
+                <option value="hairless">Hairless</option>
+                <option value="powderpuff">Powderpuff</option>
+              </select>
+            </div>
+            <small v-if="formErrors.type && !uploadFormData.type" class="text-danger ">
+              <%= __('Please indicate the litter letter.') %>
+            </small>
+          </div>
+        </div>-->
+        <% /*Наша предварительная цена*/ %>
+        <!--   <div class="form-group row">
+          <div class="col-sm-6">
+            <div class="form-group mt-4">
+              <label><%= __('Our preliminary price') %></label>
+              <input class="form-control"
+                     type="number"
+                     v-model.number="uploadFormData.ourPreliminaryPrice"
+              >
+              <div class="invalid-feedback" v-if="formErrors.ourPreliminaryPrice">
+                <%= __('Please indicate your preliminary price.') %>
+              </div>
+            </div>
+          </div>
+          <% /*Валюта*/ %>
+          <div class="col-sm-6">
+            <div class="form-group mt-4">
+              <label><%= __('Currency') %></label>
+              <select class="custom-select"
+                      id="inputGroupSelect01"
+                      :class="formErrors.currency ? 'is-invalid' : ''"
+                      v-model="uploadFormData.currency"
+              >
+                <option selected><%= __('Choose') %>...</option>
+                <option value="€">€ - <%= __('Euro') %></option>
+                <option value="$">$ - <%= __('U.S. dollar') %></option>
+                <option value="`&#8381;`">&#8381; - <%= __('Russian ruble') %></option>
+              </select>
+              <small v-if="formErrors.currency" class="text-danger ">
+                <%= __('Please indicate the litter letter.') %>
+              </small>
+            </div>
+          </div>
+        </div>-->
+
+        <% /*Краткое описание*/ %>
+        <div class="form-group">
+          <label><%= __('Sub Title') %></label>
+          <textarea class="form-control"
+                    name=""
+                    placeholder="Прекрасный щенок."
+                    v-model="uploadFormData.subtitle"
+                    cols="30"
+                    rows="3">
+          </textarea>
+        </div>
+
+        <p class="text-danger" v-if="cloudError === 'tooBig'">
+          <small><%= __('That file is too big. Please choose a junkier picture') %>.</small>
+        </p>
+        <p class="text-danger" v-else-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a
+              href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+
+      </div>
+
+      <div class="modal-footer flex-row-reverse justify-content-start">
+        <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1"><%= __('Save') %></ajax-button>
+        <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+
+  <% /* "Borrow litter" modal */ %>
+  <modal v-if="borrowLitterModalOpen && selectedLitter" v-cloak key="borrow" @close="closeBorrowLitterModal()">
+    <% /*Зарезервировать*/ %>
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Make a reservation') %> {{selectedLitter.label || 'item'}}</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="reservePuppy" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingBorrowLitterForm" @submitted="submittedBorrowLitterForm($event)"
+               v-if="!borrowFormSuccess">
+      <div class="modal-body">
+        <div class="item-preview d-flex justify-content-center">
+          <div class="card">
+            <img alt="<%= __('A mysterious item') %>"
+                 :alt="selectedLitter.label ? selectedLitter.label : '<%= __('A mysterious item') %>'"
+                 :src="selectedLitter.imageSrc"/>
+          </div>
+        </div>
+        <% /*Наша предварительная цена*/ %>
+        <div class="form-group row mt-4">
+          <label for="staticEmail" class="col-sm-5 col-form-label"><%= __('Our preliminary price') %></label>
+          <div class="col-sm-1">
+            <input class="form-control-plaintext" type="text" v-model="selectedLitter.currency" readonly>
+          </div>
+          <div class="col-sm-6">
+            <input class="form-control-plaintext" type="text" v-model="selectedLitter.ourPreliminaryPrice" readonly>
+          </div>
+          <!--<input class="form-control" type="text" placeholder="<%= __('€1000 - €1200') %>" v-model="borrowFormData.preliminaryPrice" :class="[formErrors.preliminaryPrice ? 'is-invalid' : '']">-->
+          <div class="invalid-feedback"
+               v-if="formErrors.ourPreliminaryPrice"><%= __('Please indicate your preliminary price.') %></div>
+        </div>
+
+        <div class="form-group mt-4">
+          <label><%= __('What price would you offer?') %></label>
+          <input class="form-control" type="number"
+                 v-model.number="borrowFormData.preliminaryPrice"
+                 :class="[formErrors.preliminaryPrice ? 'is-invalid' : '']">
+          <div class="invalid-feedback"
+               v-if="formErrors.preliminaryPrice"><%= __('Please indicate your preliminary price.') %></div>
+        </div>
+        <div class="form-group mt-4">
+          <label><%= __('When can you pick up the puppy?') %></label>
+          <div class="field-wrap">
+            <span class="datepicker-label"><%= __('Until') %></span>
+            <datepicker ref="datepickerref" v-model="borrowFormData.expectedReturnAt"
+                        placeholder-text="(<%= __('Choose date') %>)" :popup="true"
+                        :invalid="formErrors.expectedReturnAt"
+                        validation-error-message="<%= __('Required field.') %>"></datepicker>
+          </div>
+        </div>
+
+        <p class="text-danger" v-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+      </div>
+      <div class="modal-footer  flex-row-reverse justify-content-start">
+        <ajax-button type="submit" :syncing="syncing"
+                     class="btn btn-primary ml-1"><%= __('Make a reservation') %></ajax-button>
+        <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
+      </div>
+    </ajax-form>
+    <div class="modal-body" v-else>
+      <p><%= __('Thank you for contacting, we will contact you shortly. Advance reservation comes into force after the agreement of the details and the adoption of a positive decision by the two parties.') %>
+        <strong class="text-success">{{selectedLitter.label || 'item'}}</strong> know
+        when you could drop by.</p>
+      <p>Stay in touch with {{selectedLitter.owner.fullName}} to confirm pickup details: <strong>{{selectedLitter.owner.emailAddress}}</strong>
+      </p>
+    </div>
+    <div class="modal-footer" v-if="borrowFormSuccess">
+      <button data-dismiss="modal" class="btn btn-outline-success"><%= __('Got it') %></button>
+    </div>
+  </modal>
+
+  <% /* "Confirm Delete Litter" Modal */ %>
+  <modal v-if="confirmDeleteLitterModalOpen && selectedLitter" v-cloak key="delete"
+         @close="closeDeleteLitterModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Remove this') %>?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="destroyOneLitter" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingDeleteLitterForm"
+               @submitted="submittedDeleteLitterForm()">
+      <div class="modal-body">
+        <p><%= __('Are you sure you want to remove this') %> {{selectedLitter.label || 'item'}}?</p>
+        <p class="text-muted"
+           v-if="selectedLitter.borrowedBy"><%= __('We will no longer be able to assist with the return of this item, so you will need to contact') %>
+          {{selectedLitter.borrowedBy.fullName}} <%= __('directly to coordinate') %>.</p>
+        <p v-else><%= __('This item will no longer be available to share with friends') %>.</p>
+        <p class="text-danger" v-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a
+              href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal"><%= __('Nevermind') %></button>
+        <button type="submit" class="btn btn-danger ml-1"><%= __('Remove') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+
+  <% /* For virtual pages */ %>
+  <router-view></router-view>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

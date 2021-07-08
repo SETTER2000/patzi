@@ -1,0 +1,690 @@
+<div id="welcome" class="content" v-cloak>
+  <section class="home-banner-area pt-sm-4">
+    <div class="container-fluid">
+      <div class="row fullscreen d-flex align-items-center">
+        <div class="banner-content col-lg-4 col-md-8 justify-content-center ">
+          <h1 class="wow fadeIn" data-wow-duration="1s" data-wow-delay=".6s"> <%= __('GrO') %><span>o</span><%= __('Owth') %> <br/>
+            <%= __('matO') %><span>t</span><%= __('Ters') %><br> <%= __('meaning') %></h1>
+          <div class="designation mb-25 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.5s">
+            <p><%= __('Chinese Crested Dog') %></p>
+          </div>
+          <a href="#" @click="clickOpenExampleModalButton()" class="primary-btn my-3"
+             data-text="<%= __('Dog World') %>">
+            <span>D</span>
+            <span>o</span>
+            <span>g</span>
+            <span></span>
+            <span>W</span>
+            <span>o</span>
+            <span>r</span>
+            <span>l</span>
+            <span>d</span>
+          </a>
+        </div>
+        <div class="banner-img offset-lg-1 col-lg-7 col-md-6">
+          <!--<img class="img-fluid"  :src="urlB()" alt="Poale Ell Bazhen">-->
+          <img class="img-fluid"  src="https://d3a1wbnh2r1l7y.cloudfront.net/banner-img.jpg" alt="Poale Ell Bazhen">
+        </div>
+
+        <div class="social-icons">
+          <ul>
+            <li><a href="https://www.facebook.com/olga.vasef"><i class="ti-facebook"></i>facebook</a></li>
+            <li><a href="https://www.instagram.com/poaleell/?hl=ru"><i class="ti-instagram"></i>instagram</a></li>
+            <li><a href="https://www.youtube.com/channel/UCu31A2FPy08gEG6904OqEfA"><i class="ti-youtube"></i>youtube</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End banner Area -->
+
+  <!-- Start About Area -->
+  <section class="about-area section-gap">
+    <div class="container">
+      <div class="row align-items-center justify-content-start">
+        <div class="col-lg-5 about-left">
+          <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/lux.jpg" alt="Alfa Laval De Lux Supernova">
+        </div>
+        <div class="offset-lg-1 col-lg-5 col-md-12 about-right">
+          <div class="section-title">
+            <h2 class="mb-4">Poale Ell Kennel<br/>
+              Chinese Crested Dog</h2>
+          </div>
+          <div class="mb-35 wow fadeIn" data-wow-duration=".8s" data-wow-delay=".3s">
+            <p>
+              <%= __('In the breed since 2004. Officially, the kennel Poale Ell, was registered in the international registry of the FCI federation in 2016, certificate No. 18431 dated 02.26.2016, owner Olga Petrova.') %>
+            </p>
+            <p><%= __('The nursery is actively working with Polish, British and American manufacturers. Specializes in breeding Chinese crested dogs of standard size. In kennel dogs there are brilliant pedigrees with lines of the best specialized kennels in the world.') %>
+            </p>
+          </div>
+          <a href="/about" class="primary-btn" data-text="<%= __('Read More') %>">
+            <span>R</span>
+            <span>e</span>
+            <span>a</span>
+            <span>d</span>
+            <span></span>
+            <span>M</span>
+            <span>o</span>
+            <span>r</span>
+            <span>e</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End About Area -->
+
+  <!-- Start Service Area -->
+  <section class="service-area  section-gap-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3><%= __('Our Services') %></h3>
+            <h2><span><%= __('What We Offer') %></span></h2>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-6">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+            <div class="d-flex align-items-center mb-3">
+              <i class="flaticon-button"></i>
+              <h4 class="ml-3"><%= __('Overexposure of Dogs') %></h4>
+            </div>
+            <p><%= __('If you need to go on a short trip, we will gladly take our dog for a few days for free.') %></p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s">
+            <div class="d-flex align-items-center mb-3">
+              <i class="flaticon-water"></i>
+              <h4 class="ml-3"><%= __('Natural Nutrition') %></h4>
+            </div>
+            <p><%= __('All dogs of the kennel eat only natural food. Meat, vegetables, fruits. Individual approach.') %></p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+            <div class="d-flex align-items-center mb-3">
+              <i class="flaticon-ring"></i>
+              <h4 class="ml-3"><%= __('Return of the Dog') %></h4>
+            </div>
+            <p><%= __('Always ready to take back our dog, if for some reason you do not have the opportunity to continue to contain a pet.') %></p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+            <div class="d-flex align-items-center mb-3">
+              <i class="flaticon-art"></i>
+              <h4 class="ml-3"><%= __('Dog Show') %></h4>
+            </div>
+            <p><%= __('Promising dogs, with the consent of the owner - display at exhibitions at the expense of the kennel.') %></p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.0s">
+            <div class="d-flex align-items-center mb-3">
+              <!--<i class="flaticon-shirt"></i>-->
+              <i class="groom"></i>
+              <h4 class="ml-3"><%= __('Dog Grooming') %></h4>
+            </div>
+            <p><%= __('Fashionable, haircut. The washing up. Cleaning the ears, claws, hair removal. Use of professional cosmetics.') %></p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+            <div class="d-flex align-items-center mb-3">
+              <i class="flaticon-content"></i>
+              <h4 class="ml-3"><%= __('Event Coverage') %></h4>
+            </div>
+            <p><%= __('Permanent support of the owners, discounts on the purchase of medicines, consumables, feed, etc.') %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Service Area -->
+
+  <!-- Start Work Area Area -->
+  <section class="work-area  section-gap-top" id="work">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3><%= __('Born In Poale Ell') %></h3>
+            <h2><span><%= __('Check Our Work') %></span></h2>
+          </div>
+        </div>
+
+        <div class="col-lg-12 d-none">
+          <div class="filters">
+            <ul>
+              <li class="active" data-filter=".all"></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="filters-content">
+        <div class="row grid">
+          <div class="col-lg-4 col-md-6 grid-sizer"></div>
+
+          <div class="col-lg-8 col-md-12 grid-item all wow fadeIn" data-wow-duration="2s" data-wow-delay="0s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/Bazhen-Barthalamew-3m.jpg"
+                       alt="">
+                </div>
+                <div class="middle">
+                  <h4><%= __('litter') %> B</h4>
+                  <div class="cat">3 <%= __('months') %></div>
+                </div>
+                <a class="overlay" href="/litters"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 grid-item col-md-6 all wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/Poale-Ell-Adam-2.jpg" alt="">
+                </div>
+                <div class="middle">
+                  <h4>Poale Ell Adam</h4>
+                  <div class="cat">24 days</div>
+                </div>
+                <a class="overlay" href="/litters"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 grid-item col-md-6 all wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/litter-03112017.jpg"
+                       alt="litter-03112017">
+                </div>
+                <div class="middle">
+                  <h4>Bell, Bazhen, Barthalamew</h4>
+                  <div class="cat"><%= __('Litter') %> B</div>
+                </div>
+                <a class="overlay" href="/litters"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-8 grid-item col-md-12 all wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/PoaleEllAdam-1.jpg" alt="">
+                </div>
+                <div class="middle">
+                  <h4>Poale Ell Adam</h4>
+                  <div class="cat"><%= __('Litter') %> A</div>
+                </div>
+                <a class="overlay" href="/litters"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 text-center grid-item col-md-12 all creative wow fadeIn" data-wow-duration="2s">
+            <a href="/litters" class="primary-btn" data-text="View More" >
+              <span>V</span>
+              <span>i</span>
+              <span>e</span>
+              <span>w</span>
+              <span> </span>
+              <span>M</span>
+              <span>o</span>
+              <span>r</span>
+              <span>e</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Work Area Area -->
+
+  <!-- Start Pricing Area -->
+  <section class="pricing-area  section-gap-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3><%= __('Pricing Plan') %></h3>
+            <h2><span><%= __('Choose Your Dog') %></span></h2>
+            <p>
+            <ul>
+              <li><span class="ti-close cross mx-2 text-danger"></span><%= __('Not included in the price') %></li>
+            </ul>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-4 col-md-6">
+          <div class="pricing_item">
+            <h3 class="p_title"><%= __('Hairless Dam') %></h3>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+            <h1 class="p_price">&euro;1500</h1>
+            <div class="p_list">
+              <ul>
+                <li><span class="ti-check"></span> <%= __('Vaccination, anthelmintic') %></li>
+                <li><span class="ti-check"></span> <%= __('Pedigree (puppy card)') %> </li>
+                <li><span class="ti-check"></span> <%= __('Clear Tests PRA, PLL') %></li>
+                <li><span class="ti-check"></span> <%= __('The gift collar brand') %></li>
+                <li><span class="ti-check"></span><%= __('Contract of sale') %> </li>
+                <li><span class="ti-check"></span> <%= __('Nursery help') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
+              </ul>
+              <a class="primary-btn mt-4" href="/pricing" data-text="<%= __('Detailed') %>">
+                <span>D</span>
+                <span>e</span>
+                <span>t</span>
+                <span>a</span>
+                <span>i</span>
+                <span>l</span>
+                <span>e</span>
+                <span>d</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="pricing_item">
+            <h3 class="p_title">Hairless Sire</h3>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+            <h1 class="p_price">&euro;1000</h1>
+            <div class="p_list">
+              <ul>
+                <li><span class="ti-check"></span> <%= __('Vaccination, anthelmintic') %></li>
+                <li><span class="ti-check"></span> <%= __('Pedigree (puppy card)') %> </li>
+                <li><span class="ti-check"></span> <%= __('Clear Tests PRA, PLL') %></li>
+                <li><span class="ti-check"></span> <%= __('The gift collar brand') %></li>
+                <li><span class="ti-check"></span><%= __('Contract of sale') %> </li>
+                <li><span class="ti-check"></span> <%= __('Nursery help') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
+              </ul>
+              <a class="primary-btn mt-4" href="/pricing" data-text="<%= __('Detailed') %>">
+                <span>D</span>
+                <span>e</span>
+                <span>t</span>
+                <span>a</span>
+                <span>i</span>
+                <span>l</span>
+                <span>e</span>
+                <span>d</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="pricing_item">
+            <h3 class="p_title">Powderpuff Dam</h3>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+            <h1 class="p_price">&euro;1000</h1>
+            <div class="p_list">
+              <ul>
+                <li><span class="ti-check"></span> <%= __('Vaccination, anthelmintic') %></li>
+                <li><span class="ti-check"></span> <%= __('Pedigree (puppy card)') %> </li>
+                <li><span class="ti-check"></span> <%= __('Clear Tests PRA, PLL') %></li>
+                <li><span class="ti-check"></span> <%= __('The gift collar brand') %></li>
+                <li><span class="ti-check"></span><%= __('Contract of sale') %> </li>
+                <li><span class="ti-check"></span> <%= __('Nursery help') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
+              </ul>
+              <a class="primary-btn mt-4" href="/pricing" data-text="<%= __('Detailed') %>">
+                <span>D</span>
+                <span>e</span>
+                <span>t</span>
+                <span>a</span>
+                <span>i</span>
+                <span>l</span>
+                <span>e</span>
+                <span>d</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-12 col-md-6">
+          <div class="pricing_item">
+            <h3 class="p_title">Powderpuff Sire</h3>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+            <h1 class="p_price">&euro;800</h1>
+            <div class="p_list">
+              <ul>
+                <li><span class="ti-check"></span> <%= __('Vaccination, anthelmintic') %></li>
+                <li><span class="ti-check"></span> <%= __('Pedigree (puppy card)') %> </li>
+                <li><span class="ti-check"></span> <%= __('Clear Tests PRA, PLL') %></li>
+                <li><span class="ti-check"></span> <%= __('The gift collar brand') %></li>
+                <li><span class="ti-check"></span><%= __('Contract of sale') %> </li>
+                <li><span class="ti-check"></span> <%= __('Nursery help') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
+              </ul>
+              <a class="primary-btn mt-4" href="/pricing" data-text="<%= __('Detailed') %>">
+                <span>D</span>
+                <span>e</span>
+                <span>t</span>
+                <span>a</span>
+                <span>i</span>
+                <span>l</span>
+                <span>e</span>
+                <span>d</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!-- End Pricing Area -->
+
+  <!-- Start Blog Area -->
+  <section class="blog-area  section-gap-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3><%= __('Our Blog') %></h3>
+            <h2><span><%= __('Latest Good Story') %></span></h2>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="single-recent-blog mb-lg-3 mb-5">
+            <div class="thumb">
+              <img class="f-img img-fluid mx-auto" src="https://d3a1wbnh2r1l7y.cloudfront.net/Olga_PoaleEll.jpg" alt="">
+            </div>
+            <a href="#">
+              <h4
+                class="mt-4 mb-3"><%= __('In anticipation of the New 2019. Christmas photo shoot "I and my favorite pets." In the photo: Ella, Adam, Lux.') %></h4>
+            </a>
+            <div class="mb-3 bottom d-flex justify-content-between align-items-center flex-wrap">
+              <div class="meta">
+                <span class="ti-user mr-1"></span> <%= __('Olga Petrova') %>
+                <span class="ti-calendar mr-1"></span> 24/12/2018
+              </div>
+            </div>
+            <p>
+              <%= __('On the eve of the New Year - a wonderful holiday, which is a real magic. This time of carefree fun, smiles and pleasant surprises. Let your main gift in the coming year be the realization of your plans! With all my heart I wish you health, an infinite number of happy moments and harmony in families. Let luck be your companion, inspiring optimism and confidence that all your dreams will surely come true!') %>
+              🎄<br>
+              <%= __('C Happy New Year and Merry Christmas!') %>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="single-recent-blog mb-lg-3 mb-5">
+            <div class="row">
+              <div class="col-lg-6 col-md-5">
+                <div class="thumb">
+                 <!-- <img class="f-img img-fluid mx-auto" src="https://d3a1wbnh2r1l7y.cloudfront.net/2-new-2019.jpg"
+                       alt="">-->
+                  <el-image class="f-img img-fluid mx-auto" :src="getSrc('2-new-2019.jpg',coverMode, WxH,'fp-x:0.5,fp-y:0.5,fp-z:1')"
+                            alt=""></el-image>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 mt-md-0 mt-3">
+                <a href="#">
+                  <h4 class="mb-lg-3 mb-2"><%= __('So I would sit with them all day.') %></h4>
+                </a>
+                <div class="bottom d-flex justify-content-between align-items-center flex-wrap mb-3">
+                  <div class="meta">
+                    <span class="ti-user mr-1"></span> <%= __('Olga Petrova') %>
+                    <span class="ti-calendar mr-1"></span> 24/12/2018
+                  </div>
+                </div>
+                <p>
+                  <%= __('It is snowing outside, and we are warm together..') %>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="single-recent-blog mb-lg-3 mb-5">
+            <div class="row">
+              <div class="col-lg-6 col-md-5">
+                <div class="thumb">
+                  <el-image class="f-img img-fluid mx-auto" :src="getSrc('3-new-2019.jpg','cover:smart', '1000x700','fp-x:0.5,fp-y:0.48,fp-z:1')"
+                            alt=""></el-image>
+                  <!--<img class="f-img img-fluid mx-auto" src="https://d3a1wbnh2r1l7y.cloudfront.net/3-new-2019.jpg"-->
+                       <!--alt="">-->
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 mt-md-0 mt-3">
+                <a href="#">
+                  <h4 class="mb-lg-3 mb-2"><%= __('Ella, my star. Lovely girl.') %></h4>
+                </a>
+                <div class="bottom d-flex justify-content-between align-items-center flex-wrap mb-3">
+                  <div class="meta">
+                    <span class="ti-user mr-1"></span> <%= __('Olga Petrova') %>
+                    <span class="ti-calendar mr-1"></span> 24/12/2018
+                  </div>
+                </div>
+                <p>
+                  <%= __('She is always there, even when I\'m not at home. Wonderful, warm, tender lump.') %>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="single-recent-blog mb-lg-3 mb-5">
+            <div class="row">
+              <div class="col-xs-12 col-lg-6 col-md-5">
+                <div class="thumb">
+                  <el-image class="f-img img-fluid mx-auto" :src="getSrc('DSC_4395.jpg', 'cover:smart', '1000x800','fp-x:0.5,fp-y:0.65,fp-z:2')"
+                            alt=""></el-image>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 mt-md-0 mt-3">
+                <a href="#">
+                  <h4 class="mb-lg-3 mb-2"><%= __('We will be forever young ...') %></h4>
+                </a>
+                <div class="bottom d-flex justify-content-between align-items-center flex-wrap mb-3">
+                  <div class="meta">
+                    <span class="ti-user mr-1"></span><%= __('Olga Petrova') %>
+                    <span class="ti-calendar mr-1"></span> 24/12/2018
+                  </div>
+                </div>
+                <p>
+                  <%= __('In these photos, only a moment that will last forever. Let the dreams come true!') %>
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Blog Area -->
+
+
+  <router-view></router-view>
+
+  <!--  ╔═╗═╗ ╦╔═╗╔╦╗╔═╗╦  ╔═╗  ┌┬┐┌─┐┌┬┐┌─┐┬
+        ║╣ ╔╩╦╝╠═╣║║║╠═╝║  ║╣   ││││ │ ││├─┤│
+        ╚═╝╩ ╚═╩ ╩╩ ╩╩  ╩═╝╚═╝  ┴ ┴└─┘─┴┘┴ ┴┴─┘  -->
+  <modal class="example-modal" v-if="modal==='example'" @close="closeExampleModal()" v-cloak>
+    <div class="modal-header">
+      <h2 class="modal-title"><%= __('Dog Shows') %></h2>
+      <p><%= __('An exciting journey into the world of dogs through the prism of the exhibition marathon.') %></p>
+      <p><%= __('Have you ever been at an international dog show, for example, at the World Dog Show? Have you ever participated in these exhibitions? We invite you to discover this new, exciting journey of joy and charm with your beloved pet. After all, you are on this site is not accidental!? In our kennel there is always a desperate and sweet dog, ready to accompany you on this journey, which will become your most reliable friend on trips to countries and exhibitions. Discover the new world of dogs - show dogs!') %></p>
+      <hr/>
+      <button type="button" class="modal-close-button" data-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <h5 class="section-heading"><%= __('Chapter') %> 1: 10/06/2018, <%= __('Moscow') %>
+        , <%= __('China Town shopping and entertainment center') %>.</h5>
+
+
+      <p><%= __('On video') %> Chinese Crested Dog: Poale Ell Bazhen </p>
+      <div class="embed-responsive embed-responsive-16by9">
+
+        <!--<iframe width="560" height="315" src="https://www.youtube.com/embed/Z5SmaOld7lM" frameborder="0"-->
+        <!--allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"-->
+        <!--allowfullscreen></iframe>-->
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/Z5SmaOld7lM?start=4" frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+      </div>
+      <div class="p-3">
+        <h3><%= __('The First Dog Show of Bazhen') %>.</h3>
+        <p>- MKOO “Empire of Stars”, All-Russian Dog Show CAC - ChF, judge MIHAIL PAPADATOS (Greece)
+          POALE ELL BAZHEN - right on, CW, JCAC, BJ, BOB</p>
+        <p> - MKOO “Atlantis”, All-Russian Dogshow, CAC - ChF, judge PAOLO LOVAGLIO (Italy)
+          POALE ELL BAZHEN - right on, CW, JCAC, BJ, BOB</p>
+        <p><%= __('This is the first exhibition of Bazhen. Baby got a great description') %>.</p>
+      </div>
+
+      <div class="d-flex bd-highlight mb-0">
+        <div class="p-2 bd-highlight">
+          <a class="fancybox" rel="gallery1"
+             href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-1.jpg"
+             title="">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-1.jpg" alt="">
+          </a>
+        </div>
+        <div class="p-2 bd-highlight">
+          <a class="fancybox" rel="gallery1"
+             href="https://d3a1wbnh2r1l7y.cloudfront.net/ol.jpg"
+             title="">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ol.jpg" alt="">
+          </a>
+        </div>
+        <div class="p-2 bd-highlight">
+          <a class="fancybox" rel="gallery1"
+             href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-3.jpg"
+             title="">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-3.jpg" alt="">
+          </a>
+        </div>
+      </div>
+
+
+      <div class="d-flex bd-highlight mb-0">
+        <div class="p-2 bd-highlight">
+          <a class="fancybox" rel="gallery1"
+             href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-4.jpg"
+             title="">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-4.jpg" alt="">
+          </a>
+        </div>
+        <div class="p-2 bd-highlight">
+          <a class="fancybox" rel="gallery1"
+             href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-5.jpg"
+             title="">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-5.jpg" alt="">
+          </a>
+        </div>
+      </div>
+
+
+      <div class="d-flex bd-highlight mb-0">
+        <div class="p-2 bd-highlight">
+          <a class="fancybox" rel="gallery1"
+             href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-6.jpg"
+             title="">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-6.jpg" alt="">
+          </a>
+        </div>
+        <div class="p-2 bd-highlight">
+          <a class="fancybox" rel="gallery1"
+             href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-7.jpg"
+             title="">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-7.jpg" alt="">
+          </a>
+        </div>
+        <div class="p-2 bd-highlight">
+          <a class="fancybox" rel="gallery1"
+             href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-8.jpg"
+             title="">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-8.jpg" alt="">
+          </a>
+        </div>
+      </div>
+
+      <div class="d-flex bd-highlight mb-0">
+        <div class="p-2 bd-highlight">
+          <a class="grouped_elements" rel="group1" href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-9.jpg">
+            <!--<img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-9.jpg" alt="">-->
+            <el-image class="f-img img-fluid mx-auto" :src="getSrc('ds-9.jpg')"
+                      alt=""></el-image>
+          </a>
+        </div>
+        <div class="p-2 bd-highlight"><a class="grouped_elements" rel="group1"
+                                         href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-10.jpg"><img
+              class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-10.jpg" alt=""></a></div>
+        <div class="ml-auto p-2 bd-highlight">
+          <a class="grouped_elements" rel="group1" href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-11.jpg">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-11.jpg" alt="">
+          </a>
+        </div>
+      </div>
+
+      <div class="d-flex bd-highlight mb-0">
+        <div class="p-2 bd-highlight">
+          <a class="fancybox" rel="gallery1"
+             href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-3.jpg"
+             title="">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-3.jpg" alt="">
+          </a>
+        </div>
+        <div class="p-2 bd-highlight">
+          <a class="fancybox" rel="gallery1"
+             href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-9.jpg"
+             title="">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-9.jpg" alt="">
+          </a>
+        </div>
+        <div class="p-2 bd-highlight">
+          <a class="fancybox" rel="gallery1"
+             href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-5.jpg"
+             title="">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-5.jpg" alt="">
+          </a>
+        </div>
+      </div>
+      <div class="d-flex bd-highlight mb-0">
+        <div class="p-2 bd-highlight"><a class="grouped_elements" rel="group1"
+                                         href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-9.jpg"><img
+              class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-9.jpg" alt=""></a></div>
+        <div class="p-2 bd-highlight"><a class="grouped_elements" rel="group1"
+                                         href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-10.jpg"><img
+              class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-10.jpg" alt=""></a></div>
+        <div class="ml-auto p-2 bd-highlight">
+          <a class="grouped_elements" rel="group1" href="https://d3a1wbnh2r1l7y.cloudfront.net/ds-11.jpg">
+            <img class="img-fluid" src="https://d3a1wbnh2r1l7y.cloudfront.net/ds-11.jpg" alt="">
+          </a>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="modal-footer flex-row-reverse justify-content-between">
+      <button type="button" data-dismiss="modal" class="btn btn-info"><%= __('Close') %></button>
+      <button type="button" data-dismiss="modal" class="btn btn-outline-danger"><%= __('Cancel') %></button>
+    </div>
+  </modal>
+</div>
+
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

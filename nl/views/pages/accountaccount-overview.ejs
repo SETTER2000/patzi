@@ -1,0 +1,113 @@
+<div id="account-overview" v-cloak>
+  <div class="container">
+    <h1>< % = __("Mijn account") % ></h1>
+    <hr/>
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <h4>Persoonlijke informatie</h4>
+      </div>
+      <div class="col-sm-6">
+        <span class="float-sm-right">
+          <a class="btn btn-sm btn-outline-info account-settings-button" href="/account/profile">profiel Bewerken</a>
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">< % = __("Name") %>:</div>
+      <div class="col"><strong>{{me.fullName}}</strong></div>
+    </div>
+    <div class="row">
+      <div class="col-3">e-Mail:</div>
+      <div class="col">
+        <strong class="[me.emailStatus === 'onbevestigd' || me.emailStatus === 'wijzig de gevraagde dienst' ? 'tekst-gedempt' : "]">{{me.emailChangeCandidate ? mij.emailChangeCandidate : me.e-mailadres}}</strong>
+        <span v-if="me.emailStatus === 'unconfirmed' || me.emailStatus === 'change-requested'" class="badge badge-pill badge-warning">niet-Geverifieerde</span>
+      </div>
+    </div>
+    <hr/>
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <h4>Wachtwoord</h4>
+      </div>
+      <div class="col-sm-6">
+        <span class="float-sm-right">
+          <a class="btn btn-sm btn-outline-info account-settings-button" href="/account/password">wachtwoord Wijzigen</a>
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">Wachtwoord:</div>
+      <div class="col"><strong>••••••••••</strong></div>
+    </div>
+    <hr/>
+
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <h4>Taal</h4>
+      </div>
+      <div class="col-sm-6">
+        <span class="float-sm-right">
+          <a class="btn btn-sm btn-outline-info account-settings-button" href="/account/language">< % = __("Change language") % ></a>
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3"><%= __('Taal') %>:</div>
+      <div class="col"><strong>{{me.preferredLocale}}</strong></div>
+    </div>
+    <hr/>
+    <div class="row mb-3" v-if="isBillingEnabled">
+      <div class="col-sm-6">
+        <h4>Facturering</h4>
+      </div>
+      <div class="col-sm-6">
+        <span class="float-sm-right">
+          <ajax-button :syncing="syncingOpenCheckout || syncingUpdateCard" class="btn btn-sm btn-outline-info account-settings-button" @click="clickStripeCheckoutButton()">
+            <span slot="syncing-state">
+              <span v-if="syncingOpenCheckout">Aansluiten...</span>
+              <span v-else>Bijwerken...</span>
+            </span>
+            <span slot="default">{{ me.hasBillingCard ? 'Andere kaart' : 'Voeg kaart' }}</span>
+          </ajax-button>
+        </span>
+      </div>
+    </div>
+    <div v-if="isBillingEnabled && me.hasBillingCard">
+      <div class="row">
+        <div class="col-3">Creditcard:</div>
+        <div class="col">{{me.billingCardBrand}} eindigt in <strong>{{me.billingCardLast4}}</strong> <a class="remove-button ml-2" @click="clickRemoveCardButton()">Verwijderen</a></div>
+      </div>
+      <div class="row">
+        <div class="col-3">Vervaldatum:</div>
+        <div class="col">{{me.billingCardExpMonth}}/{{me.billingCardExpYear}}</div>
+      </div>
+    </div>
+    <div class="alert alert-danger" v-else-if="isBillingEnabled && cloudError">
+      Er is een fout opgetreden bij het updaten van uw credit card informatie. Controleer uw gegevens en probeer het opnieuw, of neem contact op met ondersteuning <a href="/contact"></a> als de fout zich blijft voordoen.
+    </div>
+    <div class="alert alert-secondary" v-else-if="isBillingEnabled">
+      Heb je niet verbonden zijn een bron betaling aan uw account. Om toegang te krijgen tot betaalde functies, die u nodig hebt om uw credit card informatie. (Maak je geen zorgen: u betaalt alleen wanneer u de limiet hebt bereikt van je vrije plan).
+    </div>
+  </div>
+
+  <% /* Bevestig Het Verwijderen Card Info Modal - * / %>
+  <modal v-if="removeCardModalVisible" @close="closeRemoveCardModal()" v-cloak>
+    <div class="modal-header">
+      <h5 class="modal-title">Verwijder De Kaart Informatie?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="updateBillingCard" :syncing.sync="syncingRemoveCard" :cloud-error.sync="cloudError" :handle-parsing="handleParsingRemoveCardForm" @submitted="submittedRemoveCardForm()">
+      <div class="modal-body">
+        <p>weet u zeker dat u wilt verwijderen van uw {{me.billingCardBrand}} eindigt in <strong>{{me.billingCardLast4}}</strong>?</p>
+        <p class="text-muted">Dit kan uw toegang beperken tot betaalde functies.</p>
+        <p class="text-danger" v-if="cloudError"><small>er is Een fout opgetreden tijdens het verwerken van uw verzoek. Controleer uw gegevens en probeer het opnieuw, of neem contact op met ondersteuning <a href="/contact"></a> als de fout zich blijft voordoen.</small></p>
+      </div>
+      <div class="modal-footer">
+        <button data-dismiss="modal" class="btn btn-outline-secondary mr-1">Nevermind</button>
+        <ajax-button type="submit" :syncing="syncingRemoveCard" class="btn btn-danger ml-1">Verwijderen</ajax-button>
+      </div>
+    </ajax-form>
+  </modal>
+</div>
+<%- /* Laat de lokale bevolking als `venster.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

@@ -1,0 +1,179 @@
+<div id="contact" v-cloak>
+  <!-- start banner Gebied -->
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white">Contact Met Ons Op</h1>
+          <p>Gevogelte living lights voor onze oren naar de hemel lager tekenen</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Einde banner Gebied -->
+
+
+  <div class="container section-gap">
+    <h1 class="text-center">contact</h1>
+    <div class="contact-form" v-if="!cloudSuccess">
+      <p class="text-center">een vraag voor ons?  Misschien wat feedback?  We houden van praten met gebruikers over Poale Ell, en we zijn blij om vragen te beantwoorden over onze prijzen, stappenplan, of business solutions.  Stuur ons een bericht en wij zullen u zo spoedig mogelijk.</p>
+      <hr/>
+      <ajax-form action="deliverContactFormMessage" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm()" :handle-parsing="handleParsingForm">
+        <div class="form-group">
+          <label for="full-name">Naam</label>
+          <input class="form-control" id="volledige naam" name="volledige naam" type="text" class="[formErrors.fullName ? 'is-invalid' : "]" v-model.trim="formData.fullName" placeholder="Sturgis P. Steur" autocomplete="naam" focus-de eerste>
+          <div class="invalid-feedback" v-if="formErrors.fullName">laat ons weten wat u te bellen.</div>
+        </div>
+        <div class="form-group">
+          <label for="email-address">e-Mail adres</label>
+          <input class="form-control" id="email-adres" name="email-adres" type="email" class="[formErrors.e-mailadres ? 'is-invalid' : "]" v-model.trim="formData.emailAddress" placeholder="uw e-mail, bijvoorbeeld: sturgeon@example.com" autocomplete="email">
+          <div class="invalid-feedback" v-if="formErrors.emailAddress">vul een geldig e-mail adres.</div>
+        </div>
+        <div class="form-group">
+          <label for="topic">Onderwerp</label>
+          <input class="form-control" id="onderwerp" name="onderwerp" type="text" class="[formErrors.onderwerp ? 'is-invalid' : "]" v-model.trim="formData.onderwerp" placeholder="Prijzen vraag" autocomplete="none">
+          <div class="invalid-feedback" v-if="formErrors.topic">kies een onderwerp voor je bericht.</div>
+        </div>
+        <div class="form-group">
+          <label for="message">Bericht</label>
+          <textarea class="form-control" id="bericht" name="bericht" class="[formErrors.bericht ? 'is-invalid' : "]" v-model.trim="formData.bericht" placeholder="Wat is het verschil tussen een &quot;&quot; &quot;Haarloze en de Powderpuff hond&quot; ?" autocomplete="none"></textarea>
+          <div class="invalid-feedback" v-if="formErrors.message">Bericht kan niet leeg zijn.</div>
+        </div>
+        <p class="text-danger" v-if="cloudError"><small>er is Een fout opgetreden tijdens het verwerken van uw verzoek. Controleer uw gegevens en probeer het opnieuw, of neem contact op met ondersteuning <a href="/contact"></a> als de fout zich blijft voordoen.</small></p>
+        <div class="form-group">
+          <ajax-button type="submit" :syncing="syncing" class="btn btn-dark btn-lg btn-block">bericht Verzenden</ajax-button>
+        </div>
+      </ajax-form>
+    </div>
+    <div class="success-message" v-if="cloudSuccess">
+      <p class="text-center">Bedankt voor het uitreiken!</p>
+      <hr/>
+      <p>Wij hebben uw bericht ontvangen en iemand van ons team zal u spoedig.</p>
+    </div>
+  </div>
+
+
+  <!-- Contact Start-Gebied pagina -->
+  <section class="contact-page-area ">
+    <h2 class="text-center">Waar vindt u ons?</h2>
+    <div class="contact-form"><p class="text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci aliquam ducimus
+        exercitationem impedit iure magni, modi optio possimus provident sapiente sequi temporibus suscipit ut?
+        Eaque earum facilis molestiae officiis suscipit.</p>
+      </div>
+    <div class="container">
+
+      <div class="row">
+        <div class="col-lg-12">
+          <hr>
+          <div
+            class="kaart-wrap"
+            style="width:100%; height: 445px;"
+            id="kaart"
+          ></div>
+        </div>
+
+        <div class="d-flex align-content-stretch flex-wrap">
+        <!--  <div class="single-contact-address d-flex flex-row">
+
+          </div>-->
+
+            <div class="p-2 flex-fill bd-highlight">
+              <div class="icon"><i class="ti-home"></i></div>
+              <div class="contact-details">
+                <h5>Moskou, Rusland</h5>
+                <p>st. Ostrovityanova d. 27 Bldg. 3</p>
+              </div>
+            </div>
+            <div class="p-2 flex-fill bd-highlight">
+              <div class="icon"><i class="ti-headphone"></i></div>
+              <div class="contact-details">
+                <h5>07 (910) 4067 406</h5>
+                <p>Ma Ma 9u tot 9pm</p>
+              </div>
+            </div>
+            <div class="p-2 flex-fill bd-highlight">
+              <div class="icon"><i class="ti-email"></i></div>
+              <div class="contact-details">
+                <h5>support@poaleell.com</h5>
+                <p>Stuur ons uw query altijd!</p>
+              </div>
+            </div>
+
+        <!--  <div class="single-contact-address d-flex flex-row">
+
+          </div>-->
+        </div>
+     <% /*<div class="col-lg-8">
+          <form
+            class="form-gebied "
+            id="myForm"
+            action="mail.php"
+            method="post"
+            class="contact-form-tekst-recht"
+          >
+            <div class="row">
+              <div class="col-lg-6 form-group form-group-top">
+                <input
+                  name="naam"
+                  placeholder="Vul uw naam"
+                  onfocus="dit.placeholder = ""
+                  onblur="dit.placeholder = 'Vul uw naam in'"
+                  class="common-ingang mb-20 formulier-control"
+                  required=""
+                  type="text"
+                />
+
+                <input
+                  name="email"
+                  placeholder="Vul e-mail adres"
+                  patroon="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"
+                  onfocus="dit.placeholder = ""
+                  onblur="dit.placeholder = 'Voer het e-mailadres'"
+                  class="common-ingang mb-20 formulier-control"
+                  required=""
+                  type="email"
+                />
+
+                <input
+                  name="onderwerp"
+                  placeholder="Voer het onderwerp"
+                  onfocus="dit.placeholder = ""
+                  onblur="dit.placeholder = 'Voer het onderwerp'"
+                  class="common-ingang mb-20 formulier-control"
+                  required=""
+                  type="text"
+                />
+              </div>
+              <div class="col-lg-6 form-group">
+                  <textarea
+                    class="common-textarea vorm-control"
+                    name="bericht"
+                    placeholder="Messege"
+                    onfocus="dit.placeholder = ""
+                    onblur="dit.placeholder = 'Messege'"
+                    required=""
+                  ></textarea>
+              </div>
+              <div class="col-lg-12">
+                <div class="alert-msg" style="text-align: left;"></div>
+
+                knop <
+                  class="primaire-btn"
+                  style="float: right;"
+                  data-text="Bericht Verzenden"
+                >
+                  <span>S</span> <span>e</span> <span>n</span> <span>d</span>
+                  <span> </span> <span>M</span> <span>e</span> <span>s</span>
+                  <span>s</span> <span>een</span> <span>g</span> <span>e</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>*/ %>
+      </div>
+    </div>
+  </section>
+  <!-- Einde contact-pagina Area -->
+
+</div>
+<%- /* Laat de lokale bevolking als `venster.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

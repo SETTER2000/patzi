@@ -1,0 +1,111 @@
+<div id="homepage" class="[heroHeightSet ? het 'niet']" v-mantel>
+  <div class="hero d-flex flex-column justify-content-center" full-page-hero>
+    <div class="container text-center">
+      <div class="hero-image">
+        <img class="sky" alt="The sky above the ocean" src="/images/hero-sky.png"/>
+        <img class="cloud cloud-1" alt="A grayish-blue cloud" src="/images/hero-cloud.png"/>
+        <img class="cloud cloud-2" alt="Another grayish-blue cloud" src="/images/hero-cloud.png"/>
+        <img class="ship" alt="A ship hovering a few feet over the surface of the water, bearing a flagpole with the Sails.js logo" src="/images/hero-ship.png"/>
+        <img class="water" alt="The shadow of the floating ship on the water" src="/images/hero-water.png"/>
+      </div>
+      <h1 class="display-4">Chinese Naakthond Hond <br>  <strong>Uw Eeuwige Metgezel</strong></h1>
+      <div>
+        <div class="more-info-text" @click="clickHeroButton()">
+          <div class="text">Duik in</div>
+          <div class="icon">&darr;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="about-wrapper" role="scroll-destination">
+    <div class="container">
+      <div class="about text-center">
+        <h3>Dit is uw vers-project gegenereerd + een paar extra ' s.</h3>
+        <p>In onze tijd <a target="_blank" href="https://sailsjs.com/about">bouwen van apps voor klanten</a>, we bevonden ons opnieuw rollen sommige van de belangrijkste functies over en weer tussen de projecten.  Dus we kozen voor een aantal van de dingen die steeds opduiken, eigenwijze geïmplementeerd onze eigen oplossingen voor hen, en vervolgens opgenomen het allemaal in deze vrije en open-bron starter app. We hopen dat het helpt u zo veel als het ons helpt!</p>
+      </div>
+      <div class="features text-center">
+        <div class="row">
+          <div class="feature mb-4 mb-sm-0 col-sm">
+            <div class="icon">
+              <i class="fa fa-envelope"></i>
+            </div>
+            <h4>e-Mails</h4>
+            <p class="text-muted">Ingebouwde ondersteuning voor interne e-mails van het contact formulier <a href="/contact"></a>, evenals transactionele e-mails voor de gebruikers.</p>
+          </div>
+          <div class="feature pt-4 pt-sm-0 mb-4 mb-sm-0 col-sm">
+            <div class="icon">
+              <i class="fa fa-lock"></i>
+            </div>
+            <h4>Verificatie</h4>
+            <p class="text-muted">Ready-to-go, aanpasbare <a href="/signup">aanmelden</a>, <a href="/login">login</a>, en <a href="/password/forgot">password recovery</a> stromen voor uw gebruikers.</p>
+          </div>
+          <div class="feature pt-4 pt-sm-0 col-sm">
+            <div class="icon">
+              <i class="fa fa-credit-card"></i>
+            </div>
+            <h4>Facturering</h4>
+            <p class="text-muted">Hook-up van uw Streep account voor het beheer van klanten en betaling bronnen.</p>
+          </div>
+        </div>
+        <a class="btn btn-outline-info mt-5" href="/faq">meer informatie</a>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="setup">
+      <h3 class="text-center">Hoe je aan de slag:</h3>
+      <div class="step">
+        <div class="step-image">
+        <img alt="computer with email symbol on screen" src="/images/setup-email.png"/>
+        </div>
+        <h5>Set-up van uw branding en content</h5>
+        <p>Deze starter app bevat verschillende pagina templates (met inbegrip van degene die u nu aan het lezen) dat u kunt zo veel of zo weinig als u wilt.  Als er pagina ' s die u niet nodig hebt, te verwijderen.</p>
+        <p>aan de slag Te gaan, een wereldwijde zoek/vervang in dit project voor exemplaren van <code>Poale Ell</code> en deze allemaal vervangen door de daadwerkelijke naam van uw app of platform ("Facebag").  Daarna doe je hetzelfde weer te vervangen <code>Poale Ell</code> met de werkelijke naam van uw organisatie ("Facebag Corporation").</p>
+        <blockquote><small>Deze app bevat ook een standaard <a href="/legal/terms"></a> Gebruiksvoorwaarden en het privacybeleid <a href="/legal/privacy"></a>.  We willen het makkelijker maken voor apps om transparant te zijn over hun gebruikers, en de rechten en privacy.  Maar we zijn ontwikkelaars niet-juristen; en dit is <em>zeker geen juridisch advies</em>.  Alvorens in te gaan wonen, moet u deze vervangen worden door bijvoorbeeld documenten met uw eigen bedrijfsbeleid en <a href="https://en.wikipedia.org/wiki/Counsel" target="_blank"></a> om raad voor hulp als u bij het ontwerpen van nieuwe voorwaarden van de grond af.</small></blockquote>
+      </div>
+      <div class="step">
+        <div class="step-image">
+        <img alt="computer with credit card icon on screen" src="/images/setup-payment.png"/>
+        </div>
+        <h5>Configureren integraties</h5>
+        <p>om deze app te sturen geautomatiseerde e-mails, moet u een Mailgun account <a target="_blank" href="https://mailgun.com"></a>.  Dan, in <code>config/custom.js</code>, het volgende configureren:</p>
+        <div class="card bg-light mb-4">
+          <div class="card-body"><pre><code><span class="text-muted">// de Ontvanger van het contact formulier berichten</span>
+internalEmailAddress: my.email@example.com,
+
+<span class="text-muted">// uitgaande e-mails</span>
+fromEmailAddress: 'noreply@example.com',
+fromName: 'De Poale Ell Team',
+
+<span class="text-muted">// Mailgun instellingen</span>
+mailgunDomain: 'transactional-mail.example.com',
+mailgunSecret: 'sleutel-testkeyb183848139913858e8abd9a3'</code></pre>
+          </div>
+        </div>
+        <p>inschakelen van ondersteuning voor facturatie-functies, die je nodig hebt om een <a target="_blank" href="https://stripe.com">Streep</a> account, dan zijn uw test referenties:</p>
+        <div class="card bg-light mb-4">
+          <div class="card-body"><pre><code><span class="text-muted">// Streep referenties</span>
+stripePublishableKey: 'pk_test_Zzd814nldl91104qor5911gjald',
+stripeSecret: 'sk_test_Zzd814nldl91104qor5911gjald'</code></pre>
+          </div>
+        </div>
+        <blockquote><small>Als je de app hoeft niet, het verwerken van betalingen, het zal nog steeds werken zonder Streep configuratie. In dit geval zijn alle verwijzingen naar de facturering zal gewoon worden weggelaten uit de UI.</small></blockquote>
+      </div>
+      <div class="step">
+        <div class="step-image">
+        <img alt="computer with sails logo on screen" src="/images/setup-customize.png"/>
+        </div>
+        <h5>Aanpassen</h5>
+        <p>Zodra de initiële configuratie is uitgevoerd, je bent klaar om te beginnen met de bouw van de rest van uw app.</p>
+        <p>We hard gewerkt om deze starter-app van de structuur en de bestanden worden als kale mogelijk, dus het is gemakkelijk voor het toevoegen van nieuwe pagina ' s en business logica volgen van de conventies die we opzetten. Als u in de problemen, neem een kijkje op <a href="/faq">uw nieuwe FAQ-pagina</a>, die betrekking heeft op de tools die we gebruikt en hoe aan te passen.  Voor een diepere duik, check out de Zeilen <a href="https://courses.platzi.com/courses/sails-js/">walkthrough</a>, <a href="https://sailsjs.com/documentation">documentatie</a> en <a href="https://sailsjs.com/support">ondersteuning</a> pagina ' s.</p>
+      </div>
+    </div>
+    <hr/>
+    <div class="pep-talk text-center">
+      <h3>aan de slag.</h3>
+      <p>Wij denken dat dit project is een handig uitgangspunt, maar natuurlijk is er geen one-size-fits-all oplossing. Het goede nieuws is, deze app is in uw handen nu, dus je kunt springen in de bestanden aan te passen aan uw behoeften. Wijziging van bepaalde code in het rond. Break stuff.  Fix it. En bovenal: <strong>maak iets wat mensen willen gebruik</strong>.</p>
+      <p><span class="text-muted">&hearts;</span> <a href="https://sailsjs.com/about">De Zeilen Team</a></p>
+    </div>
+  </div>
+</div>
+<%- /* Laat de lokale bevolking als `venster.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

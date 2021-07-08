@@ -1,0 +1,51 @@
+<div id="signup" v-cloak>
+  <div class="container" v-if="!cloudSuccess">
+    <h1 class="text-center">een account Aanmaken</h1>
+    <div class="signup-form">
+      <p class="text-center">aan de slag! Lid worden is gratis en duurt slechts een paar minuten.</p>
+      <hr/>
+      <ajax-form action="signup" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm()" :handle-parsing="handleParsingForm">
+        <div class="form-group">
+          <label for="full-name">Volledige naam</label>
+          <input class="form-control" id="volledige naam" type="text" class="[formErrors.fullName ? 'is-invalid' : "]" v-model.trim="formData.fullName" placeholder="Sturgis P. Steur" autocomplete="naam" focus-de eerste>
+          <div class="invalid-feedback" v-if="formErrors.fullName">vul uw volledige naam in.</div>
+        </div>
+        <div class="form-group">
+          <label for="email-address">e-Mail adres</label>
+          <input class="form-control" id="email-adres" type="email" class="[formErrors.e-mailadres ? 'is-invalid' : "]" v-model.trim="formData.emailAddress" placeholder="sturgeon@example.com" autocomplete="email">
+          <div class="invalid-feedback" v-if="formErrors.emailAddress">vul een geldig e-mail adres.</div>
+        </div>
+        <div class="form-group">
+          <label for="password">Kies een wachtwoord</label>
+          <input class="form-control" id="password" type="password" class="[formErrors.wachtwoord ? 'is-invalid' : "]" v-model.trim="formData.wachtwoord" tijdelijke aanduiding="••••••••" autocomplete="nieuw wachtwoord">
+          <div class="invalid-feedback" v-if="formErrors.password">A.u.b. voer een wachtwoord in.</div>
+        </div>
+        <div class="form-group">
+          <label for="confirm-password">wachtwoord Bevestigen</label>
+          <input class="form-control" id="bevestig wachtwoord" type="password" class="[formErrors.wachtwoord bevestigen ? 'is-invalid' : "]" v-model.trim="formData.wachtwoord bevestigen" tijdelijke aanduiding="••••••••" autocomplete="nieuw wachtwoord">
+          <div class="invalid-feedback" v-if="formErrors.confirmPassword">Uw wachtwoord en de bevestiging komen niet overeen.</div>
+        </div>
+        <div class="form-group form-check">
+          <input class="form-check-input" id="terms-agreement" type="checkbox" v-model="formData.agreed">
+          <label for="voorwaarden van de overeenkomst" class="form-check-label" :klasse="[formErrors.afgesproken ? 'tekst-gevaar": "] ">ik heb gelezen &amp; <a target="_blank" href="/terms">akkoord gaat met de voorwaarden van service</a>.</label>
+        </div>
+        <p class="text-danger" v-if="cloudError==='emailAlreadyInUse'"><small>Het lijkt erop dat er al een account met uw e-mail adres. Als u uw wachtwoord bent vergeten kunt u deze opvragen hier <a href="password/forgot"></a>.</small></p>
+        <p class="text-danger" v-else-if="cloudError"><small>er is Een fout opgetreden tijdens het verwerken van uw verzoek. Controleer uw gegevens en probeer het opnieuw, of neem contact op met ondersteuning <a href="/support"></a> als de fout zich blijft voordoen.</small></p>
+        <div class="form-group">
+          <ajax-button type="submit" :syncing="syncing" class="btn-dark btn-lg btn-block">account Aanmaken</ajax-button>
+        </div>
+      </ajax-form>
+      <p class="text-center">een account? <a href="/login">Teken in</a></p>
+    </div>
+  </div>
+  <div class="container" v-if="cloudSuccess">
+    <h1 class="text-center">Controleer uw e-mail!</h1>
+    <div class="success-message">
+      <hr/>
+      <p>Uw account is bijna klaar. Alles wat je hoeft te doen is klik op de link die we gestuurd naar <strong>{{formData.emailAddress}}</strong>.</p>
+      <p>(U kunt nog steeds toegang krijgen tot uw dashboard nu, maar sommige functies zullen worden unvavailable totdat we gecontroleerd uw e-mail adres.)</p>
+      <p><a class="btn btn-outline-info" href="/">Ga naar dashboard</a></p>
+    </div>
+  </div>
+</div>
+<%- /* Laat de lokale bevolking als `venster.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

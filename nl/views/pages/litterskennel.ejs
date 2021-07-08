@@ -1,0 +1,181 @@
+<div id="kennel" v-cloak>
+
+  <!-- start banner Gebied -->
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white">Nesten</h1>
+          <p>Gevogelte living lights voor onze oren naar de hemel lager tekenen</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Einde banner Gebied -->
+  <!-- <ul>
+     <li v-for="litter in litters" @click="clickLitter(litter.id)">{{litter.label}}</li>
+   </ul>-->
+  <!-- Werkgebied Start -->
+  <section class="work-area section-gap-top" id="work">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3>Onze Portfolio</h3>
+            <h2><span>Controleren</span> Ons Werk</h2>
+          </div>
+        </div>
+
+        <div class="col-lg-12 d-none">
+          <div class="filters">
+            <ul>
+              <li class="active" data-filter=".all"></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="filters-content">
+        <div class="row grid">
+          <div class="col-lg-4 col-md-6 grid-sizer"></div>
+          <div v-for="(nest -, toets-index) in nesten" key="index" class="col-lg-8 raster-item col-md-6 wow fadeIn alle"
+               data-wow-duur="2s" data-wow-vertraging="0,4 s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/litter-03112017.jpg" alt="">
+                </div>
+                <div class="middle">
+                  <ul class="navbar-nav  my-sm-0 ">
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+                         aria-haspopup="true" aria-expanded="false">
+                        <i class="ti-settings"></i>
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" v-als="nest.de eigenaar.id === mij.id" href="#"
+                           @click="clickDeleteLitter(nest.id)">
+                          Verwijderen
+                        </a>
+                        <a class="dropdown-item" href="#">Actie</a>
+                        <a class="dropdown-item" href="#">een Andere actie</a>
+                        <!--<a class="dropdown-item" href="#">Somelitter anders hier</a>-->
+                      </div>
+                    </li>
+                  </ul>
+
+                  <h3>Nest: {{litter.label | capitalize}}</h3>
+                  <div class="cat">Nest geboren: {{nest.geboren | date('NL') }}</div>
+                  <h4 v-if="litter.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mijn</h4>
+                  <h5 v-if="litter.owner.id !== me.id"> Eigenaar: <a href="#" class="card-link">{{litter.owner.fullName}}</a></h5>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-lg-4 col-md-12 grid-item all wow fadeIn" data-wow-duration="2s" data-wow-delay="0s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/Bazhen-Barthalamew-3m.jpg" alt="">
+                </div>
+                <div class="middle">
+                  <h4>+2D Vinyl Design</h4>
+                  <div class="cat">Opdrachtgever Project</div>
+                </div>
+                <a class="overlay" href="project-details.html"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 grid-item col-md-6 all wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/Poale-Ell-Adam-2.jpg" alt="">
+                </div>
+                <div class="middle">
+                  <h4>2D Vinyl Design</h4>
+                  <div class="cat">Opdrachtgever Project</div>
+                </div>
+                <a class="overlay" href="project-details.html"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 grid-item col-md-6 all wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/litter-03112017.jpg" alt="">
+                </div>
+                <div class="middle">
+                  <h4>2D Vinyl Design</h4>
+                  <div class="cat">Opdrachtgever Project</div>
+                </div>
+                <a class="overlay" href="project-details.html"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 grid-item col-md-12 all wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+            <div class="single-work">
+              <div class="relative">
+                <div class="thumb">
+                  <img class="image img-fluid" src="http://d3a1wbnh2r1l7y.cloudfront.net/PoaleEllAdam-1.jpg" alt="">
+                </div>
+                <div class="middle">
+                  <h4>++2D Ontwerp Vinyl</h4>
+                  <div class="cat">Opdrachtgever Project</div>
+                </div>
+                <a class="overlay" href="project-details.html"></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 text-center grid-item col-md-12 all creative wow fadeIn" data-wow-duration="2s">
+            <a href="#" class="primary-btn" data-text="View More">
+              <span>V</span>
+              <span>ik</span>
+              <span>e</span>
+              <span>w</span>
+              <span> </span>
+              <span>M</span>
+              <span>o</span>
+              <span>r</span>
+              <span>e</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Werkgebied End -->
+  <% /* "Bevestig Verwijderen Van Strooisel" Modal - * / %>
+  <modaal v-als="confirmDeleteLitterModalOpen && selectedLitter" v-mantel key="verwijderen"
+         @close="closeDeleteLitterModal()">
+    <div class="modal-header">
+      <h5 class="modal-title">Verwijder dit item?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="destroyOneLitter" :synchroniseren.sync="synchroniseren" :cloud-fout.sync="cloudError"
+               :handvat-parsing="handleParsingDeleteLitterForm"
+               @voorgelegd="submittedDeleteLitterForm()">
+      <div class="modal-body">
+        <p>weet u zeker dat u wilt verwijderen dit {{selectedLitter.label || 'item'}}?</p>
+        <p class="text-muted" v-if="selectedLitter.borrowedBy">zullen We niet langer in staat zijn om te helpen met de terugkeer van dit artikel, dus je moet contact opnemen met {{selectedLitter.borrowedBy.fullName}} direct te coördineren.</p>
+        <p v-else>Dit item is niet langer beschikbaar zijn om te delen met vrienden.</p>
+        <p class="text-danger" v-if="cloudError"><small>er is Een fout opgetreden tijdens het verwerken van uw verzoek. Controleer uw gegevens en probeer het opnieuw, of neem contact op met ondersteuning <a href="/contact"></a> als de fout zich blijft voordoen.</small></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal">Nevermind</button>
+        <button type="submit" class="btn btn-danger ml-1">Verwijderen</button>
+      </div>
+    </ajax-form>
+  </modal>
+</div>
+<%- /* Bloot server-rendered gegevens venster.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

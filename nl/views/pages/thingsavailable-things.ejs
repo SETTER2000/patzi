@@ -1,0 +1,335 @@
+<div id="available-things" v-cloak>
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white">Honden</h1>
+          <p>Honden van de Kennel Poale Ell </p>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Werkgebied Start -->
+  <section class="work-area section-gap-top" >
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3>Onze Portfolio</h3>
+            <h2><span>Controleren</span> Ons Werk </h2>
+            <div class="mt-5">
+              <button @click="clickAddButton()" class="btn btn-outline-info">een item Toevoegen</button>
+            </div>
+          </div>
+        </div>
+        <!--<div class="col-lg-12 d-none">-->
+          <!--<div class="filters">-->
+            <!--<ul>-->
+              <!--<li class="active" data-filter=".all"></li>-->
+            <!--</ul>-->
+          <!--</div>-->
+        <!--</div>-->
+      </div>
+      <div class="container">
+        <div class="masonry-container ">
+          <div class="row d-flex align-items-center justify-content-center ">
+            <!--<a class="fancybox" rel="gallery1"
+               href="http://d3a1wbnh2r1l7y.cloudfront.net/ds-6.jpg"
+               title="">
+              <img src="http://d3a1wbnh2r1l7y.cloudfront.net/ds-6.jpg" alt=""/>
+            </a>
+            <a class="fancybox" rel="gallery1"
+               href="http://d3a1wbnh2r1l7y.cloudfront.net/ds-3.jpg"
+               title="">
+              <img src="http://d3a1wbnh2r1l7y.cloudfront.net/ds-3.jpg" alt=""/>
+            </a>-->
+              <div class="col-md-3 col-sm-4 mx-1 my-1 item" v-for="(thing, key, index) in things" :key="index">
+                <!--<a class="fancybox" rel="gallery1" :href="thing.imageSrc" :title="thing.title">-->
+                <een v-als="ding.de eigenaar.id === mij.id" href="#"
+                   @click="clickDeleteThing(ding.id)">
+                <img  :src="thing.imageSrc" :alt="thing.label">
+                </a>
+                <div>{{thing.hi}}</div>
+                <!--<a rel="gallery1" href="http://d3a1wbnh2r1l7y.cloudfront.net/ds-1.jpg" title="Codirosso spazzacamino (Massimo Greco _Foligno)" class="fancybox"><img src="http://d3a1wbnh2r1l7y.cloudfront.net/ds-1.jpg" alt="" class="img-fluid"></a>-->
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Werkgebied End -->
+
+
+
+
+
+  <!--OUDE GALLERY-->
+  <!-- <div class="container">
+     <div class="row m-5">
+       <div v-for="(thing, key, index) in things" :key="index" class="col-sm-4">
+         <div class="card mt-lg-4 ">
+           <div class="card-header p-1">
+             <ul class="nav justify-content-end nav-pills card-header-pills pr-2">
+               <li class="nav-item">
+                 <div class="dropdown">
+                   <button class="btn btn-outline-licht btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                     <a class="dropdown-item" v-als="ding.de eigenaar.id === mij.id" href="#"
+                        @click="clickDeleteThing(ding.id)">
+                       Verwijderen
+                     </a>
+                     <a class="dropdown-item" href="#">Actie</a>
+                     &lt;!&ndash;     <a class="dropdown-item" href="#">een Andere actie</a>
+                      <a class="dropdown-item" href="#">Iets anders hier</a>&ndash;&gt;
+                   </div>
+                 </div>
+               </li>
+             </ul>
+           </div>
+           <img :src="thing.imageSrc" class="card-img-top" alt="...">
+           <div class="card-body">
+             <h5 class="card-title">{{thing.label}}</h5>
+
+             <h6 class="card-subtitle mb-2 text-muted">{{thing.title}}</h6>
+             <p class="card-text">{{thing.subtitle}}</p>
+             <p v-if="thing.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mijn</p>
+             <a v-if="thing.owner.id !== me.id" href="#" class="card-link">{{thing.owner.fullName}}</a>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>-->
+
+
+  <!--  <section class="work-area section-gap-top" id="work">
+      <div class="container">
+        <div class="filters-content">
+          <div class="row grid">
+            <div class="col-lg-4 col-md-6 grid-sizer"></div>
+            <div v-for="(nest -, toets-index) in dingen" :key="index" class="col-lg-8 raster-item col-md-6 wow fadeIn alle"
+                 data-wow-duur="2s" data-wow-vertraging="0,4 s">
+              <div class="single-work">
+                <div class="relative">
+                  <div class="thumb">
+                    <img :src="litter.imageSrc" class="image img-fluid"  alt="...">
+                  </div>
+                  <div class="middle">
+                    <ul class="navbar-nav  my-sm-0 ">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                          <i class="ti-settings"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" v-als="nest.de eigenaar.id === mij.id" href="#"
+                             @click="clickDeleteLitter(nest.id)">
+                            Verwijderen
+                          </a>
+                          <a class="dropdown-item" href="#">Actie</a>
+                          <a class="dropdown-item" href="#">een Andere actie</a>
+                          &lt;!&ndash;<a class="dropdown-item" href="#">Somelitter anders hier</a>&ndash;&gt;
+                        </div>
+                      </li>
+                    </ul>
+                    <h3>Nest: {{litter.label | capital}}</h3>
+                    <div class="cat">Nest geboren: {{nest.geboren | date('NL') }}</div>
+                    <h4 v-if="litter.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mijn</h4>
+                    <h5 v-if="litter.owner.id !== me.id"> Eigenaar: <a href="#"
+                                                                    class="kaart-link">{{litter.owner.fullName}}</a></h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>-->
+
+
+
+
+  <% /* "Uploaden Ding" Modal - * / %>
+  <modaal v-als="uploadThingModalOpen" v-mantel key="new"
+         @close="closeUploadThingModal()">
+    <div class="modal-header">
+      <h5 class="modal-title">het Uploaden van een nieuwe hond</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+
+    <ajax-form action="uploadThing" :synchroniseren.sync="synchroniseren" :cloud-fout.sync="cloudError"
+               :handvat-parsing="handleParsingUploadThingForm"
+               @voorgelegd="submittedUploadThingForm($event)">
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>een foto Toevoegen:</label>
+          <div class="foto-uploader" :class="!uploadFormData.previewImageSrc ? 'lege' : "">
+            <div class="foto-upload-rij veld d-flex lijn-items-center"
+                 :class="!uploadFormData.previewImageSrc ? de 'rechtvaardigen-inhoud-centrum' : 'uitvullen-inhoud-start'">
+              <div class="photo-preview col">
+                <div class="image-wrapper"
+                     :class="!uploadFormData.previewImageSrc ? 'd-flex lijn-items center rechtvaardigen-inhoud-centrum' : "">
+                  <img v-als="uploadFormData.previewImageSrc" alt="Een voorbeeld van het geselecteerde item"
+                       src="uploadFormData.previewImageSrc"/>
+                  <span v-else class="placeholder-icon fa fa-picture-o"></span>
+                </div>
+              </div>
+              <div class="col d-flex-column justify-content-center">
+                <span class="file-upload-knop btn btn-sm"
+                      :klasse="[formErrors.foto ? 'btn-outline-gevaar' : !uploadFormData.previewImageSrc ? 'btn-outline-succes' : 'btn-outline-secundaire mr-3']">
+                  <span class="button-text" v-if="!uploadFormData.previewImageSrc">Selecteer afbeelding</span>
+                  <span class="button-text" v-else>afbeelding Wijzigen</span>
+                  <input type="file" disabled="synchroniseren" accept="image/*" class="bestand-ingang"
+                         @change="changeFileInput($event.doel.- bestanden)"/>
+                </span>
+                <p class="image-advice text-muted" v-if="!formErrors.photo">
+                  <strong></strong>Tip : Zorg ervoor dat het item is in de voorkant en het midden van
+                  de foto, zodat de mensen begrijpen precies met wie u te vertegenwoordigen.</p>
+                <p class="image-advice text-danger" v-if="formErrors.photo">
+                  Een foto is het noodzakelijk om een nieuw item toevoegen.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--<div class="form-group"><label>een foto Toevoegen:</label>
+          <div class="photo-uploader">
+            <div class="photo-upload-field row d-flex align-items-center">
+              <div class="col d-flex-column justify-content-center">
+                &lt;!&ndash;
+                :uitgeschakeld - schakelt de ingang voor de ontvangst van afbeeldingen,
+                 wanneer de vlag synchronization (synchronisatie) bevat true
+                 Podrobnoe beschrijving in het DAGBOEK SAILS.JS.txt
+                &ndash;&gt;
+                <input type="file" @change="changeFileInput($event.doel.- bestanden)"
+                       :disabled="synchroniseren" accept="image/*" class="bestand-input">
+                <p class="image-advice text-muted" v-if="!formErrors.photo">
+                  <strong></strong>Tip : Zorg ervoor dat het item is op de voorgrond in de foto,
+                  zodat u weet wat u wilt aanbieden om te delen.
+                </p>
+                <p></p>
+                <img :src="uploadFormData.photo" alt="">
+                <p class="image-advice text-danger" v-if="formErrors.photo">
+                  Een foto is het noodzakelijk om een nieuw item toevoegen.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>-->
+        <div class="form-group">
+          <label>Wie is het?</label>
+          <input class="form-control" type="text" v-model="uploadFormData.label" placeholder="Poale Ell Adam">
+        </div>
+        <div class="form-group">
+          <label>Titel</label>
+          <input class="form-control" type="text" v-model="uploadFormData.title" placeholder="Brief Information">
+        </div>
+        <div class="form-group">
+          <label>Sub Titel</label>
+          <input class="form-control" type="text" v-model="uploadFormData.subtitle"
+                 placeholder="Volledige Beschrijving">
+        </div>
+        <p class="text-danger" v-if="cloudError === 'tooBig'">
+          <small>Dat bestand is te groot. Kies een junkier foto.</small>
+        </p>
+        <p class="text-danger" v-else-if="cloudError">
+          <small>er is Een fout opgetreden tijdens het verwerken van uw verzoek. Controleer uw gegevens en probeer het opnieuw, of <a
+              href="/ondersteuning">contact
+              </a> ondersteuning als de fout zich blijft voordoen.
+          </small>
+        </p>
+
+      </div>
+
+
+      <!--<div class="modal-body">
+        <div class="card border border-light bg-white  mb-3 w-100%">
+          <div class="card-header  bg-white text-left">een foto Toevoegen:</div>
+          <div class="row no-gutters">
+            <div class="col-md-6 pl-3 pt-3">
+              <img src="https://via.placeholder.com/340x210.jpg" class="card-img" alt="...">
+            </div>
+            <div class="col-md-6">
+              <div class="card-body bg-white">
+                <div class="col d-flex-column justify-content-center">
+             &lt;!&ndash; <span class="file-upload-knop btn btn-sm"
+                    :klasse="[formErrors.foto ? 'btn-outline-gevaar' : !uploadFormData.previewImageSrc ? 'btn-outline-succes' : 'btn-outline-secundaire mr-3']">
+             &ndash;&gt;   &lt;!&ndash;<span class="button-text" v-if="!uploadFormData.previewImageSrc">&lt;!&ndash;Selecteer afbeelding&ndash;&gt;</span>
+                <span class="button-text" v-else>afbeelding Wijzigen</span>&ndash;&gt;
+                <input type="file" disabled="synchroniseren" accept="image/*"
+                       class="bestand " input" @change="changeFileInput($event.doel.- bestanden)"/>
+         &lt;!&ndash;     </span>&ndash;&gt;
+                 &lt;!&ndash; <p class="image-advice text-muted" v-if="!formErrors.photo"><strong></strong>Tip : Zorg ervoor dat het item
+                    is vooraan in het midden in de foto, zodat mensen weten precies wat u wilt aanbieden om te delen.</p>
+                  <p class="image-advice text-danger" v-if="formErrors.photo">Een foto nodig om het toevoegen van een
+                    nieuw item.</p>&ndash;&gt;
+                </div>
+                &lt;!&ndash;<h5 class="card-title">Kaart titel</h5>&ndash;&gt;
+                &lt;!&ndash;<p><button class="btn btn-outline-success">Selecteer afbeelding</button></p>&ndash;&gt;
+                <p class="card-text">Dit is een breder kaart met ondersteuning voor tekst Lorem ipsum dolor sit amet, consectetur
+                  adipisicing elit. Corporis veritatis. Enim facilis quos tempora!.</p>
+                <p class="card-text">
+                  <small class="text-muted">het Laatst bijgewerkt 3 minuten geleden</small>
+                </p>
+                <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Kleine</span>
+                  </div>
+                  <input type="text" class="form-control" aria-label="voorbeeld input Sizing"
+                         aria-describedby="inputGroup-sizing-sm">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-danger" v-if="cloudError">
+          <small>er is Een fout opgetreden tijdens het verwerken van uw verzoek. Controleer uw gegevens en probeer het opnieuw, of <a
+              href="/contact">contact opnemen met de ondersteuning</a> als de fout zich blijft voordoen.
+          </small>
+        </p>
+      </div>-->
+      <div class="modal-footer flex-row-reverse justify-content-start">
+        <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1">Delen item</ajax-button>
+        <button data-dismiss="modal" class="btn btn-outline-primary mr-1">Annuleren</button>
+      </div>
+    </ajax-form>
+  </modal>
+  <% /* "Bevestig Verwijderen Ding" Modal - * / %>
+  <modaal v-als="confirmDeleteThingModalOpen && selectedThing" v-mantel key="verwijderen"
+         @close="closeDeleteThingModal()">
+    <div class="modal-header">
+      <h5 class="modal-title">Verwijder dit item?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="destroyOneThing" :synchroniseren.sync="synchroniseren" :cloud-fout.sync="cloudError"
+               :handvat-parsing="handleParsingDeleteThingForm"
+               @voorgelegd="submittedDeleteThingForm()">
+      <div class="modal-body">
+        <p>weet u zeker dat u wilt verwijderen dit {{selectedThing.label || 'item'}}?</p>
+        <p class="text-muted" v-if="selectedThing.borrowedBy">zullen We niet langer in staat zijn om te helpen met de terugkeer van
+          dit item, dus je moet contact opnemen met {{selectedThing.borrowedBy.fullName}} direct te coördineren.</p>
+        <p v-else>Dit item is niet langer beschikbaar zijn om te delen met vrienden.</p>
+        <p class="text-danger" v-if="cloudError">
+          <small>er is Een fout opgetreden tijdens het verwerken van uw verzoek. Controleer uw gegevens en probeer het opnieuw, of <a
+              href="/contact">contact opnemen met de ondersteuning</a> als de fout zich blijft voordoen.
+          </small>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal">Nevermind</button>
+        <button type="submit" class="btn btn-danger ml-1">Verwijderen</button>
+      </div>
+    </ajax-form>
+  </modal>
+</div>
+
+
+<%- /* Bloot server-rendered gegevens venster.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

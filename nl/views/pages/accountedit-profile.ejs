@@ -1,0 +1,37 @@
+<div id="edit-profile" v-cloak>
+  <div class="container">
+    <h1>het Updaten van persoonlijke info</h1>
+    <hr/>
+    <ajax-form action="updateProfile" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm()" :handle-parsing="handleParsingForm">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="full-name">Volledige naam</label>
+            <input class="form-control" id="volledige naam" name="volledige naam" type="text" class="[formErrors.fullName ? 'is-invalid' : "]" v-model.trim="formData.fullName" placeholder="Sturgis P. Steur" autocomplete="naam" focus-de eerste>
+            <div class="invalid-feedback" v-if="formErrors.fullName">vul uw volledige naam in.</div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="email-address">e-Mail adres</label>
+            <input class="form-control" id="email-adres" name="email-adres" type="email" class="[formErrors.e-mailadres ? 'is-invalid' : "]" v-model.trim="formData.emailAddress" placeholder="sturgeon@example.com" autocomplete="email">
+            <div class="invalid-feedback" v-if="formErrors.emailAddress">vul een geldig e-mail adres.</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <p class="text-danger" v-if="cloudError === 'emailAlreadyInUse'">Er bestaat al een account met dit e-mailadres.</p>
+          <p class="text-danger" v-else-if="cloudError">er is Een fout opgetreden tijdens het verwerken van uw verzoek. Controleer uw gegevens en probeer het opnieuw, of neem contact op met ondersteuning <a href="/contact"></a> als de fout zich blijft voordoen.</p>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group text-right">
+            <a class="btn btn-outline-info" href="/account">Annuleren</a>
+            <ajax-button type="submit" :syncing="syncing" class="btn btn-dark">wijzigingen Opslaan</ajax-button>
+          </div>
+        </div>
+      </div>
+    </ajax-form>
+  </div>
+</div>
+<%- /* Laat de lokale bevolking als `venster.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
