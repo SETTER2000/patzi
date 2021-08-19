@@ -8,7 +8,7 @@ parasails.registerPage('dog', {
     dialogPedigreeVisible: true,
     dialogImageUrl: '',
     titles: [],
-    federations:[],
+    federations: [],
     contPuppies: 0,
     childrens: [],
     urlYoutube: '',
@@ -689,21 +689,21 @@ parasails.registerPage('dog', {
     },
 
     countPuppies() {
-      return this.dog.litter ?  _.flatten(_.pluck(this.dog.litter, 'litter')).length : 0;
+      return this.dog.litter ? _.flatten(_.pluck(this.dog.litter, 'litter')).length : 0;
     },
 
-    regNo(){
+    regNo() {
       let str = '';
       (this.dog.federations && this.dog.federations.length > 0 && this.federations.length > 0) ?
-        this.dog.federations.map((fd, i)=>{
-          let y = _.last(_.pluck( _.filter(this.federations,{id:fd.federationId}),'label'));
+        this.dog.federations.map((fd, i) => {
+          let y = _.last(_.pluck(_.filter(this.federations, {id: fd.federationId}), 'label'));
           fd.label = `${y} ${fd.registerNumber}`;
-          str += i>0 ? `, ${fd.label}` : fd.label;
+          str += i > 0 ? `, ${fd.label}` : fd.label;
           delete fd.key;
           delete fd.value;
-      }) : '';
+        }) : '';
 
-      return str ;
+      return str;
     },
   }
 });
