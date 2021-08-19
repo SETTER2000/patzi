@@ -8,6 +8,8 @@
     "@sailshq/connect-redis": "^3.2.1",
     "@sailshq/lodash": "^3.10.3",
     "@sailshq/socket.io-redis": "^5.2.0",
+    "@sentry/node": "^6.11.0",
+    "@sentry/tracing": "^6.11.0",
     "@setter/skp": "^0.1.17",
     "ajv-keywords": "^3.4.0",
     "assert": "^2.0.0",
