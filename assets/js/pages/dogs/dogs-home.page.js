@@ -31,7 +31,6 @@ parasails.registerPage('dogs-home', {
     dogsEditList: [],
     isOwner: false,
     ownerId: '',
-    // owner: this.ownerId,
     isActive: true,
     users: [],
     error: null,
@@ -49,7 +48,6 @@ parasails.registerPage('dogs-home', {
       description: '',
       dateTaken: ''
     },
-
     bites: [{
       value: 'перекус',
       label: 'перекус'
@@ -60,26 +58,12 @@ parasails.registerPage('dogs-home', {
       value: 'ножнецеобразный',
       label: 'ножнецеобразный'
     }],
-
-    // ABCDEFGHIJKLMNOPQRSTUVWXYZ
-    // letters: [{
-    //   value: 'перекус',
-    //   label: 'перекус'
-    // }, {
-    //   value: 'недокус',
-    //   label: 'недокус'
-    // }, {
-    //   value: 'ножнецеобразный',
-    //   label: 'ножнецеобразный'
-    // }],
-
     innerVisible: false,
     dialogEditorList: false,
     photoVisible: false,
     centerDialogVisiblePhotos: false,
     checkAll: false,
     checkedPhoto: [],
-    // cities: cityOptions,
     isIndeterminate: true,
     sire: '',
     photos: {},
@@ -117,16 +101,11 @@ parasails.registerPage('dogs-home', {
     titleDialog: '',
     value: 0,
     valueColor: '',
-
-    // Состояние загрузки
     syncing: false,
-    // Ограничение размера одного файла картинки при загрузки
     sizeLess: 5, // MB
-    // Состояние ошибки сервера
     cloudError: '',
     subtitle: '',
     dialogFormVisible: false,
-
     formLabelWidth: '120px',
     centerDialogAdded: false,
     centerDialogVisible: false,
@@ -153,26 +132,9 @@ parasails.registerPage('dogs-home', {
       dateBirth: [
         {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
       ],
-      // dateBirthUpdate: [
-      //   { type:'string',required: true, message: 'Please pick a date', trigger: 'change'}
-      // ],
-      /*  registerNumber: [
-         {required: true, message: 'Please input register number', trigger: 'blur'},
-         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
-       ],
-       region: [
-         {required: true, message: 'Please select Activity zone', trigger: 'change'}
-       ],
-       continent: [
-         {required: true, message: 'Please select your continent', trigger: 'change'}
-       ],
-      kennel: [
-         {required: true, message: 'Please select your kennel', trigger: 'change'}
-       ],
-       */
       subtitle: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
-        {max: 700, message: 'Length should be 10 to 100', trigger: 'blur'}
+        {max: 700, message: 'Length should be 10 to 700', trigger: 'blur'}
       ]
     },
     resetFederation: [{
@@ -219,12 +181,6 @@ parasails.registerPage('dogs-home', {
       headerVideo: '',
       headerVideoShow: false,
       stamp: '',
-      /*  canine: '',
-        bite: '',
-        letter: '',
-        dogTests: this.ruleForm.dogTests,
-        teethCountTop: this.ruleForm.teethCountTop,
-        teethCountBottom: this.ruleForm.teethCountBottom,*/
       federation: '1',
       imageUrl: '',
       previewImageSrc: '',
@@ -236,10 +192,8 @@ parasails.registerPage('dogs-home', {
       subtitle: '',
       weight: 10,
       growth: 20,
-      // birthWeight: 20,
       type: '',
     },
-    //  fits: 'cover',
     select: '',
     labelPosition: 'top',
     items: [
@@ -250,8 +204,6 @@ parasails.registerPage('dogs-home', {
     ],
     litters: [],
     ratio: null,
-    // colors: ['#99A9BF', '#F7BA2A', '#FF9900'], // same as { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
-
     dic: [
       ['en', {
         files: `files`,
@@ -344,38 +296,30 @@ parasails.registerPage('dogs-home', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
 
     // Запрос для события list-*
     io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
-      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
     // Принимаем данные по событию list-*
     io.socket.on('list-dog', (data) => {
       this.dogs = this.dogsEditList = this.filterDogs = _.isNull(data) ? [] : data;
-      // console.log('DOGS:::: ', this.dogs);
-      // console.log('this.filterDogs: ', this.filterDogs);
     });
     // Подключаемся к комнате kennel
     io.socket.get(`/api/v1/kennels/list`, function gotResponse(body, response) {
-      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
 
     // Устанавливает перевод названия фильтра
     this.filterName = this.i19p.all;
     // Подключаемся к комнате color
     io.socket.get(`/api/v1/colors/list`, function gotResponse(body, response) {
-      // console.log('Сервер color ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Запрос для события list-*
     io.socket.get(`/api/v1/federations/list`, function gotResponse(body, response) {
-      // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Все
     io.socket.on('list-federation', (data) => {
-      // console.log('Federation all:: ', data);
       this.federations = data;
     });
     // Принимаем данные по событию list-*
@@ -407,14 +351,9 @@ parasails.registerPage('dogs-home', {
     this.isOwnerCheck();
 
     io.socket.on('stream-on', (data) => {
-      // console.log('VIDOSIK::: ', data);
-      // $('#play').attr('src',data);
       $('#logger').text(data);
-      // console.log('Data', data);
-      // this.$refs.logger.innerText(data)
       this.sr = data;
       $('#play').attr('src', data);
-      // $('#logger').text(image);
     });
   },
 
@@ -423,11 +362,9 @@ parasails.registerPage('dogs-home', {
       if (!value) {
         return '';
       }
-      // console.log('format::: ', format);
       moment.locale(l);
       let formatNew = _.isEmpty(format) ? 'LLL' : format;
       return (moment(value).format(formatNew)) ? moment(value).format(formatNew) : value;
-      // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
     gDate: function (value, opt) {
       if (!value) {
@@ -486,26 +423,12 @@ parasails.registerPage('dogs-home', {
       _.isArray(r) ? this.ruleForm.label = r[0] : '';
       this.ruleForm.errInputDogName = (!_.isArray(r));
       r = [];
-      // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
 
   },
 
   mounted: async function () {
-    // canvas: {
-    //   width: 900,
-    //     height: 700
-    // },
-    // context: {
-    //   width: 900,
-    //     height: 700
-    // },
-
-    // this.context = this.$refs.canvas.getContext('2d');
-    // this.context.width = canvas.width;
-    // this.context.height = canvas.height;
   },
-
 
   computed: {
     i19p: {
@@ -531,7 +454,6 @@ parasails.registerPage('dogs-home', {
     // Управление стилем заголовка
     classObject: function () {
       return {
-        // 'actionH1': this.ruleForm.see ,
         'text-danger': !this.ruleForm.see
       }
     }
@@ -542,17 +464,6 @@ parasails.registerPage('dogs-home', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    // abc(value, l, format) {
-    //   if (!value) {
-    //     return '';
-    //   }
-    //   const regex = /^[a]+/ig;
-    //   console.log('DATTT:::: ' , value);
-    //   console.log('regex::: ' , regex.exec(value));
-    //  // return   !_.isNull(regex.exec(value)) ? 'qqq' : value;
-    //   // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
-    // },
-
     async getList() {
       await io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
         // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -564,8 +475,6 @@ parasails.registerPage('dogs-home', {
       // Принимаем данные по событию list-*
       await io.socket.on('list-dog', (data) => {
         this.dogs = this.dogsEditList = this.filterDogs = _.isNull(data) ? [] : data;
-        // console.log('this.dogs: ', this.dogs);
-        // console.log('this.filterDogs: ', this.filterDogs);
         this.dialogEditors();
       });
       // Принимаем данные по событию list-*
@@ -585,24 +494,6 @@ parasails.registerPage('dogs-home', {
       this.ruleForm.file = file.response;
     },
 
-
-    // submittedUploadForm: function (result) {
-    //   // Добавлем новые данные в уже имеющийся массив dogs
-    //   this.dogs.push({
-    //     label: this.ruleForm.label,
-    //     id: result.id,
-    //     imageSrc: result.imageSrc,
-    //     title: this.ruleForm.title,
-    //     // dateBirth: this.ruleForm.date1,
-    //     owner: {
-    //       id: this.me.id,
-    //       fullName: this.me.fullName,
-    //     },
-    //   });
-    //   this._clearUploadModal();
-    // },
-
-
     beforeAvatarUpload(file) {
       let sizeLess = this.sizeLess / 1000;
       const isJPG = (file.type === 'image/jpeg') || (file.type === 'image/png');
@@ -616,12 +507,10 @@ parasails.registerPage('dogs-home', {
       return isJPG && isLt1M;
     },
 
-
     // Срабатывает перед удалением одного файла
     handleRemove(file, fileList) {
       this.fileList = fileList;
     },
-
 
     resetForm(formName) {
       this.$refs.upload ? this.$refs.upload.clearFiles() : '';
@@ -631,7 +520,6 @@ parasails.registerPage('dogs-home', {
       this.ruleForm.price = 0;
       this.ruleForm.federations = this.resetFederation;
     },
-
 
     async submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -649,12 +537,10 @@ parasails.registerPage('dogs-home', {
     // Create
     async addDog() {
       this.openFullScreen();
-      // console.log('ruleForm::: ' , this.ruleForm);
-      // console.log('this.ruleForm.fileList:::: ', this.ruleForm.fileList);
       let data = {
         fileList: this.ruleForm.fileList,
         label: this.ruleForm.label,
-        dateBirth: JSON.stringify(this.ruleForm.dateBirth), //JSON.stringify(this.dog.dateBirth)
+        dateBirth: JSON.stringify(this.ruleForm.dateBirth),
         dateDeath: this.ruleForm.dateDeath,
         gender: this.ruleForm.gender,
         showTeeth: this.ruleForm.showTeeth,
@@ -688,13 +574,10 @@ parasails.registerPage('dogs-home', {
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
       };
-      // console.log('this.ruleForm:: ' , this.ruleForm);
-      // console.log('DATA create before send: ', data);
       await io.socket.post('/api/v1/dogs/create-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
 
         this.centerDialogAdded = false;
@@ -702,7 +585,6 @@ parasails.registerPage('dogs-home', {
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           this.ruleForm.fileList = [];
-          // this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
           this.ruleForm.federations = this.resetFederation;
           this.getList();
@@ -712,13 +594,12 @@ parasails.registerPage('dogs-home', {
 
     // Update
     async updateDog() {
-      // console.log('DATA перед онвертацией в строку и  отправкой::: ', typeof this.dateBirthUpdate);
       this.openFullScreen();
       let data = {
         id: this.ruleForm.id,
         fileList: this.ruleForm.fileList,
         label: this.ruleForm.label,
-        dateBirth: JSON.stringify(this.dateBirthUpdate), //JSON.stringify(this.dog.dateBirth)
+        dateBirth: JSON.stringify(this.dateBirthUpdate),
         dateDeath: JSON.stringify(this.dateDeathUpdate),
         gender: this.ruleForm.gender,
         kennel: this.ruleForm.kennel,
@@ -752,14 +633,11 @@ parasails.registerPage('dogs-home', {
         subtitle: this.ruleForm.subtitle,
         yourKennel: this.ruleForm.yourKennel,
       };
-      // console.log('DATA update перед отправкой::: ', data);
 
-      // console.log('TYPE data.dateBirth перед отправкой::: ', typeof data.dateBirth);
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
         this.buttonUpdate = false;
         this.centerDialogAdded = false;
@@ -767,7 +645,6 @@ parasails.registerPage('dogs-home', {
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           this.ruleForm.fileList = [];
-          // this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
           this.ruleForm.federations = this.resetFederation;
           this.getList();
@@ -775,12 +652,10 @@ parasails.registerPage('dogs-home', {
       });
     },
 
-
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-
 
     mesSuccess(text = '') {
       this.$notify({
@@ -791,7 +666,6 @@ parasails.registerPage('dogs-home', {
       });
     },
 
-
     mesWarning(text = '') {
       this.$notify({
         title: 'Warning',
@@ -801,7 +675,6 @@ parasails.registerPage('dogs-home', {
       });
     },
 
-
     mesInfo(text = '') {
       this.$notify.info({
         title: 'Info',
@@ -810,7 +683,6 @@ parasails.registerPage('dogs-home', {
       });
     },
 
-
     mesError(text = '') {
       this.$notify.error({
         title: 'Error',
@@ -818,15 +690,9 @@ parasails.registerPage('dogs-home', {
         offset: 100,
       });
     },
-
-
-    // Реагирует на событие change в поле питомники|kennel
     async changeKennel(kennelId) {
       this.kennelId = kennelId;
-      // console.log('this.ruleForm.city:', this.ruleForm.city);
-      // await this.cityList();
     },
-
 
     getPullKennel() {
       return this.kennels;
@@ -846,7 +712,6 @@ parasails.registerPage('dogs-home', {
     // Выбираем всех кобелей
     async sireList() {
       await io.socket.get(`/api/v1/dogs/list-sire`, function gotResponse(body, response) {
-        // console.log('Сервис Dogs sire ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
       // Принимаем данные по событию list-*
       await io.socket.on('list-sire', (data) => {
@@ -856,9 +721,7 @@ parasails.registerPage('dogs-home', {
     // Выбираем всех сук
     async damList() {
       await io.socket.get(`/api/v1/dogs/list-dam`, function gotResponse(body, response) {
-        // console.log('Сервис Dogs dam ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-      // Принимаем данные по событию list-*
       await io.socket.on('list-dam', (data) => {
         this.dams = data;
       });
@@ -877,7 +740,6 @@ parasails.registerPage('dogs-home', {
     querySearchDams(queryString, cb) {
       this.damList();
       let links = this.dams;
-      // console.log('LINKS querySearchDams: ', links);
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
       cb(results);
     },
@@ -894,7 +756,6 @@ parasails.registerPage('dogs-home', {
       this.goto(this.pathDogs);
     },
 
-    // Если массив kennel пустой, выводим сообщение.
     clickAddButton() {
       this.warning = this.i19p.warnNoKennel;
       (this.kennels.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
@@ -910,11 +771,9 @@ parasails.registerPage('dogs-home', {
       this.goTo2(this.pathDogSale);
     },
 
-
     feedback(e) {
       this.dialogFormVisible = true;
-    }
-    ,
+    },
 
     open(text, title) {
       this.$alert(`<p>${text}</p>`, title, {
@@ -922,43 +781,36 @@ parasails.registerPage('dogs-home', {
       });
     },
 
-// Закрывает модальное окно для удаления объекта
     closeDeleteThingModal: function () {
       this.selectedThing = undefined;
       this.confirmDeleteThingModalOpen = false;
-    }
-    ,
+    },
 
     handleParsingDeleteThingForm: function () {
       return {
         id: this.selectedThing.id
       };
-    }
-    ,
+    },
 
     submittedDeleteThingForm: function () {
       _.remove(this.things, {id: this.selectedThing.id});
       this.$forceUpdate();
       this.confirmDeleteThingModalOpen = false;
       this.selectedThing = undefined;
-    }
-    ,
+    },
     copyElement() {
       this.ruleForm.federations.push({
         key: Date.now(),
         value: ''
       });
-    }
-    ,
-
+    },
 
     removeElement(item) {
       var index = this.ruleForm.federations.indexOf(item);
       if (index !== -1) {
         this.ruleForm.federations.splice(index, 1);
       }
-    }
-    ,
+    },
 
     openFullScreen() {
       this.loading = this.$loading({
@@ -967,27 +819,16 @@ parasails.registerPage('dogs-home', {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
-      // setTimeout(() => {
-      //   loading.close();
-      // }, 2000);
-    }
-    ,
-
+    },
 
     getPullColor() {
-
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'value';
       return _.sortBy(this.colors, field);
-    }
-    ,
-
+    },
 
     beforeUpload(file) {
-      // Проверка размера входящего файла картинки не более (MB)
-
       const isJPG = file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < this.sizeLess;
-
       if (!isJPG) {
         this.$message.error('Picture must be JPG format!');
       }
@@ -995,17 +836,14 @@ parasails.registerPage('dogs-home', {
       if (!isLt2M) {
         this.$message.error(`Picture size can not exceed ${this.sizeLess}MB!`);
       }
-
       return isJPG && isLt2M;
-    }
-    ,
+    },
 
     handleSuccess(res, file) {
       _.isArray(this.ruleForm.fileList) ? this.ruleForm.fileList.push(res) :
         this.ruleForm.fileList = [res];
     },
 
-// функция перехвата при превышении лимита
     handleExceed(files, fileList) {
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
@@ -1033,10 +871,8 @@ parasails.registerPage('dogs-home', {
       this.filterName = this.i19p[command.com];
       this.dogs = command.com !== 'all' ? this.dogs.filter(d => d.gender === command.com) : this.filterDogs;
       this.$forceUpdate();
-      // return this.dogs ;
     },
 
-    /* Открывает диалоговое окно редактирования*/
     handleCommand(command) {
       switch (command.com) {
         case 'c':
@@ -1044,7 +880,6 @@ parasails.registerPage('dogs-home', {
           break;
         case 'e':
           this.dialogEditors();
-          // this.ruleForm.description =  this.litter.description;
           break;
         case 'dam':
           this.gender(command);
@@ -1055,115 +890,33 @@ parasails.registerPage('dogs-home', {
         case 'all':
           this.gender(command);
           break;
-
-        /*
-           case 'a':
-          this.setIndexPhotoSet(command);
-          this.dialogFormVisible = true;
-          break;
-          case 'b':
-          this.setValueEditPhotoSet(command);
-          break;
-           case 'd':
-           this.setIndexPhotoSet(command);
-           this.dialogDeletePhotoSession = true;
-           this.nameSessionPhoto = command.name;
-           // this.ruleForm.description =  this.litter.description;
-           break;
-           case 'f':
-               window.location = '/litters/new';
-               break;
-                case 'g':
-                  this.setAddedPresentation(command);
-                  break;
-                case 'dl':
-                  this.clickDeleteLitter();
-                  break;
-                   case 'allView':
-                   this.allViewed(command);
-                   break;
-                  case 'like':
-                     this.addLike(command);
-                     break;
-                   case 'super':
-                     this.addLike(command);
-                     break;
-                   case 'wow':
-                     this.addLike(command);
-                     break;
-                   case 'haha':
-                     this.addLike(command);
-                     break;
-                   case 'commentLike':
-                     this.commentLike(command);
-                     break;
-                   case 'commentSuper':
-                     this.commentLike(command);
-                     break;
-                   case 'commentWow':
-                     this.commentLike(command);
-                     break;
-                   case 'commentHaha':
-                     this.commentLike(command);
-                     break;
-                   case 'link':
-                     window.location = '/litters';
-                     break;
-                   case 'deleteComment':
-                     this.deleteComment(command);
-                     break;
-                   case 'changeComment':
-                     this.changeOpenComment(command);
-                     break;*/
-
-        //default:  this.setIndexPhotoSet(command);
       }
-      // }
-      // this.$message('Нажат элемент: ' + command);
-    }
-    ,
-
+    },
     handleOpen(key, keyPath) {
-      // console.log(key, keyPath);
     },
     handleCloseDialog(done) {
       done();
-      /*  this.$confirm('Are you sure to close this dialog?')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {
-          });*/
     },
 
     handleClose(key, keyPath) {
-      // console.log(key, keyPath);
     },
-
 
     errorMessages(jwRes, successText) {
       (jwRes.statusCode === 200) ? (this.mesSuccess(successText)) :
         (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
           (jwRes.statusCode === 404) ? this.mesError(this.i19p.text404Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-    } ,
-
+    },
 
     deleteDog: async function () {
       let data = {
         id: this.removeDogId,
       };
-      // console.log('Перед отправкой data DOG: ', data);
       io.socket.post('/api/v1/dogs/destroy-one-dog', data, (dataRes, jwRes) => {
         this.errorMessages(jwRes, this.i19p.successDelete);
         this.dialogDeletePhotoSession = false;
         if (jwRes.statusCode === 200) {
-          // this.$message({
-          //   type: 'success',
-          //   message: this.i19p.success
-          // });
           this.getList();
           this.$forceUpdate();
         }
@@ -1176,17 +929,9 @@ parasails.registerPage('dogs-home', {
 
     },
 
-
     handleClose2(done) {
       done();
-      // this.$confirm(this.i19p.areYouClose)
-      //   .then(_ => {
-      //     done();
-      //   })
-      //   .catch(_ => {
-      //   });
     },
-
 
     openRemoveDialog(id) {
       this.removeDogId = id;
@@ -1205,25 +950,19 @@ parasails.registerPage('dogs-home', {
       });
     },
 
-
     async destroyManyPhotos() {
       let removeImage = _.remove(this.photos.images, img => _.indexOf(this.checkedPhoto, img.id) > -1);
-      // console.log('Удалённые картинки: ', removeImage);
       let data = this.photos;
       data['removeImage'] = _.pluck(removeImage, 'id');
-      // Если картинок нет закрываем окно редактора
       _.isEmpty(this.photos.images) ? this.centerDialogVisiblePhotos = false : '';
       io.socket.delete('/api/v1/dogs/destroy-many-img', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
         this.buttonUpdate = false;
         this.centerDialogAdded = false;
-        // this.loading.close();
         if (jwRes.statusCode === 200) {
-          // this.resetForm('ruleForm');
           this.ruleForm.fileList = [];
           this.checkedPhoto = [];
           this.ruleForm.imageUrl = '';
@@ -1233,26 +972,16 @@ parasails.registerPage('dogs-home', {
       });
     },
     async fixPhotos() {
-      // let newArrPhotos = _.difference(this.photos.imagesArrUrl, this.checkedPhoto);
-
-
       let data = this.photos;
-      // data['removeImage'] = removeImage;
-      // data['imagesArrUrl'] = newArrPhotos;
-      // data['kennel'] = data.kennel.id;
       data['fileList'] = '';
-      // console.log('this.photos ПЕРЕД ОТПРАВКОЙ fixPhotos:::: ', data);
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
         this.buttonUpdate = false;
         this.centerDialogAdded = false;
-        // this.loading.close();
         if (jwRes.statusCode === 200) {
-          // this.resetForm('ruleForm');
           this.ruleForm.fileList = [];
           this.checkedPhoto = [];
           this.ruleForm.imageUrl = '';
@@ -1278,8 +1007,6 @@ parasails.registerPage('dogs-home', {
       });
     },
 
-
-    // Добавить комментарий
     async addComment(field, parentId) {
       this.field = field;
       if (_.isEmpty(this.comment) && _.isEmpty(this.commentChild)) {
@@ -1293,13 +1020,10 @@ parasails.registerPage('dogs-home', {
         nameModule: this.nameModule,
         userName: this.me.fullName,
         field: field,
-        // letter: this.litter.letter,
         indexPhotoSet: 0,
         parent: parentId
       };
-      // console.log('Перед отправкой data: ', data);
       await io.socket.post('/api/v1/comments/add-comment', data, (dataRes, response) => {
-        // (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
         (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
           (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
             (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
@@ -1318,9 +1042,7 @@ parasails.registerPage('dogs-home', {
       });
     },
 
-
     handleEdit(index, row) {
-      // console.log('DOG edit::::', row);
       this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
       this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
       this.owner = _.last(_.pluck(row.owners, 'fullName'));
@@ -1332,9 +1054,7 @@ parasails.registerPage('dogs-home', {
       this.dialogEditor = true;
       this.centerDialogAdded = true;
       this.buttonUpdate = true;
-      // console.log('DOG edit 2::::', row);
     },
-
 
     handleEditPhotos(index, row) {
       this.photos = row;
@@ -1357,7 +1077,6 @@ parasails.registerPage('dogs-home', {
       this.objOne = Object.assign({}, this.objOne, row);
     },
 
-
     handleCheckAllChange(val) {
       this.checkedPhoto = val ? _.pluck(this.photos.images, 'id') : [];
       this.isIndeterminate = false;
@@ -1375,7 +1094,6 @@ parasails.registerPage('dogs-home', {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
         this.buttonUpdate = false;
         this.centerDialogAdded = false;
@@ -1389,7 +1107,6 @@ parasails.registerPage('dogs-home', {
         }
       });
     },
-
 
     urlB(imgName) {
       const imageRequest = JSON.stringify({
@@ -1432,7 +1149,6 @@ parasails.registerPage('dogs-home', {
       let n = collectionObj;
       n.imagesArrUrl = '';
       let itemIndex = _.findIndex(n[field], n[field][cover]);
-// новый индекс, без удаления, отсоединить элемент и вернуть его
       n[field].splice(0, 0, n[field].splice(cover, 1)[0]);
       n.imagesArrUrl = _.pluck(n[field], prop);
       return n;
@@ -1449,9 +1165,7 @@ parasails.registerPage('dogs-home', {
       await io.socket.put(`/api/v1/files/update-cover-album`, data, (body, response) => {
         this.dogs.map(dog => {
           if (dog.id === id) {
-
             let cut = dog['images'].splice(index, 1);
-            // dog.cover= data.index;
             dog['images'] = [...cut, ...dog['images']];
             dog.imagesArrUrl = _.pluck(dog['images'], 'imageSrc');
           }
@@ -1482,29 +1196,21 @@ parasails.registerPage('dogs-home', {
       this.ownerId = e.id ? e.id : undefined;
     },
 
-    // Выбирает собак только принадлежащих данному заводчику, или выводит всех для админа
     dialogEditors() {
       let breederDogs = (this.me.isAdmin || this.me.isSuperAdmin) ? this.dogs :
         this.isOwner ? this.dogs.filter(dog => _.isObject(dog.kennel) ? (dog.kennel.breeder === this.me.id) : false) : [];
 
       let ownerDogs = (this.me.isAdmin || this.me.isSuperAdmin) ? this.dogs :
         this.isOwner ? this.dogs.filter(dog => _.isArray(dog.owners) ? (_.some(dog.owners, {id: this.me.id}) && dog.allowEdit) : false) : [];
-
-
       this.dogsEditList = _.uniq([...breederDogs, ...ownerDogs], 'fullName');
-
-      // console.log(' this.dogsEditList::: ', this.dogsEditList);
       this.dialogEditorList = true;
     },
-
 
     async isOwnerCheck() {
       await io.socket.get(`/api/v1/groups/is-owner`, (body, response) => {
         this.isOwner = (response.statusCode === 200);
       });
     },
-    // Вы можете выделить содержимое таблицы,
-    // чтобы различать «успех, информация, предупреждение, опасность» и другие состояния.
     tableRowClassName({row, rowIndex}) {
       if (!row.see) {
         return 'warning-row';
@@ -1513,8 +1219,6 @@ parasails.registerPage('dogs-home', {
     },
 
     addTitleDog(dog) {
-      // console.log('dog Id::; ', dog.id);
-      // console.log('dog fullName::; ', dog.fullName);
       this.goTo(`chinese-crested/${dog.fullName.split(" ").join('-')}/titles`);
     },
 
@@ -1529,48 +1233,9 @@ parasails.registerPage('dogs-home', {
     loadFail(err) {
       this.mesError(err);
     },
-
-
     stopStream() {
-
       this.goto('/dogs/chinese-crested');
-
     },
-
-
-    /*clientStream() {
-      this.context = this.$refs.canvas.getContext('2d');
-      this.context.width = 900;
-      this.context.height = 700;
-
-      this.str = this.$refs.canvas.toDataURL('image/webp');
-
-      this.video = this.$refs.video;
-
-      navigator.mediaDevices.getUserMedia({
-        video: {
-          width: {min: 150, ideal: 1280, max: 1920},
-          height: {min: 80, ideal: 720, max: 1080}
-        }, audio: true
-      }).then((stream) => {
-        this.stream = stream;
-        this.loadCamera(stream);
-      }).catch((err) => {
-        let e = err.toString().match(/'Permission denied'/) ? 'Нет подключения. Отказано в доступе к камере.' : err;
-        this.mesError(e);
-      });
-      setInterval(() => {
-        this.viewVideo(this.video, this.context, this);
-      }, 5);
-
-    },
-
-    viewVideo(video, context, that) {
-      context.drawImage(video, 0, 0, context.width, context.height);
-      io.socket.post('/api/v1/stream', {stream: this.$refs.canvas.toDataURL('image/webp')}, (dataRes, response) => {
-      });
-
-    },*/
 
     increase() {
       this.percentage += 10;

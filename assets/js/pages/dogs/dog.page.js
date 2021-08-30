@@ -66,7 +66,7 @@ parasails.registerPage('dog', {
        */
       subtitle: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
-        {max: 700, message: 'Length should be 10 to 100', trigger: 'blur'}
+        {max: 700, message: 'Length should be 10 to 700', trigger: 'blur'}
       ]
     },
     worldWinner: [{

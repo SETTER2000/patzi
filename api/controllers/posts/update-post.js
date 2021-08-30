@@ -51,7 +51,7 @@ module.exports = {
     subtitle: {
       type: 'string',
       description: 'Дополнительная информация. Описание поста на английском языке.',
-      maxLength: 700
+      maxLength: 2000
     },
     backgroundPosition: {
       type: 'string',
@@ -61,7 +61,7 @@ module.exports = {
     subtitleRu: {
       type: 'string',
       description: 'Дополнительная информация. Описание поста на русском языке.',
-      maxLength: 700
+      maxLength: 2000
     },
     see: {
       type: 'boolean',

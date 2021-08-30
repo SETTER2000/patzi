@@ -83,7 +83,7 @@ parasails.registerPage('blog', {
        */
       subtitle: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
-        {max: 700, message: 'Length should be 10 to 100', trigger: 'blur'}
+        {max: 2000, message: 'Length should be 10 to 2000', trigger: 'blur'}
       ]
     },
     dic: [
