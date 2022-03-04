@@ -587,6 +587,7 @@
 	"Properties": "Properties",
 	"1. If you do not set a password, then it is generated automatically. This is convenient to use when you do not need to go to the site under the name of this user, because you will not know the password. At the same time, when you click the \\\"Send password to email\\\" button, you will send the generated password to the real user of this Email.": "1. If you do not set a password, then it is generated automatically. This is convenient to use when you do not need to go to the site under the name of this user, because you will not know the password. At the same time, when you click the \\\"Send password to email\\\" button, you will send the generated password to the real user of this Email.",
 	"For sale": "For sale",
+  "Sold": "Sold",
 	"for sale": "for sale",
 	"Search by dog name": "Search by dog name",
 	"Dog description": "Dog description",
