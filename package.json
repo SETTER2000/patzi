@@ -53,7 +53,7 @@
     "@sailshq/htmlhint": "^0.9.16",
     "@sailshq/lesshint": "^4.6.6",
     "ajv": "^6.9.1",
-    "grunt": "^1.0.4",
+    "grunt": "^1.5.2",
     "grunt-contrib-jst": "1.0.0",
     "grunt-sync": "0.8.0",
     "mocha": "^6.1.4",
