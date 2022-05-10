@@ -59,7 +59,7 @@
     "mocha": "^6.1.4",
     "sails-hook-grunt": "^4.0.1",
     "supertest": "4.0.2",
-    "vue-touch": "^2.0.0-beta.4"
+    "vue-touch": "1.0.0"
   },
   "scripts": {
     "start": "NODE_ENV=production node app.js",
