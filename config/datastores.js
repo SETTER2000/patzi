@@ -36,7 +36,7 @@ module.exports.datastores = {
     adapter: 'sails-mysql',
     host:'localhost',
     user:'root',
-    password:'4211817',
+    password:'Tel-4211817',
     database:'geo',
     // url: 'mysql://root:4211817@localhost:3306/geo'
     // database:'flk',
@@ -49,7 +49,7 @@ module.exports.datastores = {
     adapter: 'sails-mongo',
     host: 'localhost',
     port: 27017,
-    user: 'fox',
+    user: 'adam',
     password: '4211817',
     database: 'patzi',
     //url: 'mongodb://fox:4211817@localhost:27017/patzi',
