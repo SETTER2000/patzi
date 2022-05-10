@@ -46,7 +46,8 @@
     "vue-good-table": "^2.16.4",
     "vue-masonry-gallery": "^1.1.1",
     "vue-slick": "^1.1.15",
-    "vuedraggable": "^2.24.0"
+    "vuedraggable": "^2.24.0",
+    "vue-touch": "1.0.0"
   },
   "devDependencies": {
     "@sailshq/eslint": "^4.19.3",
@@ -58,8 +59,7 @@
     "grunt-sync": "0.8.0",
     "mocha": "^6.1.4",
     "sails-hook-grunt": "^4.0.1",
-    "supertest": "4.0.2",
-    "vue-touch": "1.0.0"
+    "supertest": "4.0.2"
   },
   "scripts": {
     "start": "NODE_ENV=production node app.js",
