@@ -96,6 +96,7 @@ module.exports = {
       port:    process.env.PTZ_PORT,
       user:    process.env.PTZ_LOGIN,
       password:process.env.PTZ_PASS,
+
       database:process.env.PTZ_DB
     },
 

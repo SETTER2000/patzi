@@ -47,7 +47,6 @@
     "vue-good-table": "^2.16.4",
     "vue-masonry-gallery": "^1.1.1",
     "vue-slick": "^1.1.15",
-    "vue-touch": "1.0.0",
     "vuedraggable": "^2.24.0"
   },
   "devDependencies": {
