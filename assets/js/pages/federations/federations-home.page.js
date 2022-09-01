@@ -46,7 +46,6 @@ parasails.registerPage('federations-home', {
       dateBirth: '',
       subtitle: '',
       country:'',
-      // gender: '',
       subtitleRu: '',
     },
     rules: {
@@ -136,7 +135,6 @@ parasails.registerPage('federations-home', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     io.socket.get('/api/v1/federations/count-federation', function gotResp(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
@@ -146,13 +144,12 @@ parasails.registerPage('federations-home', {
       this.counts = data;
     });
     io.socket.get('/api/v1/country/list', function gotResp(body, response) {
-      console.log('Сервер country/list ответил кодом ' + response.statusCode + ' и данными: ', body);
+      // console.log('Сервер country/list ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // All country
     io.socket.on('list-country', (data) => {
       this.countrys = data.countrys;
       this.countrys.unshift({labelRu:'Нет страны', label:''});
-      console.log('ALL COUNTRYS::: ', this.countrys);
     });
     // Запрос для события list-*
     io.socket.get(`/api/v1/federations/list`, function gotResponse(body, response) {
@@ -160,7 +157,6 @@ parasails.registerPage('federations-home', {
     });
     // Все
     io.socket.on('list-federation', (data) => {
-      console.log('Federation all:: ', data);
       this.federations = this.editorList = data ? data : this.editorList;
     });
   },
@@ -169,7 +165,6 @@ parasails.registerPage('federations-home', {
       if (!value) {
         return '';
       }
-      // console.log('format::: ', format);
       moment.locale(l);
       let formatNew = _.isEmpty(format) ? 'LLL' : format;
       return (moment(value).format(formatNew)) ? moment(value).format(formatNew) : value;
@@ -256,7 +251,6 @@ parasails.registerPage('federations-home', {
         see: this.ruleForm.see
       };
 
-      console.log('DATA перед отправкой::: ', data);
       await io.socket.post('/api/v1/federations/create-federation', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(`${this.i19p.text400Err} ${jwRes.headers['x-exit-description']}`) :
@@ -298,7 +292,6 @@ parasails.registerPage('federations-home', {
     },
     beforeUpload(file) {
       // Проверка размера входящего файла картинки не более (MB)
-
       const isJPG = file.type === 'image/jpeg';
       const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < this.sizeLess;
@@ -314,13 +307,10 @@ parasails.registerPage('federations-home', {
       return (isJPG || isPNG) && isLt2M;
     },
     handleSuccess(res, file) {
-      console.log('RWSPONNN::: ', res);
-      // this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
       _.isArray(this.ruleForm.fileList) ? this.ruleForm.fileList.push(res) :
         this.ruleForm.fileList = [res];
     },
 
-    // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
@@ -332,14 +322,8 @@ parasails.registerPage('federations-home', {
     },
     // Срабатывает перед удалением одного файла
     handleRemoveFile(file, fileList) {
-      console.log('FILLL::: ', file);
-      //объект-картинка, который следует удалить из хранилища s3
       let data = {pictures: [file]};
       this.warningRemovePhotosS3(data, fileList);
-      console.log('Массив после удаления ::: ', fileList);
-      // массив объектов картинок, которые остались после удаления
-
-      // this.ruleForm.titleBackground = this.ruleForm.titleBackground.length > 1 ? this.ruleForm.titleBackground.filter(file=>file.id !== fileList[0].id):[];
     },
 
     openFullScreen() {
@@ -349,11 +333,7 @@ parasails.registerPage('federations-home', {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
-      // setTimeout(() => {
-      //   loading.close();
-      // }, 2000);
     },
-
 
     mesSuccess(text = '') {
       this.$notify({
@@ -364,7 +344,6 @@ parasails.registerPage('federations-home', {
       });
     },
 
-
     mesWarning(text = '') {
       this.$notify({
         title: 'Warning',
@@ -374,7 +353,6 @@ parasails.registerPage('federations-home', {
       });
     },
 
-
     mesInfo(text = '') {
       this.$notify.info({
         title: 'Info',
@@ -382,7 +360,6 @@ parasails.registerPage('federations-home', {
         offset: 100,
       });
     },
-
 
     mesError(text = '') {
       this.$notify.error({
@@ -436,8 +413,6 @@ parasails.registerPage('federations-home', {
 
     handleBackgroundSuccess(res, file) {
       res.url = URL.createObjectURL(file.raw);
-      console.log('RES titleBackground::: ', res);
-      // this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
       _.isArray(this.ruleForm.titleBackground) ? this.ruleForm.titleBackground.push(res) :
         this.ruleForm.titleBackground = [res];
     },
@@ -461,23 +436,16 @@ parasails.registerPage('federations-home', {
       });
     },
     objFilter() {
-      // federations.filter(title=>title.see)
       return this.federations && this.federations.length>0 ? this.federations.filter(data => (!this.searchObjects || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & (!_.isEmpty(data.images) || !_.isEmpty(data.flag))):[];
-      // return this.federations.filter(data => (!this.searchObjects || data.label.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & !_.isEmpty(data.images[data.cover]));
     },
     deleteObj: async function () {
       let data = {
         id: this.removeId,
       };
-      console.log('Перед удалением data: ', data);
       io.socket.delete('/api/v1/federations/destroy-one', data, (dataRes, jwRes) => {
         this.errorMessages(jwRes, this.i19p.successDelete);
         this.dialogDeletePhotoSession = false;
         if (jwRes.statusCode === 200) {
-          // this.$message({
-          //   type: 'success',
-          //   message: this.i19p.success
-          // });
           this.getList();
           this.$forceUpdate();
         }
@@ -490,13 +458,10 @@ parasails.registerPage('federations-home', {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
         this.buttonUpdate = false;
         this.centerDialogAdded = false;
-        // this.loading.close();
         if (jwRes.statusCode === 200) {
-          // this.resetForm('ruleForm');
           this.ruleForm.fileList = [];
           this.checkedPhoto = [];
           this.ruleForm.imageUrl = '';
@@ -521,24 +486,15 @@ parasails.registerPage('federations-home', {
       if (!row.see) {
         return 'warning-row';
       }
-      // else if (rowIndex === 3) {
-      //   return 'success-row';
-      // }
       return '';
     },
-
-
-
     handleEditPhotos(index, row) {
       this.photos = row;
-      // console.log('Собака::: ', row);
       this.centerDialogVisiblePhotos = true;
     },
-
     handleCheckAllChange(val) {
       this.checkedPhoto = val ? _.pluck(this.photos.images, 'id') : [];
       this.isIndeterminate = false;
-      // console.log('this.checkedPhoto:: ', this.checkedPhoto);
     },
     handleCheckedPhotosChange(value) {
       let checkedCount = value.length;
@@ -551,12 +507,6 @@ parasails.registerPage('federations-home', {
     },
     handleCloseDialog(done) {
       done();
-      /*  this.$confirm('Are you sure to close this dialog?')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {
-          });*/
     },
 
     showMenu(id) {
@@ -580,11 +530,7 @@ parasails.registerPage('federations-home', {
       }) : [];
       this.dateBirthUpdate = row.dateBirth;
       this.ruleForm = row;
-      console.log('this.ruleForm:::: ', this.ruleForm);
-
       this.dateBirthUpdate = row.dateBirth;
-      // this.dateDeathUpdate = row.dateDeath;
-      // this.ruleForm.kennel = row.kennel.id;
       this.dialogEditor = true;
       this.centerDialogAdded = true;
       this.buttonUpdate = true;
@@ -599,20 +545,17 @@ parasails.registerPage('federations-home', {
         label: this.ruleForm.label,
         site: this.ruleForm.site,
         dateBirth: JSON.stringify(this.dateBirthUpdate),
-        // flag: this.getLinkFlag(),
         flag: this.ruleForm.flag,
         labelRu: this.ruleForm.labelRu,
         see: this.ruleForm.see,
         subtitle: this.ruleForm.subtitle,
         subtitleRu: this.ruleForm.subtitleRu,
       };
-      console.log('DATA UPDATE перед отправкой ::: ', data);
 
       io.socket.put('/api/v1/federations/update-federation', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
         this.buttonUpdate = false;
         this.centerDialogAdded = false;
@@ -620,7 +563,6 @@ parasails.registerPage('federations-home', {
         if (jwRes.statusCode === 200) {
           this.resetForm('ruleForm');
           this.ruleForm.fileList = [];
-          // this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
           this.ruleForm.federations = this.resetFederation;
           this.getList();
@@ -661,23 +603,18 @@ parasails.registerPage('federations-home', {
     },
     async destroyManyPhotos() {
       let removeImage = _.remove(this.photos.images, img => _.indexOf(this.checkedPhoto, img.id) > -1);
-      // console.log('Удалённые картинки: ', removeImage);
       let data = this.photos;
       data['removeImage'] = _.pluck(removeImage, 'id');
       // Если картинок нет закрываем окно редактора
-      console.log('REMOVE DATA перед отправкой::', data);
       _.isEmpty(this.photos.images) ? this.centerDialogVisiblePhotos = false : '';
       io.socket.delete('/api/v1/federations/destroy-many-img', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
-              // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
         this.buttonUpdate = false;
         this.centerDialogAdded = false;
-        // this.loading.close();
         if (jwRes.statusCode === 200) {
-          // this.resetForm('ruleForm');
           this.ruleForm.fileList = [];
           this.checkedPhoto = [];
           this.ruleForm.imageUrl = '';
@@ -686,7 +623,5 @@ parasails.registerPage('federations-home', {
         }
       });
     },
-
-
   }
 });

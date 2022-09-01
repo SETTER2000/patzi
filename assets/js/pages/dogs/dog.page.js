@@ -17,7 +17,6 @@ parasails.registerPage('dog', {
     siblings: false,
     titlesDog: [],
     obj: {},
-
     direction: 'ttb',
     dialogVisible: false,
     comment: '',
@@ -128,38 +127,32 @@ parasails.registerPage('dog', {
   virtualPages: true,
   html5HistoryMode: 'history',
   virtualPagesRegExp: /\/chinese-crested\/?[-a-z]+\/?(\w+)([^\/]+)?/i,
-  // virtualPagesRegExp: /^\/chinese-crested\/?[-az]+\/?([^\/]+)?/i,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
-    console.log('DOG::: ', this.dog);
     this.urlYoutube = `https://www.youtube.com/embed/${this.dog.headerVideo}?playlist=${this.dog.headerVideo}&amp;loop=1&amp;mute=1&amp;showinfo=0&amp;controls=0&amp;start=0&amp;autoplay=1`;
     io.socket.put(`/api/v1/pdg`, this.dog, function gotResponse(body, response) {
       // console.log('Сервис Dogs dam ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Принимаем данные по событию search-*
     io.socket.on('list-pedigree', (data) => {
-      // console.log('PEDIGRRR: ', data);
       this.dog.pedigree = data.pedigree;
-      console.log('Pedigree: ', this.dog);
     });
     // Запрос для события list-*
     io.socket.get(`/api/v1/titles/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     this.getList();
-// Запрос для события list-*
+    // Запрос для события list-*
     io.socket.get(`/api/v1/federations/list`, function gotResponse(body, response) {
       // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
     });
     // Все
     io.socket.on('list-federation', (data) => {
-      console.log('Federation all:: ', data);
       this.federations = data;
     });
     // Принимаем данные по событию list-*
@@ -167,23 +160,17 @@ parasails.registerPage('dog', {
     io.socket.on('list-titlesDog', (data) => {
       this.dog.titleDog = [...data.titleDog];
       this.$forceUpdate();
-      // console.log('titlesDog получаем титулы собаки:::: ', this.dog.titleDog);
     });
     // Принимаем данные по событию list-*
     // получаем все титулы в системе
     io.socket.on('list-title', (data) => {
       this.titles = data;
-      // console.log('titles:::: ', this.titles);
-      // console.log('this.filterDogs: ', this.filterDogs);
     });
   },
 
-
   mounted: async function () {
     this.getChildren();
-    // this.getSiblings();
   },
-
 
   filters: {
     getCreate: function (value, l, format) {
@@ -311,20 +298,14 @@ parasails.registerPage('dog', {
     },
 
     // Получить все награды собаки
-    getAwards(command) {
-      // console.log('command::: ', command);
-    },
+    getAwards(command) {},
     handlerSetActiveSlider(i) {
-      // console.log('Нажали по слайду: ', i);
-      // this.photos = _.pluck(this.litter.puppies, 'photos');
       return this.indexPhoto;
     },
     /* Открывает диалоговое окно редактирования*/
     handleCommand(command) {
       switch (command.com) {
         case 'a':
-          // this.getAwards(command);
-          // this.dialogFormAwards = true;
           this.virtualPageSlug = 'titles';
           break;
         case 'b':
@@ -363,12 +344,6 @@ parasails.registerPage('dog', {
     open() {
       this.$alert('Клыки x Верхние резцы x Нижние резцы', '', {
         confirmButtonText: 'OK',
-        /* callback: action => {
-           this.$message({
-             type: 'info',
-             message: `action: ${ action }`
-           });
-         }*/
       });
     },
 
@@ -423,18 +398,14 @@ parasails.registerPage('dog', {
 
     beforeUpload(file) {
       // Проверка размера входящего файла картинки не более (MB)
-
       const isJPG = file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < this.sizeLess;
-
       if (!isJPG) {
         this.$message.error('Picture must be JPG format!');
       }
-
       if (!isLt2M) {
         this.$message.error(`Picture size can not exceed ${this.sizeLess}MB!`);
       }
-
       return isJPG && isLt2M;
     },
 
@@ -444,34 +415,19 @@ parasails.registerPage('dog', {
     },
     // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
-      console.log('files::', files);
-      console.log('fileList::', fileList);
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
 
-    // Срабатывает перед удалением одного файла
-    // handleRemove(file, fileList) {
-    //   console.log('fileList-1::: ' , fileList);
-    //   console.log('file-1::: ' , file);
-    //   console.log('file.response-1::: ' , file.response);
-    //   this.fileList = fileList;
-    // },
-
     handleRemove(file, fileList) {
-      console.log('fileList-1::: ', fileList);
-      console.log('file-1::: ', file);
-      console.log('file.response-1::: ', file.response);
-
       io.socket.delete('/api/v1/files/remove-picture-from-s3', file.response, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.successUpdate)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400ErrUpdate) :
             (jwRes.statusCode === 409) ? this.mesError(jwRes.headers['x-exit-description']) :
               // (jwRes.statusCode === 500 && data.message.indexOf("record already exists with conflicting")) ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500ErrUpdate) : '';
-        if (jwRes.statusCode === 200) {
-        }
+        if (jwRes.statusCode === 200) {}
       });
       this.ruleForm.fileList = Object.assign({}, this.ruleForm.fileList, fileList);
     },
@@ -496,10 +452,8 @@ parasails.registerPage('dog', {
       }
     },
 
-
     submitForm: async function (formName) {
       this.$refs[formName].validate((valid) => {
-
         if (_.isEmpty(this.ruleForm.id)) {
           this.mesError('Error. Не выбран титул.');
         } else if (!_.isObject(this.ruleForm.dateReceiving)) {
@@ -513,22 +467,16 @@ parasails.registerPage('dog', {
       });
     },
 
-
     // Update
     async updateDog() {
       this.openFullScreen();
-      console.log('titleDog.fileList.photos:: ', this.ruleForm.titleDog);
       let data = {
         id: this.dog.id,
-        // dateBirth: this.dog.dateBirth.toISOString() + this.dog.dateBirth.getTimezoneOffset(),
         dateBirth: JSON.stringify(this.dog.dateBirth),
-
         label: this.dog.label,
         gender: this.dog.gender,
         titleDog: this.ruleForm, // добавляем титул
       };
-      console.log('DATA перед отправкой::: ', typeof data.dateBirth);
-
       await io.socket.put('/api/v1/dogs/update-dog', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -544,17 +492,13 @@ parasails.registerPage('dog', {
           // this.ruleForm.file = [];
           this.ruleForm.imageUrl = '';
           this.ruleForm.federations = this.resetFederation;
-          this.getList();
-        }
+          this.getList();}
       });
     },
-
     getList() {
       io.socket.get(`/api/v1/titles/${this.dog.id}`, function gotResponse(body, response) {
-        console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
+        // console.log('Сервер ответил кодом ' + response.statusCode + ' и данными: ', body);
       });
-
-
     },
     openFullScreen() {
       this.loading = this.$loading({
@@ -563,11 +507,7 @@ parasails.registerPage('dog', {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
-      // setTimeout(() => {
-      //   loading.close();
-      // }, 2000);
     },
-
     resetForm(formName) {
       this.$refs.upload ? this.$refs.upload.clearFiles() : '';
       this.$refs[formName].resetFields();
@@ -576,8 +516,6 @@ parasails.registerPage('dog', {
       this.ruleForm.price = 0;
       this.ruleForm.federations = this.resetFederation;
     },
-
-
     // Обработчик события удаления титула. Всплывает изнутри компонента
     openTit(data) {
       this.$confirm('Это навсегда удалит файл. Продолжить?', 'Внимание', {
@@ -638,11 +576,6 @@ parasails.registerPage('dog', {
     ww(titleId) {
       return _.last(_.pluck(_.filter(this.titles, {'id': titleId}), 'label')) === 'WW';
     },
-    /* getSiblings() {
-       io.socket.get('/api/v1/dogs/list', function gop(cashier,data) {
-         console.log('ERRRR:: ', data);
-       });
-     },*/
 
     getChildren() {
       let gender = this.dog.gender === 'dam' ? 'sire' : 'dam';
@@ -667,12 +600,10 @@ parasails.registerPage('dog', {
       });
 
       bdt = _.uniq(bdt);
-      console.log('BDT:: ', bdt);
       let u = [];
       _.each(bdt, dt => {
         let ltr = {};
         let lit = _.filter(this.childrens, {'dBirth': dt});
-        console.log('LIT::: ', lit);
         ltr.fullName = lit[0][gender].fullName;
         ltr.oneParent = lit[0][gender];
         ltr.gender = gender;
@@ -684,14 +615,11 @@ parasails.registerPage('dog', {
       this.dog = Object.assign({}, this.dog, {litter: u});
     },
     getUrlShare() {
-      return `https://www.facebook.com/sharer/sharer.php?u=${this.seo.canonical}&amp;src=sdkpreparse`;
-      // https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse
+      return '';
     },
-
     countPuppies() {
       return this.dog.litter ? _.flatten(_.pluck(this.dog.litter, 'litter')).length : 0;
     },
-
     regNo() {
       let str = '';
       (this.dog.federations && this.dog.federations.length > 0 && this.federations.length > 0) ?
@@ -702,7 +630,6 @@ parasails.registerPage('dog', {
           delete fd.key;
           delete fd.value;
         }) : '';
-
       return str;
     },
   }

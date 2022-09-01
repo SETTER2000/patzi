@@ -1,47 +1,33 @@
 module.exports = {
-
-
   friendlyName: 'Download photo',
-
-
   description: 'Скачать файл фотографии (возвращая поток).',
-
-
   inputs: {
     collection: {
       type: 'string',
       required: true,
       description: 'Наименование коллекции.'
     },
-
-
     folder: {
       type: 'string',
       required: true,
       description: 'Наименование альбома.'
     },
-
     id: {
       description: 'Идентификатор объекта из данной коллекции.',
       type: 'string',
       required: true
     },
-
     key: {
       description: 'Ключ картинки в массиве картинок данного альбома.',
       type: 'number',
       required: true
     },
-
     photoSet: {
       description: 'Ключ фотосессии в массиве фотосессий данного альбома.',
       type: 'number',
       example: 0
     },
-
   },
-
-
   exits: {
     success: {
       outputDescription: 'The streaming bytes of the specified kennel\'s photo.',
@@ -63,7 +49,6 @@ module.exports = {
     inputs.photoSet = inputs.photoSet ? inputs.photoSet : 0;
     // Если название альбома существует, то выводим его | images
     let folder = inputs.folder ? inputs.folder : 'images';
-
 
     switch (collection) {
       case 'Litter':
@@ -98,7 +83,7 @@ module.exports = {
     if (!collectionObject) {
       throw 'notFound';
     }
-// console.log('collectionObject[folder][inputs.photoSet]::: ' , collectionObject[folder][inputs.photoSet]);
+
     let arr = _.isArray(collectionObject[folder][inputs.photoSet]['photos']) ?
       await collectionObject[folder][inputs.photoSet]['photos'].filter((image, index) => inputs.key === index) :
       await collectionObject[folder].filter((image, index) => inputs.key === index);
@@ -106,11 +91,9 @@ module.exports = {
       throw 'notFound';
     }
 
-
     //************************************//
     // **** ФОРМИРУЕМ ЗАГРУЗКУ ФАЙЛА **** //
     //************************************//
-    // Set the mime type for the response
     // Это устанавливает mime тип ответа
     if (!arr[0].fd) {
       throw 'notFound';
@@ -119,13 +102,10 @@ module.exports = {
 
     /**
      * startDownload - функция от модуля sails-hook-uploads
-     * мы будем использовать этот метод для загрузки файла
      * Этот метод стартует загрузку в поток байтов файла, после
      * полной загрузки сервер отдаст success
-     *
      * Ответ о благополучном завершении отдачи файла
      */
-    // return await sails.startDownload(arr[0].fd);
     return await sails.startDownload(arr[0].fd);
   }
 };

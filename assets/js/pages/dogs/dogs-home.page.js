@@ -299,8 +299,7 @@ parasails.registerPage('dogs-home', {
     _.extend(this, SAILS_LOCALS);
 
     // Запрос для события list-*
-    io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
-    });
+    io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {});
 
     // Принимаем данные по событию list-*
     io.socket.on('list-dog', (data) => {
@@ -426,10 +425,7 @@ parasails.registerPage('dogs-home', {
     },
 
   },
-
-  mounted: async function () {
-  },
-
+  mounted: async function () {},
   computed: {
     i19p: {
       get: function () {
@@ -486,14 +482,11 @@ parasails.registerPage('dogs-home', {
         this.continents = data.continents;
       });
     },
-
-
     handleAvatarSuccess(res, file) {
       this.files.push(file.response);
       this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
       this.ruleForm.file = file.response;
     },
-
     beforeAvatarUpload(file) {
       let sizeLess = this.sizeLess / 1000;
       const isJPG = (file.type === 'image/jpeg') || (file.type === 'image/png');
@@ -1135,8 +1128,8 @@ parasails.registerPage('dogs-home', {
     },
 
     /**
-     * Формирует масисив картинок для показа в слайдере
-     * причём в зависимости от индекса cover, поднимает фото обложки на первую позициию
+     * Формирует массив картинок для показа в слайдере
+     * причём в зависимости от индекса cover, поднимает фото обложки на первую позицию
      * в массиве, чтоб просмотр начинался с этой картинки
      * @param collectionObj - объект коллекции (dog, litter и т.д.)
      * @param cover - index объекта картинки в массиве

@@ -356,7 +356,7 @@ module.exports = {
    *                                                                         *
    ***************************************************************************/
   log: {
-    level: 'debug'
+    level: 'warning'
   },
 
 
@@ -445,7 +445,10 @@ module.exports = {
      *                                                                          *
      ***************************************************************************/
     adapter: require('skipper-s3'),
-
+    // bucket: process.env.bucket,
+    // key: process.env.key,
+    // region: process.env.region,
+    // secret: process.env.secret,
     //--------------------------------------------------------------------------
     //  /\   To avoid checking them in to version control, you might opt to set
     //  ||   sensitive credentials like `s3Secret` using an environment variable.

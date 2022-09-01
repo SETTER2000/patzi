@@ -57,7 +57,7 @@ module.exports.routes = {
 
   'GET /experts': { action: 'experts/view-experts-home' },
 
- 
+
   'GET /litter/:letter/:year/:virtualPageSlug?': {action: 'litters/view-litter'},
   'GET /litters/:virtualPageSlug?': {action: 'litters/view-litters-home'},
 
@@ -273,7 +273,7 @@ module.exports.routes = {
   'PUT    /api/v1/getRootNode': {action: 'pedigree/root-node-pedigree', csrf: false},
 
 
-  'GET    /undefined': {action: 'files/undefined'},
+  'GET    /smoke-test': {action: 'files/smoke-test'},
 
 
   'POST   /api/v1/region/create-region': {action: 'region/create-region', csrf: false},

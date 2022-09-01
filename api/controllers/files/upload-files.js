@@ -22,7 +22,6 @@ module.exports = {
   exits: {
     success: {
       outputDescription: 'Information about the newly created record.',
-      // Устанавливаем выходной тип данных. Хорошая практика для документирования кода.
       outputType: {
         id: 'number',
         imageSrc: 'string'
