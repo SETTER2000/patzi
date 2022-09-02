@@ -46,30 +46,6 @@ Google Analytics, doivent être inclus que dans la production de:
     */
     if (sails.config.environment === 'production') { %>
 
-
-        <!-- Google Analytics, Google Tag Manager, etc. -->
-
-        <!-- Yandex.Metrika informer -->
-        <!--  <a href="https://metrika.yandex.ru/stat/?id=47472943&amp;from=informer"
-             target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/47472943/3_1_FFFFFFFF_EFEFEFFF_0_pageviews"
-                                                 style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="47472943" data-lang="ru" /></a>-->
-
-        <!-- Yandex.Metrika counter -->
-        <script type="text/javascript" >
-            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-                m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-            ym(47472943, "init", {
-                clickmap:true,
-                trackLinks:true,
-                accurateTrackBounce:true
-            });
-        </script>
-        <noscript><div><img src="https://mc.yandex.ru/watch/47472943" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-        <!-- /Yandex.Metrika counter -->
-
-
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113396906-1"></script>
         <script>
@@ -135,31 +111,8 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
 
 </head>
 <body data-home-page-name='Homepage' class="u-body u-overlap" v-cloak>
-<script>
-    window.fbAsyncInit = function() {
-        FB.init({
-            appId      : '300089384393151',
-            cookie     : true,
-            xfbml      : true,
-            version    : 'v8.0'
-        });
 
-        FB.AppEvents.logPageView();
-
-    };
-
-    (function(d, s, id){
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "https://connect.facebook.net/ru_RU/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-</script>
 <div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v8.0&appId=300089384393151&autoLogAppEvents=1" nonce="vT0HWZKZ"></script>
-<!--<script async defer crossorigin="anonymous" src="https://connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v8.0" nonce="SyNyEYZR"></script>-->
-<!--<body data-home-page="homepage.html" data-home-page-title="homepage" class="u-body u-overlap u-overlap-contrast" v-cloak>-->
 
 <% if(!me){ %>
 
@@ -479,7 +432,9 @@ sur le pipeline d'actifs entre les "STYLES" et "STYLES END", ou les deux.
             <nav class="u-align-left u-dropdown-icon u-menu u-menu-dropdown u-offcanvas u-menu-1">
                 <div class="menu-collapse u-custom-font u-font-oswald" style="font-size: 1.25rem;">
                     <a class="u-button-style u-custom-text-color u-custom-text-hover-color u-nav-link u-text-white" href="#">
-                        <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 302 302" style="undefined">
+                        <svg class="u-svg-link"
+                             preserveAspectRatio="xMidYMin slice" viewBox="0
+                              0 302 302" style="">
                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-0b31"></use>
                         </svg>
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-0b31"
