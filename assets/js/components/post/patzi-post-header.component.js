@@ -205,7 +205,7 @@ parasails.registerComponent('patziPostHeader', {
       this.showRule = !this.showRule;
     },
     getUrlShare(){
-      return `https://www.facebook.com/sharer/sharer.php?u=${this.objData.canonical}&amp;src=sdkpreparse`;
+      return `#`;
     },
     getUrlImg(){
       return  this.post.images && this.post.images.length > 0 ? this.post.images[this.post.cover].imageSrc : '/images/default-image.jpg' ;

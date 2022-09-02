@@ -1,12 +1,6 @@
 module.exports = {
-
-
   friendlyName: 'Cloud front url',
-
-
   description: 'Отдаёт url картинки в зависимости от environment',
-
-
   inputs: {
     collectionName: {
       type: 'string',
@@ -22,7 +16,6 @@ module.exports = {
       type: 'number',
       description: `Индекс фотосессии`
     },
-
     edits: {
       type: 'ref',
       description: `Объект преобразования картинки. `,
@@ -34,16 +27,11 @@ module.exports = {
       description: `Название свойства в объекте коллекции, которое содержит массив фотосессий.`
     }
   },
-
-
   exits: {
-
     success: {
       description: 'All done.',
     },
-
   },
-
 
   fn: async function (inputs) {
     const btoa = require('btoa');
@@ -58,7 +46,6 @@ module.exports = {
 
     // Если не передан объект resize, то устанавливаем размер по умолчанию.
     inputs.edits.resize = inputs.edits.resize ? inputs.edits.resize : resize;
-    // console.log('inputs.collection::: ', inputs.collection);
     if (!_.isArray(inputs.collection)) {
       if (sails.config.environment === 'production') {
         inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
@@ -80,37 +67,22 @@ module.exports = {
     } else {
       await _.each(inputs.collection, async (obj) => {
         objId = obj.id ? obj.id : obj._id;
-        // console.log('obj::: ' , obj);
-        // console.log('obj[inputs.field]::: ' ,  (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? 'y':'n');
-        // console.log('inputs.field::: ' , inputs.field);
-        // console.log('!_.isEmpty(obj[inputs.field])::: ' , (!_.isEmpty(obj[inputs.field])&& obj[inputs.field].length>0) ? 'y':'e');
         obj[inputs.field] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? await obj[inputs.field].map((img, i) => {
           if (sails.config.environment === 'production') {
-            // console.log('Объект img:: ', img);
             const imageRequest = JSON.stringify({
               bucket: sails.config.uploads.bucket,
               key: img.fd,
               edits: inputs.edits
             });
             img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
-
           } else {
             i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
             img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${objId}/${inputs.field}/${i}`) : '';
           }
-
-          // img.detail = obj.fullName ? `/chinese-crested/${obj.fullName.split(" ").join('-')}` : '';
-          // console.log('img.imageSrc::: ' , img.imageSrc);
-          // console.log('img.detail::: ' , img.detail);
-          // delete img.fd;
           return img;
         }) : '';
       });
     }
-
-
     return inputs.collection;
-
   }
 };
-
