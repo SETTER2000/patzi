@@ -20,7 +20,7 @@ parasails.registerPage('topics-home', {
     photos: {},
     isIndeterminate: true,
     limit: 4,
-    sizeLess: 5, // MB
+    sizeLess: 20, // MB
     photoDesc: {
       innerVisiblePhotoDescription: false,
       photoId: '',
@@ -116,7 +116,7 @@ parasails.registerPage('topics-home', {
         limitExceededText: `Лимит`,
         limitExceededText2: `вы выбрали`,
         limitExceededText3: `Всего`,
-        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе.
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         warnRemove: 'Это навсегда удалит объект. Продолжить?',
         photoEditor: 'Редактор фотографий',
@@ -306,8 +306,8 @@ parasails.registerPage('topics-home', {
 
     // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
-      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
-      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
 

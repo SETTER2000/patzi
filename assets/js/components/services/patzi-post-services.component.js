@@ -85,7 +85,7 @@ parasails.registerComponent('patziPostServices', {
               <i class="groom"></i>
               <h4 class="ml-3">{{objData.preferredLocale === 'ru' ? 'Стрижка собак' : 'Dog Grooming'}}</h4>
             </div>
-            <p>{{objData.preferredLocale === 'ru' ? 'Модная, пародная стрижка. Мытьё. Чистка ушей, когтей, эпиляция. Использование профессиональной косметики.' : 'Fashionable, haircut. The washing up. Cleaning the ears, claws, hair removal. Use of professional cosmetics.'}}</p>
+            <p>{{objData.preferredLocale === 'ru' ? 'Модная, породная стрижка. Мытьё. Чистка ушей, когтей, эпиляция. Использование профессиональной косметики.' : 'Fashionable, haircut. The washing up. Cleaning the ears, claws, hair removal. Use of professional cosmetics.'}}</p>
           </div>
         </div>
         <div class="col-lg-4 col-md-6">
@@ -103,7 +103,7 @@ parasails.registerComponent('patziPostServices', {
               <i class="flaticon-content"></i>
               <h4 class="ml-3">{{objData.preferredLocale === 'ru' ? 'Фотограф для питомца' : 'Pet photographer'}}</h4>
             </div>
-            <p>{{objData.preferredLocale === 'ru' ? 'Фотосессия вас и вашей собаки. По желанию на улице или дома. Оплата договарная, в среднем 1500 руб. за фотосессию. Это примерно 1-2 часа. В среднем от 10 до 30 фото, профессионального качества.' : 'Photo session of you and your dog. Optionally on the street or at home. Payment is negotiable, on average 1500 rubles. for the photo session. This is approximately 1-2 hours. On average, 10 to 30 photos, professional quality.'}}</p>
+            <p>{{objData.preferredLocale === 'ru' ? 'Фотосессия вас и вашей собаки. По желанию на улице или дома. Оплата договорная, в среднем 3000 руб. за фотосессию. Это примерно 1-2 часа. В среднем от 10 до 30 фото, профессионального качества.' : 'Photo session of you and your dog. Optionally on the street or at home. Payment is negotiable, on average 1500 rubles. for the photo session. This is approximately 1-2 hours. On average, 10 to 30 photos, professional quality.'}}</p>
           </div>
         </div>
       </div>

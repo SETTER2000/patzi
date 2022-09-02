@@ -103,7 +103,7 @@ parasails.registerPage('dogs-home', {
     value: 0,
     valueColor: '',
     syncing: false,
-    sizeLess: 5, // MB
+    sizeLess: 20, // MB
     cloudError: '',
     subtitle: '',
     dialogFormVisible: false,

@@ -42,7 +42,7 @@ module.exports = {
         h3: {ru: 'Каталог экспертов', en: 'Expert Directory'},
         // Текст параграфа под заголовко H3 в начале страницы
         textUnderHeading: {
-          ru: 'На странице представлены эксперты в области оценки экстерьера собак на выставках в породе Китайская Хохлатая Собака. Это база экспертов не может претендовать на полноту информации, как и любая другая база данных в мире. Вопрос лишь того кто ей пользуется.',
+          ru: 'На странице представлены эксперты в области оценки экстерьера собак на выставках в породе Китайская Хохлатая Собака. Это база экспертов не может претендовать на полноту информации, как и любая другая база данных в мире. Вопрос лишь того, кто ей пользуется.',
           en: 'The page presents experts in the field of evaluating the appearance of dogs at exhibitions in the Chinese Crested Dog breed. This expert database cannot claim to be complete, like any other database in the world. The only question is who uses it.'
         },
       },

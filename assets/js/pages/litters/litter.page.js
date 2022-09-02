@@ -6,7 +6,7 @@ parasails.registerPage('litter', {
     dialogTableVisible: false,
     viewChangeComment: false,
     dialogPedigreeVisible: true,
-    size: 5, // Mb input img
+    size: 20, // MB input img
     likeId: '',
     elWow: '',
     // титул:'',

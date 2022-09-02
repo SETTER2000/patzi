@@ -23,7 +23,7 @@ parasails.registerPage('blog', {
     dialogFormVisible: false,
     activeClass: 'scc',
     errorClass: 'text-danger',
-    sizeLess: 5, // MB
+    sizeLess: 20, // MB
     dialogVisible: false,
     succ: false,
     dialogImageUrl: '',

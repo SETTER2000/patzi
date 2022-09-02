@@ -31,7 +31,7 @@ parasails.registerPage('federations-home', {
       dateTaken: '',
     },
     centerDialogVisiblePhotos: false,
-    sizeLess: 5, // MB
+    sizeLess: 20, // MB
     buttonUpdate: false,
     dialogVisible: false,
     dialogImageUrl: '',

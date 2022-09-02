@@ -30,7 +30,7 @@ parasails.registerPage('users-home', {
     buttonUpdate: false,
     centerDialogAdded: false,
     value5: [],
-    sizeLess: 5, // MB
+    sizeLess: 20, // MB
     fileList: [],
     count: 5,
     query: 5,

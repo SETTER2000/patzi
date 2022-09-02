@@ -15,7 +15,7 @@ parasails.registerPage('blog-home', {
 
     // posts: [{name: 'sadf', label: 'sdfsd'}],
     dialog: {},
-    sizeLess: 5, // MB
+    sizeLess: 20, // MB
     dialogVisible: false,
     dialogImageUrl: '',
     innerVisible: false,

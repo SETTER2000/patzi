@@ -43,7 +43,7 @@ module.exports = {
         h3: {ru: 'Федерации мира', en: 'World Federation'},
         // Текст параграфа под заголовко H3 в начале страницы
         textUnderHeading: {
-          ru: 'На странице представлены федерации собак мира породы Китайская Хохлатая Собака. Это база федераций не может претендовать на полноту информации, как и любая другая база данных в мире. Вопрос лишь того кто ей пользуется.',
+          ru: 'На странице представлены федерации собак мира породы Китайская Хохлатая Собака. Это база федераций не может претендовать на полноту информации, как и любая другая база данных в мире. Вопрос лишь того, кто ей пользуется.',
           en: 'The page presents the dog federations of the world of the Chinese Crested Dog breed. This federation database cannot claim to be complete, like any other database in the world. The only question is who uses it.'
         },
       },
