@@ -49,7 +49,7 @@ parasails.registerPage('kennels-home', {
     users: [],
     state1: '',
     selectedKennel: undefined,
-    url: 'https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg',
+    url: 'https://d1lyb0stb8az10.cloudfront.net/Continents.jpg',
     fit: 'cover',
     state2: '',
     options: [],
@@ -203,7 +203,7 @@ parasails.registerPage('kennels-home', {
         all: 'Все',
         warnRemove: 'Это навсегда удалит объект. Продолжить?',
         delCancel: 'Удаление отменено',
-        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе.
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         warnNotRecover: 'После удаления объект невозможно будет восстановить. Удалить объект',
         text400Err: 'Не смог создать!',

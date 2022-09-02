@@ -41,7 +41,8 @@ parasails.registerPage('dogs-home', {
     dialogEditor: false,
     photoDescUpdate: false,
     dogFullName: '',
-    cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net',
+    // cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net',
+    cloudFrontUrl: 'https://d1lyb0stb8az10.cloudfront.net',
     photoDesc: {
       innerVisiblePhotoDescription: false,
       photoId: '',
@@ -197,10 +198,10 @@ parasails.registerPage('dogs-home', {
     select: '',
     labelPosition: 'top',
     items: [
-      {name: 'Poale Ell Adam', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2.jpg'},
-      {name: 'Poale Ell Bell', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018-11.jpg'},
-      {name: 'Poale Ell Bazhen', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Adam-10m.jpg'},
-      {name: 'Poale Ell Barthalamew', src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Lux-2018.jpg'},
+      {name: 'Poale Ell Adam', src: 'https://d1lyb0stb8az10.cloudfront.net/Lux-2.jpg'},
+      {name: 'Poale Ell Bell', src: 'https://d1lyb0stb8az10.cloudfront.net/Lux-2018-11.jpg'},
+      {name: 'Poale Ell Bazhen', src: 'https://d1lyb0stb8az10.cloudfront.net/Adam-10m.jpg'},
+      {name: 'Poale Ell Barthalamew', src: 'https://d1lyb0stb8az10.cloudfront.net/Lux-2018.jpg'},
     ],
     litters: [],
     ratio: null,
@@ -280,10 +281,10 @@ parasails.registerPage('dogs-home', {
     ],
     map: [
       ['growth', {
-        src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Izmerit_holku.svg',
+        src: 'https://d1lyb0stb8az10.cloudfront.net/Izmerit_holku.svg',
       }],
       ['hairless', {
-        src: 'https://d3a1wbnh2r1l7y.cloudfront.net/Hairless_OR_Powderpuff.jpg',
+        src: 'https://d1lyb0stb8az10.cloudfront.net/Hairless_OR_Powderpuff.jpg',
       }]],
   },
   virtualPages: true,

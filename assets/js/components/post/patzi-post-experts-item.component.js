@@ -103,7 +103,7 @@ parasails.registerComponent('patziPostExpertsItem', {
     },
     getFlag(country) {
       return !_.isObject(country)   ? false :
-        country.label ? `https://d3a1wbnh2r1l7y.cloudfront.net/flags/${country.label}.jpg` : '';
+        country.label ? `https://d1lyb0stb8az10.cloudfront.net/flags/${country.label}.jpg` : '';
     },
     async updateStyle(wrapper) {
       /*  const t = `${this.post.valueX}% ${this.post.valueY}%`;

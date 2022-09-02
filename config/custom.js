@@ -23,8 +23,8 @@ module.exports.custom = {
    *                                                                         *
    **************************************************************************/
   baseUrl: 'http://localhost:1337',
-  cloudFrontUrl: 'https://d3a1wbnh2r1l7y.cloudfront.net',
-  pathPhotoS3: 'https://d3a1wbnh2r1l7y.cloudfront.net',
+  cloudFrontUrl: 'https://d1lyb0stb8az10.cloudfront.net',
+  pathPhotoS3: 'https://d1lyb0stb8az10.cloudfront.net',
 
   /**************************************************************************
    *                                                                         *
@@ -71,7 +71,7 @@ module.exports.custom = {
 
 
   friendEmailAddress: 'ins09@mail.ru',
-  avatar: 'https://d3a1wbnh2r1l7y.cloudfront.net/ava.png',
+  avatar: 'https://d1lyb0stb8az10.cloudfront.net/ava.png',
 
   // The sender that all outgoing emails will appear to come from.
   // Отправитель, от которого будут исходить все исходящие письма.

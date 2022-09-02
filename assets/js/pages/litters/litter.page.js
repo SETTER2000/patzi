@@ -74,7 +74,7 @@ parasails.registerPage('litter', {
     nameSessionPhoto: '',
     count: 0,
     dialogVisible: false,
-    circleUrl: 'https://d3a1wbnh2r1l7y.cloudfront.net/ava.png',
+    circleUrl: 'https://d1lyb0stb8az10.cloudfront.net/ava.png',
     limit: 50, // photos in slider
     letter: '',
     autoplay: true,
@@ -186,7 +186,7 @@ parasails.registerPage('litter', {
         textOneErr: `Произошла ошибка`,
         textTwoErr: `Комментарий не добавлен.`,
         warnNoDogs: `Нет возможности создать помёт, пока отсутствует хотя бы одна пара собак.`,
-        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе.
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         text400Err: 'Ошибка. Не смог создать!',
         text404Err: 'Ошибка. Возможно у вас нет прав на удаление данного объекта!',
@@ -628,8 +628,8 @@ console.log('LITTER::: ', this.litter);
 
     handleExceedPuppies(files, fileList) {
       console.log('handleExceedPuppies:: ', fileList);
-      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
-      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
 

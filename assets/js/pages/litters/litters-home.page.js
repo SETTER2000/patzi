@@ -31,7 +31,7 @@ parasails.registerPage('litters-home', {
     dam: '',
     sizeLess: 500,
     innerVisible: false,
-    url: 'https://d3a1wbnh2r1l7y.cloudfront.net/Continents.jpg',
+    url: 'https://d1lyb0stb8az10.cloudfront.net/Continents.jpg',
     fit: 'cover',
     ruleForm: {
       sire: '',
@@ -157,7 +157,7 @@ parasails.registerPage('litters-home', {
       }],
       ['ru', {
         warnNoDogs: `Нет возможности создать помёт, пока отсутствует хотя бы одна пара собак.`,
-        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе.
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         text400Err: 'Ошибка. Не смог создать!',
         text500Err: 'Ошибка сервера! Невозможно создать.',
@@ -506,14 +506,14 @@ parasails.registerPage('litters-home', {
     },
     // функция перехвата при превышении лимита
     handleExceed(files, fileList) {
-      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
-      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
 
     handleExceedPuppies(files, fileList) {
-      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files}, 
-      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}: 
+      this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
+      ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
 

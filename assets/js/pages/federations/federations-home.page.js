@@ -521,7 +521,7 @@ parasails.registerPage('federations-home', {
       this.show = false;
     },
     getLinkFlag(country){
-      return `https://d3a1wbnh2r1l7y.cloudfront.net/flags/${country}.jpg`;
+      return `https://d1lyb0stb8az10.cloudfront.net/flags/${country}.jpg`;
     } ,
     async handleEdit(index, row) {
       row.titleBackground = _.isArray(row.titleBackground) ? await _.each(row.titleBackground, bg => {
