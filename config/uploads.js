@@ -38,8 +38,8 @@ module.exports.uploads = {
 
 
   // My
-  bucket: sails.process.Bucket,
-  key: sails.process.key,
-  region: sails.process.region,
-  secret: sails.process.secret
+  bucket: process.env.Bucket,
+  key: process.env.key,
+  region: process.env.region,
+  secret: process.env.secret
 };
