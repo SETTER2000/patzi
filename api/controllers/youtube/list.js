@@ -1,15 +1,7 @@
 module.exports = {
-
-
   friendlyName: 'List',
-
-
   description: 'List youtube.',
-
-
   inputs: {},
-
-
   exits: {
     success: {
       description: 'The requesting user agent has been successfully logged out.'
@@ -21,22 +13,17 @@ module.exports = {
     }
   },
 
-
   fn: async function (inputs) {
-
     const fs = require('fs');
     const readline = require('readline');
     const {google} = require('googleapis');
     const OAuth2 = google.auth.OAuth2;
-
-// If modifying these scopes, delete your previously saved credentials
-// at ~/.credentials/youtube-nodejs-quickstart.json
     const SCOPES = ['https://www.googleapis.com/auth/youtube.readonly'];
     const TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
       process.env.USERPROFILE) + '/.credentials/';
     const TOKEN_PATH = TOKEN_DIR + 'youtube-nodejs-quickstart.json';
 
-// Load client secrets from a local file.
+    // Load client secrets from a local file.
     fs.readFile('/client_secret.json', function processClientSecrets(err, content) {
       if (err) {
         console.log('Error loading client secret file: ' + err);

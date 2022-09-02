@@ -19,7 +19,7 @@
     "btoa": "^1.2.1",
     "gm": "^1.23.1",
     "google-auth-library": "^6.0.2",
-    "googleapis": "^52.1.0",
+    "googleapis": "^107.0.0",
     "imageboss-js": "^1.0.1",
     "ipware": "^2.0.0",
     "jquery": "^3.6.0",

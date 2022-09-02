@@ -15,16 +15,16 @@
 module.exports.uploads = {
 
   /***************************************************************************
-  *                                                                          *
-  * Sails apps upload and download to the local disk filesystem by default,  *
-  * using a built-in filesystem adapter called `skipper-disk`. This feature  *
-  * is mainly intended for convenience during development since, in          *
-  * production, many apps will opt to use a different approach for storing   *
-  * uploaded files, such as Amazon S3, Azure, or GridFS.                     *
-  *                                                                          *
-  * Most of the time, the following options should not be changed.           *
-  * (Instead, you might want to have a look at `config/env/production.js`.)  *
-  * * Парусные приложения загружаются и загружаются в файловую систему локального
+   *                                                                          *
+   * Sails apps upload and download to the local disk filesystem by default,  *
+   * using a built-in filesystem adapter called `skipper-disk`. This feature  *
+   * is mainly intended for convenience during development since, in          *
+   * production, many apps will opt to use a different approach for storing   *
+   * uploaded files, such as Amazon S3, Azure, or GridFS.                     *
+   *                                                                          *
+   * Most of the time, the following options should not be changed.           *
+   * (Instead, you might want to have a look at `config/env/production.js`.)  *
+   * * Парусные приложения загружаются и загружаются в файловую систему локального
    * диска по умолчанию, *
    * используя встроенный адаптер файловой системы под названием `Skipper-disk`.
    * Эта особенность в основном предназначен для удобства при разработке, так как, в *
@@ -33,14 +33,13 @@ module.exports.uploads = {
    * *
    * В большинстве случаев следующие параметры не должны быть изменены. *
    * (Вместо этого вы можете взглянуть на `config / env / production.js`.)                                                                         *
-  ***************************************************************************/
+   ***************************************************************************/
   // dirpath: '.tmp/uploads',
 
 
   // My
-
-  // sails.config.uploads.bucket
-  // sails.config.uploads.key
-  // sails.config.uploads.region
-  // sails.config.uploads.secret
+  bucket: sails.process.Bucket,
+  key: sails.process.key,
+  region: sails.process.region,
+  secret: sails.process.secret
 };
