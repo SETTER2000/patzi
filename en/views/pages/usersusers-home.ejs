@@ -4,7 +4,7 @@
                :visible.sync="centerDialogAdded"
                custom-class="dialog-add"
                center>
-        <% /* Диалоговое окно. Подсказка о использование поля пароля. */ %>
+        <% /* Диалоговое окно. Подсказка об использование поля пароля. */ %>
         <el-dialog
                 title="Установка пароля"
                 :visible.sync="dialogVisiblePass"
@@ -513,7 +513,7 @@
   </span>
     </el-dialog>
 
-    <% /* Диалоговое окно. Предупредение о невозможности удалить пользователя. */ %>
+    <% /* Диалоговое окно. Предупреждение о невозможности удалить пользователя. */ %>
     <el-dialog
             title="ВНИМАНИЕ!"
             :visible.sync="centerDialogVisible"
@@ -543,10 +543,9 @@
     <el-dialog :title="objOne.fullName" :visible.sync="dialogTableVisible">
         <span class="demonstration">{{objOne.kennel}}</span>
         <el-carousel height="60vh" trigger="click" :autoplay="false" indicator-position="none">
-            <el-carousel-item v-for="(img, index) of objOne.images" :key="img.id" class="d-flex flex-center
-          ">
+            <el-carousel-item v-for="(img, index) of objOne.images" :key="img.id" class="d-flex flex-center">
                 <p class="medium">{{ img.description }}</p>
-                <img :data-src="img.imageSrc" class="lazyload"   style="object-fit:contain; " alt="">
+                <img :data-src="img.imageSrc" class="lazyload"   style="object-fit:contain;" alt="">
             </el-carousel-item>
         </el-carousel>
         <span slot="footer" class="dialog-footer d-flex justify-content-center">
@@ -585,9 +584,10 @@
     </section>
 
 
-    <!-- Start Align Area -->
+
     <div class="whole-wrap mb-5">
         <div class="container">
+             <% /* Поиск пользователей. */ %>
             <div class="row">
                 <div class="col mb-5 flex justify-content-between">
                     <% /* Кол-во строк в таблице. */ %>
@@ -617,6 +617,8 @@
                     </el-select>
                 </div>
             </div>
+
+             <% /* Таблица пользователей. */ %>
             <template v-cloak>
                 <el-table
                         ref="multipleTable"
@@ -625,8 +627,7 @@
                         highlight-current-row
                         @current-change="handleCurrentChange"
                         @selection-change="handleSelectionChange"
-                        @cell-click="handleCellClick"
-                >
+                        @cell-click="handleCellClick">
                     <el-table-column
                             type="index"
                             fixed="left"
@@ -638,7 +639,9 @@
                             fixed="left"
                             width="90">
                         <template slot="header" slot-scope="scope">
-                            <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
+                            <div class="d-flex justify-content-center">
+                                <i class="el-icon-user-solid"></i>
+                            </div>
                         </template>
                         <template slot-scope="scope">
                             <div v-if="scope.row.imageSrc" class="photo-preview col">
