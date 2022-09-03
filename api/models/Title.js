@@ -1,17 +1,5 @@
-/**
- * Title.js
- *
- * @description :: A model definition represents a database table/collection.
- * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
- */
-
 module.exports = {
-
   attributes: {
-
-    //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
-    //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
-    //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
     label: {
       type: 'string',
       description: `Название титула. Например для блога или статей.`,
@@ -20,16 +8,6 @@ module.exports = {
       minLength: 2,
       maxLength: 200
     },
-/*    country: {
-      type: 'string',
-      maxLength: 170,
-      description: `Страна где проводился Мир и получен титул.`
-    },
-    city: {
-      type: 'string',
-      maxLength: 170,
-      description: `Город где проводился Мир и получен титул.`
-    },*/
     labelRu: {
       type: 'string',
       description: `Название титула на русском языке. Например для блога или статей.`,
@@ -46,32 +24,27 @@ module.exports = {
       defaultsTo: true,
       description: `Флаг видимости титула. Видна или нет. По умолчанию видна.`
     },
-
     images: {
       type: 'ref',
       defaultsTo: [],
       example: ['5d1f1b04fbe834262cbb8c53', '5d1f1b04fbe834262cbb8c54'],
       description: `FD загруженных фотографий родителей`
     },
-
     titleBackground: {
       type: 'ref',
       example: {},
       description: `Объект файла данных о загруженном файле. Фон титула.`
     },
-
     subtitle: {
       type: 'string',
       description: 'Дополнительная информация. Описание титула на английском языке.',
       maxLength: 700
     },
-
     subtitleRu: {
       type: 'string',
       description: 'Дополнительная информация. Описание титула на русском языке.',
       maxLength: 700
     },
-
     cover: {
       type: 'number',
       defaultsTo: 0,
@@ -79,17 +52,5 @@ module.exports = {
       description: `Номер ключа в массиве фотографий, который определяет главную фотографию альбома.
                     Обложка альбома.`
     },
-
-    //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
-    //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
-    //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-
-
-    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
   },
-
 };
-

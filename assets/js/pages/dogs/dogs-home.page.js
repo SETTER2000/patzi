@@ -1,7 +1,4 @@
 parasails.registerPage('dogs-home', {
-  //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
-  //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
-  //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     dogs: [],
     owner: false,
@@ -25,7 +22,13 @@ parasails.registerPage('dogs-home', {
       abbr: 'RUSJCH',
       labelRu: 'Юный чемпион России',
       value: 1
-    }, {id: '2', label: 'Hungarian Junior Champion', abbr: 'HJCH', labelRu: 'Юный чемпион Болгарии', value: 2}],
+    }, {
+      id: '2',
+      label: 'Hungarian Junior Champion',
+      abbr: 'HJCH',
+      labelRu: 'Юный чемпион Болгарии',
+      value: 2
+    }],
     filterDogs: [],
     filterName: '',
     dogsEditList: [],
@@ -41,8 +44,6 @@ parasails.registerPage('dogs-home', {
     dialogEditor: false,
     photoDescUpdate: false,
     dogFullName: '',
-    // cloudFrontUrl: 'https://d17pkle29f0gkk.cloudfront.net',
-    cloudFrontUrl: 'https://d1lyb0stb8az10.cloudfront.net',
     photoDesc: {
       innerVisiblePhotoDescription: false,
       photoId: '',
@@ -121,20 +122,41 @@ parasails.registerPage('dogs-home', {
     formErrors: {},
     rules: {
       kennel: [
-        {required: true, message: 'Please select kennel name', trigger: 'change'}
+        {
+          required: true,
+          message: 'Please select kennel name',
+          trigger: 'change'
+        }
       ],
       label: [
         {required: true, message: 'Please input dog name', trigger: 'blur'},
-        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
+        {
+          min: 3,
+          max: 100,
+          message: 'Length should be 3 to 100',
+          trigger: 'blur'
+        },
       ],
       gender: [
-        {required: true, message: 'Please select a dog gender.', trigger: 'change'}
+        {
+          required: true,
+          message: 'Please select a dog gender.',
+          trigger: 'change'
+        }
       ],
       dateBirth: [
-        {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
+        {
+          type: 'date',
+          required: true,
+          message: 'Please pick a date',
+          trigger: 'change'
+        }
       ],
       subtitle: [
-        {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
+        {
+          message: 'Please tell about the nurseries. It is very interesting.',
+          trigger: 'change'
+        },
         {max: 700, message: 'Length should be 10 to 700', trigger: 'blur'}
       ]
     },
@@ -198,10 +220,22 @@ parasails.registerPage('dogs-home', {
     select: '',
     labelPosition: 'top',
     items: [
-      {name: 'Poale Ell Adam', src: 'https://d1lyb0stb8az10.cloudfront.net/Lux-2.jpg'},
-      {name: 'Poale Ell Bell', src: 'https://d1lyb0stb8az10.cloudfront.net/Lux-2018-11.jpg'},
-      {name: 'Poale Ell Bazhen', src: 'https://d1lyb0stb8az10.cloudfront.net/Adam-10m.jpg'},
-      {name: 'Poale Ell Barthalamew', src: 'https://d1lyb0stb8az10.cloudfront.net/Lux-2018.jpg'},
+      {
+        name: 'Poale Ell Adam',
+        src: 'https://d2e0ab19zxiehc.cloudfront.net/Lux-2.jpg'
+      },
+      {
+        name: 'Poale Ell Bell',
+        src: 'https://d2e0ab19zxiehc.cloudfront.net/Lux-2018-11.jpg'
+      },
+      {
+        name: 'Poale Ell Bazhen',
+        src: 'https://d2e0ab19zxiehc.cloudfront.net/Adam-10m.jpg'
+      },
+      {
+        name: 'Poale Ell Barthalamew',
+        src: 'https://d2e0ab19zxiehc.cloudfront.net/Lux-2018.jpg'
+      },
     ],
     litters: [],
     ratio: null,
@@ -281,10 +315,10 @@ parasails.registerPage('dogs-home', {
     ],
     map: [
       ['growth', {
-        src: 'https://d1lyb0stb8az10.cloudfront.net/Izmerit_holku.svg',
+        src: 'https://d2e0ab19zxiehc.cloudfront.net/Izmerit_holku.svg',
       }],
       ['hairless', {
-        src: 'https://d1lyb0stb8az10.cloudfront.net/Hairless_OR_Powderpuff.jpg',
+        src: 'https://d2e0ab19zxiehc.cloudfront.net/Hairless_OR_Powderpuff.jpg',
       }]],
   },
   virtualPages: true,
@@ -300,7 +334,8 @@ parasails.registerPage('dogs-home', {
     _.extend(this, SAILS_LOCALS);
 
     // Запрос для события list-*
-    io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {});
+    io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
+    });
 
     // Принимаем данные по событию list-*
     io.socket.on('list-dog', (data) => {
@@ -426,7 +461,8 @@ parasails.registerPage('dogs-home', {
     },
 
   },
-  mounted: async function () {},
+  mounted: async function () {
+  },
   computed: {
     i19p: {
       get: function () {
@@ -820,15 +856,15 @@ parasails.registerPage('dogs-home', {
       return _.sortBy(this.colors, field);
     },
 
-    beforeUpload(file) {
+    beforeUpload(file){
       const isJPG = file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < this.sizeLess;
       if (!isJPG) {
-        this.$message.error('Picture must be JPG format!');
+        this.$message.error('Изображение должно быть в формате jpg!');
       }
 
       if (!isLt2M) {
-        this.$message.error(`Picture size can not exceed ${this.sizeLess}MB!`);
+        this.$message.error(`Размер изображения не может превышать ${this.sizeLess}mb!`);
       }
       return isJPG && isLt2M;
     },
@@ -1104,7 +1140,7 @@ parasails.registerPage('dogs-home', {
 
     urlB(imgName) {
       const imageRequest = JSON.stringify({
-        bucket: 'paltos',
+        bucket: sails.config.uploads.bucket,
         key: imgName,
         edits: {
           grayscale: true,
@@ -1114,7 +1150,10 @@ parasails.registerPage('dogs-home', {
           }
         }
       });
-      return `${this.cloudFrontUrl}/${btoa(imageRequest)}`;
+
+      console.log('KKFRR_SS', btoa(imageRequest))
+
+      return `${sails.config.uploads.urlCloudFront}/${btoa(imageRequest)}`;
     },
     openAlert() {
       this.$alert('This is a message', 'Title', {

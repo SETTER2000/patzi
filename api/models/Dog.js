@@ -277,35 +277,9 @@ module.exports = {
 
                       parents и children атрибуты могут быть изменены с помощью
                       .addToCollection(), .removeFromCollection()и .replaceCollection()
-                    `
+                `
     },
 
-
-    // sire: {
-    //   model: 'dog',
-    //   description: ` У собаки может быть только один отец. `
-    // },
-    //
-    // dam:{
-    //   model: 'dog',
-    //   description: `  Однако также возможно иметь связь между двумя атрибутами в одной и той же модели.
-    //   Это называется рефлексивной ассоциацией .
-    //   Добавить пользователя № 12 в качестве родителя пользователя № 23
-    //   await User.addToCollection(23, 'parents', 12);
-    //   Найти пользователя № 12 и заполнить его детей
-    //   var userTwelve = await User.findOne(12).populate('children');
-    //   `
-    // },
-
-
-    // Добавить единственную рефлексивную ассоциацию
-    // bestFriend: {
-    //   model: 'dog',
-    // },
-    // Добавьте еще одну множественную рефлексивную ассоциацию, эту сквозную
-    // bookmarkedUsers: {
-    //   collection: 'dog'
-    // }
     // Добавьте одну сторону множественной рефлексивной ассоциации
     parents: {
       collection: 'dog',
@@ -327,8 +301,6 @@ module.exports = {
       collection: 'dog',
       via: 'parents'
     },
-
-
   },
 
   // получить предков для pedigree
@@ -428,14 +400,12 @@ module.exports = {
       return false;
     }
     dog = _.last(dog);
-    // console.log('DOGGG::: ', (dog && dog.label) ? dog.label : dog);
     // Создать массив идентификаторов родителей
     let parentsId = _.pluck(_.filter(dog.pedigree, {numConnections: 0}), 'dog_children');
     // Получить коллекцию родителей
     let parents = [_.find(dog.ancestors, {_id: parentsId[0]}), _.find(dog.ancestors, {_id: parentsId[1]})];
-
-    // console.log('parents: ', parents);
     dog.parents = parents;
+
     /**
      * Генерирует ссылки с параметрами изображения,
      * которое должен вернуть S3 для данного модуля

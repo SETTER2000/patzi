@@ -65,10 +65,5 @@ parasails.registerPage('homepage', {
     showPosts(){
       return  _.some(this.posts, 'rootPage', true);
     } ,
-    // getImageUrl(){
-    //   return   'https://d1lyb0stb8az10.cloudfront.net/root/root.jpg';
-    //   // return   'https://d1lyb0stb8az10.cloudfront.net/ChesterIMG_0500b.jpg';
-    // }
-
   }
 });

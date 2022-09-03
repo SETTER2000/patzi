@@ -1,12 +1,11 @@
 @footer-height: 40px;
 @container-md-max-width: 1100px;
-//@import url('https://fonts.googleapis.com/css?family=Alex+Brush|Amita|Fondamento|Italianno|Kurale|Medula+One|Merienda+One|Mr+De+Haviland|Poiret+One|Pompiere|Qwigley|Rouge+Script|Spicy+Rice|Unkempt|Wire+One&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Gabriela|Open+Sans+Condensed:300&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Oswald:300,500,600|Roboto:400,700');
 @import url('https://fonts.googleapis.com/css?family=Cormorant&display=swap');
+
 [v-cloak] {
   display: none;
-  //color: #13ce66;
 }
 
 html, body {
@@ -16,129 +15,11 @@ html, body {
   .pointer{
     cursor: pointer;
   }
-  //background: linear-gradient(to top right, #FDB171, #FD987D);
 }
-
-/*#header {
-  padding: 0 !important;
-}
-
-#header.header-scrolled {
-  //z-index: 10000;
-}*/
-
-/*header {
-  //header#sec-599b {
-  //  transform: translate(0, -80%);
-  //  transition: .25s;
-  //  transition-delay: 10s;
-  //}
-  //
-  //header#sec-599b:hover {
-  //  transform: translate(0%);
-  //  transition-delay: 3s;
-  //  transition: .25s;
-  //}
-
-  .main-menu {
-    padding-top: 10px;
-  }
-
-  .logo, .share {
-    position: relative;
-    display: inline-block;
-    height: 26px;
-    width: 122px;
-  }
-  .logo::after {
-    content: '';
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: -5px;
-    left: 0;
-    background: url("../images/logo.svg") no-repeat center;
-    background-size: contain;
-  }
-  .share::after {
-    content: '';
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: -5px;
-    left: 0;
-    background: url("../images/share.svg") no-repeat center;
-    background-size: contain;
-  }
-
-  .ru, .en {
-    position: relative;
-    display: inline-block;
-    height: 20px;
-    width: 95px;
-  }
-  .ru::after {
-    content: '';
-    width: 100%;
-    background: url("https://d1lyb0stb8az10.cloudfront.net/Flag_of_Russia.jpg") no-repeat center;
-    background-size: contain;
-  }
-  .en::after {
-    content: '';
-    width: 100%;
-    background: url("https://d1lyb0stb8az10.cloudfront.net/Engl-flag.jpg") no-repeat center;
-    background-size: contain;
-
-  }
-
-  a:not(.btn) {
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    &.nav-item {
-      // padding-left: 0px;
-      padding-right: 0px;
-      margin-right: 20px;
-      &:hover {
-        border-bottom-color: @border-lt-gray;
-      }
-      &.current {
-        border-bottom-color: @accent-teal;
-      }
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-    &.dropdown-toggle {
-      &:hover {
-        color: @accent-teal !important;
-      }
-    }
-  }
-
-  .dropdown-menu.account-menu {
-    left: auto;
-    right: 0px;
-  }
-  .dropdown-menu.account-menu {
-    left: auto;
-    right: 0;
-  }
-  .nav-menu ul {
-    margin: 16px 0 0 0;
-    box-shadow: 0px 0px 10px rgba(127, 137, 161, 0.25);
-  }
-  .nav-menu > li.menu-has-children.avatar {
-    margin-right: 40px;
-    //margin-top: -4px;
-  }
-
-}*/
-
 body {
   display: flex;
   flex-direction: column;
   height: 100vh; /* Avoid the IE 10-11 `min-height` bug. */
-
   // SVG ИКОНКИ САМОПАЛ
   .container-icon {
     position: relative;
@@ -153,10 +34,7 @@ body {
       position: absolute;
       overflow: visible;
     }
-
   }
-  // end SVG ИКОНКИ САМОПАЛ
-
   .groom {
     position: relative;
     display: inline-block;
@@ -171,7 +49,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    background: url("https://d1lyb0stb8az10.cloudfront.net/brush.svg") no-repeat center;
+    background: url("@{cloud-front-url}/brush.svg") no-repeat center;
     background-size: contain;
   }
 

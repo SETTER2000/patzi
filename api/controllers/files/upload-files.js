@@ -1,7 +1,7 @@
 module.exports = {
   friendlyName: 'Photo',
   description: 'Photo upload.',
-  files: ['file'], // именуем поле, через которое будет передоваться файл при загрузки
+  files: ['file'], // именуем поле, через которое будет передаваться файл при загрузки
   inputs: {
     file: {
       type: 'ref',

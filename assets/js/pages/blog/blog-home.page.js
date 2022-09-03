@@ -12,8 +12,6 @@ parasails.registerPage('blog-home', {
     centerDialogAdded: false,
     limit: 50,
     postCount: 0,
-
-    // posts: [{name: 'sadf', label: 'sdfsd'}],
     dialog: {},
     sizeLess: 20, // MB
     dialogVisible: false,
@@ -38,23 +36,6 @@ parasails.registerPage('blog-home', {
       dateBirth: [
         {type: 'date', required: true, message: 'Please pick a date', trigger: 'change'}
       ],
-      // dateBirthUpdate: [
-      //   { type:'string',required: true, message: 'Please pick a date', trigger: 'change'}
-      // ],
-      /*  registerNumber: [
-         {required: true, message: 'Please input register number', trigger: 'blur'},
-         {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'}
-       ],
-       region: [
-         {required: true, message: 'Please select Activity zone', trigger: 'change'}
-       ],
-       continent: [
-         {required: true, message: 'Please select your continent', trigger: 'change'}
-       ],
-      kennel: [
-         {required: true, message: 'Please select your kennel', trigger: 'change'}
-       ],
-       */
       subtitle: [
         {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
         {max: 2000, message: 'Length should be 10 to 2000', trigger: 'blur'}
@@ -150,8 +131,6 @@ parasails.registerPage('blog-home', {
     });
     // Принимаем данные по событию list-*
     io.socket.on('list-expert', data => {
-      // this.dataAll = this.seo;
-      // console.log('EXPERTS LIST:: ', data);
       this.experts = _.each(data.users, (t, ind) => {
         t.uSectionClass = `u-section-3-${ind + 1}`;
         t.active = (ind === 0);
@@ -178,7 +157,6 @@ parasails.registerPage('blog-home', {
   },
 
   filters: {
-
     trimString: function (value, count = 12) {
       if (!value) {
         return '';
@@ -193,7 +171,6 @@ parasails.registerPage('blog-home', {
       let r = '';
       const regex = /[ a-z]+/i;
       const regexRu = /[ а-яё]+/i;
-
       obj['lang'] = lang ? lang : 'en';
       r = lang === 'ru' ? regexRu.exec(value) : regex.exec(value);
       if (!_.isArray(r)) {
@@ -213,7 +190,6 @@ parasails.registerPage('blog-home', {
         return new Map(this.dic).get(this.me.preferredLocale);
       }
     },
-
   },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
@@ -226,7 +202,6 @@ parasails.registerPage('blog-home', {
 
     beforeUpload(file) {
       // Проверка размера входящего файла картинки не более (MB)
-
       const isJPG = file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < this.sizeLess;
 

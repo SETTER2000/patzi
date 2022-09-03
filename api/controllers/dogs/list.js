@@ -1,23 +1,17 @@
 module.exports = {
-
-
   friendlyName: 'List',
-
-
   description: 'Обрабатывает сокет подключение клиента и отдаёт весь список объектов коллекции.',
-
-
   exits: {
     success: {
       anyData: 'Вы подключились к комнате dog и слушаете событие list'
     },
     notFound: {
       description: 'There is no such object with such ID.',
-      responseType: 'notFound' // как раньше res.notFound(), сейчас это встроеная функция sails
+      responseType: 'notFound' // как раньше res.notFound(), сейчас это встроенная функция sails
     },
     forbidden: {
       description: 'The dog who makes this request does not have permission to delete this entry.',
-      responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
+      responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроенная функция sails
     },
     badRequest: {
       description: 'Error.',
@@ -31,23 +25,17 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-
-    // Бибилиотека Node.js
     const url = require('url');
     const moment = require('moment');
-
     const resizeX = 1424
       , resizeY = 800
       , gravity = 'Center'// NorthWest, North, NorthEast, West, Center, East, SouthWest, South, SouthEast
       , Q = 45 // Качество изображения (100 - 0) http://www.graphicsmagick.org/GraphicsMagick.html#details-compress
     ;
-    // Устанавливаем соответствующую локаль для даты, установленую пользователем.
+    // Устанавливаем соответствующую локаль для даты, установленную пользователем.
     moment.locale(this.req.me.preferredLocale);
-
     // Формат отображаемой даты
     let format = 'LL HH:mm';
-
-    // Have the socket which made the request join the "dog" room.
     // Подключить сокет, который сделал запрос, к комнате «dog».
     await sails.sockets.join(req, 'dog');
     await sails.sockets.join(req, 'stream');
@@ -59,9 +47,7 @@ module.exports = {
       .populate('kennel')
       .populate('children')
       .populate('parents')
-      .populate('owners')
-    ;
-
+      .populate('owners');
 
     /**
      * Генерирует ссылки с параметрами изображения,
