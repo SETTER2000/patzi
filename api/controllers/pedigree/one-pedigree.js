@@ -22,7 +22,6 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-    // пОДКЛЮЧИТЬ СОКЕТ, КОТОРЫЙ СДЕЛАЛ ЗАПРОС, К КОМНАТЕ «KENNEL».
     await sails.sockets.join(req, 'dog');
     let dog = await Dog.pedigree(inputs.id);
     if (!dog) {

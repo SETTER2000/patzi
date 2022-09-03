@@ -294,12 +294,7 @@ module.exports = {
     }
 
     let images = [];
-
-    // hAVE THE SOCKET WHICH MADE THE REQUEST JOIN THE "KENNEL" ROOM.
-    // пОДКЛЮЧИТЬ СОКЕТ, КОТОРЫЙ СДЕЛАЛ ЗАПРОС, К КОМНАТЕ «KENNEL».
     await sails.sockets.join(req, 'dog');
-
-
     // Проверяем есть ли фото
     if (inputs.fileList) {
       images = inputs.fileList.filter(o => !_.isNull(o));

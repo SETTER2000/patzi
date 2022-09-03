@@ -257,7 +257,6 @@ parasails.registerPage('kennels-home', {
 
     // Принимаем данные по событию list-*
     io.socket.on('list-kennel', (data) => {
-      // console.log('data KENNELS:', data);
       this.kennels = this.kennelsEditList = this.filterObjects = _.isNull(data.kennels) ? [] : data;
     });
 
@@ -484,14 +483,11 @@ parasails.registerPage('kennels-home', {
         address: this.ruleForm.address,
         phones: this.ruleForm.phones
       };
-
-      console.log('KENNEL before added::: ', data);
       await io.socket.post('/api/v1/kennels/create-kennel', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? (this.mesSuccess(this.i19p.success)) :
           (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
             (jwRes.statusCode >= 500 && data.code === 'E_UNIQUE') ? this.mesError(this.i19p.text500ExistsErr) :
               (jwRes.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-        // console.log('Сервер create-kennel ответил кодом ' + jwRes.statusCode + ' и данными: ', data);
         this.centerDialogAdded = false;
         this.loading.close();
         if (jwRes.statusCode === 200) {
@@ -528,9 +524,7 @@ parasails.registerPage('kennels-home', {
 
       data.coOwner = this.coOwnerId;
       data.dateCreate = this.updateForm.dateCreate;
-      // data.dateCreate = JSON.stringify(this.updateForm.dateCreate);
 
-      // console.log('DATA перед отправкой::: ', data);
       await io.socket.put('/api/v1/kennels/update-kennel', data, (data, jwRes) => {
         (jwRes.statusCode === 200) ? this.mesSuccess(this.i19p.successUpdate) :
           (jwRes.statusCode === 400) ? this.mesError(`${this.i19p.text400Err} Ошибка обновления.`) :
@@ -545,7 +539,6 @@ parasails.registerPage('kennels-home', {
         }
       });
     },
-
 
     // Обработчик события нажатия на кнопку|иконку Delete|ведро в карточке товара
     // Это кнопка вызывает модальное окно <modal> с <ajax-form>
@@ -593,8 +586,6 @@ parasails.registerPage('kennels-home', {
         this.options = [];
       }
     },
-
-
     async changeSelectContinent() {
       this.updateForm.country = {};
       this.updateForm.region = {};
@@ -602,17 +593,13 @@ parasails.registerPage('kennels-home', {
       this.ruleForm.country = null;
       this.ruleForm.region = null;
       this.ruleForm.city = null;
-
     },
-
-
     changeSelectCountry() {
       this.updateForm.region = {};
       this.updateForm.city = {};
       this.ruleForm.region = null;
       this.ruleForm.city = null;
     },
-
 
     // Реагирует на событие change в поле города|city
     changeSelectRegion(regionId) {

@@ -19,7 +19,7 @@ parasails.registerPage('kennel', {
       address: 'Hungary, Budapest',
       description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
     }],
-    dic:[
+    dic: [
       ['en', {
         textOneErr: `An error has occurred`,
         textTwoErr: `No comment added.`,
@@ -48,7 +48,7 @@ parasails.registerPage('kennel', {
         textOneErr: `Произошла ошибка`,
         textTwoErr: `Комментарий не добавлен.`,
         warnNoDogs: `Нет возможности создать помёт, пока отсутствует хотя бы одна пара собак.`,
-        warnNoKennel: `В данный момент не существует ни одного питомника в базе. 
+        warnNoKennel: `В данный момент не существует ни одного питомника в базе.
         Вам следует создать для начала хотя бы один питомник, что бы добавить собаку.`,
         text400Err: 'Ошибка. Не смог создать!',
         text404Err: 'Ошибка. Возможно у вас нет прав на удаление данного объекта!',
@@ -71,22 +71,12 @@ parasails.registerPage('kennel', {
     ],
   },
 
-  //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
-  //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
-  //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
     moment().locale(this.me.preferredLocale);
-    
-    console.log('KENNEL', this.kennel);
   },
-
-
   mounted: async function () {
   },
-
-
   filters: {
     getCreate: function (value, l, format) {
       if (!value) {
@@ -96,21 +86,20 @@ parasails.registerPage('kennel', {
       let formatNew = (!format) ? 'LLL' : format;
       return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
-    //Сантиметры в дюймы
+    // Сантиметры в дюймы
     getDin: function (value, l, format) {
       if (!value) {
         return '';
       }
       return (value * 0.393700).toFixed(1);
     },
-    //Киллограммы в фунты
+    // Килограммы в фунты
     getFunt: function (value, l, format) {
       if (!value) {
         return '';
       }
       return (value / 1000 * 2.20462).toFixed(1);
     },
-
     getAge: function (value, l, format) {
       if (!value) {
         return '';
@@ -121,8 +110,6 @@ parasails.registerPage('kennel', {
       return moment(value).preciseDiff(now);
     },
   },
-
-
   computed: {
     i19p: {
       get: function () {
@@ -130,7 +117,6 @@ parasails.registerPage('kennel', {
         return new Map(this.dic).get(this.me.preferredLocale);
       }
     },
-
     indexSlide: {
       get: function () {
         // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
@@ -140,13 +126,8 @@ parasails.registerPage('kennel', {
         // Возвращаем объект языка, соответствующий значению: this.me.preferredLocale
         this.indexPhoto = i;
       },
-
     }
   },
-
-  //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-  //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
-  //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     showSliderImages(indexPhoto) {
       this.fullscreenLoading = true;
@@ -168,8 +149,6 @@ parasails.registerPage('kennel', {
         .catch(_ => {
         });
     },
-
-
     mesSuccess(text = '') {
       this.$notify({
         title: 'Success',
@@ -178,8 +157,6 @@ parasails.registerPage('kennel', {
         type: 'success'
       });
     },
-
-
     mesWarning(text = '') {
       this.$notify({
         title: 'Warning',
@@ -188,8 +165,6 @@ parasails.registerPage('kennel', {
         type: 'warning'
       });
     },
-
-
     mesInfo(text = '') {
       this.$notify.info({
         title: 'Info',
@@ -197,8 +172,6 @@ parasails.registerPage('kennel', {
         offset: 100,
       });
     },
-
-
     mesError(text = '') {
       this.$notify.error({
         title: 'Error',
@@ -206,8 +179,6 @@ parasails.registerPage('kennel', {
         offset: 100,
       });
     },
-
-
     // Получить все награды собаки
     getAwards(command) {
     },
@@ -227,7 +198,6 @@ parasails.registerPage('kennel', {
         case 'c':
           this.goto('/kennels/chinese-crested');
           break;
-        //default:  this.setIndexPhotoSet(command);
       }
     },
     goTo(path) {
@@ -236,16 +206,9 @@ parasails.registerPage('kennel', {
     goTo2(path) {
       this.goto(path);
     },
-
     getLinkDetailDog(nameDog) {
       if (!nameDog) return;
       return `/chinese-crested/${nameDog.split(" ").join('-')}`;
     },
-  /*  goTo(path) {
-      window.location = `/${path}`;
-    },
-    goTo2(path) {
-      this.goto(path);
-    },*/
   }
 });
