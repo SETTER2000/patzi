@@ -254,16 +254,13 @@ parasails.registerPage('users-home', {
 
 
     io.socket.on('list', (data) => {
-      console.log('USER list::: ', data);
       this.users = _.get(data, 'users') ?
          _.each(data.users, user=>{ user.groups = _.pluck(user.groups, 'id');}) : this.users;
-      console.log('USER list this.users::: ', this.users);
     });
 
     // Принимаем данные по событию list-*
     io.socket.on('list-continent', (data) => {
       this.continents = data.continents;
-      console.log('  this.continents ::: ', this.continents);
     });
 
     // Получаем данные для селектов в форме

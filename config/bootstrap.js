@@ -79,7 +79,7 @@ module.exports.bootstrap = async function () {
     isAdmin: false,
     isSuperAdmin: false,
     preferredLocale: 'ru',
-    avatar:'https://d2e0ab19zxiehc.cloudfront.net/avatar_olga.jpg',
+    avatar:'https://d1lyb0stb8az10.cloudfront.net/avatar_olga.jpg',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin),
     gravatar: await sails.helpers.gravatar.getAvatarUrl('vasef@mail.ru')
   }).fetch();
@@ -91,7 +91,7 @@ module.exports.bootstrap = async function () {
     fullNameEn:await sails.helpers.translitWord.with({str: 'Елена Сова'}) ,
     isAdmin: false,
     preferredLocale: 'ru',
-    avatar:'https://d2e0ab19zxiehc.cloudfront.net/sova.jpg',
+    avatar:'https://d1lyb0stb8az10.cloudfront.net/sova.jpg',
     password: await sails.helpers.passwords.hashPassword(sails.config.custom.passwordSuperAdmin)
   }).fetch();
 

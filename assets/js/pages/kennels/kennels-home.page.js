@@ -49,7 +49,7 @@ parasails.registerPage('kennels-home', {
     users: [],
     state1: '',
     selectedKennel: undefined,
-    url: 'https://d2e0ab19zxiehc.cloudfront.net/Continents.jpg',
+    url: 'https://d1lyb0stb8az10.cloudfront.net/Continents.jpg',
     fit: 'cover',
     state2: '',
     options: [],

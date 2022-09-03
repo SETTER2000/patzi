@@ -386,7 +386,7 @@ parasails.registerPage('titles-home', {
     },
 
     getLinkFlag(country){
-       return `https://d2e0ab19zxiehc.cloudfront.net/flags/${country}.jpg`;
+       return `https://d1lyb0stb8az10.cloudfront.net/flags/${country}.jpg`;
     } ,
 
     // Create Title
