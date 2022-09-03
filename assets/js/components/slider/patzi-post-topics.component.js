@@ -10,40 +10,28 @@
  */
 
 parasails.registerComponent('patziPostTopics', {
-  //  ╔═╗╦═╗╔═╗╔═╗╔═╗
-  //  ╠═╝╠╦╝║ ║╠═╝╚═╗
-  //  ╩  ╩╚═╚═╝╩  ╚═╝
   props: [
     'objData',
     'topics'
   ],
-
-  //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
-  //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
-  //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: function () {
     return {
       styleObject: {
-        color: '#ff080f',
-        // fontSize: '103px'
+        color: '#ff080f'
       }
     };
   },
-
-  //  ╦ ╦╔╦╗╔╦╗╦
-  //  ╠═╣ ║ ║║║║
-  //  ╩ ╩ ╩ ╩ ╩╩═╝
-  template: ` 
+  template: `
  <section   class="u-carousel  u-slide u-valign-middle u-block-fbe7-1" src="" id="carousel_c5ca" data-interval="5000" data-u-ride="carousel">
     <ol class="u-absolute-hcenter u-carousel-indicators u-block-fbe7-5">
     <template v-for="(i) in topics.length">
       <li data-u-target="#carousel_c5ca" class="u-grey-30"  :data-u-slide-to="i - 1"></li>
       </template>
     </ol>
-    <div class="u-carousel-inner" role="listbox">  
+    <div class="u-carousel-inner" role="listbox">
      <patzi-post-topic-item v-for="(topic,ind) of topics" @select-topic="selectPosts" :obj-data="objData" :topic="topic" :key="topic.id" ></patzi-post-topic-item>
     </div>
-    
+
     <a class="u-absolute-vcenter u-carousel-control u-carousel-control-prev u-text-grey-30 u-block-fbe7-3" href="#carousel_c5ca" role="button" data-u-slide="prev">
         <span aria-hidden="true">
           <svg viewBox="0 0 477.175 477.175"><path d="M145.188,238.575l215.5-215.5c5.3-5.3,5.3-13.8,0-19.1s-13.8-5.3-19.1,0l-225.1,225.1c-5.3,5.3-5.3,13.8,0,19.1l225.1,225
@@ -60,26 +48,12 @@ parasails.registerComponent('patziPostTopics', {
     </a>
   </section>
 `,
-
-
-  //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
-  //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
-  //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    console.log('this.objData888::: ', this.objData);
-    console.log('this.topics ***::: ', this.topics.length);
-
-
-    // this.updateChart(this.$refs.$wrapper, _.sortBy(this.objData.data,'label'));
     this.data = this.objData.data ? this.objData.data : this.data;
-
   },
-
-
   mounted: async function () {
     this.updateStyle(this.$refs.img, this.topics.topicBackground);
   },
-
   beforeDestroy: function () {
     //...
   },
@@ -92,9 +66,6 @@ parasails.registerComponent('patziPostTopics', {
     },
 
   },
-  //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-  //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
-  //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     selectPosts(id,dateReceiving) {
       console.log('ID::; ', id);
@@ -102,13 +73,10 @@ parasails.registerComponent('patziPostTopics', {
       this.$emit('select-posts', {id:id, dateReceiving:dateReceiving});
     },
     updateStyle(wrapper, objData) {
-      // console.log('wrapper::: ', wrapper);
       if (!wrapper) {
         return;
       }
-      // console.log('objData -- 9999 :: ', objData);
       let img = _.last(_.pluck(objData, 'imageSrc'));
-      // console.log('imm:', img);
       (img && img.length) > 0 ? $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
     }
   }
