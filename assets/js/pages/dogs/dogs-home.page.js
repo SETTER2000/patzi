@@ -1140,7 +1140,7 @@ parasails.registerPage('dogs-home', {
 
     urlB(imgName) {
       const imageRequest = JSON.stringify({
-        bucket: sails.config.uploads.bucket,
+        bucket: 'paltos',
         key: imgName,
         edits: {
           grayscale: true,

@@ -96,18 +96,8 @@ parasails.registerComponent('patziPostHeader', {
                     <el-button  @click="openEditDialog()" type="primary" icon="el-icon-edit" circle></el-button>
                     <el-button type="warning" @click="toggle" icon="el-icon-s-operation" circle></el-button>
                     <el-button  @click="removeItem()" type="danger" icon="el-icon-delete" circle></el-button>
-
                     </template>
                 </el-row>
-                    <div class="fb-share-button"
-                             :data-href="objData.canonical"
-                             data-layout="button_count"
-                             data-size="large">
-                            <a target="_blank"
-                               :href="getUrlShare()"
-                               class="fb-xfbml-parse-ignore"></a>
-                        </div>
-                <!--<a href="#" class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1" data-animation-name="rollIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">More</a>-->
               </div>
             </div>
           </div>
@@ -115,13 +105,8 @@ parasails.registerComponent('patziPostHeader', {
       </div>
     </div>
   </section>
-
 `,
 
-
-  //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
-  //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
-  //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
     // Принимаем данные по событию list-*
     io.socket.on('post-position', data => {
@@ -159,16 +144,11 @@ parasails.registerComponent('patziPostHeader', {
       if (!value) {
         return '';
       }
-      // console.log('format::: ', format);
       moment.locale(l);
       let formatNew = _.isEmpty(format) ? 'LLL' : format;
       return (moment(value).format(formatNew)) ? moment(value).format(formatNew) : value;
-      // return (moment.parseZone(value).format(formatNew)) ? moment.parseZone(value).format(formatNew) : value;
     },
   },
-  //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-  //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
-  //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     openEditDialog() {
       this.$emit('editpost', this.post);
@@ -196,10 +176,6 @@ parasails.registerComponent('patziPostHeader', {
       await io.socket.put(`/api/v1/posts/update-position-img`, data, (data, jwRes) => {
         // console.log('Сервер update-position-img ответил кодом ' + jwRes.statusCode + ' и данными: ', data);
       });
-      // wrappers.map((wrapper, ind) => {
-      //   let img = (objData && objData.length >= 1) ? objData[ind].imageSrc : '';
-      //   img ? $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
-      // });
     },
     toggle() {
       this.showRule = !this.showRule;

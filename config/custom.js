@@ -22,9 +22,9 @@ module.exports.custom = {
    * > but it can also be used for user-uploaded images, webhooks, etc.      *
    *                                                                         *
    **************************************************************************/
-  baseUrl: 'http://localhost:1337',
-  cloudFrontUrl: 'https://d1lyb0stb8az10.cloudfront.net',
-  pathPhotoS3: 'https://d1lyb0stb8az10.cloudfront.net',
+  baseUrl: process.env.PTZ_BASEURL,
+  cloudFrontUrl: process.env.CLOUD_FRONT_URL,
+  pathPhotoS3: process.env.CLOUD_FRONT_URL,
 
   /**************************************************************************
    *                                                                         *

@@ -50,7 +50,7 @@ module.exports = {
       if (sails.config.environment === 'production') {
         inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
           const imageRequest = JSON.stringify({
-            bucket: sails.config.uploads.bucket,
+            bucket: 'paltos',
             key: image.fd,
             edits: inputs.edits
           });
@@ -70,7 +70,7 @@ module.exports = {
         obj[inputs.field] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? await obj[inputs.field].map((img, i) => {
           if (sails.config.environment === 'production') {
             const imageRequest = JSON.stringify({
-              bucket: sails.config.uploads.bucket,
+              bucket: 'paltos',
               key: img.fd,
               edits: inputs.edits
             });

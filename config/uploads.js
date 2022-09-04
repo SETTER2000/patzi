@@ -42,5 +42,8 @@ module.exports.uploads = {
   key: process.env.key,
   region: process.env.region,
   secret: process.env.secret,
+  headers:{
+    'x-amz-acl':'public-read'
+  },
   urlCloudFront: process.env.CLOUD_FRONT_URL,
 };

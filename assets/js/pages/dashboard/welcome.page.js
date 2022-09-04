@@ -84,7 +84,7 @@ parasails.registerPage('welcome', {
 
     urlB() {
       const imageRequest = JSON.stringify({
-       bucket: sails.config.uploads.bucket,
+       bucket: 'paltos',
         key: 'banner-img.jpg',
         edits: {
           // grayscale: true,

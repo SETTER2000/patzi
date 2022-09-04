@@ -1,12 +1,6 @@
 module.exports = {
-
-
   friendlyName: 'Download photo',
-
-
   description: 'Скачать файл фотографии (возвращая поток).',
-
-
   inputs: {
     id: {
       description: 'Идентификатор, чье фото мы скачиваем.',
@@ -14,8 +8,6 @@ module.exports = {
       required: true
     }
   },
-
-
   exits: {
     success: {
       outputDescription: 'The streaming bytes of the specified user\'s photo.',
@@ -29,30 +21,13 @@ module.exports = {
     }
   },
 
-
   fn: async function (inputs) {
-
     let user = await User.findOne({id: inputs.id});
-
+    console.log('FOOOF USER:::: ', user)
     if (!user) {
       throw 'notFound';
     }
 
-
-    /**
-     * ПЕРЕВЕРНУЛИ: === -> !== , || -> &&,  _.any -> !_.any
-     * Так что теперь мы говорим:
-     * "Если вы не являетесь владельцем фото и не один из ваших друзей тоже,
-     * то это означает, что вам запрещено видеть эту вещь.
-     */
-    // if (this.req.me.id !== user.owner && !_.any(user.friends, {id: user.owner})) {
-    //   throw 'forbidden';
-    // }
-
-    //************************************//
-    // **** ФОРМИРУЕМ ЗАГРУЗКУ ФАЙЛА **** //
-    //************************************//
-    // Set the mime type for the response
     // Это устанавливает mime тип ответа
     this.res.type(user.avatarMime);
 
