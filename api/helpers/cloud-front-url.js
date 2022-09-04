@@ -52,11 +52,11 @@ module.exports = {
       if (sails.config.environment === 'production') {
         inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
           const imageRequest = JSON.stringify({
-            bucket: process.env.S3_BUCKET,
+            bucket: sails.config.uploads.bucket,
             key: image.fd,
             edits: inputs.edits
           });
-          image.imageSrc = `${process.env.CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
+          image.imageSrc = `${sails.config.uploads.CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
           return image;
         }) : '';
       } else {

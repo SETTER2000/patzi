@@ -39,7 +39,7 @@ module.exports.uploads = {
 
   // My
   bucket: process.env.Bucket,
-  key: process.env.key,
+  AWS_KEY: process.env.key,
   region: process.env.region,
   secret: process.env.secret,
   CLOUD_FRONT_URL: process.env.CLOUD_FRONT_URL,

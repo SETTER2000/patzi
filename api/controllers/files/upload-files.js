@@ -27,7 +27,7 @@ module.exports = {
     const through2 = require('through2');
     const skp = require('@setter/skp')(
       {
-        key: sails.config.uploads.key,
+        key: sails.config.uploads.AWS_KEY,
         region: sails.config.uploads.region,
         secret: sails.config.uploads.secret,
         bucket: sails.config.uploads.bucket
