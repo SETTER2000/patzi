@@ -23,7 +23,6 @@ module.exports = {
 
   fn: async function (inputs) {
     let user = await User.findOne({id: inputs.id});
-    console.log('FOOOF USER:::: ', user)
     if (!user) {
       throw 'notFound';
     }

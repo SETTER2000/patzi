@@ -56,12 +56,7 @@ module.exports = {
             key: image.fd,
             edits: inputs.edits
           });
-
           image.imageSrc = `${CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
-          console.log('IMGSRC 58::: ', img.imageSrc);
-          // console.log('process.env.CLOUD_FRONT_URL 59::: ', process.env.CLOUD_FRONT_URL);
-          // console.log('sails.config.uploads.bucket 60::: ', sails.config.uploads.bucket);
-          // console.log('${CLOUD_FRONT_URL}::: ', ${CLOUD_FRONT_URL});
           return image;
         }) : '';
       } else {
@@ -81,7 +76,7 @@ module.exports = {
               key: img.fd,
               edits: inputs.edits
             });
-            img.imageSrc = `${sails.config.uploads.CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
+            img.imageSrc = `${CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
           } else {
             i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
             img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${objId}/${inputs.field}/${i}`) : '';

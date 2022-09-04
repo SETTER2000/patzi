@@ -1,12 +1,6 @@
 module.exports = {
-
-
   friendlyName: 'Create dog',
-
-
   description: 'Создаём, добавляем новую собаку.',
-
-
   inputs: {
     label: {
       type: 'string',
@@ -15,8 +9,6 @@ module.exports = {
       В рамках всей коллекции это поле не может быть сделано уникальным, только проверка имени вместе
       с названием питомника может однозначно установить уникальность собаки в базе.`
     },
-
-
     letter: {
       type: 'string',
       description: `Буква помёта к которому пренадлежит собака.
@@ -24,211 +16,150 @@ module.exports = {
       В случаи когда дата рождения щенков одного помёта разная.
       (например в 23:00 первый родился и через 2 часа второй. Помёт один, а дата рождения разная.).
       Если буква не указана, то автоматически берётся первая буква имени собаки.`,
-      //required: true,
     },
-
     federations: {
       type: 'ref',
       description: `Массив объектов содержащий ID федерации и рег. номер.`,
       example: ` [ { "key": "", "value": "", "registerNumber": "1212", "federationId": 0 }, { "key": 1598060284550, "value": "", "federationId": 1, "registerNumber": "788" } ]`,
     },
-
     owner: {
       type: 'string',
       description: `Кто является владельцем собаки. (ID)`,
     },
-
-
     fileList: {
       type: 'ref',
       description: 'Массив с файлами данных о загруженных файлах.'
     },
-
-
     subtitle: {
       type: 'string',
       description: 'Дополнительная информация. Описание питомника.',
       maxLength: 700
     },
-
-
     showTeeth: {
       type: 'boolean',
       description: `Флаг видимости блока зубов собаки. Виднен или нет блок на сайте. По умолчанию не виден.`
     },
-
-
     see: {
       type: 'boolean',
       defaultsTo: true,
       description: `Флаг видимости собаки. Видна или нет. По умолчанию не видна.`
     },
-
     allowEdit: {
       type: 'boolean',
       description: `Флаг. При установки заводчиком в true, даёт возможность владельцу
       редактировать собаку.`
     },
-
     headerVideoShow: {
       type: 'boolean',
       description: `Флаг. Виден видео-хедер или нет`
     },
-
-
     headerVideo: {
       type: 'string',
       example: 'https://youtu.be/RPp6p73ria4',
       description: 'Код видео из ютуба для показа в хедере собаки'
     },
-
-
     sire: {
       type: 'string',
       description: 'Отец.',
       maxLength: 80
     },
-
-
     dam: {
       type: 'string',
       description: 'Мать.',
       maxLength: 80
     },
-
-    // winner: {
-    //   type: 'boolean',
-    //   defaultsTo: false,
-    //   description: `Флаг устанавливается, если собака стала Чемпионом Мира.`
-    // },
-
     saleDescription: {
       type: 'string',
       description: `Рекомендации к продаже. Сопроводительный текст, который будет виден на странице
        продаж для данной собаки.`,
       maxLength: 700
     },
-
-
     dateBirth: {
       type: 'string',
       required: true,
       description: 'Дата рождения.'
     },
-
     dateDeath: {
       type: 'string',
       description: 'Дата смерти.'
     },
-
     sale: {
       type: 'boolean',
       defaultsTo: false,
       description: `Флаг продажи собаки. Проадётся или нет. По умолчанию не продаётся.`
     },
-
-
     currency: {
       type: 'string',
       description: `Валюта продажи. Валюта за катоую можно купить собаку.`,
       example: 'dollar, рубль, euro',
       isIn: ['dollar', 'рубль', 'euro'],
-      // required: true,
       minLength: 4,
       maxLength: 6
     },
-
-
     price: {
       type: 'number',
-      // required: true,
       description: 'Цена продажи собаки.'
     },
-
-
     kennel: {
       type: 'string',
       description: 'Идентификатор питомника'
     },
-
-
     gender: {
       type: 'string',
       required: true,
       example: 'sire, dam',
       description: 'Пол собак. В смысле не пол собаки, а конец есть или нет.'
     },
-
-
     nickname: {
       type: 'string',
       description: 'Кличка, ласковое имя.'
     },
-
-
     birthWeight: {
       type: 'number',
       description: 'Вес. В граммах при рождении.',
       example: 170
     },
-
-
     weight: {
       type: 'number',
       description: 'Вес. В граммах.',
       example: 4500
     },
-
-
     growth: {
       type: 'number',
       description: 'Рост. В сантиметрах.',
       example: 30
     },
-
-
     type: {
       type: 'string',
       description: 'Тип. Возможны два варианта.',
       example: 'hairless, powderpuff',
     },
-
     color: {
       type: 'string',
       description: 'Цвет.',
-      // example:'hairless, powderpuff',
     },
-
     stamp: {
       type: 'string',
       description: 'Клеймо. Номер собаки в реестре.',
-      // example:'hairless, powderpuff',
     },
-
-
     canine: {
       type: 'string',
       description: 'Клыки. Количество клыков.',
       example: '4',
       defaultsTo: '4'
     },
-
     teethCountTop: {
       type: 'string',
       description: 'Количество зубов вверху.',
       example: '6',
       defaultsTo: '6'
     },
-
-
     teethCountBottom: {
       type: 'string',
       description: 'Количество зубов внизу.',
       example: '6',
       defaultsTo: '6'
     },
-
-
     bite: {
       type: 'string',
       description: 'Прикус.',
@@ -236,17 +167,11 @@ module.exports = {
       isIn: ['перекус', 'недокус', 'ножнецеобразный'],
       defaultsTo: 'ножнецеобразный'
     },
-
-
     dogTests: {
       type: 'string',
       description: 'Тесты собаки.'
     },
-
-
   },
-
-
   exits: {
     success: {
       outputDescription: 'Information about the newly created record.',
@@ -260,17 +185,14 @@ module.exports = {
       description: 'No image upload was provided.',
       responseType: 'badRequest'
     },
-
     dogAlreadyInUse: {
       statusCode: 409,
       description: 'The specified dog name is already in use.',
     },
-
     dogAlreadyInUseRU: {
       statusCode: 409,
       description: 'Указанное имя собаки уже используется.',
     },
-
     dogAddedUse: {
       statusCode: 409,
       description: `You do not have the right to add a dog to this kennel,
@@ -283,7 +205,6 @@ module.exports = {
     },
   },
 
-
   fn: async function (inputs, exits) {
     const req = this.req;
     const moment = require('moment');
@@ -292,7 +213,6 @@ module.exports = {
     if (!req.isSocket) {
       throw 'badRequest';
     }
-
     let images = [];
     await sails.sockets.join(req, 'dog');
     // Проверяем есть ли фото
@@ -308,29 +228,19 @@ module.exports = {
         delete img.field;
       });
     }
-
-
     // Получаем объект питомника
     let kennel = await Kennel.findOne({id: inputs.kennel})
       .populate('breeder')
       .populate('owners');
-
     // Если ты не админ и не суперадмин, то проверяем являешься ли ты
     // владельцем питомника или совладельцем.
     if (!req.me.isAdmin && !req.me.isSuperAdmin) {
-      console.log('1 - one');
       if (kennel.breeder.id !== req.me.id || !_.sample(kennel.owners, {'id': req.me.id})) {
-
-        console.log('2 - one');
         throw (req.me.preferredLocale === 'ru') ? 'dogAddedUseRU' : 'dogAddedUse';
       }
     }
-
-
     // Удаляем название питомника из имени собаки
     inputs.label = inputs.label.replace(kennel.label, '');
-
-
     // Проверка существования такой же собаки.
     let conflictingDog = await Dog.findOne({
       kennel: inputs.kennel,

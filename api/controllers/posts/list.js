@@ -1,9 +1,5 @@
 module.exports = {
-
-
   friendlyName: 'List',
-
-
   description: 'List posts.',
   inputs: {
     num: {
@@ -11,7 +7,6 @@ module.exports = {
       description: `Кол-во постов выдаваемых по запросу.`
     },
   },
-
   exits: {
     success: {
       anyData: 'Вы подключились к комнате post и слушаете событие list'
@@ -30,7 +25,6 @@ module.exports = {
     }
   },
 
-
   fn: async function (inputs, exits) {
     let req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
@@ -40,7 +34,6 @@ module.exports = {
     // Have the socket which made the request join the "post" room.
     // Подключить сокет, который сделал запрос, к комнате «post».
     await sails.sockets.join(req, 'post');
-
     // Выбираем весь список объектов данной коллекции.
     let posts = await Post.find({see:true})
       .populate('experts')
@@ -48,9 +41,6 @@ module.exports = {
         {rootPage: 'DESC'},
         {dateEvent: 'DESC'}
       ]);
-
-
-
     /**
      * Генерирует ссылки с параметрами изображения,
      * которое должен вернуть S3 для данного модуля
@@ -76,18 +66,13 @@ module.exports = {
         resize: {}
       }
     });
-
-
     await posts.map(async (post) => {
       post.detail = post.label ? `/post/${post.id}` : '';
       post.imagesArrUrl = _.pluck(post.images, 'imageSrc'); // Массив url картинок для просмотра в слайдере
       // post.cover = post.imagesArrUrl[0]; // Обложка альбома
       return post;
     });
-
-             console.log('LIST POSTS: ', posts);
     await sails.sockets.broadcast('post', 'list-post', posts);
-    // Respond with view.
     return exits.success();
 
   }

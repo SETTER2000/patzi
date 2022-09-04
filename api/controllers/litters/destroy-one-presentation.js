@@ -1,12 +1,6 @@
 module.exports = {
-
-
   friendlyName: 'Destroy one presentation',
-
-
   description: '',
-
-
   inputs: {
     id: {
       type: 'string',
@@ -18,10 +12,7 @@ module.exports = {
     index:{
       type:'string'
     }
-
   },
-
-
   exits: {
     notFound:{
       description: 'Не существует такой вещи с таким ID.',
@@ -32,15 +23,7 @@ module.exports = {
       responseType: 'forbidden' // как раньше res.forbidden(), сейчас это встроеная функция sails
     }
   },
-
-
-
   fn: async function (inputs, exits) {
-
-    console.log('index:::' , inputs.index);
-    console.log('ID:::' , inputs.id);
-    console.log('OBJ:::' , inputs.obj);
-
     let litter = await Litter.findOne({
       id: inputs.id
     });
@@ -48,12 +31,8 @@ module.exports = {
       throw 'notFound';
     }
     await  litter.presentation.splice(inputs.index,1);
-
     await Litter.updateOne({id: inputs.id})
       .set({presentation:  litter.presentation});
-
-
     return exits.success();
   }
-
 };

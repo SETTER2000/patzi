@@ -1,41 +1,29 @@
 module.exports = {
-
-
   friendlyName: 'Update cover album',
-
-
   description: 'Обновляет обложку альбома.',
-
-
   inputs: {
     collectionName: {
       type: 'string',
       description: `Имя коллекции.`,
       required: true
     },
-
-
     field: {
       type: 'string',
       description: `Поле где находится массив объектов фотографий.`,
       required: true
     },
-
     cover: {
       type: 'string',
-      description: `Ключ картинки в массиве фоторгафий привязанных к объекту коллекции. 
+      description: `Ключ картинки в массиве фоторгафий привязанных к объекту коллекции.
       Согласно которому это фото будет обложкой.`,
       required: true
     },
-
     id: {
       type: 'string',
       description: `Идентификатор помёта.`,
       required: true
     }
   },
-
-
   exits: {
     success: {
       // Информация о вновь созданной записи
@@ -52,21 +40,13 @@ module.exports = {
     }
   },
 
-
   fn: async function (inputs, exits) {
     const req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
       throw 'badRequest';
     }
-
     await sails.sockets.join(req, 'files');
-
-      console.log('1',inputs.id);
-      console.log('2',inputs.cover);
-      console.log('3',inputs.field);
-      console.log('4',inputs.collectionName);
-
     let updateObject =  await sails.helpers.imgCover.with({
       id: inputs.id,
       cover: inputs.cover,
@@ -74,10 +54,6 @@ module.exports = {
       collectionName: inputs.collectionName
     });
     await sails.sockets.broadcast('files', 'update-cover');
-
     return exits.success();
-
   }
-
-
 };

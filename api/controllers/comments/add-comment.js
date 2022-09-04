@@ -60,7 +60,7 @@ module.exports = {
       type: 'string',
       example: 'puppies',
       required: true,
-      description: `Наименование поля в объекте экземпляра модуля в котором содержится контент к 
+      description: `Наименование поля в объекте экземпляра модуля в котором содержится контент к
       которому относится комментарий.`
     },
 
@@ -119,13 +119,8 @@ module.exports = {
     if (!newComment) {
       throw 'badRequest';
     }
-
     // Добавить новый комментарий newComment.id в группу 'admin'
     let newCommentary = inputs.parent ?  await Commentary.addToCollection(inputs.parent, 'child', newComment.id) : '';
-    console.log('newCommentary::: ', newCommentary);
-
-
-    // console.log(`MODULE ::: ${inputs.nameModule}`, inputs.nameModule);
     switch (inputs.nameModule) {
       case 'Litter':
         module = await Litter.findOne({id: inputs.instanceModuleId});
@@ -135,24 +130,16 @@ module.exports = {
         await Litter.updateOne({id: inputs.instanceModuleId}).set(module);
         break;
     }
-
-
     let count = module[inputs.field].filter(ob => ob.indexPhotoSet === inputs.indexPhotoSet);
     count = _.last(_.pluck(count, 'countComment'));
-    // console.log('NEW MOD:: ', module[inputs.field]);
-    // console.log(`count ::::`, count);
 
     /**
      * Добавляет аватар к коментариям и возвращает собранный массив объектов комментариев согласно
      * идентификатору экземпляра модуля и его полю к которому относятся комментарии
      */
     let comment = await sails.helpers.oneComment(newComment.id);
-
-    // console.log('Return COMMENT: ', comment);
     // Рассылаем данные всем подписанным на событие add-* данной комнаты.
     await sails.sockets.broadcast('litter', 'add-comment', {comments: comment, countComment: count});
-
     return exits.success();
-
   }
 };

@@ -1,12 +1,6 @@
 module.exports = {
-
-
   friendlyName: 'Update description img',
-
-
   description: '',
-
-
   inputs: {
     id: {
       type: 'string',
@@ -25,10 +19,7 @@ module.exports = {
       type: 'string',
       description: `Время съёмки.`
     },
-
   },
-
-
   exits: {
     success: {
       outputDescription: 'Information about the newly created record.',
@@ -42,43 +33,27 @@ module.exports = {
       description: 'No image upload was provided.',
       responseType: 'badRequest'
     },
-
     dogAlreadyInUse: {
       statusCode: 409,
       description: 'The specified dog name is already in use.',
     },
-
     dogAlreadyInUseRU: {
       statusCode: 409,
       description: 'Указанное имя собаки уже используется.',
     },
   },
 
-
   fn: async function (inputs, exits) {
     const req = this.req;
     if (!req.isSocket) {
       throw 'badRequest';
     }
-
-    console.log('IDD: ' , inputs.id);
-    console.log('inputs.photoId: ' ,inputs.photoId);
     let dog = await Dog.findOne(inputs.id);
     _.each(dog.images, img => {
       if(img.id === inputs.photoId) {img.description = inputs.description; img.dateTaken = inputs.dateTaken;}
     });
-    // console.log('IN:: ', inputs.removeImage);
-    // let removeImage = _.remove(dog.images, img => _.indexOf(inputs.removeImage, img.id) > -1);
-    // console.log('removeImage::: ', removeImage);
-    // console.log('dog.images::: ', dog.images);
-
     let updateDog = await Dog.updateOne({id: inputs.id})
       .set({images: dog.images});
-
-
     return exits.success();
-
   }
-
-
 };

@@ -1,12 +1,6 @@
 module.exports = {
-
-
   friendlyName: 'Destroy one title',
-
-
   description: 'Удалить один титул у данной собаки.',
-
-
   inputs: {
     id: {
       type: 'string',
@@ -24,8 +18,6 @@ module.exports = {
       required: true
     }
   },
-
-
   exits: {
     success: {
       anyData: 'Вы подключились к комнате dog и слушаете событие list'
@@ -44,9 +36,7 @@ module.exports = {
     }
   },
 
-
   fn: async function (inputs, exits) {
-
     let req = this.req;
     // Убедитесь, что это запрос сокета (не традиционный HTTP)
     if (!req.isSocket) {
@@ -55,42 +45,20 @@ module.exports = {
     //
     // Подключить сокет, который сделал запрос, к комнате «title».
     await sails.sockets.join(req, 'title');
-    console.log('inputs данные для удаления:::: ', inputs);
-
     if (_.isEmpty(inputs.dogId) || _.isEmpty(inputs.id) || _.isEmpty(inputs.dateReceiving)) {
       throw 'badRequest';
     }
-
-
     let dog = await Dog.findOne(inputs.dogId);
     if (!dog) {
       console.error('Ошибка. Не смог выбрать обект dog!');
       throw 'badRequest';
     }
-
     dog.titleDog = dog.titleDog.filter(td => !_.isNull(td));
     let evens = _.remove(dog.titleDog, (title) => {
       return ((inputs.dateReceiving === title.dateReceiving) && (inputs.id === title.id));
     });
-
     let update = await Dog.updateOne({id: inputs.dogId})
       .set({titleDog: dog.titleDog});
-
-
-    // // получить все титулы собаки
-    // let titlesDog = await sails.helpers.getDogTitles.with({id: dog.id});
-    // // объеденить титулы с объектами титулов собаки
-    // dog = await sails.helpers.mergerTitlesAndDogTitles.with({dog: dog, titlesDog: titlesDog});
-    //
-    // // console.log('DOG::; ', tileIds);
-    // // console.log('titles::; ', titles);
-    //
-    // await sails.sockets.broadcast('title', 'list-titlesDog', dog);
-
-    // Respond with view.
     return exits.success();
-
   }
-
-
 };

@@ -1,53 +1,39 @@
 module.exports = {
-
-
   friendlyName: 'Destroy one comment',
-
   description: 'Удалить комментарий.',
-
-
   inputs: {
     id: {
       type: 'string',
       required: true
     },
-
     nameModule: {
       type: 'string',
       example: 'Litter',
       required: true,
       description: `Наименование модуля. Например модуль Litter.`
     },
-
-
     instanceModuleId: {
       type: 'string',
       example: '5d5fc8aac1717d2778adbfae',
       required: true,
       description: `Идентификатор экземпляра модуля в котором оставлен комментарий. Например в модуле Litter
-      (помёты) их может быть несколько, следовательно кажый помёт имеет свой ID, он и 
+      (помёты) их может быть несколько, следовательно кажый помёт имеет свой ID, он и
       записывается здесь (Litter.id).`
     },
-
-
     indexPhotoSet: {
       type: 'string',
       example: '2911bfggfhahdd',
       required: true,
       description: `Хэш-код объекта массива.`
     },
-
-
     field: {
       type: 'string',
       example: 'puppies',
       required: true,
-      description: `Наименование поля в объекте экземпляра модуля в котором содержится контент к 
+      description: `Наименование поля в объекте экземпляра модуля в котором содержится контент к
       которому относится комментарий.`
     },
   },
-
-
   exits: {
     notFound: {
       description: 'Не существует такого объекта с таким ID.',
@@ -63,7 +49,6 @@ module.exports = {
     },
   },
 
-
   fn: async function (inputs, exits) {
     let req = this.req;
     if (!req.me.isSuperAdmin && !req.me.isAdmin) {
@@ -78,14 +63,11 @@ module.exports = {
         throw 'forbidden';
       }
     }
-
-
     let destroyedRecords;
     destroyedRecords = await Commentary.destroyOne({id: inputs.id});
     if (!destroyedRecords) {
       throw 'badRequest';
     }
-    // Have the socket which made the request join the "litter" room.
     // Подключить сокет, который сделал запрос, к комнате «comment».
     await sails.sockets.join(req, 'comment');
     let allModule = await sails.helpers.listComments.with({
@@ -103,14 +85,9 @@ module.exports = {
         await Litter.updateOne({id: inputs.instanceModuleId}).set(module);
         break;
     }
-
-    console.log('allModule:::: ',allModule);
-
     // Рассылаем данные всем подписанным на событие list-* данной комнаты.
     await sails.sockets.broadcast('litter', 'list-comment', allModule);
     await sails.sockets.broadcast('litter', 'delete-comment', _.zipObject([[inputs.indexPhotoSet,inputs.id]]));
-
     return exits.success();
   }
-
 };

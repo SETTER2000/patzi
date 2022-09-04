@@ -1,20 +1,12 @@
 module.exports = {
-
-
   friendlyName: 'Destroy one litter',
-
-
   description: 'Удалите «помёт» с указанным идентификатором из базы данных.',
-
-
   inputs: {
     id: {
       type: 'string',
       required: true
     }
   },
-
-
   exits: {
     notFound: {
       description: 'Не существует такой вещи с таким ID.',
@@ -26,7 +18,6 @@ module.exports = {
     }
   },
 
-
   fn: async function (inputs, exits) {
     let litter = await Litter.findOne({
       id: inputs.id
@@ -37,18 +28,10 @@ module.exports = {
     if (litter.owner !== this.req.me.id) {
       throw 'forbidden';
     }
-
     await Litter.destroy({id: inputs.id});
-
-
-     // Remove photos
     let puppies = (_.isArray(litter.puppies[0].photos) && !_.isEmpty(litter.puppies[0].photos)) ? litter.puppies[0].photos : [];
     let removeImage = [...litter.images, ...puppies];
-    console.log('Для удаления::: ', removeImage);
     await sails.helpers.removeImgS3(removeImage);
-
-
     return exits.success();
   }
-
 };
