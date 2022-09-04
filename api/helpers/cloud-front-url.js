@@ -34,8 +34,10 @@ module.exports = {
   },
 
   fn: async function (inputs) {
+    // var Buffer = require('safe-buffer').Buffer;
     const btoa = require('btoa');
     const url = require('url');
+    const CLOUD_FRONT_URL = 'https://d2e0ab19zxiehc.cloudfront.net'
     let imageSrc = '',
       objId = '',
       resize = {
@@ -54,7 +56,12 @@ module.exports = {
             key: image.fd,
             edits: inputs.edits
           });
-          image.imageSrc = `${sails.config.uploads.CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
+
+          image.imageSrc = `${CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
+          console.log('IMGSRC 58::: ', img.imageSrc);
+          // console.log('process.env.CLOUD_FRONT_URL 59::: ', process.env.CLOUD_FRONT_URL);
+          // console.log('sails.config.uploads.bucket 60::: ', sails.config.uploads.bucket);
+          // console.log('${CLOUD_FRONT_URL}::: ', ${CLOUD_FRONT_URL});
           return image;
         }) : '';
       } else {
