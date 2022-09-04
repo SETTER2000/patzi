@@ -97,7 +97,7 @@ module.exports = {
             if (_.isObject(o)) {
               if (sails.config.environment === 'production' && o.fd) {
                 let imageRequest = JSON.stringify({
-                  bucket: 'paltos',
+                  bucket: sails.config.uploads.bucket,
                   key: o.fd,
                   edits: inputs.edits
                 });
@@ -155,7 +155,7 @@ module.exports = {
     let getCloudFrontImg = im => {
      return im.map(img => {
         let imageRequest = JSON.stringify({
-          bucket: 'paltos',
+          bucket: sails.config.uploads.bucket,
           key: img.fd,
           edits: inputs.edits
         });

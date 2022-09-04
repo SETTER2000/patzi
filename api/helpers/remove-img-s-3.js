@@ -33,7 +33,7 @@ module.exports = {
       const skp = require('@setter/skp')(
         {
           key: sails.config.uploads.key,
-          bucket: 'paltos' || process.env.S3_BUCKET || inputs.bucket,
+          bucket: sails.config.uploads.bucket || process.env.S3_BUCKET || inputs.bucket,
           region: sails.config.uploads.region,
           secret: sails.config.uploads.secret
         }

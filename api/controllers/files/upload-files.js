@@ -30,7 +30,7 @@ module.exports = {
         key: sails.config.uploads.key,
         region: sails.config.uploads.region,
         secret: sails.config.uploads.secret,
-        bucket: 'paltos'
+        bucket: sails.config.uploads.bucket
       }
     );
     const resizeX = 1424,

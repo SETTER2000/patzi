@@ -1151,7 +1151,7 @@ parasails.registerPage('dogs-home', {
         }
       });
 
-      console.log('KKFRR_SS', btoa(imageRequest))
+      console.log('encode btoa:::', btoa(imageRequest))
 
       return `${sails.config.uploads.urlCloudFront}/${btoa(imageRequest)}`;
     },

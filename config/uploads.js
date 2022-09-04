@@ -38,13 +38,9 @@ module.exports.uploads = {
 
 
   // My
-  adapter: require('skipper-s3'),
   bucket: process.env.Bucket,
   key: process.env.key,
   region: process.env.region,
   secret: process.env.secret,
-  headers:{
-    'x-amz-acl':'public-read'
-  },
   urlCloudFront: process.env.CLOUD_FRONT_URL,
 };
