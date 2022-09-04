@@ -34,7 +34,7 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    // var Buffer = require('safe-buffer').Buffer;
+    require('dotenv').config();
     const btoa = require('btoa');
     const url = require('url');
     const CLOUD_FRONT_URL = 'https://d2e0ab19zxiehc.cloudfront.net'
@@ -52,11 +52,11 @@ module.exports = {
       if (sails.config.environment === 'production') {
         inputs.collection[inputs.field] = (!_.isEmpty(inputs.collection[inputs.field])) ? await inputs.collection[inputs.field].map((image, i) => {
           const imageRequest = JSON.stringify({
-            bucket: sails.config.uploads.bucket,
+            bucket: process.env.S3_BUCKET,
             key: image.fd,
             edits: inputs.edits
           });
-          image.imageSrc = `${CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
+          image.imageSrc = `${process.env.CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
           return image;
         }) : '';
       } else {
@@ -72,7 +72,7 @@ module.exports = {
         obj[inputs.field] = (!_.isEmpty(obj[inputs.field]) && !_.isUndefined(obj[inputs.field][0])) ? await obj[inputs.field].map((img, i) => {
           if (sails.config.environment === 'production') {
             const imageRequest = JSON.stringify({
-              bucket: sails.config.uploads.bucket,
+              bucket: process.env.S3_BUCKET,
               key: img.fd,
               edits: inputs.edits
             });

@@ -175,7 +175,6 @@ module.exports = {
   exits: {
     success: {
       outputDescription: 'Information about the newly created record.',
-      // Устанавливаем выходной тип данных. Хорошая практика для документирования кода.
       outputType: {
         id: 'number',
         imageSrc: 'string'
@@ -209,10 +208,7 @@ module.exports = {
     const req = this.req;
     const moment = require('moment');
     moment.locale('en');
-    // Убедитесь, что это запрос сокета (не традиционный HTTP)
-    if (!req.isSocket) {
-      throw 'badRequest';
-    }
+    if (!req.isSocket) {throw 'badRequest';}
     let images = [];
     await sails.sockets.join(req, 'dog');
     // Проверяем есть ли фото

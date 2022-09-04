@@ -104,7 +104,7 @@ parasails.registerPage('dogs-home', {
     value: 0,
     valueColor: '',
     syncing: false,
-    sizeLess: 20, // MB
+    sizeLess: 8, // MB
     cloudError: '',
     subtitle: '',
     dialogFormVisible: false,
@@ -459,10 +459,8 @@ parasails.registerPage('dogs-home', {
       this.ruleForm.errInputDogName = (!_.isArray(r));
       r = [];
     },
-
   },
-  mounted: async function () {
-  },
+  mounted: async function () {},
   computed: {
     i19p: {
       get: function () {
@@ -492,10 +490,6 @@ parasails.registerPage('dogs-home', {
     }
   },
 
-
-  //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-  //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
-  //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     async getList() {
       await io.socket.get(`/api/v1/dogs/list`, function gotResponse(body, response) {
@@ -536,12 +530,10 @@ parasails.registerPage('dogs-home', {
       }
       return isJPG && isLt1M;
     },
-
     // Срабатывает перед удалением одного файла
     handleRemove(file, fileList) {
       this.fileList = fileList;
     },
-
     resetForm(formName) {
       this.$refs.upload ? this.$refs.upload.clearFiles() : '';
       this.$refs[formName].resetFields();
@@ -550,7 +542,6 @@ parasails.registerPage('dogs-home', {
       this.ruleForm.price = 0;
       this.ruleForm.federations = this.resetFederation;
     },
-
     async submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid && !this.buttonUpdate) {
@@ -732,13 +723,10 @@ parasails.registerPage('dogs-home', {
       this.innerVisible = true;
       this.dialog = new Map(this.map).get(string);
       this.dialog.header = this.i19p[string];
-
-
     },
     async handleSelect(e) {
       this.dogId = (_.isNumber(e.id)) ? e.id : undefined;
     },
-
     // Выбираем всех кобелей
     async sireList() {
       await io.socket.get(`/api/v1/dogs/list-sire`, function gotResponse(body, response) {
@@ -756,7 +744,6 @@ parasails.registerPage('dogs-home', {
         this.dams = data;
       });
     },
-
     /* Авто поиск по собакам. Кобели. */
     querySearchSires(queryString, cb) {
       this.sireList();
@@ -765,7 +752,6 @@ parasails.registerPage('dogs-home', {
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
       cb(results);
     },
-
     /* Авто поиск по собакам. Суки. */
     querySearchDams(queryString, cb) {
       this.damList();
@@ -773,24 +759,19 @@ parasails.registerPage('dogs-home', {
       let results = queryString ? links.filter(this.createFilter(queryString)) : links;
       cb(results);
     },
-
-
     createFilter: function (queryString) {
       return (link) => {
         return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1);
       };
     },
-
     handlerCloseDialogSlider() {
       this.fullscreenLoading = false;
       this.goto(this.pathDogs);
     },
-
     clickAddButton() {
       this.warning = this.i19p.warnNoKennel;
       (this.kennels.length > 0) ? this.centerDialogAdded = true : this.centerDialogVisibleWarnings = true;
     },
-
     goTo(path) {
       window.location = `/${path}`;
     },
@@ -800,28 +781,23 @@ parasails.registerPage('dogs-home', {
     goDogSale() {
       this.goTo2(this.pathDogSale);
     },
-
     feedback(e) {
       this.dialogFormVisible = true;
     },
-
     open(text, title) {
       this.$alert(`<p>${text}</p>`, title, {
         dangerouslyUseHTMLString: true
       });
     },
-
     closeDeleteThingModal: function () {
       this.selectedThing = undefined;
       this.confirmDeleteThingModalOpen = false;
     },
-
     handleParsingDeleteThingForm: function () {
       return {
         id: this.selectedThing.id
       };
     },
-
     submittedDeleteThingForm: function () {
       _.remove(this.things, {id: this.selectedThing.id});
       this.$forceUpdate();
@@ -834,14 +810,12 @@ parasails.registerPage('dogs-home', {
         value: ''
       });
     },
-
     removeElement(item) {
       var index = this.ruleForm.federations.indexOf(item);
       if (index !== -1) {
         this.ruleForm.federations.splice(index, 1);
       }
     },
-
     openFullScreen() {
       this.loading = this.$loading({
         lock: true,
@@ -850,46 +824,37 @@ parasails.registerPage('dogs-home', {
         background: 'rgba(0, 0, 0, 0.7)'
       });
     },
-
     getPullColor() {
       let field = (this.me.preferredLocale === 'ru') ? 'labelRu' : 'value';
       return _.sortBy(this.colors, field);
     },
-
     beforeUpload(file){
       const isJPG = file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < this.sizeLess;
       if (!isJPG) {
         this.$message.error('Изображение должно быть в формате jpg!');
       }
-
       if (!isLt2M) {
         this.$message.error(`Размер изображения не может превышать ${this.sizeLess}mb!`);
       }
-      return isJPG && isLt2M;
     },
-
     handleSuccess(res, file) {
       _.isArray(this.ruleForm.fileList) ? this.ruleForm.fileList.push(res) :
         this.ruleForm.fileList = [res];
     },
-
     handleExceed(files, fileList) {
       this.$message.warning(`${this.i19p.limitExceededText} ${this.limit} ${this.i19p.files},
       ${this.i19p.limitExceededText2}  ${fileList.length} + ${files.length}. ${this.i19p.limitExceededText3}:
       ${files.length + fileList.length} ${this.i19p.files}`);
     },
-
     showMenu(id, e) {
       this.dogId = id;
       this.show = true;
       this.showDog = id;
     },
-
     showOut() {
       this.show = false;
     },
-
     /**
      * Фильтр по свойству gender
      * @param command
@@ -902,7 +867,6 @@ parasails.registerPage('dogs-home', {
       this.dogs = command.com !== 'all' ? this.dogs.filter(d => d.gender === command.com) : this.filterDogs;
       this.$forceUpdate();
     },
-
     handleCommand(command) {
       switch (command.com) {
         case 'c':
@@ -927,10 +891,8 @@ parasails.registerPage('dogs-home', {
     handleCloseDialog(done) {
       done();
     },
-
     handleClose(key, keyPath) {
     },
-
     errorMessages(jwRes, successText) {
       (jwRes.statusCode === 200) ? (this.mesSuccess(successText)) :
         (jwRes.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
@@ -952,17 +914,13 @@ parasails.registerPage('dogs-home', {
         }
       });
     },
-
     openDialogNegotiations(fullNameDog) {
       this.drawer = true;
       this.fullNameDogNegotiations = fullNameDog;
-
     },
-
     handleClose2(done) {
       done();
     },
-
     openRemoveDialog(id) {
       this.removeDogId = id;
       this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
@@ -971,7 +929,6 @@ parasails.registerPage('dogs-home', {
         type: 'warning'
       }).then(() => {
         this.deleteDog();
-
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -979,7 +936,6 @@ parasails.registerPage('dogs-home', {
         });
       });
     },
-
     async destroyManyPhotos() {
       let removeImage = _.remove(this.photos.images, img => _.indexOf(this.checkedPhoto, img.id) > -1);
       let data = this.photos;
@@ -1020,7 +976,6 @@ parasails.registerPage('dogs-home', {
         }
       });
     },
-
     removePhotos() {
       this.checkAll = false;
       this.$confirm(this.i19p.warnRemove, this.i19p.warning, {
@@ -1036,7 +991,6 @@ parasails.registerPage('dogs-home', {
         });
       });
     },
-
     async addComment(field, parentId) {
       this.field = field;
       if (_.isEmpty(this.comment) && _.isEmpty(this.commentChild)) {
@@ -1057,8 +1011,6 @@ parasails.registerPage('dogs-home', {
         (response.statusCode === 400) ? this.mesError(this.i19p.text400Err) :
           (response.statusCode === 409) ? this.mesError(response.headers['x-exit-description']) :
             (response.statusCode >= 500) ? this.mesError(this.i19p.text500Err) : '';
-
-
         if (response.statusCode === 200) {
           this.comment = '';
           this.commentChild = '';
@@ -1071,7 +1023,6 @@ parasails.registerPage('dogs-home', {
         }
       });
     },
-
     handleEdit(index, row) {
       this.dam = _.last(_.pluck(_.filter(row.parents, 'gender', 'dam'), 'fullName'));
       this.sire = _.last(_.pluck(_.filter(row.parents, 'gender', 'sire'), 'fullName'));
@@ -1085,12 +1036,10 @@ parasails.registerPage('dogs-home', {
       this.centerDialogAdded = true;
       this.buttonUpdate = true;
     },
-
     handleEditPhotos(index, row) {
       this.photos = row;
       this.centerDialogVisiblePhotos = true;
     },
-
     handleDelete(index, row) {
       this.innerVisible = true;
     },
@@ -1150,9 +1099,6 @@ parasails.registerPage('dogs-home', {
           }
         }
       });
-
-      console.log('encode btoa:::', btoa(imageRequest))
-
       return `${sails.config.uploads.urlCloudFront}/${btoa(imageRequest)}`;
     },
     openAlert() {
@@ -1186,8 +1132,6 @@ parasails.registerPage('dogs-home', {
       n.imagesArrUrl = _.pluck(n[field], prop);
       return n;
     },
-
-
     async coverPhoto(id, index) {
       let data = {
         id: id,
@@ -1206,39 +1150,31 @@ parasails.registerPage('dogs-home', {
         });
       });
     },
-
     objFilter() {
       return this.dogs.filter(data => (!this.searchObjects || data.fullName.toLowerCase().includes(this.searchObjects.toLowerCase())) & data.see & !_.isEmpty(data.images[data.cover]))
     },
-
-
     querySearchFoo(queryString, cb) {
       if (_.isUndefined(this.users)) return;
       let users = this.users;
       let results = queryString ? users.filter(this.createFilterOwner(queryString)) : users;
       cb(results);
     },
-
     createFilterOwner(queryString) {
       return (user) => {
         return (user.fullName.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
       };
     },
-
     async handleSelected(e) {
       this.ownerId = e.id ? e.id : undefined;
     },
-
     dialogEditors() {
       let breederDogs = (this.me.isAdmin || this.me.isSuperAdmin) ? this.dogs :
         this.isOwner ? this.dogs.filter(dog => _.isObject(dog.kennel) ? (dog.kennel.breeder === this.me.id) : false) : [];
-
       let ownerDogs = (this.me.isAdmin || this.me.isSuperAdmin) ? this.dogs :
         this.isOwner ? this.dogs.filter(dog => _.isArray(dog.owners) ? (_.some(dog.owners, {id: this.me.id}) && dog.allowEdit) : false) : [];
       this.dogsEditList = _.uniq([...breederDogs, ...ownerDogs], 'fullName');
       this.dialogEditorList = true;
     },
-
     async isOwnerCheck() {
       await io.socket.get(`/api/v1/groups/is-owner`, (body, response) => {
         this.isOwner = (response.statusCode === 200);
@@ -1250,11 +1186,9 @@ parasails.registerPage('dogs-home', {
       }
       return '';
     },
-
     addTitleDog(dog) {
       this.goTo(`chinese-crested/${dog.fullName.split(" ").join('-')}/titles`);
     },
-
     loadCamera(stream) {
       try {
         this.video.srcObject = stream;
@@ -1269,7 +1203,6 @@ parasails.registerPage('dogs-home', {
     stopStream() {
       this.goto('/dogs/chinese-crested');
     },
-
     increase() {
       this.percentage += 10;
       if (this.percentage > 100) {
