@@ -23,8 +23,6 @@ module.exports.custom = {
    *                                                                         *
    **************************************************************************/
   baseUrl: process.env.PTZ_BASEURL,
-  CLOUD_FRONT_URL: process.env.CLOUD_FRONT_URL,
-  pathPhotoS3: process.env.CLOUD_FRONT_URL,
 
   /**************************************************************************
    *                                                                         *
@@ -71,7 +69,7 @@ module.exports.custom = {
 
 
   friendEmailAddress: 'ins09@mail.ru',
-  avatar: 'https://d1lyb0stb8az10.cloudfront.net/ava.png',
+  avatar: 'https://d2e0ab19zxiehc.cloudfront.net/ava.png',
 
   // The sender that all outgoing emails will appear to come from.
   // Отправитель, от которого будут исходить все исходящие письма.

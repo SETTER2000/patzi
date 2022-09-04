@@ -42,5 +42,5 @@ module.exports.uploads = {
   key: process.env.key,
   region: process.env.region,
   secret: process.env.secret,
-  urlCloudFront: process.env.CLOUD_FRONT_URL,
+  CLOUD_FRONT_URL: process.env.CLOUD_FRONT_URL,
 };

@@ -222,19 +222,19 @@ parasails.registerPage('dogs-home', {
     items: [
       {
         name: 'Poale Ell Adam',
-        src: 'https://d1lyb0stb8az10.cloudfront.net/Lux-2.jpg'
+        src: 'https://d2e0ab19zxiehc.cloudfront.net/Lux-2.jpg'
       },
       {
         name: 'Poale Ell Bell',
-        src: 'https://d1lyb0stb8az10.cloudfront.net/Lux-2018-11.jpg'
+        src: 'https://d2e0ab19zxiehc.cloudfront.net/Lux-2018-11.jpg'
       },
       {
         name: 'Poale Ell Bazhen',
-        src: 'https://d1lyb0stb8az10.cloudfront.net/Adam-10m.jpg'
+        src: 'https://d2e0ab19zxiehc.cloudfront.net/Adam-10m.jpg'
       },
       {
         name: 'Poale Ell Barthalamew',
-        src: 'https://d1lyb0stb8az10.cloudfront.net/Lux-2018.jpg'
+        src: 'https://d2e0ab19zxiehc.cloudfront.net/Lux-2018.jpg'
       },
     ],
     litters: [],
@@ -315,10 +315,10 @@ parasails.registerPage('dogs-home', {
     ],
     map: [
       ['growth', {
-        src: 'https://d1lyb0stb8az10.cloudfront.net/Izmerit_holku.svg',
+        src: 'https://d2e0ab19zxiehc.cloudfront.net/Izmerit_holku.svg',
       }],
       ['hairless', {
-        src: 'https://d1lyb0stb8az10.cloudfront.net/Hairless_OR_Powderpuff.jpg',
+        src: 'https://d2e0ab19zxiehc.cloudfront.net/Hairless_OR_Powderpuff.jpg',
       }]],
   },
   virtualPages: true,

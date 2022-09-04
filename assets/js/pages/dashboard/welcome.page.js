@@ -8,7 +8,7 @@ parasails.registerPage('welcome', {
     WxH: '800x420',
     coverMode: 'cover',
     fp: 'fp-x:0.5,fp-y:0.5,fp-z:1',
-    cloudFrontUrl: 'https://d1lyb0stb8az10.cloudfront.net',
+    cloudFrontUrl: 'https://d2e0ab19zxiehc.cloudfront.net',
     posts: [],
     post: {},
     showPostsSection: true

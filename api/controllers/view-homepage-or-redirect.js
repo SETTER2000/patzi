@@ -33,7 +33,7 @@ module.exports = {
         description: sails.config.custom.descriptionRootPage,
         title: sails.config.custom.titleRootPage,
         canonical: sails.config.custom.canonicalRootPage,
-        image:'https://d1lyb0stb8az10.cloudfront.net/root/root.jpg'
+        image:`${sails.config.uploads.CLOUD_FRONT_URL}/root/root.jpg`
       }
     };
 
