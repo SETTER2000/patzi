@@ -657,7 +657,6 @@
         <el-row :gutter="7" class="flex-container wrap">
           <el-col class="flex-item" v-for="(topic, index) in objFilter()" :key="topic.id"
                   :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-
             <div @mouseenter="showMenu(topic.id)" @mouseleave="showOut()"
                  style="position: relative;" class="ell-image-flex"
                  v-if="!_.isEmpty(topic.imagesArrUrl)">
