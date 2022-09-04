@@ -70,6 +70,7 @@ module.exports = {
       // dog.cover = dog.imagesArrUrl[0]; // Обложка альбома
        return dog;
     });
+  console.log('DOGSSSS:::', dogs)
 
 
     await sails.sockets.broadcast('dog', 'list-dog', dogs);

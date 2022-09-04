@@ -101,7 +101,7 @@ module.exports = {
                   key: o.fd,
                   edits: inputs.edits
                 });
-                o.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+                o.imageSrc = `${sails.config.custom.CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
               }else{
                 o.imageSrc = o.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${options.collectionName}/${options.objectCollectionId}/${options.field}/0`) : '';
               }
@@ -159,7 +159,7 @@ module.exports = {
           key: img.fd,
           edits: inputs.edits
         });
-        img.imageSrc = `${sails.config.custom.cloudFrontUrl}/${btoa(imageRequest)}`;
+        img.imageSrc = `${sails.config.custom.CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
         return img;
       })
     };

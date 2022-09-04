@@ -23,7 +23,7 @@ module.exports.custom = {
    *                                                                         *
    **************************************************************************/
   baseUrl: process.env.PTZ_BASEURL,
-  cloudFrontUrl: process.env.CLOUD_FRONT_URL,
+  CLOUD_FRONT_URL: process.env.CLOUD_FRONT_URL,
   pathPhotoS3: process.env.CLOUD_FRONT_URL,
 
   /**************************************************************************
