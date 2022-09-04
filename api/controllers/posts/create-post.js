@@ -211,7 +211,6 @@ module.exports = {
     await Topic.addToCollection(inputs.topicId, 'posts').members([newPost.id]);
 
     // Добавляем экспертов к посту
-    console.log('inputs.experts:: ', inputs.experts);
     await Post.addToCollection(newPost.id, 'experts').members(inputs.experts);
     // Выбираем весь список объектов данной коллекции.
     // let posts = await Post.find()
