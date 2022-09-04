@@ -38,6 +38,7 @@ module.exports.uploads = {
 
 
   // My
+  adapter: require('skipper-s3'),
   bucket: process.env.Bucket,
   key: process.env.key,
   region: process.env.region,
