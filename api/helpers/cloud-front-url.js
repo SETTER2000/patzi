@@ -42,8 +42,7 @@ module.exports = {
       objId = '',
       resize = {
         fit: 'inside',
-        width: 1424,
-        height: 800
+        width: 2048
       };
 
     // Если не передан объект resize, то устанавливаем размер по умолчанию.
