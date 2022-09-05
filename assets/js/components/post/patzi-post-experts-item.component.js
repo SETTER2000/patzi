@@ -103,19 +103,10 @@ parasails.registerComponent('patziPostExpertsItem', {
     },
     getFlag(country) {
       return !_.isObject(country)   ? false :
-        country.label ? `${sails.config.uploads.CLOUD_FRONT_URL}/flags/${country.label}.jpg` : '';
+        country.label ? `https://d2e0ab19zxiehc.cloudfront.net/flags/${country.label}.jpg` : '';
     },
     async updateStyle(wrapper) {
-      /*  const t = `${this.post.valueX}% ${this.post.valueY}%`;
-        let data = {id: this.post.id, position: t, valueX: this.post.valueX, valueY: this.post.valueY};*/
       wrapper ? wrapper.style.setProperty('background-image', 'url(' + this.expert.avatar + ')') : '';
-      // await io.socket.put(`/api/v1/posts/update-position-img`, data, (data, jwRes) => {
-      //   console.log('Сервер update-position-img ответил кодом ' + jwRes.statusCode + ' и данными: ', data);
-      // });
-      // wrappers.map((wrapper, ind) => {
-      //   let img = (objData && objData.length >= 1) ? objData[ind].imageSrc : '';
-      //   img ? $(wrapper).css('backgroundImage', 'url(' + img + ')') : '';
-      // });
     },
   }
 });

@@ -216,7 +216,7 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       type: 'string',
       description: 'Дескриптор файла Skipper однозначно идентифицирует загруженное изображение.',
       moreInfoUrl: 'https://www.npmjs.com/package/skipper',
-      defaultsTo: `${sails.config.uploads.CLOUD_FRONT_URL}/ava.png`
+      defaultsTo: `https://d2e0ab19zxiehc.cloudfront.net/ava.png`
     },
     images: {
       type: 'ref',

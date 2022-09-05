@@ -76,7 +76,7 @@ module.exports = {
               key: img.fd,
               edits: inputs.edits
             });
-            img.imageSrc = `${CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
+            img.imageSrc = `${sails.config.uploads.CLOUD_FRONT_URL}/${btoa(imageRequest)}`;
           } else {
             i = inputs.photoSet ? `${i}/${inputs.photoSet}` : i;
             img.imageSrc = img.fd ? url.resolve(sails.config.custom.baseUrl, `/download/${inputs.collectionName}/${objId}/${inputs.field}/${i}`) : '';

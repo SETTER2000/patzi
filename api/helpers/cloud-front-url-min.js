@@ -76,6 +76,7 @@ module.exports = {
 
 
   fn: async function (inputs) {
+    require('dotenv').config();
     const btoa = require('btoa');
     let resultImgRecursion = '';
     const url = require('url');
