@@ -53,6 +53,7 @@ module.exports = {
       cb(null, `${data.toString()}\n`);
     });
     info = await sails.upload(inputs.file);
+    console.log(`INFO о загрузки фото: ${info}`)
     let fd = _.pluck(info, 'fd')[0];
     if (!info) {
       throw 'badRequest';

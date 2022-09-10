@@ -13,7 +13,7 @@ parasails.registerPage('blog-home', {
     limit: 150,
     postCount: 0,
     dialog: {},
-     sizeLess: 2000, // MB
+     sizeLess: 20, // MB
     dialogVisible: false,
     dialogImageUrl: '',
     innerVisible: false,

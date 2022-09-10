@@ -39,8 +39,7 @@ module.exports.bootstrap = async function () {
     }//•
 
     // Compare bootstrap version from code base to the version that was last run
-    var lastRunBootstrapInfo = await sails.helpers.fs.readJson(bootstrapLastRunInfoPath)
-      .tolerate('doesNotExist');// (it's ok if the file doesn't exist yet-- just keep going.)
+    var lastRunBootstrapInfo = await sails.helpers.fs.readJson(bootstrapLastRunInfoPath).tolerate('doesNotExist');// (it's ok if the file doesn't exist yet-- just keep going.)
 
     if (lastRunBootstrapInfo && lastRunBootstrapInfo.lastRunVersion === HARD_CODED_DATA_VERSION) {
       sails.log('Работает v' + HARD_CODED_DATA_VERSION + ' файла начальной загрузки (bootstrap.js)...  (because it\'s already been run)');

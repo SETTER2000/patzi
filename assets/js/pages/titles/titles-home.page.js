@@ -31,7 +31,7 @@ parasails.registerPage('titles-home', {
       dateTaken: '',
     },
     photoDescUpdate: false,
-     sizeLess: 2000, // MB
+     sizeLess: 20, // MB
     buttonUpdate: false,
     centerDialogAdded: false,
     centerDialogVisibleConfirm: false,
