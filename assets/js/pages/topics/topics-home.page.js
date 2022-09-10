@@ -20,7 +20,7 @@ parasails.registerPage('topics-home', {
     photos: {},
     isIndeterminate: true,
     limit: 4,
-    sizeLess: 20, // MB
+     sizeLess: 2000, // MB
     photoDesc: {
       innerVisiblePhotoDescription: false,
       photoId: '',

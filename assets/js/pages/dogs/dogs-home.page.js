@@ -90,7 +90,7 @@ parasails.registerPage('dogs-home', {
     drawer: false,
     direction: 'rtl',
     show: false,
-    limit: 50,
+    limit: 150,
     removeDogId: undefined,
     dogId: undefined,
     dialog: {},
@@ -104,7 +104,7 @@ parasails.registerPage('dogs-home', {
     value: 0,
     valueColor: '',
     syncing: false,
-    sizeLess: 20, // MB
+     sizeLess: 2000, // MB
     cloudError: '',
     subtitle: '',
     dialogFormVisible: false,

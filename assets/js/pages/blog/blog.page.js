@@ -9,7 +9,7 @@ parasails.registerPage('blog', {
     inx: '',
     topics: [],
     countDelVideo: 0,
-    limit: 50,
+    limit: 150,
     multipleSelection: [],
     rws: false,
     rowsUpdateVideo: [],
@@ -19,7 +19,7 @@ parasails.registerPage('blog', {
     dialogFormVisible: false,
     activeClass: 'scc',
     errorClass: 'text-danger',
-    sizeLess: 20, // MB
+     sizeLess: 2000, // MB
     dialogVisible: false,
     succ: false,
     dialogImageUrl: '',

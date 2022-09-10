@@ -10,10 +10,10 @@ parasails.registerPage('blog-home', {
     removePostId: '',
     centerDialogVisible: false,
     centerDialogAdded: false,
-    limit: 50,
+    limit: 150,
     postCount: 0,
     dialog: {},
-    sizeLess: 20, // MB
+     sizeLess: 2000, // MB
     dialogVisible: false,
     dialogImageUrl: '',
     innerVisible: false,

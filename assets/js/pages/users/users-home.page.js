@@ -23,14 +23,14 @@ parasails.registerPage('users-home', {
     dialogVisibleEmail: false,
     dialogVisibleGroup: false,
     dialog: {},
-    limit: 50,
+    limit: 150,
     groups: [],
     dialogImageUrl: '',
     dialogVisible: false,
     buttonUpdate: false,
     centerDialogAdded: false,
     value5: [],
-    sizeLess: 20, // MB
+     sizeLess: 2000, // MB
     fileList: [],
     count: 5,
     query: 5,

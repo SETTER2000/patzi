@@ -20,7 +20,7 @@ parasails.registerPage('dog', {
     direction: 'ttb',
     dialogVisible: false,
     comment: '',
-    sizeLess: 20, // MB
+     sizeLess: 2000, // MB
     objOne: {},
     limit: 2,
     buttonUpdate: false,

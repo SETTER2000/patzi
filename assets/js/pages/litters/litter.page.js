@@ -75,7 +75,7 @@ parasails.registerPage('litter', {
     count: 0,
     dialogVisible: false,
     circleUrl: 'https://d2e0ab19zxiehc.cloudfront.net/ava.png',
-    limit: 50, // photos in slider
+    limit: 150, // photos in slider
     letter: '',
     autoplay: true,
     isAfterDate: false,
