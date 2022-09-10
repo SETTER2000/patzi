@@ -5,7 +5,7 @@ parasails.registerPage('blog', {
     virtualPageSlug: '',
     fileList: [],
     expt: [],
-    experts:[],
+    experts: [],
     inx: '',
     topics: [],
     countDelVideo: 0,
@@ -19,7 +19,7 @@ parasails.registerPage('blog', {
     dialogFormVisible: false,
     activeClass: 'scc',
     errorClass: 'text-danger',
-     sizeLess: 2000, // MB
+    sizeLess: 2000, // MB
     dialogVisible: false,
     succ: false,
     dialogImageUrl: '',
@@ -29,7 +29,7 @@ parasails.registerPage('blog', {
       see: true,
       rootPage: false,
       fileList: [],
-      experts:[],
+      experts: [],
       topic: {},
       dateEvent: {},
       subtitle: '',
@@ -39,18 +39,36 @@ parasails.registerPage('blog', {
     formLabelWidth: '140px',
     rules: {
       kennel: [
-        {required: true, message: 'Please select kennel name', trigger: 'change'}
+        {
+          required: true,
+          message: 'Please select kennel name',
+          trigger: 'change'
+        }
       ],
       label: [
         {required: true, message: 'Please input dog name', trigger: 'blur'},
-        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
+        {
+          min: 3,
+          max: 100,
+          message: 'Length should be 3 to 100',
+          trigger: 'blur'
+        },
       ],
       labelRu: [
         {required: true, message: 'Please input dog name', trigger: 'blur'},
-        {min: 3, max: 100, message: 'Length should be 3 to 100', trigger: 'blur'},
+        {
+          min: 3,
+          max: 100,
+          message: 'Length should be 3 to 100',
+          trigger: 'blur'
+        },
       ],
       gender: [
-        {required: true, message: 'Please select a dog gender.', trigger: 'change'}
+        {
+          required: true,
+          message: 'Please select a dog gender.',
+          trigger: 'change'
+        }
       ],
       dateEvent: [
         {required: true, message: 'Please pick a date', trigger: 'blur'}
@@ -78,7 +96,10 @@ parasails.registerPage('blog', {
        ],
        */
       subtitle: [
-        {message: 'Please tell about the nurseries. It is very interesting.', trigger: 'change'},
+        {
+          message: 'Please tell about the nurseries. It is very interesting.',
+          trigger: 'change'
+        },
         {max: 2000, message: 'Length should be 10 to 2000', trigger: 'blur'}
       ]
     },
@@ -293,10 +314,10 @@ parasails.registerPage('blog', {
     },
 
     handleSuccess(res, file) {
-/*      console.log('HANDLE SUCCESS res: ', res);
-      console.log('HANDLE SUCCESS file: ', file);
-      console.log('this.post.fileList::', this.post.fileList);
-      console.log(' fileList::: ', this.fileList);*/
+      /*      console.log('HANDLE SUCCESS res: ', res);
+            console.log('HANDLE SUCCESS file: ', file);
+            console.log('this.post.fileList::', this.post.fileList);
+            console.log(' fileList::: ', this.fileList);*/
       this.post.fileList = _.isUndefined(this.post.fileList) ? [] : this.post.fileList;
       this.fileList.push(res);
       // _.isArray(this.post.fileList) ? this.post.fileList.push(res) : this.post.fileList = [res];
@@ -312,8 +333,15 @@ parasails.registerPage('blog', {
 
     // Срабатывает перед удалением одного файла
     handleRemove(file, fileList) {
-/*      console.log('HANDLE REMOVE file: ', file);
-      console.log('HANDLE REMOVE fileList: ', fileList);*/
+      /*      console.log('HANDLE REMOVE file: ', file);
+            console.log('HANDLE REMOVE fileList: ', fileList);*/
+      this.fileList = [];
+      this.post.fileList = fileList;
+    },
+
+    handleError(file, fileList) {
+      console.log('HANDLE ERROR file: ', file);
+      console.log('HANDLE ERROR fileList: ', fileList);
       this.fileList = [];
       this.post.fileList = fileList;
     },
