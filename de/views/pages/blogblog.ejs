@@ -202,21 +202,19 @@
                           v-model="post.label">
                     <el-button v-if="!succ" type="info" @click="editLabel" slot="append"
                                icon="el-icon-circle-check"></el-button>
-
                 </el-input>
-
             </div>
             <div v-if="eLabel" class="btr pointer ml-2">
                 <i @click="eLabel ? eLabel=false : eLabel=true" class="el-icon-view"></i>
             </div>
         </div>
         <div class="block">
+
             <!---------------------------------------------------------------------------------------->
             <% /*Загрузка фото NEW*/ %>
             <div class="container-fluid ">
                 <div class="row">
                     <div class="col">
-
                         <el-upload
                                 action="/api/v1/files/upload"
                                 list-type="picture-card"
@@ -275,7 +273,6 @@
                             <el-tooltip effect="dark"
                                         content="<%= __("Enable the display of this topic on the main page of the site?") %>"
                                         placement="top-start">
-
                                 <div size="mini" round class="el-icon-question "></div>
                             </el-tooltip>
                         </el-col>
@@ -317,7 +314,6 @@
                     <el-tooltip effect="dark"
                                 content="<%= __("If you have not found your cattery, go to the \"topics\" section and create it.") %>"
                                 placement="top-start">
-
                         <div size="mini" round class="el-icon-question "></div>
                     </el-tooltip>
                 </el-form-item>
@@ -346,7 +342,6 @@
                     <el-tooltip effect="dark"
                                 content="<%= __("If you haven't found the expert you are looking for, go to the Users section and create one.") %>"
                                 placement="top-start">
-
                         <div size="mini" round class="el-icon-question "></div>
                     </el-tooltip>
                 </el-form-item>
@@ -355,7 +350,6 @@
                 <template>
                     <el-form-item label="<%= __('Description') %> (Ru)" prop="subtitleRu">
                         <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
-
                             <el-input
                                     type="textarea"
                                     :rows="3"
@@ -369,7 +363,6 @@
                         </el-col>
                     </el-form-item>
                 </template>
-
 
                 <% /* ОПИСАНИЕ ПОСТА на английском */ %>
                 <template>
@@ -467,7 +460,6 @@
         <span slot="footer" class="dialog-footer flex justify-content-center">
             <el-button type="" @click="handlerCloseDialogSlider()"><%= __('Close') %></el-button>
         </span>
-
     </el-dialog>
     <% /* шапка страницы post */ %>
     <patzi-post-header :obj-data="seo" :post="post" @editpost="editPost" @remove="removeItem"
@@ -492,10 +484,9 @@
             <span>{{me.preferredLocale === 'ru' ? post.topic.labelRu : post.topic.label}}</span>
            <div  class="flex justify-content-center  m-5" v-if="post.images.length == 0">
                <h3 class="mr-10">Собачка не фокусе, добавьте картинок </h3>
-               <p >
+               <p>
                <el-button @click="editPost(post)" type="success" icon="el-icon-plus" circle ></el-button>
                </p>
-
            </div>
             <patzi-post-gallery :obj-data="seo" :post="post" :lines="lines"
                                 @select-posts="filterPosts"></patzi-post-gallery>
@@ -506,7 +497,6 @@
     <patzi-post-videos v-if="post.video.length > 0" :obj-data="seo" :video="post.video"></patzi-post-videos>
     <% /* ЭКСПЕРТЫ НА ВЫСТАВКЕ */ %>
     <patzi-post-experts v-if="post.experts.length > 0" :obj-data="seo" :experts="experts" ></patzi-post-experts>
-
     <router-view></router-view>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
