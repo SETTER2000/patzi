@@ -38,12 +38,12 @@ parasails.registerComponent('patziPostVideos', {
 <!--            <li data-u-target="#carousel_62aa" class="u-palette-1-light-1" data-u-slide-to="1"></li>
             <li data-u-target="#carousel_62aa" class="u-palette-1-light-1" data-u-slide-to="2"></li>-->
         </ol>
-             
-        <div class="u-carousel-inner" role="listbox">
-            <div v-for="(post, index) of video"  :key="'io-'+index" class="u-align-center u-carousel-item u-clearfix u-palette-1-base" :class="classObject(index)"  >
+<!--        Окно карусели видео роликов-->
+        <div class="u-carousel-inner" role="listbox" :autoplay="false">
+            <div v-for="(post, index) of video"   :key="'io-'+index" class="u-align-center u-carousel-item u-clearfix u-palette-1-base" :class="classObject(index)"  >
                 <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
                     <div class="u-align-left u-expanded-width-sm u-expanded-width-xs u-video u-video-contain u-video-1" >
-                        <div style="position: absolute;" class="embed-responsive">
+                        <div style="position: absolute;" class="embed-responsive" >
                             <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;"
                                     class="embed-responsive-item" :src="'https://www.youtube.com/embed/'+post.videoUrl"
                                     frameborder="0"
