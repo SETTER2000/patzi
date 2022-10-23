@@ -1,0 +1,40 @@
+<div id="faq" class="content">
+  <div class="container mb-5">
+    <h1>FAQ</h1>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4><%= __('What is this page for') %>?</h4>
+      <p><%= __('On this page you will find answers to frequently asked questions about the ') %> <a
+          href="/">poaleell</a>.<%= __('application. This page will be updated and supplemented with new questions and answers to them, as the application matures.') %>
+      </p>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4><%= __('What languages does the application support?') %></h4>
+      <p><%= __('By default, the application supports English. There is support for the Russian language. In order to switch the language you need to log in and select Settings in the Account menu. Here, click the Change Language button and then select the language you need by clicking on it. Save the changes.') %></p>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4><%= __('Do you plan to further increase the number of supported languages in the application?') %></h4>
+      <p><%= __('Yes, of course. Work in this direction is already underway.') %> <%= __('In the near future plans include support for German, French, Spanish.') %></p>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4><%= __('How can I enter?') %></h4>
+      <p><%= __('In order to enter the application you need to register, it usually takes 1 minute. After logging in to the site, you will be sent a message to the email address specified during registration. Open the letter and confirm your email. This will complete the registration.') %></p>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4><%= __('I can not log in. What to do?') %></h4>
+      <p><%= __('If you already have your verified account on the site, then most likely the problem is in the page address. You did not come over a secure connection, so you can not log in. See the address in the browser, it should start with') %> https://...</p>
+      <blockquote><small><em><%= __('Tip') %>: <%= __('in order to always get on a secure connection, enter the following URL in the address bar of the browser') %>:
+            <a href="https://www.poaleell.com"> www.poaleell.com </a></em></small></blockquote>
+    </div>
+    <div class="q-and-a">
+      <hr class="mt-4 mb-4"/>
+      <h4><%= __('Where can I go for more help') %>?</h4>
+      <p><%= __('If you have problems and you do not know what to do or are completely puzzled, please contact us.') %> +7 (910) 406 7 406</p>
+    </div>
+  </div>
+</div>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

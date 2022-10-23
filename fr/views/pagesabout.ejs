@@ -1,0 +1,39 @@
+<div id="about" v-cloak>
+  <patzi-section-header :obj-data="seo" :video="false"></patzi-section-header>
+
+
+  <!-- Start About Area -->
+  <section class="about-area section-gap">
+    <div class="container">
+      <div class="row align-items-top justify-content-start">
+        <div class="col-lg-5 about-left">
+          <img class="img-fluid" src="https://d2e0ab19zxiehc.cloudfront.net/Clare-3r.jpg" alt="Alfa Laval De Lux Supernova">
+        </div>
+        <div class="offset-lg-1 col-lg-5 col-md-12 about-right">
+          <div class="section-title">
+            <h2 class="mb-4">
+              Poale Ell</h2>
+          </div>
+          <div class="mb-35 wow fadeIn text-justify" data-wow-duration=".8s" data-wow-delay=".3s">
+
+            <p><%= __('In the breed since 2004. Officially, the kennel Poale Ell, was registered in the international registry of the FCI federation in 2016, certificate No. 18431 dated 02.26.2016, owner Olga Petrova. The nursery is actively working with Polish, British and American manufacturers. Specializes in breeding Chinese crested dogs of standard size. In kennel dogs there are brilliant pedigrees with lines of the best specialized kennels in the world.') %></p>
+
+            <h4> <%= __('Our Manufacturers') %></h4>
+            <p> <%= __('All kennel dogs passed individual genetic testing for PRA and PLL (negative); have negative KCS checks (for "dry eye"); examined (made by ultrasound) for heart disease. We know very much about the Chinese Crested Dog breed and are ready to pass on our knowledge to everyone, who, like us, loves these wonderful creatures and is ready to put them into their own lives forever. Because, once having fallen in love with themselves, they never let go of anyone and never.') %></p>
+            <p><strong> <%= __('ATTENTION OF BEGINNERS!') %></strong>
+              <br><%= __('Dogs of this breed have an uncontrollable ability to breed. This state of affairs has not yet been explained. (mystery of nature)') %>
+            </p>
+            <footer class="blockquote-footer text-right"><cite title="Source Title">Poale Ell Kennel</cite></footer>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End About Area -->
+<!--  <patzi-post-gallery :obj-data="seo" :post="post" :lines="lines"
+                      @select-posts="filterPosts"></patzi-post-gallery>-->
+  <!-- Start Service Area -->
+  <patzi-post-services :obj-data="seo" ></patzi-post-services>
+  <!-- End Service Area -->
+</div>
+<%- /* Exposez server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

@@ -1,0 +1,111 @@
+<div id="pricing" v-cloak>
+  <patzi-section-header :obj-data="seo"></patzi-section-header>
+
+
+  <!-- Start Service Area -->
+  <patzi-post-services :obj-data="seo" ></patzi-post-services>
+
+  <!-- End Service Area -->
+
+  <!-- Start Pricing Area -->
+  <section class="pricing-area">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h3><%= __('Pricing Plan') %></h3>
+            <h2><span><%= __('Choose Your Dog') %></span></h2>
+            <p ><ul><li><span class="ti-close cross mx-2 text-danger"></span><%= __('Not included in the price') %></li></ul></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-3 col-md-3">
+          <div class="pricing_item">
+            <h3 class="p_title"><%= __('Hairless Dam') %></h3>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+            <h1 class="p_price">&euro;1500</h1>
+            <div class="p_list">
+              <ul>
+                <li><span class="ti-check"></span> <%= __('Vaccination, anthelmintic') %></li>
+                <li><span class="ti-check"></span> <%= __('Pedigree (puppy card)') %> </li>
+                <li><span class="ti-check"></span> <%= __('Clear Tests PRA, PLL') %></li>
+                <li><span class="ti-check"></span> <%= __('The gift collar brand') %></li>
+                <li><span class="ti-check"></span><%= __('Contract of sale') %> </li>
+                <li><span class="ti-check"></span> <%= __('Nursery help') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-3">
+          <div class="pricing_item">
+            <h3 class="p_title">Hairless Sire</h3>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+            <h1 class="p_price">&euro;1000</h1>
+            <div class="p_list">
+              <ul>
+                <li><span class="ti-check"></span> <%= __('Vaccination, anthelmintic') %></li>
+                <li><span class="ti-check"></span> <%= __('Pedigree (puppy card)') %> </li>
+                <li><span class="ti-check"></span> <%= __('Clear Tests PRA, PLL') %></li>
+                <li><span class="ti-check"></span> <%= __('The gift collar brand') %></li>
+                <li><span class="ti-check"></span><%= __('Contract of sale') %> </li>
+                <li><span class="ti-check"></span> <%= __('Nursery help') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-3">
+          <div class="pricing_item">
+            <h3 class="p_title">Powderpuff Dam</h3>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+            <h1 class="p_price">&euro;1000</h1>
+            <div class="p_list">
+              <ul>
+                <li><span class="ti-check"></span> <%= __('Vaccination, anthelmintic') %></li>
+                <li><span class="ti-check"></span> <%= __('Pedigree (puppy card)') %> </li>
+                <li><span class="ti-check"></span> <%= __('Clear Tests PRA, PLL') %></li>
+                <li><span class="ti-check"></span> <%= __('The gift collar brand') %></li>
+                <li><span class="ti-check"></span><%= __('Contract of sale') %> </li>
+                <li><span class="ti-check"></span> <%= __('Nursery help') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3">
+          <div class="pricing_item">
+            <h3 class="p_title">Powderpuff Sire</h3>
+            <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+            <h1 class="p_price">&euro;800</h1>
+            <div class="p_list">
+              <ul>
+                <li><span class="ti-check"></span> <%= __('Vaccination, anthelmintic') %></li>
+                <li><span class="ti-check"></span> <%= __('Pedigree (puppy card)') %> </li>
+                <li><span class="ti-check"></span> <%= __('Clear Tests PRA, PLL') %></li>
+                <li><span class="ti-check"></span> <%= __('The gift collar brand') %></li>
+                <li><span class="ti-check"></span><%= __('Contract of sale') %> </li>
+                <li><span class="ti-check"></span> <%= __('Nursery help') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Erect ears') %></li>
+                <li><span class="ti-close cross"></span> <%= __('Delivery') %> </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Pricing Area -->
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

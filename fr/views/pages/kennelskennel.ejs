@@ -1,0 +1,233 @@
+<div id="kennel" class="content" v-cloak>
+  <% /* ДИАЛОГОВОЕ ОКНО. ФОТО ЗАВОДЧИКА*/ %>
+
+  <el-dialog
+    v-if="kennel.breeder"
+    :title="kennel.breeder.fullName"
+    :visible.sync="centerDialogVisible"
+    width="30%"
+    center>
+    <img class="img-fluid" :src="kennel.breeder.avatar" :alt="kennel.label">
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible = false"><%= __('Close') %></el-button>
+  </span>
+  </el-dialog>
+  <% /* ДИАЛОГОВОЕ ОКНО. ФОТО Совладельца */ %>
+  <el-dialog
+    :visible.sync="centerDialogVisibleOwner"
+    width="30%"
+    center>
+    <div slot="title" class="dialog-title">
+      {{coOwnerFullName}}
+    </div>
+    <el-button v-if="linkDog" :underline="false" @click="goTo2(linkDog)" type="text">
+      <img class="img-fluid" :src="photoOwner" :alt="kennel.label">
+    </el-button>
+    <template v-else>
+      <img class="img-fluid" :src="photoOwner" :alt="kennel.label">
+    </template>
+    <span slot="footer" class="dialog-footer">
+
+    <el-button @click="centerDialogVisibleOwner = false; photoOwner='';coOwnerFullName=''"><%= __('Close') %></el-button>
+  </span>
+  </el-dialog>
+
+  <% /* Шапка страницы */ %>
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <div v-if="kennel.winner" class="menu-center">
+            <el-popover
+              placement="right-start"
+              trigger="hover"
+              width="320">
+              <div class="menu-center"><h4><%= __('World Winner') %></h4>
+                <el-table :data="worldWinner">
+                  <el-table-column width="70" property="year" label="<%= __('year') %>"></el-table-column>
+                  <el-table-column width="150" property="address" label="<%= __('address') %>"></el-table-column>
+                  <el-table-column width="600" property="description" label="<%= __('description') %>"></el-table-column>
+                </el-table>
+              </div>
+              <i slot="reference" style="font-size: 2em" class="ti-crown"></i>
+            </el-popover>
+          </div>
+          <h1 class="text-white">{{kennel.label}}</h1>
+          <p>{{kennel.dateCreate | getAge}}</p>
+          <!--<el-tooltip class="item" effect="dark" content="<%= __('Country') %>" placement="bottom">-->
+          <H3 class="text-gold">
+
+            <!--<i  class="ti-world"></i>-->
+            {{kennel.country.label}}
+
+          </H3>
+          <!--</el-tooltip>-->
+          <small v-if="kennel.city">({{kennel.city.value}})</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Start About Area -->
+
+  <section class="about-area mb-5">
+    <div class="container">
+      <div class="row  align-items-top justify-content-start">
+        <% /* Хлебные крошки */ %>
+        <div class="col-md-6 my-5">
+          <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item><a style="text-decoration: none" href="/"><%= __('Home-menu') %></a></el-breadcrumb-item>
+            <el-breadcrumb-item><a style="text-decoration: none" href="/kennels"><%= __('Kennels') %></a></el-breadcrumb-item>
+            <el-breadcrumb-item> {{kennel.label}}</el-breadcrumb-item>
+            <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
+          </el-breadcrumb>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="demo-basic--circle">
+          <div class="block">
+            <el-button type="text" @click="centerDialogVisible = true">
+              <el-tooltip v-if="kennel.breeder" class="item" effect="dark" placement="left-start">
+                <div slot="content"><%= __('Cattery owner') %>: {{kennel.breeder.fullName}}</div>
+                <el-avatar :size="'large'" :src="kennel.breeder.avatar"></el-avatar>
+              </el-tooltip>
+            </el-button>
+          </div>
+          <div class="block" v-for="owner in kennel.owners" :key="owner.id" v-if="kennel.owners">
+            <el-button type="text" @click="centerDialogVisibleOwner = true; coOwnerFullName=owner.fullName;photoOwner=owner.avatar">
+              <el-tooltip class="item" effect="dark" placement="left-start">
+                <div slot="content"><%= __('Co-owner') %>: {{owner.fullName}}</div>
+                <el-avatar :size="'large'" :src="owner.avatar"></el-avatar>
+              </el-tooltip>
+            </el-button>
+          </div>
+        </div>
+        <div class="col">
+          <% /* Фото питомника */ %>
+          <img class="img-fluid" :src="kennel.imageSrc" :alt="kennel.label">
+          <div class="row py-3">
+            <% /* Информация о владельце питомника */ %>
+            <div :class="[_.isEmpty(kennel.owners) ? 'col-12' : '','col-6']">
+              <div class="mr-3" v-if="kennel.breeder">
+                <span><i
+                    class="el-icon-user-solid"></i><strong> {{kennel.breeder.fullNameEn}} ({{kennel.breeder.fullName}})</strong></span>
+                <br><span v-if="kennel.breeder.emailAddress"><i class="el-icon-message"></i> {{kennel.breeder.emailAddress}}</span>
+                <br><span v-if="kennel.address"><i class="el-icon-office-building"></i> {{kennel.address}}</span>
+                <br><span v-if="kennel.site"><i class="el-icon-location-outline"></i> {{kennel.site}}</span>
+                <br><span v-if="kennel.phones" v-for="(phone , index) in kennel.phones" :key="phone.value">
+                       <p v-if="phone.value"> <i class="el-icon-phone-outline"></i> {{phone.value}} {{phone.fullName}}</p>
+                   </span>
+              </div>
+            </div>
+            <% /* Информация о совладельце питомника */ %>
+            <div class="col" v-if="kennel.owners">
+              <div class="" v-for="(owner, index) in kennel.owners" :key="owner.id">
+                <span><i class="el-icon-user-solid"></i><strong> {{owner.fullNameEn}} ({{owner.fullName}})</strong></span>
+                <br><span v-if="owner.emailAddress"><i class="el-icon-message"></i> {{owner.emailAddress}}</span>
+                <br><span v-if="owner.address"><i class="el-icon-office-building"></i> {{owner.address}}</span>
+                <br><span v-if="owner.site"><i class="el-icon-location-outline"></i> {{owner.site}}</span>
+                <br><span v-if="owner.phones" v-for="(phone , index) in owner.phones" :key="phone.value"> <br><i
+                    class="el-icon-phone-outline"></i> {{phone.value}} {{phone.fullName}}
+            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="offset-lg-1 col-lg-5 col-md-12 about-right">
+          <div class="section-title">
+            <% /* Название питомника */ %>
+            <h2 class="mb-4"> {{kennel.label}}</h2>
+          </div>
+
+          <% /* Описание питомника */ %>
+          <div class="mb-35 wow fadeIn text-justify" data-wow-duration=".8s" data-wow-delay=".3s">
+            <p>{{kennel.subtitle}}</p>
+
+            <h4 v-if="kennel.manufacturers"> <%= __('Our Manufacturers') %></h4>
+            <p> {{kennel.manufacturers}}</p>
+            <!--<p><strong> <%= __('ATTENTION OF BEGINNERS!') %></strong>-->
+            <!--<br><%= __('Dogs of this breed have an uncontrollable ability to breed. This state of affairs has not yet been explained. (mystery of nature)') %>-->
+            <!--</p>-->
+            <footer v-if="kennel.manufacturers | kennel.subtitle" class="blockquote-footer text-right"><cite title="Source Title">{{kennel.label}}
+                Kennel</cite></footer>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End About Area -->
+
+  <!-- Start Service Area -->
+  <% /* Собаки питомника */ %>
+  <section class="service-area section-gap-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title text-center">
+            <h2><span><%= __('Kennel dogs') %> </span></h2>
+            <h3>{{kennel.label}}</h3>
+
+          </div>
+        </div>
+      </div>
+      <div class="row" v-if="_.isEmpty(kennel.dogs)" >
+        <div class="col-lg-12 flex justify-content-center">
+          <div class="">
+            <el-button @click=" goTo('dogs/chinese-crested')" class="btn btn-outline-success"
+                       icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
+          </div>
+        </div>
+      </div>
+      <div class="row" v-else >
+        <div class="col-md-6" v-for="(dog, index) in kennel.dogs" :key="dog.id">
+          <div class="single-service wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s">
+            <% /* Имя собаки с иконкой */ %>
+            <div class="d-flex align-items-center">
+              <template v-if="dog.gender==='sire'">
+                <i class="el-icon-male"></i>
+              </template>
+              <template v-else>
+                <i class="el-icon-female"></i>
+              </template>
+              <h4 class="ml-3">
+                <el-button :underline="false" @click="goTo2(dog.detail)" type="text">{{dog.fullName}}</el-button>
+              </h4>
+            </div>
+            <% /* Фото собаки */ %>
+            <div class="demo-image__preview">
+              <div v-if="dog.images" style="position: relative">
+                <template>
+                  <el-carousel class="menu-center" trigger="click" :autoplay="false" indicator-position="none">
+                    <el-carousel-item v-for="(img, index) of dog.imagesMin" :key="img.id">
+                      <% /* Главное фото собаки */ %>
+                      <img :src="img.imageSrc" style="margin: 0 auto; width: auto; height: 100%; " alt="">
+                    </el-carousel-item>
+                  </el-carousel>
+                </template>
+                <% /* Аватарки родителей собаки. Круглые. */ %>
+                <div class="flex menu-center" style="position: absolute; right:12px;top:3px; z-index:10;">
+                  <div v-for="parent in dog.parents" :key="parent.id" v-if="dog.parents">
+                    <el-button v-if="parent.images" type="text"
+                               @click="centerDialogVisibleOwner = true;linkDog=getLinkDetailDog(parent.fullName); coOwnerFullName=parent.fullName;photoOwner=parent.images[parent.cover].imageSrc"
+                    >
+                      <div v-if="parent.images.length>0">
+                        <el-tooltip class="item" effect="dark" placement="top">
+                          <div slot="content">{{parent.gender}}: {{parent.fullName}}</div>
+                          <el-avatar  :src="parent.images[parent.cover].imageSrc"></el-avatar>
+                        </el-tooltip>
+                      </div>
+                    </el-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Service Area -->
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

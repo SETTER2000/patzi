@@ -1,0 +1,939 @@
+<div id="dog" class="content" v-cloak>
+
+    <!--    virtualPageSlug:: {{virtualPageSlug}}-->
+    <% /* Диалоговое окно ТИТУЛЫ (TITLES) Представление*/ %>
+    <el-dialog
+            :visible.sync="dialogFormAwards"
+            :direction="direction"
+            custom-class="awards"
+            center
+            :show-close="false"
+            :fullscreen="true"
+            top="1vh"
+            :before-close="handlerCloseDialogSlider"
+            v-if="virtualPageSlug==='titles'"
+    >
+        <!--    шапка-->
+        <section class="u-clearfix u-valign-middle-lg u-section-1" id="carousel_e299">
+            <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
+                <div class="u-layout">
+                    <div class="u-layout-row">
+                        <div class="u-container-style u-image u-layout-cell u-left-cell u-size-28 u-image-1">
+                            <div class="u-container-layout u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs">
+                                <div class="u-align-left u-border-7 u-border-grey-dark-1 u-container-style u-group u-group-1">
+                                    <div class="u-container-layout u-valign-middle u-container-layout-2">
+                                        <h1 class="u-text u-title u-text-1">
+                                            <%= __('I have') %><br><%= __('titles') %>{{ _.isEmpty(dog.titleDog) ? '?'
+                                            :''}} <br>
+                                        </h1>
+                                        <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div>
+                                        <a :href="getFullNameLink(dog.fullName)"
+                                           class="u-border-0 u-link u-no-underline u-link-1">{{dog.fullName}}
+                                            &gt;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="u-container-style u-image u-layout-cell u-right-cell u-size-32 u-image-2">
+                            <div class="u-container-layout">
+                                <img class="u-expand-resize u-expanded-height u-image u-image-2 lazyload"
+                                     :data-src="dog.images[0].imageSrc">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!--    кнопка-->
+        <section v-if="me.isSuperAdmin || me.isAdmin" class="u-align-center u-clearfix u-section-2" id="sec-6766">
+            <div class="u-clearfix u-sheet u-sheet-1">
+                <div class="u-align-center u-container-style u-group u-group-1">
+                    <div class="u-container-layout u-valign-middle u-container-layout-1">
+                        <template>
+                            <div class="mt-5  text-center">
+                                <el-button @click="clickAddButton()"
+                                           class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"
+                                           icon="el-icon-circle-plus-outline"><%= __('add me title') %></el-button>
+                            </div>
+                            <!--                            <div class="mt-5  text-center" v-else>-->
+                            <!--                                <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"-->
+                            <!--                                           class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('add me title') %></el-button>-->
+
+                            <!--                            </div>-->
+                        </template>
+
+                        <!--                        <a href="#" class="u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1">Кнопка</a>-->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!--сами титулы, картинки титулов-->
+        <patzi-photo-list :collection-titles="dog.titleDog" :me="me" @remove-title="openTit"></patzi-photo-list>
+
+
+        <span slot="footer" class="dialog-footer">
+        <el-link :href="getFullNameLink(dog.fullName)" type="success"><%= __('Close') %></el-link>
+        </span>
+    </el-dialog>
+
+    <% /* Диалоговое окно. Добавить | Редактировать титулы. */ %>
+    <el-dialog title="<%= __('Add me titles') %>"
+               :visible.sync="centerDialogAdded"
+               custom-class="dialog-kennel-add-dog"
+               center>
+        <el-dialog
+                width="60%"
+                :title="dialog.header"
+                :visible.sync="innerVisible"
+                append-to-body>
+            <div class="text-center"><p>{{dialog.description}}</p></div>
+            <el-image :src="dialog.src" style="width: 100%">
+                <div slot="placeholder" class="image-slot">
+                    Loading<span class="dot">...</span>
+                </div>
+
+            </el-image>
+        </el-dialog>
+
+        <% /* Диалоговое окно. Не верный текст имени собаки. */ %>
+        <template v-if="!ruleForm.see">
+            <el-popover
+                    ref="popover"
+                    placement="top-start"
+                    title="<%= __('Visibility') %>"
+                    width="270"
+                    trigger="hover"
+                    content="<%= __('Your title is currently not visible in the catalog. Until you turn on the visibility no one can see it.') %>">
+            </el-popover>
+            <div class="menu-center">
+                <h1 v-if="buttonUpdate" class="flex justify-content-center"
+                    :class="classObject"
+                >{{ruleForm.fullName}}
+                </h1>
+                <el-button class="not-border" icon="el-icon-warning-outline" size="mini" v-popover:popover
+                           circle></el-button>
+            </div>
+        </template>
+        <template v-else>
+            <h1 v-if="buttonUpdate" class="flex justify-content-center"
+                :class="classObject"
+            >{{ruleForm.fullName}}</h1>
+        </template>
+        <div v-if="ruleForm.imageUrl">
+            <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
+        </div>
+        <h5><%= __('Multiple upload photos') %></h5>
+        <label v-if="!ruleForm.imageUrl">
+            <%= __('Download the scans of the diploma, which indicates the presence of this title in the dog.') %>
+        </label>
+        <div class="my-2">
+            <el-divider content-position="left"><%= __('Add photo') %></el-divider>
+        </div>
+        <!---------------------------------------------------------------------------------------->
+        <% /*Загрузка фото NEW*/ %>
+        <div class="container-fluid ">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <el-upload
+                            action="/api/v1/files/upload"
+                            list-type="picture-card"
+                            drag
+                            multiple
+                            ref="upload"
+                            :on-preview="handlePictureCardPreview"
+                            :before-upload="beforeUpload"
+                            :limit="limit"
+                            :on-success="handleSuccess"
+                            :on-exceed="handleExceed"
+                            :on-remove="handleRemove"
+                    >
+                        <i class="el-icon-plus"></i>
+                        <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
+                            {{sizeLess}}<%= __('MB') %></div>
+                    </el-upload>
+                    <br>
+                    <el-dialog :visible.sync="dialogVisible" style="z-index: 10000">
+                        <img :data-src="dialogImageUrl" class="lazyload" alt="">
+                    </el-dialog>
+                </div>
+            </div>
+        </div>
+
+        <!---------------------------------------------------------------------------------------->
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+            <div class="container-fluid ">
+                <div class="row ">
+                    <div class="col col-sm-12 col-lg-10">
+                        <% /* DIVIDER*/ %>
+                        <div>
+                            <el-divider></el-divider>
+                        </div>
+                        <% /* ТИТУЛЫ. Добавить */ %>
+                        <el-form-item label="Титул" prop="id">
+                            <el-select v-model="ruleForm.id" placeholder="Select">
+                                <el-option v-for="item in titles"
+                                           :label="item.label"
+                                           :title="item.subtitleRu"
+                                           :value="item.id"
+                                           :key="item.id">
+                                    <span style="float: left">{{ item.label }}</span>
+                                </el-option>
+                            </el-select>
+
+                        </el-form-item>
+                    </div>
+                </div>
+                <div class="row my-5">
+                    <div class="col col-sm-12 col-lg-10">
+                        <% /* ДАТА ПОЛУЧЕНИЯ */ %>
+                        <el-form-item label="<%= __('Date') %>" prop="dateReceiving">
+                            <el-date-picker
+                                    v-model="ruleForm.dateReceiving"
+                                    type="datetime"
+                                    placeholder="<%= __('Select date and time') %>"
+                                    default-time="12:00:00">
+                            </el-date-picker>
+                        </el-form-item>
+                    </div>
+                </div>
+
+                <% /* СТРАНА для WW*/ %>
+                <template v-if="ww(ruleForm.id)">
+                    <el-divider content-position="left"><%= __('World Champion Addition') %></el-divider>
+                    <el-form-item v-if="" label="<%= __('Country') %>" prop="country">
+                        <el-input show-word-limit
+                                  style="width:80%;"
+                                  clearable
+                                  maxlength="170"
+                                  size="small"
+                                  placeholder="<%= __('name of the country where the title was received') %>"
+                                  v-model="ruleForm.country"></el-input>
+                    </el-form-item>
+                </template>
+
+                <% /* ГОРОД для WW*/ %>
+                <template v-if="ww(ruleForm.id)">
+                    <el-form-item v-if="" label="<%= __('City') %>" prop="city">
+                        <el-input show-word-limit
+                                  style="width:80%;"
+                                  clearable
+                                  maxlength="170"
+                                  size="small"
+                                  placeholder="<%= __('name of the country where the title was received') %>"
+                                  v-model="ruleForm.city"></el-input>
+                    </el-form-item>
+                </template>
+
+                <% /* ВИДЕН ТИТУЛ ИЛИ НЕТ */ %>
+                <div class="flex justify-content-center my-5">
+                    <el-form-item prop="see">
+                        <el-switch
+                                style="display: block"
+                                v-model="ruleForm.see"
+                                active-color="#13ce66"
+                                inactive-color="#ff4949"
+                                active-text="<%= __('visible') %>"
+                                inactive-text="<%= __('not visible') %>">
+                        </el-switch>
+                    </el-form-item>
+                </div>
+            </div>
+            <el-divider></el-divider>
+            <el-row type="flex" justify="center">
+                <div class="my-3 pt-4 text-center hidden-xs-only">
+                    <el-form-item>
+                        <el-button
+                                @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
+                        <el-button v-if="!buttonUpdate" type="primary"
+                                   @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+                        <el-button v-else type="primary" @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
+                    </el-form-item>
+                </div>
+                <div class="text-center hidden-sm-and-up">
+                    <el-button-group>
+                        <el-button @click="buttonUpdate = false; centerDialogAdded = false"
+                                   icon="el-icon-close"></el-button>
+                        <el-button v-if="!buttonUpdate" type="primary"
+                                   @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+                        <el-button v-else type="primary" @click="submitForm('ruleForm')"
+                                   icon="el-icon-check"></el-button>
+                    </el-button-group>
+                </div>
+            </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+  </span>
+    </el-dialog>
+
+    <% /* Диалоговое окно. Аватар пользователя, картинка собаки. */ %>
+    <el-dialog
+            :title="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)"
+            custom-class="dialog-kennel-add"
+            :visible.sync="photoVisible"
+            :before-close="handleCloseDialog">
+        <div class="menu-center" v-if="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)">
+            <img class="lazyload" :data-src="(_.isEmpty(objOne.avatar) ? objOne.imageSrc : objOne.avatar)"
+                 style="width: 100%;"
+                 :alt="(_.isEmpty(objOne.fullName) ? objOne.description : objOne.fullName)">
+        </div>
+        <span slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="objOne={};photoVisible = false"><%= __('Close') %></el-button>
+    </span>
+    </el-dialog>
+
+
+    <div :class="{ winner: isWW() }">
+        <% /* Шапка страницы */ %>
+        <section v-if="!dog.headerVideoShow" class="banner-area relative" :class="{deathColor:dog.dateDeath,
+         }">
+            <div class="container">
+                <div class="row d-flex align-items-center justify-content-center">
+                    <div class="about-content col-lg-12">
+                        <div v-if="isWW()" class="menu-center">
+                            <i slot="reference" style="font-size: 2em; color: rgb(170, 150, 124)" class="ti-crown"></i>
+                        </div>
+
+                        <h1 class="text-white">{{dog.fullName}}</h1>
+                        <p>{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</p>
+                        <H2 v-if="dog.nickname" class="text-gold">
+                            <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
+                            <i v-else class="el-icon-female"></i>
+                            {{dog.nickname}}
+                        </H2>
+                        <p v-else class="gender">
+                            <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
+                            <i v-else class="el-icon-female"></i>
+                        </p>
+                        <p>
+                            <% /* Титулы */ %>
+                            {{dog.detail}}
+                            <el-button type="text" @click="goto(name(dog.fullName, 'titles'))">
+                              <span class="pointer" v-for="(value, name, index) of dog.countTitles" :key="'t-' + index"
+                                    :title="dog.countTitlesSubtitleRu[index]">{{ name }}<span v-if="value>1">x{{ value }}</span>
+                                  {{ index < _.size(dog.countTitles) - 1 ? ', ' : '' }}
+                              </span>
+                            </el-button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section v-if="dog.headerVideoShow && dog.headerVideo" class="u-clearfix u-video u-section-1" id="sec-53d9">
+            <div style="" class="u-background-video u-expanded u-video-cover">
+                <div style=" position: absolute;width:178%;left:-39%;height:178%;top:-39%" class="embed-responsive">
+                    <iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;"
+                            class="embed-responsive-item" :src="urlYoutube" frameborder="0" allowfullscreen=""></iframe>
+                </div>
+            </div>
+            <!-- <div class="u-clearfix u-sheet u-sheet-1">
+                 <img src="images/adc12b1e1454f20fadfaabb27bbc3476.png" alt="" class="u-image u-image-contain u-image-default u-image-1" data-image-width="195" data-image-height="199" data-animation-name="bounceIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
+                 <div class="u-align-center u-container-style u-expanded-width u-group u-group-1">
+                     <div class="u-container-layout">
+                         <h3 class="u-text u-text-white u-text-1">hello, we are</h3>
+                         <h1 class="u-text u-text-white u-title u-text-2" data-animation-name="fadeIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">{{dog.fullName}}</h1>
+                         <p class="u-text u-text-body-alt-color u-text-3">Chinese Crested Dog Lovely baby</p>
+                     </div>
+                 </div>
+                 <img src="images/a43f0c881afb6a0766cbd11968251686.png" alt="" class="u-image u-image-contain u-image-default u-image-2" data-image-width="195" data-image-height="199" data-animation-name="rollIn" data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
+             </div>-->
+            <div class="u-clearfix u-sheet u-sheet-1 container">
+                <div class="row d-flex align-items-center justify-content-center">
+                    <div class="about-content col-lg-12">
+                        <div v-if="isWW()" class="menu-center">
+                            <h3 class="u-text u-text-white u-text-1">
+
+                                <i slot="reference" style="font-size: 2em; color: rgb(170, 150, 124)"
+                                   class="ti-crown"></i>
+                            </h3>
+                        </div>
+                        <h1 class="u-text u-text-white u-title u-text-2" data-animation-name="fadeIn"
+                            data-animation-duration="1000" data-animation-delay="0" data-animation-direction="">
+                            {{dog.fullName}}</h1>
+                        <p class="u-text u-text-body-alt-color u-text-3">{{dog.dateBirth | getAge(me.preferredLocale,
+                            dog.dateDeath)}}</p>
+                        <!--  <h1 class="text-white">{{dog.fullName}}</h1>
+                          <p>{{dog.dateBirth | getAge(me.preferredLocale, dog.dateDeath)}}</p>-->
+                        <H2 v-if="dog.nickname" class="text-gold">
+                            <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
+                            <i v-else class="el-icon-female"></i>
+                            {{dog.nickname}}
+                        </H2>
+                        <p v-else class="gender">
+                            <i v-if="dog.gender === 'sire'" class="el-icon-male"></i>
+                            <i v-else class="el-icon-female"></i>
+                        </p>
+                        <p>
+                            <% /* Титулы */ %>
+                            {{dog.detail}}
+                            <el-button type="text" @click="goto(name(dog.fullName, 'titles'))">
+                              <span class="pointer" v-for="(value, name, index) of dog.countTitles" :key="'t-' + index"
+                                    :title="dog.countTitlesSubtitleRu[index]">{{ name }}<span v-if="value>1">x{{ value }}</span>
+                                  {{ index < _.size(dog.countTitles) - 1 ? ', ' : '' }}
+                              </span>
+                            </el-button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <% /* Главное Фото */ %>
+        <section class="service-area section-gap">
+            <div class="container">
+                <div class="portfolio_details_inner ">
+                    <div class="row">
+                        <div class="col pt-4">
+                            <% /* Хлебные крошки */ %>
+                            <el-breadcrumb separator-class="el-icon-arrow-right">
+                                <el-breadcrumb-item><a style="text-decoration: none" href="/"><%= __('Home-menu') %></a>
+                                </el-breadcrumb-item>
+                                <el-breadcrumb-item><a style="text-decoration: none"
+                                                       href="/dogs/chinese-crested"><%= __('Dogs') %></a>
+                                </el-breadcrumb-item>
+                                <el-breadcrumb-item> {{dog.fullName}}</el-breadcrumb-item>
+                            </el-breadcrumb>
+
+                        </div>
+                        <div class="col-md-6">
+                            <el-row type="flex" class="row-bg  mt-sm-0" justify="end">
+                                <el-col :span="21">
+                                    <el-row type="flex" class="row-bg" justify="end">
+                                        <% /* Заводчик */ %>
+                                        <el-col :span="11">
+                                            <h5 class="text-center">
+                                                <small>breeder:</small>
+                                                {{dog.breeder.fullName}}
+                                                <% /* Сделать перевод имён */ %>
+                                                <!--                                                {{me.preferredLocale === 'ru' ? dog.breeder.fullName : dog.breeder.fullNameEn}}-->
+                                            </h5>
+                                        </el-col>
+                                        <% /* Владелец  */ %>
+                                        <el-col :span="11">
+                                            <h5 class="text-center">
+                                                <small>owner:</small>
+                                                {{dog.owners.fullName}}
+                                                <% /* Сделать перевод имён */ %>
+                                                <!--                                                {{me.preferredLocale === 'ru' ? dog.owners.fullName : dog.owners.fullNameEn}}-->
+                                            </h5>
+                                        </el-col>
+                                    </el-row>
+                                </el-col>
+
+                                <% /* Кнопки управления */ %>
+                                <el-col :span="1" class="menu-center-v">
+                                    <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content">
+                                        <el-dropdown @command="handleCommand">
+                            <span class="el-dropdown-link">
+                              <i class="el-icon-more el-icon--right"></i>
+                            </span>
+                                            <el-dropdown-menu slot="dropdown">
+                                                <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
+                                                    <%= __('Add photo') %>
+                                                </el-dropdown-item>
+                                                <el-dropdown-item icon="ti-medall" :command="{com:'a'}">
+                                                    <%= __('Titles') %>
+                                                </el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </el-dropdown>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                        </div>
+                    </div>
+
+                    <% /*ГЛАВНАЯ КАРТИНКА */ %>
+                    <div class="menu-center " style="position: relative; overflow:hidden ">
+
+                        <el-tooltip v-if="dog.sale & dog.price>0" class="item" effect="dark"
+                                    content="<%= __('For sale') %>"
+                                    placement="left">
+                            <el-button class="lenta pointer" @click="goTo('dogs/chinese-crested/sale')">
+                                <div style="color: white;">{{dog.currency | getCurrency()}} {{dog.price}}</div>
+                            </el-button>
+                        </el-tooltip>
+
+                        <el-image
+                                :src="rootImg()"
+                                :key="dog.id"
+                                :fit="'cover'"
+                                :class="{deathColor:dog.dateDeath}"
+                                :scroll-container="'#style-1'"
+                                :preview-src-list="dog.imagesArrUrl">
+                            <div slot="placeholder" class="image-slot" style="height:500px;">
+                                Loading<span class="dot">...</span>
+                            </div>
+                            <div slot="error" class="image-slot">
+                                <i class="el-icon-picture-outline"></i> <%= __('not found') %>
+                            </div>
+                        </el-image>
+                        <% /* КНОПКА ПОДЕЛИТЬСЯ*/ %>
+                        <!-- <div class="fb-share-button" :data-href="seo.canonical" data-layout="button_count"
+                              data-size="small"><a target="_blank" :href="getUrlShare()"
+                                                   class="fb-xfbml-parse-ignore">Поделиться</a>
+                         </div>-->
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <h2 class="text-center text-uppercase"><%= __('Dog description') %></h2>
+        <% /* ИНФОРМАЦИЯ о СОБАКЕ */ %>
+        <section class="service-area ">
+            <div class="container">
+
+                <!--  <div class="menu-between mb-5">
+          <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()"
+                     round><%= __('Pedigree') %></el-button>
+        </div>-->
+                <div class="menu-center">
+                    <% /* ЦИТАТА, ЗАМЕТКА о СОБАКЕ */ %>
+                    <div v-if="dog.subtitle" class="card  mb-4">
+                        <div class="card-header">
+                            <%= __('Quote') %>
+                        </div>
+                        <div class="card-body">
+                            <blockquote class="blockquote mb-0">
+                                <p>{{dog.subtitle}}</p>
+                                <footer class="blockquote-footer">
+                                    {{dog.owners.fullName}}
+                                    <!--                                    <cite :title="dog.kennel.label">{{dog.kennel.label}}</cite>-->
+                                </footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                    <% /* СОБАКА */ %>
+                    <el-card class="box-card ">
+                        <div slot="header" class="clearfix">
+                            <span><%= __('Dog') %> ({{dog.gender}})</span>
+
+                        </div>
+                        <div class="menu-between-v">
+
+                            <% /* Регистрационный номер в федерации*/ %>
+                            <div class="menu-between" v-if="regNo()">
+                                <span><%= __('Reg. no') %></span>
+                                <span class="text-uppercase">{{regNo()}}</span>
+                            </div>
+
+                            <div class="menu-between">
+                                <span><%= __('DoB') %></span>
+                                <span>{{dog.dateBirth | getCreate(me.preferredLocale)}}</span>
+                            </div>
+                            <div v-if="dog.dateDeath" class="menu-between">
+                                <span><%= __('DoD') %></span>
+                                <span>{{dog.dateDeath | getCreate(me.preferredLocale)}}</span>
+                            </div>
+                            <div class="menu-between" v-if="dog.color">
+                                <span><%= __('Color') %></span> <span> {{dog.color}}</span>
+                            </div>
+                            <div class="menu-between" v-if="dog.type">
+                                <span><%= __('Variety') %></span> <span>{{dog.type}}</span>
+                            </div>
+                            <div class="menu-between" v-if="dog.growth > 20">
+                                <span><%= __('Size') %> </span>
+                                <template>{{dog.growth}}<%= __('cm') %>
+                                    ({{dog.growth | getDin}}")
+                                    <template v-if="dog.weight > 20">/ {{dog.weight/1000}}<%= __('kg') %> ({{dog.weight
+                                        | getFunt}}#)
+                                    </template>
+                                </template>
+                            </div>
+                        </div>
+                    </el-card>
+
+                    <% /* ЗАВОДЧИК BREEDER*/ %>
+                    <el-card class="box-card">
+                        <div slot="header" class="clearfix">
+                            <span><%= __('Breeder') %>: {{dog.breeder.fullName}} </span>
+
+                        </div>
+                        <div class="menu-center">
+                            <div class="block">
+                                <a href="#" @click="clickShowPhoto(dog.breeder)" class="flex justify-content-center">
+                                    <el-avatar :size="100" :src="dog.breeder.avatar" @error="errorHandler">
+                                        <img data-src="https://cube.elemecdn
+                                        .com/e/fd/0fc7d20532fdaf769a25683617711png.png" class="lazyload"/>
+                                    </el-avatar>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="menu-center">
+                            <el-link :underline="false" type="info" :href="getLinkKennel(dog.kennel.label)">
+                                {{dog.kennel.label}}
+                                <span v-if="dog.breeder.country">({{dog.breeder.country}})</span>
+                            </el-link>
+                        </div>
+                    </el-card>
+
+                    <% /* ВЛАДЕЛЕЦ OWNER*/ %>
+                    <el-card class="box-card">
+                        <div slot="header" class="clearfix">
+                            <span><%= __('Owner') %>: {{dog.owners.fullName}}
+                                <template v-if="dog.owners.country">({{dog.owners.country}})</template></span>
+
+                        </div>
+                        <div class="menu-center">
+                            <div class="block">
+                                <a href="#" @click="clickShowPhoto(dog.owners)" class="flex justify-content-center">
+                                    <el-avatar :size="100" :src="dog.owners | getFoto()" @error="errorHandler">
+                                        <img class="lazyload" data-src="https://cube.elemecdn
+                                        .com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                                    </el-avatar>
+                                </a>
+                            </div>
+                        </div>
+                    </el-card>
+                    <% /* РАЗНОЕ */ %>
+                    <el-card class="box-card"
+                             v-if="(dog.growth && dog.growth > 20) | dog.teethCount | dog.dogTests | dog.stamp">
+                        <div slot="header" class="clearfix">
+                            <span><%= __('Varia') %></span>
+                        </div>
+                        <div class="menu-between-v">
+                            <div class="menu-between" v-if="dog.birthWeight && dog.birthWeight > 20">
+                                <span><%= __('Birth weight') %>:</span> <span>{{dog.birthWeight}} g</span>
+                            </div>
+                            <div class="menu-between" v-if="dog.stamp">
+                                <span><%= __('Stamp') %>:</span> <span>{{dog.stamp}}</span>
+                            </div>
+
+                            <div class="menu-between" v-if="dog.dogTests">
+                                <span><%= __('Tests') %>:</span> <span>{{dog.dogTests}}</span>
+                            </div>
+
+                            <span v-if="dog.showTeeth">
+                           <div class="menu-between">
+                             <span><%= __('Bite') %>:</span> <span>{{dog.bite}}</span>
+                           </div>
+
+                           <div class="menu-between" v-if="dog.teethCount">
+                             <span><%= __('Number of teeth') %>:</span>
+                             <el-tooltip content="?" placement="top" effect="light">
+                               <el-link :underline="false" @click="open" type="info">
+                                 {{dog.teethCount}}
+                               </el-link>
+                             </el-tooltip>
+                           </div>
+                            </span>
+                        </div>
+                    </el-card>
+
+                    <% /* РОДИТЕЛИ PARENTS */ %>
+                    <el-card class="box-card " v-for="(parent, index) of dog.parents" :key="'p-' + index">
+                        <div slot="header" class="clearfix">
+                            <span>
+                                <i :class="[parent.gender==='sire' ? 'el-icon-male':'', 'el-icon-female']"></i>
+                                {{parent.gender}}:
+                            </span>
+                            <el-link :href="parent.detail" class="link" :underline="false">
+                                {{parent.fullName}}
+                            </el-link>
+                        </div>
+                        <!--                        <div class="menu-between">-->
+                        <!--                            <span><%= __('Size') %>: </span> <span>{{parent.growth}}<%= __('cm') %>-->
+                        <!--                ({{parent.growth | getDin}}") / {{parent.weight/1000}}<%= __('kg') %>-->
+                        <!--                ({{parent.weight | getFunt}}#)-->
+                        <!--                            </span>-->
+                        <!--                        </div>-->
+
+                        <div class="menu-between" v-if="parent.growth > 20">
+                            <span><%= __('Size') %> </span>
+                            <template>{{parent.growth}}<%= __('cm') %>
+                                ({{parent.growth | getDin}}")
+                                <template v-if="parent.weight > 20">/ {{parent.weight/1000}}<%= __('kg') %>
+                                    ({{parent.weight | getFunt}}#)
+                                </template>
+                            </template>
+                        </div>
+                        <div v-if="parent">
+                            <template>
+                                <el-carousel trigger="click" :autoplay="false" indicator-position="none">
+                                    <el-carousel-item v-for="(img, index) of parent.imgI7" :key="img.id"
+                                                      class="menu-center">
+                                        <p class="medium">{{ parent.description }}</p>
+                                        <img :data-src="img.imageSrc" class="lazyload"
+                                             style="width: auto; height: 300px; " alt="">
+                                    </el-carousel-item>
+                                </el-carousel>
+                            </template>
+                        </div>
+                    </el-card>
+
+                    <% /* DRAWER. Siblings. БРАТЬЯ и СЁСТРЫ. ОДНОПОМЁТНИКИ.*/ %>
+                    <el-drawer
+                            title="I am the title"
+                            :visible.sync="siblings"
+                            direction="rtl"
+                            :with-header="false">
+
+                        <el-container>
+                            <el-header><h3><%= __('Siblings') %></h3></el-header>
+                            <el-main>
+                                <div class="menu-between-v">
+
+                                    <div class="mb-5" v-for="(lit, ind) of dog.siblings" :key="lit.id">
+
+                                        <h3><a :href="lit.detail" class="alert-link">{{lit.fullName}}</a>
+                                            <i :class="[lit.gender==='sire' ? 'el-icon-male':'', 'el-icon-female']"></i>
+                                        </h3>
+
+                                        <div class="menu-between">
+                                            <div :style="{ overflow: 'hidden', padding: '15px', border: lit.dateDeath ? '1px solid #3b3b3b' : 'none'}">
+                                                <div class="alert" :class="[lit.gender==='dam' ? 'alert-success' :
+                                                '',  'alert-primary']"
+                                                     role="alert">
+                                                    <el-image
+                                                            style="width: 250px;"
+                                                            :alt="lit.fullName"
+                                                            fit="'cover'"
+                                                            :src="lit.images[lit.cover].imageSrc"
+                                                            :preview-src-list="lit.imagesArrUrl">
+                                                    </el-image>
+                                                    <!--                                                    <el-popover-->
+                                                    <!--                                                            placement="top-start"-->
+                                                    <!--                                                            width="200"-->
+                                                    <!--                                                            trigger="hover">-->
+                                                    <!--                                                        <div slot="reference" :href="lit.detail"-->
+                                                    <!--                                                             class="alert-link"></div>-->
+                                                    <!--                                                    </el-popover>-->
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <!--                                                <p v-if="dateDeath" title="<%= __('Age') %>">{{lit.dateBirth | getAge(me-->
+                                                <!--                                                    .preferredLocale,-->
+                                                <!--                                                    dog.dateDeath)}}</p>-->
+                                                <p title="<%= __('Age') %>">{{lit.dateBirth | getAge(me.preferredLocale,
+                                                    lit.dateDeath)}}</p>
+                                                <em>
+                                                    <small title="<%= __('Date of birth') %>"> {{lit.dateBirth |
+                                                        getCreate(me.preferredLocale, 'llll')}}
+                                                        <span v-if="lit.birthWeight" title="<%= __('Birth weight') %>">
+                                                        ({{lit.birthWeight}}g)</span>
+                                                    </small>
+                                                </em>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </el-main>
+                        </el-container>
+                    </el-drawer>
+                    <% /* DRAWER. ПОТОМСТВО */ %>
+                    <el-drawer
+                            title="I am the title"
+                            :visible.sync="drawer"
+                            direction="ltr"
+                            :with-header="false">
+
+                        <el-container>
+                            <el-header><h3><%= __('Offspring') %></h3></el-header>
+                            <el-main>
+                                <div class="menu-between-v">
+
+                                    <div class="mb-5" v-for="(lit, ind) of dog.litter" :key="lit.dateBirth">
+                                        <div class="menu-between">
+                                            <div>
+                                                <div class="alert alert-secondary" role="alert">
+                                                    <el-popover
+                                                            placement="top-start"
+                                                            width="200"
+                                                            trigger="hover">
+                                                        <ul>
+                                                            <li><strong><%= __('Partner') %></strong></li>
+                                                            <li v-if="lit.oneParent.sale"><%= __('For sale') %>!</li>
+                                                            <!--<li><img width="90" :src="lit.oneParent.imgI7[lit.oneParent.cover].imageSrc" alt=""></li>-->
+                                                            <li>
+                                                                <!--<i class="" :class="[lit.oneParent.gender === 'dam' ? 'el-icon-female' : '', 'el-icon-male']"></i>-->
+                                                                <div class="flex justify-content-between">
+                                                                    <span> <%= __('Gender') %></span><span>{{lit.oneParent.gender}}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="flex justify-content-between">
+                                                                    <span><%= __('DoB') %></span>
+                                                                    <span>{{lit.oneParent.dateBirth | getCreate(me.preferredLocale,'L')}}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li v-if="lit.oneParent.color">
+                                                                <div class="flex justify-content-between">
+                                                                    <span><%= __('Color') %></span> <span>{{lit.oneParent.color}}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li v-if="lit.oneParent.width">
+                                                                <div class="flex justify-content-between">
+                                                                    <span>Вес</span>
+                                                                    <span>{{lit.oneParent.weight}}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li v-if="lit.oneParent.growth">
+                                                                <div class="flex justify-content-between">
+                                                                    <span>Рост</span>
+                                                                    <span>{{lit.oneParent.growth}}</span>
+                                                                </div>
+                                                            </li>
+                                                            <div v-if="lit.oneParent.showTeeth">
+                                                                <li v-if="lit.oneParent.canine">
+                                                                    <div class="flex justify-content-between">
+                                                                        <span>Клыки</span>
+                                                                        <span>{{lit.oneParent.canine}}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li v-if="lit.oneParent.teethCount">
+                                                                    <div class="flex justify-content-between">
+                                                                        <span><%= __('Bite') %></span>
+                                                                        <span :title="lit.oneParent.bite">
+                              {{lit.oneParent.bite.slice(0,6)}}...
+                                  </span>
+                                                                    </div>
+                                                                </li>
+                                                                <li v-if="lit.oneParent.teethCount">
+                                                                    <div class="flex justify-content-between">
+                                                                        <span><%= __('Teeth') %></span> <span>{{lit.oneParent.teethCount}}</span>
+                                                                    </div>
+                                                                </li>
+                                                            </div>
+                                                        </ul>
+                                                        <a slot="reference" :href="lit.detail" class="alert-link">{{lit.fullName}}</a>
+                                                    </el-popover>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <em>
+                                                    <small title="Дата помёта"> {{lit.dateBirth}}</small>
+                                                </em>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="flex justify-content-between" v-for="(ch, ind) of lit.litter">
+                                            <el-avatar v-if="ch.imgI7" :size="50"
+                                                       :src="ch.imgI7[ch.cover].imageSrc"></el-avatar>
+                                            <div v-if="ch.sale" class="pt-2">
+                                                <el-popover
+                                                        placement="top"
+                                                        width="290"
+                                                        trigger="hover"
+                                                >
+
+                                                    <div class="alert alert-warning" role="alert">
+                                                        <div class="flex justify-content-between ">
+                                                            <h3><%= __('For sale') %>!</h3>
+                                                            <h3>{{ch.currency | getCurrency()}} {{ch.price}}</h3>
+                                                        </div>
+                                                    </div>
+                                                    <el-button slot="reference"
+                                                               @click="goTo('dogs/chinese-crested/sale')" type="warning"
+                                                               icon="el-icon-money" circle></el-button>
+                                                </el-popover>
+                                            </div>
+                                            <div class="alert"
+                                                 :class="[ch.gender==='dam' ? 'alert-success' : '',  'alert-primary']"
+                                                 role="alert">
+                                                <el-popover
+                                                        placement="top-start"
+                                                        width="200"
+                                                        trigger="hover">
+                                                    <ul :style="{ overflow: 'hidden', padding: '15px', border: ch.dateDeath ? '1px solid #3b3b3b' : 'none'}">
+                                                        <li><strong><%= __('Descendant') %></strong></li>
+                                                        <!--<li v-if="ch.sale"><%= __('For sale') %>!</li>-->
+                                                        <li v-if="ch.imgI7"><img width="142" class="lazyload"
+                                                                                 :data-src="ch.imgI7[ch.cover].imageSrc"
+                                                                                 alt=""></li>
+                                                        <li>
+                                                            <!--<i class="" :class="[ch.gender === 'dam' ? 'el-icon-female' : '', 'el-icon-male']"></i>-->
+
+                                                            <div class="flex justify-content-between">
+                                                                <span> <%= __('Gender') %></span><span>{{ch.gender}}</span>
+                                                            </div>
+                                                        </li>
+
+                                                        <li v-if="ch.color">
+                                                            <div class="flex justify-content-between">
+                                                                <span><%= __('Color') %> </span><span>{{ch.color}}</span>
+                                                            </div>
+                                                        </li>
+                                                        <li v-if="ch.weight">
+                                                            <div class="flex justify-content-between">
+                                                                <span>Вес </span><span>{{ch.weight}}</span></div>
+                                                        </li>
+                                                        <li v-if="ch.growth">
+                                                            <div class="flex justify-content-between">
+                                                                <span>Рост </span><span>{{ch.growth}}</span></div>
+                                                        </li>
+                                                        <div v-if="ch.showTeeth">
+                                                            <li v-if="ch.canine">
+                                                                <div class="flex justify-content-between">
+                                                                    <span>Клыки</span><span>{{ch.canine}}</span></div>
+                                                            </li>
+                                                            <!--<li v-if="ch.teethCount"><%= __('Bite') %>: {{ch.bite}}</li>-->
+                                                            <li v-if="ch.teethCount">
+                                                                <div class="flex justify-content-between">
+                                                                    <span><%= __('Teeth') %></span><span> {{ch.teethCount}}</span>
+                                                                </div>
+                                                            </li>
+                                                        </div>
+                                                    </ul>
+                                                    <a slot="reference" :href="ch.detail" style="color: #5a6268">
+                                                        {{ch.fullName}}</a>
+                                                </el-popover>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </el-main>
+                        </el-container>
+                    </el-drawer>
+                </div>
+            </div>
+            <div class="container">
+                <div class="flex justify-content-center mt-5">
+                    <el-button v-if="!_.isEmpty(dog.litter)" @click="drawer = true" type="success" round>
+                        <%= __('Offsprings') %> {{countPuppies()}}
+                    </el-button>
+                    <el-button v-if="dog.siblings && dog.siblings.length > 1"
+                               type="warning" @click="siblings = true" type="success" round><%= __('Siblings') %>
+                    </el-button>
+                    <el-button v-if="dog.isPedigree" type="primary" @click="clickPedigree()"
+                               round><%= __('Pedigree') %></el-button>
+
+
+                </div>
+            </div>
+        </section>
+
+        <% /* Content */ %>
+        <section class="portfolio_details_area ">
+            <div class="container">
+                <div class="portfolio_details_inner ">
+                    <div class="row">
+                        <% /* КАРТИНКИ СОБАКИ */ %>
+                        <div class="col menu-center">
+                            <div v-for="(img ,index, key) in dog.images" :key="index + '-DOGS'">
+                                <picture @click="clickShowPhoto(img)" class="pointer">
+                                    <source media="(min-width: 1240px)" :srcset="dog.imagesMin[index].imageSrc">
+                                    <source media="(max-width: 414px)" :srcset="dog.imgI7[index].imageSrc">
+                                    <img :data-src="img.imageSrc" class="portrait lazyload" :alt="img.name">
+                                </picture>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <% /* Полное описание собаки */ %>
+                        <div class="col ">
+                            {{dog.description}}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <router-view></router-view>
+    </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

@@ -1,0 +1,83 @@
+<div id="edit-avatar" v-cloak>
+
+  <div class="container">
+    <h1><%= __('Update personal avatar') %></h1>
+    <hr/>
+    <ajax-form action="updateAvatar"
+               :syncing.sync="syncing"
+               :cloud-error.sync="cloudError"
+               @submitted="submittedFormUpdate($event)"
+               :handle-parsing="handleParsingFormUpdate"
+    >
+      <div class="modal-body">
+        <% /*Редактировать фото*/ %>
+        <div class="form-group">
+          <label><%= __('Edit a photo') %>:</label>
+          <div class="photo-uploader" :class="!formData.avatar ? 'empty' :  ''">
+            <div class="photo-upload-field row d-flex align-items-center chek-wrap"
+                 :class="!formData.avatar ? 'justify-content-center' :  'justify-content-start'">
+
+
+
+              <div class="photo-preview col">  <!---->
+                <div class="image-wrapper round "
+                     :class="!formData.avatar ? 'd-flex align-items-center justify-content-center' : ''">
+
+
+                  <transition name="collapse">
+                    <ajax-button v-if="formData.avatar" type="submit" :syncing="syncing"
+                                 class="rounded-circle  chek act">
+                      <div class="ti-close text-danger" ti></div> </ajax-button>
+                    <!--<span @click="clickDeleteAvatar()"
+                          title="удалить"
+                          v-if="formData.avatar"
+                          class="ti-close  text-danger rounded-circle chek act"></span>-->
+                  </transition>
+
+
+                  <transition name="collapse">
+                    <span v-if="borrowFormSuccess" class="ti-check text-success rounded-circle chek"></span>
+                  </transition>
+                  <img v-if="formData.avatar" class="personPhoto" alt="A preview of the selected item"
+                       :src="formData.avatar"/>
+                  <span v-else class="placeholder-icon fa fa-picture-o"></span>
+                </div>
+              </div>
+              <div class="col d-flex-column justify-content-center">
+                <span class="file-upload-button btn btn-sm"
+                      :class="[formErrors.photo ? 'btn-outline-danger' : formData.avatar ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
+                  <span class="button-text" v-if="!formData.avatar"><%= __('Select image') %></span>
+                  <span class="button-text" v-else><%= __('Change image') %></span>
+                  <input type="file" multiple :disabled="syncing" accept="image/*" class="file-input"
+                         @change="changeFileUpdate($event.target.files)"/>
+                </span>
+                <p class="image-advice text-muted" v-if="!formErrors.photo">
+                  <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
+                  <%= __('Use mainly square images for better scaling of avatars.') %><br>
+                  <span class="text-danger"><%= __('Attention') %>
+                    : </span><%= __('Picture size is no more than 100 kb.') %>
+                </p>
+                <p class="image-advice text-danger" v-if="formErrors.photo">
+                  <%= __('A photo is required in order to add a new item') %>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% /*Показ ошибок*/ %>
+        <p class="text-danger" v-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+      </div>
+      <div class="modal-footer  flex-row-reverse justify-content-start">
+
+        <ajax-button v-if="formData.avatar" type="submit" :syncing="syncing"
+                     class="btn btn-primary ml-1">{{formData.photo === undefined ?  'Удалить' : 'Сохранить'}}</ajax-button>
+        <a class="btn btn-outline-info" href="/account"><%= __('Close') %></a>
+      </div>
+    </ajax-form>
+
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

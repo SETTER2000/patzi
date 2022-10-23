@@ -1,0 +1,1155 @@
+<div id="kennels-home" class="content" v-cloak>
+
+  <% /* Диалоговое окно Редактор питомников. Список питомников*/ %>
+  <el-dialog title="<%= __('Kennel editor') %>. <%= __('List') %>."
+             custom-class="dialog-kennel-add"
+             :before-close="handleCloseDialogListKennel"
+             :visible.sync="dialogEditorList">
+    <template>
+      <el-table
+        ref="filterTable"
+        :data="kennelsEditList.filter(data => !search || data.label.toLowerCase().includes(search.toLowerCase()))"
+        :default-sort="{prop: 'updatedAt', order: 'descending'}"
+        max-height="650"
+        style="width: 100%">
+        <el-table-column
+          type="index"
+          fixed="left"
+          width="35">
+        </el-table-column>
+        <el-table-column
+          property="imageSrc"
+          label="Logo"
+          fixed="left"
+          width="90">
+          <template slot="header" slot-scope="scope">
+            <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
+          </template>
+          <template slot-scope="scope">
+            <div v-if="!_.isEmpty(scope.row.imageSrc)">
+              <a href="#" @click="clickShowPhoto(scope.$index,scope.row)" class="flex justify-content-center">
+                <el-avatar :size="38" @error="errorHandler">
+                  <img :src="scope.row.imageSrc"/>
+                </el-avatar>
+              </a>
+            </div>
+            <div v-else class="photo-preview col">
+              <div class="image-wrapper round  d-flex align-items-center justify-content-center">&lt;!&ndash;&ndash;&gt; &lt;!&ndash;&ndash;&gt;
+                <span
+                  class="placeholder-icon fa fa-picture-o"></span></div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="<%= __('Name') %>"
+          sortable
+          prop="label">
+          <template slot-scope="scope">
+            <el-link @click="goTo2(scope.row.detail)" type="primary">{{scope.row.label}}</el-link>
+          </template>
+        </el-table-column>
+
+        <el-table-column
+          label="<%= __('Country') %>"
+          sortable
+          prop="country"
+          sortable
+          width="120">
+          <template slot-scope="scope">
+            {{me.preferredLocale==='ru' ? scope.row.country.labelRu : scope.row.country.label}}
+          </template>
+        </el-table-column>
+
+        <el-table-column
+                v-show="true"
+                label="<%= __('Update') %>"
+                sortable
+                prop="updatedAt">
+          <template slot-scope="scope">
+            {{scope.row.updatedAt |  getCreate(me.preferredLocale, 'llll')}}
+          </template>
+        </el-table-column>
+        <el-table-column align="right">
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
+              size="mini"
+              placeholder="Start typing a kennel name"/>
+          </template>
+          <template slot-scope="scope">
+            <el-tooltip content="<%= __('Image editor') %>" placement="left" effect="light">
+              <el-button
+                v-if="scope.row.images"
+                size="mini"
+                icon="el-icon-picture-outline-round"
+                @click="handleEditPhotos(scope.$index, scope.row)">
+              </el-button>
+            </el-tooltip>
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.$index, scope.row)">
+              Edit
+            </el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="openRemoveDialog(scope.row.id)"
+            >Delete
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </template>
+    <span slot="footer" class="dialog-footer">
+      <span class="flex justify-content-between">
+         <el-button @click="clearFilter"><%= __('reset all filters') %></el-button>
+        <span>
+            <el-button @click="clickCloseDialog()"><%= __('Close') %></el-button>
+        </span>
+      </span>
+    </span>
+  </el-dialog>
+
+  <% /* Диалоговое окно. Редактировать Питомник. */ %>
+  <el-dialog :visible.sync="centerDialogUpdate"
+             custom-class="dialog-kennel-add"
+             :before-close="handleCloseDialog"
+             center>
+    <template slot="title" slot-scope="scope">
+      <span style="font-size: 1.2rem">{{ !buttonUpdate ? 'Add your kennel' : 'edit kennel'}}</span>
+    </template>
+    <% /* Вложенное Диалоговое окно. Подтверждение удаления объекта. */ %>
+    <el-dialog
+      title="<%= __('Warning') %>"
+      :visible.sync="centerDialogConfirmDeleteCoOwner"
+      width="30%"
+      center
+      append-to-body>
+      <el-divider content-position="left">{{nameDeleteCoOwner()}}</el-divider>
+
+      <span><%= __('Confirm removal of this user from the co-owners of your cattery.') %></span>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogConfirmDeleteCoOwner = false"><%= __('Cancel') %></el-button>
+    <el-button type="primary" @click="deleteCoOwner()"><%= __('Confirm') %></el-button>
+  </span>
+    </el-dialog>
+    <el-dialog
+      width="80%"
+      top="3vh"
+      title="<%= __('Continents') %> 6"
+      :visible.sync="innerVisible"
+      append-to-body>
+      <div class="justify-content-center">
+        <el-image
+          style="width: inherit; height: auto"
+          :src=url
+          :fit="fit"></el-image>
+      </div>
+    </el-dialog>
+    <% /* Диалоговое окно.  Кто может быть совладельцем */ %>
+    <el-dialog :visible.sync="innerVisibleCo"
+               width="30%"
+               top="3vh"
+               title="<%= __('Who can be a co-owner') %>"
+               append-to-body>
+      <div class="justify-content-center">
+        <%= __('You can add a co-owner of the nursery, if one exists.') %>
+        <br> <%= __('Co-owner may be registered user with a valid email. Start typing your username and select the person you want from the list provided.') %>
+        <br> <%= __('The case of letters does not matter.') %>
+      </div>
+    </el-dialog>
+    <div class="container">
+      <template v-if="!updateForm.action">
+        <el-popover
+          ref="popover"
+          placement="top-start"
+          title="<%= __('Visibility') %>"
+          width="270"
+          trigger="hover"
+          content="<%= __('Your dog is currently not visible in the catalog. Until you turn on the visibility no one can see it.') %>">
+        </el-popover>
+        <div class="menu-center">
+          <h1 v-if="buttonUpdate" class="flex justify-content-center"
+              :class="classObject"
+          >{{updateForm.label}}
+          </h1>
+          <el-button class="not-border" icon="el-icon-warning-outline" size="mini"
+                     v-popover:popover circle></el-button>
+        </div>
+      </template>
+      <template v-else>
+        <h1 v-if="buttonUpdate" class="flex justify-content-center"
+            :class="classObject"
+        >{{updateForm.label}}</h1>
+      </template>
+
+
+      <div v-if="updateForm.imageSrc" class="col">
+        <div class="single-gallery-image" :style="{ backgroundImage: `url('${updateForm.imageSrc}')` }"></div>
+      </div>
+      <!--<img src="https://d2e0ab19zxiehc.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" class="img-fluid" alt="Responsive image">-->
+      <div class="form-group">
+        <label v-if="!updateForm.imageUrl"> <%= __('Change logo') %>:</label>
+        <hr>
+        <div class="photo-uploader">
+          <div class="row file-upload-field  ">
+            <div class="file-preview  col-sm-12 col-md-4 el-col-md-offset-3 d-flex justify-content-center">
+              <el-upload
+                class="avatar-uploader"
+                action="/api/v1/files/upload"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload">
+                <img v-if="updateForm.imageUrl" :src="updateForm.imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </div>
+            <div class="col-sm-12  col-md-6">
+              <p class="image-advice text-muted" v-if="!formErrors.photo">
+                <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <el-row :gutter="20">
+      <el-col :span="1"></el-col>
+      <el-col :span="23">
+        <el-form :model="updateForm" :rules="uprows" ref="updateForm"
+                 label-width="120px" class="demo-ruleForm">
+
+          <% /* ВИДИМОСТЬ ПИТОМНИКА */ %>
+          <el-form-item label="<%= __('Set Visibility') %>" prop="action">
+            <el-switch
+              v-model="updateForm.action"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="Yes!"
+              inactive-text="No"
+            >
+            </el-switch>
+            <el-tooltip effect="dark" placement="top-start">
+              <div slot="content"><%= __('Set Visibility') %></div>
+              <div size="mini" round class="el-icon-question ml-3"></div>
+            </el-tooltip>
+          </el-form-item>
+
+          <% /* ИМЯ ПИТОМНИКА */ %>
+          <!-- <el-form-item  label="<%= __('Kennel') %>" prop="label">
+  <el-input minlength="3" maxlength="80" show-word-limit
+            placeholder="<%= __('The official name') %>"
+            v-model="updateForm.label"></el-input>
+</el-form-item>-->
+
+          <% /* НОМЕР ПИТОМНИКА */ %>
+          <el-form-item label="<%= __('Number') %>" prop="registerNumber">
+            <el-input minlength="3" maxlength="20" show-word-limit
+                      v-model="updateForm.registerNumber"
+                      placeholder="<%= __('Kennel registration number') %>"></el-input>
+          </el-form-item>
+
+          <% /* ДАТА РЕГИСТРАЦИИ ПИТОМНИКА */ %>
+          <!--updateForm.dateCreate::: {{updateForm.dateCreate}}<br>-->
+          <!--updateForm.dateCreate test::: {{test}}-->
+          <el-form-item label="<%= __('Date') %>" required>
+            <el-col :span="11">
+              <el-form-item prop="dateCreate">
+                <el-date-picker
+                  type="date"
+                  v-model="updateForm.dateCreate"
+                  placeholder="<%= __('Registration date') %>"
+                  style="width: 100%;"
+                />
+              </el-form-item>
+            </el-col>
+          </el-form-item>
+
+          <% /* КОНТИНЕНТ */ %>
+          <template>
+            <el-form-item label="<%= __('Continent') %>" prop="continentId">
+              <el-select v-model="updateForm.continent.id"
+                         placeholder="<%= __('Where is the nursery registered?') %>"
+                         style="width: 58%;"
+                         @change="changeSelectContinent()"
+              >
+                <el-option v-for="item in continents"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
+              </el-select>
+
+              <el-tooltip class="ml-3" effect="dark" content="<%= __('Continental Information') %>"
+                          placement="top-start">
+                <el-button @click="innerVisible=true" size="mini" round icon="el-icon-question"></el-button>
+              </el-tooltip>
+            </el-form-item>
+          </template>
+
+          <% /* СТРАНА */ %>
+          <template v-if="updateForm.continent.id">
+            <el-form-item label="<%= __('Country') %>" prop="countryId">
+              <el-select v-model="updateForm.country.id"
+                         placeholder="<%= __('Where is the kennel registered?') %>"
+                         style="width: 58%;"
+                         @change="changeSelectCountry()"
+              >
+                <el-option v-for="item in getPullCountry()"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </template>
+
+          <% /* ОБЛАСТЬ, РЕГИОН */ %>
+          <template v-if="updateForm.country && updateForm.country.id">
+            <el-form-item label="<%= __('Region') %>" prop="regionId">
+              <el-select v-model="updateForm.region.id"
+                         placeholder="<%= __('Where is the kennel registered?') %>"
+                         style="width: 58%;"
+                         @change="changeSelectRegion(updateForm.region.id)">
+                <el-option v-for="item in getPullRegion()"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: rgb(132,146,166); font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </template>
+
+          <% /* ГОРОД */ %>
+          <template v-if="updateForm.region && updateForm.region.id">
+            <el-form-item label="<%= __('City') %>" prop="cityId">
+              <el-autocomplete v-model="updateForm.city.value"
+                               popper-class="my-autocomplete"
+                               :fetch-suggestions="querySearchUpdate"
+                               placeholder="<%= __('Please Input City') %>"
+                               :trigger-on-focus="false"
+                               @select="handleSelect"
+                               @visible-change="changeSelectCity"
+                               clearable
+                               @clear="clearInputCity"
+                               style="width: 58%;">
+                <template slot-scope="{ item}">
+                  <span class="value">{{ item.labelRu  }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                </template>
+              </el-autocomplete>
+              <el-tooltip effect="dark" content="<%= __('English search') %>" placement="top-start">
+                <div size="mini" round class="el-icon-question ml-3"></div>
+              </el-tooltip>
+            </el-form-item>
+          </template>
+
+          <% /* АДРЕС */ %>
+          <template v-if="updateForm.city">
+            <el-form-item label="<%= __('Address') %>" prop="address">
+              <el-input
+                placeholder="<%= __('street, house, building') %>" minlength="3" maxlength="100" show-word-limit
+                v-model="updateForm.address"></el-input>
+            </el-form-item>
+          </template>
+
+          <% /* ТЕЛЕФОНЫ */ %>
+          <% /* Как сделать обязательным заполнения телефона:
+             :rules="{ required: true, message: 'Phone can not be null', trigger: 'blur' }" */ %>
+          <el-form-item v-for="(phone, index) in updateForm.phones"
+                        :label="'Phone: ' + `${index + 1}`"
+                        :key="phone.key"
+                        :prop="'phones.' + index + '.value'">
+            <el-col :span="12">
+              <el-input placeholder="<%= __('Phone number') %>" v-model="phone.value"></el-input>
+              <el-input placeholder="<%= __('Full Name') %>" v-model="phone.fullName"></el-input>
+            </el-col>
+            <el-col :span="6">
+              <el-button-group>
+                <el-tooltip effect="dark" content="<%= __('Add phone') %>" placement="top-end">
+                  <el-button @click="addPhone" size="mini" round icon="el-icon-circle-plus-outline"></el-button>
+                </el-tooltip>
+                <el-tooltip effect="dark" v-if="index > 0" content="<%= __('Remove phone') %>" placement="top-start">
+                  <el-button @click.prevent="removePhone(phone)" size="mini" round icon="el-icon-delete"></el-button>
+                </el-tooltip>
+              </el-button-group>
+
+              <!--<el-button ><%= __('Add phone') %></el-button>-->
+              <!--<el-button  ><%= __('Delete') %></el-button>-->
+            </el-col>
+            <el-col :span="6">
+
+            </el-col>
+          </el-form-item>
+
+          <% /* С КАКОЙ СТОРОНЫ ИМЯ ПИТОМНИКА */ %>
+          <el-form-item label="<%= __('Name on') %>:" prop="rightName">
+            <el-switch
+              v-model="updateForm.rightName"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="<%= __('right') %>"
+              inactive-text="<%= __('left') %>">
+            </el-switch>
+            <el-tooltip effect="dark" placement="top-start">
+              <div slot="content"><%= __('Which side is the name of the dog written in relation to the name of the kennel.') %><br>
+                (<%= __('right: KennelName DogName | left: DogName KennelName') %>)"
+              </div>
+              <div size="mini" round class="el-icon-question ml-3"></div>
+            </el-tooltip>
+
+          </el-form-item>
+
+          <% /* САЙТ */ %>
+          <el-form-item label="<%= __('WebSite') %>" prop="site">
+            <el-input
+              minlength="3" maxlength="30" show-word-limit
+              placeholder="<%= __('Without http:// | https://') %>"
+              v-model="updateForm.site">
+              <template slot="prepend">//</template>
+            </el-input>
+          </el-form-item>
+
+          <% /* ВАШ ПИТОМНИК? (OWNER) */ %>
+          <el-form-item label="<%= __('Your kennel?') %>" prop="yourKennel">
+            <el-switch
+              v-model="updateForm.yourKennel"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="Yes!"
+              inactive-text="No"
+            >
+            </el-switch>
+            <el-tooltip v-if="!updateForm.yourKennel" effect="dark" placement="top-start">
+              <div slot="content"><%= __('Is the kennel registered to you, are you a breeder?') %></div>
+              <div size="mini" round class="el-icon-question ml-3"></div>
+            </el-tooltip>
+          </el-form-item>
+
+          <% /* BREEDER */ %>
+          <template v-if="!updateForm.yourKennel && (me.isAdmin || me.isSuperAdmin)">
+            <!--<template >-->
+            <el-form-item label="<%= __('Breeder') %>" prop="breederId">
+              <el-autocomplete
+                class="inline-input"
+                v-model="updateForm.breeder.fullName"
+                :fetch-suggestions="querySearchFoo"
+                placeholder="<%= __('Please set the owner of the kennel') %>"
+                :trigger-on-focus="false"
+                @select="handleBreederSelected"
+                style="width: 58%;"
+                clearable
+                @clear="clearInputBreeder"
+              >
+                <template slot-scope="{ item }">
+                  <span class="value">{{ item.fullName }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fullName }}</span>
+                </template>
+              </el-autocomplete>
+              <el-tooltip class="ml-3" effect="dark" content="<%= __('Who can be a co-owner') %>"
+                          placement="top-start">
+                <el-button @click="innerVisibleCo=true" size="mini" round icon="el-icon-question"></el-button>
+              </el-tooltip>
+            </el-form-item>
+          </template>
+
+          <% /* ОПИСАНИЕ ПИТОМНИКА */ %>
+          <el-form-item v-if="updateForm.yourKennel" label="<%= __('About Us') %>" prop="subtitle">
+            <el-input minlength="10" maxlength="300" show-word-limit
+                      placeholder="<%= __('Tell us about the kennel') %>" type="textarea"
+                      v-model="updateForm.subtitle"></el-input>
+          </el-form-item>
+
+          <% /* АБЗАЦ О ПРОИЗВОДИТЕЛЯХ ПИТОМНИКА */ %>
+          <el-form-item v-if="updateForm.yourKennel" label="<%= __('Our Manufacturers') %>" prop="manufacturers">
+            <el-input minlength="10" maxlength="300" show-word-limit
+                      placeholder="<%= __('The paragraph about the dogs of the kennel') %>" type="textarea"
+                      v-model="updateForm.manufacturers"></el-input>
+          </el-form-item>
+
+          <% /* добавить CO-OWNER */ %>
+          <template v-if="updateForm.yourKennel">
+            <!--<template >-->
+            <el-form-item label="<%= __('Co-owner') %>" prop="coOwnerId">
+              <el-autocomplete
+                class="inline-input"
+                v-model="cowner"
+                :fetch-suggestions="querySearchFoo"
+                placeholder="<%= __('Please Input co-owner') %>"
+                :trigger-on-focus="false"
+                @select="handleCoOwnerSelected"
+                clearable
+                style="width: 58%;"
+              >
+
+                <template slot-scope="{ item }">
+                  <span class="value">{{ item.fullName }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fullName }}</span>
+                </template>
+              </el-autocomplete>
+              <el-tooltip class="ml-3" effect="dark" content="<%= __('Who can be a co-owner') %>"
+                          placement="top-start">
+                <el-button @click="innerVisibleCo=true" size="mini" round icon="el-icon-question"></el-button>
+              </el-tooltip>
+            </el-form-item>
+          </template>
+
+          <% /* вывод CO-OWNER */ %>
+          <el-row>
+            <p class="text-center" v-if="!_.isEmpty(updateForm.owners)">Уже являются совладельцами:</p>
+            <el-col :span="24">
+              <div class="demo-basic--circle menu-center">
+                <div class="block mx-1" v-for="(owner, index) in updateForm.owners" :key="index +'-ow'">
+                  <template v-if="updateForm.yourKennel || me.isAdmin || me.isSuperAdmin">
+                    <el-popover
+                      placement="top-start"
+                      :title="owner.fullName"
+                      width="200"
+                      trigger="hover"
+                      :content="owner.emailAddress">
+                      <el-button slot="reference" type="text" @click="centerDialogConfirmDeleteCoOwner=true;coownerId=owner.id"
+                                 :underline="false">
+                        <template v-if="owner.defaultIcon === 'gravatar'">
+                          <el-avatar :size="50" :src="owner.gravatar"></el-avatar>
+                        </template>
+                        <template v-else>
+                          <el-avatar :size="50" :src="owner.avatar"></el-avatar>
+                        </template>
+                      </el-button>
+                    </el-popover>
+                  </template>
+                  <template v-else>
+                    <template v-if="owner.defaultIcon === 'gravatar'">
+                      <el-avatar :size="50" :src="owner.gravatar"></el-avatar>
+                    </template>
+                    <template v-else>
+                      <el-avatar :size="50" :src="owner.avatar"></el-avatar>
+                    </template>
+                  </template>
+
+
+                </div>
+                <!--<div class="block" v-for="size in sizeList" :key="size">
+                  <el-avatar :size="size" :src="circleUrl"></el-avatar>
+                </div>-->
+              </div>
+              <!-- <el-card :body-style="{ padding: '0px' }">
+                 <template v-if="owner.defaultIcon === 'gravatar'">
+                 <img :src="owner.gravatar" class="image">
+                 </template>
+                 <template v-else>
+                   <img :src="owner.avatar" class="image">
+                 </template>
+                 <div style="padding: 14px;">
+                   <span>{{owner.fullName}}</span>
+                   <div class="menu-between">
+                     <time class="time">{{ owner.emailAddress }}</time>
+                     <el-button type="danger" icon="el-icon-delete" class="button" circle></el-button>
+                   </div>
+                 </div>
+               </el-card>-->
+            </el-col>
+          </el-row>
+
+          <el-divider></el-divider>
+          <% /* КНОПКИ УПРАВЛЕНИЯ ФОРМОЙ ОТПРАВКИ */ %>
+          <el-row type="flex" justify="center">
+            <div class="my-3 pt-4 text-center hidden-xs-only">
+              <el-form-item>
+                <el-button @click="clickCloseDialogEditorKennel()"><%= __('Cancel') %></el-button>
+                <el-button type="primary" @click="submitForm('updateForm')"><%= __('Update') %></el-button>
+              </el-form-item>
+            </div>
+            <div class="text-center hidden-sm-and-up">
+              <el-button-group>
+                <el-button @click="clickCloseDialogEditorKennel()" icon="el-icon-close"></el-button>
+                <el-button type="primary" @click="submitForm('updateForm')" icon="el-icon-check"></el-button>
+              </el-button-group>
+            </div>
+          </el-row>
+        </el-form>
+      </el-col>
+    </el-row>
+    <span slot="footer" class="dialog-footer">
+<!--    <el-button @click="goTo()"><%= __('Add card') %></el-button>
+    <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>-->
+  </span>
+  </el-dialog>
+
+  <% /* Диалоговое окно. Добавить Питомник*/ %>
+  <el-dialog :visible.sync="centerDialogAdded"
+             custom-class="dialog-kennel-add"
+             :before-close="handleCloseDialog"
+             center>
+    <template slot="title" slot-scope="scope">
+      <span style="font-size: 1.2rem">{{ !buttonUpdate ? 'Add your kennel' : 'edit kennel'}}</span>
+    </template>
+    <el-dialog
+      width="80%"
+      top="3vh"
+      title="<%= __('Continents') %> 6"
+      :visible.sync="innerVisible"
+      append-to-body>
+      <div class="justify-content-center">
+        <el-image
+          style="width: inherit; height: auto"
+          :src=url
+          :fit="fit"></el-image>
+      </div>
+    </el-dialog>
+    <% /* Диалоговое окно.  Кто может быть совладельцем */ %>
+    <el-dialog
+      width="30%"
+      top="3vh"
+      title="<%= __('Who can be a co-owner') %>"
+      :visible.sync="innerVisibleCo"
+      append-to-body>
+      <div class="justify-content-center">
+        <%= __('You can add a co-owner of the nursery, if one exists.') %>
+        <br> <%= __('Co-owner may be registered user with a valid email. Start typing your username and select the person you want from the list provided.') %>
+        <br> <%= __('The case of letters does not matter.') %>
+      </div>
+    </el-dialog>
+    <div class="container">
+      <template v-if="!ruleForm.action">
+        <el-popover
+          ref="popover"
+          placement="top-start"
+          title="<%= __('Visibility') %>"
+          width="270"
+          trigger="hover"
+          content="<%= __('Your dog is currently not visible in the catalog. Until you turn on the visibility no one can see it.') %>">
+        </el-popover>
+        <div class="menu-center">
+          <h1 v-if="buttonUpdate" class="flex justify-content-center"
+              :class="classObject"
+          >{{ruleForm.label}}
+          </h1>
+          <el-button class="not-border" icon="el-icon-warning-outline" size="mini" v-popover:popover circle></el-button>
+        </div>
+      </template>
+      <template v-else>
+        <h1 v-if="buttonUpdate" class="flex justify-content-center"
+            :class="classObject"
+        >{{ruleForm.label}}</h1>
+      </template>
+
+
+      <div v-if="ruleForm.imageUrl" class="col">
+        <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
+      </div>
+      <!--<img src="https://d2e0ab19zxiehc.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" class="img-fluid" alt="Responsive image">-->
+      <div class="form-group">
+        <!--<svg width="200" height="100"-->
+        <!--xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">-->
+        <!--<image xlink:href="https://d2e0ab19zxiehc.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" height="100" width="200"/>-->
+        <!--</svg>-->
+        <label v-if="!ruleForm.imageUrl"> <%= __('Add logo') %>:</label>
+        <hr>
+        <div class="photo-uploader">
+          <div class="row file-upload-field  ">
+            <div class="file-preview  col-sm-12 col-md-4 el-col-md-offset-3 d-flex justify-content-center">
+              <el-upload
+                class="avatar-uploader"
+                action="/api/v1/files/upload"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload">
+                <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </div>
+            <div class="col-sm-12  col-md-6">
+              <p class="image-advice text-muted" v-if="!formErrors.photo">
+                <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <el-row :gutter="20">
+      <el-col :span="1"></el-col>
+      <el-col :span="23">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
+                 label-width="120px" class="demo-ruleForm">
+
+          <% /* ВИДИМОСТЬ ПИТОМНИКА */ %>
+          <el-form-item label="<%= __('Set Visibility') %>" prop="action">
+            <el-switch
+              v-model="ruleForm.action"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="Yes!"
+              inactive-text="No"
+            >
+            </el-switch>
+            <el-tooltip effect="dark" placement="top-start">
+              <div slot="content"><%= __('Set Visibility') %></div>
+              <div size="mini" round class="el-icon-question ml-3"></div>
+            </el-tooltip>
+          </el-form-item>
+
+          <% /* ИМЯ ПИТОМНИКА */ %>
+          <el-form-item label="<%= __('Kennel') %>" prop="label">
+            <el-input minlength="3" maxlength="80" show-word-limit
+                      placeholder="<%= __('The official name') %>"
+                      v-model="ruleForm.label"></el-input>
+          </el-form-item>
+
+          <% /* НОМЕР ПИТОМНИКА */ %>
+          <el-form-item label="<%= __('Number') %>" prop="registerNumber">
+            <el-input minlength="3" maxlength="20" show-word-limit
+                      v-model="ruleForm.registerNumber"
+                      placeholder="<%= __('Kennel registration number') %>"></el-input>
+          </el-form-item>
+
+          <% /* ДАТА РЕГИСТРАЦИИ ПИТОМНИКА */ %>
+          <el-form-item label="<%= __('Date') %>" required>
+            <el-col :span="11">
+              <el-form-item prop="dateCreate">
+                <el-date-picker
+                  type="date"
+                  placeholder="<%= __('Registration date') %>"
+                  v-model="ruleForm.dateCreate"
+                  style="width: 100%;"
+                />
+              </el-form-item>
+            </el-col>
+          </el-form-item>
+
+          <% /* КОНТИНЕНТ */ %>
+          <template>
+            <el-form-item label="<%= __('Continent') %>" prop="continent">
+              <el-select v-model="ruleForm.continent"
+                         @change="changeSelectContinent()"
+                         placeholder="<%= __('Where is the nursery registered?') %>"
+                         :clearable="true"
+                         style="width: 58%;">
+                <el-option v-for="item in continents"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
+              </el-select>
+              <el-tooltip class="ml-3" effect="dark" content="<%= __('Continental Information') %>"
+                          placement="top-start">
+                <el-button @click="innerVisible=true" size="mini" round icon="el-icon-question"></el-button>
+              </el-tooltip>
+            </el-form-item>
+          </template>
+
+          <% /* СТРАНА */ %>
+          <template v-if="ruleForm.continent">
+            <!--<template >-->
+            <el-form-item label="<%= __('Country') %>" prop="country">
+              <el-select v-model="ruleForm.country"
+                         placeholder="<%= __('Where is the kennel registered?') %>"
+                         style="width: 58%;"
+                         :clearable="true"
+                         @visible-change="changeSelectCountry"
+              >
+                <el-option v-for="item in getPullCountry()"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </template>
+
+          <% /* ОБЛАСТЬ, РЕГИОН */ %>
+          <template v-if="ruleForm.country">
+            <!--<template >-->
+            <el-form-item label="<%= __('Region') %>" prop="region">
+              <el-select v-model="ruleForm.region"
+                         placeholder="<%= __('Where is the kennel registered?') %>"
+                         style="width: 58%;"
+                         :clearable="true"
+                         @change="changeSelectRegion(ruleForm.region)">
+                <el-option v-for="item in getPullRegion()"
+                           :key="item.id"
+                           :label="item.label"
+                           :value="item.id">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="float: right; color: rgb(132,146,166); font-size: 13px">{{ item.labelRu }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </template>
+
+          <% /* ГОРОД */ %>
+          <template v-if="ruleForm.country">
+            <el-form-item label="<%= __('City') %>" prop="city">
+              <el-autocomplete v-model="ruleForm.city"
+                               popper-class="my-autocomplete"
+                               :fetch-suggestions="querySearch"
+                               placeholder="<%= __('Please Input City') %>"
+                               :trigger-on-focus="false"
+                               @select="handleSelect"
+                               style="width: 58%;"
+              >
+                <template slot-scope="{ item }">
+
+                  <span class="value">{{ item.labelRu  }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                </template>
+              </el-autocomplete>
+              <!--<el-tooltip effect="dark" content="<%= __('English search') %>" placement="top-start">-->
+              <!--<div size="mini" round class="el-icon-question ml-3"></div>-->
+              <!--</el-tooltip>-->
+            </el-form-item>
+          </template>
+
+          <% /* АДРЕС */ %>
+          <template v-if="ruleForm.city">
+            <el-form-item label="<%= __('Address') %>" prop="address">
+              <el-input
+                placeholder="<%= __('street, house, building') %>" minlength="3" maxlength="100" show-word-limit
+                v-model="ruleForm.address"></el-input>
+            </el-form-item>
+          </template>
+
+          <% /* ТЕЛЕФОНЫ */ %>
+          <% /* Как сделать обязательным заполнения телефона:
+               :rules="{ required: true, message: 'Phone can not be null', trigger: 'blur' }" */ %>
+          <el-form-item
+            v-for="(phone, index) in ruleForm.phones"
+            :label="'Phone: ' + `${index + 1}`"
+            :key="phone.key"
+            :prop="'phones.' + index + '.value'">
+            <el-col :span="12">
+              <el-input placeholder="<%= __('Phone number') %>" v-model="phone.value"></el-input>
+              <el-input placeholder="<%= __('Full Name') %>" v-model="phone.fullName"></el-input>
+            </el-col>
+            <el-col :span="6">
+              <el-button-group>
+                <el-tooltip effect="dark" content="<%= __('Add phone') %>" placement="top-end">
+                  <el-button @click="addDomain" size="mini" round icon="el-icon-circle-plus-outline"></el-button>
+                </el-tooltip>
+                <el-tooltip effect="dark" v-if="index > 0" content="<%= __('Remove phone') %>" placement="top-start">
+                  <el-button @click.prevent="removeDomain(phone)" size="mini" round icon="el-icon-delete"></el-button>
+                </el-tooltip>
+              </el-button-group>
+
+              <!--<el-button ><%= __('Add phone') %></el-button>-->
+              <!--<el-button  ><%= __('Delete') %></el-button>-->
+            </el-col>
+            <el-col :span="6">
+
+            </el-col>
+          </el-form-item>
+
+          <% /* С КАКОЙ СТОРОНЫ ИМЯ ПИТОМНИКА */ %>
+          <el-form-item label="<%= __('Name on') %>:" prop="rightName">
+            <el-switch
+              v-model="ruleForm.rightName"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="<%= __('right') %>"
+              inactive-text="<%= __('left') %>">
+            </el-switch>
+            <el-tooltip effect="dark" placement="top-start">
+              <div slot="content"><%= __('Which side is the name of the dog written in relation to the name of the kennel.') %><br>
+                (<%= __('right: KennelName DogName | left: DogName KennelName') %>)"
+              </div>
+              <div size="mini" round class="el-icon-question ml-3"></div>
+            </el-tooltip>
+
+          </el-form-item>
+
+          <% /* САЙТ */ %>
+          <el-form-item label="<%= __('WebSite') %>" prop="site">
+            <el-input
+              minlength="3" maxlength="30" show-word-limit
+              placeholder="<%= __('Without http:// | https://') %>"
+              v-model="ruleForm.site">
+              <template slot="prepend">//</template>
+            </el-input>
+          </el-form-item>
+
+          <% /* OWNER */ %>
+          <el-form-item label="<%= __('Your kennel?') %>" prop="yourKennel">
+            <el-switch
+              v-model="ruleForm.yourKennel"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="Yes!"
+              inactive-text="No"
+            >
+            </el-switch>
+            <el-tooltip effect="dark" placement="top-start">
+              <div slot="content"><%= __('Is the kennel registered to you, are you a breeder?') %></div>
+              <div size="mini" round class="el-icon-question ml-3"></div>
+            </el-tooltip>
+          </el-form-item>
+
+          <% /* CO-OWNER */ %>
+          <template v-if="ruleForm.yourKennel || yourKennel">
+            <!--<template >-->
+            <el-form-item label="<%= __('Co-owner') %>" prop="coOwner">
+              <el-autocomplete
+                class="inline-input"
+                v-model="ruleForm.coOwner"
+                :fetch-suggestions="querySearchFoo"
+                placeholder="<%= __('Please Input co-owner') %>"
+                :trigger-on-focus="false"
+                @select="handleCoOwnerSelected"
+                style="width: 58%;"
+              >
+                <template slot-scope="{ item }">
+                  <span class="value">{{ item.fullName }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fullName }}</span>
+                </template>
+              </el-autocomplete>
+              <el-tooltip class="ml-3" effect="dark" content="<%= __('Who can be a co-owner') %>"
+                          placement="top-start">
+                <el-button @click="innerVisibleCo=true" size="mini" round icon="el-icon-question"></el-button>
+              </el-tooltip>
+            </el-form-item>
+
+
+            <!--     <el-popover
+                   placement="bottom"
+                   title="Title"
+                   width="200"
+                   trigger="click"
+                   content="this is content, this is content, this is content">
+                   <el-button slot="reference">Click to activate</el-button>
+                 </el-popover>-->
+          </template>
+
+          <% /* ОПИСАНИЕ ПИТОМНИКА */ %>
+          <el-form-item v-if="ruleForm.yourKennel" label="<%= __('About Us') %>" prop="subtitle">
+            <el-input
+              minlength="10" maxlength="300" show-word-limit
+              placeholder="<%= __('Tell us about the kennel') %>" type="textarea"
+              v-model="ruleForm.subtitle"></el-input>
+          </el-form-item>
+
+          <% /* АБЗАЦ О ПРОИЗВОДИТЕЛЯХ ПИТОМНИКА */ %>
+          <el-form-item v-if="ruleForm.yourKennel" label="<%= __('Our Manufacturers') %>" prop="manufacturers">
+            <el-input minlength="10" maxlength="300" show-word-limit
+                      placeholder="<%= __('The paragraph about the dogs of the kennel') %>" type="textarea"
+                      v-model="ruleForm.manufacturers"></el-input>
+          </el-form-item>
+
+
+          <el-divider></el-divider>
+          <% /* КНОПКИ УПРАВЛЕНИЯ ФОРМОЙ ОТПРАВКИ */ %>
+          <el-row type="flex" justify="center">
+            <div class="my-3 pt-4 text-center hidden-xs-only">
+              <el-form-item>
+                <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+                <el-button @click="clickCloseDialog()"><%= __('Cancel') %></el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+
+              </el-form-item>
+            </div>
+            <div class="text-center hidden-sm-and-up">
+              <el-button-group>
+                <el-button @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
+                <el-button @click="clickCloseDialog()" icon="el-icon-close"></el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+              </el-button-group>
+            </div>
+          </el-row>
+        </el-form>
+      </el-col>
+    </el-row>
+    <span slot="footer" class="dialog-footer">
+<!--    <el-button @click="goTo()"><%= __('Add card') %></el-button>
+    <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>-->
+  </span>
+  </el-dialog>
+
+  <% /* Диалоговое окно. Логотип питомника. */ %>
+  <el-dialog
+    :title="objOne.label"
+    custom-class="dialog-kennel-add"
+    :visible.sync="photoVisible"
+    :before-close="handleCloseDialog">
+    <div class="menu-center" v-if="objOne.imageSrc">
+      <img :src="objOne.imageSrc" style="width: 100%" :alt="objOne.label">
+    </div>
+    <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="objOne={};photoVisible = false"><%= __('Close') %></el-button>
+  </span>
+  </el-dialog>
+  <% /* Диалоговое окно. Подтверждение удаления объекта. */ %>
+  <el-dialog
+    title="<%= __('Warning') %>"
+    :visible.sync="centerDialogVisibleConfirm"
+    width="30%"
+    center>
+    <span>{{text}}</span>
+    <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialogVisibleConfirm = false"><%= __('Cancel') %></el-button>
+                <el-button type="primary" @click="confirmDeletion()"><%= __('Yes') %></el-button>
+             </span>
+  </el-dialog>
+  <% /* Диалоговое окно. Тарифы. */ %>
+  <el-dialog
+    title="<%= __('Warning') %>"
+    :visible.sync="centerDialogVisible"
+    width="53%"
+    style="margin-top: 17vh"
+    center>
+    <el-alert
+      title="<%= __('You have not linked a payment source to your account. In order to access paid features, you\'ll need to provide your credit card information. (Don\'t worry: you will only be charged when you\'ve reached the limit of your free plan.)') %>"
+      type="warning">
+    </el-alert>
+
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="goToCard()"><%= __('Add card') %></el-button>
+    <el-button type="primary" @click="centerDialogVisible = false"><%= __('Close') %></el-button>
+  </span>
+  </el-dialog>
+
+
+  <patzi-section-header :obj-data="seo"></patzi-section-header>
+
+  <patzi-row-h3-p :obj-data="seo"></patzi-row-h3-p>
+
+
+
+
+
+  <% /*Описание страницы. Первый блок текста.*/ %>
+
+
+  <div v-if="me.hasBillingCard || me.isSuperAdmin" class="mt-5 section-title text-center">
+    <el-button @click="add()" icon="el-icon-circle-plus-outline"
+               class="btn btn-outline-info"><%= __('Add kennel') %></el-button>
+  </div>
+  <div class="mt-5 section-title text-center" v-else>
+    <el-button @click="add()" icon="el-icon-circle-plus-outline"
+               class="btn btn-outline-info"><%= __('Add kennel') %></el-button>
+  </div>
+
+  <% /*Фильтр и блоки фото.*/ %>
+  <section class="about-area">
+    <div class="container">
+      <% /* Фильтры. */ %>
+
+      <% /* Кнопки управления, фильтры */ %>
+      <div class="menu-between mb-1" v-if="_.pluck(filterObjects, 'label').length >0">
+        <div class="text-lowercase font-weight-light font-italic">
+
+          <%= __('Kennels') %>: {{getNameContinent() || filterName }}
+          <el-tooltip effect="dark" content="<%= __('Selected') %>" placement="top">
+            <el-link :underline="false" type="info">({{objFilter().length}})</el-link>
+          </el-tooltip>
+          <span v-if="ruleForm.continent"> <el-tooltip effect="dark" content="<%= __('Reset filter') %>" placement="top-start"><el-link
+                @click="ruleForm.continent=this.sr='';objFilter()" type="danger" :underline="false"
+                icon="el-icon-document-remove"></el-link></el-tooltip></span>
+        </div>
+        <div class="grid-content">
+          <el-dropdown @command="handleCommand">
+                            <span class="el-dropdown-link">
+                             <i class="el-icon-more el-icon&#45;&#45;right pointer"></i>
+                            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-if="_.some(kennels, 'sale', true)" icon="el-icon-money"
+                                :command="{com:'c'}">
+                <%= __('For Sale') %>
+              </el-dropdown-item>
+              <el-dropdown-item v-if="_.some(kennels, 'action', true)" icon="ti-world"
+                                :command="{com:'c'}">
+                <el-select size="small" @change="changeSelectContinent()" v-model="ruleForm.continent"
+                           placeholder="<%= __('Where is the nursery registered?') %>"
+                           :clearable="true"
+                           style="padding-left: 4px;padding-right: 5px;">
+                  <el-option v-for="item in continents"
+                             :key="item.id"
+                             :label="item.label"
+                             :value="item.id">
+                    <span style="float: left">{{ item.label }}</span>
+                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                  </el-option>
+                </el-select>
+              </el-dropdown-item>
+              <el-dropdown-item v-if="me.isSuperAdmin || me.isAdmin || isBreeder" icon="el-icon-edit" :command="{com:'e'}">
+                <%= __('Kennel editor') %>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </div>
+
+      <% /* ПОИСК. */ %>
+      <div class="menu-center my-3">
+        <el-input
+          v-model="searchObjects"
+          placeholder="<%= __('Search by kennel name') %>"
+          clearable/>
+      </div>
+      <!--v-if="kennel.imageSrc && kennel.action"-->
+      <% /* ФОТО ПИТОМНИКОВ */ %>
+      <div class="scrollbar" id="style-1">
+        <el-row :gutter="7" class="flex-container wrap">
+          <el-col class="flex-item" v-for="(kennel, index) in objFilter()" :key="kennel.id"
+                  :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
+            <div @mouseenter="showMenu(kennel.id)" @mouseleave="showOut()"
+                 style="position: relative;" class="ell-image-flex">
+              <transition-group appear name="el-fade-in">
+                <div v-show="show && (showObject === kennel.id)"
+                     class="transition-box blue-dark menu-center-v"
+                     :key="kennel.id">
+                  <% /* Кнопки управления питомником */ %>
+                    <div style="font-size: .8rem; color:#C0C4CC"> {{kennel.country.label}} </div>
+                    <el-link class="link" :href="kennel.detail" :underline="false">
+
+                      <div :class="{deathColor:kennel.dateDeath}"> {{kennel.label}}</div>
+
+                      <div class="date" :class="{deathColor:kennel.dateDeath}">{{kennel.dateBirth | getAge(me.preferredLocale,
+                        kennel.dateDeath)}}
+                      </div>
+                    </el-link>
+                    <el-button v-if="_.isObject(kennel.breeder)" @click="goTo2(kennel.detail)"
+                               size="mini" type="success" round>
+                      {{kennel.breeder.fullName}}
+                    </el-button>
+                </div>
+              </transition-group>
+
+              <el-image
+                :src="kennel.imageSrc"
+                :key="kennel.id"
+                :fit="'cover'"
+                :scroll-container="'#style-1'"
+                lazy
+              >
+              </el-image>
+            </div>
+            <!--  <el-link type="danger" class="px-2" @click="goTo2(kennel.detail)" :underline="false"
+                       :title="kennel.label">
+                <el-image
+                  :src="kennel.imageSrc"
+                  :key="kennel.id"
+                  :fit="'cover'"
+                  :scroll-container="'#style-1'"
+                  lazy
+                >
+                </el-image>
+              </el-link>-->
+          </el-col>
+        </el-row>
+      </div>
+    </div>
+  </section>
+</div>
+
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

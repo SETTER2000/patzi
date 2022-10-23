@@ -1,0 +1,315 @@
+<div id="group-home" class="content" v-cloak>
+  <patzi-section-header :obj-data="seo"></patzi-section-header>
+  <patzi-row-h3-p :obj-data="seo"></patzi-row-h3-p>
+
+  <!-- Start Align Area -->
+  <div class="whole-wrap">
+    <div class="container">
+      <div class=" text-center">
+        <el-button icon="el-icon-circle-plus-outline" class="btn btn-outline-info" @click="clickAddButton()"><%= __('Add a group') %></el-button>
+      </div>
+
+      <% /*Диалоговое окно. Показывает фото профиля.*/ %>
+      <el-dialog :title="objOne.label" :visible.sync="dialogTableVisible">
+        <div class="demo-image__placeholder">
+          <div class="block">
+            <span class="demonstration">{{objOne.kennel}}</span>
+            <el-image :src="objOne.imageSrc">
+              <div slot="placeholder" class="image-slot">
+                Loading<span class="dot"><i class="el-icon-loading"></i></span>
+              </div>
+            </el-image>
+          </div>
+        </div>
+      </el-dialog>
+
+      <% /*Диалоговое окно. Объясняет почему нельзя удалить группу.*/ %>
+      <el-dialog
+        title="ВНИМАНИЕ!"
+        :visible.sync="centerDialogVisible"
+        width="30%"
+        center>
+        <div class="text-center">Эту группу нельзя удалить, группа является системной.</div>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="centerDialogVisible = false">Ок</el-button>
+        </span>
+      </el-dialog>
+
+
+      <div class="section-top-border">
+        <div class="progress-table-wrap">
+          <div class="progress-table">
+            <div class="table-head">
+              <div class="serial">#</div>
+              <div class="country">Название</div>
+              <div class="visit">количество</div>
+              <div class="percentage">Соотношение</div>
+              <div class="visit">Изменить</div>
+              <div class="visit">Удалить</div>
+            </div>
+            <div v-for="(group, index, key) of groups" :data-index="index" :key="group.id">
+              <div class="table-row">
+                <div class="serial">{{index+1}}</div>
+                <div class="country collapse">
+                  <!--<img width="31px" :src="group.imageSrc" alt="flag">-->
+
+
+                  <div v-if="group.imageSrc" class="photo-preview">
+                    <div class="image-wrapper round">
+                      <a href="#" @click="clickShowPhoto(index, group)">
+                        <img :src="group.imageSrc" class="personPhoto"/>
+                      </a>
+                    </div>
+                  </div>
+                  <div v-else class="photo-preview">
+                    <div class="image-wrapper round  d-flex align-items-center justify-content-center"><!----> <!----> <span
+                        class="placeholder-icon fa fa-picture-o"></span></div>
+                  </div>
+
+
+                  <span @click="clickCollapse(group.id)"> {{group.label}}</span>
+                </div>
+                <div class="visit "><span class="text-center">645032</span></div>
+                <div class="percentage">
+                  <div class="progress">
+                    <div class="progress-bar color-1" role="progressbar" style="width: 80%" aria-valuenow="80"
+                         aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+                <div class="visit">
+                <span class="genric-btn success-border small" data-toggle="tooltip" data-placement="top"
+                      title="<%= __('Edit') %>" @click="clickUpdateButton(group.id)">
+                  edit
+                </span>
+                </div>
+                <div class="visit">
+                <span class="genric-btn primary-border small" data-toggle="tooltip" data-placement="top" title="Delete"
+                      @click="clickDeleteGroup(group.id)">
+                  <span class="ti-close"></span>
+                </span>
+                </div>
+              </div>
+              <div class="table-row">
+                <div class="col" :data-index="index">
+                  <transition name="collapse">
+                    <div v-if="group.id===collaps" class="col">
+                      <div class="card card-body">
+                        {{ group.subtitle}}
+                      </div>
+                    </div>
+                  </transition>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% /*  End Align Area */ %>
+
+  <% /* "Upload Group" Modal */ %>
+  <modal v-if="virtualPageSlug==='new'"
+         v-cloak key="new"
+         @close="closeUploadGroupModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Upload new photo') %></h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="uploadGroup"
+               :syncing.sync="syncing"
+               :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingUploadGroupForm"
+               @submitted="submittedUploadGroupForm($event)"
+    >
+      <div class="modal-body">
+        <div class="form-group">
+          <label><%= __('Add a photo') %>:</label>
+          <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
+            <div class="photo-upload-field row d-flex align-items-center"
+                 :class="!uploadFormData.previewImageSrc ? 'justify-content-center' :  'justify-content-start'">
+              <div class="photo-preview col">
+                <div class="image-wrapper"
+                     :class="!uploadFormData.previewImageSrc ? 'd-flex align-items-center justify-content-center' : ''">
+
+                  <img v-if="uploadFormData.previewImageSrc" alt="A preview of the selected item"
+                       :src="uploadFormData.previewImageSrc"/>
+                  <span v-else class="placeholder-icon fa fa-picture-o"></span>
+                </div>
+              </div>
+              <div class="col d-flex-column justify-content-center">
+                <span class="file-upload-button btn btn-sm"
+                      :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
+                  <span class="button-text" v-if="!uploadFormData.previewImageSrc"><%= __('Select image') %></span>
+                  <span class="button-text" v-else><%= __('Change image') %></span>
+                  <input type="file" :disabled="syncing" accept="image/*" class="file-input"
+                         @change="changeFileInput($event.target.files)"/>
+                </span>
+                <p class="image-advice text-muted" v-if="!formErrors.photo">
+                  <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
+                </p>
+                <p class="image-advice text-danger" v-if="formErrors.photo">
+                  <%= __('A photo is required in order to add a new item') %>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <% /*Наименование группы*/ %>
+        <div class="form-group">
+          <label>Наименование группы</label>
+          <input class="form-control"
+                 :class="(formErrors.label && !uploadFormData.label) ? 'is-invalid' : ''"
+                 type="text"
+                 id="validationServerUsername"
+                 aria-describedby="inputGroupPrepend3"
+                 v-model="uploadFormData.label"
+          >
+          <small v-if="formErrors.label && !uploadFormData.label" class="text-danger ">
+            <%= __('Please indicate the group letter.') %>
+          </small>
+        </div>
+
+        <% /*Краткое описание*/ %>
+        <div class="form-group">
+          <label><%= __('Sub Title') %></label>
+          <textarea class="form-control"
+                    name=""
+                    v-model="uploadFormData.subtitle"
+                    cols="30"
+                    rows="3">
+          </textarea>
+        </div>
+
+        <p class="text-danger" v-if="cloudError === 'tooBig'">
+          <small><%= __('That file is too big. Please choose a junkier picture') %>.</small>
+        </p>
+        <p class="text-danger" v-else-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a
+              href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+
+      </div>
+
+      <div class="modal-footer flex-row-reverse justify-content-start">
+        <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1"><%= __('Save') %></ajax-button>
+        <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+
+  <% /* "Update group" modal */ %>
+  <modal v-if="virtualPageSlug==='edit' && selectedGroup"
+         v-cloak key="edit"
+         @close="closeUploadGroupModal()">
+    <% /*Редактировать*/ %>
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Edit') %> {{selectedGroup.label || 'item'}}</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="updateGroup"
+               :syncing.sync="syncing"
+               :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingUpdateGroupForm"
+               @submitted="submittedGroupFormUpdate($event)"
+    >
+      <div class="modal-body">
+        <% /*Редактировать фото*/ %>
+        <div class="form-group">
+          <label><%= __('Edit a photo') %>:</label>
+          <div class="photo-uploader" :class="!selectedGroup.imageSrc ? 'empty' :  ''">
+            <div class="photo-upload-field row d-flex align-items-center"
+                 :class="!selectedGroup.imageSrc ? 'justify-content-center' :  'justify-content-start'">
+              <div class="photo-preview col">
+                <div class="image-wrapper"
+                     :class="!selectedGroup.imageSrc ? 'd-flex align-items-center justify-content-center' : ''">
+
+                  <img v-if="selectedGroup.imageSrc" alt="A preview of the selected item"
+                       :src="selectedGroup.imageSrc"/>
+                  <span v-else class="placeholder-icon fa fa-picture-o"></span>
+                </div>
+              </div>
+              <div class="col d-flex-column justify-content-center">
+                <span class="file-upload-button btn btn-sm"
+                      :class="[formErrors.photo ? 'btn-outline-danger' : selectedGroup.imageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
+                  <span class="button-text" v-if="!selectedGroup.imageSrc"><%= __('Select image') %></span>
+                  <span class="button-text" v-else><%= __('Change image') %></span>
+                  <input type="file" multiple :disabled="syncing" accept="image/*" class="file-input"
+                         @change="changeFileUpdate($event.target.files)"/>
+                </span>
+                <p class="image-advice text-muted" v-if="!formErrors.photo">
+                  <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
+                </p>
+                <p class="image-advice text-danger" v-if="formErrors.photo">
+                  <%= __('A photo is required in order to add a new item') %>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% /*Краткое описание*/ %>
+        <div class="form-group">
+          <label><%= __('Sub Title') %></label>
+          <textarea class="form-control"
+                    name=""
+                    v-model="selectedGroup.subtitle"
+                    cols="30"
+                    rows="3">
+          </textarea>
+        </div>
+        <% /*Показ ошибок*/ %>
+        <p class="text-danger" v-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+      </div>
+      <div class="modal-footer  flex-row-reverse justify-content-start">
+        <ajax-button type="submit" :syncing="syncing"
+                     class="btn btn-primary ml-1"><%= __('Save') %></ajax-button>
+        <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
+      </div>
+    </ajax-form>
+
+  </modal>
+
+  <% /* "Confirm Delete Group" Modal */ %>
+  <modal v-if="confirmDeleteGroupModalOpen && selectedGroup" v-cloak key="delete"
+         @close="closeDeleteGroupModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Remove this') %>?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="destroyOneGroup" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingDeleteGroupForm"
+               @submitted="submittedDeleteGroupForm()">
+      <div class="modal-body">
+        <p><%= __('Are you sure you want to remove this') %> {{selectedGroup.label || 'item'}}?</p>
+        <p class="text-muted"
+           v-if="selectedGroup.borrowedBy"><%= __('We will no longer be able to assist with the return of this item, so you will need to contact') %>
+          {{selectedGroup.borrowedBy.fullName}} <%= __('directly to coordinate') %>.</p>
+        <p v-else><%= __('This item will no longer be available to share with friends') %>.</p>
+        <p class="text-danger" v-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a
+              href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal"><%= __('Nevermind') %></button>
+        <button type="submit" class="btn btn-danger ml-1"><%= __('Remove') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+
+  <router-view></router-view>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

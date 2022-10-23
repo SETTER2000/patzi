@@ -1,0 +1,27 @@
+<div id="chart-home" class="content" v-cloak>
+  <!-- start banner Area -->
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white"><%= __('Carts') %></h1>
+          <p class="text-white"><%= __('Graphical representation of some generalized data') %></p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End banner Area -->
+  <section class="work-area">
+
+    <h3 class="flex justify-content-center" v-cloak><%= __('The number of CCD in the world') %>.</h3>
+    <d3-bars-chart :d3-data="dogsWorld"></d3-bars-chart>
+
+    <h3 class="flex justify-content-center"><%= __('The number of kennels in the world') %>.</h3>
+    <d3-bars-chart :d3-data="dogsWorld2"></d3-bars-chart>
+
+  </section>
+  <!-- End Portfolio Details Area -->
+  <!--<router-view></router-view>-->
+</div>
+
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

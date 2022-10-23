@@ -1,0 +1,22 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */
+/*
+Время отпущенное на подтверждение электронного адреса при регистрации на сайте Поале Элл заканчивается.
+Через 6 часов ваш аккаунт будет аннулирован.
+  Если для вас эта информация не актуальна, то просто не обращайте внимание на данной сообщение.
+  Если вы хотите подтвердить ваш адрес электронной почты, вам следует перейти в письмо, которое
+  было вам выслано при регистрации и нажать кнопку подтверждения.
+
+  Если вы не смогли найти письмо присланное при регистрации, свяжитесь пожалуйста с нами или
+  зарегистрируйтесь повторно.
+*/
+%>
+<p style="margin-bottom: 25px;"><%= __('Dear') %> <%= user.fullName %>,</p>
+<p style="margin-bottom: 25px;">
+  <%= __('The time allowed to confirm the email address when registering on the Poale Ell website ends. After 6 hours, your account will be canceled.') %>
+ <br><%= __('If this information is not relevant to you, then just do not pay attention to this message.') %>
+ <br><%= __('If you want to confirm your email address, you should go to the email that was sent to you during registration and click the confirm button.') %>
+</p><p>
+  <%= __('If you could not find the letter sent during registration, please contact us or register again.') %>
+</p>
+<p style="margin-bottom: 5px;"><%= __('Sincerely') %>,</p>
+<p style="margin-top: 0px;"><%= __('The Poale Ell Team') %></p>

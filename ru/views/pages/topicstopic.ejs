@@ -1,0 +1,44 @@
+<div id="topic" v-cloak>
+    <patzi-section-header :obj-data="seo" :label="true"></patzi-section-header>
+
+    <% /* Главное Фото */ %>
+    <section class="service-area section-gap">
+        <div class="container">
+            <div class="portfolio_details_inner ">
+              <% /* Хлебные крошки */ %>
+                <div class="row">
+                    <div class="col-md-6">
+                        <el-breadcrumb separator-class="el-icon-arrow-right">
+                            <el-breadcrumb-item><a style="text-decoration: none" href="/"><%= __('Home-menu') %></a></el-breadcrumb-item>
+                            <el-breadcrumb-item><a style="text-decoration: none" href="/topics"><%= __('Topics') %></a></el-breadcrumb-item>
+                            <el-breadcrumb-item> {{data.labelRu}}</el-breadcrumb-item>
+                            <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
+                        </el-breadcrumb>
+                    </div>
+                </div>
+                </div>
+              <% /* Заголовок с описанием */ %>
+                <patzi-row-h3-p :obj-data="seo"></patzi-row-h3-p>
+              <% /* Фото для темы */ %>
+                <div class="demo-image flex justify-content-center">
+                    <div class="m-1" v-for="(img, index ) of data.imagesMin" :key="'imgs-' + index">
+                        <el-image
+                                style=" height: 300px;"
+                                :src="img.imageSrc"
+                                :fit="'cover'"
+                                :scroll-container="'#style-1'"
+                                :preview-src-list="data.imagesArrUrl">
+                    </div>
+                </div>
+
+              <el-row>
+                <div class="d-flex justify-content-center p-5">
+                <el-button type="danger" @click="goto('/blog')"><%= __('to posts') %></el-button>
+                </div>
+              </el-row>
+
+            </div>
+        </div>
+    </section>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

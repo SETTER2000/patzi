@@ -1,0 +1,433 @@
+<div id="litters-home" class="content" v-cloak>
+  <% /* Диалоговое окно Слайдер картинок */ %>
+  <el-dialog
+    title="<%= __('Parents') %>"
+    :visible.sync="dialogTableVisible"
+    :fullscreen="true"
+    top="1vh"
+    :close="handlerCloseDialogSlider"
+    center>
+    <div class="d-flex justify-content-end">
+      <el-switch
+        style="display: block"
+        v-model="autoplay"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        active-text="Autoplay"
+        inactive-text="Disable ">
+      </el-switch>
+    </div>
+    <!--<span>It should be noted that the content will not be aligned in center by default</span>-->
+    <div class="block">
+      <!--<span class="demonstration">Switch when indicator is clicked</span>-->
+      <el-carousel
+        :autoplay="autoplay"
+        trigger="click"
+        height="80vh"
+        :initial-index="indexSlide"
+        :next="handlerSetActiveSlider(indexPhoto)"
+      >
+        <el-carousel-item v-for="(item, key, index) in photos" :key="index">
+          <h3 class="small text-center">{{ item.label }}</h3>
+          <div class="my-flex-cont">
+            <div class="my-flex-box">
+              <el-image
+                :src="item.imageSrc"
+                :fit="fit"></el-image>
+              <!--<div class="my-flex-cont">-->
+              <!--<div class="my-flex-box">-->
+              <!--<img :src="item.imageSrc" class="gallery" alt="">-->
+            </div>
+          </div>
+          <!--</div>-->
+        </el-carousel-item>
+      </el-carousel>
+    </div>
+    <!--<span slot="footer" class="dialog-footer">-->
+    <!--<el-button type="primary" @click="dialogTableVisible = false" ><%= __('Close') %></el-button>-->
+    <!--</span>-->
+  </el-dialog>
+
+  <% /* Диалоговое окно. Предупреждение | Warning. */ %>
+  <div v-if="centerDialogVisibleWarnings">
+    <el-dialog
+      title="<%= __('Warning') %>"
+      :visible.sync="centerDialogVisibleWarnings"
+      width="45%"
+      style="margin-top: 17vh"
+      center>
+      <p class="text-center">{{warning}}</p>
+
+
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisibleWarnings = false"><%= __('Close') %></el-button>
+      <el-button type="success" @click="goTo('dogs')"><%= __('Add dog') %></el-button>
+  </span>
+    </el-dialog>
+  </div>
+
+  <% /* Диалоговое окно. Добавить Помёт NEW. */ %>
+  <!--<div v-if="centerDialogAdded">-->
+    <el-dialog
+      title="<%= __('Add litter') %>"
+      :visible.sync="centerDialogAdded"
+      custom-class="dialog-kennel-add"
+      :fullscreen="false"
+      :before-close="handlerCloseDialogLitterAdd"
+      center
+      v-if="virtualPageSlug==='new'">
+
+      <el-dialog
+        width="80%"
+        top="3vh"
+        title="Continents 6"
+        :visible.sync="innerVisible"
+        append-to-body>
+        <div class="justify-content-center">
+          <el-image
+            style="width: inherit; height: auto"
+            :src=url
+            :fit="fit"></el-image>
+        </div>
+      </el-dialog>
+
+      <div class="container">
+        <div v-if="ruleForm.imageUrl" class="col">
+          <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
+        </div>
+        <!--<img src="https://d2e0ab19zxiehc.cloudfront.net/1920px-Flag_of_the_Republic_of_Abkhazia.svg.png" class="img-fluid" alt="Responsive image">-->
+        <div class="form-group py-2">
+          <h5><%= __('Multiple upload photos') %></h5>
+          <label v-if="!ruleForm.imageUrl">
+            <%= __('Make albums, dividing by event or by time group of photos. Describe events, tell about the photo, thereby structuring your memories and events.') %>
+          </label>
+          <el-divider content-position="left"><%= __('Parents') %></el-divider>
+          <div class="photo-uploader">
+            <div class="row">
+              <div class="col-md-12 ">
+                <!---------------------------------------------------------------------------------------->
+                <% /*Загрузка фото NEW*/ %>
+                <el-upload
+                  action="/api/v1/files/upload"
+                  list-type="picture-card"
+                  multiple
+                  ref="upload"
+                  :on-preview="handlePictureCardPreview"
+                  :before-upload="beforeUpload"
+                  :limit="limit"
+                  :on-success="handleSuccess"
+                  :on-exceed="handleExceed"
+                  :on-remove="handleRemove">
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt="">
+                </el-dialog>
+                <!------------------------------------------------------------------------------->
+              </div>
+            </div>
+          </div>
+          <el-divider content-position="left"><%= __('Puppies this litter') %></el-divider>
+          <div class="photo-uploader">
+            <div class="row">
+              <div class="col-md-12 ">
+                <% /*Загрузка фото щенков*/ %>
+                <el-upload
+                  action="/api/v1/files/upload"
+                  list-type="picture-card"
+                  multiple
+                  ref="uploadPuppies"
+                  :on-preview="handlePictureCardPreview"
+                  :before-upload="beforeUpload"
+                  :limit="limit"
+                  :on-success="handleSuccessPuppies"
+                  :on-exceed="handleExceedPuppies"
+                  :on-remove="handleRemovePuppies">
+                  <i class="el-icon-plus"></i>
+                </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+                  <img width="100%" :src="dialogImageUrl" alt="">
+                </el-dialog>
+
+
+                <!------------------------------------------------------------------------------->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <el-row :gutter="22">
+        <el-col :span="1"></el-col>
+        <el-col :span="23">
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
+                   label-width="175px" class="demo-ruleForm">
+
+            <% /* Дата помёта NEW */ %>
+            <el-form-item label="<%= __('Date of litter') %>" prop="born">
+              <el-date-picker
+                v-model="ruleForm.born"
+                type="date"
+                placeholder="<%= __('Select date and time') %>"
+                :format="i19p.getFormatDateLocale"
+              >
+              </el-date-picker>
+            </el-form-item>
+
+            <% /* Буква помёта NEW */ %>
+            <el-form-item label="<%= __('Litter letter') %>" prop="letter">
+              <el-input
+                size="medium"
+                placeholder="A"
+                v-model="ruleForm.letter">
+              </el-input>
+            </el-form-item>
+            <% /* Кобель Sire NEW */ %>
+            <template v-if="sires">
+              <el-form-item label="<%= __('Sire') %>" prop="sire">
+                <el-autocomplete
+                  popper-class="my-autocomplete"
+                  v-model="ruleForm.sire"
+                  :fetch-suggestions="querySearchSires"
+                  placeholder="<%= __("Start typing the dog's name") %>"
+                  :trigger-on-focus="false"
+                  @select="handleSelect"
+                  style="width: 58%;"
+                ><i slot="prefix" class="el-autocomplete__icon el-icon-male"></i>
+
+                  <template slot-scope="{ item }">
+                    <span class="value">{{ item.value }}</span>
+                  </template>
+                </el-autocomplete>
+              </el-form-item>
+            </template>
+            <% /* Сука Dam NEW */ %>
+            <template v-if="dams">
+              <el-form-item label="<%= __('Dam') %>" prop="dam">
+                <el-autocomplete
+                  popper-class="my-autocomplete"
+                  v-model="ruleForm.dam"
+                  :fetch-suggestions="querySearchDams"
+                  placeholder="<%= __("Start typing the dog's name") %>"
+                  :trigger-on-focus="false"
+                  @select="handleSelect"
+                  style="width: 58%;"
+                ><i slot="prefix" class="el-autocomplete__icon el-icon-female"></i>
+                  <template slot-scope="{ item }">
+                    <span class="value">{{ item.value }}</span>
+                  </template>
+                </el-autocomplete>
+              </el-form-item>
+            </template>
+
+            <% /* Описание помёта NEW */ %>
+            <template>
+              <el-form-item label="<%= __('Description') %>" prop="description">
+                <el-input
+                  type="textarea"
+                  placeholder="<%= __('Beautiful star litter!') %>"
+                  v-model="ruleForm.description"
+                  maxlength="300"
+                  show-word-limit
+                >
+                </el-input>
+              </el-form-item>
+            </template>
+
+            <% /* Название фотосессии щенков NEW */ %>
+            <template>
+              <el-form-item label="<%= __('Name photos') %>" prop="sessionName">
+                <el-input
+                  placeholder="<%= __('Photo shoot title') %>"
+                  v-model="ruleForm.sessionName"
+                  maxlength="60"
+                  show-word-limit
+                >
+                </el-input>
+              </el-form-item>
+            </template>
+
+            <% /* Описание фотосессии щенков */ %>
+            <template>
+              <el-form-item label="<%= __('Description of the photo shoot') %>" prop="descriptionPhotoSession">
+                <el-input
+                  placeholder="<%= __('Photo shoot title') %>"
+                  v-model="ruleForm.descriptionPhotoSession"
+                  maxlength="300"
+                  show-word-limit
+                >
+                </el-input>
+              </el-form-item>
+            </template>
+
+            <% /* Кнопки управления */ %>
+            <div class="my-3 pt-4">
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+                <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+                <el-button @click="centerDialogAdded = false"><%= __('Cancel') %></el-button>
+              </el-form-item>
+            </div>
+          </el-form>
+        </el-col>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+  </span>
+    </el-dialog>
+  <!--</div>-->
+
+  <patzi-section-header :obj-data="seo"></patzi-section-header>
+
+
+  <!-- Start Work Area Area -->
+  <section class="work-area section-gap-top" id="work">
+    <div class="container">
+      <patzi-row-h3-h2 :obj-data="seo"></patzi-row-h3-h2>
+      <div class="mb-5 pb-5 flex justify-content-center" v-if="me.isSuperAdmin || me.isAdmin" class="mt-5">
+        <el-button icon="el-icon-circle-plus-outline" class="btn btn-outline-info" @click="clickAddButton()"><%= __('Add litter') %></el-button>
+      </div>
+
+      <div class="card text-center mb-1" v-for="(litter, index) in litters" :key="litter.id + '-letter'">
+        <div class="card-header">
+          <%= __('Litter') %>: {{litter.letter}}
+        </div>
+
+        <div class="card-body">
+          <h4 class="card-title"> {{litter.bornNt}}</h4>
+          <div v-if="litter.subtitle" class="card-text m-3"><p>{{litter.subtitle}}</p></div>
+          <div class="card-text">
+            <!--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis eligendi fuga id modi nam officia vero. Accusamus aut corporis culpa cumque deleniti deserunt enim incidunt, minus nisi quidem similique sint?</p>-->
+            <!--<el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>-->
+
+            <% /*Главное фото помёта*/ %>
+
+            <ul v-if="litter.images.length">
+
+              <li v-for="(im ,index, key) in litter.images" :key="index + '-lst'">
+                <keep-alive>
+                  <div v-if="im.imageSrc">
+                    <a :href="im.detail" title="<%= __('More about litter') %>">
+                      <el-image :src="im.imageSrc" v-if="index===litter.cover" :lazy="true">
+                        <div slot="placeholder" class="image-slot" style="height:500px;">
+                          Loading<span class="dot">...</span>
+                        </div>
+                      </el-image>
+                      <!--    <img :src="im.imageSrc" v-if="index===photoKey"  alt="">-->
+                    </a>
+                  </div>
+                  <div v-else>
+                    <el-image>
+                      <div slot="error" class="img-fluid image-slot">
+                        <i class="el-icon-picture-outline"></i>
+                      </div>
+                    </el-image>
+                  </div>
+                </keep-alive>
+              </li>
+            </ul>
+
+            <% /* Кнопка "Удалить помёт"*/ %>
+            <div class="flex-container buttons wrap  ">
+              <div v-if="me.isSuperAdmin || me.isAdmin" class="fixButton mt-3">
+
+                <a class="p-button mr-lg-3" v-if="me.isSuperAdmin || me.isAdmin" href="#"
+                   @click="clickDeleteLitter(litter.id)">
+                  <i class="el-icon-delete"></i>
+                </a>
+
+              </div>
+            </div>
+          </div>
+
+          <% /* Кнопки: Отец, Мать*/ %>
+          <div class="flex-container buttons wrap  mt-3">
+            <el-tooltip class="item" effect="dark" content="<%= __('Dam') %>" placement="top">
+              <el-button v-if="litter.dam[1]" class="mr-lg-3 "  type="text" :underline="false" icon="el-icon-female"
+                       @click="goDog(litter.dam[1])">
+               {{litter.dam[1]}}
+              </el-button>
+              <el-link v-else disabled class="mr-lg-3 px-1"  :underline="false" type="danger" icon="el-icon-female">
+                {{noBase}}
+              </el-link>
+            </el-tooltip>
+            &nbsp;
+            <el-tooltip class="item" effect="dark" content="<%= __('Sire') %>" placement="top">
+              <el-button  v-if="litter.sire[1]" class="mr-lg-3 px-1"  type="text"   :underline="false" icon="el-icon-male"
+                       @click="goDog(litter.sire[1])">
+                {{litter.sire[1]}}
+              </el-button>
+              <el-link v-else disabled class="mr-lg-3" type="danger"  :underline="false" icon="el-icon-male">
+                {{noBase}}
+              </el-link>
+            </el-tooltip>
+          </div>
+
+          <el-divider v-if="litter.images" content-position="left"><%= __('Parents') %></el-divider>
+
+          <% /*Маленькие фото. Превью.*/ %>
+          <ul class="flex-container wrap" v-if="litter.imagesMin">
+            <li class="flex-item" v-for="(img, index, key) in litter.imagesMin"  :key="index +  '-label'">
+              <template v-if="me.isSuperAdmin">
+                <div class="ell-relation" v-if="litter.cover === index">
+                  <el-button type="warning" size="mini" title="<%= __("Album's cover") %>"
+                             class="ell-position-button check" icon="el-icon-star-off"
+                             circle></el-button>
+                </div>
+                <div class="ell-relation" v-else>
+                  <el-button size="mini" title="<%= __('Make an album cover') %>"
+                             class="ell-position-button" @click="coverPhoto(litter.id,index)"
+                             icon="el-icon-document" circle></el-button>
+                </div>
+              </template>
+              <div class="ell-image-flex">
+                <a href="#" @click="showSlider(litter.id, index)">
+                  <picture>
+                    <source media="(max-width: 480px)" :srcset="litter.wdt[index].imageSrc" >
+                    <img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">
+                  </picture>
+                </a>
+              </div>
+
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <% /* "Confirm Delete Litter" Modal */ %>
+  <modal v-if="confirmDeleteLitterModalOpen && selectedLitter" v-cloak key="delete"
+         @close="closeDeleteLitterModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Remove this') %>?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax form action="destroyOneLitter" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingDeleteLitterForm"
+               @submitted="submittedDeleteLitterForm()">
+      <div class="modal-body">
+        <p><%= __('Are you sure you want to remove this') %> {{selectedLitter.label || 'item'}}?</p>
+        <p class="text-muted"
+           v-if="selectedLitter.borrowedBy"><%= __('We will no longer be able to assist with the return of this item, so you will need to contact') %>
+          {{selectedLitter.borrowedBy.fullName}} <%= __('directly to coordinate') %>.</p>
+        <p v-else><%= __('This item will no longer be available to share with friends') %>.</p>
+        <p class="text-danger" v-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a
+              href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal"><%= __('Nevermind') %></button>
+        <button type="submit" class="btn btn-danger ml-1"><%= __('Remove') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+
+  <% /* For virtual pages */ %>
+  <router-view></router-view>
+</div>
+<%- /* Exposez server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

@@ -1,0 +1,779 @@
+<div id="users-home" class="content pb-5" v-cloak>
+    <% /* Диалоговое окно. Добавить пользователя. */ %>
+    <el-dialog title="<%= __('Add user') %>"
+               :visible.sync="centerDialogAdded"
+               custom-class="dialog-add"
+               center>
+        <% /* Диалоговое окно. Подсказка об использование поля пароля. */ %>
+        <el-dialog
+                title="Установка пароля"
+                :visible.sync="dialogVisiblePass"
+                custom-class="dia"
+                :before-close="handleClose"
+                append-to-body>
+            <p>1. Если вы не устанавливаете пароль, то он генерируется автоматически. Это удобно использовать когда Вам
+                нет необходимости заходить
+                на сайт под именем данного пользователя, т.к. пароль вы не будете знать. В то же время при нажатие
+                кнопки "Отправить пароль на
+                email"
+                вы отправите сгенерированный пароль реальному пользователю данного Email.<br>
+                <i class="el-icon-warning-outline"></i> Используйте эту процедуру когда вас попросили создать чужой
+                аккаунт и вы знаете реальный
+                емайл пользователя.</p>
+            <p class="pt-2" style="word-break: break-all">2. Если вы устанавливаете пароль, то его следует вписать в оба
+                поля одинаково.
+                <br> <i class="el-icon-warning-outline"></i> Используйте эту процедуру когда вам нужно войти от имени
+                данного пользователя в
+                систему, чтобы произвести какие-то действия от его имени. Например создать питомник и добавить собак.
+            </p>
+            <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisiblePass = false">Cancel</el-button>
+  </span>
+        </el-dialog>
+
+        <% /* Диалоговое окно. Подсказка о использование поля Email. */ %>
+        <el-dialog
+                title="Установка Email пользователя"
+                :visible.sync="dialogVisibleEmail"
+                custom-class="dia"
+                :before-close="handleClose"
+                append-to-body>
+            <p>1. Если вы не устанавливаете Email, то он генерируется автоматически. За основу берётся полное имя
+                пользователя.
+                <br>
+                <i class="el-icon-warning-outline"></i> Используйте эту процедуру чтобы создать пользователя в системе к
+                которому нужно привязать
+                данные например питомник, но вы не знаете его контактных данных или вам не важны его контактные данные.
+            </p>
+            <p class="pt-2" style="word-break: break-all">
+                2. Если вы устанавливаете Email, то с помощью кнопок "Да" и "Нет" вы можете определить будет ли email
+                подтверждён или нет.
+                Для правильной связи с пользователем требуется проверенный контакт, в данном случае адрес электронной
+                почты.
+                Если этот контакт не был подтверждён пользователем из письма, которое отправляется ему при регистрации,
+                то возможны ошибки
+                в написании email или не идентифицированные пользователи в системе. Этого нельзя допускать.
+                <br>Если email не подтверждён, некоторые возможности работы в системе будут не доступны, например не
+                возможно будет привязать этого пользователя к питомнику в качестве совладельца.
+                <br> <i class="el-icon-warning-outline"></i>
+                Рекомендуется активировать кнопку "Да".
+            </p>
+            <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisibleEmail = false">Cancel</el-button>
+  </span>
+        </el-dialog>
+
+        <% /* Диалоговое окно. Подсказка о использование поля Группы. */ %>
+        <el-dialog
+                title="Установка Email пользователя"
+                :visible.sync="dialogVisibleGroup"
+                custom-class="dia"
+                :before-close="handleClose"
+                append-to-body>
+            <p>
+                Обязательно установите группу "user" если Email стоит "Да".
+            </p>
+            <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisibleGroup = false">Cancel</el-button>
+  </span>
+        </el-dialog>
+
+
+        <template v-if="!ruleForm.see">
+            <el-popover
+                    ref="popover"
+                    placement="top"
+                    title="<%= __('Visibility') %>"
+                    width="275"
+                    trigger="hover"
+                    content="<%= __('At the moment, the user is not active, i.e. it will not be visible in the system. Set the visibility.') %>">
+            </el-popover>
+            <div class="menu-center">
+                <h1 v-if="buttonUpdate" class="flex justify-content-center"
+                    :class="classObject"
+                >{{ruleForm.fullName}}
+                </h1>
+                <el-button class="not-border" icon="el-icon-warning-outline" size="mini" v-popover:popover
+                           circle></el-button>
+            </div>
+        </template>
+
+        <template v-else>
+            <h1 v-if="buttonUpdate" class="flex justify-content-center"
+                :class="classObject"
+            >{{ruleForm.fullName}}</h1>
+        </template>
+
+
+        <div v-if="ruleForm.imageUrl">
+            <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
+        </div>
+        <h5><%= __('Multiple upload photos') %></h5>
+        <label v-if="!ruleForm.imageUrl">
+            <%= __('Make albums, dividing by event or by time group of photos. Describe events, tell about the photo, thereby structuring your memories and events.') %>
+        </label>
+        <div class="my-2">
+            <el-divider content-position="left"><%= __('Add photo') %></el-divider>
+        </div>
+
+        <!---------------------------------------------------------------------------------------->
+        <% /*Загрузка фото NEW*/ %>
+        <el-row type="flex" class="row-bg" justify="center">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                <el-upload
+                        action="/api/v1/files/upload"
+                        list-type="picture-card"
+                        drag
+                        multiple
+                        ref="upload"
+                        :on-preview="handlePictureCardPreview"
+                        :before-upload="beforeUpload"
+                        :limit="limit"
+                        :on-success="handleSuccess"
+                        :on-exceed="handleExceed"
+                        :on-remove="handleRemove"
+                >
+                    <i class="el-icon-plus"></i>
+                    <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
+                        {{sizeLess}}<%= __('MB') %></div>
+                </el-upload>
+                <br>
+                <el-dialog :visible.sync="dialogVisible">
+                    <img :src="dialogImageUrl" alt="">
+                </el-dialog>
+            </el-col>
+        </el-row>
+        <!---------------------------------------------------------------------------------------->
+
+
+        <el-row type="flex" class="row-bg" justify="center">
+            <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
+                <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
+                         class="demo-ruleForm">
+
+                    <% /* ИМЯ ПОЛЬЗОВАТЕЛЯ*/ %>
+                    <template v-if="!buttonUpdate">
+                        <el-form-item label="ФИО" prop="label">
+                            <el-input minlength="3" maxlength="120" show-word-limit
+                                      style="width:80%;"
+                                      size="small"
+                                      placeholder="<%= __('Full name user') %>"
+                                      v-model="ruleForm.label"></el-input>
+                        </el-form-item>
+                    </template>
+
+                    <% /* КОНТИНЕНТ*/ %>
+                    <template>
+                        <el-form-item label="<%= __('Continent') %>" prop="continent">
+                            <el-select @change="changeSelectContinent()" v-model="ruleForm.continent"
+                                       placeholder="<%= __('Where is the nursery registered?') %>"
+                                       :clearable="true"
+                                       style="width: 58%;">
+                                <el-option v-for="item in continents"
+                                           :key="item.id"
+                                           :label="item.label"
+                                           :value="item.id">
+                                    <span style="float: left">{{ item.label }}</span>
+                                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                                </el-option>
+                            </el-select>
+
+                            <el-tooltip class="ml-3" effect="dark" content="<%= __('Continental Information') %>"
+                                        placement="top-start">
+                                <el-button @click="innerVisible=true" size="mini" round
+                                           icon="el-icon-question"></el-button>
+                            </el-tooltip>
+                        </el-form-item>
+                    </template>
+
+                    <% /* СТАРАНА*/ %>
+                    <template v-if="ruleForm.continent">
+                        <el-form-item label="<%= __('Country') %>" prop="country">
+                            <el-select v-model="ruleForm.country"
+                                       placeholder="<%= __('Where is the kennel registered?') %>"
+                                       style="width: 58%;"
+                                       :clearable="true"
+                                       @visible-change="changeSelectCountry"
+                            >
+                                <el-option v-for="item in getPullCountry()"
+                                           :key="item.id"
+                                           :label="item.label"
+                                           :value="item.id">
+                                    <span style="float: left">{{ item.label }}</span>
+                                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </template>
+
+                    <% /* РЕГИОН */ %>
+                    <template v-if="ruleForm.country">
+                        <el-form-item label="<%= __('Region') %>" prop="region">
+                            <el-select v-model="ruleForm.region"
+                                       v-if="!buttonUpdate"
+                                       placeholder="<%= __('Where is the kennel registered?') %>"
+                                       style="width: 58%;"
+                                       :clearable="true"
+                                       @visible-change="changeSelectRegion"
+                                       @change="changeRegion">
+                                <el-option v-for="item in getPullRegion()"
+                                           :key="item.id"
+                                           :label="item.label"
+                                           :value="item.id">
+                                    <span style="float: left">{{ item.label }}</span>
+                                    <span style="float: right; color: rgb(132,146,166); font-size: 13px">{{ item.labelRu }}</span>
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="region"
+                                       v-else
+                                       placeholder="<%= __('Where is the kennel registered?') %>"
+                                       style="width: 58%;"
+                                       :clearable="true"
+                                       @visible-change="changeSelectRegion"
+                                       @change="changeRegion">
+                                <el-option v-for="item in getPullRegion()"
+                                           :key="item.id"
+                                           :label="item.label"
+                                           :value="item.id">
+                                    <span style="float: left">{{ item.label }}</span>
+                                    <span style="float: right; color: rgb(132,146,166); font-size: 13px">{{ item.labelRu }}</span>
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </template>
+
+                    <% /* ГОРОД */ %>
+                    <template v-if="ruleForm.country">
+                        <el-form-item label="<%= __('City') %>" prop="city">
+                            <el-autocomplete v-model="ruleForm.city"
+                                             v-if="!buttonUpdate"
+                                             popper-class="my-autocomplete"
+                                             :fetch-suggestions="querySearch"
+                                             placeholder="<%= __('Please Input City') %>"
+                                             :trigger-on-focus="false"
+                                             @select="handleSelectCity"
+                                             style="width: 58%;">
+                                <template slot-scope="{ item }">
+                                    <span class="value">{{ item.labelRu  }}</span>
+                                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                                </template>
+                            </el-autocomplete>
+                            <el-autocomplete v-model="city"
+                                             v-else
+                                             popper-class="my-autocomplete"
+                                             :fetch-suggestions="querySearch"
+                                             placeholder="<%= __('Please Input City') %>"
+                                             :trigger-on-focus="false"
+                                             @select="handleSelect"
+                                             style="width: 58%;">
+                                <template slot-scope="{ item }">
+                                    <span class="value">{{ item.labelRu  }}</span>
+                                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                                </template>
+                            </el-autocomplete>
+                        </el-form-item>
+                    </template>
+
+                    <% /* EMAIL адрес */ %>
+                    <template>
+                        <el-row :gutter="10">
+                            <el-form-item label="<%= __('Email') %>" prop="emailAddress">
+                                <el-col :span="11">
+                                    <el-input
+                                            autosize
+                                            size="small"
+                                            placeholder="Please input"
+                                            v-model="ruleForm.emailAddress"
+                                            maxlength="70"
+                                            :clearable="true"
+                                            show-word-limit>
+                                    </el-input>
+                                </el-col>
+
+                                <% /* ПОДТВЕРЖДЁН EMAIL | НЕ ПОДТВЕРЖДЁН EMAIL  */ %>
+                                <el-col :span="8">
+                                    <template>
+                                        <el-tooltip placement="top">
+                                            <div slot="content"><%= __('Make confirmed email. The user will not be sent a verification letter by mail.') %></div>
+                                            <el-radio-group @change="groupAction()" class="my-1"
+                                                            v-model="ruleForm.emailStatus" size="small">
+                                                <el-radio-button label="confirmed">Да</el-radio-button>
+                                                <el-radio-button label="unconfirmed">Нет</el-radio-button>
+                                            </el-radio-group>
+                                        </el-tooltip>
+                                    </template>
+                                </el-col>
+                                <el-col :span="1">
+                                    <el-button @click="dialogVisibleEmail=true" class="not-border my-1"
+                                               icon="el-icon-warning-outline" size="mini"
+                                               circle></el-button>
+                                </el-col>
+                            </el-form-item>
+                        </el-row>
+                    </template>
+
+                    <% /* ПАРОЛЬ */ %>
+                    <template v-if="!buttonUpdate">
+                        <el-row :gutter="10">
+                            <el-form-item label="<%= __('Password') %>" prop="checkPass">
+                                <el-col :span="8">
+                                    <el-input :clearable="true" minlength="8" maxlength="30" type="password"
+                                              size="small" v-model="ruleForm.password"
+                                              autocomplete="off"></el-input>
+                                </el-col>
+                                <el-col :span="8">
+                                    <el-input :clearable="true" minlength="8" maxlength="30" type="password"
+                                              size="small" v-model="ruleForm.checkPass"
+                                              autocomplete="off"></el-input>
+                                </el-col>
+                                <el-col :span="1">
+                                    <el-button @click="dialogVisiblePass=true" class="not-border my-1"
+                                               icon="el-icon-warning-outline" size="mini"
+                                               circle></el-button>
+                                </el-col>
+                            </el-form-item>
+                        </el-row>
+                    </template>
+
+                    <% /* ОТПРАВИТЬ пароль НА EMAIL? */ %>
+                    <template v-if="ruleForm.emailStatus==='confirmed'">
+                        <el-form-item prop="sendCodEmail" class="menu-left pl-5 ml-md-2">
+                            <el-tooltip placement="top">
+                                <div slot="content"><%= __('Send authorization data to email the user') %>.</div>
+                                <el-radio-group v-model="ruleForm.sendCodEmail" size="small">
+                                    <el-radio-button label="confirmed">Отправить пароль на email</el-radio-button>
+                                    <el-radio-button label="unconfirmed">Не отправлять</el-radio-button>
+                                </el-radio-group>
+                            </el-tooltip>
+                        </el-form-item>
+                    </template>
+
+                    <div class="my-sm-5">
+                        <el-divider content-position="left"><%= __('Properties') %></el-divider>
+                    </div>
+
+                    <% /* ВИДЕН ПОЛЬЗОВАТЕЛЬ ИЛИ НЕТ */ %>
+                    <template>
+                        <el-form-item prop="see">
+                            <el-switch
+                                    style="display: block"
+                                    v-model="ruleForm.see"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                                    active-text="виден"
+                                    inactive-text="не виден">
+                            </el-switch>
+                        </el-form-item>
+                    </template>
+
+                    <% /* ГРУППА ПОЛЬЗОВАТЕЛЯ  */ %>
+                    <template v-if="ruleForm.emailStatus==='confirmed'">
+                        <el-form-item label="Группы" prop="groups">
+                            <el-select
+                                    v-model="ruleForm.groups"
+                                    multiple
+                                    size="small"
+                                    collapse-tags
+                                    placeholder="Select"
+                            >
+                                <el-option
+                                        v-for="item in groups"
+                                        :key="item.id"
+                                        :label="item.label"
+                                        :value="item.id">
+                                </el-option>
+                            </el-select>
+
+                            <el-button @click="dialogVisibleGroup=true" class="not-border my-1"
+                                       icon="el-icon-warning-outline" size="mini"
+                                       circle></el-button>
+
+
+                        </el-form-item>
+                        </el-form-item>
+                    </template>
+
+                    <% /* ДЕНЬ РОЖДЕНИЕ */ %>
+                    <el-form-item v-if="!buttonUpdate" label="<%= __('DoB') %>" prop="dateBirth">
+                        <el-row :gutter="2">
+                            <el-col :span="11">
+                                <el-date-picker
+                                        v-model="ruleForm.dateBirth"
+                                        type="datetime"
+                                        size="small"
+                                        placeholder="<%= __('Select date and time') %>"
+                                        default-time="12:00:00">
+                                </el-date-picker>
+                            </el-col>
+                        </el-row>
+                    </el-form-item>
+                    <el-form-item v-if="buttonUpdate" label="<%= __('DoB') %>" prop="dateBirthUpdate">
+                        <el-row :gutter="2">
+                            <el-col :span="11">
+                                <el-date-picker
+                                        v-model="dateBirthUpdate"
+                                        type="datetime"
+                                        placeholder="<%= __('Select date and time') %>"
+                                        default-time="12:00:00">
+                                </el-date-picker>
+                            </el-col>
+                        </el-row>
+                    </el-form-item>
+
+                    <% /* ДЕНЬ СМЕРТИ */ %>
+                    <el-form-item v-if="!buttonUpdate" label="<%= __('DoD') %>" prop="dateDeath">
+                        <el-row :gutter="2">
+                            <el-col :span="11">
+                                <el-date-picker
+                                        v-model="ruleForm.dateDeath"
+                                        type="datetime"
+                                        placeholder="<%= __('Select date and time') %>"
+                                        default-time="12:00:00">
+                                </el-date-picker>
+                            </el-col>
+                        </el-row>
+                    </el-form-item>
+                    <el-form-item v-if="buttonUpdate" label="<%= __('DoD') %>" prop="dateDeathUpdate">
+                        <el-row :gutter="2">
+                            <el-col :span="11">
+                                <el-date-picker
+                                        v-model="dateDeathUpdate"
+                                        type="datetime"
+                                        placeholder="<%= __('Select date and time') %>"
+                                        default-time="12:00:00">
+                                </el-date-picker>
+                            </el-col>
+                        </el-row>
+                    </el-form-item>
+
+                    <% /* О СЕБЕ */ %>
+                    <template>
+                        <el-form-item label="<%= __('About myself') %>" prop="description">
+                            <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+                                <el-input
+                                        type="textarea"
+                                        :rows="2"
+                                        autosize
+                                        placeholder="Please input"
+                                        v-model="ruleForm.description"
+                                        maxlength="1700"
+                                        show-word-limit>
+                                </el-input>
+                            </el-col>
+                        </el-form-item>
+                    </template>
+
+                    <div class="my-3 pt-4 text-center hidden-xs-only">
+                        <el-form-item>
+                            <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+                            <el-button
+                                    @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
+                            <el-button v-if="!buttonUpdate" type="primary"
+                                       @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+                            <el-button v-else type="primary"
+                                       @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
+
+                        </el-form-item>
+                    </div>
+                    <div class="text-center hidden-sm-and-up">
+                        <el-button-group>
+                            <el-button @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
+                            <el-button @click="buttonUpdate = false; centerDialogAdded = false"
+                                       icon="el-icon-close"></el-button>
+                            <el-button v-if="!buttonUpdate" type="primary"
+                                       @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+                            <el-button v-else type="primary" @click="submitForm('ruleForm')"
+                                       icon="el-icon-check"></el-button>
+                        </el-button-group>
+                    </div>
+                </el-form>
+            </el-col>
+        </el-row>
+
+        <span slot="footer" class="dialog-footer">
+  </span>
+    </el-dialog>
+
+    <% /* Диалоговое окно. Отправка сообщения. */ %>
+    <el-dialog title="Shipping address" :visible.sync="dialogFormVisible">
+        <el-form :model="form">
+            <el-form-item label="Promotion name" :label-width="formLabelWidth">
+                <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="Zones" :label-width="formLabelWidth">
+                <el-select v-model="form.region" placeholder="Please select a zone">
+                    <el-option label="Zone No.1" value="shanghai"></el-option>
+                    <el-option label="Zone No.2" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false">Cancel</el-button>
+    <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
+  </span>
+    </el-dialog>
+
+    <% /* Диалоговое окно. Предупреждение о невозможности удалить пользователя. */ %>
+    <el-dialog
+            title="ВНИМАНИЕ!"
+            :visible.sync="centerDialogVisible"
+            width="30%"
+            center>
+        <span>{{text}}</span>
+        <span slot="footer" class="dialog-footer">
+    <!--<el-button @click="centerDialogVisible = false">Cancel</el-button>-->
+    <el-button type="primary" @click="centerDialogVisible = false">Ok</el-button>
+  </span>
+    </el-dialog>
+
+    <% /* Диалоговое окно. Подтверждение удаления объекта. */ %>
+    <el-dialog
+            title="ВНИМАНИЕ!"
+            :visible.sync="centerDialogVisibleConfirm"
+            custom-class="dialog-win"
+            center>
+        <span>{{text}}</span>
+        <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialogVisibleConfirm = false">Отмена</el-button>
+                <el-button type="primary" @click="confirmDeletion()">Да</el-button>
+             </span>
+    </el-dialog>
+
+    <% /* Диалоговое окно. Показывает фото профиля. */ %>
+    <el-dialog :title="objOne.fullName" :visible.sync="dialogTableVisible">
+        <span class="demonstration">{{objOne.kennel}}</span>
+        <el-carousel height="60vh" trigger="click" :autoplay="false" indicator-position="none">
+            <el-carousel-item v-for="(img, index) of objOne.images" :key="img.id" class="d-flex flex-center">
+                <p class="medium">{{ img.description }}</p>
+                <img :data-src="img.imageSrc" class="lazyload"   style="object-fit:contain;" alt="">
+            </el-carousel-item>
+        </el-carousel>
+        <span slot="footer" class="dialog-footer d-flex justify-content-center">
+                <el-button @click="dialogTableVisible = false">Ок</el-button>
+             </span>
+    </el-dialog>
+
+    <patzi-section-header :obj-data="seo"></patzi-section-header>
+
+    <patzi-row-h3-p :obj-data="seo"></patzi-row-h3-p>
+
+
+    <section>
+        <div class="container mb-5 pb-5">
+            <el-row :gutter="5">
+                <el-col :xs="24" :sm="8">
+                    <el-card shadow="hover">
+                        <p class="text-center">Всего: {{counts}}</p>
+                    </el-card>
+                </el-col>
+                <el-col :xs="24" :sm="8">
+                    <el-card shadow="hover" :body-style="{padding:'13px'}">
+                        <p v-if="me.isSuperAdmin || me.isAdmin" class="menu-center">
+                            <el-button @click="clickAddButton()" class="btn btn-outline-info"
+                                       icon="el-icon-circle-plus-outline"><%= __('Add') %></el-button>
+                        </p>
+                    </el-card>
+                </el-col>
+                <el-col :xs="24" :sm="8">
+                    <el-card shadow="hover">
+                        <p class="text-center"> Заблокировано:</p>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </div>
+    </section>
+
+
+
+    <div class="whole-wrap mb-5">
+        <div class="container">
+             <% /* Поиск пользователей. */ %>
+            <div class="row">
+                <div class="col mb-5 flex justify-content-between">
+                    <% /* Кол-во строк в таблице. */ %>
+                    <el-input-number v-model="count" :step="stepCount" :min="minCount"  size="small"
+                                     step-strictly></el-input-number>
+                    <% /* Удалённый поиск по полю fullName. Поиск на сервере. */ %>
+                    <el-select
+                            v-model="value"
+                            style="width: 100%; margin-left: 35px;"
+                            multiple
+                            filterable
+                            clearable
+                            remote
+                            clearable
+                            size="small"
+                            @change="changeSelectSearch($event)"
+                            reserve-keyword
+                            placeholder="ФИО. Поиск чувствителен к регистру."
+                            :remote-method="remoteMethod"
+                            :loading="loadingSearch">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.id"
+                                :label="item.fullName"
+                                :value="item.fullName">
+                        </el-option>
+                    </el-select>
+                </div>
+            </div>
+
+             <% /* Таблица пользователей. */ %>
+            <template v-cloak>
+                <el-table
+                        ref="multipleTable"
+                        :data="getUsers.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()) || data.emailAddress.includes(search.toLowerCase()))"
+                        style="width: 100%"
+                        highlight-current-row
+                        @current-change="handleCurrentChange"
+                        @selection-change="handleSelectionChange"
+                        @cell-click="handleCellClick">
+                    <el-table-column
+                            type="index"
+                            fixed="left"
+                            width="38">
+                    </el-table-column>
+                    <el-table-column
+                            property="imageSrc"
+                            label=""
+                            fixed="left"
+                            width="90">
+                        <template slot="header" slot-scope="scope">
+                            <div class="d-flex justify-content-center">
+                                <i class="el-icon-user-solid"></i>
+                            </div>
+                        </template>
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.imageSrc" class="photo-preview col">
+                                <div class="image-wrapper round">
+                                    <a href="#" @click="clickShowPhoto(scope.$index,scope.row)">
+                                        <img :src="scope.row.imageSrc" class="personPhoto"/>
+                                    </a>
+                                </div>
+                            </div>
+                            <div v-else class="photo-preview col">
+                                <div class="image-wrapper round  d-flex align-items-center justify-content-center">
+                                    <span class="placeholder-icon fa fa-picture-o"></span></div>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column type="expand">
+                        <template slot-scope="scope">
+                            <p>Аккаунт создан: <strong>{{ scope.row.createdAt | getCreate()}}</strong></p>
+                            <p v-if="_.isArray(_.last(_.pluck(scope.row.kennelBreed,'phones')))">
+                                Телефон: {{_.last(_.pluck(_.last(_.pluck(scope.row.kennelBreed,'phones')), 'value'))}}
+                                {{_.last(_.pluck(_.last(_.pluck(scope.row.kennelBreed,'phones')), 'fullName'))}}
+                            </p>
+                            <p v-if="scope.row.continent">Continent: {{scope.row.continent.label}}</p>
+                            <p v-if="scope.row.country">Country: {{scope.row.country.label }}</p>
+                            <p v-if="scope.row.region"><%= __('Region') %>: {{scope.row.region.label }}</p>
+                            <p v-if="scope.row.city">Город: {{scope.row.city.value }}</p>
+                            <p v-if="_.pluck(scope.row.kennelBreed,'address')[0]">Адрес:
+                                {{_.pluck(scope.row.kennelBreed,'address')[0] }}</p>
+                            <p v-if="_.pluck(scope.row.kennelBreed,'site').join(', ')">Сайт: {{
+                                _.pluck(scope.row.kennelBreed,'site').join(', ') }}</p>
+                            <p v-if="_.last(_.pluck(scope.row.kennelBreed,'label'))">Владелец питомника: {{
+                                _.pluck(scope.row.kennelBreed,'label').join(', ') }}</p>
+                            <p v-if="_.last(_.pluck(scope.row.kennels,'label'))">Совладелец питомника: {{
+                                _.pluck(scope.row.kennels,'label').join(', ') }}</p>
+<!--                            <p v-if="ip">-->
+<!--                                <el-button @click="goTo2( `https://awebanalysis.com/ru/ip-lookup/${scope.row.tosAcceptedByIp}/`)"-->
+<!--                                           type="success" round>{{-->
+<!--                                    scope.row.tosAcceptedByIp }}</el-button>-->
+<!--                                 </p>-->
+                            <p v-if="scope.row.tosAcceptedByIp">
+                                <el-button type="text" @click="checkIp(scope.row.tosAcceptedByIp)" >
+                                    {{ scope.row.tosAcceptedByIp }}
+                                </el-button>
+                            </p>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column
+                            property="createdAtFormatFilter"
+                            label="Дата"
+                            sortable
+                            width="220"
+                            column-key="createdAtFormatFilter"
+                            :filters="tableDateFilter"
+                            :filter-method="filterHandler"
+                    >
+                        <template slot-scope="scope">
+                            <i class="el-icon-time " :class="{'text-danger':scope.row.online }"></i>
+                            {{ scope.row.createdAtFormat}}
+                            <br><i class="el-icon-right"></i> {{scope.row.onlineDateIn | getCreate('llll')}}
+                            <br><i class="el-icon-back" v-if="scope.row.onlineDateOut"></i> {{scope.row.onlineDateOut |
+                            getCreate('llll')}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            property="fullName"
+                            label="ФИО"
+                            sortable
+                            width="150"
+                    >
+                        <template slot-scope="scope">
+                            <el-popover trigger="hover" placement="top">
+                                <p>Питомник: {{ scope.row.kennel }}</p>
+                                <p>Адрес: {{ scope.row.kennelAddress }}</p>
+                                <div slot="reference" class="name-wrapper">
+                                    <el-tag size="small">{{ scope.row.fullName }}</el-tag>
+                                </div>
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            property="emailAddress"
+                            sortable
+                            label="eMail"
+                            width="170"
+                            show-overflow-tooltip>
+                    </el-table-column>
+                    <el-table-column label="Группы" width="170">
+                        <template slot-scope="scope">
+                            <el-select
+                                    v-model="scope.row.groups"
+                                    multiple
+                                    size="small"
+                                    :key="scope.row.id"
+                                    collapse-tags
+                                    @remove-tag="handleDeleteGroup($event,scope.$index, scope.row)"
+                                    placeholder="Select"
+                                    @change="handleSelect(scope.$index, scope.row)"
+                            >
+                                <el-option
+                                        v-for="item in scope.row.allGroups"
+                                        :key="item.id"
+                                        :label="item.label"
+                                        :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            property="emailStatus"
+                            sortable
+                            label="Подтверждён"
+                            width="170"
+                            show-overflow-tooltip>
+                    </el-table-column>
+
+                    <el-table-column
+                            align="right"
+                            fixed="right"
+                            width="140">
+                        <template slot-scope="scope">
+                            <el-button @click="handleMessage(scope.$index, scope.row)" type="info"
+                                       icon="el-icon-message" circle></el-button>
+                            <el-button @click="handleDelete(scope.$index, scope.row)" type="danger"
+                                       icon="el-icon-delete" circle></el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </template>
+            <% /* __('END TABLE') */ %>
+        </div>
+    </div>
+</div>
+
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

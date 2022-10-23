@@ -1,0 +1,110 @@
+<div id="homepage" class="content" :class="[heroHeightSet ? '' : 'uninitialized']" v-cloak>
+  <div class="hero d-flex flex-column justify-content-center mb-5" full-page-hero>
+    <div class="container text-center">
+      <div class="hero-image">
+        <img class="sky" alt="The sky above the ocean" src="/images/hero-sky.png"/>
+        <img class="cloud cloud-1" alt="A grayish-blue cloud" src="/images/hero-cloud.png"/>
+        <img class="cloud cloud-2" alt="Another grayish-blue cloud" src="/images/hero-cloud.png"/>
+        <%- /* <img class="ship" alt="A ship hovering a few feet over the surface of the water, bearing a flagpole with the Sails.js logo" src="/images/hero-ship.png"/>*/ %>
+        <img class="water" alt="The shadow of the floating ship on the water" src="/images/hero-water.png"/>
+      </div>
+      <h1 class="display-4">Chinese Crested Dog <br> <strong>Your Eternal Companion</strong></h1>
+
+
+      <div>
+        <div class="more-info-text" @click="clickHeroButton()">
+          <div class="text">Jump in</div>
+          <div class="icon">&darr;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" role="scroll-destination">
+    <div class="d-flex p-3 pt-5 justify-content-center" style="height: 100vh;">
+      <div class="m-3 align-self-end">Flex-item 1</div>
+      <div class="m-3 align-self-center">Flex-item 2</div>
+      <div class="m-3">Flex-item 3</div>
+    </div>
+  </div>
+
+
+
+
+
+  <div class="container" >
+    <div class="pep-talk text-center">
+      <h3 class="pb-3"><%= __("Let's get acquainted") %>!</h3>
+      <div class="step">
+        <p><%= __('We believe that this project is a fairly convenient starting point, but, of course, there is no universal solution. The good news is that this application is now in our hands, so you can go on to register and soon find out all the news and secrets of the Poale Ell.') %>
+          .</p>
+        <p><span class="text-muted">&hearts;</span> <a href="https://poaleell.com"><%= __('The Poale Ell Team') %></a></p>
+      </div>
+    </div>
+
+    <div class="setup">
+      <h3 class="text-center"><%= __('How to get started') %>:</h3>
+      <div class="step">
+        <div class="step-image">
+          <img alt="computer with email symbol on screen" src="/images/setup-email.png"/>
+        </div>
+        <h5 class="mb-3"><%= __('Set up your account.') %></h5>
+        <!--<div class="circle"></div>-->
+        <!--  <div class="polygon"></div>-->
+        <!--<div class="left"></div>-->
+        <!--<div class="right"></div>-->
+        <!--<%= __('registering') %>-->
+
+        <p><a href="/signup"><%= __('Sign up. Confirm email address.') %></a></p>
+        <p><%= __('Log on to the site, look around. Reply to us what you like, what you expect to see, what is missing on the pages. New application, all defects will be corrected in the next releases and patches.') %>
+          <%= __('Open in the tablet, on the phone site. The application is designed with an adaptive layout, with support for the HTTPS protocol - a secure data transfer protocol. Distribution of static files worldwide in the Amazon S3 cloud. Worldwide availability of 99.9%. in combination with high response speed and load resistance and that\'s not all.') %>
+          <code>Команда Poale Ell</code></p>
+        <blockquote>
+          <small><em><%= __('The site works in a test mode.') %> </em></small>
+        </blockquote>
+      </div>
+      <!--      <div class="step">
+              <div class="step-image">
+              <img alt="computer with credit card icon on screen" src="/images/setup-payment.png"/>
+              </div>
+              <h5>Configure integrations</h5>
+              <p>In order for this app to send automated emails, you'll need to create a <a target="_blank" href="https://mailgun.com">Mailgun</a> account.  Then, in <code>config/custom.js</code>, configure the following:</p>
+              <div class="card bg-light mb-4">
+                <div class="card-body"><pre><code><span class="text-muted">// Recipient of contact form messages</span>
+      internalEmailAddress: my.email@example.com,
+
+      <span class="text-muted">// For outgoing emails</span>
+      fromEmailAddress: 'noreply@example.com',
+      fromName: 'The Poale Ell Team',
+
+      <span class="text-muted">// Mailgun settings</span>
+      mailgunDomain: 'transactional-mail.example.com',
+      mailgunSecret: 'key-testkeyb183848139913858e8abd9a3'</code></pre>
+                </div>
+              </div>
+              <p>To enable support for billing features, you'll need to make a <a target="_blank" href="https://stripe.com">Stripe</a> account, then include your test credentials like so:</p>
+              <div class="card bg-light mb-4">
+                <div class="card-body"><pre><code><span class="text-muted">// Stripe credentials</span>
+      stripePublishableKey: 'pk_test_Zzd814nldl91104qor5911gjald',
+      stripeSecret: 'sk_test_Zzd814nldl91104qor5911gjald'</code></pre>
+                </div>
+              </div>
+              <blockquote><small>If your app doesn't need payment processing, it will still work without Stripe configuration. In this case, all references to billing will just be omitted from the UI.</small></blockquote>
+            </div>
+            <div class="step">
+              <div class="step-image">
+              <img alt="computer with sails logo on screen" src="/images/setup-customize.png"/>
+              </div>
+              <h5>Customize</h5>
+              <p>Once the initial configuration is done, you're ready to start building out the rest of your app.</p>
+              <p>We worked hard to make this starter app's structure consistent and its files are as bare-bones as possible, so it's easy to add new pages and business logic following the conventions we set up. If you run into trouble, have a look at <a href="/faq">your new FAQ page</a>, which covers the tools we used and how to customize.  For a deeper dive, check out the Sails <a href="https://courses.platzi.com/courses/sails-js/">walkthrough</a>, <a href="https://sailsjs.com/documentation">reference documentation</a> and <a href="https://sailsjs.com/support">support</a> pages.</p>
+            </div>-->
+    </div>
+    <hr/>
+  </div>
+
+
+
+
+</div>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
