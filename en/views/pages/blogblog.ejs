@@ -492,7 +492,8 @@
     </section>
 
     <% /* КАРУСЕЛЬ С ВИДЕО */ %>
-    <patzi-post-videos v-if="post.video.length > 0" :obj-data="seo" :video="post.video"></patzi-post-videos>
+    <patzi-post-videos v-if="post.video.length > 0" :obj-data="seo"
+                       :video="post.video" ></patzi-post-videos>
     <% /* ЭКСПЕРТЫ НА ВЫСТАВКЕ */ %>
     <patzi-post-experts v-if="post.experts.length > 0" :obj-data="seo" :experts="experts" ></patzi-post-experts>
     <router-view></router-view>
