@@ -473,14 +473,11 @@ module.exports = {
   custom: {
     baseUrl: process.env.PTZ_BASEURL,
     internalEmailAddress:process.env.PTZ_INTERNALEMAIL,
-    // mailgunDomain: process.env.MAILGUN_DOMAIN,
-    // mailgunSecret: process.env.MAILGUN_SECRET
-    mailgunDomain: 'poaleell.com',
-  mailgunSecret: 'key-1f50857987daed49b73c40a68b0a1c8d',
+    mailgunDomain: process.env.MAILGUN_DOMAIN,
+    mailgunSecret: process.env.MAILGUN_SECRET,
 
-
-  friendEmailAddress: 'ins09@mail.ru',
-  avatar: 'https://d2e0ab19zxiehc.cloudfront.net/ava.png',
+    friendEmailAddress: 'ins09@mail.ru',
+    avatar: 'https://d2e0ab19zxiehc.cloudfront.net/ava.png',
 
   // The sender that all outgoing emails will appear to come from.
   // Отправитель, от которого будут исходить все исходящие письма.
