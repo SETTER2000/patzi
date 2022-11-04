@@ -475,7 +475,7 @@ module.exports = {
     internalEmailAddress:process.env.PTZ_INTERNALEMAIL,
     mailgunDomain: process.env.MAILGUN_DOMAIN,
     mailgunSecret: process.env.MAILGUN_SECRET,
-
+    googleMapKey: process.env.GOOGLE_MAP_KEY,
     friendEmailAddress: 'ins09@mail.ru',
     avatar: 'https://d2e0ab19zxiehc.cloudfront.net/ava.png',
 
