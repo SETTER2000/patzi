@@ -7,7 +7,7 @@ parasails.registerPage('users-home', {
     value: '',
     value1: '',
     value2: '',
-    minCount:100,
+    minCount:150,
     stepCount:50,
     files: [],
     cityId: undefined,
