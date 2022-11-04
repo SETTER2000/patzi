@@ -473,7 +473,8 @@ module.exports = {
   custom: {
     baseUrl: process.env.PTZ_BASEURL,
     internalEmailAddress:process.env.PTZ_INTERNALEMAIL,
-
+    mailgunDomain: process.env.MAILGUN_DOMAIN,
+    mailgunSecret: process.env.MAILGUN_SECRET
     // mailgunDomain: 'mg.example.com',
     // mailgunSecret: 'key-prod_fake_xx',
     // stripeSecret: 'sk_prod__fake_xx',
