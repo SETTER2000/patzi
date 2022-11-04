@@ -109,7 +109,7 @@ module.exports.custom = {
    *                                                                          *
    ***************************************************************************/
   // …
-  googleMapKey: 'AIzaSyAUr7qK0Dq4YE52t90itw-EF0XHTkVuCIE',
+  googleMapKey: 'AIzaSyBqUUPetzjJ9GDBnQDhaON3Z-0d4L_gJ80',
 
   descriptionRootPage: 'Питомник Poale Ell занимается разведением собак породы "Китайская Хохлатая Собака".',
   titleRootPage: 'Питомник Китайских Хохлатых Собак.',
