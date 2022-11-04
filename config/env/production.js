@@ -473,8 +473,25 @@ module.exports = {
   custom: {
     baseUrl: process.env.PTZ_BASEURL,
     internalEmailAddress:process.env.PTZ_INTERNALEMAIL,
-    mailgunDomain: process.env.MAILGUN_DOMAIN,
-    mailgunSecret: process.env.MAILGUN_SECRET
+    // mailgunDomain: process.env.MAILGUN_DOMAIN,
+    // mailgunSecret: process.env.MAILGUN_SECRET
+    mailgunDomain: 'poaleell.com',
+  mailgunSecret: 'key-1f50857987daed49b73c40a68b0a1c8d',
+
+
+  friendEmailAddress: 'ins09@mail.ru',
+  avatar: 'https://d2e0ab19zxiehc.cloudfront.net/ava.png',
+
+  // The sender that all outgoing emails will appear to come from.
+  // Отправитель, от которого будут исходить все исходящие письма.
+  fromEmailAddress: 'info@poaleell.com',
+  fromName: 'The Poale Ell Team',
+
+  // Whether to require proof of email address ownership any time a new user
+  // signs up, or when an existing user attempts to change their email address.
+  // Требовать ли подтверждения владения адресом электронной почты в любое время, когда новый пользователь
+  // регистрируется, или когда существующий пользователь пытается изменить свой адрес электронной почты.
+  verifyEmailAddresses: true,
     // mailgunDomain: 'mg.example.com',
     // mailgunSecret: 'key-prod_fake_xx',
     // stripeSecret: 'sk_prod__fake_xx',
