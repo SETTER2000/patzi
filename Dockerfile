@@ -17,4 +17,8 @@ COPY . .
 # Главный сервер принимает запросы на порт 1337
 EXPOSE 1337
 
+LABEL "org.label-schema.vendor"="lphp@mail.com"
+LABEL "org.label.url"="http://poaleell.com"
+LABEL "org.label-schema.version"="1.0.0"
+
 CMD [ "node", "app.js" ]
