@@ -39,7 +39,7 @@
     "sails-hook-orm": "^4.0.2",
     "sails-hook-sockets": "^2.0.1",
     "sails-hook-uploads": "^0.4.2",
-    "sails-mongo": "^2.0.0",
+    "sails-mongo": "^2.0.1",
     "sails-mysql": "^3.0.0",
     "sharp": "^0.30.7",
     "skipper-s3": "^0.6.0",
