@@ -29,7 +29,7 @@
     "moment": "^2.29.3",
     "moment-timezone": "^0.5.26",
     "mongodb": "^3.6.2",
-    "mongoose": "^6.5.2",
+    "mongoose": "^6.11.3",
     "mysql": "^2.18.1",
     "nvm": "^0.0.4",
     "query": "^0.2.0",
