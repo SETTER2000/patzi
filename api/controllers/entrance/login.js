@@ -27,7 +27,7 @@ bcrypt сравнить хешированный пароль из базы да
     },
 
     password: {
-      description: 'The unencrypted password to try in this attempt, e.g. "passwordlol".',
+      description: 'The unencrypted password to try in this attempt, e.g. "password".',
       type: 'string',
       required: true
     },
@@ -74,7 +74,6 @@ and exposed as req.me.)`
 
 
   fn: async function (inputs) {
-
     // Look up by the email address.
     // (note that we lowercase it to ensure the lookup is always case-insensitive,
     // regardless of which database we're using)

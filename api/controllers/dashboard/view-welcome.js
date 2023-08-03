@@ -19,7 +19,6 @@ module.exports = {
 
 
   fn: async function () {
-
     // true - включить красный spinner на главной, false - выключить
     return {spinner: true,
       seo: {

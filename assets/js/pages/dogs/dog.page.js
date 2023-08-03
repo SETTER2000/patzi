@@ -202,7 +202,7 @@ parasails.registerPage('dog', {
 
     },
 
-    // Получить значёк валюты
+    // Получить значок валюты
     getCurrency: function (value) {
       if (!value) {
         return '';

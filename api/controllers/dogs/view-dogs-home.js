@@ -30,7 +30,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    // Бибилиотека Node.js
+    // Библиотека Node.js
     const url = require('url');
     const moment = require('moment');
 

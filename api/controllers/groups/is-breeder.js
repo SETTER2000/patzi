@@ -31,6 +31,9 @@ module.exports = {
       throw 'badRequest';
     }
 
+    console.log("REQ.ME::: ",req.me)
+    console.log("REQ.ME2::: ",this.req.me)
+
    if(!await sails.helpers.groupBy.with({group:'breeder', me:req.me})){
      throw 'notFound';
    }

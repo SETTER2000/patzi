@@ -34,7 +34,7 @@
     "nvm": "^0.0.4",
     "pm2": "^5.3.0",
     "query": "^0.2.0",
-    "sails": "^1.2.3",
+    "sails": "1.2.3",
     "sails-hook-apianalytics": "^2.0.3",
     "sails-hook-organics": "^2.2.1",
     "sails-hook-orm": "^4.0.2",
