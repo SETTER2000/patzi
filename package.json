@@ -38,7 +38,7 @@
     "sails-hook-apianalytics": "^2.0.3",
     "sails-hook-organics": "^2.2.1",
     "sails-hook-orm": "^4.0.2",
-    "sails-hook-sockets": "^2.0.1",
+    "sails-hook-sockets": "^3.0.0",
     "sails-hook-uploads": "^0.4.2",
     "sails-mongo": "^2.0.0",
     "sails-mysql": "^3.0.0",
@@ -82,6 +82,6 @@
   "author": "anonymous node/sails user",
   "license": "",
   "engines": {
-    "node": "^10.22.1"
+    "node": "18.19.1"
   }
 }
