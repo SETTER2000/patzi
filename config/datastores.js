@@ -49,7 +49,7 @@ module.exports.datastores = {
     adapter: 'sails-mongo',
     host: 'localhost',
     port: 27017,
-    user: 'fox',
+    user: 'adam',
     password: '4211817',
     database: 'patzi',
     //url: 'mongodb://fox:4211817@localhost:27017/patzi',
