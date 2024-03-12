@@ -22,6 +22,7 @@ module.exports.custom = {
    * > but it can also be used for user-uploaded images, webhooks, etc.      *
    *                                                                         *
    **************************************************************************/
+  // использовать, на локальном компе без переменной окружения
   // baseUrl: 'http://localhost',
   baseUrl: process.env.PTZ_BASEURL,
 
