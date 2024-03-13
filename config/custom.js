@@ -23,8 +23,10 @@ module.exports.custom = {
    *                                                                         *
    **************************************************************************/
   // использовать, на локальном компе без переменной окружения
-  // baseUrl: 'http://localhost',
-  baseUrl: process.env.PTZ_BASEURL,
+  baseUrl: 'http://localhost',
+  // baseUrl: process.env.PTZ_BASEURL,
+  cloudFrontUrl: 'https://d2e0ab19zxiehc.cloudfront.net',
+  pathPhotoS3: 'https://d2e0ab19zxiehc.cloudfront.net',
 
   /**************************************************************************
    *                                                                         *
