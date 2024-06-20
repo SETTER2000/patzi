@@ -1,0 +1,1881 @@
+<div id="dogs-home" class="content" v-cloak>
+    <p class="text-danger"
+       v-if="cloudError === 'dogAlreadyInUse'"><%= __('There is already an account using that email address') %>.
+    </p>
+    <% /* Диалоговое окно Список собак*/ %>
+    <el-dialog title="<%= __('Dog editor') %>. <%= __('List') %>."
+               custom-class="dialog-kennel-add"
+               :visible.sync="dialogEditorList"
+               width="60%">
+        <template>
+            <el-table
+                    ref="filterTable"
+                    :row-class-name="tableRowClassName"
+                    :data="dogsEditList.filter(data => !search || data.fullName.toLowerCase().includes(search.toLowerCase()))"
+                    :default-sort="{prop: 'updatedAt', order: 'descending'}"
+                    max-height="650"
+                    style="width: 100%">
+                <el-table-column
+                        type="index"
+                        fixed="left"
+                        width="35">
+                </el-table-column>
+
+                <el-table-column
+                        property="cover"
+                        label=""
+                        fixed="left"
+                        width="90">
+                    <template slot="header" slot-scope="scope">
+                        <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
+                    </template>
+                    <template slot-scope="scope">
+                        <div v-if="!_.isEmpty(scope.row.images)">
+                            <a href="#" @click="clickShowPhoto(scope.$index,scope.row)"
+                               class="flex justify-content-center">
+                                <el-avatar :size="38" @error="errorHandler">
+                                    <img class="lazyload" :data-src="scope.row.images[scope.row.cover].imageSrc"/>
+                                </el-avatar>
+                            </a>
+                        </div>
+                        <div v-else class="photo-preview col">
+                            <div class="image-wrapper round  d-flex align-items-center justify-content-center"><!---->
+                                <!----> <span
+                                        class="placeholder-icon fa fa-picture-o"></span></div>
+                        </div>
+                    </template>
+                </el-table-column>
+
+
+                <el-table-column
+                        label="<%= __('Name') %>"
+                        sortable
+                        prop="fullName">
+                    <template slot-scope="scope">
+                        <el-link @click="goTo2(scope.row.detail)" type="primary">{{scope.row.fullName}}</el-link>
+                    </template>
+                </el-table-column>
+
+
+
+                <el-table-column
+                        v-show="true"
+                        label="<%= __('Update') %>"
+                        sortable
+                        prop="updatedAt">
+                    <template slot-scope="scope">
+                        {{scope.row.updatedAt |  getCreate(me.preferredLocale, 'llll')}}
+                    </template>
+                </el-table-column>
+
+
+                <el-table-column
+                        label="<%= __('Price') %>"
+                        sortableв
+                        prop="price"
+                        width="80">
+                    <template slot-scope="scope" v-if="scope.row.price > 0 && scope.row.sale">
+                        <span v-if="scope.row.currency === 'рубль'">{{scope.row.price}} &#8381;</span>
+                        <span v-else-if="scope.row.currency === 'euro'">€ {{scope.row.price}}</span>
+                        <span v-else>$ {{scope.row.price}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column align="right">
+                    <template slot="header" slot-scope="scope">
+                        <el-input
+                                v-model="search"
+                                size="small"
+                                placeholder="Input dog name"
+                                clearable/>
+                    </template>
+                    <template slot-scope="scope">
+                        <% /* ДОБАВИТЬ ТИТУЛЫ */ %>
+                        <!--  <el-row class="my-4">
+                            <el-button v-if="buttonUpdate" type="primary" @click="addTitleDog(ruleForm)" round>{{titleAdd}}</el-button>
+                          </el-row>-->
+                        <el-tooltip :content="titleAdd" placement="top" effect="light">
+                            <el-button
+                                    size="mini"
+                                    icon="el-icon-trophy"
+                                    @click="addTitleDog(scope.row)">
+                            </el-button>
+                        </el-tooltip>
+                        <el-tooltip content="<%= __('Image editor') %>" placement="top" effect="light">
+                            <el-button
+                                    v-if="scope.row.images"
+                                    size="mini"
+                                    icon="el-icon-picture-outline-round"
+                                    @click="handleEditPhotos(scope.$index, scope.row)">
+                            </el-button>
+                        </el-tooltip>
+                        <el-button
+                                size="mini"
+                                @click="handleEdit(scope.$index, scope.row)">
+                            Edit
+                        </el-button>
+                        <el-button
+                                size="mini"
+                                type="danger"
+                                @click="openRemoveDialog(scope.row.id)"
+                        >Delete
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </template>
+        <span slot="footer" class="dialog-footer">
+      <span class="flex justify-content-between">
+        <div>
+         <el-button @click="clearFilter" class="btn btn-outline-info"><%= __('Reset filters') %></el-button>
+        </div>
+        <div v-if="me.hasBillingCard || me.isSuperAdmin || me.isAdmin">
+            <el-button @click="clickAddButton()" class="btn btn-outline-success"
+                       icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
+        </div>
+        <div>
+            <el-button @click="buttonUpdate = false; dialogEditorList = false"
+                       class="btn btn-outline-info"><%= __('Close') %></el-button>
+        </div>
+      </span>
+    </span>
+    </el-dialog>
+    <% /* Диалоговое окно. Добавить | Редактировать собаку. */ %>
+    <el-dialog title="<%= __('Add your dog') %>"
+               :visible.sync="centerDialogAdded"
+               custom-class="dialog-window"
+               center>
+        <el-dialog
+                width="60%"
+                :title="dialog.header"
+                :visible.sync="innerVisible"
+                append-to-body>
+            <div class="text-center"><p>{{dialog.description}}</p></div>
+            <el-image :src="dialog.src" style="width: 100%">
+                <div slot="placeholder" class="image-slot">
+                    Loading<span class="dot">...</span>
+                </div>
+            </el-image>
+        </el-dialog>
+
+        <% /* Диалоговое окно. Не верный текст имени собаки. */ %>
+        <el-dialog
+                title="<%= __('Error') %>"
+                width="30%"
+                :visible.sync="ruleForm.errInputDogName"
+                :show-close=false
+                append-to-body>
+            <span><%= __('The name of the dog is written only in English letters. Switch the keyboard to the correct layout.') %></span>
+            <span slot="footer" class="dialog-footer">
+    <el-button autofocus type="primary" @click="ruleForm.errInputDogName = false; ruleForm.label=''">Ok</el-button>
+  </span>
+        </el-dialog>
+
+        <template v-if="!ruleForm.see">
+            <el-popover
+                    ref="popover"
+                    placement="top-start"
+                    title="<%= __('Visibility') %>"
+                    width="270"
+                    trigger="hover"
+                    content="<%= __('Your dog is currently not visible in the catalog. Until you turn on the visibility no one can see it.') %>">
+            </el-popover>
+            <div class="menu-center">
+                <h1 v-if="buttonUpdate" class="flex justify-content-center"
+                    :class="classObject"
+                >{{ruleForm.fullName}}
+                </h1>
+                <el-button class="not-border" icon="el-icon-warning-outline" size="mini" v-popover:popover
+                           circle></el-button>
+            </div>
+        </template>
+        <template v-else>
+            <h1 v-if="buttonUpdate" class="flex justify-content-center"
+                :class="classObject"
+            >{{ruleForm.fullName}}</h1>
+        </template>
+        <div v-if="ruleForm.imageUrl">
+            <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
+        </div>
+        <h5><%= __('Multiple upload photos') %></h5>
+        <label v-if="!ruleForm.imageUrl">
+            <%= __('The first photo in this download will become the album cover. Later in the editor you can change these settings.') %>
+        </label>
+        <div class="my-2">
+            <el-divider content-position="left"><%= __('Add photo') %></el-divider>
+        </div>
+        <!---------------------------------------------------------------------------------------->
+        <% /*Загрузка фото NEW*/ %>
+        <div class="container-fluid ">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <el-upload
+                            action="/api/v1/files/upload"
+                            list-type="picture-card"
+                            drag
+                            multiple
+                            ref="upload"
+                            :on-preview="handlePictureCardPreview"
+                            :before-upload="beforeUpload"
+                            :limit="limit"
+                            :on-success="handleSuccess"
+                            :on-exceed="handleExceed"
+                            :on-remove="handleRemove"
+                    >
+                        <i class="el-icon-plus"></i>
+                        <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
+                            {{sizeLess}}<%= __('MB') %></div>
+                    </el-upload>
+                    <br>
+                    <el-dialog :visible.sync="dialogVisible" style="z-index: 10000">
+                        <img class="lazyload" :data-src="dialogImageUrl" alt="">
+                    </el-dialog>
+                </div>
+            </div>
+        </div>
+
+        <!---------------------------------------------------------------------------------------->
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+            <div class="container-fluid ">
+                <div class="row ">
+                    <div class="col col-lg-6">
+
+                        <% /* ВИДНА СОБАКА ИЛИ НЕТ */ %>
+                        <el-form-item prop="see">
+                            <el-switch
+                                    style="display: block"
+                                    v-model="ruleForm.see"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                                    active-text="<%= __('visible') %>"
+                                    inactive-text="<%= __('not visible') %>">
+                            </el-switch>
+                        </el-form-item>
+
+                        <% /* ПИТОМНИК */ %>
+                        <el-form-item v-if="!buttonUpdate" label="<%= __('Kennel') %>" prop="kennel">
+                            <el-select v-model="ruleForm.kennel" placeholder="<%= __('Choose your cattery') %>"
+                                       class="form-width"
+                            >
+                                <el-option v-for="item in getPullKennel()"
+                                           :key="item.id"
+                                           :label="item.label"
+                                           :value="item.id">
+                                    <span style="float: left">{{ item.label }}</span>
+                                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.labelRu }}</span>
+                                </el-option>
+                            </el-select>
+                            <el-tooltip effect="dark"
+                                        content="<%= __("Add kennel") %>"
+                                        placement="top-start">
+                                <el-button @click="goTo('kennels')" size="mini" round icon="el-icon-plus"></el-button>
+                            </el-tooltip>
+                            <el-tooltip effect="dark"
+                                        content="<%= __("If you have not found your cattery, go to the \"Kennels\" section and create it.") %>"
+                                        placement="top-start">
+
+                                <div size="mini" round class="el-icon-question "></div>
+                            </el-tooltip>
+                        </el-form-item>
+
+                        <% /* ИМЯ СОБАКИ*/ %>
+                        <template v-if="ruleForm.kennel &&  !buttonUpdate">
+
+                            <el-form-item label="<%= __('Dog') %>" prop="label">
+                                <el-input minlength="3" maxlength="80" show-word-limit
+                                          style="width:80%;"
+                                          :keyup="ruleForm.label | abc(ruleForm)"
+                                          placeholder="<%= __('The official name without the name of the kennel') %>"
+                                          v-model="ruleForm.label"></el-input>
+                            </el-form-item>
+                        </template>
+
+                        <% /* ДЕНЬ РОЖДЕНИЕ */ %>
+                        <el-form-item v-if="!buttonUpdate" label="<%= __('DoB') %>" prop="dateBirth">
+                            <el-row :gutter="2">
+                                <el-col :span="11">
+                                    <el-date-picker
+                                            v-model="ruleForm.dateBirth"
+                                            type="datetime"
+                                            placeholder="<%= __('Select date and time') %>"
+                                            default-time="12:00:00">
+                                    </el-date-picker>
+                                </el-col>
+                            </el-row>
+                        </el-form-item>
+                        <el-form-item v-if="buttonUpdate" label="<%= __('DoB') %>" prop="dateBirthUpdate">
+                            <el-row :gutter="2">
+                                <el-col :span="11">
+                                    <el-date-picker
+                                            v-model="dateBirthUpdate"
+                                            type="datetime"
+                                            placeholder="<%= __('Select date and time') %>"
+                                            default-time="12:00:00">
+                                    </el-date-picker>
+                                </el-col>
+                            </el-row>
+                        </el-form-item>
+
+                        <% /* ДЕНЬ СМЕРТИ */ %>
+                        <el-form-item v-if="!buttonUpdate" label="<%= __('DoD') %>" prop="dateDeath">
+                            <el-row :gutter="2">
+                                <el-col :span="11">
+                                    <el-date-picker
+                                            v-model="ruleForm.dateDeath"
+                                            type="datetime"
+                                            placeholder="<%= __('Select date and time') %>"
+                                            default-time="12:00:00">
+                                    </el-date-picker>
+                                </el-col>
+                            </el-row>
+                        </el-form-item>
+                        <el-form-item v-if="buttonUpdate" label="<%= __('DoD') %>" prop="dateDeathUpdate">
+                            <el-row :gutter="2">
+                                <el-col :span="11">
+                                    <el-date-picker
+                                            v-model="dateDeathUpdate"
+                                            type="datetime"
+                                            placeholder="<%= __('Select date and time') %>"
+                                            default-time="12:00:00">
+                                    </el-date-picker>
+                                </el-col>
+                            </el-row>
+                        </el-form-item>
+
+                      <% /* ПОЛ */ %>
+                        <el-form-item label="<%= __('Gender') %>" prop="gender">
+                            <el-col :xs="8" :sm="10" :md="10" :lg="16" :xl="16">
+                                <el-radio-group v-model="ruleForm.gender">
+                                    <el-radio label="sire"><%= __('Sire') %></el-radio>
+                                    <el-radio label="dam"><%= __('Dam') %></el-radio>
+                                </el-radio-group>
+                            </el-col>
+                        </el-form-item>
+
+                      <% /* Регистрационный номер в федерации*/ %>
+                        <el-form-item
+                                v-for="(federation, index) in ruleForm.federations"
+                                :label="'№ ' + index"
+                                :key="federation.key"
+                                :prop="'federations.' + index + '.registerNumber'"
+                                :rules="{required: true, message: 'Federation can not be null', trigger: 'blur'}">
+
+
+                            <el-col :xs="14" :sm="18" :md="18" :lg="17" :xl="16">
+                                <el-input placeholder="<%= __("Dog's registration number") %>"
+                                          v-model="federation.registerNumber"
+                                          class="input-with-select">
+
+                                    <el-select v-model="federation.federationId" slot="prepend" class="wds"
+                                               placeholder="Select">
+                                        <el-option v-for="(federation, ind) of federations"
+                                                   :label="federation.label"
+                                                   :value="federation.id" :key="'index'+ind"></el-option>
+                                    </el-select>
+                                    <el-button slot="append" @click="copyElement"
+                                               icon="el-icon-copy-document"></el-button>
+                                    <el-button v-if="ruleForm.federations.length >1"
+                                               slot="append" @click.prevent="removeElement(federation)"
+                                               icon="el-icon-delete"></el-button>
+                                </el-input>
+                            </el-col>
+
+                        </el-form-item>
+                        <% /* ВЕС при рождении */ %>
+                        <template>
+
+                            <el-row :gutter="2">
+                                <el-form-item label="<%= __('Birth weight (g)') %>" prop="birthWeight">
+                                    <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                        <el-slider
+                                                class="hidden-xs-only"
+                                                v-model="ruleForm.birthWeight"
+                                                class="hidden-xs-only"
+                                                :min="0"
+                                                :max="400"
+                                                :step="1"
+                                                show-input>
+                                        </el-slider>
+                                        <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                         :max="400" size="mini"
+                                                         v-model="ruleForm.birthWeight"></el-input-number>
+                                    </el-col>
+                                    <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                        <el-tooltip effect="dark"
+                                                    content="<%= __("Specify the weight at birth.") %>"
+                                                    placement="top-start">
+                                            <div size="mini" round class="el-icon-question ml-3"></div>
+                                        </el-tooltip>
+                                    </el-col>
+                                </el-form-item>
+                            </el-row>
+
+                        </template>
+
+                        <% /*Домашняя кличка */ %>
+                        <template>
+                            <el-form-item label="<%= __('Nickname') %>" prop="nickname">
+                                <el-col :xs="14" :sm="14" :md="14" :lg="12" :xl="12">
+                                    <el-input minlength="3" maxlength="20" show-word-limit
+                                              placeholder="<%= __('Affectionate name') %>"
+                                              v-model="ruleForm.nickname"></el-input>
+                                </el-col>
+
+
+                                <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                    <el-tooltip effect="dark"
+                                                content="<%= __("How do you call the house, a nickname, affectionate name") %>"
+                                                placement="top-start">
+                                        <div size="mini" round class="el-icon-question ml-3"></div>
+                                    </el-tooltip>
+                                </el-col>
+                            </el-form-item>
+                        </template>
+
+                        <% /*Клеймо*/ %>
+                        <template>
+                            <el-form-item label="<%= __('Stamp') %>" prop="stamp">
+                                <el-col :xs="14" :sm="18" :md="18" :lg="17" :xl="16">
+                                    <el-input minlength="3" maxlength="20" show-word-limit
+                                              placeholder="<%= __('Stamp Dog number in the registry.') %>"
+                                              v-model="ruleForm.stamp"></el-input>
+                                </el-col>
+                            </el-form-item>
+                        </template>
+
+                        <% /* ТИП */ %>
+                        <el-form-item label="<%= __('Type') %>" prop="type">
+                            <el-col :xs="9" :sm="9" :md="7" :lg="7" :xl="7">
+                                <el-radio-group v-model="ruleForm.type">
+                                    <el-radio label="hairless"><%= __('Hairless') %></el-radio>
+                                    <el-radio label="powderpuff"><%= __('Powderpuff') %></el-radio>
+                                </el-radio-group>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2" class="mb-3">
+                                <el-tooltip effect="dark" content="<%= __("What is it?") %>"
+                                            placement="top-start">
+                                    <el-button @click="showDialog('hairless')" size="mini" round
+                                               icon="el-icon-question"></el-button>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+
+                        <% /* РОСТ */ %>
+                        <template>
+                            <el-row :gutter="2">
+                                <el-form-item label="<%= __('Growth (cm)') %>" prop="growth">
+                                    <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                        <el-slider
+                                                class="hidden-xs-only"
+                                                v-model="ruleForm.growth"
+                                                :min="20"
+                                                :max="40"
+                                                show-input>
+                                        </el-slider>
+                                        <el-input-number :min="20" class="text-center hidden-sm-and-up"
+                                                         :max="40" size="mini"
+                                                         v-model="ruleForm.growth"></el-input-number>
+                                    </el-col>
+                                    <el-col :xs="4" :sm="3" :md="3" :lg="3" :xl="2">
+                                        <el-tooltip effect="dark" content="<%= __("How to measure a dog's height?") %>"
+                                                    placement="top-start">
+                                            <el-button @click="showDialog('growth')" size="mini" round
+                                                       icon="el-icon-question"></el-button>
+                                        </el-tooltip>
+                                    </el-col>
+                                </el-form-item>
+                            </el-row>
+
+                        </template>
+
+                        <% /* ВЕС */ %>
+                        <template>
+                            <el-form-item label="<%= __('Weight (g)') %>" prop="weight">
+                                <el-col :span="16">
+                                    <div class="block">
+                                        <el-slider
+                                                class="hidden-xs-only"
+                                                v-model="ruleForm.weight"
+                                                :min="20"
+                                                :max="10000"
+                                                :step="10"
+                                                show-input>
+                                        </el-slider>
+                                        <el-input-number :min="20"
+                                                         class="text-center hidden-sm-and-up"
+                                                         :step="10"
+                                                         :max="10000"
+                                                         size="mini"
+                                                         v-model="ruleForm.weight">
+                                        </el-input-number>
+                                    </div>
+                                </el-col>
+                                <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                    <el-tooltip effect="dark"
+                                                content="<%= __("Indicate the current weight of the dog.") %>"
+                                                placement="top-start">
+                                        <div size="mini" round class="el-icon-question ml-3"></div>
+                                    </el-tooltip>
+                                </el-col>
+                            </el-form-item>
+                        </template>
+
+                        <% /* ЦВЕТ */ %>
+                        <template>
+                            <el-form-item label="<%= __('Color') %>" prop="color">
+                                <el-col :xs="14" :sm="8" :md="6" :lg="6" :xl="6">
+
+                                    <el-select v-model="ruleForm.color" placeholder="Select">
+                                        <el-option
+                                                v-for="item in getPullColor()"
+                                                :key="item.value"
+                                                :label="item.labelRu"
+                                                :value="item.value">
+                                            <span style="float: left">{{ item.labelRu }}</span>
+                                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+                                        </el-option>
+                                    </el-select>
+                                </el-col>
+                                <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
+                                    <el-tooltip class="ml-3" effect="dark"
+                                                content="<%= __("Does the standard dictate the definition of color?") %>"
+                                                placement="top-start">
+                                        <el-button @click="open(i19p.infoColor,i19p.whyColor)" size="mini" round
+                                                   icon="el-icon-question"></el-button>
+                                    </el-tooltip>
+                                </el-col>
+                            </el-form-item>
+                        </template>
+
+                        <% /* БУКВА ПОМЁТА  */ %>
+                        <template>
+                            <el-row :gutter="2">
+                                <el-form-item label="<%= __('Litter letter') %>" prop="letter">
+                                    <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                        <el-select v-model="ruleForm.letter" placeholder="Select">
+                                            <el-option
+                                                    v-for="item in letters"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                        <el-button class="not-border" icon="el-icon-warning-outline" size="mini"
+                                                   v-popover:popover2
+                                                   circle></el-button>
+                                    </el-col>
+                                    <el-popover
+                                            ref="popover2"
+                                            placement="top-start"
+                                            title="<%= __('Letter') %>"
+                                            width="270"
+                                            trigger="hover"
+                                            content="<%= __('If you do not set the letter of the litter yourself, the system will do this automatically by setting the first letter of the dog’s name as a litter.') %>">
+                                    </el-popover>
+
+                                    <!--<el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                  <el-tooltip effect="dark"
+                              placement="top-start">
+                    <div slot="content"><%= __("If you do not set the letter of the litter yourself, the system will do this automatically by setting the first letter of the dog’s name as a litter.") %></div>
+                    <div size="mini" round class="el-icon-question ml-3"></div>
+                  </el-tooltip>
+                </el-col>-->
+
+                                </el-form-item>
+                            </el-row>
+                        </template>
+
+                        <% /* ОПИСАНИЕ */ %>
+                        <template>
+                            <el-form-item label="<%= __('Description') %>" prop="subtitle">
+                                <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+                                    <el-input
+                                            type="textarea"
+                                            :rows="2"
+                                            autosize
+                                            placeholder="Please input"
+                                            v-model="ruleForm.subtitle"
+                                            maxlength="700"
+                                            show-word-limit>
+                                    </el-input>
+                                </el-col>
+                            </el-form-item>
+                        </template>
+
+                        <% /* ТЕСТЫ */ %>
+                        <template>
+                            <el-form-item label="<%= __('Tests') %>" prop="dogTests">
+                                <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+                                    <el-input
+                                            type="textarea"
+                                            :rows="3"
+                                            autosize
+                                            placeholder="<%= __('PLL, PRA clear by parent') %>"
+                                            v-model="ruleForm.dogTests"
+                                            maxlength="700"
+                                            show-word-limit>
+                                    </el-input>
+                                </el-col>
+                            </el-form-item>
+                        </template>
+
+
+                        <div class="my-sm-5">
+                            <el-divider content-position="left"><%= __('Teeth') %></el-divider>
+                        </div>
+                        <% /* показывать|не показывать ЗУБЫ */ %>
+                        <template>
+                            <!-- `checked` should be true or false -->
+
+                            <el-checkbox v-model="ruleForm.showTeeth">
+                <span
+                        :class="[ruleForm.showTeeth ? 'text-success' : '', 'text-secondary']"><%= __('Show teeth') %></span>
+                                | <span
+                                        :class="[!ruleForm.showTeeth ? 'text-success' : '', 'text-secondary']"><%= __('Do not show teeth') %></span>
+                            </el-checkbox>
+                        </template>
+                        <% /* ПРИКУС */ %>
+                        <template>
+                            <el-row :gutter="2">
+                                <el-form-item label="<%= __('Bite') %>" prop="bite">
+                                    <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                        <el-select v-model="ruleForm.bite" placeholder="Select">
+                                            <el-option
+                                                    v-for="item in bites"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </el-col>
+                                </el-form-item>
+                            </el-row>
+                        </template>
+
+                        <% /* КЛЫКИ */ %>
+                        <template>
+                            <el-row :gutter="2">
+                                <el-form-item label="<%= __('Canine') %>" prop="canine">
+                                    <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                        <el-slider
+                                                class="hidden-xs-only"
+                                                v-model="ruleForm.canine"
+                                                :min="0"
+                                                :max="4"
+                                                show-input>
+                                        </el-slider>
+                                        <el-input-number class="text-center hidden-sm-and-up"
+                                                         :min="0" :max="4" size="mini"
+                                                         v-model="ruleForm.canine"></el-input-number>
+                                    </el-col>
+                                    <!--   <el-col :xs="4" :sm="3" :md="3" :lg="3" :xl="2">
+                    <el-tooltip effect="dark" content="<%= __("How to measure a dog's height?") %>"
+                                placement="top-start">
+                      <el-button @click="showDialog('growth')" size="mini" round
+                                 icon="el-icon-question"></el-button>
+                    </el-tooltip>
+                  </el-col>-->
+                                </el-form-item>
+                            </el-row>
+
+                        </template>
+
+                        <% /* ЗУБЫ ВЕРХ */ %>
+                        <template>
+                            <el-row :gutter="2">
+                                <el-form-item label="<%= __('Teeth top') %>" prop="teethCountTop">
+                                    <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                        <el-slider
+                                                class="hidden-xs-only"
+                                                v-model="ruleForm.teethCountTop"
+                                                :min="0"
+                                                :max="6"
+                                                show-input>
+                                        </el-slider>
+                                        <el-input-number class="text-center hidden-sm-and-up"
+                                                         :min="0" :max="6" size="mini"
+                                                         v-model="ruleForm.teethCountTop"></el-input-number>
+                                    </el-col>
+                                    <!--   <el-col :xs="4" :sm="3" :md="3" :lg="3" :xl="2">
+                    <el-tooltip effect="dark" content="<%= __("How to measure a dog's height?") %>"
+                                placement="top-start">
+                      <el-button @click="showDialog('growth')" size="mini" round
+                                 icon="el-icon-question"></el-button>
+                    </el-tooltip>
+                  </el-col>-->
+                                </el-form-item>
+                            </el-row>
+
+                        </template>
+
+                        <% /* ЗУБЫ НИЗ */ %>
+                        <template>
+                            <el-row :gutter="2">
+                                <el-form-item label="<%= __('Teeth bottom') %>" prop="teethCountBottom">
+                                    <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                        <el-slider
+                                                class="hidden-xs-only"
+                                                v-model="ruleForm.teethCountBottom"
+                                                :min="0"
+                                                :max="6"
+                                                show-input>
+                                        </el-slider>
+                                        <el-input-number class="text-center hidden-sm-and-up"
+                                                         :min="0" :max="6" size="mini"
+                                                         v-model="ruleForm.teethCountBottom"></el-input-number>
+                                    </el-col>
+                                    <!--   <el-col :xs="4" :sm="3" :md="3" :lg="3" :xl="2">
+                    <el-tooltip effect="dark" content="<%= __("How to measure a dog's height?") %>"
+                                placement="top-start">
+                      <el-button @click="showDialog('growth')" size="mini" round
+                                 icon="el-icon-question"></el-button>
+                    </el-tooltip>
+                  </el-col>-->
+                                </el-form-item>
+                            </el-row>
+
+                        </template>
+
+                        <div class="my-sm-5">
+                            <el-divider content-position="left"><%= __('Parents') %></el-divider>
+                        </div>
+
+                        <% /* ОТЕЦ */ %>
+                        <template v-if="sires">
+                            <el-form-item label="<%= __('Sire') %>" prop="sire">
+                                <el-col :xs="18" :sm="21" :md="16" :lg="18" :xl="18">
+                                    <el-autocomplete
+                                            v-if="!buttonUpdate"
+                                            popper-class="my-autocomplete"
+                                            clearable
+                                            v-model="ruleForm.sire"
+                                            :fetch-suggestions="querySearchSires"
+                                            placeholder="<%= __("Start typing the dog's name") %>"
+                                            :trigger-on-focus="false"
+                                            @select="handleSelect"
+                                    ><i slot="prefix" class="el-autocomplete__icon el-icon-male"></i>
+                                        <template slot-scope="{ item }">
+                                            <span class="value">{{ item.value }}</span>
+                                        </template>
+                                    </el-autocomplete>
+                                    <el-autocomplete v-else
+                                                     popper-class="my-autocomplete"
+                                                     clearable
+                                                     v-model="sire"
+                                                     :fetch-suggestions="querySearchSires"
+                                                     placeholder="<%= __("Start typing the dog's name") %>"
+                                                     :trigger-on-focus="false"
+                                                     @select="handleSelect"
+                                    ><i slot="prefix" class="el-autocomplete__icon el-icon-male"></i>
+                                        <template slot-scope="{ item }">
+                                            <span class="value">{{ item.value }}</span>
+                                        </template>
+                                    </el-autocomplete>
+                                </el-col>
+                            </el-form-item>
+                        </template>
+
+                        <% /* МАТЬ */ %>
+                        <template v-if="dams">
+                            <el-form-item label="<%= __('Dam') %>" prop="dam">
+                                <el-col :xs="20" :sm="20" :md="16" :lg="18" :xl="18">
+                                    <el-autocomplete
+                                            v-if="!buttonUpdate"
+                                            popper-class="my-autocomplete"
+                                            v-model="ruleForm.dam"
+                                            :fetch-suggestions="querySearchDams"
+                                            placeholder="<%= __("Start typing the dog's name") %>"
+                                            :trigger-on-focus="false"
+                                            @select="handleSelect"
+                                            style="width: 58%;">
+                                        <i slot="prefix" class="el-autocomplete__icon el-icon-female"></i>
+                                        <template slot-scope="{ item }">
+                                            <span class="value">{{ item.value }}</span>
+                                        </template>
+                                    </el-autocomplete>
+
+                                    <el-autocomplete
+                                            v-else
+                                            popper-class="my-autocomplete"
+                                            v-model="dam"
+                                            :fetch-suggestions="querySearchDams"
+                                            placeholder="<%= __("Start typing the dog's name") %>"
+                                            :trigger-on-focus="false"
+                                            @select="handleSelect"
+                                            style="width: 58%;">
+                                        <i slot="prefix" class="el-autocomplete__icon el-icon-female"></i>
+                                        <template slot-scope="{ item }">
+                                            <span class="value">{{ item.value }}</span>
+                                        </template>
+                                    </el-autocomplete>
+                                </el-col>
+                            </el-form-item>
+                        </template>
+
+
+                        <div class="my-sm-5">
+                            <el-divider content-position="left"><%= __('Sale') %></el-divider>
+                        </div>
+
+                        <% /* ПРОДАЁТСЯ */ %>
+                        <template>
+                            <el-form-item label="<%= __('To sell') %>" prop="sale">
+                                <el-checkbox v-model="ruleForm.sale"></el-checkbox>
+                            </el-form-item>
+                        </template>
+
+                        <% /* ЦЕНА ПРОДАЖИ */ %>
+                        <template v-if="ruleForm.sale">
+                            <el-row :gutter="2">
+                                <el-form-item label="<%= __('Price') %>" prop="price">
+                                    <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                        <el-slider
+                                                class="hidden-xs-only"
+                                                v-model="ruleForm.price"
+                                                :min="20"
+                                                :max="100000"
+                                                show-input>
+                                        </el-slider>
+                                        <el-input-number :min="20" class="text-center hidden-sm-and-up"
+                                                         :max="100000" size="mini"
+                                                         v-model="ruleForm.price"></el-input-number>
+                                    </el-col>
+                                    <el-col :xs="4" :sm="3" :md="3" :lg="3" :xl="2">
+                                        <el-tooltip effect="dark"
+                                                    content="<%= __("Is it obligatory to set a price now?") %>"
+                                                    placement="top-start">
+                                            <el-button @click="open(i19p.priceText,i19p.priceTitle)" size="mini" round
+                                                       icon="el-icon-question"></el-button>
+                                        </el-tooltip>
+                                    </el-col>
+                                </el-form-item>
+                            </el-row>
+                        </template>
+
+                        <% /* ВАЛЮТА ПРОДАЖИ */ %>
+                        <template v-if="ruleForm.sale">
+                            <el-form-item label="<%= __('Sale currency') %>">
+                                <el-select v-model="ruleForm.currency"
+                                           placeholder="<%= __('please select your currency') %>">
+                                    <el-option label="dollar ($)" value="dollar"></el-option>
+                                    <el-option label="euro (€)" value="euro"></el-option>
+                                    <el-option label="рубль (&#8381;)" value="рубль"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </template>
+
+                        <% /* РЕКОМЕНДАЦИИ К ПРОДАЖЕ */ %>
+                        <template v-if="ruleForm.sale">
+                            <el-form-item label="<%= __('Recommendations') %>" prop="saleDescription">
+                                <el-col :xs="14" :sm="14" :md="14" :lg="12" :xl="12">
+                                    <el-input
+                                            type="textarea"
+                                            :rows="2"
+                                            autosize
+                                            placeholder="Please input"
+                                            v-model="ruleForm.saleDescription"
+                                            maxlength="700"
+                                            show-word-limit>
+                                    </el-input>
+                                </el-col>
+                                <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                    <el-tooltip effect="dark"
+                                                placement="top-start">
+                                        <div slot="content">{{i19p.recommendationsSale}}</div>
+                                        <div size="mini" round class="el-icon-question "></div>
+                                    </el-tooltip>
+                                </el-col>
+                            </el-form-item>
+                        </template>
+
+
+                        <!--   <div class="my-3 pt-4 text-center hidden-xs-only">
+            <el-form-item>
+
+              <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+              <el-button @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
+              <el-button v-if="!buttonUpdate" type="primary"
+                         @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+              <el-button v-else type="primary" @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
+
+            </el-form-item>
+          </div>
+          <div class="text-center hidden-sm-and-up">
+            <el-button-group>
+              <el-button @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
+              <el-button @click="buttonUpdate = false; centerDialogAdded = false" icon="el-icon-close"></el-button>
+              <el-button v-if="!buttonUpdate" type="primary"
+                         @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+              <el-button v-else type="primary" @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+            </el-button-group>
+          </div>-->
+                    </div>
+                    <div style="border-left: 2px dashed rgb(220, 224, 228); padding-left: 50px" class="col col-lg-5">
+
+                        <% /* ВЛАДЕЛЕЦ. OWNER */ %>
+                        <template>
+                            <!--<template v-if="me.isAdmin | me.isSuperAdmin">-->
+
+                            <el-form-item label="<%= __('Owner') %>" prop="owner">
+                                <el-autocomplete
+                                        v-if="!buttonUpdate"
+                                        class="inline-input"
+                                        v-model="ruleForm.owner"
+                                        :fetch-suggestions="querySearchFoo"
+                                        placeholder="<%= __('Please Input owner') %>"
+                                        :trigger-on-focus="false"
+                                        @select="handleSelected"
+                                        style="width: 58%;"
+                                >
+                                    <template slot-scope="{ item }">
+                                        <span class="value">{{ item.fullName }}</span>
+                                        <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fullName }}</span>
+                                    </template>
+                                </el-autocomplete>
+                                <el-autocomplete
+                                        v-else
+                                        class="inline-input"
+                                        v-model="owner"
+                                        :fetch-suggestions="querySearchFoo"
+                                        placeholder="<%= __('Please Input co-owner') %>"
+                                        :trigger-on-focus="false"
+                                        @select="handleSelected"
+                                        style="width: 58%;"
+                                >
+                                    <template slot-scope="{ item }">
+                                        <span class="value">{{ item.fullName }}</span>
+                                        <span style="float: right; color: #8492a6; font-size: 13px">{{ item.fullName }}</span>
+                                    </template>
+                                </el-autocomplete>
+                                <el-tooltip class="ml-3" effect="dark" content="<%= __('Who can be a owner') %>"
+                                            placement="top-start">
+                                    <el-button @click="innerVisibleCo=true" size="mini" round
+                                               icon="el-icon-question"></el-button>
+                                </el-tooltip>
+                            </el-form-item>
+                        </template>
+
+                        <% /* РАЗРЕШИТЬ РЕДАКТИРОВАТЬ BREEDER|OWNER */ %>
+                        <template>
+                            <!--<template v-if="me.isAdmin | me.isSuperAdmin ">-->
+                            <el-form-item prop="allowEdit">
+
+                                <el-switch
+                                        v-model="ruleForm.allowEdit"
+                                        active-color="#13ce66"
+                                        class="inline-input"
+                                        inactive-color="#ff4949"
+                                        active-text="<%= __('allow') %>"
+                                        inactive-text="<%= __('not allow') %>">
+                                </el-switch>
+
+                                <el-tooltip class="ml-3" effect="dark" content="<%= __('Allow Edit Dog owner') %>"
+                                            placement="top-start">
+                                    <el-button @click="innerVisibleDogEditor=true" size="mini" round
+                                               icon="el-icon-question"></el-button>
+                                </el-tooltip>
+
+                            </el-form-item>
+
+                        </template>
+
+                        <% /* ВИДЕО ДЛЯ HEADER */ %>
+                        <template>
+                            <el-form-item label="<%= __('Header video') %>" prop="headerVideo">
+                                <el-col :xs="14" :sm="14" :md="14" :lg="12" :xl="12">
+                                    <el-input minlength="3" maxlength="100" show-word-limit
+                                              placeholder="https://youtu.be/estvUeG5ezA"
+                                              v-model="ruleForm.headerVideo"></el-input>
+                                </el-col>
+
+
+                                <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                    <el-tooltip effect="dark"
+                                                content="<%= __("Paste the link to the YouTube video here to display it in the dog's page header") %>"
+                                                placement="top-start">
+                                        <div size="mini" round class="el-icon-question ml-3"></div>
+                                    </el-tooltip>
+                                </el-col>
+                            </el-form-item>
+                        </template>
+                        <% /* видно|не видно ВИДЕО ДЛЯ HEADER  */ %>
+                        <template>
+                            <el-form-item prop="headerVideoShow">
+
+                                <el-switch
+                                        v-model="ruleForm.headerVideoShow"
+                                        active-color="#13ce66"
+                                        class="inline-input"
+                                        inactive-color="#ff4949"
+                                        active-text="<%= __('allow') %>"
+                                        inactive-text="<%= __('not allow') %>">
+                                </el-switch>
+
+                                <el-tooltip class="ml-3" effect="dark"
+                                            content="<%= __('Enable or disable display of video header for this dog') %>"
+                                            placement="top-start">
+                                    <el-button @click="innerVisibleDogEditor=true" size="mini" round
+                                               icon="el-icon-question"></el-button>
+                                </el-tooltip>
+
+                            </el-form-item>
+
+                        </template>
+                    </div>
+                    <div class="col-md-auto">
+
+                    </div>
+                </div>
+            </div>
+            <el-divider></el-divider>
+
+            <el-row type="flex" justify="center">
+                <div class="my-3 pt-4 text-center hidden-xs-only">
+                    <el-form-item>
+
+                        <el-button v-if="!buttonUpdate" @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+                        <el-button
+                                @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
+                        <el-button v-if="!buttonUpdate" type="primary"
+                                   @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+                        <el-button v-else type="primary" @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
+
+                    </el-form-item>
+                </div>
+                <div class="text-center hidden-sm-and-up">
+                    <el-button-group>
+                        <el-button v-if="!buttonUpdate" @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
+                        <el-button @click="buttonUpdate = false; centerDialogAdded = false"
+                                   icon="el-icon-close"></el-button>
+                        <el-button v-if="!buttonUpdate" type="primary"
+                                   @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+                        <el-button v-else type="primary" @click="submitForm('ruleForm')"
+                                   icon="el-icon-check"></el-button>
+                    </el-button-group>
+                </div>
+            </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+  </span>
+    </el-dialog>
+
+    <% /* Диалоговое окно. Редактор титулов собак. */ %>
+    <!--  <el-dialog
+          width="100%"
+          :title="titleAdd"
+          :visible.sync="addTitleDog"
+          :show-close=false
+          custom-class="dialog-images-editor"
+          center
+  >
+    <el-form :model="ruleForm">
+      <el-form-item label="Promotion name" :label-width="formLabelWidth">
+        <el-input v-model="ruleForm.name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="Zones" :label-width="formLabelWidth">
+        <el-select v-model="ruleForm.region" placeholder="Please select a zone">
+          <el-option label="Zone No.1" value="shanghai"></el-option>
+          <el-option label="Zone No.2" value="beijing"></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="addTitleDog = false">Cancel</el-button>
+    <el-button type="primary" @click="addTitleDog = false"><%= __('Save') %></el-button>
+  </span>
+  </el-dialog>-->
+    <% /* Диалоговое окно. Редактор картинок. */ %>
+    <el-dialog
+            :title="`${i19p.photoEditor} ${photos.fullName}`"
+            :visible.sync="centerDialogVisiblePhotos"
+            width="100vw"
+            custom-class="dialog-images-editor"
+            center>
+        <el-dialog
+                width="80vw"
+                title="<%= __('Photo Description') %>"
+                :visible.sync="photoDesc.innerVisiblePhotoDescription"
+                append-to-body>
+            <el-form ref="photoDesc" :model="photoDesc" label-width="120px">
+                <el-form-item label="<%= __('Decription') %>">
+                    <el-input type="textarea" v-model="photoDesc.description"></el-input>
+                </el-form-item>
+
+                <el-form-item v-if="!photoDescUpdate" label="<%= __('Date taken') %>" prop="dateTaken">
+                    <el-row :gutter="2">
+                        <el-col :span="11">
+                            <el-date-picker
+                                    v-model="photoDesc.dateTaken"
+                                    type="datetime"
+                                    placeholder="<%= __('Select date and time') %>"
+                                    default-time="12:00:00">
+                            </el-date-picker>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+            </el-form>
+
+            <el-form-item v-if="photoDescUpdate" label="<%= __('Date taken') %>" prop="dateTakenUpdate">
+                <el-row :gutter="2">
+                    <el-col :span="11">
+                        <el-date-picker
+                                v-model="dateTakenUpdate"
+                                type="datetime"
+                                placeholder="<%= __('Select date and time') %>"
+                                default-time="12:00:00">
+                        </el-date-picker>
+                    </el-col>
+                </el-row>
+            </el-form-item>
+            <span slot="footer" class="dialog-footer">
+    <el-button @click="photoDesc.innerVisiblePhotoDescription = false">Cancel</el-button>
+    <el-button type="primary" @click="updateDescriptionPhoto">Save</el-button>
+  </span>
+        </el-dialog>
+        <div class="container">
+            <div class=" mb-3 menu-between">
+                <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
+                    <%= __('Select all') %></el-checkbox>
+                <span>
+          <span class="mx-3">  <%= __('All files') %>:  {{_.isArray(photos.images)? photos.images.length : 0}}</span>
+         <span class="mx-3"> <%= __('Marked') %>:  {{checkedPhoto.length}}</span>
+        <el-button type="danger" v-if="checkedPhoto.length > 0" type="danger" class="mx-3" :underline="false"
+                   @click="removePhotos"
+                   class="mx-3"
+                   title="<%= __('Remove') %>"
+                   icon="el-icon-delete" circle></el-button>
+
+          </span>
+            </div>
+
+            <el-checkbox-group v-model="checkedPhoto" @change="handleCheckedPhotosChange">
+                <div class="photo-editor">
+
+                    <el-card shadow="hover" :body-style="{ padding: '0px'}"
+                             v-for="(img, index, key) in photos.images"
+                             :key="index + '-photo'">
+
+                        <template v-if="me.isSuperAdmin || isOwner">
+                            <div class="ell-relation" v-if="photos.cover === index">
+                                <el-button type="warning" size="mini" title="<%= __("Album's cover") %>"
+                                           class="ell-position-button check" icon="el-icon-star-off"
+                                           circle></el-button>
+                            </div>
+                            <div class="ell-relation" v-else>
+                                <el-button size="mini" title="<%= __('Make an album cover') %>"
+                                           class="ell-position-button" @click="coverPhoto(photos.id,index)"
+                                           icon="el-icon-document" circle></el-button>
+                            </div>
+                        </template>
+
+                        <img :data-src="img.imageSrc" class="image lazyload">
+
+
+                        <div style="padding: 14px;">
+                            <el-row :gutter="2">
+                                <el-col :span="11">
+                                    <el-link
+                                            @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description;  photoDesc.innerVisiblePhotoDescription=true"
+                                            :underline="false"
+                                            type="primary"><%= __('Date taken') %>:
+                                    </el-link>
+                                </el-col>
+                                <el-col :span="13">
+                                    <el-link :underline="false" type="danger"> {{img.dateTaken |
+                                        getCreate(me.preferredLocale, 'lll')}}
+                                    </el-link>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="2">
+                                <el-col :span="16">
+                                    <el-link :underline="false" type="primary"><%= __('File') %>:</el-link>
+                                </el-col>
+                                <el-col :span="8">
+                                    <el-link :title="img.name" :underline="false" type="primary">
+                                        {{_.trunc(img.name,10)}}
+                                    </el-link>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="2">
+                                <el-col :span="16">
+                                    <el-link :underline="false" type="primary"><%= __('Type') %>:</el-link>
+                                </el-col>
+                                <el-col :span="8">
+                                    <el-link :underline="false" type="primary"> {{img.type}}</el-link>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="2">
+                                <el-col :span="16">
+                                    <el-link :underline="false" type="primary"><%= __('Size') %>:</el-link>
+                                </el-col>
+                                <el-col :span="8">
+                                    <el-link :underline="false" type="danger"> {{_.ceil(img.size/1024,2)}} Kb</el-link>
+                                </el-col>
+                            </el-row>
+
+
+                            <el-row :gutter="2">
+                                <el-col :span="16">
+                                    <el-link
+                                            @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description; photoDesc.innerVisiblePhotoDescription=true"
+                                            :underline="false"
+                                            type="primary"><%= __('Description') %>:
+                                    </el-link>
+                                </el-col>
+                                <el-col :span="8">
+                                    <el-link :underline="false" type="danger"> {{_.trunc(img.description, 10)}}
+                                    </el-link>
+                                </el-col>
+                            </el-row>
+
+
+                            <div class="bottom clearfix ">
+                                <div class="menu-center-2">
+                                    <el-checkbox :label="img.id" :key="img.id"></el-checkbox>
+                                    <el-link :href="img.detail" title="<%= __('More') %>" type="success"
+                                             :underline="false"><i
+                                                class="el-icon-right"></i></el-link>
+                                </div>
+                            </div>
+                        </div>
+                    </el-card>
+                </div>
+            </el-checkbox-group>
+        </div>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisiblePhotos = false">Cancel</el-button>
+  </span>
+    </el-dialog>
+    <% /* HELP/Диалоговое окно. ВЛАДЕЛЕЦ */ %>
+    <el-dialog
+            width="30%"
+            top="3vh"
+            title="<%= __('Who can be a owner') %>"
+            :visible.sync="innerVisibleCo"
+            append-to-body>
+        <div class="justify-content-center">
+            <%= __('Owner may be registered user with a valid email. Start typing username and select the person you want from the list provided.') %>
+            <br><%= __('If the owner has not been selected, the owner of the dog automatically becomes the current user who added the dog to the database.') %>
+            <br> <%= __('The case of letters does not matter.') %>
+            <el-divider content-position="left"><i class="el-icon-warning"></i> <%= __('Attention') %></el-divider>
+            <strong> <%= __('If you are the owner of this dog, then if you enter another owner in this field, you thereby transfer the editing rights of the dog to the new owner. As a result, you can no longer see this dog in the editor window. Therefore, you cannot edit it.') %></strong>
+        </div>
+    </el-dialog>
+
+    <% /* HELP/Диалоговое окно. Разрешить редактировать собаку. */ %>
+    <el-dialog
+            width="30%"
+            top="3vh"
+            title="<%= __('Allow Edit Dog owner') %>"
+            :visible.sync="innerVisibleDogEditor"
+            append-to-body>
+        <div class="justify-content-center">
+            <%= __('Allow - this means that you allow the owner to edit the dog, otherwise he will not see his dog in the editor window.') %>
+
+        </div>
+    </el-dialog>
+    <% /* Диалоговое окно. Feedback about this page?. */ %>
+    <modal v-if="dialogFormVisible" v-cloak key="delete"
+           @close="closeDeleteThingModal()">
+        <ajax-form action="deliverContactFormMessage" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+                   :handle-parsing="handleParsingDeleteThingForm"
+                   @submitted="submittedDeleteThingForm()">
+            <div class="modal-body">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary mr-1"
+                        @click="dialogFormVisible=false"><%= __('Cancel') %></button>
+                <button type="submit" class="btn btn-danger ml-1"><%= __('Send feedback') %></button>
+            </div>
+        </ajax-form>
+    </modal>
+    <% /* Выезжающая вкладка чата с покупателем*/ %>
+    <el-drawer
+            title="<%= __('Chat') %>"
+            :visible.sync="drawer"
+            :direction="direction"
+            :before-close="handleClose2">
+        <el-row type="flex" class="row-bg" justify="space-around">
+            <el-col :span="1">
+                <div class="grid-content bg-purple"></div>
+            </el-col>
+            <el-col :span="18">
+                <!--  <el-popover
+                          placement="top-start"
+                          title="Title"
+                          width="200"
+                          trigger="hover"
+                          content="Включите свою веб-камеру. Для проверки перед коммуникацией.">
+
+                    <el-button  slot="reference" @click="clientStream()" type="success" icon="el-icon-video-camera" circle></el-button>
+
+                  </el-popover>
+                  <el-button   @click="stopStream()" type="danger" icon="el-icon-close" circle></el-button>-->
+                <div class="grid-content bg-purple-light">
+                    <h4><%= __('Welcome') %>, {{me.fullName}}!</h4>
+                    <p>{{i19p.startOfNegotiations}} {{fullNameDogNegotiations}}.</p>
+                    <p>{{i19p.startOfNegotiations2}}</p>
+
+                </div>
+            </el-col>
+            <el-col :span="1">
+                <div class="grid-content bg-purple"></div>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="1"></el-col>
+            <el-col :span="18">
+                <!--        <el-progress type="dashboard" :percentage="percentage" :color="colors2"></el-progress>-->
+                <!-- <img  id="play" ref="play"  />
+                 <div id="logger"></div>
+                 <video controls src="" ref="video"   poster="/images/default-image.jpg" style="width:460px; height: 280px;" autoplay="true"></video>
+                 <canvas ref="canvas"  width=460" height="280"></canvas>-->
+
+
+            </el-col>
+            <el-col :span="1"></el-col>
+        </el-row>
+        <el-row type="flex" class="row-bg" justify="space-around">
+            <el-col :span="1">
+                <div class="grid-content bg-purple"></div>
+            </el-col>
+            <el-col :span="18">
+                <div class="mt-4">
+                    <% /* Поле ввода комментария */ %>
+                    <el-form @submit.native.prevent>
+                        <el-form-item>
+                            <el-input @keyup.enter.native="addComment('negotiation')"
+                                      class="lb mt-2"
+                                      maxLength="1000"
+                                      clearable
+                                      placeholder="<%= __('Write a message') %>"
+                                      v-model="comment">
+                                <i slot="prefix" class="el-input__icon el-icon-chat-line-round"></i>
+                                <template slot="prepend">
+                                    <el-avatar :size="35" :src="me[me.defaultIcon]"></el-avatar>
+                                </template>
+                            </el-input>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-col>
+            <el-col :span="1">
+                <div class="grid-content bg-purple"></div>
+            </el-col>
+        </el-row>
+    </el-drawer>
+    <% /* Диалоговое окно "В ПРОДАЖЕ" (SALE)*/ %>
+    <el-dialog
+            title=""
+            :visible.sync="dialogPedigreeVisible"
+            :fullscreen="true"
+            custom-class="sale-dogs"
+            :before-close="handlerCloseDialogSlider"
+            v-if="virtualPageSlug==='sale'"
+    >
+        <section
+                class="skrollable skrollable-between u-align-center u-clearfix u-image u-shading u-video-cover u-section-1"
+                id="sec-8a77">
+            <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+                <h1 class="u-text u-text-1" data-animation-name="fadeIn" data-animation-duration="1000"
+                    data-animation-delay="0"><%= __('Buy puppy chinese crested') %>
+                    <br>
+                </h1>
+                <h2 class="u-text u-text-2" data-animation-name="bounceIn" data-animation-duration="1000"
+                    data-animation-delay="0"
+                    data-animation-direction=""><%= __('Your Eternal Companion') %></h2>
+                <p class="u-text u-text-3" data-animation-name="pulse" data-animation-duration="1000"
+                   data-animation-delay="0"
+                   data-animation-direction=""><%= __('This page contains all the puppies and dogs that the kennel currently sells. You can contact us in any way convenient for you. All prices are preliminary and can be changed individually during communication.') %></p>
+                <a href="/dogs/chinese-crested"
+                   class="u-border-radius-0 u-btn u-btn-rectangle u-button-style u-palette-1-base u-btn-1"><%= __('Dog catalog') %></a>
+            </div>
+
+        </section>
+        <template v-if="_.some(dogs, 'sale', true)">
+            <section v-for="(o, index) in dogs"
+                     v-if="!_.isEmpty(o.images)  && o.price > 0 && o.sale && !_.isEmpty(o.currency)"
+                     :key="o.id" class="u-align-center u-clearfix u-section-2" id="sec-1e4d">
+                <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+                    <h2 v-if="o.currency === 'рубль'" class="u-text u-text-1">{{o.price}} &#8381;</h2>
+                    <h2 v-else class="u-text u-text-1">{{o.currency === 'euro' ? '€' : '$'}} {{o.price}}</h2>
+                    <p class="u-text u-text-2"><%= __('Litter') %> {{o.letter}} / {{o.dateBirth | gDate('y')}}</p>
+                    <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
+                        <div class="u-gutter-0 u-layout">
+                            <div class="u-layout-row">
+                                <div
+                                        class="u-align-left u-container-style u-layout-cell u-left-cell u-size-20 u-size-20-md u-layout-cell-1"
+                                        src="">
+                                    <div class="u-container-layout u-container-layout-1" src="">
+                                        <el-image
+                                                :src="o.images[o.cover].imageSrc"
+                                                :key="o.id"
+                                                :fit="'cover'"
+                                                class="u-expanded-width u-image u-image-default u-image-1"
+                                                :preview-src-list="o.imagesArrUrl">
+                                        </el-image>
+                                    </div>
+                                </div>
+                                <div class="u-container-style u-layout-cell u-size-20 u-size-20-md u-layout-cell-2">
+                                    <div class="u-border-1 u-border-grey-30 u-container-layout u-container-layout-2">
+                                        <h2 class="u-align-center u-text u-text-3">
+                                            <el-link :underline="false" :href="o.detail" type="primary">{{o.fullName}}
+                                            </el-link>
+                                        </h2>
+                                        <p class="u-align-center u-text u-text-4">{{o.saleDescription}}</p>
+                                        <p class="u-align-center u-text u-text-5"><%= __('Dob') %>: {{ o.dateBirth |
+                                            getCreate(me.preferredLocale,'L') }}</p>
+                                        <span class="u-icon u-icon-circle u-text-palette-1-base u-icon-1">
+                  <el-tooltip content="<%= __('Start negotiations') %>" placement="bottom" effect="light">
+                    <el-button type="text" @click="openDialogNegotiations(o.fullName)" class="button">
+                    <svg class="u-svg-link" preserveAspectRatio="xMidYMin slice" viewBox="0 0 512 512" style=""><use
+                                xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-7fdd"></use></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                         id="svg-7fdd" x="0px"
+                         y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"
+                         class="u-svg-content"><circle style="fill:#FAD24D;" cx="256" cy="256" r="256"></circle><path
+                                style="fill:#FF5B62;"
+                                d="M219.236,194.345c-67.632,0-122.458,47.87-122.458,106.922c0,30.194,14.338,57.462,37.389,76.905  c-27.89,23.219-55.089,21.205-55.089,21.205c25.753,20.079,67.299,9.911,92.843,0.536c14.557,5.331,30.541,8.277,47.316,8.277  c67.632,0,122.458-47.87,122.458-106.922S286.869,194.345,219.236,194.345z"></path><path
+                                style="fill:#ED4C54;"
+                                d="M219.236,194.345c-11.516,0-22.658,1.391-33.224,3.985c14.118,45.438,61.678,78.86,118.187,78.86  c11.516,0,22.659-1.389,33.224-3.985C323.306,227.766,275.745,194.345,219.236,194.345z"></path><path
+                                style="fill:#21D0C3;"
+                                d="M308.357,56.587c67.632,0,122.458,47.871,122.458,106.922c0,30.194-14.338,57.462-37.389,76.905  c27.89,23.22,55.089,21.205,55.089,21.205c-25.753,20.079-67.299,9.911-92.843,0.536c-14.557,5.331-30.541,8.277-47.316,8.277  c-67.632,0-122.458-47.87-122.458-106.923S240.725,56.587,308.357,56.587z"></path><g><path
+                                    style="fill:#FFFFFF;"
+                                    d="M243.127,134.883h122.155c5.5,0,5.5,8.316,0,8.316H243.127   C237.627,143.198,237.627,134.883,243.127,134.883z M241.45,188.943h72.52c3.265,0,3.265,8.316,0,8.316h-72.52   C238.186,197.259,238.186,188.943,241.45,188.943z M243.127,161.913h122.155c5.5,0,5.5,8.316,0,8.316H243.127   C237.627,170.229,237.627,161.913,243.127,161.913z"></path><path
+                                    style="fill:#FFFFFF;"
+                                    d="M157.62,288.482h122.155c5.5,0,5.5,8.316,0,8.316H157.62   C152.12,296.797,152.12,288.482,157.62,288.482z M155.943,342.542h72.52c3.265,0,3.265,8.316,0,8.316h-72.52   C152.679,350.858,152.679,342.542,155.943,342.542z M157.62,315.512h122.155c5.5,0,5.5,8.316,0,8.316H157.62   C152.12,323.828,152.12,315.512,157.62,315.512z"></path>
+</g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
+                    </el-button>
+                  </el-tooltip>
+                  </span>
+                                    </div>
+                                </div>
+                                <div
+                                        class="u-align-left u-container-style u-expand-resize u-layout-cell u-right-cell u-size-20 u-size-20-md u-layout-cell-3"
+                                        src="">
+                                    <div class="u-container-layout u-container-layout-3" src=""
+                                         v-if="o.images[(o.cover+1)]">
+                                        <!--<img :data-src="o.images[1].imageSrc" alt="" class="u-expanded-width u-image u-image-default
+                                        u-image-2" data-image-width="1600" data-image-height="1067">-->
+                                        <el-image
+                                                :src="o.images[(o.cover+1)].imageSrc"
+                                                :key="o.id"
+                                                :fit="'cover'"
+                                                class="u-expanded-width u-image u-image-default u-image-2"
+                                                :preview-src-list="o.imagesArrUrl">
+                                        </el-image>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="u-align-center u-clearfix u-grey-5 u-section-5" id="sec-cabe">
+                <div class="u-clearfix u-sheet u-valign-middle-md u-valign-middle-sm u-valign-middle-xs u-sheet-1">
+                    <h2 class="u-text u-text-1"><%= __('We are here') %></h2>
+                    <p
+                            class="u-text u-text-2"><%= __('A more detailed place is the position when verbally coordinating the meeting') %>
+                        .</p>
+                    <div class="u-align-left u-expanded-width u-grey-10 u-map u-map-1">
+                        <div class="embed-responsive">
+                            <iframe class="embed-responsive-item"
+                                    src="//maps.google.com/maps?output=embed&amp;q=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%20%D0%9E%D1%81%D1%82%D1%80%D0%BE%D0%B2%D0%B8%D1%82%D1%8F%D0%BD%D0%BE%D0%B2%D0%B0%20%D0%B4.%2027&amp;t=m&amp;hl=ru"
+                                    data-map="JTdCJTIycG9zaXRpb25UeXBlJTIyJTNBJTIybWFwLWFkZHJlc3MlMjIlMkMlMjJhZGRyZXNzJTIyJTNBJTIyJUQwJTlDJUQwJUJFJUQxJTgxJUQwJUJBJUQwJUIyJUQwJUIwJTIwJUQwJTlFJUQxJTgxJUQxJTgyJUQxJTgwJUQwJUJFJUQwJUIyJUQwJUI4JUQxJTgyJUQxJThGJUQwJUJEJUQwJUJFJUQwJUIyJUQwJUIwJTIwJUQwJUI0LiUyMDI3JTIyJTJDJTIyem9vbSUyMiUzQW51bGwlMkMlMjJ0eXBlSWQlMjIlM0ElMjJyb2FkJTIyJTJDJTIybGFuZyUyMiUzQSUyMnJ1JTIyJTJDJTIyYXBpS2V5JTIyJTNBbnVsbCUyQyUyMm1hcmtlcnMlMjIlM0ElNUIlNUQlN0Q="></iframe>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="u-align-center u-clearfix u-image u-section-6" id="sec-dcba" data-image-width="150"
+                     data-image-height="112">
+                <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+                    <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
+                        <div class="u-layout">
+                            <div class="u-layout-row">
+                                <div class="u-container-style u-layout-cell u-left-cell u-size-24 u-layout-cell-1">
+                                    <div class="u-container-layout u-valign-middle u-container-layout-1">
+                                        <h2 class="u-text u-text-palette-4-base u-text-1"><%= __('Are you ready to meet?') %></h2>
+                                    </div>
+                                </div>
+                                <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-36 u-layout-cell-2">
+                                    <div
+                                            class="u-container-layout u-valign-middle-lg u-valign-middle-md u-valign-middle-xl u-container-layout-2">
+                                        <p class="u-text u-text-palette-4-base u-text-2">
+                                            <br>
+                                            <br><%= __('Puppy show') %>.
+                                            <br><%= __('We are waiting for everyone to visit us') %>.
+                                            <br><%= __('We conclude a sales contract') %>.
+                                            <br>
+                                            <br> <%= __('Moscow') %>,&nbsp;
+                                            <br><%= __('st. Ostrovityanova Building 27 Bldg. 3') %>
+                                            <br>+ 7 (910) 406-7-406
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </template>
+        <template v-else>
+            <section>
+                <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+                    <h3><%= __('There are currently no dogs for sale in the kennel.') %></h3>
+                    <!--<a href="/dogs/chinese-crested" class="u-border-1 u-border-palette-1-base u-border-radius-0 u-btn u-btn-rectangle u-button-style u-custom-font u-font-oswald u-text-black u-btn-1"
+             data-animation-direction=""><%= __('Dog catalog') %></a>-->
+                </div>
+            </section>
+        </template>
+        <!--OLD-->
+        <!--  <section>
+      <div class="showcase">
+        <el-card shadow="hover" v-for="(o, index) in dogs" :key="o.id" class="my-2 "
+                 v-if="!_.isEmpty(o.images)  && o.price > 0 && o.sale && !_.isEmpty(o.currency)"
+                 :body-style="{ padding: '0px' }">
+
+          <el-image
+            :src="o.images[o.cover].imageSrc"
+            :key="o.id"
+            :fit="'cover'"
+            :preview-src-list="o.imagesArrUrl">
+          </el-image>
+          <div class="text-center">
+            <div><%= __('Litter') %> {{o.letter}} / {{o.dateBirth.split('-')[0]}}</div>
+            <h5>
+              <el-link  :href="o.detail" type="primary">{{o.fullName}}</el-link>
+            </h5>
+            <div>
+              <em><strong><i class="el-icon-present"></i> <%= __('Dob') %>:</strong></em>
+              <time class="time"> {{ o.dateBirth | getCreate(me.preferredLocale,'L') }}</time>
+              <el-tooltip content="<%= __('Start negotiations') %>" placement="bottom" effect="light">
+                <el-button type="text" @click="openDialogNegotiations(o.fullName)" class="button"
+                           icon="el-icon-right"></el-button>
+              </el-tooltip>
+            </div>
+            <div style="color:green; font-size: 2vh;">
+              <span v-if="o.currency === 'рубль'"> {{o.price}} &#8381; </span>
+              <span v-else> {{o.currency === 'euro' ? '€' : '$'}} {{o.price}} </span>
+            </div>
+          </div>
+          <el-divider><i class="el-icon-star-on"></i></el-divider>
+          <div class="px-5 py-4 text">{{o.saleDescription}}</div>
+        </el-card>
+      </div>
+    </section>-->
+    </el-dialog>
+
+    <% /* Диалоговое окно. Тарифы. */ %>
+    <el-dialog
+            :visible.sync="centerDialogVisible"
+            custom-class="dialog-kennel-add"
+            center>
+
+
+        <!-- Start Pricing Area -->
+        <section>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title text-center">
+                        <h3><%= __('Annual subscription') %></h3>
+                        <h2 class="mt-5"><span><%= __('Tariff Plans') %></span></h2>
+                        <p>
+                        <ul>
+                            <li>
+                                <span class="ti-close cross mx-2 text-danger"></span><%= __('Not included in the price') %>
+                            </li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <el-alert
+                        title="<%= __('You have not linked a payment source to your account. In order to access paid features, you\'ll need to provide your credit card information. (Don\'t worry: you will only be charged when you\'ve reached the limit of your free plan.)') %>"
+                        type="warning">
+                </el-alert>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="pricing_item">
+                        <h3 class="p_title"><%= __('User') %></h3>
+                        <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+                        <h1 class="p_price">&euro;0</h1>
+                        <div class="p_list">
+                            <ul>
+
+                                <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
+                                <li><span class="ti-check"></span> <%= __('Write comments') %></li>
+                                <li><span class="ti-close cross"></span><%= __('Add dogs') %> </li>
+                                <li><span class="ti-close cross"></span> <%= __('Edit dogs') %></li>
+                                <li><span class="ti-close cross"></span> <%= __('Add kennel') %></li>
+                                <li><span class="ti-close cross"></span> <%= __('Edit kennel') %></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="pricing_item">
+                        <h3 class="p_title"><%= __('Owner') %></h3>
+                        <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+                        <h1 class="p_price">&euro;5</h1>
+                        <div class="p_list">
+                            <ul>
+                                <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
+                                <li><span class="ti-check"></span> <%= __('Write comments') %></li>
+                                <li><span class="ti-check"></span> <%= __('Add 3 dogs') %></li>
+                                <li><span class="ti-check"></span> <%= __('Edit 3 dogs') %></li>
+                                <li><span class="ti-close cross"></span> <%= __('Add kennel') %></li>
+                                <li><span class="ti-close cross"></span> <%= __('Edit kennel') %></li>
+
+                            </ul>
+                            <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
+                                <span>D</span>
+                                <span>e</span>
+                                <span>t</span>
+                                <span>a</span>
+                                <span>i</span>
+                                <span>l</span>
+                                <span>e</span>
+                                <span>d</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="pricing_item">
+                        <h3 class="p_title"><%= __('Breeder') %></h3>
+                        <p class="p_criteria"><%= __('What is included in the price') %>.</p>
+                        <h1 class="p_price">&euro;8</h1>
+                        <div class="p_list">
+                            <ul>
+                                <li><span class="ti-check"></span> <%= __('View open site sections') %></li>
+                                <li><span class="ti-check"></span> <%= __('Write comments') %></li>
+                                <li><span class="ti-check"></span> <%= __('Add dogs') %></li>
+                                <li><span class="ti-check"></span> <%= __('Edit dogs') %></li>
+                                <li><span class="ti-check"></span> <%= __('Add kennel') %></li>
+                                <li><span class="ti-check"></span> <%= __('Edit kennel') %></li>
+                            </ul>
+                            <a class="primary-btn mt-4" href="#" data-text="<%= __('Detailed') %>">
+                                <span>D</span>
+                                <span>e</span>
+                                <span>t</span>
+                                <span>a</span>
+                                <span>i</span>
+                                <span>l</span>
+                                <span>e</span>
+                                <span>d</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <div slot="footer" class="dialog-footer mb-3 pb-5">
+
+            <el-button @click="centerDialogVisible = false"><%= __('Close') %></el-button>
+            <el-button type="info" @click="goTo('account')" size="large"><%= __('Add card') %></el-button>
+        </div>
+    </el-dialog>
+    <% /* Диалоговое окно. Предупреждение | Warning. */ %>
+    <el-dialog
+            title="<%= __('Warning') %>"
+            :visible.sync="centerDialogVisibleWarnings"
+            width="45%"
+            style="margin-top: 17vh"
+            center>
+        <p class="text-center">{{warning}}</p>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisibleWarnings = false"><%= __('Close') %></el-button>
+      <el-button type="success" @click="goTo('kennels')"><%= __('Add kennel') %></el-button>
+  </span>
+    </el-dialog>
+    <% /* Диалоговое окно. Слайдер. */ %>
+    <el-dialog title="<%= __('Portfolio') %>" :visible.sync="dialogTableVisible">
+        <template>
+            <el-carousel indicator-position="outside" height="65vh">
+                <el-carousel-item v-for="(item, index) of items" :key="index">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img :data-src="item.src" class="img-fluid height lazyload"
+                             alt="A generic square placeholder image with rounded corners in a figure.">
+                    </div>
+                </el-carousel-item>
+            </el-carousel>
+        </template>
+    </el-dialog>
+
+    <% /* Диалоговое окно. Фото собаки. */ %>
+    <el-dialog
+            :title="objOne.fullName"
+            custom-class="dialog-kennel-add"
+            :visible.sync="photoVisible"
+            :before-close="handleCloseDialog">
+        <div class="menu-center" v-if="objOne.images">
+            <img :data-src="objOne.images[objOne.cover].imageSrc" class="lazyload" style="width: 100%"
+                 :alt="objOne.fullName">
+        </div>
+        <!--<div class="block">
+          <el-image :src="objOne.img" class="cov">
+            <div slot="placeholder" class="image-slot">
+              Loading<span class="dot">...</span>
+            </div>
+          </el-image>
+        </div>-->
+        <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="objOne={};photoVisible = false"><%= __('Close') %></el-button>
+  </span>
+    </el-dialog>
+
+    <patzi-section-header :obj-data="seo"></patzi-section-header>
+
+    <patzi-row-h3-p :obj-data="seo"></patzi-row-h3-p>
+
+
+    <template>
+        <div v-if="me.hasBillingCard || me.isSuperAdmin || me.isAdmin" class="mt-5  text-center">
+            <el-button @click="clickAddButton()" class="btn btn-outline-info"
+                       icon="el-icon-circle-plus-outline"><%= __('Add dog') %></el-button>
+        </div>
+        <div class="mt-5  text-center" v-else>
+            <el-button @click="centerDialogVisible = true" icon="el-icon-circle-plus-outline"
+                       class="btn btn-outline-info"><%= __('Add dog') %></el-button>
+        </div>
+    </template>
+
+
+    <section class="work-area">
+        <div class="container">
+
+            <% /* Кнопки управления, фильтры */ %>
+            <div class="menu-between mb-1" v-if="_.pluck(filterDogs, 'label').length >0">
+                <div><span class=" font-weight-bold">
+            <%= __('Dogs') %>: {{filterName}}</span></div>
+
+                <div class="grid-content">
+                    <el-dropdown @command="handleCommand">
+                            <span class="el-dropdown-link">
+                              <i class="el-icon-more el-icon--right pointer"></i>
+                            </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item icon="el-icon-female" :command="{com:'dam'}">
+                                <%= __('Dam') %>
+                            </el-dropdown-item>
+
+                            <el-dropdown-item icon="el-icon-male" :command="{com:'sire'}">
+                                <%= __('Sire') %>
+                            </el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'all'}">
+                                <%= __('All') %>
+                            </el-dropdown-item>
+
+                            <el-dropdown-item v-if="_.some(dogs, 'sale', true)" icon="el-icon-money"
+                                              :command="{com:'c'}">
+                                <%= __('For Sale') %>
+                            </el-dropdown-item>
+
+                            <el-dropdown-item v-if="me.isSuperAdmin || me.isAdmin || isOwner" icon="el-icon-edit"
+                                              :command="{com:'e'}">
+                                <%= __('Dog editor') %>
+                            </el-dropdown-item>
+
+
+                            <!--<el-dropdown-item icon="el-icon-present" :command="{com:'g'}">-->
+                            <!--<%= __('Add presentation') %>-->
+                            <!--</el-dropdown-item>-->
+                            <!--<el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:photoSet.indexPhotoSet}">-->
+                            <!--<%= __('Photo session name') %>-->
+                            <!--</el-dropdown-item>-->
+                            <!--<el-dropdown-item icon="el-icon-edit" :command="{com:'b',i:photoSet.indexPhotoSet}">-->
+                            <!--<%= __('Photo session description') %>-->
+                            <!--</el-dropdown-item>-->
+
+                            <!--<el-dropdown-item icon="el-icon-delete-solid"-->
+                            <!--:command="{com:'d',i:photoSet.indexPhotoSet, name:photoSet.sessionName}">-->
+                            <!--<%= __('Delete photo session') %>-->
+                            <!--</el-dropdown-item>-->
+
+                            <!--<el-dropdown-item :divided="true" disabled v-if="photoSet.createdAt" icon="el-icon-date"-->
+                            <!--command="">-->
+                            <!--<%= __('Date publication') %> : <br>{{photoSet.createdAt |-->
+                            <!--getCreate(me.preferredLocale)}}-->
+                            <!--</el-dropdown-item>-->
+
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
+            </div>
+
+            <% /* ПОИСК. */ %>
+            <div class="menu-center my-3">
+                <el-input
+                        v-model="searchObjects"
+                        placeholder="<%= __('Search by dog name') %>"
+                        clearable></el-input>
+            </div>
+
+            <% /* ФОТО СОБАК */ %>
+            <div class="scrollbar" id="style-1">
+                <el-row :gutter="7" class="flex-container wrap">
+                    <el-col class="flex-item" v-for="(dog, index) in objFilter()" :key="dog.id"
+                            :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
+                        <div @mouseenter="showMenu(dog.id)" @mouseleave="showOut()"
+                             style="position: relative; " class="ell-image-flex"
+                             v-if="!_.isEmpty(dog.imagesArrUrl)">
+                            <transition-group appear name="el-fade-in">
+                                <div v-show="show && (showDog === dog.id)" class="transition-box blue-dark"
+                                     :class="{death:dog.dateDeath}" :key="dog.id">
+                                    <% /* Кнопки управления собакой */ %>
+                                    <div class="menu-center-v">
+                                        <div class="py-4">
+                                            <el-link :href="dog.detail" class="link" :underline="false">
+
+                                                <div :class="{deathColor:dog.dateDeath}"> {{dog
+                                                    .fullName}}</div>
+
+                                                <div class="date" :class="{deathColor:dog.dateDeath}">{{dog.dateBirth |
+                                                    getAge(me.preferredLocale, dog.dateDeath)}}
+                                                </div>
+                                            </el-link>
+                                            <el-row class="mt-2">
+                                                <!--<el-button icon="el-icon-search" circle></el-button>-->
+                                                <!--<el-button type="primary" icon="el-icon-picture" circle></el-button>-->
+                                                <el-button v-if="dog.price>0 & dog.sale"
+                                                           @click="goTo2('/dogs/chinese-crested/sale')"
+                                                           type="success" round>
+                                                    <%= __('For sale') %></el-button>
+                                                <!--<el-button type="info" icon="el-icon-message" circle></el-button>-->
+                                                <!--<el-button type="warning" icon="el-icon-star-off" circle></el-button>-->
+                                                <!--<el-button type="danger" icon="el-icon-delete" circle></el-button>-->
+                                            </el-row>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </transition-group>
+
+                            <el-image
+                                    :src="dog.images[dog.cover].imageSrc"
+                                    :key="dog.id"
+                                    :fit="'cover'"
+                                    style="max-width: 800px; max-height: 700px"
+                                    :scroll-container="'#style-1'"
+                                    lazy
+                                    :preview-src-list="dog.imagesArrUrl">
+                            </el-image>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- End Portfolio Details Area -->
+    <router-view></router-view>
+</div>
+
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

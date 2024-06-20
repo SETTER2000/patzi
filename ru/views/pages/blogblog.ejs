@@ -1,0 +1,501 @@
+<div id="blog" v-cloak>
+    <% /* Диалоговое окно редактор поста (EDIT)*/ %>
+    <el-dialog
+            :title=" succ ? '<%= __('REDACTED') %>': '<%= __('POST EDITOR') %>' "
+            :visible.sync="dialogPedigreeVisible"
+            :fullscreen="true"
+            top="1vh"
+            center
+            :class="[succ ? activeClass : '', '']"
+            :before-close="handlerCloseDialogSlider"
+            v-if="virtualPageSlug==='edit'">
+        <% /* Диалоговое окно добавления|редактирование видео*/ %>
+        <el-dialog
+                width="40rem"
+                title="<%= __('Add a video') %>"
+                :visible.sync="dialogFormVisible"
+                append-to-body>
+            <el-form :model="form" :rules="rules" ref="form" class="demo-form">
+                <el-form-item label="<%= __('Url youtube') %>" prop="videoUrl">
+
+                    <% /* ВИДЕО URL */ %>
+                    <el-input show-word-limit
+                              style="width:60%;"
+                              clearable
+                              maxlength="700"
+                              size="small"
+                              placeholder="https://youtu.be/TUar0_aUWq8"
+                              v-model="form.videoUrl"
+                              autofocus></el-input>
+                    <el-tooltip effect="dark"
+                                content="<%= __("Click on YouTube button \"SHARE\" and then button \"COPY\" and paste the copied url here") %>"
+                                placement="top-start">
+
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
+                <% /* ВИДЕО Заголовок */ %>
+                <el-form-item label="<%= __('Title video') %>" prop="videoHeader">
+                    <el-input show-word-limit
+                              style="width:60%;"
+                              clearable
+                              maxlength="200"
+                              size="small"
+                              placeholder="Title"
+                              v-model="form.videoHeader"></el-input>
+                    <el-tooltip effect="dark"
+                                content="<%= __("The title for the video is displayed on the post page") %>"
+                                placement="top-start">
+
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
+                <% /* ВИДЕО Описание */ %>
+                <el-form-item label="<%= __('Description video') %>" prop="videoDescription">
+                    <el-input show-word-limit
+                              style="width:60%;"
+                              clearable
+                              maxlength="700"
+                              size="small"
+                              placeholder="Description"
+                              v-model="form.videoDescription"></el-input>
+                    <el-tooltip effect="dark"
+                                content="<%= __("The description for the video is displayed on the post page") %>"
+                                placement="top-start">
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
+                <% /* ВИДЕО Showinfo:  */ %>
+                <%= __('Showinfo youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoShowinfo">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="form.videoShowinfo"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="form.videoShowinfo"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+
+                <% /* ВИДЕО videoStart:  */ %>
+                <%= __('Start youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoStart">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="form.videoStart"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="form.videoStart"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+
+                <% /* ВИДЕО videoControls:  */ %>
+                <%= __('Controls youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoControls">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="form.videoControls"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="form.videoControls"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+
+                <% /* ВИДЕО videoMute:  */ %>
+                <%= __('Mute youtube') %>
+                <template>
+                    <el-row :gutter="2">
+                        <el-form-item prop="videoMute">
+                            <el-col :xs="12" :sm="15" :md="14" :lg="13" :xl="12">
+                                <el-slider
+                                        class="hidden-xs-only"
+                                        v-model="form.videoMute"
+                                        class="hidden-xs-only"
+                                        :min="0"
+                                        :max="400"
+                                        :step="1"
+                                        show-input>
+                                </el-slider>
+                                <el-input-number :min="0" class="text-center hidden-sm-and-up"
+                                                 :max="400" size="mini" v-model="form.videoMute"></el-input-number>
+                            </el-col>
+                            <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="2">
+                                <el-tooltip effect="dark"
+                                            content="<%= __("Specify the weight at birth.") %>"
+                                            placement="top-start">
+                                    <div size="mini" round class="el-icon-question ml-3"></div>
+                                </el-tooltip>
+                            </el-col>
+                        </el-form-item>
+                    </el-row>
+                </template>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false"><%= __('Cancel') %></el-button>
+    <el-button v-if="updateButton" type="primary" @click="saveUpdateVideo()"><%= __('Save') %></el-button>
+    <el-button v-else type="primary" @click="addVideo()"><%= __('Add') %></el-button>
+  </span>
+        </el-dialog>
+        <div style="height: 90px;" class="flex justify-content-center align-content-center">
+            <h2 v-if="eLabel"> {{post.labelRu}}</h2>
+            <div v-else="!eLabel" class="demo-input-suffix">
+                <el-input style=" width: 25rem" placeholder="<%= __('Required to fill') %> <%=__('in Russian')%>"
+                          v-model="post.labelRu "
+                          class="input-with-select">
+                </el-input>
+                <el-input style=" width: 25rem"
+                          placeholder="<%= __('Required to fill') %> <%=__('in English')%>"
+                          v-model="post.label">
+                    <el-button v-if="!succ" type="info" @click="editLabel" slot="append"
+                               icon="el-icon-circle-check"></el-button>
+                </el-input>
+            </div>
+            <div v-if="eLabel" class="btr pointer ml-2">
+                <i @click="eLabel ? eLabel=false : eLabel=true" class="el-icon-view"></i>
+            </div>
+        </div>
+        <div class="block">
+
+            <!---------------------------------------------------------------------------------------->
+            <% /*Загрузка фото NEW*/ %>
+            <div class="container-fluid ">
+                <div class="row">
+                    <div class="col">
+                        <el-upload
+                                action="/api/v1/files/upload"
+                                list-type="picture-card"
+                                drag
+                                multiple
+                                ref="upload"
+                                :file-list="post.fileList"
+                                :on-preview="handlePictureCardPreview"
+                                :on-success="handleSuccess"
+                                :on-remove="handleRemove"
+                                :on-error="handleError"
+                        >
+                            <i class="el-icon-plus"></i>
+                            <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
+                                {{sizeLess}}<%= __('MB') %></div>
+                        </el-upload>
+                        <br>
+                        <el-dialog :visible.sync="dialogVisible" class="img-up" style="z-index: 10000">
+                            <img :src="dialogImageUrl" alt="">
+                        </el-dialog>
+                    </div>
+                </div>
+            </div>
+            <el-form :model="post" :rules="rules" ref="post" label-width="120px" class="demo-ruleForm">
+                <% /* ВИДЕН ПОСТ ИЛИ НЕТ */ %>
+                <el-form-item label="<%= __('Article') %>" prop="see">
+                    <el-row :gutter="2">
+                        <el-col :span="3">
+                            <el-switch
+                                    style="display: block; padding-bottom: 0"
+                                    v-model="post.see"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                                    active-text="<%= __('visible') %>"
+                                    inactive-text="<%= __('not visible') %>">
+                            </el-switch>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+                <% /* НА ГЛАВНУЮ */ %>
+                <el-form-item label="<%= __('On the main') %>" prop="rootPage">
+                    <el-row :gutter="2">
+                        <el-col :span="4">
+                            <el-switch
+                                    style="display: block"
+                                    v-model="post.rootPage"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                                    active-text="<%= __('on') %>"
+                                    inactive-text="<%= __('off') %>">
+                            </el-switch>
+                        </el-col>
+                        <el-col :span="5">
+                            <el-tooltip effect="dark"
+                                        content="<%= __("Enable the display of this topic on the main page of the site?") %>"
+                                        placement="top-start">
+                                <div size="mini" round class="el-icon-question "></div>
+                            </el-tooltip>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+                <% /* ДАТА */ %>
+                <el-form-item label="<%= __('Date') %>" prop="dateEvent">
+                    <el-row :gutter="2">
+                        <el-col :span="11">
+                            <el-date-picker
+                                    v-model="post.dateEvent"
+                                    type="datetime"
+                                    placeholder="<%= __('Select date and time') %>"
+                                    default-time="12:00:00">
+                            </el-date-picker>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+                <% /* ТЕМА */ %>
+                <el-form-item label="<%= __('Topic') %>" prop="topic">
+                    <el-select v-model="post.topic.id" placeholder="<%= __('Choose your cattery') %>"
+                               class="form-width"
+                    >
+                        <el-option v-for="item in getPull()"
+                                   :key="item.id"
+                                   :label="item.labelRu"
+                                   :value="item.id">
+                            <div class="d-flex justify-content-between">
+                                <div class="size pr-5">{{ item.labelRu | trimString}}</div>
+                                <div class="size">{{ item.label | trimString}}</div>
+                            </div>
+                        </el-option>
+                    </el-select>
+                    <el-tooltip effect="dark"
+                                content="<%= __("Add topic") %>"
+                                placement="top-start">
+                        <el-button @click="goTo('topics')" size="mini" round icon="el-icon-plus"></el-button>
+                    </el-tooltip>
+                    <el-tooltip effect="dark"
+                                content="<%= __("If you have not found your cattery, go to the \"topics\" section and create it.") %>"
+                                placement="top-start">
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+                <% /* ЭКСПЕРТЫ  */ %>
+                <el-form-item label="<%= __('Expert') %>" prop="experts">
+                    <el-select v-model="post.experts"
+                               placeholder="<%= __('Choose your expert') %>"
+                               class="form-width"
+                               multiple
+                    >
+                        <el-option v-for="item in getPullExpert()"
+                                   :key="item.id"
+                                   :label="me.preferredLocale === 'ru' ? item.fullName : item.fullNameEn"
+                                   :value="item.id">
+                            <div class="d-flex justify-content-between">
+                                <div class="size pr-5">{{ item.fullName}}</div>
+                                <div class="size">{{ item.fullNameEn }}</div>
+                            </div>
+                        </el-option>
+                    </el-select>
+                    <el-tooltip effect="dark"     v-if="me.isAdmin || me.isSuperAdmin"
+                                content="<%= __("Add expert") %>"
+                                placement="top-start">
+                        <el-button @click="goTo('users')" size="mini" round icon="el-icon-plus"></el-button>
+                    </el-tooltip>
+                    <el-tooltip effect="dark"
+                                content="<%= __("If you haven't found the expert you are looking for, go to the Users section and create one.") %>"
+                                placement="top-start">
+                        <div size="mini" round class="el-icon-question "></div>
+                    </el-tooltip>
+                </el-form-item>
+
+                <% /* ОПИСАНИЕ ПОСТА на русском */ %>
+                <template>
+                    <el-form-item label="<%= __('Description') %> (Ru)" prop="subtitleRu">
+                        <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+                            <el-input
+                                    type="textarea"
+                                    :rows="3"
+                                    clearable
+                                    :keyup="post.subtitleRu  | abc(post,'label','ru')"
+                                    placeholder="Please input"
+                                    v-model="post.subtitleRu"
+                                    maxlength="2000"
+                                    show-word-limit>
+                            </el-input>
+                        </el-col>
+                    </el-form-item>
+                </template>
+
+                <% /* ОПИСАНИЕ ПОСТА на английском */ %>
+                <template>
+                    <el-form-item label="<%= __('Description') %> (En)" prop="subtitle">
+                        <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+                            <el-input
+                                    type="textarea"
+                                    :rows="3"
+                                    clearable
+                                    placeholder="Please input"
+                                    v-model="post.subtitle"
+                                    maxlength="2000"
+                                    show-word-limit>
+                            </el-input>
+                        </el-col>
+                    </el-form-item>
+                </template>
+            </el-form>
+            <span slot="footer" class="dialog-footer  flex justify-content-center" style="margin-bottom: 180px" >
+            <el-button  type="success" @click="saveUpdate()"><%= __('Save') %></el-button>
+        </span>
+            <% /* ВИДЕО */ %>
+            <h2 class="flex justify-content-center"><%= __('Video Editor') %></h2>
+            <template>
+                <el-divider content-position="left">Всего роликов: {{post.video.length}}</el-divider>
+                <el-table
+                        :data="post.video"
+                        ref="multipleTable"
+                        style="width: 100vw"
+                        max-height="250"
+                        @select="selectRowsVideo"
+                        @select-all="selectRowsVideo"
+                        @selection-change="handleSelectionChange">
+                    <el-table-column
+                            type="selection"
+                            width="55">
+                    </el-table-column>
+                    <el-table-column
+                            sortable
+                            prop="videoHeader"
+                            label="Заголовок"
+                            width="220">
+                    </el-table-column>
+                    <el-table-column
+                            sortable
+                            prop="videoDescription"
+                            label="Описание"
+                            width="320">
+                    </el-table-column>
+                    <el-table-column
+                            prop="videoUrl"
+                            label="URL"
+                            width="300">
+                    </el-table-column>
+                    <el-table-column
+                            prop="videoControls"
+                            label="videoControls"
+                            width="120">
+                    </el-table-column>
+                    <el-table-column
+                            prop="videoMute"
+                            label="videoMute"
+                            width="120">
+                    </el-table-column>
+                    <el-table-column
+                            prop="videoShowinfo"
+                            label="videoShowinfo"
+                            width="130">
+                    </el-table-column>
+                    <el-table-column
+                            prop="videoStart"
+                            label="videoStart"
+                            width="120">
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            label=""
+                            width="80">
+                        <template slot-scope="scope">
+                            <el-button @click.native.prevent="editRow(scope.$index, post.video)" type="text"
+                                       size="small">Edit
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div style="margin-top: 20px">
+                    <el-button type="" @click="addOneVideo()">
+                        <%= __('Video') %>&nbsp;<i class="el-icon-circle-plus-outline el-icon-right"></i></el-button>
+                    <el-button type="danger" v-if="rws" @click.native.prevent="openD()">
+                        Удалить выделенное
+                    </el-button>
+                </div>
+            </template>
+        </div>
+        <span slot="footer" class="dialog-footer flex justify-content-center">
+            <el-button type="" @click="handlerCloseDialogSlider()"><%= __('Close') %></el-button>
+        </span>
+    </el-dialog>
+    <% /* шапка страницы post */ %>
+    <patzi-post-header :obj-data="seo" :post="post" @editpost="editPost" @remove="removeItem"
+                       @select-posts="filterPosts"></patzi-post-header>
+    <% /* ВЫВОД КАРТИНОК */ %>
+    <section class="u-clearfix u-section-2" id="carousel_1cb2">
+        <div class="u-clearfix u-sheet u-sheet-1">
+            <p class="u-text u-text-1 text-capitalize"><%= __('event') %></p>
+            <h2 class="u-text u-text-2 text-uppercase flex space-between">
+                <span><%= __('in the focus') %>!</span>
+
+                <el-switch
+                        v-if="post.images.length !== 0"
+                        style="display: block"
+                        v-model="lines"
+                        active-color="#13ce66"
+                        inactive-color="#bdce0d"
+                        active-text="<%= __('row') %>"
+                        inactive-text="<%= __('column') %>">
+                </el-switch>
+            </h2>
+            <span>{{me.preferredLocale === 'ru' ? post.topic.labelRu : post.topic.label}}</span>
+           <div  class="flex justify-content-center  m-5" v-if="post.images.length == 0">
+               <h3 class="mr-10">Собачка не фокусе, добавьте картинок </h3>
+               <p>
+               <el-button @click="editPost(post)" type="success" icon="el-icon-plus" circle ></el-button>
+               </p>
+           </div>
+            <patzi-post-gallery :obj-data="seo" :post="post" :lines="lines"
+                                @select-posts="filterPosts"></patzi-post-gallery>
+        </div>
+    </section>
+
+    <% /* КАРУСЕЛЬ С ВИДЕО */ %>
+    <patzi-post-videos v-if="post.video.length > 0" :obj-data="seo"
+                       :video="post.video" ></patzi-post-videos>
+    <% /* ЭКСПЕРТЫ НА ВЫСТАВКЕ */ %>
+    <patzi-post-experts v-if="post.experts.length > 0" :obj-data="seo" :experts="experts" ></patzi-post-experts>
+    <router-view></router-view>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

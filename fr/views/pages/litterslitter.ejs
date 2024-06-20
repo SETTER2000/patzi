@@ -1,0 +1,1325 @@
+<div id="litter" class="content" v-cloak>
+  <% /* Диалоговое окно родословная (PEDIGREE)*/ %>
+  <el-dialog
+    title="<%= __('Pedigree') %>"
+    :visible.sync="dialogPedigreeVisible"
+    :fullscreen="true"
+    top="1vh"
+    center
+    :before-close="handlerCloseDialogSlider"
+    v-if="virtualPageSlug==='pedigree'"
+  >
+    <div class="d-flex justify-content-end">
+      <!--<el-switch-->
+      <!--style="display: block"-->
+      <!--v-model="autoplay"-->
+      <!--active-color="#13ce66"-->
+      <!--inactive-color="#ff4949"-->
+      <!--active-text="Autoplay"-->
+      <!--inactive-text="Disable ">-->
+      <!--</el-switch>-->
+    </div>
+    <!--<span>It should be noted that the content will not be aligned in center by default</span>-->
+    <div class="block">
+
+      <!--<span class="demonstration">Switch when indicator is clicked</span>-->
+      <!-- <el-carousel
+         :autoplay="autoplay"
+         trigger="click"
+         height="80vh"
+         :initial-index="indexSlide"
+         :next="handlerSetActiveSlider(indexPhoto)"
+       >
+         <el-carousel-item v-for="(item, key, index) in photos" :key="index">
+           <h3 class="small text-center">{{ item.label }}</h3>
+           <div class="my-flex-cont">
+             <div class="my-flex-box">
+             <el-image
+               :src="item.imageSrc"
+               :fit="fit"></el-image>
+             <div class="my-flex-cont">
+             <div class="my-flex-box">
+             <img :src="item.imageSrc" class="gallery" alt="">
+             </div>
+           </div>
+           </div>
+         </el-carousel-item>
+       </el-carousel>-->
+    </div>
+    <!--<span slot="footer" class="dialog-footer">-->
+    <!--<el-button type="primary" @click="handlerCloseDialogSlider()" ><%= __('Close') %></el-button>-->
+    <!--</span>-->
+  </el-dialog>
+  <% /* Диалоговое окно добавить фотосессию */ %>
+  <el-dialog title="<%= __('Add photo shoot') %>"
+             :visible.sync="dialogAddedPhotoSession">
+    <el-form :label-position="'top'"
+             :model="ruleForm" :rules="rules" ref="ruleForm"
+             label-width="120px" class="demo-ruleForm">
+      <div class="photo-uploader">
+        <div class="row">
+          <div class="col-md-12 ">
+            <% /*Загрузка фото щенков*/ %>
+            <el-upload
+              action="/api/v1/files/upload"
+              list-type="picture-card"
+              multiple
+              ref="uploadPuppies"
+              :on-preview="handlePictureCardPreview"
+              :before-upload="beforeUpload"
+              :limit="limit"
+              :on-success="handleSuccessPuppies"
+              :on-exceed="handleExceedPuppies"
+              :on-remove="handleRemovePuppies">
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <!--<el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>-->
+
+
+            <!------------------------------------------------------------------------------->
+          </div>
+        </div>
+      </div>
+      <el-divider content-position="left"><%= __('Puppies this litter') %></el-divider>
+      <% /*Название фотосессии*/ %>
+      <el-form-item label="<%= __('Name photoshoot puppies') %>" prop="sessionName">
+        <el-input clearable :maxlength="photoSetNameLength" autofocus="true" show-word-limit
+                  v-model="ruleForm.sessionName"></el-input>
+      </el-form-item>
+      <% /*Описание фотосессии*/ %>
+      <el-form-item label="<%= __('Description of the photo shoot') %>"
+                    prop="descriptionPhotoSession">
+        <el-input clearable :maxlength="photoSetDescriptionLength" show-word-limit type="textarea"
+                  v-model="ruleForm.descriptionPhotoSession"></el-input>
+      </el-form-item>
+      <% /* Дата съёмки фотосессии*/ %>
+      <el-form-item label="<%= __('Date taken') %>"
+                    prop="dateShooting">
+        <el-date-picker
+          v-model="ruleForm.dateShooting"
+          type="date"
+          placeholder="<%= __('Pick a day') %>">
+        </el-date-picker>
+      </el-form-item>
+      <% /* Показывать или нет дату съёмки*/ %>
+      <el-form-item label="<%= __('Show shooting date') %>">
+        <el-switch v-model="ruleForm.showShootingDate"></el-switch>
+      </el-form-item>
+
+
+      <!--<el-form-item label="Zones" :label-width="formLabelWidth">-->
+      <!--<el-select v-model="form.region" placeholder="Please select a zone">-->
+      <!--<el-option label="Zone No.1" value="shanghai"></el-option>-->
+      <!--<el-option label="Zone No.2" value="beijing"></el-option>-->
+      <!--</el-select>-->
+      <!--</el-form-item>-->
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <!--<el-button @click="dialogFormVisible = false"><%= __('Cancel') %></el-button>-->
+    <el-button @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+    <el-button type="primary" @click="updateForm('ruleForm')"><%= __('Save') %></el-button>
+  </span>
+  </el-dialog>
+  <% /* Диалоговое окно добавить презентацию */ %>
+  <el-dialog title="<%= __('Add presentation') %>"
+             :visible.sync="dialogAddedPresentation">
+    <el-form :label-position="'top'"
+             :model="ruleForm" :rules="rules" ref="ruleForm"
+             label-width="120px" class="demo-ruleForm">
+      <% /*URL на PDF файл презентации*/ %>
+      <el-form-item label="<%= __('URL') %> (<%= __('add a link to the pdf file of your presentation') %>)"
+                    prop="presentationUrl">
+        <el-input :maxlength="presentationUrlLength"
+                  clearable
+                  autofocus="true"
+                  show-word-limit
+                  placeholder="https://drive.google.com/open?id=1tnZHWrsak3sy_gzz2wt8I7tZb44FC0cW"
+                  v-model="ruleForm.presentationUrl"></el-input>
+      </el-form-item>
+      <% /*Наименование презентации*/ %>
+      <el-form-item label="<%= __('Presentation Name') %>" prop="presentationName">
+        <el-input clearable :maxlength="photoSetNameLength" autofocus="true" show-word-limit
+                  v-model="ruleForm.presentationName"></el-input>
+      </el-form-item>
+      <% /*Описание презентации*/ %>
+      <el-form-item label="<%= __('Presentation description') %>"
+                    prop="descriptionPresentation">
+        <el-input clearable :maxlength="photoSetDescriptionLength" show-word-limit type="textarea"
+                  v-model="ruleForm.descriptionPresentation"></el-input>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogAddedPresentation = false"><%= __('Cancel') %></el-button>
+    <el-button type="primary" @click="addedPresentForm('ruleForm')"><%= __('Save') %></el-button>
+  </span>
+  </el-dialog>
+  <% /* Диалоговое окно удалить фотосессию */ %>
+  <el-dialog title="<%= __('Delete photo shoot') %>"
+             :visible.sync="dialogDeletePhotoSession" center>
+    <el-form :label-position="'top'"
+             :model="ruleForm" ref="ruleForm"
+             label-width="120px" class="demo-ruleForm text-center">
+      {{nameSessionPhoto}}
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogDeletePhotoSession = false"><%= __('Cancel') %></el-button>
+    <el-button type="primary" @click="deleteForm('ruleForm')"><%= __('Confirm') %></el-button>
+  </span>
+  </el-dialog>
+
+
+
+  <% /* Диалоговое окно Слайдер картинок NEW*/ %>
+  <el-dialog
+          title=""
+          :visible.sync="dialogTableVisible"
+          :fullscreen="true"
+          top="1vh"
+          :close="handlerCloseDialogSlider"
+          center>
+    <div class="d-flex justify-content-start">
+      <el-switch
+              style="display: block"
+              v-model="autoplay"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="Autoplay"
+              inactive-text="Disable ">
+      </el-switch>
+    </div>
+    <div class="block" v-if="dialogTableVisible">
+      <el-carousel
+              :autoplay="autoplay"
+              trigger="click"
+              height="80vh"
+              setActiveItem
+              :initial-index="indexSlide"
+              :next="handlerSetActiveSlider(indexSlide)"
+      >
+        <el-carousel-item v-for="(item, key, index) in photos"
+                          :key="index">
+          <h3 class="small text-center">{{ item.label }}</h3>
+          <div class="my-flex-cont">
+            <el-image
+                    :src="item.imageSrc"
+                    :fit="fit">
+              <div slot="placeholder" class="image-slot" style="height:500px;">
+              Loading<span class="dot">...</span>
+            </div>
+            </el-image>
+          </div>
+        </el-carousel-item>
+      </el-carousel>
+    </div>
+  </el-dialog>
+
+
+
+
+  <% /* Диалоговое окно Редактор названия фотосессии*/ %>
+  <el-dialog title="<%= __('Photo Shoot Editor') %>" :visible.sync="dialogFormVisible">
+    <el-form :label-position="'top'"
+             :model="ruleFormEdit" :rules="rules" ref="ruleFormEdit"
+             label-width="120px" class="demo-ruleForm">
+      <% /*Название фотосессии*/ %>
+      <el-form-item label="<%= __('Name photoshoot puppies') %>" prop="sessionName">
+        <el-input :maxlength="photoSetNameLength" autofocus="true" show-word-limit
+                  v-model="ruleFormEdit.sessionName"></el-input>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false"><%= __('Cancel') %></el-button>
+    <el-button type="primary" @click="updatePhotoSetName('ruleFormEdit')"><%= __('Save') %></el-button>
+  </span>
+  </el-dialog>
+  <% /* Диалоговое окно Редактор описания фотосессии*/ %>
+  <el-dialog title="<%= __('Photo Shoot Editor') %>"
+             :visible.sync="dialogDescriptionPhotoSession">
+    <el-form :label-position="'top'"
+             :model="ruleFormEdit" :rules="rules" ref="ruleFormEdit"
+             label-width="120px" class="demo-ruleForm">
+      <% /*Описание фотосессии*/ %>
+      <el-form-item label="<%= __('Description of the photo shoot') %>" prop="descriptionPhotoSession">
+        <el-input :maxlength="photoSetDescriptionLength" show-word-limit type="textarea"
+                  v-model="ruleFormEdit.descriptionPhotoSession"></el-input>
+      </el-form-item>
+      <% /* Дата съёмки фотосессии*/ %>
+      <el-form-item label="<%= __('Date taken') %>" prop="dateShooting">
+        <el-date-picker
+                v-model="ruleFormEdit.dateShooting"
+                type="date"
+                placeholder="<%= __('Pick a day') %>">
+        </el-date-picker>
+      </el-form-item>
+      <% /* Показывать или нет дату съёмки*/ %>
+      <el-form-item label="<%= __('Show shooting date') %>">
+        <el-switch v-model="ruleFormEdit.showShootingDate"></el-switch>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogDescriptionPhotoSession = false"><%= __('Cancel') %></el-button>
+    <el-button type="primary" @click="updatePhotoSetDescription('ruleFormEdit')"><%= __('Save') %></el-button>
+  </span>
+  </el-dialog>
+
+
+
+  <% /* Диалоговое окно Редактор помёта*/ %>
+  <el-dialog title="<%= __('Litter Editor') %>" :visible.sync="dialogEditor">
+    <el-form :label-position="'top'"
+             :model="ruleForm" :rules="rules" ref="ruleForm"
+             label-width="120px" class="demo-ruleForm">
+      <!--<el-form-item label="<%= __('Description') %>" prop="description">-->
+      <!--<el-input maxlength="60" show-word-limit v-model="ruleForm.description"></el-input>-->
+      <!--</el-form-item>-->
+      <% /*Краткое Описание Помёта*/ %>
+      <el-form-item label="<%= __('Short Litter Description') %>" prop="subtitle">
+        <el-input :maxlength="subtitleLength" show-word-limit type="textarea" v-model="ruleForm.subtitle"></el-input>
+      </el-form-item>
+
+      <% /*Описание Помёта*/ %>
+      <el-form-item label="<%= __('Description') %>" prop="description">
+        <el-input :maxlength="descriptionLitterLength" show-word-limit type="textarea"
+                  v-model="ruleForm.description"></el-input>
+      </el-form-item>
+
+      <% /* Дата помёта NEW */ %>
+      <el-form-item label="<%= __('Date of litter') %>" prop="born">
+        <el-date-picker
+                v-model="ruleForm.born"
+                type="date"
+                :format="i19p.getFormatDateLocale"
+                placeholder="<%= __('Select date and time') %>"
+        >
+        </el-date-picker>
+      </el-form-item>
+      <!--<el-form-item label="Zones" :label-width="formLabelWidth">-->
+      <!--<el-select v-model="form.region" placeholder="Please select a zone">-->
+      <!--<el-option label="Zone No.1" value="shanghai"></el-option>-->
+      <!--<el-option label="Zone No.2" value="beijing"></el-option>-->
+      <!--</el-select>-->
+      <!--</el-form-item>-->
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogEditor = false"><%= __('Cancel') %></el-button>
+    <el-button type="primary" @click="submitForm('ruleForm')"><%= __('Save') %></el-button>
+  </span>
+  </el-dialog>
+  <% /* Modal "Подтвердить удаление презентации" */ %>
+  <modal v-if="confirmDeletePresentationModalOpen && selectedLitter" v-cloak key="delete"
+         @close="closeDeletePresentationModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Remove this') %>?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="destroyOnePresentation"
+               :syncing.sync="syncing"
+               :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingDeletePresentationForm"
+               @submitted="submittedDeletePresentationForm()">
+      <div class="modal-body">
+        <p><%= __('Are you sure you want to remove this') %> {{selectedLitter.label || 'item'}}?</p>
+        <p class="text-muted"
+           v-if="selectedLitter.borrowedBy"><%= __('We will no longer be able to assist with the return of this item, so you will need to contact') %>
+          {{selectedLitter.borrowedBy.fullName}} <%= __('directly to coordinate') %>.</p>
+        <p v-else><%= __('This item will no longer be available to share with friends') %>.</p>
+        <p class="text-danger" v-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a
+                    href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal"><%= __('Nevermind') %></button>
+        <button type="submit" class="btn btn-danger ml-1"><%= __('Remove') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+  <% /* Modal "Confirm Delete Litter"  */ %>
+  <modal v-if="confirmDeleteLitterModalOpen && selectedLitter" v-cloak key="delete"
+         @close="closeDeleteLitterModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Remove this') %>?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="destroyOneLitter" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingDeleteLitterForm"
+               @submitted="submittedDeleteLitterForm()">
+      <div class="modal-body">
+        <p><%= __('Are you sure you want to remove this') %> {{selectedLitter.label || 'item'}}?</p>
+        <p class="text-muted"
+           v-if="selectedLitter.borrowedBy"><%= __('We will no longer be able to assist with the return of this item, so you will need to contact') %>
+          {{selectedLitter.borrowedBy.fullName}} <%= __('directly to coordinate') %>.</p>
+        <p v-else><%= __('This item will no longer be available to share with friends') %>.</p>
+        <p class="text-danger" v-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %>
+            <a
+                    href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal"><%= __('Nevermind') %></button>
+        <button type="submit" class="btn btn-danger ml-1"><%= __('Remove') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+
+
+
+
+
+  <% /* Шапка страницы */ %>
+  <section class="banner-area relative">
+    <div class="container">
+      <div class="row d-flex align-items-center justify-content-center">
+        <div class="about-content col-lg-12">
+          <h1 class="text-white"><%= __('Litter Details') %></h1>
+          <p><%= __('Information about new arrivals to this world.') %></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <% /* Content */ %>
+  <section class="portfolio_details_area section-gap">
+    <div class="container">
+
+      <div class="portfolio_details_inner ">
+        <div class="row">
+          <% /* Хлебные крошки */ %>
+          <div class="col col-md-6">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+              <el-breadcrumb-item><a href="/"><%= __('Home-menu') %></a></el-breadcrumb-item>
+              <el-breadcrumb-item><a href="/litters"><%= __('Litters') %></a></el-breadcrumb-item>
+              <el-breadcrumb-item><%= __('Litter') %> {{litter.letter}}</el-breadcrumb-item>
+              <!--<el-breadcrumb-item>promotion detail</el-breadcrumb-item>-->
+            </el-breadcrumb>
+          </div>
+          <% /* Буквы помётов (кнопки переключения помётов) */ %>
+          <div class="col-md-6">
+            <div class="text-right">
+              <el-button-group v-for="(lett, index) in letters" :key="index + '-lett'">
+
+                <el-button v-if="lett.letter === litter.letter" @click="goTo(lett.link)" type="warning" size="mini">
+                  {{lett.letter}}
+                </el-button>
+                <el-button v-else @click="goTo(lett.link)" size="mini">
+                  {{lett.letter}}
+                </el-button>
+              </el-button-group>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <% /* Главная картинка помёта */ %>
+          <div class="col-md-6">
+            <div class="left_img">
+              <ul v-if="litter.images.length">
+                <li v-for="(img ,index, key) in litter.images" :key="index + '-lst'">
+                  <a href="#" @click="showSliderImages()">
+                    <!-- <picture>
+                       <source media="(max-width: 480px)" :srcset="litter.imagesMin[index].imageSrc" >
+                       <img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">
+                     </picture>-->
+                    <!--<el-image :src="img.imageSrc" v-if="index===litter.cover" :lazy="true">-->
+                    <el-image :src="litter.imagesMin[index].imageSrc" v-if="index===litter.cover" :lazy="true">
+                      <div slot="placeholder" class="image-slot" style="height:500px;">
+                        Loading<span class="dot">...</span>
+                      </div>
+                      <div slot="error" class="image-slot">
+                        <i class="el-icon-picture-outline"></i> <%= __('not found') %>
+                      </div>
+                    </el-image>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="offset-md-1 col-md-5">
+            <div class="portfolio_right_text ">
+              <el-row :gutter="20">
+                <% /* Буква помёта */ %>
+                <el-col :span="10"><h4><%= __('Litter') %> {{litter.letter.toUpperCase()}}</h4></el-col>
+
+                <% /* Кнопки редактирования помёта (dropdown) */ %>
+                <el-col :span="1" :offset="12">
+                  <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
+                    <el-dropdown @command="handleCommand">
+                      <span class="el-dropdown-link">
+                        <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
+                      </span>
+                      <el-dropdown-menu slot="dropdown">
+
+                        <el-dropdown-item icon="el-icon-circle-plus" :command="{com:'f'}">
+                          <%= __('Add litter') %>
+                        </el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
+                          <%= __('Add photo session') %>
+                        </el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-present" :command="{com:'g'}">
+                          <%= __('Add presentation') %>
+                        </el-dropdown-item>
+
+                        <el-dropdown-item icon="el-icon-edit" :command="{com:'e'}">
+                          <%= __('Change description') %>
+                        </el-dropdown-item>
+
+                        <el-dropdown-item icon="el-icon-star-off" :command="{com:'link'}">
+                          <%= __('Change album art') %>
+                        </el-dropdown-item>
+
+                        <el-dropdown-item icon="el-icon-delete-solid"
+                                          :command="{com:'dl'}">
+                          <%= __('Delete') %> <%= __('litter') %>
+                        </el-dropdown-item>
+
+                        <el-dropdown-item :divided="true" disabled v-if="litter.createdAt" icon="el-icon-date"
+                                          command="">
+                          <%= __('Date publication') %> : <br>{{litter.createdAt | getCreate(me.preferredLocale)}}
+                        </el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </div>
+                </el-col>
+              </el-row>
+              <% /* Краткое описание помёта */ %>
+              <p v-if="litter.subtitle">{{litter.subtitle}}</p>
+
+              <% /* Звёздочки рейтинга */ %>
+              <div class="block mb-5">
+                <el-rate
+                  v-model="ratio"
+                  :colors="colors"
+                  @change="changeRatio(litter.letter.toUpperCase())"
+                  show-score
+                  text-color="#ff9900"
+                  score-template=" <%= __('points') %> {value} "
+                >
+                </el-rate>
+              </div>
+              <% /* Описание и данные о помёте */ %>
+              <ul class="list">
+
+                <% /* Дата помёте */ %>
+                <li><span><%= __('Dob') %>
+                    <el-tooltip v-if="isAfterDate" class="item" effect="dark"
+                                content="<%= __("Date of litter. If the date has not yet arrived, then the mating has taken place and the birth is expected on that date.") %>"
+                                placement="right-start">
+                           <i class="el-icon-question"></i>
+                   </el-tooltip>
+                  </span>: {{litter.bornNt}}
+                </li>
+                <li><span><%= __('Name') %>
+                    <el-tooltip class="item" effect="dark"
+                                content="<%= __("The letter with which the puppy's name should begin.") %>"
+                                placement="right-start">
+                           <i class="el-icon-question"></i>
+                   </el-tooltip>
+                  </span>: {{litter.letter.toUpperCase()}}...
+                </li>
+                <li><span class="title-description"><%= __('Sire') %></span>:
+                  <el-link :underline="false" type="danger" @click="goDog(litter.sire[1])"> {{litter.sire[1]}}</el-link>
+                </li>
+                <li><span><%= __('Dam') %></span>:
+                  <el-link :underline="false" type="danger" @click="goDog(litter.dam[1])"> {{litter.dam[1]}}</el-link>
+                </li>
+
+              </ul>
+              <% /* Кнопки PEDIGREE */ %>
+              <el-row :gutter="10">
+                <el-col :xs="9" :sm="10" :md="8" :lg="6">
+                  <% /*@click="goTo('/pedigree')" */ %>
+                  <el-button class="mt-4" @click="clickPedigree()" type="primary" round>Pedigree</el-button>
+
+                </el-col>
+
+                <el-col :xs="6" :sm="8" :md="6" :lg="2">
+                  <el-button v-if="forSale" class="mt-4" @click="goDogsSale" type="success"
+                             round><%= __('Puppies for sale') %></el-button>
+
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </div>
+        <div class="row ">
+          <% /* Полное описание помёта */ %>
+          <div class="col ">
+            {{litter.description}}
+          </div>
+        </div>
+
+      </div>
+
+      <% /* Разделитель описания помёта и блока где выводятся фотосессии*/ %>
+      <el-divider content-position="left"><%= __('Puppies this litter') %>.
+        <span v-if="litter.puppies">{{litter.bornNt}}</span>
+        <span v-else><%= __('It has not happened yet. We wait...') %></span>
+      </el-divider>
+
+      <!--<template>-->
+      <!--<ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">-->
+      <!--<li v-for="i in count" class="infinite-list-item">{{ i }}</li>-->
+      <!--</ul>-->
+      <!--</template>-->
+      <el-row>
+        <!--<el-tabs v-model="activeName" @tab-click="handleClick">-->
+        <el-tabs
+          :tab-position="tabPosition"
+          v-model="virtualPageSlug"
+          @tab-click="clickTabName"
+        >
+
+          <!--<el-tabs type="card" @tab-click="handleClick">-->
+          <el-tab-pane label="<%= __('Photo') %>" name="photo">
+            <transition name="el-fade-in-linear">
+              <div>
+                <div class="mb-lg-5" v-if="(litter.puppies.length>0)">
+                  <% /* ФОТОСЕССИИ */ %>
+                  <div class="mb-lg-3 " v-for="(photoSet, index, key) in litter.puppies" :key="photoSet.indexPhotoSet">
+                    <el-row>
+                      <el-col>
+                        <el-divider v-if="index>0"><i class="el-icon-star-on"></i></el-divider>
+                      </el-col>
+                    </el-row>
+                    <el-row type="flex" class="row-bg" justify="end">
+
+                      <% /* Имя фотосессии */ %>
+                      <el-col :span="22">
+                        <h5 class="text-center"> {{photoSet.sessionName}}</h5>
+                      </el-col>
+
+                      <% /* Кнопки управления фотосессией */ %>
+                      <el-col :span="1">
+                        <div v-if="me.isAdmin || me.isSuperAdmin" class="grid-content bg-purple">
+                          <el-dropdown @command="handleCommand">
+                            <span class="el-dropdown-link">
+                              <el-link :underline="false"> <i class="el-icon-more el-icon--right"></i></el-link>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                              <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'c'}">
+                                <%= __('Add photo session') %>
+                              </el-dropdown-item>
+                              <el-dropdown-item icon="el-icon-present" :command="{com:'g'}">
+                                <%= __('Add presentation') %>
+                              </el-dropdown-item>
+                              <el-dropdown-item icon="el-icon-edit" :command="{com:'a',i:photoSet.indexPhotoSet}">
+                                <%= __('Photo session name') %>
+                              </el-dropdown-item>
+                              <el-dropdown-item icon="el-icon-edit" :command="{com:'b',i:photoSet.indexPhotoSet}">
+                                <%= __('Photo session description') %>
+                              </el-dropdown-item>
+
+                              <el-dropdown-item icon="el-icon-delete-solid"
+                                                :command="{com:'d',i:photoSet.indexPhotoSet, name:photoSet.sessionName}">
+                                <%= __('Delete photo session') %>
+                              </el-dropdown-item>
+
+                              <el-dropdown-item :divided="true" disabled v-if="photoSet.createdAt" icon="el-icon-date"
+                                                command="">
+                                <%= __('Date publication') %> : <br>{{photoSet.createdAt |
+                                getCreate(me.preferredLocale)}}
+                              </el-dropdown-item>
+
+                            </el-dropdown-menu>
+                          </el-dropdown>
+                        </div>
+                      </el-col>
+                    </el-row>
+
+                    <% /*  */ %>
+                    <div class="card-body">
+                      <% /*Описание фотосессии.*/ %>
+                      <div class="card-text">
+                        <p>
+                          <el-link type="warning" disabled class="dateShooting"
+                                   v-if="photoSet.dateShooting && photoSet.showShootingDate"><i
+                              class="el-icon-date"></i> <%= __('Date taken') %>: <strong>
+                              {{photoSet.dateShooting | getCreate(me.preferredLocale, 'LL')}}</strong></el-link>
+                          <em v-if="photoSet.descriptionPhotoSession">{{photoSet.descriptionPhotoSession}}</em></p>
+
+                      </div>
+                      <% /*Маленькие фото. Превью.*/ %>
+                      <div class="card-text mt-sm-4">
+                        <el-row :gutter="4" justify="center">
+                          <el-col :xs="24" :sm="6" :md="4" :lg="3" :xl="3"
+                                  v-for="(img, idx, key) in photoSet.imagesMin"
+                                  :key="idx +  '-label'">
+                            <template v-if="me.isSuperAdmin">
+                              <div class="ell-relation" v-if="litter.cover === index">
+                                <!--<el-button type="warning" size="mini" title="<%= __("Album's cover") %>"-->
+                                <!--class="ell-position-button check" icon="el-icon-star-off"-->
+                                <!--circle/>-->
+                              </div>
+                              <div class="ell-relation" v-else>
+                                <!--<el-button size="mini" title="<%= __('Make an album cover') %>"-->
+                                <!--class="ell-position-button" @click="coverPhoto(litter.id,index)"-->
+                                <!--icon="el-icon-document" circle></el-button>-->
+                              </div>
+
+                            </template>
+                            <a v-loading.fullscreen.lock="fullscreenLoading" href="#" @click="showSlider(idx, index)">
+                              <!--<img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">-->
+                              <picture>
+                                <source media="(max-width: 520px)" :srcset="photoSet.imagesMobile[idx].imageSrc">
+                                <source media="(max-width: 750px)" :srcset="photoSet.photos[idx].imageSrc">
+                                <img :src="img.imageSrc" class="ell object-fit_cover" :alt="img.name">
+                              </picture>
+                            </a>
+                          </el-col>
+                        </el-row>
+                      </div>
+                      <!--// Показатели рейтингов-->
+                      <el-row class="sv" :gutter="2">
+                        <el-col :xs="12" :sm="12" :md="12" :lg="16" :xl="18">
+                          <div class="menu-left icos" v-if="photoSet.countLike>0">
+                            <!--// like-->
+                            <el-tooltip v-if="photoSet.countRatLike > 0" class="item" effect="dark" placement="top-start">
+                              <div slot="content">
+                                <ul style="color: #c5c5c5">
+                                  <li style="border-bottom: .2px solid #8d8d8d; margin-bottom: 3px; padding-bottom:3px; " class="text-center">{{photoSet.countRatLike}}</li>
+                                  <li v-for="(usName, index) in photoSet.listLikeUserName" :key="index +  '-usaNm'">
+                                    {{usName}}
+                                  </li>
+                                </ul>
+                              </div>
+                              <!--// like SVG-->
+                              <div  class="container-icon ">
+                                <i style="color:#2980B9;" class="ti-thumb-up"></i>
+                              </div>
+                            </el-tooltip>
+                            <!--// super-->
+                            <el-tooltip v-show="photoSet.countSuper > 0" class="item" effect="dark" placement="top">
+                              <div slot="content">
+                                <ul style="color: #c5c5c5">
+                                  <li style="border-bottom: .2px solid #8d8d8d; margin-bottom: 3px; padding-bottom:3px; " class="text-center"> {{photoSet.countSuper}}</li>
+                                  <li v-for="(usName, index) in photoSet.listSuperUserName" :key="index +  '-usNm'">
+                                    {{usName}}
+                                  </li>
+                                </ul>
+                              </div>
+                              <!--// super SVG -->
+                              <div class="container-icon">
+                                <i style="color:#E84B3C;" class="ti-heart"></i>
+                              </div>
+                            </el-tooltip>
+
+                            <!--// wow-->
+                            <el-tooltip v-show="photoSet.countWow > 0" class="item" effect="dark" placement="top">
+                              <div slot="content">
+                                <ul style="color: #c5c5c5">
+                                  <li style="border-bottom: .2px solid #8d8d8d; margin-bottom: 3px; padding-bottom:3px; " class="text-center"> {{photoSet.countWow}}</li>
+                                  <li v-for="(usName, index) in photoSet.listWowUserName" :key="index +  '-usNam'"> {{usName}}</li>
+                                </ul>
+                              </div>
+                              <!--// wow SVG-->
+                              <div id="wow" class="container-icon">
+                                <i class="el-icon-loading" style="color:#ffb007;"> </i>
+                                <!--  <svg version="1.1" id="wow" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="272.034px" height="272.034px" viewBox="0 0 272.034 272.034" enable-background="new 0 0 272.034 272.034" xml:space="preserve" data-llp-composed="true" class="lazy-line-painter">
+                                     <circle fill="#FFFFFF" stroke-miterlimit="10" cx="136.017" cy="136.018" r="135.517" data-llp-id="wow-0" data-llp-duration="500" data-llp-delay="0" fill-opacity="0" style=""/>
+                                     <circle fill="#FFFFFF" stroke-miterlimit="10" cx="178.086" cy="64.983" r="19.655" data-llp-id="wow-1" data-llp-duration="500" data-llp-delay="500" fill-opacity="0" style=""/>
+                                     <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="136.707" cy="193.259" rx="42.414" ry="61.725" data-llp-id="wow-2" data-llp-duration="500" data-llp-delay="1000" fill-opacity="0" style=""/>
+                                     <circle fill="#FFFFFF" stroke-miterlimit="10" cx="88.431" cy="62.914" r="19.655" data-llp-id="wow-3" data-llp-duration="500" data-llp-delay="1500" fill-opacity="0" style=""/>
+                                     <circle fill="#FFFFFF" stroke-miterlimit="10" cx="89.121" cy="67.052" r="11.379" data-llp-id="wow-4" data-llp-duration="500" data-llp-delay="2000" fill-opacity="0" style=""/>
+                                     <circle fill="#FFFFFF" stroke-miterlimit="10" cx="177.397" cy="69.122" r="11.379" data-llp-id="wow-5" data-llp-duration="500" data-llp-delay="2500" fill-opacity="0" style=""/>
+                                     <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="133.948" cy="99.121" rx="19.655" ry="12.414" data-llp-id="wow-6" data-llp-duration="500" data-llp-delay="3000" fill-opacity="0" style=""/>
+                                     <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="137.742" cy="231.879" rx="25.517" ry="16.207" data-llp-id="wow-7" data-llp-duration="500" data-llp-delay="3500" fill-opacity="0" style=""/>
+                                  </svg>-->
+                              </div>
+                            </el-tooltip>
+
+                            <!--// haha-->
+
+                              <el-tooltip v-show="photoSet.countHaha > 0" class="item" effect="dark" placement="top">
+                                <div slot="content">
+                                  <ul style="color: #c5c5c5">
+                                    <li style="border-bottom: .2px solid #8d8d8d; margin-bottom: 3px; padding-bottom:3px; " class="text-center">  {{photoSet.countHaha}}</li>
+                                    <li v-for="(usName, index) in photoSet.listHahaUserName" :key="index +  '-usNm'"> {{usName}}</li>
+                                  </ul>
+                                </div>
+                                <!--// haha SVG-->
+                                <div class="container-icon">
+                                  <i style="color:#9274a6;" class="ti-face-smile"></i>
+                                  <!--<svg v-show="countHaha > 0" version="1.1" id="haha" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="272.034px" height="272.034px" viewBox="0 0 272.034 272.034" enable-background="new 0 0 272.034 272.034" xml:space="preserve" data-llp-composed="true" class="lazy-line-painter">
+                                    <circle fill="#FFFFFF" stroke-miterlimit="10" cx="136.017" cy="136.018" r="135.517" data-llp-id="haha-0" data-llp-duration="500" data-llp-delay="0" fill-opacity="0" style=""/>
+                                    <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="183.949" cy="66.017" rx="25.517" ry="18.621" data-llp-id="haha-1" data-llp-duration="500" data-llp-delay="500" fill-opacity="0" style=""/>
+                                    <path fill="#FFFFFF" stroke-miterlimit="10" d="M210.845,145.327c0,14.664-50.712,61.38-74.138,61.38&#10;&#9;c-23.424,0-77.585-44.647-77.585-59.312c0-14.665,54.161,6.207,77.585,6.207C160.133,153.603,210.845,130.662,210.845,145.327z" data-llp-id="haha-2" data-llp-duration="500" data-llp-delay="1000" fill-opacity="0" style=""/>
+                                    <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="82.914" cy="63.604" rx="25.172" ry="18.966" data-llp-id="haha-3" data-llp-duration="500" data-llp-delay="1500" fill-opacity="0" style=""/>
+                                    <circle fill="#FFFFFF" stroke-miterlimit="10" cx="89.121" cy="67.052" r="11.379" data-llp-id="haha-4" data-llp-duration="500" data-llp-delay="2000" fill-opacity="0" style=""/>
+                                    <circle fill="#FFFFFF" stroke-miterlimit="10" cx="177.397" cy="69.122" r="11.379" data-llp-id="haha-5" data-llp-duration="500" data-llp-delay="2500" fill-opacity="0" style=""/>
+                                    <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="131.189" cy="104.638" rx="19.655" ry="12.414" data-llp-id="haha-6" data-llp-duration="500" data-llp-delay="3000" fill-opacity="0" style=""/>
+                                    <ellipse fill="#FFFFFF" stroke-miterlimit="10" cx="136.363" cy="183.604" rx="25.518" ry="16.207" data-llp-id="haha-7" data-llp-duration="500" data-llp-delay="3500" fill-opacity="0" style=""/>
+                                  </svg>-->
+                                </div>
+                              </el-tooltip>
+
+
+                            <!--// count-->
+                            <el-tooltip v-if="photoSet.countLike>0" class="item container-icon" effect="dark" placement="top" v-cloak>
+                              <div slot="content">
+                                <ul>
+                                  <li v-for="(usName, index) in photoSet.listAllUsers" :key="index +  '-usNem'"> {{usName}}</li>
+                                </ul>
+                              </div>
+                              <!--// countLike-->
+                              <span style="font-size: 13px">  {{photoSet.countLike ? photoSet.countLike : 0}}</span>
+                            </el-tooltip>
+                          </div>
+                        </el-col>
+                        <el-col :xs="12" :sm="6" :md="6" :lg="4" :xl="3" class="text-right">
+                          <div class="grid-content bg-purple text-right">
+                            <%= __('Comments') %>: {{photoSet.comments ? photoSet.comments.length : 0}}
+                          </div>
+                        </el-col>
+                     <!--   <el-col :xs="8" :sm="6" :md="6" :lg="4" :xl="3" class="text-right">
+                          <div class="grid-content bg-purple-light text-right"><%= __('Shared') %>: {{photoSet.shared ?
+                            photoSet.shared.length : 0}}
+                          </div>
+                        </el-col>-->
+                      </el-row>
+
+
+                      <!--// Кнопки управления рейтингами -->
+                      <el-row class="button-like" :gutter="2">
+                        <!--<el-col >-->
+                        <!--<button @click="clearLocalStor()">Clear</button>-->
+                        <!--</el-col>-->
+                        <!--// Like-->
+                        <el-col :xs="8" :sm="8" :md="9" :lg="10" :xl="10" class="text-right">
+                          <el-dropdown placement="top" @command="handleCommand">
+                             <span class="el-dropdown-link pointer">
+                            <i class="ti-thumb-up"></i>
+                               <%= __('Like') %>
+                             </span>
+                            <el-dropdown-menu slot="dropdown">
+                              <el-dropdown-item style="color:#2980B9;"
+                                                :command="{com:'like',photoSet:photoSet,field:'puppies'}"
+                                                icon="ti-thumb-up"><%= __('Like') %>
+                              </el-dropdown-item>
+                              <el-dropdown-item style="color:#E84B3C;"
+                                                :command="{com:'super',photoSet:photoSet,field:'puppies'}"
+                                                icon="ti-heart"> <%= __('Super') %>
+                              </el-dropdown-item>
+                              <el-dropdown-item style="color:#ffb007;"
+                                                :command="{com:'wow',photoSet:photoSet,field:'puppies'}"
+                                                icon="el-icon-loading"><%= __('Wow') %>
+                              </el-dropdown-item>
+                              <el-dropdown-item style="color:#9274a6;"
+                                                :command="{com:'haha',photoSet:photoSet,field:'puppies'}"
+                                                icon="ti-face-smile"><%= __('Ha-Ha') %>
+                              </el-dropdown-item>
+                            </el-dropdown-menu>
+                          </el-dropdown>
+                        </el-col>
+                        <!--// Comment-->
+                        <el-col :xs="8" :sm="8" :md="6" :lg="4" :xl="4" class="text-center">
+                          <el-badge v-if="getCountComment(photoSet)>0" :value="getCountComment(photoSet)"
+                                    class="itemFoo" :max="10">
+                            <el-dropdown @command="handleCommand" split-button trigger="click"
+                                         @click="openCommentsForm(photoSet)"
+                                         icon="el-icon-chat-square">
+                              <%= __('Comment') %>
+                              <!--({{photoSet.comments ? photoSet.comments.length : 0}})-->
+                              <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item
+                                  :command="{photoSet: photoSet, com:'allView'}"><%= __('Mark Read') %></el-dropdown-item>
+                              </el-dropdown-menu>
+                            </el-dropdown>
+                          </el-badge>
+                          <el-button v-else @click="openCommentsForm(photoSet)" icon="el-icon-chat-square">
+                            <%= __('Comment') %>
+                            <!--({{photoSet.comments ? photoSet.comments.length : 0}})-->
+                          </el-button>
+                        </el-col>
+                        <!--// Share-->
+                        <el-col :xs="8" :sm="8" :md="9" :lg="10" :xl="10">
+                          <el-button size="medium"><span class="share"></span><%= __('Share') %></el-button>
+                        </el-col>
+
+                        <transition name="el-fade-in-linear">
+                          <div v-if="ruleForm.show === photoSet.indexPhotoSet">
+                            <div class="row justify-content-center my-4">
+                              <div class="col">
+                                <div class="row">
+                                  <div class="col">
+                                    <el-collapse v-model="activeNames" accordion>
+                                      <el-collapse-item title="<%= __('Write your review') %>" name="1">
+                                        <div><%= __('Your opinion is important and necessary for us. Leave your comment regarding this litter.') %></div>
+                                        <div><%= __('Perhaps you have questions that you would like to receive answers from the nursery. Write to us, we will be happy to answer you.') %></div>
+                                        <transition-group name="fade" appear>
+                                          <ul class="hr" v-if="_.isNull(com.parent)"
+                                              v-for="(com,index) in photoSet.comments" :key="com.id">
+                                            <li class="avat">
+                                              <div class="avat">
+                                                <el-avatar :size="35" :src="com.avatarUrl"></el-avatar>
+                                              </div>
+                                            </li>
+                                            <li class="comm">
+                                              <div class="comment"
+                                                   :class="{'wid': (viewChangeComment && commentId === com.id)}">
+                                                <el-tooltip v-if="!_.isEmpty(com.kennels)" class="item" effect="light"
+                                                            :content="`<%= __('Kennel') %>: ${com.kennels.name} (${com.kennels.countryName})`"
+                                                            placement="bottom-start">
+                                                  <span class="user-comment">{{com.userName}} </span>
+                                                </el-tooltip>
+                                                <span class="user-comment non" v-else>{{com.userName}} </span>
+                                                <span v-if="!viewChangeComment" class="comment-text"
+                                                      :class="{'font-weight-bold':com.notViewed}"
+                                                      @click="viewed(com.id,photoSet, $event)">
+                                                    {{com.comment}}
+                                                     </span>
+                                                <span v-if="viewChangeComment && commentId === com.id"
+                                                      class="comment-text">
+                                                    <el-form @submit.native.prevent>
+                                                      <el-form-item>
+                                                        <el-input
+                                                          type="textarea"
+                                                          :rows="2"
+                                                          style="width: 100%"
+                                                          @keyup.enter.native="changeComment()"
+                                                          @blur="changeCloseComment()"
+                                                          autofocus="true"
+                                                          class="mt-2"
+                                                          maxLength="1000"
+                                                          placeholder="<%= __('The field cannot be empty') %>"
+                                                          clearable
+                                                          v-model="commentUpdate">
+                                                            <i slot="prefix"
+                                                               class="el-input__icon el-icon-chat-line-round"></i>
+                                                        </el-input>
+                                                       </el-form-item>
+                                                    </el-form>
+                                                  </span>
+
+                                              </div>
+                                              <ul class="sub-string ">
+                                                <!-- <li>
+                                                  <el-dropdown placement="top" @command="handleCommand">
+                                                    <span class="el-dropdown-link pointer" style="color:#385898;">
+                                                      <i class="ti-thumb-up"></i>
+                                                      <%= __('Like') %>
+                                                    </span>
+                                                    <el-dropdown-menu slot="dropdown">
+                                                      <el-dropdown-item style="color:#2980B9;"
+                                                                        :command="{com:'commentLike', like:'like', commentId:com.id, photoSet:photoSet,field:'puppies'}"
+                                                                        icon="ti-thumb-up"><%= __('Like') %>
+                                                      </el-dropdown-item>
+                                                      <el-dropdown-item style="color:#E84B3C;"
+                                                                        :command="{com:'commentSuper', like:'super', commentId:com.id, photoSet:photoSet,field:'puppies'}"
+                                                                        icon="ti-heart"> <%= __('Super') %>
+                                                      </el-dropdown-item>
+                                                      <el-dropdown-item style="color:#ffb007;"
+                                                                        :command="{com:'commentWow', like:'wow', commentId:com.id, photoSet:photoSet,field:'puppies'}"
+                                                                        icon="el-icon-loading"><%= __('Wow') %>
+                                                      </el-dropdown-item>
+                                                      <el-dropdown-item style="color:#9274a6;"
+                                                                        :command="{com:'commentHaha', like:'haha', commentId:com.id, photoSet:photoSet,field:'puppies'}"
+                                                                        icon="ti-face-smile"><%= __('Ha-Ha') %>
+                                                      </el-dropdown-item>
+                                                    </el-dropdown-menu>
+                                                  </el-dropdown>
+                                                </li>-->
+                                                <li @click="openReplayFun(com.id)"><%= __('Replay') %> </li>
+
+                                                <li>
+                                                  <el-tooltip class="item" effect="dark"
+                                                              :content="com.createdAt | getCreate(me.preferredLocale,'LL')"
+                                                              placement="top-start">
+                                                    <el-link type="info" class="mt-0">
+                                                      <span> {{dateFrom(com.updatedAt)}}</span>
+                                                    </el-link>
+                                                  </el-tooltip>
+                                                </li>
+                                                <li>
+                                                  <span v-if="me.isAdmin || me.isSuperAdmin || me.id === com.ownerId">
+                                                    <el-dropdown @command="handleCommand">
+                                                      <span class="el-dropdown-link">
+                                                        <el-link :underline="false"> <i
+                                                            class="el-icon-more el-icon--right"></i></el-link>
+                                                      </span>
+                                                      <el-dropdown-menu slot="dropdown">
+                                                        <el-dropdown-item icon="el-icon-edit-outline"
+                                                                          :command="{com:'changeComment',comment:com}">
+                                                          <%= __('Change') %> <%= __('comment') %>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item icon="el-icon-delete-solid"
+                                                                          :command="{com:'deleteComment',comment:com}">
+                                                          <%= __('Delete') %> <%= __('comment') %>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item :divided="true" disabled
+                                                                          v-if="litter.createdAt" icon="el-icon-date"
+                                                                          command="">
+                                                          <%= __('Date publication') %> : <br>{{com.createdAt | getCreate(me.preferredLocale,'dddd, D MMMM YYYY, HH:mm:ss')}}
+                                                        </el-dropdown-item>
+
+                                                        <el-dropdown-item v-if="com.updatedAt !== com.createdAt"
+                                                                          :divided="true" disabled
+                                                                          v-if="litter.createdAt" icon="el-icon-date"
+                                                                          command="">
+                                                          <%= __('Last update') %> : <br>{{com.updatedAt | getCreate(me.preferredLocale,'dddd, D MMMM YYYY, HH:mm:ss')}}
+                                                        </el-dropdown-item>
+                                                      </el-dropdown-menu>
+                                                    </el-dropdown>
+                                                  </span>
+                                                </li>
+                                                <li class="likes" v-if="_.isArray(com.likes) && com.likes.length>0">
+                                                  <template>
+                                                    <span class="like-comment">
+                                                     <el-tooltip effect="dark" content="Top Center prompts info"
+                                                                 placement="top">
+                                                         <div slot="content">
+                                                           <ul>
+                                                             <li v-for="(lk, index) in com.likes" :key="index + '-lk'">
+                                                               {{lk.like}}: <span style="color: #a5b2b8;">{{ lk.userName}}</span>
+                                                             </li>
+                                                             </ul>
+                                                         </div>
+                                                       <el-row>
+                                                         <el-button icon="ti-thumb-up"
+                                                                    style="padding: 2px; color: #8d949e;font-size: 11px;">
+                                                           <!--{{lk.like | countAll(com.likes)}}--> {{com.likes.length}}
+                                                         </el-button>
+                                                       </el-row>
+                                                     </el-tooltip>
+                                                    </span>
+                                                  </template>
+                                                </li>
+                                              </ul>
+                                              <ul v-if="openReplay && commentId === com.id">
+                                                <li class="replay-open">
+                                                  <% /* Поле ввода Replay комментария */ %>
+                                                  <el-form @submit.native.prevent>
+                                                    <el-form-item>
+                                                      <el-input @keyup.enter.native="addComment('puppies', com.id)"
+                                                                style="width: 90%;"
+                                                                class="mt-2"
+                                                                maxLength="1000"
+                                                                clearable
+                                                                placeholder="<%= __('Write a comment') %>"
+                                                                v-model="commentChild">
+                                                        <i slot="prefix"
+                                                           class="el-input__icon el-icon-chat-line-round"></i>
+                                                        <template slot="prepend">
+                                                          <el-avatar :size="35" :src="srcAvatar"></el-avatar>
+                                                        </template>
+                                                      </el-input>
+                                                    </el-form-item>
+                                                  </el-form>
+                                                </li>
+                                              </ul>
+                                            </li>
+
+
+                                            <template v-if="com.child">
+
+                                              <el-link style="color: rgb(56, 88, 152); margin-left: 50px" :underline="false"
+                                                       v-if="_.isArray(com.child) && com.child.length>0" icon="el-icon-caret-right"
+                                                       @click="newComOpen(com.id)" type="primary">
+                                                {{ com.child[0].userName}} <%= __('answered') %></el-link>
+
+                                              <ul class="hr child" v-for="(cm,index) in com.child"
+                                                  :key="cm.id + '-child1'">
+
+                                                <div v-if="newCom && (comId === cm.parent)">
+                                                  <li class="avat">
+                                                    <div class="avat">
+                                                      <el-avatar :size="35" :src="cm.avatarUrl"></el-avatar>
+                                                    </div>
+                                                  </li>
+                                                  <li class="comm">
+                                                    <div class="comment"
+                                                         :class="{'wid': (viewChangeComment && commentId === cm.id)}">
+                                                      <el-tooltip v-if="!_.isEmpty(cm.kennels)" class="item"
+                                                                  effect="light"
+                                                                  :content="`<%= __('Kennel') %>: ${cm.kennels.name} (${cm.kennels.countryName})`"
+                                                                  placement="bottom-start">
+                                                        <span class="user-comment">{{cm.userName}} </span>
+                                                      </el-tooltip>
+                                                      <span class="user-comment non" v-else>{{cm.userName}} </span>
+                                                      <span v-if="!viewChangeComment" class="comment-text"
+                                                            :class="{'font-weight-bold':cm.notViewed}"
+                                                            @click="viewed(cm.id,photoSet, $event)">
+                                                    {{cm.comment}}
+                                                     </span>
+                                                      <span v-if="viewChangeComment && commentId === cm.id"
+                                                            class="comment-text">
+                                                    <el-form @submit.native.prevent>
+                                                      <el-form-item>
+                                                        <el-input
+                                                          type="textarea"
+                                                          :rows="2"
+                                                          style="width: 100%"
+                                                          @keyup.enter.native="changeComment()"
+                                                          @blur="changeCloseComment()"
+                                                          autofocus="true"
+                                                          class="mt-2"
+                                                          maxLength="1000"
+                                                          placeholder="<%= __('The field cannot be empty') %>"
+                                                          clearable
+                                                          v-model="commentUpdate">
+                                                            <i slot="prefix"
+                                                               class="el-input__icon el-icon-chat-line-round"></i>
+                                                        </el-input>
+                                                       </el-form-item>
+                                                    </el-form>
+                                                  </span>
+
+                                                    </div>
+                                                    <ul class="sub-string ">
+                                                      <!--//sub Like-->
+                                                      <!--<li>
+                                                    <el-dropdown placement="top" @command="handleCommand">
+                                                    <span class="el-dropdown-link pointer" style="color:#385898;">
+                                                      <i class="ti-thumb-up"></i>
+                                                      <%= __('Like') %>
+                                                    </span>
+                                                      <el-dropdown-menu slot="dropdown">
+                                                        <el-dropdown-item style="color:#2980B9;"
+                                                                          :command="{com:'commentLike', like:'like', commentId:com.id, photoSet:photoSet,field:'puppies'}"
+                                                                          icon="ti-thumb-up"><%= __('Like') %>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item style="color:#E84B3C;"
+                                                                          :command="{com:'commentSuper', like:'super', commentId:com.id, photoSet:photoSet,field:'puppies'}"
+                                                                          icon="ti-heart"> <%= __('Super') %>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item style="color:#ffb007;"
+                                                                          :command="{com:'commentWow', like:'wow', commentId:com.id, photoSet:photoSet,field:'puppies'}"
+                                                                          icon="el-icon-loading"><%= __('Wow') %>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item style="color:#9274a6;"
+                                                                          :command="{com:'commentHaha', like:'haha', commentId:com.id, photoSet:photoSet,field:'puppies'}"
+                                                                          icon="ti-face-smile"><%= __('Ha-Ha') %>
+                                                        </el-dropdown-item>
+                                                      </el-dropdown-menu>
+                                                    </el-dropdown>
+                                                  </li>-->
+                                                      <!--<li @click="openReplayFun(com.id)"><%= __('Replay') %> </li>-->
+
+                                                      <li>
+                                                        <el-tooltip class="item" effect="dark"
+                                                                    :content="cm.createdAt | getCreate(me.preferredLocale,'LL')"
+                                                                    placement="top-start">
+                                                          <el-link type="info" class="mt-0">
+                                                            <span> {{dateFrom(cm.updatedAt)}}</span>
+                                                          </el-link>
+                                                        </el-tooltip>
+                                                      </li>
+                                                      <li>
+                                                  <span v-if="me.isAdmin || me.isSuperAdmin || me.id === cm.ownerId">
+                                                    <el-dropdown @command="handleCommand">
+                                                      <span class="el-dropdown-link">
+                                                        <el-link :underline="false"> <i
+                                                            class="el-icon-more el-icon--right"></i></el-link>
+                                                      </span>
+                                                      <el-dropdown-menu slot="dropdown">
+                                                        <el-dropdown-item icon="el-icon-edit-outline"
+                                                                          :command="{com:'changeComment',comment:cm}">
+                                                          <%= __('Change') %> <%= __('comment') %>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item icon="el-icon-delete-solid"
+                                                                          :command="{com:'deleteComment',comment:cm}">
+                                                          <%= __('Delete') %> <%= __('comment') %>
+                                                        </el-dropdown-item>
+                                                        <el-dropdown-item :divided="true" disabled
+                                                                          v-if="litter.createdAt" icon="el-icon-date"
+                                                                          command="">
+                                                          <%= __('Date publication') %> : <br>{{cm.createdAt | getCreate(me.preferredLocale,'dddd, D MMMM YYYY, HH:mm:ss')}}
+                                                        </el-dropdown-item>
+
+                                                        <el-dropdown-item v-if="cm.updatedAt !== cm.createdAt"
+                                                                          :divided="true" disabled
+                                                                          v-if="litter.createdAt" icon="el-icon-date"
+                                                                          command="">
+                                                          <%= __('Last update') %> : <br>{{cm.updatedAt | getCreate(me.preferredLocale,'dddd, D MMMM YYYY, HH:mm:ss')}}
+                                                        </el-dropdown-item>
+                                                      </el-dropdown-menu>
+                                                    </el-dropdown>
+                                                  </span>
+                                                      </li>
+                                                      <li class="likes"
+                                                          v-if="_.isArray(cm.likes) && cm.likes.length>0">
+                                                        <template>
+                                                    <span class="like-comment">
+                                                     <el-tooltip effect="dark" content="Top Center prompts info"
+                                                                 placement="top">
+                                                         <div slot="content">
+                                                           <ul>
+                                                             <li v-for="(lk, index) in cm.likes" :key="index + '-lk'">
+                                                               {{lk.like}}: <span style="color: #a5b2b8;">{{ lk.userName}}</span>
+                                                             </li>
+                                                             </ul>
+                                                         </div>
+                                                       <el-row>
+                                                         <el-button icon="ti-thumb-up"
+                                                                    style="padding: 2px; color: #8d949e;font-size: 11px;">
+                                                           <!--{{lk.like | countAll(com.likes)}}--> {{cm.likes.length}}
+                                                         </el-button>
+                                                       </el-row>
+                                                     </el-tooltip>
+                                                    </span>
+                                                        </template>
+                                                      </li>
+                                                    </ul>
+
+
+                                                    <ul v-if="openReplay && commentId === com.id">
+                                                      <li class="replay-open">
+                                                        <% /* Поле ввода Replay комментария */ %>
+                                                        <!--  <el-form @submit.native.prevent>
+                                                      <el-form-item>
+                                                        <el-input @keyup.enter.native="addComment('puppies', com.id)"
+                                                                  style="width: 90%;"
+                                                                  class="mt-2"
+                                                                  maxLength="1000"
+                                                                  clearable
+                                                                  placeholder="<%= __('Write a comment') %>"
+                                                                  v-model="commentChild">
+                                                          <i slot="prefix"
+                                                             class="el-input__icon el-icon-chat-line-round"></i>
+                                                          <template slot="prepend">
+                                                            <el-avatar :size="35" :src="srcAvatar"></el-avatar>
+                                                          </template>
+                                                        </el-input>
+                                                      </el-form-item>
+                                                    </el-form>-->
+                                                      </li>
+                                                    </ul>
+                                                  </li>
+                                                </div>
+                                              </ul>
+
+                                            </template>
+
+                                          </ul>
+                                        </transition-group>
+                                        <% /* Поле ввода комментария */ %>
+                                        <el-form @submit.native.prevent>
+                                          <el-form-item>
+                                            <el-input @keyup.enter.native="addComment('puppies')"
+                                                      class="mt-2"
+                                                      maxLength="1000"
+                                                      clearable
+                                                      placeholder="<%= __('Write a comment') %>"
+                                                      v-model="comment">
+                                              <i slot="prefix" class="el-input__icon el-icon-chat-line-round"></i>
+                                              <template slot="prepend">
+                                                <el-avatar :size="35" :src="srcAvatar"></el-avatar>
+                                              </template>
+                                            </el-input>
+                                          </el-form-item>
+                                        </el-form>
+                                      </el-collapse-item>
+                                    </el-collapse>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </transition>
+                      </el-row>
+
+
+                    </div>
+                  </div>
+                </div>
+                <div v-else class="text-center">
+                  <%= __('No photo session added') %>
+                  <p class="text-center my-5" v-if="me.isAdmin || me.isSuperAdmin">
+                    <el-button round @click="setAddedPhotoSet"><%= __('Add photo session') %></el-button>
+                    <!--<el-button type="success" icon="el-icon-present" circle><%= __('Add presentation') %></el-button>-->
+                    <!--<el-link icon="el-icon-present"> <%= __('Add presentation') %></el-link>-->
+                  </p>
+                </div>
+              </div>
+            </transition>
+          </el-tab-pane>
+          <el-tab-pane label="<%= __('Video') %>" name="video">
+            <div v-if="!countVideo" class="text-center">
+              <%= __('No video to view') %>
+            </div>
+            <!-- <div v-else>
+               <div class="infinite-list-wrapper">
+               <ul
+               class="list"
+               v-infinite-scroll="load"
+               infinite-scroll-disabled="disabled">
+               <li v-for="i in countVideo" class="list-item">
+               <iframe  width="400px" height="200vh" src="https://www.youtube.com/embed/uLXiV9iocEs?start=4" frameborder="0"
+               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+               allowfullscreen></iframe>
+               </li>
+               </ul>
+               <p v-if="loadingVideo">Loading...</p>
+               <p v-if="noMore">No more</p>
+               </div>
+             </div>-->
+          </el-tab-pane>
+
+          <el-tab-pane label="<%= __('Presentation') %>" name="presentation">
+            <template>
+              <div>
+                <!--<el-row class="button-like" :gutter="2">-->
+                <!--<el-col >-->
+                <!--<button @click="clearLocalStor()">Clear</button>-->
+                <!--</el-col>-->
+                <!--// Like-->
+                <!--<el-col :xs="8" :sm="8" :md="9" :lg="10" :xl="10" class="text-right">-->
+                <el-row :gutter="3">
+                  <el-col :xs="24" :sm="8" :md="8" class="text-center" v-for="(present,index) in litter.presentation"
+                          :key="index + '-present'">
+                    <el-card shadow="hover">
+                      <div slot="header">
+                        <strong>{{present.presentationName}}</strong>
+                        <!--<el-button style="float: right; padding: 3px 0" type="text">Operation button</el-button>-->
+                        <el-button @click="clickDeletePresentation(index)" style="float: right; padding: 6px"
+                                   icon="el-icon-close" circle></el-button>
+                      </div>
+
+                      <p> {{present.descriptionPresentation}}</p>
+                      <a target="_blank" :href="present.presentationUrl">
+                        <div class="text-center ">
+                          <img class="img-responsive center-block"
+                               src="https://d2e0ab19zxiehc.cloudfront.net/pdf_min.jpg" height="150" alt="">
+                        </div>
+                      </a>
+                    </el-card>
+                  </el-col>
+                  <el-col :span="24">
+                    <div class="text-center">
+                      <span v-if="litter.presentation.length<1"> <%= __('Presentation not added') %> </span>
+                      <p class="text-center my-5">
+                        <el-button v-if="me.isAdmin || me.isSuperAdmin" round
+                                   @click="setAddedPresentation"><%= __('Add presentation') %></el-button>
+                      </p>
+                    </div>
+                  </el-col>
+                  <!--  <el-col :span="8">
+                    <el-card shadow="never">
+                      Never
+                    </el-card>
+                  </el-col>-->
+                </el-row>
+              </div>
+            </template>
+          </el-tab-pane>
+
+        </el-tabs>
+
+      </el-row>
+
+    </div>
+  </section>
+
+  <!-- End Portfolio Details Area -->
+  <router-view></router-view>
+</div>
+<%- /* Exposez server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

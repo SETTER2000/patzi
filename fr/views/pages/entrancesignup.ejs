@@ -1,0 +1,92 @@
+<div id="signup" v-cloak>
+<template v-if="!cloudSuccess">
+  <section class="u-clearfix u-image u-shading u-section-1" src="" id="sec-c036" data-image-width="1422" data-image-height="800">
+    <div class="u-clearfix u-sheet u-sheet-1">
+      <div class="u-clearfix u-expanded-width-xl u-gutter-0 u-layout-wrap u-layout-wrap-1">
+        <div class="u-layout">
+          <div class="u-layout-row">
+            <div class="u-align-left u-container-style u-layout-cell u-left-cell u-size-30 u-layout-cell-1">
+              <div class="u-container-layout u-valign-middle u-container-layout-1">
+                <h1 class="u-heading-font u-text u-title u-text-1"><%= __('Create an account') %></h1>
+                <p class="u-large-text u-text u-text-font u-text-variant u-text-2">
+                  <%= __("Let's start! Become a member for free; it only takes a few minutes.") %>
+                </p>
+              </div>
+            </div>
+            <div class="u-black u-container-style u-layout-cell u-opacity u-opacity-45 u-right-cell u-size-30 u-layout-cell-2">
+              <div class="u-container-layout u-valign-middle u-container-layout-2">
+                <div class="u-expanded-width u-form u-form-1">
+
+                  <ajax-form action="signup" :syncing.sync="syncing" class="u-clearfix u-form-spacing-15 u-form-vertical u-inner-form" :cloud-error.sync="cloudError" @submitted="submittedForm()" :handle-parsing="handleParsingForm">
+                    <div class="u-form-group u-form-name">
+                      <label for="full-name" class="u-form-control-hidden u-label"><%= __('Full name') %></label>
+                      <!--<input type="text" placeholder="Enter your Name" id="name-7e36" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">-->
+                      <input  class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white"  id="full-name" type="text"  :class="[formErrors.fullName ? 'is-invalid' : '']" v-model.trim="formData.fullName" placeholder="<%= __('Full name') %>" autocomplete="name" focus-first>
+                      <div class="invalid-feedback" v-if="formErrors.fullName"><%= __('Please enter your full name.') %></div>
+                    </div>
+                    <div class="u-form-email u-form-group">
+                      <label for="email-7e36" class="u-form-control-hidden u-label"><%= __('Email address') %></label>
+                      <!--<input type="email" placeholder="Enter a valid email address" id="email-7e36" name="email" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">-->
+                      <input  class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" id="email-address" type="email"  :class="[formErrors.emailAddress ? 'is-invalid' : '']" v-model.trim="formData.emailAddress" placeholder="alex@example.com" autocomplete="email">
+                      <div class="invalid-feedback" v-if="formErrors.emailAddress">6666<%= __('Please enter a valid email address') %>.</div>
+                    </div>
+
+                    <%/*Пароль*/%>
+                    <div class="u-form-email u-form-group">
+                      <label for="email-7e36" class="u-form-control-hidden u-label"><%= __('Choose a password') %></label>
+                      <!--<input type="email" placeholder="Enter a valid email address" id="email-7e36" name="email" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">-->
+                      <input class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white"
+                             id="password" type="password"  :class="[formErrors.password ? 'is-invalid' : "]" v-model.trim="formData.password" placeholder="••••••••" autocomplete="new password">
+                      <div class="invalid-feedback" v-if="formErrors.password"><%= __('Please enter a password') %>.</div>
+                    </div>
+                    <%/*Подтверждение пароля*/%>
+                    <div class="u-form-email u-form-group">
+                      <label for="confirm-password" class="u-form-control-hidden u-label"><%= __('Confirm password') %></label>
+                      <input class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" id="confirm-password" type="password"  :class="[formErrors.confirmPassword ? 'is-invalid' : "]" v-model.trim="formData.confirmPassword" placeholder="••••••••" autocomplete="new password">
+                     <div class="invalid-feedback" v-if="formErrors.emailAddress"><%= __('Please enter a valid email address') %>.</div>
+                    </div>
+
+<!--
+
+                    <div class="u-form-group u-form-message">
+                      <label for="message-7e36" class="u-form-control-hidden u-label">Message</label>
+                      <textarea placeholder="Enter your message" rows="4" cols="50" id="message-7e36" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" ></textarea>
+                    </div>
+
+-->
+
+                      <%/*Согласие чекбокс*/%>
+                    <div class="u-form-agree u-form-group">
+                      <!--<input v-model="formData.agreed" type="checkbox" id="agree-7e36" name="agree" class="u-agree-checkbox" required="">-->
+                      <input  id="terms-agreement" type="checkbox" v-model="formData.agreed"  class="u-agree-checkbox" required="">
+                      <label for="terms-agreement" class="u-agree-label u-label" :class="[formErrors.agreed ? 'text-danger' : '']"><%= __('I have read &amp; agree to the ') %><a target="_blank" href="/terms"><%= __('terms of service') %></a>.</label>
+                    </div>
+                    <div class="u-form-group u-form-submit">
+                      <ajax-button type="submit" :syncing="syncing" class="u-border-radius-0 u-btn u-btn-rectangle u-btn-submit u-button-style u-palette-1-base u-btn-1"><%= __('submit') %></ajax-button>
+                    </div>
+                    <div class="u-form-send-message u-form-send-success">Thank you! Your message has been sent.</div>
+                    <div class="u-form-send-error u-form-send-message">Unable to send your message. Please fix errors then try again.</div>
+                    <input type="hidden" value="" name="recaptchaResponse">
+                    </ajax-form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+  <template v-if="cloudSuccess">
+    <h1 class="text-center"><%= __('Check your email') %>!</h1>
+    <div class="success-message">
+      <hr/>
+      <p><%= __('Your account is nearly ready. All you have to do is click the link we sent to') %> <strong>{{formData.emailAddress}}</strong>.</p>
+      <p>(<%= __('You can still access your dashboard now, but some features will be unvavailable until we\'ve verified your email address') %>.)</p>
+      <p><a class="btn btn-outline-info" href="/"><%= __('Go to dashboard') %></a></p>
+    </div>
+  </template>
+
+
+</div>
+<%- /* Exposé des locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

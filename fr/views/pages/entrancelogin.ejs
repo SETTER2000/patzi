@@ -1,0 +1,51 @@
+<div id="login" v-cloak>
+  <section class="u-clearfix u-image u-shading u-section-1" src="" id="sec-c148">
+    <div class="u-clearfix u-sheet u-sheet-1">
+      <div class="u-align-center u-border-1 u-border-palette-4-light-1 u-container-style u-custom-color-4 u-group u-opacity u-opacity-50 u-group-1">
+        <div class="u-container-layout u-valign-middle u-container-layout-1">
+          <h3 class="u-text u-text-1"><%= __('Log in to your account') %></h3>
+          <h4 class="u-text u-text-1"><%= __('If you have not registered before, then') %> <a style="color: #de4640" href="/signup"><%= __(' here') %>.</a></h4>
+          <div class="u-align-left u-form u-form-1">
+
+            <!--<form action="#" method="POST" class="u-form-horizontal u-form-spacing-15 u-inner-form u-inner-form-1" source="custom">-->
+            <ajax-form class="u-form-horizontal u-form-spacing-15 u-inner-form u-inner-form-1"  action="login" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="formData" :form-rules="formRules" :form-errors.sync="formErrors" @submitted="submittedForm()">
+              <input type="hidden" id="siteId" name="siteId" value="9233566">
+              <input type="hidden" id="pageId" name="pageId" value="304337160">
+              <div class="u-form-email u-form-group">
+                <label for="email-0f32" class="u-form-control-hidden u-label"><%= __('Email') %></label>
+                <!--<input type="email" placeholder="Email" id="email-0f32" name="email" class="u-border-1 u-border-grey-5 u-input" required="">-->
+                <input class="u-border-1 u-border-grey-15 u-custom-color-4 u-input"  id="email-0f32" type="email" placeholder="Email address"  v-model.trim="formData.emailAddress" autocomplete="email" focus-first>
+              </div>
+              <div class="u-form-group u-form-name">
+                <label for="name-0f32" class="u-form-control-hidden u-label"><%= __('Password') %></label>
+                <input type="password"  v-model.trim="formData.password" autocomplete="current-password" placeholder="••••••••" id="name-0f32" name="name" class="u-border-1 u-border-grey-15 u-custom-color-4 u-input" required="">
+              </div>
+
+
+              <!--<div class="form-group form-check">-->
+                <!--<input class="u-border-1 u-border-grey-5 u-input" type="checkbox" id="remember" name="rememberMe" v-model="formData.rememberMe"/>-->
+                <!--<label class="u-form-control-hidden u-label" for="remember"><%= __('Remember me') %></label>-->
+              <!--</div>-->
+
+              <div class="u-form-group u-form-submit">
+                <!--<a href="#" class="u-border-radius-0 u-btn u-btn-rectangle u-btn-submit u-button-style u-palette-1-base u-btn-1">Отправить</a>-->
+                <ajax-button :syncing="syncing" class="u-border-radius-0 u-btn u-btn-rectangle u-btn-submit u-button-style u-palette-1-base u-btn-1"><%= __('Sign in') %></ajax-button>
+                <!--<input type="submit" value="submit" class="u-border-grey-5 u-form-control-hidden" placeholder="">-->
+              </div>
+              <div class="u-form-send-message u-form-send-success" style="background-color: rgb(98, 197, 132); color: rgb(255, 255, 255);">Спасибо! Ваше сообщение отправлено.</div>
+              <div class="u-form-send-error u-form-send-message" style="background-color: rgb(249, 93, 81); color: rgb(255, 255, 255);">Отправка не удалась. Пожалуйста, исправьте ошибки и попробуйте еще раз.</div>
+              <input type="hidden" value="" name="recaptchaResponse">
+            </ajax-form>
+            <p class="d-flex justify-content-start"><a class="text-white pr-4" href="/password/forgot"><%= __('Forgot your password') %>?</a>
+              <a class="text-white px-3" href="/signup"><%= __('Sign Up') %></a>
+
+              <% /*КНОПКА ПРОДОЛЖИТЬ С FACEBOOK */ %>
+<!--            <div class="fb-login-button" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="true" data-width=""></div>-->
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<%- /* Exposé des locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

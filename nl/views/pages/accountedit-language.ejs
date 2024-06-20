@@ -1,0 +1,37 @@
+<div id="edit-language" v-cloak>
+
+  <div class="container">
+    <h1><%=__("Change language")%></h1>
+    <hr/>
+    <ajax-form action="updatePassword" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm()" :handle-parsing="handleParsingForm">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="password">Nieuwe wachtwoord</label>
+            <input class="form-control" id="password" name="password" type="password" class="[formErrors.wachtwoord ? 'is-invalid' : "]" v-model.trim="formData.wachtwoord" tijdelijke aanduiding="••••••••" autocomplete="nieuw wachtwoord" focus-de eerste>
+            <div class="invalid-feedback" v-if="formErrors.password">voer een wachtwoord of kies "Annuleren".</div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="confirm-password">wachtwoord Bevestigen</label>
+            <input class="form-control" id="confirm password" name="bevestig wachtwoord" type="password" class="[formErrors.wachtwoord bevestigen ? 'is-invalid' : "]" v-model.trim="formData.wachtwoord bevestigen" autocomplete="nieuw wachtwoord" tijdelijke aanduiding="••••••••">
+            <div class="invalid-feedback" v-if="formErrors.confirmPassword">Uw nieuwe wachtwoord en de bevestiging komen niet overeen.</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <p class="text-danger" v-if="cloudError">er is Een fout opgetreden tijdens het verwerken van uw verzoek. Controleer uw gegevens en probeer het opnieuw, of neem contact op met ondersteuning <a href="/contact"></a> als de fout zich blijft voordoen.</p>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group text-right">
+            <a class="btn btn-outline-info" href="/account">Annuleren</a>
+            <ajax-button type="submit" :syncing="syncing" class="btn btn-dark">wijzigingen Opslaan</ajax-button>
+          </div>
+        </div>
+      </div>
+    </ajax-form>
+  </div>
+</div>
+<%- /* Bloot server-rendered gegevens venster.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

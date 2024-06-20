@@ -1,0 +1,69 @@
+<div id="pedigree-home" class="content" v-cloak>
+
+    <!-- Start Work Area Area -->
+    <section style="min-height: 83vh" class="work-area section-gap-top" id="work">
+        <div class="container">
+            <!--<div class="row">-->
+            <!--<div class="col">-->
+
+            <!--<h3><%= __('Born in') %></h3>-->
+            <h3 style="margin-bottom: 5px" class="section-title text-center text-uppercase"><%= __('Dog\'s name')
+                %></h3>
+
+            <div class="row">
+                <div class="col-lg-6 offset-lg-3">
+                    <div v-if="me.isSuperAdmin || me.isAdmin" class="text-center">
+                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
+                                 label-width="0"
+                                 class="demo-ruleForm">
+
+                            <el-form-item prop="search">
+                                <!--:autofocus="true"-->
+                                <el-autocomplete
+                                        class="inline-input"
+                                        prefix-icon="el-icon-search"
+                                        style="width: 100%;"
+                                        v-model="ruleForm.search"
+                                        :fetch-suggestions="querySearchAsync"
+                                        clearable
+                                        placeholder="<%= __('Start typing the dog\'s name') %>: Poale Ell Adam"
+                                        :trigger-on-focus="false"
+                                        @select="handleSelect"
+                                        @focus="focus"
+                                        @change="change"
+                                        @blur="blur"
+                                        :autofocus="true"
+                                >
+
+
+                                    <!--<el-button type="primary" @click="submitForm('ruleForm')">Create</el-button>-->
+                                    <!--<el-button @click="resetForm('ruleForm')">Reset</el-button>-->
+
+                                    <!--<el-button slot="append" @click="submitForm('ruleForm')" icon="el-icon-search"></el-button>-->
+                                </el-autocomplete>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column" v-if="treeData2">
+<!--
+          <patzi-tree  :obj-data="seo"
+                       :item="treeData"
+                       @make-folder="makeFolder"
+                       @add-item="addItem"></patzi-tree>-->
+
+                <ul id="demo">
+                    <patzi-tree-item
+                            class="item"
+                            :item="treeData2"
+                            @make-folder="makeFolder2"
+                            @add-item="addItem2"
+                    ></patzi-tree-item>
+                </ul>
+
+            </div>
+        </div>
+    </section>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

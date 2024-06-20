@@ -1,0 +1,710 @@
+<div id="topics-home" class="content pb-5" v-cloak>
+  <% /* Диалоговое окно. Добавить | Редактировать тему. */ %>
+  <el-dialog title="<%= __('Add topic') %>"
+             :visible.sync="centerDialogAdded"
+             custom-class="dialog-add"
+             center>
+    <% /* Диалоговое окно. Не верный язык ввода. */ %>
+    <el-dialog
+      title="<%= __('Error') %>"
+      width="30%"
+      :visible.sync="ruleForm.errInputLang"
+      :show-close=false
+      append-to-body> Lang: {{ruleForm.lang}}
+      <span><%= __('This field is only filled') %>
+        <span v-if="ruleForm.lang === 'ru'"> <%= __('russians') %></span><span v-else><%= __('english') %></span>
+        <%= __('letters. Switch the keyboard to the correct layout.') %></span>
+      <span slot="footer" class="dialog-footer">
+          <el-button type="primary" autofocus
+                     @click="clear()">
+            Ok</el-button>
+      </span>
+    </el-dialog>
+    <template v-if="!ruleForm.see">
+      <el-popover
+        ref="popover"
+        placement="top"
+        title="<%= __('Visibility') %>"
+        width="275"
+        trigger="hover"
+        content="<%= __('At the moment, the topic is hidden, that is, it will not be visible in the system and therefore articles on this topic are also hidden. Set the visibility.') %>">
+      </el-popover>
+      <div class="flex justify-content-center">
+        <h1 v-if="buttonUpdate" class="flex justify-content-center"
+            :class="classObject"
+        >{{ruleForm.labelRu}}
+        </h1>
+        <el-button class="not-border text-danger" icon="el-icon-warning-outline" size="mini" v-popover:popover circle></el-button>
+      </div>
+    </template>
+    <template v-else>
+      <h1 v-if="buttonUpdate" class="flex justify-content-center"
+          :class="classObject"
+      >{{ruleForm.labelRu}}</h1>
+      <div class="flex justify-content-between text-secondary">
+        <div class="font-italic text-capitalize" v-if="ruleForm.createdAt"><small><%= __('created') %>: {{ruleForm.createdAt | getCreate}}</small></div>
+        <div class="font-italic text-capitalize" v-if="ruleForm.updatedAt"><small><%= __('edited') %>: {{ruleForm.updatedAt | getCreate}}</small></div>
+      </div>
+
+    </template>
+
+
+    <div v-if="ruleForm.imageUrl">
+      <div class="single-gallery-image" :style="{ backgroundImage: `url('${ruleForm.imageUrl}')` }"></div>
+    </div>
+    <div v-if="ruleForm.imagesArrUrl" class="flex justify-content-center">
+      <el-image v-if="ruleForm.imagesArrUrl.length"
+                style="width: 200px; height: 200px"
+                :src="ruleForm.imagesArrUrl[0]"
+                :preview-src-list="ruleForm.imagesArrUrl">
+      </el-image>
+    </div>
+
+    <el-collapse accordion>
+      <el-collapse-item name="1">
+        <template slot="title">
+          <h5><%= __('Multiple upload photos') %></h5>  <i class="ml-1 header-icon el-icon-info"></i>
+        </template>
+        <label v-if="!ruleForm.imageUrl">
+          <%= __('Download right before') %> {{limit}} <%= __('photos for this module.') %>
+          <%= __('Please note that the weight of the photo file should not exceed') %> {{sizeLess}}M.
+          <%= __('You can download whatever you want without selecting photos, the system itself will produce the result of those images that have been selected by restrictions.') %>
+
+        </label>
+
+        <div class="my-2">
+          <el-divider content-position="left"><%= __('Add photo') %></el-divider>
+        </div>
+
+        <!---------------------------------------------------------------------------------------->
+        <% /*Загрузка фото NEW*/ %>
+        <el-row type="flex" class="row-bg" justify="center">
+          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+            <el-upload
+              action="/api/v1/files/upload"
+              list-type="picture-card"
+              drag
+              multiple
+              ref="upload"
+              :on-preview="handlePictureCardPreview"
+              :before-upload="beforeUpload"
+              :limit="limit"
+              :on-success="handleSuccess"
+              :on-exceed="handleExceed"
+              :on-remove="handleRemove"
+            >
+              <i class="el-icon-plus"></i>
+              <div class="el-upload__tip" slot="tip"><%= __('jpg/png files with a size less than ') %>
+                {{sizeLess}}<%= __('MB') %></div>
+            </el-upload>
+            <br>
+            <el-dialog :visible.sync="dialogVisible">
+              <img :src="dialogImageUrl" alt="">
+            </el-dialog>
+          </el-col>
+        </el-row>
+        <!---------------------------------------------------------------------------------------->
+      </el-collapse-item>
+    </el-collapse>
+
+
+    <el-row type="flex" class="row-bg mt-3" justify="center">
+      <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+
+          <% /* НАЗВАНИЕ ТЕМЫ на английском*/ %>
+          <template>
+            <el-form-item label="<%= __('Topic Title') %> (En)" prop="label">
+              <el-input show-word-limit
+                        style="width:80%;"
+                        clearable
+                        maxlength="70"
+                        size="small"
+                        :keyup="ruleForm.label | abc(ruleForm,'label','en')"
+                        placeholder="<%= __('Topic Title') %>"
+                        v-model="ruleForm.label"></el-input>
+            </el-form-item>
+          </template>
+          <% /* ОПИСАНИЕ ТЕМЫ на английском */ %>
+          <template>
+            <el-form-item label="<%= __('Description') %> (En)" prop="subtitle">
+              <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+                <el-input
+                  type="textarea"
+                  :rows="3"
+                  clearable
+                  autosize
+                  :keyup="ruleForm.subtitle "
+                  placeholder="Please input"
+                  v-model="ruleForm.subtitle "
+                  maxlength="230"
+                  show-word-limit>
+                </el-input>
+              </el-col>
+            </el-form-item>
+          </template>
+          <% /* НАЗВАНИЕ ТЕМЫ на русском*/ %>
+          <template>
+            <el-form-item label="<%= __('Topic Title') %> (Ru)" prop="labelRu">
+              <el-input show-word-limit
+                        style="width:80%;"
+                        clearable
+                        maxlength="70"
+                        size="small"
+                        :keyup="ruleForm.labelRu | abc(ruleForm,'labelRu','ru')"
+                        placeholder="<%= __('Topic Title') %>"
+                        v-model="ruleForm.labelRu"></el-input>
+            </el-form-item>
+          </template>
+          <% /* ОПИСАНИЕ ТЕМЫ на русском */ %>
+          <template>
+            <el-form-item label="<%= __('Description') %> (Ru)" prop="subtitleRu">
+              <el-col :xs="16" :sm="15" :md="15" :lg="14" :xl="14">
+                <el-input
+                  type="textarea"
+                  :rows="3"
+                  clearable
+                  autosize
+                  :keyup="ruleForm.subtitleRu "
+                  placeholder="Please input"
+                  v-model="ruleForm.subtitleRu"
+                  maxlength="230"
+                  show-word-limit>
+                </el-input>
+              </el-col>
+            </el-form-item>
+          </template>
+          <% /* ЗАГРУЗКА ФОНА ДИЗАНА ТЕМЫ */ %>
+          <template>
+            <!--<p><%= __('Theme Background') %></p>-->
+            <el-upload
+              class="upload-demo"
+              action="/api/v1/files/upload"
+              :on-preview="handlePreview"
+              :on-remove="handleRemoveFile"
+              :file-list="ruleForm.topicBackground"
+              :limit="limit"
+              :on-success="handleBackgroundSuccess"
+              :on-exceed="handleExceed"
+              list-type="picture">
+              <el-button size="small" type="primary"><%= __('Theme Background') %> <%= __('upload') %></el-button>
+              <div slot="tip" class="el-upload__tip"><%= __('jpg/png files with a size less than ') %>
+                {{sizeLess}}<%= __('MB') %>. <%= __('The background will be the last file') %> <%= __('The last background for the theme is not deleted.') %></div>
+            </el-upload>
+
+            <!--<el-upload-->
+              <!--class="avatar-uploader"-->
+              <!--action="/api/v1/files/upload"-->
+              <!--:show-file-list="false"-->
+              <!--:on-success="handleAvatarSuccess"-->
+              <!--:before-upload="beforeAvatarUpload">-->
+              <!--<img v-if="imageUrl" :src="imageUrl" class="avatar">-->
+              <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+            <!--</el-upload>-->
+          </template>
+          <% /* Позиция фона */ %>
+          <template>
+            <el-form-item label="<%= __('Background position') %> (Ru)" prop="backgroundPosition">
+              <el-input show-word-limit
+                        style="width:35%;"
+                        clearable
+                        maxlength="70"
+                        size="small"
+                        placeholder="50% 55%"
+                        v-model="ruleForm.backgroundPosition"></el-input>
+            </el-form-item>
+          </template>
+
+          <% /* ВИДНА ТЕМА ИЛИ НЕТ */ %>
+          <div class="flex justify-content-center">
+            <el-form-item prop="see">
+              <el-switch
+                style="display: block"
+                v-model="ruleForm.see"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                active-text="<%= __('visible') %>"
+                inactive-text="<%= __('not visible') %>">
+              </el-switch>
+            </el-form-item>
+          </div>
+
+          <div class="my-3 pt-4 text-center hidden-xs-only">
+            <el-form-item>
+              <el-button v-if="!buttonUpdate" @click="resetForm('ruleForm')"><%= __('Reset') %></el-button>
+              <el-button @click="buttonUpdate = false; centerDialogAdded = false"><%= __('Cancel') %></el-button>
+              <el-button v-if="!buttonUpdate" type="primary"
+                         @click="submitForm('ruleForm')"><%= __('Create') %></el-button>
+              <el-button v-else type="primary" @click="submitForm('ruleForm')"><%= __('Update') %></el-button>
+
+            </el-form-item>
+          </div>
+          <div class="text-center hidden-sm-and-up">
+            <el-button-group>
+              <el-button @click="resetForm('ruleForm')" icon="el-icon-minus"></el-button>
+              <el-button @click="buttonUpdate = false; centerDialogAdded = false" icon="el-icon-close"></el-button>
+              <el-button v-if="!buttonUpdate" type="primary"
+                         @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+              <el-button v-else type="primary" @click="submitForm('ruleForm')" icon="el-icon-check"></el-button>
+            </el-button-group>
+          </div>
+        </el-form>
+      </el-col>
+    </el-row>
+    <span slot="footer" class="dialog-footer">
+  </span>
+  </el-dialog>
+  <% /* Диалоговое окно Редактор тем. Список тем*/ %>
+  <el-dialog title="<%= __('Theme Editor') %>. <%= __('List') %>."
+             custom-class="dialog-kennel-add"
+             :visible.sync="dialogEditorList">
+    <template>
+      <el-table
+        ref="filterTable"
+        :row-class-name="tableRowClassName"
+        :data="editorList.filter(data => !search || data.labelRu.toLowerCase().includes(search.toLowerCase())|| data.label.toLowerCase().includes(search.toLowerCase()))"
+        :default-sort="{prop: ['createdAt'], order: 'descending'}"
+        max-height="650"
+        style="width: 100%">
+        <el-table-column
+          type="index"
+          fixed="left"
+          width="35">
+        </el-table-column>
+
+        <el-table-column
+          property="cover"
+          label=""
+          fixed="left"
+          width="90">
+          <template slot="header" slot-scope="scope">
+            <div class="d-flex justify-content-center"><i class="el-icon-user-solid"></i></div>
+          </template>
+          <template slot-scope="scope">
+            <div v-if="!_.isEmpty(scope.row.images)">
+              <a href="#" @click="clickShowPhoto(scope.$index,scope.row)" class="flex justify-content-center">
+                <el-avatar :size="38" @error="errorHandler">
+                  <img :src="scope.row.images[scope.row.cover].imageSrc"/>
+                </el-avatar>
+              </a>
+            </div>
+            <div v-else class="photo-preview col">
+              <div class="image-wrapper round  d-flex align-items-center justify-content-center"><!----> <!----> <span
+                  class="placeholder-icon fa fa-picture-o"></span></div>
+            </div>
+          </template>
+        </el-table-column>
+
+
+        <el-table-column
+          label="<%= __('Title') %>"
+          sortable
+          prop="labelRu">
+          <template slot-scope="scope">
+            <el-link :underline="false" :href="scope.row.detail" type="primary">{{scope.row.labelRu}}</el-link>
+          </template>
+        </el-table-column>
+
+
+        <el-table-column
+          label="<%= __('First') %>"
+          sortable
+          prop="labelRu">
+          <template slot-scope="scope">
+            <el-popover
+                    v-if="scope.row.firstTopic"
+                    placement="right-end"
+                    title=""
+                    width="300"
+                    trigger="hover"
+                    content="Первый на страницы блога">
+            <el-button
+                    slot="reference"
+                    icon="el-icon-star-on"
+                    @click="clickHandlerFirstTopic(scope.row.id)"
+                    size="mini" round></el-button>
+            </el-popover>
+            <el-button v-else
+                       icon="el-icon-star-off"
+                       @click="clickHandlerFirstTopic(scope.row.id)"
+                       size="mini" round></el-button>
+          </template>
+        </el-table-column>
+
+
+        <el-table-column
+          label="(En)"
+          sortableв
+          prop="label"
+          width="80">
+          <template slot-scope="scope">
+
+            <el-popover
+              placement="right-end"
+              title=""
+              width="300"
+              trigger="hover"
+              :content="scope.row.label">
+              <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" icon="el-icon-edit" slot="reference"
+                         circle></el-button>
+            </el-popover>
+          </template>
+        </el-table-column>
+        <el-table-column align="right">
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
+              size="small"
+              placeholder="Input topic name"
+              clearable/>
+          </template>
+          <template slot-scope="scope">
+            <el-tooltip content="<%= __('Image editor') %>" placement="left" effect="light">
+              <el-button
+                v-if="scope.row.images"
+                size="mini"
+                icon="el-icon-picture-outline-round"
+                @click="handleEditPhotos(scope.$index, scope.row)">
+              </el-button>
+            </el-tooltip>
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.$index, scope.row)">
+              Edit
+            </el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="openRemoveDialog(scope.row.id)"
+            >Delete
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </template>
+    <span slot="footer" class="dialog-footer">
+      <span class="flex justify-content-between">
+        <div>
+         <el-button @click="clearFilter" class="btn btn-outline-info"><%= __('Reset filters') %></el-button>
+</div>
+        <div v-if="me.hasBillingCard || me.isSuperAdmin || me.isAdmin">
+            <el-button @click="clickAddButton()" class="btn btn-outline-success"
+                       icon="el-icon-circle-plus-outline"><%= __('Add topic') %></el-button>
+
+        </div>
+        <div>
+            <el-button @click="buttonUpdate = false; dialogEditorList = false" class="btn btn-outline-info"><%= __('Close') %></el-button>
+        </div>
+      </span>
+    </span>
+  </el-dialog>
+  <% /* Диалоговое окно. Фото темы. */ %>
+  <el-dialog
+    :title="objOne.fullName"
+    custom-class="dialog-kennel-add"
+    :visible.sync="photoVisible"
+    :before-close="handleCloseDialog">
+    <div class="menu-center" v-if="objOne.images">
+      <img :src="objOne.images[objOne.cover].imageSrc" style="width: 100%" :alt="objOne.fullName">
+    </div>
+    <!--<div class="block">
+      <el-image :src="objOne.img" class="cov">
+        <div slot="placeholder" class="image-slot">
+          Loading<span class="dot">...</span>
+        </div>
+      </el-image>
+    </div>-->
+    <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="objOne={};photoVisible = false"><%= __('Close') %></el-button>
+  </span>
+  </el-dialog>
+  <% /* Диалоговое окно. Редактор картинок. */ %>
+  <el-dialog
+    :title="`${i19p.photoEditor} ${photos.fullName}`"
+    :visible.sync="centerDialogVisiblePhotos"
+    width="100%"
+    custom-class="dialog-images-editor"
+    center>
+    <el-dialog
+      title="<%= __('Photo Description') %>"
+      :visible.sync="photoDesc.innerVisiblePhotoDescription"
+      append-to-body>
+      <el-form ref="photoDesc" :model="photoDesc" label-width="120px">
+        <el-form-item label="<%= __('Decription') %>">
+          <el-input type="textarea" v-model="photoDesc.description"></el-input>
+        </el-form-item>
+
+        <el-form-item v-if="!photoDescUpdate" label="<%= __('Date taken') %>" prop="dateTaken">
+          <el-row :gutter="2">
+            <el-col :span="11">
+              <el-date-picker
+                v-model="photoDesc.dateTaken"
+                type="datetime"
+                placeholder="<%= __('Select date and time') %>"
+                default-time="12:00:00">
+              </el-date-picker>
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
+
+      <el-form-item v-if="photoDescUpdate" label="<%= __('Date taken') %>" prop="dateTakenUpdate">
+        <el-row :gutter="2">
+          <el-col :span="11">
+            <el-date-picker
+              v-model="dateTakenUpdate"
+              type="datetime"
+              placeholder="<%= __('Select date and time') %>"
+              default-time="12:00:00">
+            </el-date-picker>
+          </el-col>
+        </el-row>
+      </el-form-item>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="photoDesc.innerVisiblePhotoDescription = false">Cancel</el-button>
+    <el-button type="primary" @click="updateDescriptionPhoto">Save</el-button>
+  </span>
+    </el-dialog>
+    <div class="container">
+      <div class=" mb-3 menu-between">
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">
+          <%= __('Select all') %></el-checkbox>
+        <span>
+          <span class="mx-3">  <%= __('All files') %>:  {{_.isArray(photos.images)? photos.images.length : 0}}</span>
+         <span class="mx-3"> <%= __('Marked') %>:  {{checkedPhoto.length}}</span>
+        <el-button type="danger" v-if="checkedPhoto.length > 0" type="danger" class="mx-3" :underline="false"
+                   @click="removePhotos"
+                   class="mx-3"
+                   title="<%= __('Remove') %>"
+                   icon="el-icon-delete" circle></el-button>
+
+          </span>
+      </div>
+
+      <el-checkbox-group v-model="checkedPhoto" @change="handleCheckedPhotosChange">
+        <div class="photo-editor">
+
+          <el-card shadow="hover" :body-style="{ padding: '0px'}"
+                   v-for="(img, index, key) in photos.images"
+                   :key="index + '-photo'">
+
+            <template v-if="me.isSuperAdmin || isOwner">
+              <div class="ell-relation" v-if="photos.cover === index">
+                <el-button type="warning" size="mini" title="<%= __("Album's cover") %>"
+                           class="ell-position-button check" icon="el-icon-star-off"
+                           circle></el-button>
+              </div>
+              <div class="ell-relation" v-else>
+                <el-button size="mini" title="<%= __('Make an album cover') %>"
+                           class="ell-position-button" @click="coverPhoto(photos.id,index)"
+                           icon="el-icon-document" circle></el-button>
+              </div>
+            </template>
+
+            <img :src="img.imageSrc" class="image">
+
+
+            <div style="padding: 14px;">
+              <el-row :gutter="2">
+                <el-col :span="11">
+                  <el-link
+                    @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description;  photoDesc.innerVisiblePhotoDescription=true"
+                    :underline="false"
+                    type="primary"><%= __('Date taken') %>:
+                  </el-link>
+                </el-col>
+                <el-col :span="13">
+                  <el-link :underline="false" type="danger"> {{img.dateTaken | getCreate(me.preferredLocale, 'lll')}}</el-link>
+                </el-col>
+              </el-row>
+              <el-row :gutter="2">
+                <el-col :span="16">
+                  <el-link :underline="false" type="primary"><%= __('File') %>:</el-link>
+                </el-col>
+                <el-col :span="8">
+                  <el-link :title="img.name" :underline="false" type="primary"> {{_.trunc(img.name,10)}}</el-link>
+                </el-col>
+              </el-row>
+              <el-row :gutter="2">
+                <el-col :span="16">
+                  <el-link :underline="false" type="primary"><%= __('Type') %>:</el-link>
+                </el-col>
+                <el-col :span="8">
+                  <el-link :underline="false" type="primary"> {{img.type}}</el-link>
+                </el-col>
+              </el-row>
+              <el-row :gutter="2">
+                <el-col :span="16">
+                  <el-link :underline="false" type="primary"><%= __('Size') %>:</el-link>
+                </el-col>
+                <el-col :span="8">
+                  <el-link :underline="false" type="danger"> {{_.ceil(img.size/1024,2)}} Kb</el-link>
+                </el-col>
+              </el-row>
+
+
+              <el-row :gutter="2">
+                <el-col :span="16">
+                  <el-link
+                    @click="photoDesc.photoId=img.id; photoDesc.dateTaken=img.dateTaken; photoDesc.description=img.description; photoDesc.innerVisiblePhotoDescription=true"
+                    :underline="false"
+                    type="primary"><%= __('Description') %>:
+                  </el-link>
+                </el-col>
+                <el-col :span="8">
+                  <el-link :underline="false" type="danger"> {{_.trunc(img.description, 10)}}</el-link>
+                </el-col>
+              </el-row>
+
+
+              <div class="bottom clearfix ">
+                <div class="menu-center-2">
+                  <el-checkbox :label="img.id" :key="img.id"></el-checkbox>
+                  <el-link :href="img.detail" title="<%= __('More') %>" type="success" :underline="false"><i
+                      class="el-icon-right"></i></el-link>
+                </div>
+              </div>
+            </div>
+          </el-card>
+        </div>
+      </el-checkbox-group>
+    </div>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisiblePhotos = false">Cancel</el-button>
+  </span>
+  </el-dialog>
+
+
+  <patzi-section-header :obj-data="seo"></patzi-section-header>
+
+  <patzi-row-h3-p :obj-data="seo"></patzi-row-h3-p>
+
+  <section>
+    <div class="container mb-5 pb-5">
+      <el-row :gutter="5">
+        <el-col :xs="24" :sm="8">
+          <el-card shadow="hover">
+            <p class="text-center">Всего: {{counts}}</p>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :sm="8">
+          <el-card shadow="hover" :body-style="{padding:'13px'}">
+            <p v-if="me.isSuperAdmin || me.isAdmin" class="flex justify-content-center">
+              <el-button @click="clickAddButton()" class="btn btn-outline-info"
+                         icon="el-icon-circle-plus-outline"><%= __('Add') %></el-button>
+
+            </p>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :sm="8">
+          <el-card shadow="hover">
+            <p class="text-center"> Заблокировано: {{hidden}}</p>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
+  </section>
+
+  <section class="work-area">
+    <div class="container">
+
+      <% /* Кнопки управления, фильтры */ %>
+      <div class="menu-between mb-1">
+        <div><span class=" font-weight-bold">
+            <%= __('Topics') %>: Все</span></div>
+
+        <div class="grid-content">
+          <el-dropdown @command="handleCommand">
+                            <span class="el-dropdown-link">
+                              <i class="el-icon-more el-icon--right pointer"></i>
+                            </span>
+            <el-dropdown-menu slot="dropdown">
+              <!-- <el-dropdown-item icon="el-icon-female" :command="{com:'dam'}">
+                <%= __('Dam') %>
+              </el-dropdown-item>
+
+              <el-dropdown-item icon="el-icon-male" :command="{com:'sire'}">
+                <%= __('Sire') %>
+              </el-dropdown-item>
+              <el-dropdown-item icon="el-icon-camera-solid" :command="{com:'all'}">
+                <%= __('All') %>
+              </el-dropdown-item>-->
+
+              <!--   <el-dropdown-item v-if="_.some(topics, 'sale', true)" icon="el-icon-money"
+                                :command="{com:'c'}">
+                <%= __('For Sale') %>
+              </el-dropdown-item>-->
+
+              <el-dropdown-item v-if="me.isSuperAdmin || me.isAdmin || isOwner" icon="el-icon-edit" :command="{com:'e'}">
+                <%= __('Theme Editor') %>
+              </el-dropdown-item>
+
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </div>
+
+      <% /* ПОИСК. */ %>
+      <div class="menu-center my-3">
+        <el-input
+          v-model="searchObjects"
+          placeholder="<%= __('Search by topic name') %>"
+          clearable/>
+      </div>
+
+      <% /* ФОТО TOPICS */ %>
+      <div class="scrollbar" id="style-1">
+        <el-row :gutter="7" class="flex-container wrap">
+          <el-col class="flex-item" v-for="(topic, index) in objFilter()" :key="topic.id"
+                  :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
+            <div @mouseenter="showMenu(topic.id)" @mouseleave="showOut()"
+                 style="position: relative;" class="ell-image-flex"
+                 v-if="!_.isEmpty(topic.imagesArrUrl)">
+              <transition-group appear name="el-fade-in">
+                <div v-show="show && (showTopic === topic.id)" class="transition-box blue-dark" :class="{death:topic.dateDeath}"
+                     :key="topic.id">
+                  <% /* Кнопки управления собакой */ %>
+                  <div class="menu-center-v">
+                    <div class="py-4">
+                      <el-link :href="topic.detail" class="link" :underline="false">
+
+                        <div :class="{deathColor:topic.dateDeath}"> {{me.preferredLocale==='ru' ? topic.labelRu : topic.label}}</div>
+
+                        <div class="date" :class="{deathColor:topic.dateDeath}">{{topic.dateBirth | getAge(me.preferredLocale,
+                          topic.dateDeath)}}
+                        </div>
+                      </el-link>
+                      <el-row class="mt-2">
+                        <!--<el-button icon="el-icon-search" circle></el-button>-->
+                        <!--<el-button type="primary" icon="el-icon-picture" circle></el-button>-->
+                        <el-button v-if="topic.price>0 & topic.sale" @click="goTo2('/topics/chinese-crested/sale')" type="success" round>
+                          <%= __('For sale') %></el-button>
+                        <!--<el-button type="info" icon="el-icon-message" circle></el-button>-->
+                        <!--<el-button type="warning" icon="el-icon-star-off" circle></el-button>-->
+                        <!--<el-button type="danger" icon="el-icon-delete" circle></el-button>-->
+                      </el-row>
+                    </div>
+                  </div>
+                </div>
+
+              </transition-group>
+
+              <el-image
+                :src="topic.images[topic.cover].imageSrc"
+                :key="topic.id"
+                :fit="'cover'"
+                :scroll-container="'#style-1'"
+                lazy
+                :preview-src-list="topic.imagesArrUrl">
+              </el-image>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+
+    </div>
+  </section>
+
+
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

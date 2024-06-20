@@ -1,0 +1,356 @@
+<div id="available-things" class="content" v-cloak>
+  <% /* Диалоговое окно Слайдер картинок */ %>
+  <el-dialog
+    title="<%= __('Beautiful Moments') %>"
+    :visible.sync="photoVisible"
+    width="68%"
+    center>
+    <div class="d-flex justify-content-end mb-3">
+    <el-switch
+      style="display: block"
+      v-model="autoplay"
+      active-color="#13ce66"
+      inactive-color="#ff4949"
+      active-text="Autoplay"
+      inactive-text="Disable ">
+    </el-switch>
+    </div>
+    <!--<span>It should be noted that the content will not be aligned in center by default</span>-->
+    <div class="block">
+      <!--<span class="demonstration">Switch when indicator is clicked</span>-->
+      <el-carousel :autoplay="autoplay" trigger="click" height="820px">
+        <el-carousel-item  v-for="(item, key, index) in things"  :key="index" >
+          <h3 class="small text-center">{{ item.label }}</h3>
+          <div class="my-flex-cont">
+            <div class="my-flex-box" >
+              <img :src="item.imageSrc" alt="">
+            </div>
+          </div>
+        </el-carousel-item>
+      </el-carousel>
+    </div>
+    <!--<span slot="footer" class="dialog-footer">-->
+    <!--<el-button type="primary" @click="photoVisible = false" ><%= __('Close') %></el-button>-->
+  <!--</span>-->
+  </el-dialog>
+
+  <patzi-section-header :obj-data="seo"></patzi-section-header>
+
+
+  <!-- Start Work Area Area -->
+  <section class="work-area section-gap-top">
+    <div class="container">
+      <patzi-row-h3-h2 :obj-data="seo"></patzi-row-h3-h2>
+      <div class="pb-5 mb-5 flex justify-content-center" v-if="me.isSuperAdmin || me.isAdmin" >
+        <button @click="clickAddButton()" class="btn btn-outline-info"><%= __('Add a photo') %></button>
+      </div>
+      <div class="container">
+        <div class="masonry-container ">
+          <div class="row d-flex align-items-center justify-content-center ">
+            <!--<a class="fancybox" rel="gallery1"
+               href="https://d2e0ab19zxiehc.cloudfront.net/ds-6.jpg"
+               title="">
+              <img src="https://d2e0ab19zxiehc.cloudfront.net/ds-6.jpg" alt=""/>
+            </a>
+            <a class="fancybox" rel="gallery1"
+               href="https://d2e0ab19zxiehc.cloudfront.net/ds-3.jpg"
+               title="">
+              <img src="https://d2e0ab19zxiehc.cloudfront.net/ds-3.jpg" alt=""/>
+            </a>-->
+            <div class="col-md-3 col-sm-4 mx-1 my-1 item" v-for="(thing, key, index) in things" :key="index">
+              <!--<a class="fancybox" rel="gallery1" :href="thing.imageSrc" :title="thing.title">-->
+
+
+              <img :src="thing.imageSrc" @click="clickPhotoVisible(thing.id)" class="gallery" :alt="thing.label">
+
+              <div v-if="thing.owner.id === me.id" class="flx">
+                <div class="fixButton">
+                  <a class="p-button" href="#"
+                     @click="clickEditThing(thing.id)">
+                    <i class="el-icon-edit"></i>
+                  </a>
+                </div>
+                <div class="fixButton">
+                  <a class="p-button" v-if="thing.owner.id === me.id" href="#"
+                     @click="clickDeleteThing(thing.id)">
+                    <i class="el-icon-delete"></i>
+                  </a>
+                </div>
+              </div>
+
+
+              <div>{{thing.hi}}</div>
+              <!--<a rel="gallery1" href="https://d2e0ab19zxiehc.cloudfront.net/ds-1.jpg" title="Codirosso spazzacamino (Massimo Greco _Foligno)" class="fancybox"><img src="https://d2e0ab19zxiehc.cloudfront.net/ds-1.jpg" alt="" class="img-fluid"></a>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Work Area Area -->
+
+
+  <!--OLD GALLERY-->
+  <!-- <div class="container">
+     <div class="row m-5">
+       <div v-for="(thing, key, index) in things" :key="index" class="col-sm-4">
+         <div class="card mt-lg-4 ">
+           <div class="card-header p-1">
+             <ul class="nav justify-content-end nav-pills card-header-pills pr-2">
+               <li class="nav-item">
+                 <div class="dropdown">
+                   <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                     <a class="dropdown-item" v-if="thing.owner.id === me.id" href="#"
+                        @click="clickDeleteThing(thing.id)">
+                       Delete
+                     </a>
+                     <a class="dropdown-item" href="#">Action</a>
+                     &lt;!&ndash;     <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>&ndash;&gt;
+                   </div>
+                 </div>
+               </li>
+             </ul>
+           </div>
+           <img :src="thing.imageSrc" class="card-img-top" alt="...">
+           <div class="card-body">
+             <h5 class="card-title">{{thing.label}}</h5>
+
+             <h6 class="card-subtitle mb-2 text-muted">{{thing.title}}</h6>
+             <p class="card-text">{{thing.subtitle}}</p>
+             <p v-if="thing.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mine</p>
+             <a v-if="thing.owner.id !== me.id" href="#" class="card-link">{{thing.owner.fullName}}</a>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>-->
+
+
+  <!--  <section class="work-area section-gap-top" id="work">
+      <div class="container">
+        <div class="filters-content">
+          <div class="row grid">
+            <div class="col-lg-4 col-md-6 grid-sizer"></div>
+            <div v-for="(litter, key, index) in things" :key="index" class="col-lg-8 grid-item col-md-6 all wow fadeIn"
+                 data-wow-duration="2s" data-wow-delay="0.4s">
+              <div class="single-work">
+                <div class="relative">
+                  <div class="thumb">
+                    <img :src="litter.imageSrc" class="image img-fluid"  alt="...">
+                  </div>
+                  <div class="middle">
+                    <ul class="navbar-nav  my-sm-0 ">
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                          <i class="ti-settings"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" v-if="litter.owner.id === me.id" href="#"
+                             @click="clickDeleteLitter(litter.id)">
+                            Delete
+                          </a>
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          &lt;!&ndash;<a class="dropdown-item" href="#">Somelitter else here</a>&ndash;&gt;
+                        </div>
+                      </li>
+                    </ul>
+                    <h3>Litter: {{litter.label | capital}}</h3>
+                    <div class="cat">Litter born: {{litter.born | date('ru') }}</div>
+                    <h4 v-if="litter.owner.id === me.id" class="card-link"><i class="ti-home"></i> Mine</h4>
+                    <h5 v-if="litter.owner.id !== me.id"> Owner: <a href="#"
+                                                                    class="card-link">{{litter.owner.fullName}}</a></h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>-->
+
+  <% /* "Upload Thing" Modal */ %>
+  <modal v-if="uploadThingModalOpen" v-cloak key="new" @close="closeUploadThingModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Upload new photo') %></h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+
+    <ajax-form action="uploadThing" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingUploadThingForm"
+               @submitted="submittedUploadThingForm($event)">
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label><%= __('Add a photo') %>:</label>
+          <div class="photo-uploader" :class="!uploadFormData.previewImageSrc ? 'empty' :  ''">
+            <div class="photo-upload-field row d-flex align-items-center"
+                 :class="!uploadFormData.previewImageSrc ? 'justify-content-center' :  'justify-content-start'">
+              <div class="photo-preview col">
+                <div class="image-wrapper"
+                     :class="!uploadFormData.previewImageSrc ? 'd-flex align-items-center justify-content-center' : ''">
+                  <img v-if="uploadFormData.previewImageSrc" alt="A preview of the selected item"
+                       :src="uploadFormData.previewImageSrc"/>
+                  <span v-else class="placeholder-icon fa fa-picture-o"></span>
+                </div>
+              </div>
+              <div class="col d-flex-column justify-content-center">
+                <span class="file-upload-button btn btn-sm"
+                      :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
+                  <span class="button-text" v-if="!uploadFormData.previewImageSrc"><%= __('Select image') %></span>
+                  <span class="button-text" v-else>Change image</span>
+                  <input type="file" :disabled="syncing" accept="image/*" class="file-input"
+                         @change="changeFileInput($event.target.files)"/>
+                </span>
+                <p class="image-advice text-muted" v-if="!formErrors.photo">
+                  <strong><%= __('Tip') %></strong>: <%= __('Make sure the object is in the front and center of the photo so that people understand exactly who you are representing.') %>
+                </p>
+                <p class="image-advice text-danger" v-if="formErrors.photo">
+                  A photo is required in order to add a new item.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--<div class="form-group"><label>Add a photo:</label>
+          <div class="photo-uploader">
+            <div class="photo-upload-field row d-flex align-items-center">
+              <div class="col d-flex-column justify-content-center">
+                &lt;!&ndash;
+                :disabled - отключает input для приёма изображений,
+                 когда флаг синхронизации (syncing) содержит true
+                 Поробное описание в "JOURNAL" SAILS.JS.txt
+                &ndash;&gt;
+                <input type="file" @change="changeFileInput($event.target.files)"
+                       :disabled="syncing" accept="image/*" class="file-input">
+                <p class="image-advice text-muted" v-if="!formErrors.photo">
+                  <strong>Tip</strong>: Make sure the item is front and center in the photo,
+                  so people know exactly what you're offering to share.
+                </p>
+                <p></p>
+                <img :src="uploadFormData.photo" alt="">
+                <p class="image-advice text-danger" v-if="formErrors.photo">
+                  A photo is required in order to add a new item.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>-->
+        <div class="form-group">
+          <label><%= __('Who is it') %>?</label>
+          <input class="form-control" :class="formErrors.label ? 'is-invalid' : ''"
+                 type="text" v-model="uploadFormData.label" placeholder="Poale Ell Adam">
+          <small v-if="formErrors.label" class="text-danger "><%= __('Please enter a name.') %></small>
+        </div>
+        <div class="form-group">
+          <label><%= __('Title') %></label>
+          <input class="form-control" type="text" v-model="uploadFormData.title">
+        </div>
+        <div class="form-group">
+          <label><%= __('Sub Title') %></label>
+          <input class="form-control" type="text" v-model="uploadFormData.subtitle">
+        </div>
+        <p class="text-danger" v-if="cloudError === 'tooBig'">
+          <small><%= __('That file is too big. Please choose a junkier picture') %>.</small>
+        </p>
+        <p class="text-danger" v-else-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %> <a
+              href="/support"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+
+      </div>
+
+
+      <!--<div class="modal-body">
+        <div class="card border border-light bg-white  mb-3 w-100%">
+          <div class="card-header  bg-white text-left">Add a photo:</div>
+          <div class="row no-gutters">
+            <div class="col-md-6 pl-3 pt-3">
+              <img src="https://via.placeholder.com/340x210.jpg" class="card-img" alt="...">
+            </div>
+            <div class="col-md-6">
+              <div class="card-body bg-white">
+                <div class="col d-flex-column justify-content-center">
+             &lt;!&ndash; <span class="file-upload-button btn btn-sm"
+                    :class="[formErrors.photo ? 'btn-outline-danger' : !uploadFormData.previewImageSrc ? 'btn-outline-success' : 'btn-outline-secondary mr-3']">
+             &ndash;&gt;   &lt;!&ndash;<span class="button-text" v-if="!uploadFormData.previewImageSrc">&lt;!&ndash;Select image&ndash;&gt;</span>
+                <span class="button-text" v-else>Change image</span>&ndash;&gt;
+                <input type="file" :disabled="syncing" accept="image/*"
+                       class="file-input" @change="changeFileInput($event.target.files)"/>
+         &lt;!&ndash;     </span>&ndash;&gt;
+                 &lt;!&ndash; <p class="image-advice text-muted" v-if="!formErrors.photo"><strong>Tip</strong>: Make sure the item
+                    is front and center in the photo, so people know exactly what you're offering to share.</p>
+                  <p class="image-advice text-danger" v-if="formErrors.photo">A photo is required in order to add a
+                    new item.</p>&ndash;&gt;
+                </div>
+                &lt;!&ndash;<h5 class="card-title">Card title</h5>&ndash;&gt;
+                &lt;!&ndash;<p><button class="btn btn-outline-success">Select image</button></p>&ndash;&gt;
+                <p class="card-text">This is a wider card with supporting text Lorem ipsum dolor sit amet, consectetur
+                  adipisicing elit. Corporis veritatis. Enim facilis quos tempora!.</p>
+                <p class="card-text">
+                  <small class="text-muted">Last updated 3 mins ago</small>
+                </p>
+                <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Small</span>
+                  </div>
+                  <input type="text" class="form-control" aria-label="Sizing example input"
+                         aria-describedby="inputGroup-sizing-sm">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-danger" v-if="cloudError">
+          <small>An error occured while processing your request. Please check your information and try again, or <a
+              href="/contact">contact support</a> if the error persists.
+          </small>
+        </p>
+      </div>-->
+      <div class="modal-footer flex-row-reverse justify-content-start">
+        <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1"><%= __('Save') %></ajax-button>
+        <button data-dismiss="modal" class="btn btn-outline-primary mr-1"><%= __('Cancel') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+  <% /* "Confirm Delete Thing" Modal */ %>
+  <modal v-if="confirmDeleteThingModalOpen && selectedThing" v-cloak key="delete"
+         @close="closeDeleteThingModal()">
+    <div class="modal-header">
+      <h5 class="modal-title"><%= __('Remove this') %>?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span>&times;</span>
+      </button>
+    </div>
+    <ajax-form action="destroyOneThing" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+               :handle-parsing="handleParsingDeleteThingForm"
+               @submitted="submittedDeleteThingForm()">
+      <div class="modal-body">
+        <p><%= __('Are you sure you want to remove this') %> {{selectedThing.label || 'item'}}?</p>
+        <p class="text-muted"
+           v-if="selectedThing.borrowedBy"><%= __('We will no longer be able to assist with the return of this item, so you will need to contact') %>
+          {{selectedThing.borrowedBy.fullName}} <%= __('directly to coordinate') %>.</p>
+        <p v-else><%= __('This object will no longer be available to share with to show') %>.</p>
+        <p class="text-danger" v-if="cloudError">
+          <small><%= __('An error occured while processing your request. Please check your information and try again, or') %> <a
+              href="/contact"><%= __('contact support') %></a> <%= __('if the error persists') %>.
+          </small>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary mr-1" data-dismiss="modal"><%= __('Cancel') %></button>
+        <button type="submit" class="btn btn-danger ml-1"><%= __('Remove') %></button>
+      </div>
+    </ajax-form>
+  </modal>
+</div>
+
+
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
