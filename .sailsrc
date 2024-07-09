@@ -1,10 +1,1 @@
-{
-  "generators": {
-    "modules": {
-    "component":"./sails-generate-component"}
-  },
-  "_generatedWith": {
-    "sails": "1.1.0",
-    "sails-generate": "1.16.4"
-  }
-}
+{"generators":{"modules":{"component":"./sails-generate-component"}},"_generatedWith":{"sails":"1.1.0","sails-generate":"1.16.4"},"paths":{"public":"./.www"},"hooks":{"grunt":false}}
